@@ -15,6 +15,9 @@ import ArcGIS
 import SwiftUI
 
 public struct UtilityNetworkTrace: View {
+    /// The proxy to provide access to map view operations.
+    private var mapViewProxy: MapViewProxy?
+    
     // MARK: Enums
     
     /// Activities users will perform while creating a new trace.
@@ -64,6 +67,10 @@ public struct UtilityNetworkTrace: View {
     /// A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
     @State private var shouldZoomOnTraceCompletion = false
     
+    /// A Boolean value indicating whether the Clear All Results confirmation
+    /// dialog is being shown.
+    @State private var isShowingClearAllResultsConfirmationDialog = false
+    
     /// The view model used by the view. The `UtilityNetworkTraceViewModel` manages state.
     /// The view observes `UtilityNetworkTraceViewModel` for changes in state.
     @StateObject private var viewModel: UtilityNetworkTraceViewModel
@@ -76,11 +83,8 @@ public struct UtilityNetworkTrace: View {
     /// The graphics overlay to hold generated starting point and trace graphics.
     @Binding private var graphicsOverlay: GraphicsOverlay
     
-    /// Provides a method of layer identification when starting points are being chosen.
-    @Binding private var mapViewProxy: MapViewProxy?
-    
     /// Acts as the point of identification for items tapped in the utility network.
-    @Binding private var viewPoint: CGPoint?
+    @Binding private var screenPoint: CGPoint?
     
     /// Acts as the point at which newly selected starting point graphics will be created.
     @Binding private var mapPoint: Point?
@@ -128,33 +132,41 @@ public struct UtilityNetworkTrace: View {
     /// Displays information about a chosen asset group.
     @ViewBuilder private var assetGroupDetail: some View {
         if let assetGroupName = selectedAssetGroupName,
-           let assetTypeGroups = viewModel.selectedTrace?.elementsByTypeInGroup(named: assetGroupName) {
+           let assetTypeGroups = viewModel.selectedTrace?.elementsByType(inGroupNamed: assetGroupName) {
             makeBackButton(title: featureResultsTitle) {
                 currentActivity = .viewingTraces(.viewingFeatureResults)
             }
             makeDetailSectionHeader(title: assetGroupName)
             List {
-                ForEach(assetTypeGroups.keys.compactMap({$0}).sorted(), id: \.self) { assetTypeGroupName in
-                    Section(assetTypeGroupName) {
+                ForEach(
+                    assetTypeGroups.sorted(using: KeyPathComparator(\.key)),
+                    id: \.key
+                ) { (name, elements) in
+                    Section(name) {
                         DisclosureGroup {
-                            ForEach(assetTypeGroups[assetTypeGroupName] ?? [], id: \.globalID) { element in
+                            ForEach(elements, id: \.globalID) { element in
                                 Button {
                                     Task {
                                         if let feature = await viewModel.feature(for: element),
                                            let geometry = feature.geometry {
-                                            viewpoint = Viewpoint(targetExtent: geometry.extent)
+                                            let newViewpoint = Viewpoint(boundingGeometry: geometry.extent)
+                                            if let mapViewProxy {
+                                                Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
+                                            } else {
+                                                viewpoint = newViewpoint
+                                            }
                                         }
                                     }
                                 } label: {
                                     Label {
-                                        Text("Object ID \(element.objectID.description)")
+                                        Text("Object ID \(element.objectID, format: .number.grouping(.never))")
                                     } icon: {
                                         Image(systemName: "scope")
                                     }
                                 }
                             }
                         } label: {
-                            Text(assetTypeGroups[assetTypeGroupName]?.count.description ?? "N/A")
+                            Text(elements.count, format: .number)
                         }
                     }
                 }
@@ -167,24 +179,24 @@ public struct UtilityNetworkTrace: View {
         if viewModel.configurations.isEmpty {
             Text("No configurations available")
         } else {
-            ForEach(viewModel.configurations) { configuration in
+            ForEach(viewModel.configurations, id: \.name) { configuration in
                 Button {
                     viewModel.setPendingTrace(configuration: configuration)
                     currentActivity = .creatingTrace(nil)
                 } label: {
                     Text(configuration.name)
                 }
-                .listRowBackground(configuration == viewModel.pendingTrace.configuration ? Color.secondary.opacity(0.5) : nil)
+                .listRowBackground(configuration.name == viewModel.pendingTrace.configuration?.name ? Color.secondary.opacity(0.5) : nil)
             }
         }
     }
     
     /// Displays the list of available networks.
     @ViewBuilder private var networksList: some View {
-        ForEach(viewModel.networks, id: \.self) { network in
+        ForEach(viewModel.networks, id: \.name) { network in
             Text(network.name)
                 .lineLimit(1)
-                .listRowBackground(network == viewModel.network ? Color.secondary.opacity(0.5) : nil)
+                .listRowBackground(network.name == viewModel.network?.name ? Color.secondary.opacity(0.5) : nil)
                 .onTapGesture {
                     viewModel.setNetwork(network)
                     currentActivity = .creatingTrace(nil)
@@ -274,7 +286,7 @@ public struct UtilityNetworkTrace: View {
                     currentActivity = .viewingTraces(nil)
                     if shouldZoomOnTraceCompletion,
                        let extent = viewModel.selectedTrace?.resultExtent {
-                        viewpoint = Viewpoint(targetExtent: extent)
+                        viewpoint = Viewpoint(boundingGeometry: extent)
                     }
                 }
             }
@@ -317,7 +329,12 @@ public struct UtilityNetworkTrace: View {
             Menu(selectedTrace.name) {
                 if let resultExtent = selectedTrace.resultExtent {
                     Button("Zoom To") {
-                        viewpoint = Viewpoint(targetExtent: resultExtent)
+                        let newViewpoint = Viewpoint(boundingGeometry: resultExtent)
+                        if let mapViewProxy {
+                            Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
+                        } else {
+                            viewpoint = newViewpoint
+                        }
                     }
                 }
                 Button("Delete", role: .destructive) {
@@ -339,16 +356,18 @@ public struct UtilityNetworkTrace: View {
                             set: { currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil) }
                         )
                     ) {
-                        ForEach(viewModel.selectedTrace?.assetGroupNames.sorted() ?? [], id: \.self) { assetGroupName in
-                            HStack {
-                                Text(assetGroupName)
-                                Spacer()
-                                Text(viewModel.selectedTrace?.elementsInAssetGroup(named: assetGroupName).count.description ?? "N/A")
-                            }
-                            .foregroundColor(.blue)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
+                        if let selectedTrace = viewModel.selectedTrace {
+                            ForEach(selectedTrace.assetGroupNames.sorted(), id: \.self) { assetGroupName in
+                                HStack {
+                                    Text(assetGroupName)
+                                    Spacer()
+                                    Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
+                                }
+                                .foregroundColor(.blue)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
+                                }
                             }
                         }
                     }
@@ -361,15 +380,17 @@ public struct UtilityNetworkTrace: View {
                             set: { currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil) }
                         )
                     ) {
-                        ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
-                            HStack {
-                                Text(item.function.networkAttribute.name)
-                                Spacer()
-                                VStack(alignment: .trailing) {
-                                    Text(item.function.functionType.title)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                    Text((item.result as? Double)?.description ?? "N/A")
+                        if let selectedTrace = viewModel.selectedTrace {
+                            ForEach(selectedTrace.functionOutputs, id: \.objectID) { item in
+                                HStack {
+                                    Text(item.function.networkAttribute.name)
+                                    Spacer()
+                                    VStack(alignment: .trailing) {
+                                        Text(item.function.functionType.title)
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                        Text((item.result as? Double).map { "\($0)" } ?? "N/A")
+                                    }
                                 }
                             }
                         }
@@ -399,19 +420,23 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             .padding([.vertical], 2)
-            Button(role: .destructive) {
-                viewModel.userAlert = .init(
-                    description: "Are you sure? All the trace inputs and results will be lost.",
-                    button: Button(role: .destructive) {
-                        viewModel.deleteAllTraces()
-                        currentActivity = .creatingTrace(nil)
-                    } label: {
-                        Text("OK")
-                    })
-            } label: {
-                Text(clearResultsTitle)
+            Button("Clear All Results", role: .destructive) {
+                isShowingClearAllResultsConfirmationDialog = true
             }
             .buttonStyle(.bordered)
+            .confirmationDialog(
+                "Clear all results?",
+                isPresented: $isShowingClearAllResultsConfirmationDialog
+            ) {
+                Button(role: .destructive) {
+                    viewModel.deleteAllTraces()
+                    currentActivity = .creatingTrace(nil)
+                } label: {
+                    Text("Clear All Results")
+                }
+            } message: {
+                Text("All the trace inputs and results will be lost.")
+            }
         }
     }
     
@@ -424,7 +449,12 @@ public struct UtilityNetworkTrace: View {
             Button("Zoom To") {
                 if let selectedStartingPoint = selectedStartingPoint,
                    let extent = selectedStartingPoint.geoElement.geometry?.extent {
-                    viewpoint = Viewpoint(targetExtent: extent)
+                    let newViewpoint = Viewpoint(boundingGeometry: extent)
+                    if let mapViewProxy {
+                        Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
+                    } else {
+                        viewpoint = newViewpoint
+                    }
                 }
             }
             Button("Delete", role: .destructive) {
@@ -516,28 +546,26 @@ public struct UtilityNetworkTrace: View {
     
     /// A graphical interface to run pre-configured traces on a map's utility networks.
     /// - Parameters:
-    ///   - activeDetent: The current detent of the floating panel.
     ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
     ///   - map: The map containing the utility network(s).
     ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-    ///   - viewPoint: Acts as the point of identification for items tapped in the utility network.
-    ///   - mapViewProxy: Provides a method of layer identification when starting points are being
-    ///   chosen.
+    ///   - screenPoint: Acts as the point of identification for items tapped in the utility network.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
     ///   - startingPoints: An optional list of programmatically provided starting points.
     public init(
         graphicsOverlay: Binding<GraphicsOverlay>,
         map: Map,
         mapPoint: Binding<Point?>,
-        viewPoint: Binding<CGPoint?>,
-        mapViewProxy: Binding<MapViewProxy?>,
+        screenPoint: Binding<CGPoint?>,
+        mapViewProxy: MapViewProxy?,
         viewpoint: Binding<Viewpoint?>,
         startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
     ) {
+        self.mapViewProxy = mapViewProxy
         _activeDetent = .constant(nil)
-        _viewPoint = viewPoint
+        _screenPoint = screenPoint
         _mapPoint = mapPoint
-        _mapViewProxy = mapViewProxy
         _graphicsOverlay = graphicsOverlay
         _viewpoint = viewpoint
         _externalStartingPoints = startingPoints
@@ -591,18 +619,18 @@ public struct UtilityNetworkTrace: View {
         }
         .background(Color(uiColor: .systemGroupedBackground))
         .animation(.default, value: currentActivity)
-        .onChange(of: viewPoint) { newValue in
+        .onChange(of: screenPoint) { newScreenPoint in
             guard isFocused(traceCreationActivity: .addingStartingPoints),
                   let mapViewProxy = mapViewProxy,
                   let mapPoint = mapPoint,
-                  let viewPoint = viewPoint else {
+                  let screenPoint = newScreenPoint else {
                 return
             }
             currentActivity = .creatingTrace(.viewingStartingPoints)
             activeDetent = .half
             Task {
-                await viewModel.addStartingPoint(
-                    at: viewPoint,
+                await viewModel.addStartingPoints(
+                    at: screenPoint,
                     mapPoint: mapPoint,
                     with: mapViewProxy
                 )
@@ -627,9 +655,9 @@ public struct UtilityNetworkTrace: View {
     // MARK: Computed Properties
     
     /// Indicates the number of the trace currently being viewed out the total number of traces.
-    private var currentTraceLabel: String {
+    private var currentTraceLabel: LocalizedStringKey {
         guard let index = viewModel.selectedTraceIndex else { return "Error" }
-        return "Trace \(index+1) of \(viewModel.completedTraces.count.description)"
+        return "Trace \(index+1) of \(viewModel.completedTraces.count)"
     }
     
     /// The name of the selected utility element asset group.
@@ -697,9 +725,6 @@ public struct UtilityNetworkTrace: View {
             .lineLimit(1)
             .frame(maxWidth: .infinity, alignment: .center)
     }
-    
-    /// Title for the clear all results feature
-    private let clearResultsTitle = "Clear All Results"
     
     /// Title for the feature results section
     private let featureResultsTitle = "Feature Results"

@@ -18,11 +18,10 @@ import Combine
 /// A configurable object that handles authentication challenges.
 @MainActor
 public final class Authenticator: ObservableObject {
-    /// The OAuth configurations that this authenticator can work with.
-    let oAuthConfigurations: [OAuthConfiguration]
-    
     /// A value indicating whether we should prompt the user when encountering an untrusted host.
-    var promptForUntrustedHosts: Bool
+    let promptForUntrustedHosts: Bool
+    /// The OAuth configurations that this authenticator can work with.
+    let oAuthUserConfigurations: [OAuthUserConfiguration]
     
     /// Creates an authenticator.
     /// - Parameters:
@@ -31,53 +30,10 @@ public final class Authenticator: ObservableObject {
     ///   - oAuthConfigurations: The OAuth configurations that this authenticator can work with.
     public init(
         promptForUntrustedHosts: Bool = false,
-        oAuthConfigurations: [OAuthConfiguration] = []
+        oAuthUserConfigurations: [OAuthUserConfiguration] = []
     ) {
         self.promptForUntrustedHosts = promptForUntrustedHosts
-        self.oAuthConfigurations = oAuthConfigurations
-    }
-    
-    /// Sets up new credential stores that will be persisted to the keychain.
-    /// - Remark: The credentials will be stored in the default access group of the keychain.
-    /// You can find more information about what the default group would be here:
-    /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
-    /// - Parameters:
-    ///   - access: When the credentials stored in the keychain can be accessed.
-    ///   - isSynchronizable: A value indicating whether the credentials are synchronized with iCloud.
-    public func setupPersistentCredentialStorage(
-        access: ArcGIS.KeychainAccess,
-        isSynchronizable: Bool = false
-    ) async throws {
-        let previousArcGISCredentialStore = ArcGISRuntimeEnvironment.credentialStore
-        
-        // Set a persistent ArcGIS credential store on the ArcGIS environment.
-        ArcGISRuntimeEnvironment.credentialStore = try await .makePersistent(
-            access: access,
-            isSynchronizable: isSynchronizable
-        )
-        
-        do {
-            // Set a persistent network credential store on the ArcGIS environment.
-            await ArcGISRuntimeEnvironment.setNetworkCredentialStore(
-                try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
-            )
-        } catch {
-            // If making the shared network credential store persistent fails,
-            // then restore the ArcGIS credential store.
-            ArcGISRuntimeEnvironment.credentialStore = previousArcGISCredentialStore
-            throw error
-        }
-    }
-    
-    /// Clears all ArcGIS and network credentials from the respective stores.
-    /// Note: This sets up new `URLSessions` so that removed network credentials are respected
-    /// right away.
-    public func clearCredentialStores() async {
-        // Clear ArcGIS Credentials.
-        await ArcGISRuntimeEnvironment.credentialStore.removeAll()
-        
-        // Clear network credentials.
-        await ArcGISRuntimeEnvironment.networkCredentialStore.removeAll()
+        self.oAuthUserConfigurations = oAuthUserConfigurations
     }
     
     /// The current challenge.
@@ -85,7 +41,7 @@ public final class Authenticator: ObservableObject {
     @Published var currentChallenge: ChallengeContinuation?
 }
 
-extension Authenticator: AuthenticationChallengeHandler {
+extension Authenticator: ArcGISAuthenticationChallengeHandler {
     public func handleArcGISAuthenticationChallenge(
         _ challenge: ArcGISAuthenticationChallenge
     ) async throws -> ArcGISAuthenticationChallenge.Disposition {
@@ -93,9 +49,8 @@ extension Authenticator: AuthenticationChallengeHandler {
         await Task.yield()
         
         // Create the correct challenge type.
-        if let url = challenge.request.url,
-           let configuration = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
-            return .useCredential(try await ArcGISCredential.oauth(configuration: configuration))
+        if let configuration = oAuthUserConfigurations.first(where: { $0.canBeUsed(for: challenge.requestURL) }) {
+            return .continueWithCredential(try await OAuthUserCredential.credential(for: configuration))
         } else {
             let tokenChallengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
             
@@ -107,7 +62,9 @@ extension Authenticator: AuthenticationChallengeHandler {
             return try await tokenChallengeContinuation.value.get()
         }
     }
-    
+}
+
+extension Authenticator: NetworkAuthenticationChallengeHandler {
     public func handleNetworkAuthenticationChallenge(
         _ challenge: NetworkAuthenticationChallenge
     ) async -> NetworkAuthenticationChallenge.Disposition  {

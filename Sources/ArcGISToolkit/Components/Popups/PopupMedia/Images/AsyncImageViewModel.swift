@@ -79,7 +79,7 @@ import ArcGIS
             guard let self, let url else { return }
             
             do {
-                let (data, _) = try await ArcGISRuntimeEnvironment.urlSession.data(from: url)
+                let (data, _) = try await ArcGISEnvironment.urlSession.data(from: url)
                 DispatchQueue.main.async { [weak self] in
                     if let image = UIImage(data: data) {
                         self?.result = .success(image)

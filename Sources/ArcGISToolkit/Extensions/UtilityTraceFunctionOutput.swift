@@ -13,4 +13,8 @@
 
 import ArcGIS
 
-extension UtilityTraceFunctionOutput: Identifiable { }
+extension UtilityTraceFunctionOutput {
+    var objectID: ObjectIdentifier {
+        return ObjectIdentifier(self)
+    }
+}

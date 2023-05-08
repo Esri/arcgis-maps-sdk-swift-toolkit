@@ -65,7 +65,7 @@ final class BookmarksTests: XCTestCase {
         }
         var bookmarks = Bookmarks(
             isPresented: isPresented,
-            mapOrScene: map
+            geoModel: map
         )
         bookmarks.selectionChangedAction = action
         XCTAssertTrue(_isPresented)
@@ -120,7 +120,7 @@ final class BookmarksTests: XCTestCase {
         )
         let bookmarks = Bookmarks(
             isPresented: isPresented,
-            mapOrScene: map,
+            geoModel: map,
             viewpoint: viewpoint
         )
         XCTAssertTrue(_isPresented)

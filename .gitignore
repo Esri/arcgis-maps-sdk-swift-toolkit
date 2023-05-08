@@ -1,7 +1,12 @@
 .DS_Store
 /.build
-/Packages
 xcuserdata/
 /*.xcodeproj
 DerivedData/
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+
+## Swift Package Manager
+# Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
+Packages/
+Package.pins
+Package.resolved

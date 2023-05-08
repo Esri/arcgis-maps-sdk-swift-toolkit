@@ -17,73 +17,37 @@ import XCTest
 @testable import ArcGISToolkit
 
 final class CompassTests: XCTestCase {
-    /// Verifies that the compass accurately indicates when the compass should be hidden when
-    /// `autoHide` is `false`.
+    /// Verifies that the compass accurately indicates it shouldn't be hidden when `autoHideDisabled`
+    /// is applied.
     func testHiddenWithAutoHideOff() {
-        let initialValue = 0.0
-        let finalValue = 90.0
-        var _viewpoint: Viewpoint? = makeViewpoint(rotation: initialValue)
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let compass = Compass(viewpoint: viewpoint, autoHide: false)
-        XCTAssertFalse(compass.shouldHide)
-        _viewpoint = makeViewpoint(rotation: finalValue)
-        XCTAssertFalse(compass.shouldHide)
+        let compass1Heading = Double.zero
+        let compass1 = Compass(heading: compass1Heading)
+            .autoHideDisabled() as! Compass
+        XCTAssertFalse(compass1.shouldHide(forHeading: compass1Heading))
+        
+        let compass2Heading = 45.0
+        let compass2 = Compass(heading: compass2Heading)
+            .autoHideDisabled() as! Compass
+        XCTAssertFalse(compass2.shouldHide(forHeading: compass2Heading))
+        
+        let compass3Heading = Double.nan
+        let compass3 = Compass(heading: compass3Heading)
+            .autoHideDisabled() as! Compass
+        XCTAssertFalse(compass3.shouldHide(forHeading: compass3Heading))
     }
     
-    /// Verifies that the compass accurately indicates when the compass should be hidden when
-    /// `autoHide` is `true`.
+    /// Verifies that the compass accurately indicates when it should be hidden.
     func testHiddenWithAutoHideOn() {
-        let initialValue = 0.0
-        let finalValue = 90.0
-        var _viewpoint: Viewpoint? = makeViewpoint(rotation: initialValue)
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let compass = Compass(viewpoint: viewpoint)
-        XCTAssertTrue(compass.shouldHide)
-        _viewpoint = makeViewpoint(rotation: finalValue)
-        XCTAssertFalse(compass.shouldHide)
-    }
-    
-    /// Verifies that the compass correctly initializes when given a `nil` viewpoint.
-    func testInit() {
-        let compass = Compass(viewpoint: .constant(nil))
-        XCTAssertTrue(compass.shouldHide)
-    }
-    
-    /// Verifies that the compass correctly initializes when given a `nil` viewpoint, and `autoHide` is
-    /// `false`.
-    func testInitNoAutoHide() {
-        let compass = Compass(viewpoint: .constant(nil), autoHide: false)
-        XCTAssertFalse(compass.shouldHide)
-    }
-    
-    /// Verifies that the compass correctly initializes when given only a viewpoint.
-    func testInitWithViewpoint() {
-        let compass = Compass(viewpoint: .constant(makeViewpoint(rotation: .zero)))
-        XCTAssertTrue(compass.shouldHide)
-    }
-    
-    /// Verifies that the compass correctly initializes when given only a viewpoint.
-    func testInitWithViewpointAndAutoHide() {
-        let compass = Compass(viewpoint: .constant(makeViewpoint(rotation: .zero)), autoHide: false)
-        XCTAssertFalse(compass.shouldHide)
-    }
-}
-
-extension CompassTests {
-    /// An arbitrary point to use for testing.
-    var point: Point {
-        Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84)
-    }
-    
-    /// An arbitrary scale to use for testing.
-    var scale: Double {
-        10_000.00
-    }
-    
-    /// Builds viewpoints to use for tests.
-    /// - Parameter rotation: The rotation to use for the resulting viewpoint.
-    /// - Returns: A viewpoint object for tests.
-    func makeViewpoint(rotation: Double) -> Viewpoint {
-        return Viewpoint(center: point, scale: scale, rotation: rotation)
+        let compass1Heading: Double = .zero
+        let compass1 = Compass(heading: compass1Heading)
+        XCTAssertTrue(compass1.shouldHide(forHeading: compass1Heading))
+        
+        let compass2Heading = 45.0
+        let compass2 = Compass(heading: compass2Heading)
+        XCTAssertFalse(compass2.shouldHide(forHeading: compass2Heading))
+        
+        let compass3Heading = Double.nan
+        let compass3 = Compass(heading: compass3Heading)
+        XCTAssertTrue(compass3.shouldHide(forHeading: compass3Heading))
     }
 }

@@ -28,17 +28,10 @@ struct LoginCredential: Hashable {
 @MainActor
 final class LoginViewModel: ObservableObject {
     /// The username.
-    @Published var username = "" {
-        didSet { updateSignInButtonEnabled() }
-    }
+    @Published var username = ""
     
     /// The password.
-    @Published var password = "" {
-        didSet { updateSignInButtonEnabled() }
-    }
-    
-    /// A Boolean value indicating if the sign-in button is enabled.
-    @Published var signInButtonEnabled = false
+    @Published var password = ""
     
     /// The action to perform when the user signs in. This is a closure that takes a username
     /// and password, respectively.
@@ -61,10 +54,6 @@ final class LoginViewModel: ObservableObject {
         self.challengingHost = challengingHost
         self.signInAction = signInAction
         self.cancelAction = cancelAction
-    }
-    
-    private func updateSignInButtonEnabled() {
-        signInButtonEnabled = !username.isEmpty && !password.isEmpty
     }
     
     /// The host that initiated the challenge.
@@ -123,7 +112,7 @@ extension LoginViewModifier {
                 challengingHost: challenge.host,
                 onSignIn: { loginCredential in
                     challenge.resume(
-                        with: .useCredential(
+                        with: .continueWithCredential(
                             .password(username: loginCredential.username, password: loginCredential.password)
                         )
                     )
