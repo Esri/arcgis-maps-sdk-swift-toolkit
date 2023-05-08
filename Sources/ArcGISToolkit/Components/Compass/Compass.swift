@@ -35,7 +35,7 @@ public struct Compass: View {
     /// An action to perform when the compass is tapped. Note if `mapViewProxy` is non-`nil`
     /// this will not be invoked.
     private var action: (() -> Void)?
-
+    
     /// Creates a compass with a heading based on compass directions (0° indicates a direction
     /// toward true North, 90° indicates a direction toward true East, etc.).
     /// - Parameters:
