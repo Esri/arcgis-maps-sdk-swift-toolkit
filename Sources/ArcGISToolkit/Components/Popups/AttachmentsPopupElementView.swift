@@ -65,6 +65,8 @@ struct AttachmentsPopupElementView: View {
                         } else {
                             AttachmentList(attachmentModels: viewModel.attachmentModels)
                         }
+                    @unknown default:
+                        EmptyView()
                     }
                 } label: {
                     VStack(alignment: .leading) {
@@ -78,11 +80,10 @@ struct AttachmentsPopupElementView: View {
             }
         }
         .task {
-            try? await popupElement.fetchAttachments()
-            let attachmentModels = popupElement.attachments.reversed().map { attachment in
+            let attachmentModels = try? await popupElement.attachments.reversed().map { attachment in
                 AttachmentModel(attachment: attachment)
             }
-            viewModel.attachmentModels.append(contentsOf: attachmentModels)
+            viewModel.attachmentModels.append(contentsOf: attachmentModels ?? [])
             isLoadingAttachments = false
         }
     }

@@ -34,19 +34,19 @@ struct TrustHostViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .task {
+            .onAppear {
                 // Present the alert right away. This makes it animated.
                 isPresented = true
             }
             .alert("Certificate Trust Warning", isPresented: $isPresented, presenting: challenge) { _ in
-                Button("Dangerous: Allow Connection", role: .destructive) {
-                    challenge.resume(with: .useCredential(.serverTrust))
+                Button("Allow", role: .destructive) {
+                    challenge.resume(with: .continueWithCredential(.serverTrust))
                 }
                 Button("Cancel", role: .cancel) {
                     challenge.resume(with: .cancel)
                 }
             } message: { _ in
-                Text("The certificate provided by '\(challenge.host)' is not signed by a trusted authority.")
+                Text("Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.")
             }
     }
 }

@@ -63,7 +63,9 @@ struct AttachmentRow: View  {
                 AttachmentLoadButton(attachmentModel: attachmentModel)
             }
         }
+#if !targetEnvironment(macCatalyst)
         .quickLookPreview($url)
+#endif
     }
 }
 

@@ -12,10 +12,12 @@
 // limitations under the License.
 
 import SwiftUI
+#if canImport(Charts)
 import Charts
+#endif
 
 /// A view displaying details for line chart popup media.
-@available(iOS 16, *)
+@available(iOS 16, macCatalyst 16, *)
 struct LineChart: View {
     /// The chart data to display.
     let chartData: [ChartData]
@@ -36,6 +38,7 @@ struct LineChart: View {
     
     var body: some View {
         Group {
+#if canImport(Charts)
             Chart(chartData) {
                 LineMark(
                     x: .value("Field", $0.label),
@@ -57,6 +60,7 @@ struct LineChart: View {
                     AxisGridLine()
                 }
             }
+#endif
         }
     }
 }

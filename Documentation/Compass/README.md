@@ -1,24 +1,62 @@
 # Compass
 
-The Compass (alias North arrow) shows where north is in the MapView or SceneView. The Compass supports reset rotation.
+The Compass (alias North arrow) displays the current viewpoint rotation of a MapView or SceneView. The Compass supports resetting the rotation to zero/north.
 
-The ArcGIS Runtime SDK currently supports rotating the map with 2-finger gesture on MapView and SceneView interactively by default and while the map will snap to north when rotating using gestures, the compass provides an easier way. The Compass Toolkit component will appear when the map is rotated and, when tapped, re-orientates the map back to north and hides the compass icon (note that the MapView auto-snaps back to north when it's within a threshold of north, and in that case the compass also auto hides).
+The ArcGIS Maps SDK for Swift currently supports rotating MapViews and SceneViews interactively with a 2-finger gesture and while the map/scene will snap to north when rotating using gestures, the Compass provides an easier way. The Compass Toolkit component will appear when the map is rotated and, when tapped, re-orientates the map back to north and hides the compass icon (note that the MapView auto-snaps back to north when it's within a threshold of north, and in that case the compass also auto hides).
 
-### Compass Behavior:
+![image](https://user-images.githubusercontent.com/3998072/202810369-a0b82778-77d4-404e-bebf-1a84841fbb1b.png)
 
-Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to north, it disappears. A property allows you to disable the auto-hide feature so that it always shows.
+## Features
 
-When the compass is tapped, the map orients back to north (zero bearing), the default orientation and the compass fades away, or after a short duration disappears.
+Compass:
 
-### Usage
+- Automatically hides when the rotation is zero.
+- Can be configured to be always visible.
+- Will reset the map/scene rotation to North when tapped on.
+
+## Key properties
+
+`Compass` has the following initializer:
 
 ```swift
-MapView(map: map, viewpoint: viewpoint)
-    .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
-    .overlay(alignment: .topTrailing) {
-        Compass(viewpoint: $viewpoint)
-            .padding()
+    /// Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
+    /// a direction toward true West, etc.).
+    /// - Parameters:
+    ///   - rotation: The rotation whose value determines the heading of the compass.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
+    public init(rotation: Double?, mapViewProxy: MapViewProxy)
+```
+
+`Compass` has the following modifiers:
+
+- `func compassSize(size: CGFloat)` - The size of the `Compass`, specifying both the width and height of the compass.
+- `func autoHideDisabled(_:)` - Specifies whether the ``Compass`` should automatically hide when the heading is 0.
+
+## Behavior:
+
+Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to north, it disappears. The `automaticallyHides` view modifier allows you to disable the auto-hide feature so that it is always displayed.
+
+When the compass is tapped, the map orients back to north (zero bearing).
+
+## Usage
+
+### Basic usage for displaying a `Compass`.
+
+```swift
+@State private var map = Map(basemapStyle: .arcGISImagery)
+
+@State private var viewpoint: Viewpoint?
+
+var body: some View {
+    MapViewReader { proxy in
+        MapView(map: map, viewpoint: viewpoint)
+            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
+            .overlay(alignment: .topTrailing) {
+                Compass(rotation: viewpoint?.rotation, mapViewProxy: proxy)
+                    .padding()
+            }
     }
+}
 ```
 
 To see it in action, try out the [Examples](../../Examples/Examples) and refer to [CompassExampleView.swift](../../Examples/Examples/CompassExampleView.swift) in the project.

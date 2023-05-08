@@ -24,44 +24,44 @@ public struct BasemapGallery: View {
     public enum Style {
         /// The `BasemapGallery` will display as a grid when there is an appropriate
         /// width available for the gallery to do so. Otherwise, the gallery will display as a list.
-        /// Defaults to `125` when displayed as a list, `300` when displayed as a grid.
-        case automatic(listWidth: CGFloat = 125, gridWidth: CGFloat = 300)
-        /// The `BasemapGallery` will display as a grid. Defaults to `300`.
-        case grid(width: CGFloat = 300)
-        /// The `BasemapGallery` will display as a list. Defaults to `125`.
-        case list(width: CGFloat = 125)
+        /// When displayed as a grid, `maxGridItemWidth` sets the maximum width of a grid item.
+        case automatic(maxGridItemWidth: CGFloat = 300)
+        /// The `BasemapGallery` will display as a grid.
+        case grid(maxItemWidth: CGFloat = 300)
+        /// The `BasemapGallery` will display as a list.
+        case list
     }
     
     /// Creates a `BasemapGallery` with the given geo model and array of basemap gallery items.
     /// - Remark: If `items` is empty, ArcGIS Online's developer basemaps will
     /// be loaded and added to `items`.
     /// - Parameters:
-    ///   - geoModel: A geo model.
     ///   - items: A list of pre-defined base maps to display.
+    ///   - geoModel: A geo model.
     public init(
-        geoModel: GeoModel? = nil,
-        items: [BasemapGalleryItem] = []
+        items: [BasemapGalleryItem] = [],
+        geoModel: GeoModel? = nil
     ) {
-        viewModel = BasemapGalleryViewModel(geoModel: geoModel, items: items)
+        _viewModel = StateObject(wrappedValue: BasemapGalleryViewModel(geoModel: geoModel, items: items))
     }
     
     /// Creates a `BasemapGallery` with the given geo model and portal.
     /// The portal will be used to retrieve basemaps.
     /// - Parameters:
-    ///   - geoModel: A geo model.
     ///   - portal: The portal to use to load basemaps.
-    init(
-        _ geoModel: GeoModel? = nil,
-        portal: Portal
+    ///   - geoModel: A geo model.
+    public init(
+        portal: Portal,
+        geoModel: GeoModel? = nil
     ) {
-        viewModel = BasemapGalleryViewModel(geoModel, portal: portal)
+        _viewModel = StateObject(wrappedValue: BasemapGalleryViewModel(geoModel, portal: portal))
     }
     
     /// The view model used by the view. The `BasemapGalleryViewModel` manages the state
     /// of the `BasemapGallery`. The view observes `BasemapGalleryViewModel` for changes
     /// in state. The view updates the state of the `BasemapGalleryViewModel` in response to
     /// user action.
-    @ObservedObject private var viewModel: BasemapGalleryViewModel
+    @StateObject private var viewModel: BasemapGalleryViewModel
     
     /// The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
     /// switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
@@ -77,18 +77,6 @@ public struct BasemapGallery: View {
         !(horizontalSizeClass == .compact && verticalSizeClass == .regular)
     }
     
-    /// The width of the gallery, taking into account the horizontal and vertical size classes of the device.
-    private var galleryWidth: CGFloat {
-        switch style {
-        case .list(let width):
-            return width
-        case .grid(let width):
-            return width
-        case .automatic(let listWidth, let gridWidth):
-            return isRegularWidth ? gridWidth : listWidth
-        }
-    }
-    
     /// A Boolean value indicating whether to show an error alert.
     @State private var showErrorAlert = false
     
@@ -96,41 +84,47 @@ public struct BasemapGallery: View {
     @State private var alertItem: AlertItem?
     
     public var body: some View {
-        makeGalleryView()
-            .frame(width: galleryWidth)
-            .onReceive(
-                viewModel.$spatialReferenceMismatchError.dropFirst(),
-                perform: { error in
-                    guard let error = error else { return }
-                    alertItem = AlertItem(spatialReferenceMismatchError: error)
-                    showErrorAlert = true
+        GeometryReader { geometry in
+            makeGalleryView(geometry.size.width)
+                .onReceive(
+                    viewModel.$spatialReferenceMismatchError.dropFirst(),
+                    perform: { error in
+                        guard let error = error else { return }
+                        alertItem = AlertItem(spatialReferenceMismatchError: error)
+                        showErrorAlert = true
+                    }
+                )
+                .alert(
+                    alertItem?.title ?? "",
+                    isPresented: $showErrorAlert,
+                    presenting: alertItem
+                ) { _ in
+                } message: { item in
+                    Text(item.message)
                 }
-            )
-            .alert(
-                alertItem?.title ?? "",
-                isPresented: $showErrorAlert,
-                presenting: alertItem
-            ) { _ in
-            } message: { item in
-                Text(item.message)
-            }
+                .frame(
+                    width: geometry.size.width,
+                    height: geometry.size.height
+                )
+        }
     }
 }
 
 private extension BasemapGallery {
     /// Creates a gallery view.
+    /// - Parameter containerWidth: The width of the container holding the gallery.
     /// - Returns: A view representing the basemap gallery.
-    func makeGalleryView() -> some View {
+    func makeGalleryView(_ containerWidth: CGFloat) -> some View {
         ScrollView {
             switch style {
-            case .automatic:
+            case .automatic(let maxGridItemWidth):
                 if isRegularWidth {
-                    makeGridView()
+                    makeGridView(containerWidth, maxGridItemWidth)
                 } else {
                     makeListView()
                 }
-            case .grid:
-                makeGridView()
+            case .grid(let maxItemWidth):
+                makeGridView(containerWidth, maxItemWidth)
             case .list:
                 makeListView()
             }
@@ -138,15 +132,21 @@ private extension BasemapGallery {
     }
     
     /// The gallery view, displayed as a grid.
+    /// - Parameters:
+    ///   - containerWidth: The width of the container holding the grid view.
+    ///   - maxItemWidth: The maximum allowable width for an item in the grid. Defaults to `300`.
     /// - Returns: A view representing the basemap gallery grid.
-    func makeGridView() -> some View {
+    func makeGridView(_ containerWidth: CGFloat, _ maxItemWidth: CGFloat) -> some View {
         internalMakeGalleryView(
             columns: Array(
                 repeating: GridItem(
                     .flexible(),
                     alignment: .top
                 ),
-                count: 3
+                count: max(
+                    1,
+                    Int((containerWidth / maxItemWidth).rounded(.down))
+                )
             )
         )
     }
@@ -215,15 +215,15 @@ extension AlertItem {
     init(loadBasemapError: Error) {
         self.init(
             title: "Error loading basemap.",
-            message: "\((loadBasemapError as? RuntimeError)?.failureReason ?? "The basemap failed to load for an unknown reason.")"
+            message: "\((loadBasemapError as? ArcGISError)?.details ?? "The basemap failed to load for an unknown reason.")"
         )
     }
-
+    
     /// Creates an alert item based on a spatial reference mismatch error.
     /// - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
     init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
         let message: String
-
+        
         switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
         case (.some(_), .some(_)):
             message = "The basemap has a spatial reference that is incompatible with the map."
@@ -232,7 +232,7 @@ extension AlertItem {
         case (.none, _):
             message = "The basemap does not have a spatial reference."
         }
-
+        
         self.init(
             title: "Spatial reference mismatch.",
             message: message

@@ -19,12 +19,12 @@ struct FloorFilterExampleView: View {
     /// Make a map from a portal item.
     static func makeMap() -> Map {
         Map(item: PortalItem(
-            portal: .arcGISOnline(requiresLogin: false),
+            portal: .arcGISOnline(connection: .anonymous),
             id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
         ))
     }
     
-    /// Determines the arrangement of the inner `FloorFilter` UI componenets.
+    /// Determines the arrangement of the inner `FloorFilter` UI components.
     private let floorFilterAlignment = Alignment.bottomLeading
     
     /// Determines the appropriate time to initialize the `FloorFilter`.
@@ -45,11 +45,14 @@ struct FloorFilterExampleView: View {
         scale: 100_000
     )
     
-    @StateObject private var map = makeMap()
+    /// The data model containing the `Map` displayed in the `MapView`.
+    @StateObject private var dataModel = MapDataModel(
+        map: makeMap()
+    )
     
     var body: some View {
         MapView(
-            map: map,
+            map: dataModel.map,
             viewpoint: viewpoint
         )
         .onNavigatingChanged {
@@ -58,11 +61,11 @@ struct FloorFilterExampleView: View {
         .onViewpointChanged(kind: .centerAndScale) {
             viewpoint = $0
         }
-        /// Preserve the current viewpoint when a keyboard is presented in landscape.
+        // Preserve the current viewpoint when a keyboard is presented in landscape.
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .overlay(alignment: floorFilterAlignment) {
             if isMapLoaded,
-               let floorManager = map.floorManager {
+               let floorManager = dataModel.map.floorManager {
                 FloorFilter(
                     floorManager: floorManager,
                     alignment: floorFilterAlignment,
@@ -89,7 +92,7 @@ struct FloorFilterExampleView: View {
         }
         .task {
             do {
-                try await map.load()
+                try await dataModel.map.load()
                 isMapLoaded = true
             } catch {
                 mapLoadError = true

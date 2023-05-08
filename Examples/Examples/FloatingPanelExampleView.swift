@@ -16,7 +16,14 @@ import ArcGISToolkit
 import ArcGIS
 
 struct FloatingPanelExampleView: View {
-    @StateObject private var map = Map(basemapStyle: .arcGISImagery)
+    /// The data model containing the `Map` displayed in the `MapView`.
+    @StateObject private var dataModel = MapDataModel(
+        map: Map(basemapStyle: .arcGISImagery)
+    )
+    
+    @State var isPresented = true
+    
+    @State var selectedDetent: FloatingPanelDetent = .half
     
     private let initialViewpoint = Viewpoint(
         center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
@@ -25,18 +32,49 @@ struct FloatingPanelExampleView: View {
     
     var body: some View {
         MapView(
-            map: map,
+            map: dataModel.map,
             viewpoint: initialViewpoint
         )
-        .floatingPanel(isPresented: .constant(true)) {
-            SampleContent()
+        .floatingPanel(selectedDetent: $selectedDetent, isPresented: $isPresented) {
+            List {
+                Section("Preset Heights") {
+                    Button("Summary") {
+                        selectedDetent = .summary
+                    }
+                    Button("Half") {
+                        selectedDetent = .half
+                    }
+                    Button("Full") {
+                        selectedDetent = .full
+                    }
+                }
+                Section("Fractional Heights") {
+                    Button("1/4") {
+                        selectedDetent = .fraction(1 / 4)
+                    }
+                    Button("1/2") {
+                        selectedDetent = .fraction(1 / 2)
+                    }
+                    Button("3/4") {
+                        selectedDetent = .fraction(3 / 4)
+                    }
+                }
+                Section("Value Heights") {
+                    Button("200") {
+                        selectedDetent = .height(200)
+                    }
+                    Button("600") {
+                        selectedDetent = .height(600)
+                    }
+                }
+            }
         }
-    }
-}
-
-struct SampleContent: View {
-    var body: some View {
-        List(1..<21) { Text("\($0)") }
-            .listStyle(.plain)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(isPresented ? "Close" : "Open") {
+                    isPresented.toggle()
+                }
+            }
+        }
     }
 }

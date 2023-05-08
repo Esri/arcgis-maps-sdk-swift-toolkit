@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.7
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 // Copyright 2021 Esri.
 
@@ -16,9 +16,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "arcgis-runtime-toolkit-swift",
+    name: "arcgis-maps-sdk-swift-toolkit",
+    defaultLocalization: "en",
     platforms: [
-        .macOS("12"), .iOS("15")
+        .iOS(.v15),
+        .macCatalyst(.v15)
     ],
     products: [
         .library(
@@ -27,14 +29,13 @@ let package = Package(
         ),
     ],
     dependencies: [
-        // To use a daily build of the Swift API, change the path below to point to the daily build's `output` folder.
-        .package(name: "arcgis-runtime-swift", path: "../swift/ArcGIS")
+        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.1.0"))
     ],
     targets: [
         .target(
             name: "ArcGISToolkit",
             dependencies: [
-                .product(name: "ArcGIS", package: "arcgis-runtime-swift")
+                .product(name: "ArcGIS", package: "arcgis-maps-sdk-swift")
             ]
         ),
         .testTarget(

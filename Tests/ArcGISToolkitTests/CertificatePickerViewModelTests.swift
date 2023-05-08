@@ -12,6 +12,7 @@
 // limitations under the License.
 
 import XCTest
+import ArcGIS
 @testable import ArcGISToolkit
 
 @MainActor final class CertificatePickerViewModelTests: XCTestCase {
@@ -23,7 +24,7 @@ import XCTest
         XCTAssertTrue(model.showPrompt)
         XCTAssertFalse(model.showPicker)
         XCTAssertFalse(model.showPassword)
-        XCTAssertFalse(model.showCertificateImportError)
+        XCTAssertFalse(model.showCertificateError)
         XCTAssertEqual(model.challengingHost, "host.com")
         
         model.proceedFromPrompt()
@@ -42,10 +43,28 @@ import XCTest
         // Another yield seems to be required to deal with timing when running the test
         // repeatedly.
         await Task.yield()
-        XCTAssertTrue(model.showCertificateImportError)
+        // Sometime this fails. See details in https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/245.
+        XCTAssertTrue(model.showCertificateError)
         
         model.cancel()
         let disposition = await challenge.value
         XCTAssertEqual(disposition, .cancel)
+    }
+    
+    func testCertificateErrorLocalizedDescription() {
+        let couldNotAccessCertificateFileError = CertificatePickerViewModel.CertificateError.couldNotAccessCertificateFile
+        XCTAssertEqual(couldNotAccessCertificateFileError.localizedDescription, "Could not access the certificate file.")
+
+        let importErrorInvalidData = CertificatePickerViewModel.CertificateError.importError(.invalidData)
+        XCTAssertEqual(importErrorInvalidData.localizedDescription, "The certificate file was invalid.")
+
+        let importErrorInvalidPassword = CertificatePickerViewModel.CertificateError.importError(.invalidPassword)
+        XCTAssertEqual(importErrorInvalidPassword.localizedDescription, "The password was invalid.")
+        
+        let importErrorInternalError = CertificatePickerViewModel.CertificateError.importError(CertificateImportError(rawValue: errSecInternalError)!)
+        XCTAssertEqual(importErrorInternalError.localizedDescription, "An internal error has occurred.")
+        
+        let otherError = CertificatePickerViewModel.CertificateError.other(NSError(domain: NSOSStatusErrorDomain, code: Int(errSecInvalidCertAuthority)))
+        XCTAssertEqual(otherError.localizedDescription, "The operation couldn’t be completed. (OSStatus error -67826.)")
     }
 }
