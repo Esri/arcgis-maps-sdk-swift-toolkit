@@ -32,8 +32,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ The width and height of the compass.
 ***REMOVED***private var size: CGFloat = 44
 ***REMOVED***
-***REMOVED******REMOVED***/ An action to perform when the compass is tapped. Note if `mapViewProxy` is non-`nil`
-***REMOVED******REMOVED***/ this will not be invoked.
+***REMOVED******REMOVED***/ An action to perform when the compass is tapped.
 ***REMOVED***private var action: (() -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a compass with a heading based on compass directions (0° indicates a direction
