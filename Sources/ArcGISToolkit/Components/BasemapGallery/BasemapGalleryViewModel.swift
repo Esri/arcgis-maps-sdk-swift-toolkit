@@ -89,7 +89,12 @@ import ArcGIS
     @Published private(set) var currentItem: BasemapGalleryItem? = nil {
         didSet {
             guard let item = currentItem else { return }
-            geoModel?.basemap = item.basemap
+            // If the portal is nil, the user passed in their own array
+            // of basemaps, so clone the selected one prior to setting. This
+            // prevents the "Object already owned" error.
+            // If portal is non-nil, there's no need to clone the basemap
+            // as the list of basemaps is reloaded from the portal each time.
+            geoModel?.basemap = portal == nil ? item.basemap.clone() : item.basemap
         }
     }
     
