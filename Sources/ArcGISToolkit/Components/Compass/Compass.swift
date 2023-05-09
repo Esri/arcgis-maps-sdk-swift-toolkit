@@ -32,17 +32,29 @@ public struct Compass: View {
     /// The width and height of the compass.
     private var size: CGFloat = 44
     
+    /// An action to perform when the compass is tapped.
+    private var action: (() -> Void)?
+    
     /// Creates a compass with a heading based on compass directions (0° indicates a direction
     /// toward true North, 90° indicates a direction toward true East, etc.).
     /// - Parameters:
-    ///   - heading: The heading of the compass.
+    ///   - rotation: The rotation whose value determines the heading of the compass.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
+    ///   - action: The action to perform when the compass is tapped.
     init(
-        heading: Double,
-        mapViewProxy: MapViewProxy? = nil
+        rotation: Double?,
+        mapViewProxy: MapViewProxy?,
+        action: (() -> Void)?
     ) {
+        let heading: Double
+        if let rotation {
+            heading = rotation.isZero ? .zero : 360 - rotation
+        } else {
+            heading = .nan
+        }
         self.heading = heading
         self.mapViewProxy = mapViewProxy
+        self.action = action
     }
     
     public var body: some View {
@@ -64,7 +76,11 @@ public struct Compass: View {
                     }
                 }
                 .onTapGesture {
-                    Task { await mapViewProxy?.setViewpointRotation(0) }
+                    if let mapViewProxy {
+                        Task { await mapViewProxy.setViewpointRotation(0) }
+                    } else if let action {
+                        action()
+                    }
                 }
                 .accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
         }
@@ -91,13 +107,19 @@ public extension Compass {
         rotation: Double?,
         mapViewProxy: MapViewProxy
     ) {
-        let heading: Double
-        if let rotation {
-            heading = rotation.isZero ? .zero : 360 - rotation
-        } else {
-            heading = .nan
-        }
-        self.init(heading: heading, mapViewProxy: mapViewProxy)
+        self.init(rotation: rotation, mapViewProxy: mapViewProxy, action: nil)
+    }
+    
+    /// Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
+    /// a direction toward true West, etc.).
+    /// - Parameters:
+    ///   - rotation: The rotation whose value determines the heading of the compass.
+    ///   - action: The action to perform when the compass is tapped.
+    init(
+        rotation: Double?,
+        action: @escaping () -> Void
+    ) {
+        self.init(rotation: rotation, mapViewProxy: nil, action: action)
     }
     
     /// Define a custom size for the compass.
@@ -111,7 +133,7 @@ public extension Compass {
     /// Specifies whether the ``Compass`` should automatically hide when the heading is 0.
     /// - Parameter disable: A Boolean value indicating whether the compass should automatically
     /// hide/show itself when the heading is `0`.
-    func autoHideDisabled(_ disable: Bool = true) -> some View {
+    func autoHideDisabled(_ disable: Bool = true) -> Self {
         var copy = self
         copy.autoHide = !disable
         return copy
