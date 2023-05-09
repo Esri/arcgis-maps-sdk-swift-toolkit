@@ -21,33 +21,33 @@ final class CompassTests: XCTestCase {
 ***REMOVED******REMOVED***/ is applied.
 ***REMOVED***func testHiddenWithAutoHideOff() {
 ***REMOVED******REMOVED***let compass1Heading = Double.zero
-***REMOVED******REMOVED***let compass1 = Compass(heading: compass1Heading)
-***REMOVED******REMOVED******REMOVED***.autoHideDisabled() as! Compass
+***REMOVED******REMOVED***let compass1 = Compass(rotation: compass1Heading, mapViewProxy: nil, action: nil)
+***REMOVED******REMOVED******REMOVED***.autoHideDisabled()
 ***REMOVED******REMOVED***XCTAssertFalse(compass1.shouldHide(forHeading: compass1Heading))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let compass2Heading = 45.0
-***REMOVED******REMOVED***let compass2 = Compass(heading: compass2Heading)
-***REMOVED******REMOVED******REMOVED***.autoHideDisabled() as! Compass
+***REMOVED******REMOVED***let compass2 = Compass(rotation: compass2Heading, mapViewProxy: nil, action: nil)
+***REMOVED******REMOVED******REMOVED***.autoHideDisabled()
 ***REMOVED******REMOVED***XCTAssertFalse(compass2.shouldHide(forHeading: compass2Heading))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let compass3Heading = Double.nan
-***REMOVED******REMOVED***let compass3 = Compass(heading: compass3Heading)
-***REMOVED******REMOVED******REMOVED***.autoHideDisabled() as! Compass
+***REMOVED******REMOVED***let compass3 = Compass(rotation: compass3Heading, mapViewProxy: nil, action: nil)
+***REMOVED******REMOVED******REMOVED***.autoHideDisabled()
 ***REMOVED******REMOVED***XCTAssertFalse(compass3.shouldHide(forHeading: compass3Heading))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Verifies that the compass accurately indicates when it should be hidden.
 ***REMOVED***func testHiddenWithAutoHideOn() {
 ***REMOVED******REMOVED***let compass1Heading: Double = .zero
-***REMOVED******REMOVED***let compass1 = Compass(heading: compass1Heading)
+***REMOVED******REMOVED***let compass1 = Compass(rotation: compass1Heading, mapViewProxy: nil, action: nil)
 ***REMOVED******REMOVED***XCTAssertTrue(compass1.shouldHide(forHeading: compass1Heading))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let compass2Heading = 45.0
-***REMOVED******REMOVED***let compass2 = Compass(heading: compass2Heading)
+***REMOVED******REMOVED***let compass2 = Compass(rotation: compass2Heading, mapViewProxy: nil, action: nil)
 ***REMOVED******REMOVED***XCTAssertFalse(compass2.shouldHide(forHeading: compass2Heading))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let compass3Heading = Double.nan
-***REMOVED******REMOVED***let compass3 = Compass(heading: compass3Heading)
+***REMOVED******REMOVED***let compass3 = Compass(rotation: compass3Heading, mapViewProxy: nil, action: nil)
 ***REMOVED******REMOVED***XCTAssertTrue(compass3.shouldHide(forHeading: compass3Heading))
 ***REMOVED***
 ***REMOVED***
