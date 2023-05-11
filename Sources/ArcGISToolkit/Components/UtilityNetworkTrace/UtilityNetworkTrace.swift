@@ -261,10 +261,9 @@ public struct UtilityNetworkTrace: View {
                     HStack {
                         Text("Name", bundle: .module)
                         Spacer()
-                        TextField(
-                            "Name",
-                            text: $viewModel.pendingTrace.name
-                        )
+                        TextField(text: $viewModel.pendingTrace.name) {
+                            Text("Name", bundle: .module)
+                        }
                         .onSubmit {
                             viewModel.pendingTrace.userDidSpecifyName = true
                         }
