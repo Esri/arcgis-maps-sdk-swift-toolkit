@@ -282,7 +282,7 @@ struct SiteAndFacilitySelector: View {
 /// Displays text "No matches found".
 private struct NoMatchesView: View {
     var body: some View {
-        Text("No matches found")
+        Text("No matches found", bundle: .module)
             .frame(maxHeight: .infinity)
     }
 }

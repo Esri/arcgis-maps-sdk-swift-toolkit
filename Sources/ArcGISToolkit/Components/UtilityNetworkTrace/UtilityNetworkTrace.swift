@@ -111,8 +111,8 @@ public struct UtilityNetworkTrace: View {
                 }
             )
         ) {
-            Text("New trace").tag(UserActivity.creatingTrace(nil))
-            Text("Results").tag(UserActivity.viewingTraces(nil))
+            Text("New trace", bundle: .module).tag(UserActivity.creatingTrace(nil))
+            Text("Results", bundle: .module).tag(UserActivity.viewingTraces(nil))
         }
         .pickerStyle(.segmented)
         .padding()
@@ -124,7 +124,7 @@ public struct UtilityNetworkTrace: View {
             currentActivity = .creatingTrace(nil)
             activeDetent = .half
         } label: {
-            Text("Cancel starting point selection")
+            Text("Cancel starting point selection", bundle: .module)
         }
         .buttonStyle(.bordered)
     }
@@ -177,7 +177,7 @@ public struct UtilityNetworkTrace: View {
     /// Displays the list of available named trace configurations.
     @ViewBuilder private var configurationsList: some View {
         if viewModel.configurations.isEmpty {
-            Text("No configurations available")
+            Text("No configurations available", bundle: .module)
         } else {
             ForEach(viewModel.configurations, id: \.name) { configuration in
                 Button {
@@ -236,7 +236,7 @@ public struct UtilityNetworkTrace: View {
                     currentActivity = .creatingTrace(.addingStartingPoints)
                     activeDetent = .summary
                 } label: {
-                    Text("Add new")
+                    Text("Add new", bundle: .module)
                 }
                 if !viewModel.pendingTrace.startingPoints.isEmpty {
                     DisclosureGroup(
@@ -259,7 +259,7 @@ public struct UtilityNetworkTrace: View {
                     )
                 ) {
                     HStack {
-                        Text("Name")
+                        Text("Name", bundle: .module)
                         Spacer()
                         TextField(
                             "Name",
@@ -272,10 +272,10 @@ public struct UtilityNetworkTrace: View {
                         .foregroundColor(.blue)
                     }
                     ColorPicker(selection: $viewModel.pendingTrace.color) {
-                        Text("Color")
+                        Text("Color", bundle: .module)
                     }
                     Toggle(isOn: $shouldZoomOnTraceCompletion) {
-                        Text("Zoom to result")
+                        Text("Zoom to result", bundle: .module)
                     }
                 }
             }
@@ -291,7 +291,7 @@ public struct UtilityNetworkTrace: View {
                 }
             }
         } label: {
-            Text("Trace")
+            Text("Trace", bundle: .module)
         }
         .buttonStyle(.bordered)
         .disabled(!viewModel.canRunTrace)
@@ -414,7 +414,7 @@ public struct UtilityNetworkTrace: View {
                                 }
                             })
                         ) {
-                            Text("Color")
+                            Text("Color", bundle: .module)
                         }
                     }
                 }
@@ -432,10 +432,10 @@ public struct UtilityNetworkTrace: View {
                     viewModel.deleteAllTraces()
                     currentActivity = .creatingTrace(nil)
                 } label: {
-                    Text("Clear All Results")
+                    Text("Clear All Results", bundle: .module)
                 }
             } message: {
-                Text("All the trace inputs and results will be lost.")
+                Text("All the trace inputs and results will be lost.", bundle: .module)
             }
         }
     }
