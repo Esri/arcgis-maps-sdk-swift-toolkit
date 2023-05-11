@@ -257,26 +257,38 @@ public struct UtilityNetworkTrace: View {
                         set: { currentActivity = .creatingTrace($0 ? .viewingAdvancedOptions : nil) }
                     )
                 ) {
-                        HStack {
+                    HStack {
+                        Text("Name", bundle: .module)
+                        Spacer()
+                        TextField(text: $viewModel.pendingTrace.name) {
                             Text("Name", bundle: .module)
-                            Spacer()
-                            TextField(text: $viewModel.pendingTrace.name) {
-                                Text("Name", bundle: .module)
-                            }
-                            .onSubmit {
-                                viewModel.pendingTrace.userDidSpecifyName = true
-                            }
-                            .multilineTextAlignment(.trailing)
-                            .foregroundColor(.blue)
                         }
-                        ColorPicker(selection: $viewModel.pendingTrace.color) {
-                            Text("Color", bundle: .module)
+                        .onSubmit {
+                            viewModel.pendingTrace.userDidSpecifyName = true
                         }
-                        Toggle(isOn: $shouldZoomOnTraceCompletion) {
-                            Text("Zoom to result", bundle: .module)
-                        }
+                        .multilineTextAlignment(.trailing)
+                        .foregroundColor(.blue)
+                    }
+                    ColorPicker(selection: $viewModel.pendingTrace.color) {
+                        Text(
+                            "Color",
+                            bundle: .module,
+                            comment: "A label for a control to pick a color."
+                        )
+                    }
+                    Toggle(isOn: $shouldZoomOnTraceCompletion) {
+                        Text(
+                            "Zoom to result",
+                            bundle: .module,
+                            comment: "A user option specifying that a map should automatically change to show completed trace results."
+                        )
+                    }
                 } label: {
-                    Text("Advanced Options", bundle: .module)
+                    Text(
+                        "Advanced Options",
+                        bundle: .module,
+                        comment: "A section header for advanced options."
+                    )
                 }
             }
         }
