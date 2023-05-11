@@ -84,16 +84,23 @@ struct LoginViewModifier: ViewModifier {
             .credentialInput(
                 fields: .usernamePassword,
                 isPresented: $isPresented,
-                message: "You must sign in to access '\(viewModel.challengingHost)'",
-                title: "Authentication Required",
+                message: String(
+                    localized: "You must sign in to access '\(viewModel.challengingHost)'",
+                    bundle: .module,
+                    comment: """
+                             A label explaining that credentials are required to authenticate with specified host.
+                             The host is indicated in the variable.
+                             """
+                ),
+                title: String(localized: "Authentication Required", bundle: .module),
                 cancelAction: .init(
-                    title: "Cancel",
+                    title: String(localized: "Cancel", bundle: .module),
                     handler: { _, _ in
                         viewModel.cancel()
                     }
                 ),
                 continueAction: .init(
-                    title: "Continue",
+                    title: String(localized: "Continue", bundle: .module),
                     handler: { username, password in
                         viewModel.username = username
                         viewModel.password = password
