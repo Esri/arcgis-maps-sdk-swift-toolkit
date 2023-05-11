@@ -337,11 +337,13 @@ public struct UtilityNetworkTrace: View {
                         }
                     }
                 }
-                Button("Delete", role: .destructive) {
+                Button {
                     if viewModel.completedTraces.count == 1 {
                         currentActivity = .creatingTrace(nil)
                     }
                     viewModel.deleteTrace(selectedTrace)
+                } label: {
+                    Text("Delete", bundle: .module)
                 }
             }
             .font(.title3)
