@@ -49,7 +49,7 @@ struct BookmarksHeader: View {
                 Button {
                     isPresented.toggle()
                 } label: {
-                    Text("Done", bundle: .module, comment: "The user is done with the menu.")
+                    Text("Done", bundle: .module, comment: "A button to close the bookmark selection menu.")
                         .fontWeight(.semibold)
                 }
             }
