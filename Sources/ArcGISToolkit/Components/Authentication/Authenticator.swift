@@ -18,10 +18,11 @@ import Combine
 /// A configurable object that handles authentication challenges.
 @MainActor
 public final class Authenticator: ObservableObject {
-    /// A value indicating whether we should prompt the user when encountering an untrusted host.
-    let promptForUntrustedHosts: Bool
     /// The OAuth configurations that this authenticator can work with.
     let oAuthUserConfigurations: [OAuthUserConfiguration]
+    
+    /// A value indicating whether we should prompt the user when encountering an untrusted host.
+    var promptForUntrustedHosts: Bool
     
     /// Creates an authenticator.
     /// - Parameters:
