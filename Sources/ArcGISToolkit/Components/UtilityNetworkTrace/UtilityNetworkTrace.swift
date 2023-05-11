@@ -257,26 +257,38 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .creatingTrace($0 ? .viewingAdvancedOptions : nil) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Name", bundle: .module)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(text: $viewModel.pendingTrace.name) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Name", bundle: .module)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(text: $viewModel.pendingTrace.name) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Name", bundle: .module)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.userDidSpecifyName = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.trailing)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(selection: $viewModel.pendingTrace.color) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Color", bundle: .module)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.userDidSpecifyName = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(isOn: $shouldZoomOnTraceCompletion) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Zoom to result", bundle: .module)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.trailing)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(selection: $viewModel.pendingTrace.color) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Color",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a control to pick a color."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(isOn: $shouldZoomOnTraceCompletion) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Zoom to result",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A user option specifying that a map should automatically change to show completed trace results."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Advanced Options", bundle: .module)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Advanced Options",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A section header for advanced options."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
