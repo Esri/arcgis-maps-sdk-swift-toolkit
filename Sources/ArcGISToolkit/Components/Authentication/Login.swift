@@ -84,16 +84,23 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***.credentialInput(
 ***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
-***REMOVED******REMOVED******REMOVED******REMOVED***message: "You must sign in to access '\(viewModel.challengingHost)'",
-***REMOVED******REMOVED******REMOVED******REMOVED***title: "Authentication Required",
+***REMOVED******REMOVED******REMOVED******REMOVED***message: String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "You must sign in to access '\(viewModel.challengingHost)'",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label explaining that credentials are required to authenticate with specified host.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The host is indicated in the variable.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***title: String(localized: "Authentication Required", bundle: .module),
 ***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(localized: "Cancel", bundle: .module),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Continue",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(localized: "Continue", bundle: .module),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { username, password in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.username = username
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = password
