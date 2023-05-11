@@ -252,30 +252,31 @@ public struct UtilityNetworkTrace: View {
             }
             Section {
                 DisclosureGroup(
-                    "Advanced Options",
                     isExpanded: Binding(
                         get: { isFocused(traceCreationActivity: .viewingAdvancedOptions) },
                         set: { currentActivity = .creatingTrace($0 ? .viewingAdvancedOptions : nil) }
                     )
                 ) {
-                    HStack {
-                        Text("Name", bundle: .module)
-                        Spacer()
-                        TextField(text: $viewModel.pendingTrace.name) {
+                        HStack {
                             Text("Name", bundle: .module)
+                            Spacer()
+                            TextField(text: $viewModel.pendingTrace.name) {
+                                Text("Name", bundle: .module)
+                            }
+                            .onSubmit {
+                                viewModel.pendingTrace.userDidSpecifyName = true
+                            }
+                            .multilineTextAlignment(.trailing)
+                            .foregroundColor(.blue)
                         }
-                        .onSubmit {
-                            viewModel.pendingTrace.userDidSpecifyName = true
+                        ColorPicker(selection: $viewModel.pendingTrace.color) {
+                            Text("Color", bundle: .module)
                         }
-                        .multilineTextAlignment(.trailing)
-                        .foregroundColor(.blue)
-                    }
-                    ColorPicker(selection: $viewModel.pendingTrace.color) {
-                        Text("Color", bundle: .module)
-                    }
-                    Toggle(isOn: $shouldZoomOnTraceCompletion) {
-                        Text("Zoom to result", bundle: .module)
-                    }
+                        Toggle(isOn: $shouldZoomOnTraceCompletion) {
+                            Text("Zoom to result", bundle: .module)
+                        }
+                } label: {
+                    Text("Advanced Options", bundle: .module)
                 }
             }
         }
