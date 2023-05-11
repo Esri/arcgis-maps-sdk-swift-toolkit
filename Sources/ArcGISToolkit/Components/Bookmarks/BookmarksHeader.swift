@@ -49,7 +49,7 @@ struct BookmarksHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.toggle()
 ***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Done", bundle: .module, comment: "The user is done with the menu.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Done", bundle: .module, comment: "A button to close the bookmark selection menu.")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
