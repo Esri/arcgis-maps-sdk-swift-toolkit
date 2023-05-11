@@ -164,16 +164,22 @@ struct CertificatePickerViewModifier: ViewModifier {
             .credentialInput(
                 fields: .password,
                 isPresented: $viewModel.showPassword,
-                message: "Please enter a password for the chosen certificate.",
-                title: "Password Required",
+                message: String(
+                    localized: "Please enter a password for the chosen certificate.",
+                    bundle: .module
+                ),
+                title: String(
+                    localized: "Password Required",
+                    bundle: .module
+                ),
                 cancelAction: .init(
-                    title: "Cancel",
+                    title: String(localized: "Cancel", bundle: .module),
                     handler: { _, _ in
                         viewModel.cancel()
                     }
                 ),
                 continueAction: .init(
-                    title: "OK",
+                    title: String(localized: "OK", bundle: .module),
                     handler: { _, password in
                         viewModel.proceed(withPassword: password)
                     }
@@ -200,12 +206,20 @@ private extension View {
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
-        alert("Certificate Required", isPresented: isPresented, presenting: viewModel.challengingHost) { _ in
-            Button("Browse For Certificate") {
+        alert(
+            Text("Certificate Required", bundle: .module),
+            isPresented: isPresented,
+            presenting: viewModel.challengingHost
+        ) { _ in
+            Button {
                 viewModel.proceedFromPrompt()
+            } label: {
+                Text("Browse For Certificate", bundle: .module)
             }
-            Button("Cancel", role: .cancel) {
+            Button(role: .cancel) {
                 viewModel.cancel()
+            } label: {
+                Text("Cancel", bundle: .module)
             }
         } message: { _ in
             Text("A certificate is required to access content on \(viewModel.challengingHost).")
@@ -243,13 +257,19 @@ private extension View {
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
-        
-        alert("Error importing certificate", isPresented: isPresented) {
-            Button("Try Again") {
+        alert(
+            Text("Error importing certificate", bundle: .module),
+            isPresented: isPresented
+        ) {
+            Button {
                 viewModel.proceedFromPrompt()
+            } label: {
+                Text("Try Again", bundle: .module)
             }
-            Button("Cancel", role: .cancel) {
+            Button(role: .cancel) {
                 viewModel.cancel()
+            } label: {
+                Text("Cancel", bundle: .module)
             }
         } message: {
             Text(
