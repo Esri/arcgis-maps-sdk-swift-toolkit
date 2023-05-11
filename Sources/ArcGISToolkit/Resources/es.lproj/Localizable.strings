@@ -1,15 +1,9 @@
 "Bookmarks" = "Marcapáginas";
 
-"Could not access the certificate file." = "Could not access the certificate file.";
+"Delete" = "Eliminar";
 
 "Done" = "Hecho";
 
 "Select a bookmark" = "Seleccione un marcapáginas";
 
 "Sites" = "Sitios";
-
-"The certificate file was invalid." = "The certificate file was invalid.";
-
-"The password was invalid." = "The password was invalid.";
-
-"The certificate file or password was invalid." = "The certificate file or password was invalid.";
