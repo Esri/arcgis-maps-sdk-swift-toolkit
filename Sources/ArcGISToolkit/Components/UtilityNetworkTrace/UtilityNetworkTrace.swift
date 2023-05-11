@@ -328,13 +328,19 @@ public struct UtilityNetworkTrace: View {
         if let selectedTrace = viewModel.selectedTrace {
             Menu(selectedTrace.name) {
                 if let resultExtent = selectedTrace.resultExtent {
-                    Button("Zoom To") {
+                    Button {
                         let newViewpoint = Viewpoint(boundingGeometry: resultExtent)
                         if let mapViewProxy {
                             Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
                         } else {
                             viewpoint = newViewpoint
                         }
+                    } label: {
+                        Text(
+                            "Zoom To",
+                            bundle: .module,
+                            comment: "A button to change the map to the extent of the selected trace."
+                        )
                     }
                 }
                 Button {
