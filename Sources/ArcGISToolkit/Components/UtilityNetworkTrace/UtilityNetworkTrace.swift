@@ -111,8 +111,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***Text("New trace").tag(UserActivity.creatingTrace(nil))
-***REMOVED******REMOVED******REMOVED***Text("Results").tag(UserActivity.viewingTraces(nil))
+***REMOVED******REMOVED******REMOVED***Text("New trace", bundle: .module).tag(UserActivity.creatingTrace(nil))
+***REMOVED******REMOVED******REMOVED***Text("Results", bundle: .module).tag(UserActivity.viewingTraces(nil))
 ***REMOVED***
 ***REMOVED******REMOVED***.pickerStyle(.segmented)
 ***REMOVED******REMOVED***.padding()
@@ -124,7 +124,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
 ***REMOVED******REMOVED******REMOVED***activeDetent = .half
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text("Cancel starting point selection")
+***REMOVED******REMOVED******REMOVED***Text("Cancel starting point selection", bundle: .module)
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED***
@@ -177,7 +177,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ Displays the list of available named trace configurations.
 ***REMOVED***@ViewBuilder private var configurationsList: some View {
 ***REMOVED******REMOVED***if viewModel.configurations.isEmpty {
-***REMOVED******REMOVED******REMOVED***Text("No configurations available")
+***REMOVED******REMOVED******REMOVED***Text("No configurations available", bundle: .module)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***ForEach(viewModel.configurations, id: \.name) { configuration in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -236,7 +236,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .summary
 ***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Add new")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Add new", bundle: .module)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.pendingTrace.startingPoints.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
@@ -259,7 +259,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Name")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Name", bundle: .module)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Name",
@@ -272,10 +272,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(selection: $viewModel.pendingTrace.color) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Color")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Color", bundle: .module)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(isOn: $shouldZoomOnTraceCompletion) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Zoom to result")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Zoom to result", bundle: .module)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -291,7 +291,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text("Trace")
+***REMOVED******REMOVED******REMOVED***Text("Trace", bundle: .module)
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED***.disabled(!viewModel.canRunTrace)
@@ -414,7 +414,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Color")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Color", bundle: .module)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -432,10 +432,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
 ***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Clear All Results")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Clear All Results", bundle: .module)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("All the trace inputs and results will be lost.")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("All the trace inputs and results will be lost.", bundle: .module)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
