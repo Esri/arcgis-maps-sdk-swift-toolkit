@@ -222,7 +222,14 @@ private extension View {
                 Text("Cancel", bundle: .module)
             }
         } message: { _ in
-            Text("A certificate is required to access content on \(viewModel.challengingHost).")
+            Text(
+                "A certificate is required to access content on \(viewModel.challengingHost).",
+                bundle: .module,
+                comment: """
+                         An alert message indicating that a certificate is required to access
+                         content on a remote host. The variable is the host that prompted the challenge.
+                         """
+            )
         }
     }
 }
