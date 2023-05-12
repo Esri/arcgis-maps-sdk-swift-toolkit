@@ -214,8 +214,11 @@ extension AlertItem {
 ***REMOVED******REMOVED***/ - Parameter loadBasemapError: The load basemap error.
 ***REMOVED***init(loadBasemapError: Error) {
 ***REMOVED******REMOVED***self.init(
-***REMOVED******REMOVED******REMOVED***title: "Error loading basemap.",
-***REMOVED******REMOVED******REMOVED***message: "\((loadBasemapError as? ArcGISError)?.details ?? "The basemap failed to load for an unknown reason.")"
+***REMOVED******REMOVED******REMOVED***title: String(localized: "Error loading basemap.", bundle: .module),
+***REMOVED******REMOVED******REMOVED***message: String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "\((loadBasemapError as? ArcGISError)?.details ?? "The basemap failed to load for an unknown reason.")",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -226,15 +229,15 @@ extension AlertItem {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
 ***REMOVED******REMOVED***case (.some(_), .some(_)):
-***REMOVED******REMOVED******REMOVED***message = "The basemap has a spatial reference that is incompatible with the map."
+***REMOVED******REMOVED******REMOVED***message = String(localized: "The basemap has a spatial reference that is incompatible with the map.", bundle: .module)
 ***REMOVED******REMOVED***case (_, .none):
-***REMOVED******REMOVED******REMOVED***message = "The map does not have a spatial reference."
+***REMOVED******REMOVED******REMOVED***message = String(localized: "The map does not have a spatial reference.", bundle: .module)
 ***REMOVED******REMOVED***case (.none, _):
-***REMOVED******REMOVED******REMOVED***message = "The basemap does not have a spatial reference."
+***REMOVED******REMOVED******REMOVED***message = String(localized: "The basemap does not have a spatial reference.", bundle: .module)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.init(
-***REMOVED******REMOVED******REMOVED***title: "Spatial reference mismatch.",
+***REMOVED******REMOVED******REMOVED***title: String(localized: "Spatial reference mismatch.", bundle: .module),
 ***REMOVED******REMOVED******REMOVED***message: message
 ***REMOVED******REMOVED***)
 ***REMOVED***
