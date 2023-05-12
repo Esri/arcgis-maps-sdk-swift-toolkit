@@ -346,10 +346,11 @@ public struct UtilityNetworkTrace: View {
                 Section(String.featureResultsTitle) {
                     DisclosureGroup(
                         "(\(viewModel.selectedTrace?.elementResults.count ?? 0))",
-                        isExpanded: Binding(
-                            get: { isFocused(traceViewingActivity: .viewingFeatureResults) },
-                            set: { currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil) }
-                        )
+                        isExpanded: Binding {
+                            isFocused(traceViewingActivity: .viewingFeatureResults)
+                        } set: {
+                            currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil)
+                        }
                     ) {
                         if let selectedTrace = viewModel.selectedTrace {
                             ForEach(selectedTrace.assetGroupNames.sorted(), id: \.self) { assetGroupName in
@@ -420,7 +421,7 @@ public struct UtilityNetworkTrace: View {
             }
             .buttonStyle(.bordered)
             .confirmationDialog(
-                String.clearAllResultsPrompt,
+                String.clearAllResultsQuestion,
                 isPresented: $isShowingClearAllResultsConfirmationDialog
             ) {
                 Button(String.clearAllResultsButtonLabel, role: .destructive) {
@@ -754,7 +755,7 @@ private extension String {
         bundle: .module
     )
     
-    static let clearAllResultsPrompt = String(
+    static let clearAllResultsQuestion = String(
         localized: "Clear all results?",
         bundle: .module
     )
