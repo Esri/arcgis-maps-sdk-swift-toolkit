@@ -391,7 +391,7 @@ public struct UtilityNetworkTrace: View {
                 }
                 Section {
                     DisclosureGroup(
-                        "Advanced Options",
+                        String.advancedOptionsHeaderLabel,
                         isExpanded: Binding {
                             isFocused(traceViewingActivity: .viewingAdvancedOptions)
                         } set: {
@@ -413,22 +413,20 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             .padding([.vertical], 2)
-            Button("Clear All Results", role: .destructive) {
+            Button(String.clearAllResultsButtonLabel, role: .destructive) {
                 isShowingClearAllResultsConfirmationDialog = true
             }
             .buttonStyle(.bordered)
             .confirmationDialog(
-                "Clear all results?",
+                String.clearAllResultsPrompt,
                 isPresented: $isShowingClearAllResultsConfirmationDialog
             ) {
-                Button(role: .destructive) {
+                Button(String.clearAllResultsButtonLabel, role: .destructive) {
                     viewModel.deleteAllTraces()
                     currentActivity = .creatingTrace(nil)
-                } label: {
-                    Text("Clear All Results", bundle: .module)
                 }
             } message: {
-                Text("All the trace inputs and results will be lost.", bundle: .module)
+                Text(String.clearAllResultsMessage)
             }
         }
     }
@@ -438,8 +436,8 @@ public struct UtilityNetworkTrace: View {
         makeBackButton(title: .startingPointsTitle) {
             currentActivity = .creatingTrace(.viewingStartingPoints)
         }
-        Menu(selectedStartingPoint?.utilityElement?.assetType.name ?? "Unnamed Asset Type") {
-            Button("Zoom To") {
+        Menu(selectedStartingPoint?.utilityElement?.assetType.name ?? String.unnamedAssetType) {
+            Button(String.zoomToButtonLabel) {
                 if let selectedStartingPoint = selectedStartingPoint,
                    let extent = selectedStartingPoint.geoElement.geometry?.extent {
                     let newViewpoint = Viewpoint(boundingGeometry: extent)
@@ -461,18 +459,20 @@ public struct UtilityNetworkTrace: View {
         List {
             if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
                 Section(String.fractionAlongEdgeSectionTitle) {
-                    Slider(value: Binding(get: {
-                        viewModel.pendingTrace.startingPoints.first {
-                            $0 == selectedStartingPoint
-                        }?.utilityElement?.fractionAlongEdge ?? .zero
-                    }, set: { newValue in
-                        if let selectedStartingPoint = selectedStartingPoint {
-                            viewModel.setFractionAlongEdgeFor(
-                                startingPoint: selectedStartingPoint,
-                                to: newValue
-                            )
+                    Slider(
+                        value: Binding {
+                            viewModel.pendingTrace.startingPoints.first {
+                                $0 == selectedStartingPoint
+                            }?.utilityElement?.fractionAlongEdge ?? .zero
+                        } set: { newValue in
+                            if let selectedStartingPoint = selectedStartingPoint {
+                                viewModel.setFractionAlongEdgeFor(
+                                    startingPoint: selectedStartingPoint,
+                                    to: newValue
+                                )
+                            }
                         }
-                    }))
+                    )
                 }
             } else if selectedStartingPoint?.utilityElement?.networkSource.kind == .junction &&
                         selectedStartingPoint?.utilityElement?.terminal != nil &&
@@ -480,11 +480,11 @@ public struct UtilityNetworkTrace: View {
                 Section {
                     Picker(
                         String.terminalConfigurationPickerTitle,
-                        selection: Binding(get: {
+                        selection: Binding {
                             selectedStartingPoint!.utilityElement!.terminal!
-                        }, set: { newValue in
+                        } set: { newValue in
                             viewModel.setTerminalConfigurationFor(startingPoint: selectedStartingPoint!, to: newValue)
-                        })
+                        }
                     ) {
                         ForEach(viewModel.pendingTrace.startingPoints.first {
                             $0 == selectedStartingPoint
@@ -648,9 +648,13 @@ public struct UtilityNetworkTrace: View {
     // MARK: Computed Properties
     
     /// Indicates the number of the trace currently being viewed out the total number of traces.
-    private var currentTraceLabel: LocalizedStringKey {
+    private var currentTraceLabel: String {
         guard let index = viewModel.selectedTraceIndex else { return "Error" }
-        return "Trace \(index+1) of \(viewModel.completedTraces.count)"
+        return String(
+            localized: "Trace \(index+1, specifier: "%lld") of \(viewModel.completedTraces.count, specifier: "%lld")",
+            bundle: .module,
+            comment: "A label indicating the index of the trace being viewed out of the total number of traces completed."
+        )
     }
     
     /// The name of the selected utility element asset group.
@@ -742,6 +746,22 @@ private extension String {
         bundle: .module
     )
     
+    static let clearAllResultsButtonLabel = String(
+        localized: "Clear All Results",
+        bundle: .module
+    )
+    
+    static let clearAllResultsPrompt = String(
+        localized: "Clear all results?",
+        bundle: .module
+    )
+    
+    static let clearAllResultsMessage = String(
+        localized: "All the trace inputs and results will be lost.",
+        bundle: .module,
+        comment: "A message describing the outcome of clearing all utility network trace results."
+    )
+    
     static let colorLabel = String(
         localized: "Color",
         bundle: .module
@@ -827,6 +847,12 @@ private extension String {
     static let traceConfigurationSectionLabel = String(
         localized: "Trace Configuration",
         bundle: .module
+    )
+    
+    static let unnamedAssetType = String(
+        localized: "Unnamed Asset Type",
+        bundle: .module,
+        comment: "A label to use in place of a utility element asset type name."
     )
     
     static let zoomToButtonLabel = String(
