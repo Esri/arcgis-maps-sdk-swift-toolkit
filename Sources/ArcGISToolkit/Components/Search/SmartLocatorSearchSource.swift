@@ -63,7 +63,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         searchArea: Geometry? = nil,
         preferredSearchLocation: Point? = nil
     ) async throws -> [SearchResult] {
-        // First, peform super class search.
+        // First, perform super class search.
         var results = try await super.search(
             query,
             searchArea: searchArea,
