@@ -92,6 +92,6 @@ struct AttachmentsPopupElementView: View {
 private extension AttachmentsPopupElement {
     /// Provides a default title to display if `title` is empty.
     var displayTitle: String {
-        title.isEmpty ? "Attachments" : title
+        title.isEmpty ? String(localized: "Attachments", bundle: .module) : title
     }
 }
