@@ -221,25 +221,27 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Section(String.traceConfigurationSectionLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.configuration?.name ?? .noneSelected,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceCreationActivity: .viewingTraceConfigurations) ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .creatingTrace($0 ? .viewingTraceConfigurations : nil) ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused(traceCreationActivity: .viewingTraceConfigurations)
+***REMOVED******REMOVED******REMOVED******REMOVED*** set: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace($0 ? .viewingTraceConfigurations : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configurationsList
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section(String.startingPointsTitle) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.addNew) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.addNewButtonLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .summary
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.pendingTrace.startingPoints.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceCreationActivity: .viewingStartingPoints) ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .creatingTrace($0 ? .viewingStartingPoints : nil) ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused(traceCreationActivity: .viewingStartingPoints)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** set: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace($0 ? .viewingStartingPoints : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPointsList
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
@@ -725,9 +727,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 
 private extension String {
-***REMOVED***static let addNew = String(
+***REMOVED***static let addNewButtonLabel = String(
 ***REMOVED******REMOVED***localized: "Add new",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***comment: "A button to add new utility trace starting points."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let advancedOptionsHeaderLabel = String(
