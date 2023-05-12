@@ -346,10 +346,11 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section(String.featureResultsTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"(\(viewModel.selectedTrace?.elementResults.count ?? 0))",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingFeatureResults) ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil) ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused(traceViewingActivity: .viewingFeatureResults)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** set: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedTrace = viewModel.selectedTrace {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(selectedTrace.assetGroupNames.sorted(), id: \.self) { assetGroupName in
@@ -420,7 +421,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED***.confirmationDialog(
-***REMOVED******REMOVED******REMOVED******REMOVED***String.clearAllResultsPrompt,
+***REMOVED******REMOVED******REMOVED******REMOVED***String.clearAllResultsQuestion,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isShowingClearAllResultsConfirmationDialog
 ***REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.clearAllResultsButtonLabel, role: .destructive) {
@@ -754,7 +755,7 @@ private extension String {
 ***REMOVED******REMOVED***bundle: .module
 ***REMOVED***)
 ***REMOVED***
-***REMOVED***static let clearAllResultsPrompt = String(
+***REMOVED***static let clearAllResultsQuestion = String(
 ***REMOVED******REMOVED***localized: "Clear all results?",
 ***REMOVED******REMOVED***bundle: .module
 ***REMOVED***)
