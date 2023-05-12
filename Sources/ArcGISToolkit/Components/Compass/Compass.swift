@@ -66,7 +66,18 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy?.setViewpointRotation(0) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityLabel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** An compass description to be read by a screen reader describing the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** current heading. The first variable being a degree value and the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** second being a corresponding cardinal direction (north, northeast,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** east, etc.).
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
