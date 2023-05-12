@@ -221,25 +221,27 @@ public struct UtilityNetworkTrace: View {
             Section(String.traceConfigurationSectionLabel) {
                 DisclosureGroup(
                     viewModel.pendingTrace.configuration?.name ?? .noneSelected,
-                    isExpanded: Binding(
-                        get: { isFocused(traceCreationActivity: .viewingTraceConfigurations) },
-                        set: { currentActivity = .creatingTrace($0 ? .viewingTraceConfigurations : nil) }
-                    )
+                    isExpanded: Binding {
+                        isFocused(traceCreationActivity: .viewingTraceConfigurations)
+                    } set: {
+                        currentActivity = .creatingTrace($0 ? .viewingTraceConfigurations : nil)
+                    }
                 ) {
                     configurationsList
                 }
             }
             Section(String.startingPointsTitle) {
-                Button(String.addNew) {
+                Button(String.addNewButtonLabel) {
                     currentActivity = .creatingTrace(.addingStartingPoints)
                     activeDetent = .summary
                 }
                 if !viewModel.pendingTrace.startingPoints.isEmpty {
                     DisclosureGroup(
-                        isExpanded: Binding(
-                            get: { isFocused(traceCreationActivity: .viewingStartingPoints) },
-                            set: { currentActivity = .creatingTrace($0 ? .viewingStartingPoints : nil) }
-                        )
+                        isExpanded: Binding {
+                            isFocused(traceCreationActivity: .viewingStartingPoints)
+                        } set: {
+                            currentActivity = .creatingTrace($0 ? .viewingStartingPoints : nil)
+                        }
                     ) {
                         startingPointsList
                     } label: {
@@ -725,9 +727,10 @@ public struct UtilityNetworkTrace: View {
 }
 
 private extension String {
-    static let addNew = String(
+    static let addNewButtonLabel = String(
         localized: "Add new",
-        bundle: .module
+        bundle: .module,
+        comment: "A button to add new utility trace starting points."
     )
     
     static let advancedOptionsHeaderLabel = String(
