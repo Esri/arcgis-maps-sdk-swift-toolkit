@@ -107,6 +107,6 @@ private struct DisplayField: Hashable, Identifiable {
 private extension FieldsPopupElement {
 ***REMOVED******REMOVED***/ Provides a default title to display if `title` is empty.
 ***REMOVED***var displayTitle: String {
-***REMOVED******REMOVED***title.isEmpty ? "Fields" : title
+***REMOVED******REMOVED***title.isEmpty ? String(localized: "Fields", bundle: .module) : title
 ***REMOVED***
 ***REMOVED***

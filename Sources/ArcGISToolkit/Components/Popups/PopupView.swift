@@ -65,7 +65,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .success(_):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementScrollView(popupElements: popup.evaluatedElements)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Popup evaluation failed: \(error.localizedDescription)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Popup evaluation failed: \(error.localizedDescription)", bundle: .module)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
