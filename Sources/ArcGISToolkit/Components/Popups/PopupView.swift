@@ -38,7 +38,7 @@ public struct PopupView: View {
 
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>?
-
+    
     public var body: some View {
         VStack(alignment: .leading) {
             HStack {
