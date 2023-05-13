@@ -62,7 +62,10 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .module)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** message: { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
