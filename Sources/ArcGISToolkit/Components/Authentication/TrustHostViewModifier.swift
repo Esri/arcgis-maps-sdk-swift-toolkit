@@ -62,7 +62,10 @@ struct TrustHostViewModifier: ViewModifier {
                     Text("Cancel", bundle: .module)
                 }
             } message: { _ in
-                Text("Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.")
+                Text(
+                    "Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
+                    bundle: .module
+                )
             }
     }
 }
