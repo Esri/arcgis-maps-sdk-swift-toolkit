@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import ArcGIS
-import Combine
 import Foundation
 import SwiftUI
 
@@ -62,9 +61,6 @@ final class ScalebarViewModel: ObservableObject {
         return (altScreenLength, label)
     }
     
-    /// A subject to which viewpoint updates can be submitted.
-    var viewpointSubject = PassthroughSubject<Viewpoint?, Never>()
-    
     // - MARK: Public methods
     
     /// A scalebar view model controls the underlying data used to render a scalebar.
@@ -77,7 +73,6 @@ final class ScalebarViewModel: ObservableObject {
     ///   - unitsPerPoint: The current number of device independent pixels to map display units.
     ///   - useGeodeticCalculations: Determines if a geodesic curve should be used to compute
     ///     the scale.
-    ///   - viewpoint: The map's current viewpoint.
     init(
         _ maxWidth: Double,
         _ minScale: Double,
@@ -85,8 +80,7 @@ final class ScalebarViewModel: ObservableObject {
         _ style: ScalebarStyle,
         _ units: ScalebarUnits,
         _ unitsPerPoint: Binding<Double?>,
-        _ useGeodeticCalculations: Bool,
-        _ viewpoint: Viewpoint?
+        _ useGeodeticCalculations: Bool
     ) {
         self.maxWidth = maxWidth
         self.minScale = minScale
@@ -95,16 +89,6 @@ final class ScalebarViewModel: ObservableObject {
         self.units = units
         self.unitsPerPoint = unitsPerPoint
         self.useGeodeticCalculations = useGeodeticCalculations
-        self.viewpoint = viewpoint
-        
-        viewpointSubscription = viewpointSubject
-            .sink { [weak self] in
-                guard let self else { return }
-                self.viewpoint = $0
-                self.updateScaleDisplay()
-            }
-        
-        updateScaleDisplay()
     }
     
     // - MARK: Private constants
@@ -162,12 +146,6 @@ final class ScalebarViewModel: ObservableObject {
     
     /// Allows a user to toggle geodetic calculations.
     private var useGeodeticCalculations: Bool
-    
-    /// Acts as a data provider of the current scale.
-    private var viewpoint: Viewpoint?
-    
-    /// A subscription to handle listening for viewpoint changes.
-    private var viewpointSubscription: AnyCancellable?
     
     // - MARK: Private methods
     
@@ -239,10 +217,10 @@ final class ScalebarViewModel: ObservableObject {
     
     /// Updates the information necessary to render a scalebar based off the latest viewpoint and
     /// units per point information.
-    private func updateScaleDisplay() {
+    /// - Parameter viewpoint: The viewpoint to use to calculate the new scale.
+    func updateScaleDisplay(withViewpoint viewpoint: Viewpoint) {
         guard let spatialReference = spatialReference.wrappedValue,
               let unitsPerPoint = unitsPerPoint.wrappedValue,
-              let viewpoint,
               minScale <= 0 || viewpoint.targetScale < minScale else {
             return
         }
