@@ -243,8 +243,8 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Updates the information necessary to render a scalebar based off the latest viewpoint and units per
-***REMOVED******REMOVED***/ point information.
+***REMOVED******REMOVED***/ Updates the information necessary to render a scalebar based off the latest viewpoint and
+***REMOVED******REMOVED***/ units per point information.
 ***REMOVED***private func updateScaleDisplay() {
 ***REMOVED******REMOVED***guard let spatialReference = spatialReference.wrappedValue,
 ***REMOVED******REMOVED******REMOVED***  let unitsPerPoint = unitsPerPoint.wrappedValue,
