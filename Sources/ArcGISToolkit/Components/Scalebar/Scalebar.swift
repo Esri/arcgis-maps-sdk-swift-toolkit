@@ -44,7 +44,7 @@ public struct Scalebar: View {
     }
     
     /// Acts as a data provider of the current scale.
-    private var viewpoint: Binding<Viewpoint?>
+    private var viewpoint: Viewpoint?
     
     // - MARK: Internal/Private constants
     
@@ -94,7 +94,7 @@ public struct Scalebar: View {
         units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
         unitsPerPoint: Binding<Double?>,
         useGeodeticCalculations: Bool = true,
-        viewpoint: Binding<Viewpoint?>
+        viewpoint: Viewpoint?
     ) {
         _opacity = State(initialValue: settings.autoHide ? .zero : 1)
         self.settings = settings
@@ -109,8 +109,7 @@ public struct Scalebar: View {
                 style,
                 units,
                 unitsPerPoint,
-                useGeodeticCalculations,
-                viewpoint.wrappedValue
+                useGeodeticCalculations
             )
         )
     }
@@ -131,8 +130,9 @@ public struct Scalebar: View {
             }
         }
         .opacity(opacity)
-        .onChange(of: viewpoint.wrappedValue) {
-            viewModel.viewpointSubject.send($0)
+        .onChange(of: viewpoint) {
+            guard let viewpoint = $0 else { return }
+            viewModel.updateScaleDisplay(withViewpoint: viewpoint)
             if settings.autoHide {
                 withAnimation {
                     opacity = 1
