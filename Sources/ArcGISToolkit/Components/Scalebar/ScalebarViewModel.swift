@@ -12,7 +12,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Combine
 import Foundation
 ***REMOVED***
 
@@ -62,9 +61,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***return (altScreenLength, label)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A subject to which viewpoint updates can be submitted.
-***REMOVED***var viewpointSubject = PassthroughSubject<Viewpoint?, Never>()
-***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Public methods
 ***REMOVED***
 ***REMOVED******REMOVED***/ A scalebar view model controls the underlying data used to render a scalebar.
@@ -77,7 +73,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - unitsPerPoint: The current number of device independent pixels to map display units.
 ***REMOVED******REMOVED***/   - useGeodeticCalculations: Determines if a geodesic curve should be used to compute
 ***REMOVED******REMOVED***/***REMOVED*** the scale.
-***REMOVED******REMOVED***/   - viewpoint: The map's current viewpoint.
 ***REMOVED***init(
 ***REMOVED******REMOVED***_ maxWidth: Double,
 ***REMOVED******REMOVED***_ minScale: Double,
@@ -85,8 +80,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***_ style: ScalebarStyle,
 ***REMOVED******REMOVED***_ units: ScalebarUnits,
 ***REMOVED******REMOVED***_ unitsPerPoint: Binding<Double?>,
-***REMOVED******REMOVED***_ useGeodeticCalculations: Bool,
-***REMOVED******REMOVED***_ viewpoint: Viewpoint?
+***REMOVED******REMOVED***_ useGeodeticCalculations: Bool
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.maxWidth = maxWidth
 ***REMOVED******REMOVED***self.minScale = minScale
@@ -95,16 +89,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.units = units
 ***REMOVED******REMOVED***self.unitsPerPoint = unitsPerPoint
 ***REMOVED******REMOVED***self.useGeodeticCalculations = useGeodeticCalculations
-***REMOVED******REMOVED***self.viewpoint = viewpoint
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***viewpointSubscription = viewpointSubject
-***REMOVED******REMOVED******REMOVED***.sink { [weak self] in
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***self.viewpoint = $0
-***REMOVED******REMOVED******REMOVED******REMOVED***self.updateScaleDisplay()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***updateScaleDisplay()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Private constants
@@ -162,12 +146,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows a user to toggle geodetic calculations.
 ***REMOVED***private var useGeodeticCalculations: Bool
-***REMOVED***
-***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
-***REMOVED***private var viewpoint: Viewpoint?
-***REMOVED***
-***REMOVED******REMOVED***/ A subscription to handle listening for viewpoint changes.
-***REMOVED***private var viewpointSubscription: AnyCancellable?
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Private methods
 ***REMOVED***
@@ -239,10 +217,10 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the information necessary to render a scalebar based off the latest viewpoint and
 ***REMOVED******REMOVED***/ units per point information.
-***REMOVED***private func updateScaleDisplay() {
+***REMOVED******REMOVED***/ - Parameter viewpoint: The viewpoint to use to calculate the new scale.
+***REMOVED***func updateScaleDisplay(withViewpoint viewpoint: Viewpoint) {
 ***REMOVED******REMOVED***guard let spatialReference = spatialReference.wrappedValue,
 ***REMOVED******REMOVED******REMOVED***  let unitsPerPoint = unitsPerPoint.wrappedValue,
-***REMOVED******REMOVED******REMOVED***  let viewpoint,
 ***REMOVED******REMOVED******REMOVED***  minScale <= 0 || viewpoint.targetScale < minScale else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
