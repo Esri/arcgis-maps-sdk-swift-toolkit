@@ -25,12 +25,6 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***/ The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
 ***REMOVED***private let refreshInterval: TimeInterval?
 ***REMOVED***
-***REMOVED******REMOVED***/ A localized error message to display when loading failed.
-***REMOVED***private let loadingErrorMessage = String(
-***REMOVED******REMOVED***localized: "An error occurred loading the image",
-***REMOVED******REMOVED***bundle: .module
-***REMOVED***)
-***REMOVED***
 ***REMOVED******REMOVED***/ The size of the media's frame.
 ***REMOVED***private let mediaSize: CGSize?
 ***REMOVED***
@@ -73,7 +67,10 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("\(loadingErrorMessage): \(error.localizedDescription).")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"An error occurred loading the image: \(error.localizedDescription).",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom])
 ***REMOVED******REMOVED***
