@@ -67,27 +67,21 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - maxWidth: The maximum screen width allotted to the scalebar.
 ***REMOVED******REMOVED***/   - minScale: A value of 0 indicates the scalebar segments should always recalculate.
-***REMOVED******REMOVED***/   - spatialReference: The map's spatial reference.
 ***REMOVED******REMOVED***/   - style: The visual appearance of the scalebar.
 ***REMOVED******REMOVED***/   - units: The units to be displayed in the scalebar.
-***REMOVED******REMOVED***/   - unitsPerPoint: The current number of device independent pixels to map display units.
 ***REMOVED******REMOVED***/   - useGeodeticCalculations: Determines if a geodesic curve should be used to compute
 ***REMOVED******REMOVED***/***REMOVED*** the scale.
 ***REMOVED***init(
 ***REMOVED******REMOVED***_ maxWidth: Double,
 ***REMOVED******REMOVED***_ minScale: Double,
-***REMOVED******REMOVED***_ spatialReference: Binding<SpatialReference?>,
 ***REMOVED******REMOVED***_ style: ScalebarStyle,
 ***REMOVED******REMOVED***_ units: ScalebarUnits,
-***REMOVED******REMOVED***_ unitsPerPoint: Binding<Double?>,
 ***REMOVED******REMOVED***_ useGeodeticCalculations: Bool
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.maxWidth = maxWidth
 ***REMOVED******REMOVED***self.minScale = minScale
-***REMOVED******REMOVED***self.spatialReference = spatialReference
 ***REMOVED******REMOVED***self.style = style
 ***REMOVED******REMOVED***self.units = units
-***REMOVED******REMOVED***self.unitsPerPoint = unitsPerPoint
 ***REMOVED******REMOVED***self.useGeodeticCalculations = useGeodeticCalculations
 ***REMOVED***
 ***REMOVED***
@@ -129,25 +123,35 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The units to be displayed in the scalebar.
 ***REMOVED***private var displayUnit: LinearUnit? = nil
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether an initial scale has been calculated.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ The scale requires 3 values (spatial reference, units per point and a viewpoint) to be
+***REMOVED******REMOVED***/ calculated. As these values are initially received in a non-deterministic order, this allows
+***REMOVED******REMOVED***/ a calculation to be attempted upon initial receipt of each of the 3 values.
+***REMOVED***private var initialScaleWasCalculated = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The length of the line to display in map units.
 ***REMOVED***private var lineMapLength: Double = .zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum screen width allotted to the scalebar.
 ***REMOVED***private var maxWidth: Double
 ***REMOVED***
-***REMOVED******REMOVED***/ The map's spatial reference.
-***REMOVED***private var spatialReference: Binding<SpatialReference?>
+***REMOVED******REMOVED***/ The spatial reference to calculate the scale with.
+***REMOVED***private var spatialReference: SpatialReference?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Unit of measure in use.
 ***REMOVED***private var units: ScalebarUnits
 ***REMOVED***
-***REMOVED******REMOVED***/ The current number of device independent pixels to map display units.
-***REMOVED***private var unitsPerPoint: Binding<Double?>
+***REMOVED******REMOVED***/ The units per point to calculate the scale with.
+***REMOVED***private var unitsPerPoint: Double?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows a user to toggle geodetic calculations.
 ***REMOVED***private var useGeodeticCalculations: Bool
 ***REMOVED***
-***REMOVED******REMOVED*** - MARK: Private methods
+***REMOVED******REMOVED***/ The viewpoint to calculate the scale with.
+***REMOVED***private var viewpoint: Viewpoint?
+***REMOVED***
+***REMOVED******REMOVED*** - MARK: Methods
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the labels to be displayed by the scalebar.
 ***REMOVED***private func updateLabels() {
@@ -215,12 +219,31 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Updates the information necessary to render a scalebar based off the latest viewpoint and
-***REMOVED******REMOVED***/ units per point information.
-***REMOVED******REMOVED***/ - Parameter viewpoint: The viewpoint to use to calculate the new scale.
-***REMOVED***func updateScaleDisplay(withViewpoint viewpoint: Viewpoint) {
-***REMOVED******REMOVED***guard let spatialReference = spatialReference.wrappedValue,
-***REMOVED******REMOVED******REMOVED***  let unitsPerPoint = unitsPerPoint.wrappedValue,
+***REMOVED******REMOVED***/ Update the stored spatial reference value for use in the next scale calculation.
+***REMOVED******REMOVED***/ - Parameter spatialReference: The spatial reference to calculate the scale with.
+***REMOVED***func update(_ spatialReference: SpatialReference?) {
+***REMOVED******REMOVED***self.spatialReference = spatialReference
+***REMOVED******REMOVED***if !initialScaleWasCalculated { updateScale() ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Updates the stored units per point value for use in the next scale calculation.
+***REMOVED******REMOVED***/ - Parameter unitsPerPoint: The units per point to calculate the scale with.
+***REMOVED***func update(_ unitsPerPoint: Double?) {
+***REMOVED******REMOVED***self.unitsPerPoint = unitsPerPoint
+***REMOVED******REMOVED***if !initialScaleWasCalculated { updateScale() ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Updates the stored units viewpoint value for use in the next scale calculation.
+***REMOVED******REMOVED***/ - Parameter viewpoint: The viewpoint to calculate the scale with.
+***REMOVED***func update(_ viewpoint: Viewpoint?) {
+***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED******REMOVED***if !initialScaleWasCalculated { updateScale() ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Update the information necessary to render a scalebar based off the stored viewpoint, units
+***REMOVED******REMOVED***/ per point and spatial reference values.
+***REMOVED***func updateScale() {
+***REMOVED******REMOVED***guard let spatialReference, let unitsPerPoint, let viewpoint,
 ***REMOVED******REMOVED******REMOVED***  minScale <= 0 || viewpoint.targetScale < minScale else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
@@ -297,6 +320,8 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.displayLength = displayLength
 ***REMOVED******REMOVED***self.displayUnit = displayUnit
 ***REMOVED******REMOVED***self.lineMapLength = lineMapLength
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***initialScaleWasCalculated = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***updateLabels()
 ***REMOVED***
