@@ -98,22 +98,16 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***viewpointSubscription = viewpointSubject
-***REMOVED******REMOVED******REMOVED***.debounce(for: delay, scheduler: DispatchQueue.main)
-***REMOVED******REMOVED******REMOVED***.sink(receiveValue: { [weak self] in
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.sink { [weak self] in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.viewpoint = $0
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.updateScaleDisplay()
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***updateScaleDisplay()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Private constants
-***REMOVED***
-***REMOVED******REMOVED***/ The amount of time to wait between value calculations.
-***REMOVED***private let delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.05)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The curve type to use when performing scale calculations.
 ***REMOVED***private let geodeticCurveType: GeometryEngine.GeodeticCurveType = .geodesic
