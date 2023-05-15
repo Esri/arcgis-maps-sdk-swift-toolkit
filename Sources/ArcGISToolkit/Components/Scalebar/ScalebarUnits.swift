@@ -21,7 +21,7 @@ public enum ScalebarUnits {
 ***REMOVED******REMOVED***/ Metric units (meters, etc)
 ***REMOVED***case metric
 ***REMOVED***
-***REMOVED******REMOVED***/ Mulitplier options.
+***REMOVED******REMOVED***/ Multiplier options.
 ***REMOVED******REMOVED***/ This table must begin with 1 and end with 10.
 ***REMOVED***private static let roundNumberMultipliers: [Double] =
 ***REMOVED******REMOVED***[1, 1.2, 1.25, 1.5, 1.75, 2, 2.4, 2.5, 3, 3.75, 4, 5, 6, 7.5, 8, 9, 10]
