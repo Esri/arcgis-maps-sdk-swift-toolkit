@@ -248,7 +248,7 @@ final class ScalebarViewModel: ObservableObject {
     private func updateScaleDisplay() {
         guard let spatialReference = spatialReference.wrappedValue,
               let unitsPerPoint = unitsPerPoint.wrappedValue,
-              let viewpoint = viewpoint,
+              let viewpoint,
               minScale <= 0 || viewpoint.targetScale < minScale else {
             return
         }
