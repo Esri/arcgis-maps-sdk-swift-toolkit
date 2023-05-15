@@ -38,15 +38,35 @@ struct TrustHostViewModifier: ViewModifier {
                 // Present the alert right away. This makes it animated.
                 isPresented = true
             }
-            .alert("Certificate Trust Warning", isPresented: $isPresented, presenting: challenge) { _ in
-                Button("Allow", role: .destructive) {
+            .alert(
+                Text(
+                    "Certificate Trust Warning",
+                    bundle: .module,
+                    comment: "A label indicating that the remote host's certificate is not trusted."
+                ),
+                isPresented: $isPresented,
+                presenting: challenge
+            ) { _ in
+                Button(role: .destructive) {
                     challenge.resume(with: .continueWithCredential(.serverTrust))
+                } label: {
+                    Text(
+                        "Allow",
+                        bundle: .module,
+                        comment: "A button indicating the user accepts a potentially dangerous action."
+                    )
                 }
-                Button("Cancel", role: .cancel) {
+                Button(role: .cancel) {
                     challenge.resume(with: .cancel)
+                } label: {
+                    Text("Cancel", bundle: .module)
                 }
             } message: { _ in
-                Text("Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.")
+                Text(
+                    "Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
+                    bundle: .module,
+                    comment: "A warning that the host service (challenge.host) is providing a potentially unsafe certificate."
+                )
             }
     }
 }

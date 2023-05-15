@@ -40,7 +40,7 @@ public struct OverviewMap: View {
     /// The user-defined map used in the overview map. Defaults to `nil`.
     private let userProvidedMap: Map?
     
-    /// The actual map used in the overaview map.
+    /// The actual map used in the overview map.
     private var effectiveMap: Map {
         userProvidedMap ?? dataModel.defaultMap
     }

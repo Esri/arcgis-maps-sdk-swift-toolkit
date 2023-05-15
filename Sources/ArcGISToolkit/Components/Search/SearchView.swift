@@ -88,7 +88,7 @@ public struct SearchView: View {
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
     /// `prompt` modifier.
-    private var prompt = "Find a place or address"
+    private var prompt = String(localized: "Find a place or address", bundle: .module)
     
     /// Determines whether a built-in result view will be shown. Defaults to `true`.
     /// If `false`, the result display/selection list is not shown. Set to false if you want to hide the results
@@ -99,7 +99,11 @@ public struct SearchView: View {
     
     /// Message to show when there are no results or suggestions. Defaults to "No results found".
     /// Note: this is set using the `noResultsMessage` modifier.
-    private var noResultsMessage = "No results found"
+    private var noResultsMessage = String(
+        localized: "No results found",
+        bundle: .module,
+        comment: "A message to show when there are no results or suggestions"
+    )
     
     /// The width of the search bar, taking into account the horizontal and vertical size classes
     /// of the device. This will cause the search field to display full-width on an iPhone in portrait
@@ -164,8 +168,17 @@ public struct SearchView: View {
             }
             Spacer()
             if viewModel.isEligibleForRequery {
-                Button("Repeat Search Here") {
+                Button {
                     viewModel.repeatSearch()
+                } label: {
+                    Text(
+                        "Repeat Search Here",
+                        bundle: .module,
+                        comment: """
+                                  A button to show when a user has panned the map away from the
+                                  original search location.
+                                  """
+                    )
                 }
                 .esriBorder()
             }
