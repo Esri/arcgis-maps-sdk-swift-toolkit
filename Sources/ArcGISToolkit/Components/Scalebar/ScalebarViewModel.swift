@@ -134,7 +134,7 @@ final class ScalebarViewModel: ObservableObject {
     /// The visual appearance of the scalebar.
     private let style: ScalebarStyle
     
-    // - MARK: Private vars
+    // - MARK: Private variables
     
     /// Determines the amount of display space to use based on the scalebar style.
     private var availableLineDisplayLength: CGFloat {
