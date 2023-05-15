@@ -214,11 +214,8 @@ extension AlertItem {
 ***REMOVED******REMOVED***/ - Parameter loadBasemapError: The load basemap error.
 ***REMOVED***init(loadBasemapError: Error) {
 ***REMOVED******REMOVED***self.init(
-***REMOVED******REMOVED******REMOVED***title: String(localized: "Error loading basemap.", bundle: .module),
-***REMOVED******REMOVED******REMOVED***message: String(
-***REMOVED******REMOVED******REMOVED******REMOVED***localized: "\((loadBasemapError as? ArcGISError)?.details ?? "The basemap failed to load for an unknown reason.")",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***title: String.basemapFailedToLoadTitle,
+***REMOVED******REMOVED******REMOVED***message: (loadBasemapError as? ArcGISError)?.details ?? String.basemapFailedToLoadFallbackError
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -241,4 +238,21 @@ extension AlertItem {
 ***REMOVED******REMOVED******REMOVED***message: message
 ***REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
+
+private extension String {
+***REMOVED***static let basemapFailedToLoadFallbackError = String(
+***REMOVED******REMOVED***localized: "The basemap failed to load for an unknown reason.",
+***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** An error to be displayed when a basemap chosen from the basemap gallery fails to
+***REMOVED******REMOVED******REMOVED******REMOVED*** load for an unknown reason.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let basemapFailedToLoadTitle = String(
+***REMOVED******REMOVED***localized: "Error loading basemap.",
+***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***comment: "An error to be displayed when a basemap chosen from the basemap gallery fails to load."
+***REMOVED***)
 ***REMOVED***
