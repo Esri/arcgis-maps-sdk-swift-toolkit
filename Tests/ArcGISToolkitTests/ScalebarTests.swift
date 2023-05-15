@@ -75,17 +75,17 @@ class ScalebarTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***scale: test.scale
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***let unitsPerPoint = unitsPerPointBinding(test.unitsPerPoint)
 ***REMOVED******REMOVED******REMOVED***let viewModel = ScalebarViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***test.maxWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED***0,
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReferenceBinding(test.spatialReference),
 ***REMOVED******REMOVED******REMOVED******REMOVED***test.style,
 ***REMOVED******REMOVED******REMOVED******REMOVED***test.units,
-***REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***test.useGeodeticCalculations
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***viewModel.updateScaleDisplay(withViewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***viewModel.update(test.spatialReference)
+***REMOVED******REMOVED******REMOVED***viewModel.update(test.unitsPerPoint)
+***REMOVED******REMOVED******REMOVED***viewModel.update(viewpoint)
+***REMOVED******REMOVED******REMOVED***viewModel.updateScale()
 ***REMOVED******REMOVED******REMOVED***XCTAssertEqual(viewModel.displayLength.rounded(), test.displayLength)
 ***REMOVED******REMOVED******REMOVED***XCTAssertEqual(viewModel.labels.count, test.labels.count)
 ***REMOVED******REMOVED******REMOVED***for i in 0..<test.labels.count {
@@ -102,28 +102,6 @@ extension ScalebarTests {
 ***REMOVED******REMOVED******REMOVED***x: -13046081.04434825,
 ***REMOVED******REMOVED******REMOVED***y: 4036489.208008117,
 ***REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Generates a binding to a provided units per point value.
-***REMOVED***func unitsPerPointBinding(_ value: Double) -> Binding<Double?> {
-***REMOVED******REMOVED***var _value = value
-***REMOVED******REMOVED***return Binding(
-***REMOVED******REMOVED******REMOVED***get: { _value ***REMOVED***,
-***REMOVED******REMOVED******REMOVED***set: { _value = $0 ?? .zero ***REMOVED***
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Generates a binding to a provided units per point value.
-***REMOVED***func spatialReferenceBinding(_ value: SpatialReference) -> Binding<SpatialReference?> {
-***REMOVED******REMOVED***var _value = value
-***REMOVED******REMOVED***return Binding(
-***REMOVED******REMOVED******REMOVED***get: { _value ***REMOVED***,
-***REMOVED******REMOVED******REMOVED***set: {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let newValue = $0 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_value = newValue
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
