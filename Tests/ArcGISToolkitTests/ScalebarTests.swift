@@ -75,17 +75,17 @@ class ScalebarTests: XCTestCase {
                 ),
                 scale: test.scale
             )
-            let unitsPerPoint = unitsPerPointBinding(test.unitsPerPoint)
             let viewModel = ScalebarViewModel(
                 test.maxWidth,
                 0,
-                spatialReferenceBinding(test.spatialReference),
                 test.style,
                 test.units,
-                unitsPerPoint,
                 test.useGeodeticCalculations
             )
-            viewModel.updateScaleDisplay(withViewpoint: viewpoint)
+            viewModel.update(test.spatialReference)
+            viewModel.update(test.unitsPerPoint)
+            viewModel.update(viewpoint)
+            viewModel.updateScale()
             XCTAssertEqual(viewModel.displayLength.rounded(), test.displayLength)
             XCTAssertEqual(viewModel.labels.count, test.labels.count)
             for i in 0..<test.labels.count {
@@ -102,28 +102,6 @@ extension ScalebarTests {
             x: -13046081.04434825,
             y: 4036489.208008117,
             spatialReference: .webMercator
-        )
-    }
-    
-    /// Generates a binding to a provided units per point value.
-    func unitsPerPointBinding(_ value: Double) -> Binding<Double?> {
-        var _value = value
-        return Binding(
-            get: { _value },
-            set: { _value = $0 ?? .zero }
-        )
-    }
-    
-    /// Generates a binding to a provided units per point value.
-    func spatialReferenceBinding(_ value: SpatialReference) -> Binding<SpatialReference?> {
-        var _value = value
-        return Binding(
-            get: { _value },
-            set: {
-                if let newValue = $0 {
-                    _value = newValue
-                }
-            }
         )
     }
 }
