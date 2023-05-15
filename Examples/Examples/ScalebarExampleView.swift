@@ -46,7 +46,7 @@ struct ScalebarExampleView: View {
                     maxWidth: maxWidth,
                     spatialReference: $spatialReference,
                     unitsPerPoint: $unitsPerPoint,
-                    viewpoint: $viewpoint
+                    viewpoint: viewpoint
                 )
                 .padding(.horizontal, 10)
                 .padding(.vertical, 50)
