@@ -183,7 +183,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Use a string with at least a few characters in case the number string
 ***REMOVED******REMOVED******REMOVED*** only has 1. The dividers will be decimal values and we want to make
-***REMOVED******REMOVED******REMOVED*** sure they all fit very basic hueristics.
+***REMOVED******REMOVED******REMOVED*** sure they all fit very basic heuristics.
 ***REMOVED******REMOVED***let minSegmentTestString: String
 ***REMOVED******REMOVED***if lineMapLength >= 100 {
 ***REMOVED******REMOVED******REMOVED***minSegmentTestString = String(Int(lineMapLength))
