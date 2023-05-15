@@ -183,7 +183,7 @@ final class ScalebarViewModel: ObservableObject {
         
         // Use a string with at least a few characters in case the number string
         // only has 1. The dividers will be decimal values and we want to make
-        // sure they all fit very basic hueristics.
+        // sure they all fit very basic heuristics.
         let minSegmentTestString: String
         if lineMapLength >= 100 {
             minSegmentTestString = String(Int(lineMapLength))
