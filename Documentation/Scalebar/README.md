@@ -41,7 +41,7 @@ Scalebar:
         units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
         unitsPerPoint: Binding<Double?>,
         useGeodeticCalculations: Bool = true,
-        viewpoint: Binding<Viewpoint?>
+        viewpoint: Viewpoint?
     )
 ```
 
@@ -93,7 +93,7 @@ MapView(map: map)
             maxWidth: maxWidth,
             spatialReference: $spatialReference,
             unitsPerPoint: $unitsPerPoint,
-            viewpoint: $viewpoint
+            viewpoint: viewpoint
         )
     }
 ```
