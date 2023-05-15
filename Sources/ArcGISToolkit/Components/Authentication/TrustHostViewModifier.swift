@@ -64,7 +64,8 @@ struct TrustHostViewModifier: ViewModifier {
             } message: { _ in
                 Text(
                     "Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
-                    bundle: .module
+                    bundle: .module,
+                    comment: "A warning that the host service (challenge.host) is providing a potentially unsafe certificate."
                 )
             }
     }
