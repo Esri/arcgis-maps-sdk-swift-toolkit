@@ -25,7 +25,7 @@ import SwiftUI
     @Published private(set) var configurations = [UtilityNamedTraceConfiguration]() {
         didSet {
             if configurations.isEmpty {
-                userAlert = .init(description: "No trace types found.")
+                userAlert = .noTraceTypesFound
             }
         }
     }
@@ -193,7 +193,7 @@ import SwiftUI
         network = map.utilityNetworks.first
         configurations = await utilityNamedTraceConfigurations(from: map)
         if map.utilityNetworks.isEmpty {
-            userAlert = .init(description: "No utility networks found.")
+            userAlert = .noUtilityNetworksFound
         }
         await addExternalStartingPoints()
     }
@@ -272,7 +272,7 @@ import SwiftUI
     func processAndAdd(startingPoint: UtilityNetworkTraceStartingPoint) async {
         guard let feature = startingPoint.geoElement as? ArcGISFeature,
               let globalid = feature.globalID else {
-            userAlert = .init(description: "Element could not be identified")
+            userAlert = .unableToIdentifyElement
             return
         }
         
@@ -280,10 +280,7 @@ import SwiftUI
         guard !pendingTrace.startingPoints.contains(where: { startingPoint in
             return startingPoint.utilityElement?.globalID == globalid
         }) else {
-            userAlert = .init(
-                title: "Failed to set starting point",
-                description: "Duplicate starting points cannot be added"
-            )
+            userAlert = .duplicateStartingPoint
             return
         }
         
@@ -347,10 +344,13 @@ import SwiftUI
         guard let configuration = pendingTrace.configuration,
               let network = network else { return false }
         
-        let minStartingPoints = configuration.minimumStartingLocations == .one ? 1 : 2
+        if pendingTrace.startingPoints.isEmpty && configuration.minimumStartingLocations == .one {
+            userAlert = .startingLocationNotDefined
+            return false
+        }
         
-        guard pendingTrace.startingPoints.count >= minStartingPoints else {
-            userAlert = .init(description: "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "").")
+        if pendingTrace.startingPoints.count < 2 && configuration.minimumStartingLocations == .many {
+            userAlert = .startingLocationsNotDefined
             return false
         }
         

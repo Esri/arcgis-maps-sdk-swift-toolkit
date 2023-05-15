@@ -29,7 +29,7 @@ struct MediaDetailView : View {
                 Button {
                     isShowingDetailView.wrappedValue = false
                 } label: {
-                    Text("Done")
+                    Text("Done", bundle: .module)
                         .fontWeight(.semibold)
                 }
                 .padding([.bottom], 4)
@@ -59,7 +59,7 @@ struct MediaDetailView : View {
                     }
                     if popupMedia.value?.linkURL != nil {
                         HStack {
-                            Text("Tap on the image for more information.")
+                            Text("Tap on the image for more information.", bundle: .module)
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                             Spacer()
