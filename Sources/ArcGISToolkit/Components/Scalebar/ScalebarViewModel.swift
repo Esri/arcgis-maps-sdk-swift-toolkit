@@ -243,8 +243,8 @@ final class ScalebarViewModel: ObservableObject {
         }
     }
     
-    /// Updates the information necessary to render a scalebar based off the latest viewpoint and units per
-    /// point information.
+    /// Updates the information necessary to render a scalebar based off the latest viewpoint and
+    /// units per point information.
     private func updateScaleDisplay() {
         guard let spatialReference = spatialReference.wrappedValue,
               let unitsPerPoint = unitsPerPoint.wrappedValue,
