@@ -43,7 +43,13 @@ public struct Scalebar: View {
         return "".size(withAttributes: [.font: Scalebar.font.uiFont]).height
     }
     
-    /// Acts as a data provider of the current scale.
+    /// The spatial reference to calculate the scale with.
+    private var spatialReference: SpatialReference?
+    
+    /// The units per point to calculate the scale with.
+    private var unitsPerPoint: Double?
+    
+    /// The viewpoint to calculate the scale with.
     private var viewpoint: Viewpoint?
     
     // - MARK: Internal/Private constants
@@ -89,26 +95,26 @@ public struct Scalebar: View {
         maxWidth: Double,
         minScale: Double = .zero,
         settings: ScalebarSettings = ScalebarSettings(),
-        spatialReference: Binding<SpatialReference?>,
+        spatialReference: SpatialReference?,
         style: ScalebarStyle = .alternatingBar,
         units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
-        unitsPerPoint: Binding<Double?>,
+        unitsPerPoint: Double?,
         useGeodeticCalculations: Bool = true,
         viewpoint: Viewpoint?
     ) {
         _opacity = State(initialValue: settings.autoHide ? .zero : 1)
         self.settings = settings
+        self.spatialReference = spatialReference
         self.style = style
+        self.unitsPerPoint = unitsPerPoint
         self.viewpoint = viewpoint
         
         _viewModel = StateObject(
             wrappedValue: ScalebarViewModel(
                 maxWidth,
                 minScale,
-                spatialReference,
                 style,
                 units,
-                unitsPerPoint,
                 useGeodeticCalculations
             )
         )
@@ -130,9 +136,11 @@ public struct Scalebar: View {
             }
         }
         .opacity(opacity)
+        .onChange(of: spatialReference) { viewModel.update($0) }
+        .onChange(of: unitsPerPoint) { viewModel.update($0) }
         .onChange(of: viewpoint) {
-            guard let viewpoint = $0 else { return }
-            viewModel.updateScaleDisplay(withViewpoint: viewpoint)
+            viewModel.update($0)
+            viewModel.updateScale()
             if settings.autoHide {
                 withAnimation {
                     opacity = 1
