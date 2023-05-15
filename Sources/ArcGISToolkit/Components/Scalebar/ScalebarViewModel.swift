@@ -98,22 +98,16 @@ final class ScalebarViewModel: ObservableObject {
         self.viewpoint = viewpoint
         
         viewpointSubscription = viewpointSubject
-            .debounce(for: delay, scheduler: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] in
-                guard let self = self else {
-                    return
-                }
+            .sink { [weak self] in
+                guard let self else { return }
                 self.viewpoint = $0
                 self.updateScaleDisplay()
-            })
+            }
         
         updateScaleDisplay()
     }
     
     // - MARK: Private constants
-    
-    /// The amount of time to wait between value calculations.
-    private let delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.05)
     
     /// The curve type to use when performing scale calculations.
     private let geodeticCurveType: GeometryEngine.GeodeticCurveType = .geodesic
