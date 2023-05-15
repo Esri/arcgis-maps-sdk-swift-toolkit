@@ -164,16 +164,22 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***.credentialInput(
 ***REMOVED******REMOVED******REMOVED******REMOVED***fields: .password,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showPassword,
-***REMOVED******REMOVED******REMOVED******REMOVED***message: "Please enter a password for the chosen certificate.",
-***REMOVED******REMOVED******REMOVED******REMOVED***title: "Password Required",
+***REMOVED******REMOVED******REMOVED******REMOVED***message: String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Please enter a password for the chosen certificate.",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***title: String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Password Required",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(localized: "Cancel", bundle: .module),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "OK",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(localized: "OK", bundle: .module),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, password in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withPassword: password)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -200,15 +206,30 @@ private extension View {
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***alert("Certificate Required", isPresented: isPresented, presenting: viewModel.challengingHost) { _ in
-***REMOVED******REMOVED******REMOVED***Button("Browse For Certificate") {
+***REMOVED******REMOVED***alert(
+***REMOVED******REMOVED******REMOVED***Text("Certificate Required", bundle: .module),
+***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED***presenting: viewModel.challengingHost
+***REMOVED******REMOVED***) { _ in
+***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Browse For Certificate", bundle: .module)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
+***REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .module)
 ***REMOVED******REMOVED***
 ***REMOVED*** message: { _ in
-***REMOVED******REMOVED******REMOVED***Text("A certificate is required to access content on \(viewModel.challengingHost).")
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"A certificate is required to access content on \(viewModel.challengingHost).",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** An alert message indicating that a certificate is required to access
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** content on a remote host. The variable is the host that prompted the challenge.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -243,13 +264,19 @@ private extension View {
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***alert("Error importing certificate", isPresented: isPresented) {
-***REMOVED******REMOVED******REMOVED***Button("Try Again") {
+***REMOVED******REMOVED***alert(
+***REMOVED******REMOVED******REMOVED***Text("Error importing certificate", bundle: .module),
+***REMOVED******REMOVED******REMOVED***isPresented: isPresented
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Try Again", bundle: .module)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
+***REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .module)
 ***REMOVED******REMOVED***
 ***REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED***Text(

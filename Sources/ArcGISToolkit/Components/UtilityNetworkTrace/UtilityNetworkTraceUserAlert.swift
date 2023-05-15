@@ -16,11 +16,71 @@
 ***REMOVED***/ A user presentable alert.
 struct UtilityNetworkTraceUserAlert {
 ***REMOVED******REMOVED***/ Title of the alert.
-***REMOVED***var title: String = "Error"
+***REMOVED***var title: String = String(localized: "Error", bundle: .module)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Description of the alert.
 ***REMOVED***var description: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ An additional action to be taken on the alert.
 ***REMOVED***var button: Button<Text>?
+***REMOVED***
+
+extension UtilityNetworkTraceUserAlert {
+***REMOVED***static var startingLocationNotDefined: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***description: String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Please set at least 1 starting location.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var startingLocationsNotDefined: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***description: String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Please set at least 2 starting locations.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var duplicateStartingPoint: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***title: String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Failed to set starting point",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***description: String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Duplicate starting points cannot be added.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var noTraceTypesFound: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***description: String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "No trace types found.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var noUtilityNetworksFound: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***description: String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "No utility networks found.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var unableToIdentifyElement: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***description: String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Element could not be identified.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***

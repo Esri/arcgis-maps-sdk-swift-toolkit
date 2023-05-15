@@ -40,7 +40,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ The user-defined map used in the overview map. Defaults to `nil`.
 ***REMOVED***private let userProvidedMap: Map?
 ***REMOVED***
-***REMOVED******REMOVED***/ The actual map used in the overaview map.
+***REMOVED******REMOVED***/ The actual map used in the overview map.
 ***REMOVED***private var effectiveMap: Map {
 ***REMOVED******REMOVED***userProvidedMap ?? dataModel.defaultMap
 ***REMOVED***

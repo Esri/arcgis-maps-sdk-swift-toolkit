@@ -73,7 +73,7 @@ extension SearchSuggestion: Hashable {
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED******REMOVED*** Note: We're not hashing `suggestResult` as `SearchSuggestion` is
 ***REMOVED******REMOVED******REMOVED*** created from a `SuggestResult` and `suggestResult` will be different
-***REMOVED******REMOVED******REMOVED*** for two sepate geocode operations even though they represent the
+***REMOVED******REMOVED******REMOVED*** for two separate geocode operations even though they represent the
 ***REMOVED******REMOVED******REMOVED*** same suggestion.
 ***REMOVED******REMOVED***hasher.combine(id)
 ***REMOVED***

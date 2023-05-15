@@ -38,15 +38,35 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present the alert right away. This makes it animated.
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.alert("Certificate Trust Warning", isPresented: $isPresented, presenting: challenge) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Allow", role: .destructive) {
+***REMOVED******REMOVED******REMOVED***.alert(
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Certificate Trust Warning",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating that the remote host's certificate is not trusted."
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***presenting: challenge
+***REMOVED******REMOVED******REMOVED***) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .continueWithCredential(.serverTrust))
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Allow",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A button indicating the user accepts a potentially dangerous action."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .cancel)
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .module)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** message: { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A warning that the host service (challenge.host) is providing a potentially unsafe certificate."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
