@@ -214,11 +214,8 @@ extension AlertItem {
     /// - Parameter loadBasemapError: The load basemap error.
     init(loadBasemapError: Error) {
         self.init(
-            title: String(localized: "Error loading basemap.", bundle: .module),
-            message: String(
-                localized: "\((loadBasemapError as? ArcGISError)?.details ?? "The basemap failed to load for an unknown reason.")",
-                bundle: .module
-            )
+            title: String.basemapFailedToLoadTitle,
+            message: (loadBasemapError as? ArcGISError)?.details ?? String.basemapFailedToLoadFallbackError
         )
     }
     
@@ -241,4 +238,21 @@ extension AlertItem {
             message: message
         )
     }
+}
+
+private extension String {
+    static let basemapFailedToLoadFallbackError = String(
+        localized: "The basemap failed to load for an unknown reason.",
+        bundle: .module,
+        comment: """
+                 An error to be displayed when a basemap chosen from the basemap gallery fails to
+                 load for an unknown reason.
+                 """
+    )
+    
+    static let basemapFailedToLoadTitle = String(
+        localized: "Error loading basemap.",
+        bundle: .module,
+        comment: "An error to be displayed when a basemap chosen from the basemap gallery fails to load."
+    )
 }
