@@ -44,7 +44,7 @@ public struct Scalebar: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
-***REMOVED***private var viewpoint: Binding<Viewpoint?>
+***REMOVED***private var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Internal/Private constants
 ***REMOVED***
@@ -94,7 +94,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
 ***REMOVED******REMOVED***unitsPerPoint: Binding<Double?>,
 ***REMOVED******REMOVED***useGeodeticCalculations: Bool = true,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
+***REMOVED******REMOVED***viewpoint: Viewpoint?
 ***REMOVED***) {
 ***REMOVED******REMOVED***_opacity = State(initialValue: settings.autoHide ? .zero : 1)
 ***REMOVED******REMOVED***self.settings = settings
@@ -109,8 +109,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***style,
 ***REMOVED******REMOVED******REMOVED******REMOVED***units,
 ***REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***useGeodeticCalculations,
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue
+***REMOVED******REMOVED******REMOVED******REMOVED***useGeodeticCalculations
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -131,8 +130,9 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.opacity(opacity)
-***REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
-***REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send($0)
+***REMOVED******REMOVED***.onChange(of: viewpoint) {
+***REMOVED******REMOVED******REMOVED***guard let viewpoint = $0 else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***viewModel.updateScaleDisplay(withViewpoint: viewpoint)
 ***REMOVED******REMOVED******REMOVED***if settings.autoHide {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = 1
