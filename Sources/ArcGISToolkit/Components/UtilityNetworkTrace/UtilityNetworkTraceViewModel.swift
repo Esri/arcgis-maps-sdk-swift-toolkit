@@ -25,7 +25,7 @@ import Foundation
 ***REMOVED***@Published private(set) var configurations = [UtilityNamedTraceConfiguration]() {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***if configurations.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***userAlert = .init(description: "No trace types found.")
+***REMOVED******REMOVED******REMOVED******REMOVED***userAlert = .noTraceTypesFound
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -193,7 +193,7 @@ import Foundation
 ***REMOVED******REMOVED***network = map.utilityNetworks.first
 ***REMOVED******REMOVED***configurations = await utilityNamedTraceConfigurations(from: map)
 ***REMOVED******REMOVED***if map.utilityNetworks.isEmpty {
-***REMOVED******REMOVED******REMOVED***userAlert = .init(description: "No utility networks found.")
+***REMOVED******REMOVED******REMOVED***userAlert = .noUtilityNetworksFound
 ***REMOVED***
 ***REMOVED******REMOVED***await addExternalStartingPoints()
 ***REMOVED***
@@ -272,7 +272,7 @@ import Foundation
 ***REMOVED***func processAndAdd(startingPoint: UtilityNetworkTraceStartingPoint) async {
 ***REMOVED******REMOVED***guard let feature = startingPoint.geoElement as? ArcGISFeature,
 ***REMOVED******REMOVED******REMOVED***  let globalid = feature.globalID else {
-***REMOVED******REMOVED******REMOVED***userAlert = .init(description: "Element could not be identified")
+***REMOVED******REMOVED******REMOVED***userAlert = .unableToIdentifyElement
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -280,10 +280,7 @@ import Foundation
 ***REMOVED******REMOVED***guard !pendingTrace.startingPoints.contains(where: { startingPoint in
 ***REMOVED******REMOVED******REMOVED***return startingPoint.utilityElement?.globalID == globalid
 ***REMOVED***) else {
-***REMOVED******REMOVED******REMOVED***userAlert = .init(
-***REMOVED******REMOVED******REMOVED******REMOVED***title: "Failed to set starting point",
-***REMOVED******REMOVED******REMOVED******REMOVED***description: "Duplicate starting points cannot be added"
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***userAlert = .duplicateStartingPoint
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -347,10 +344,13 @@ import Foundation
 ***REMOVED******REMOVED***guard let configuration = pendingTrace.configuration,
 ***REMOVED******REMOVED******REMOVED***  let network = network else { return false ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let minStartingPoints = configuration.minimumStartingLocations == .one ? 1 : 2
+***REMOVED******REMOVED***if pendingTrace.startingPoints.isEmpty && configuration.minimumStartingLocations == .one {
+***REMOVED******REMOVED******REMOVED***userAlert = .startingLocationNotDefined
+***REMOVED******REMOVED******REMOVED***return false
+***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard pendingTrace.startingPoints.count >= minStartingPoints else {
-***REMOVED******REMOVED******REMOVED***userAlert = .init(description: "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "").")
+***REMOVED******REMOVED***if pendingTrace.startingPoints.count < 2 && configuration.minimumStartingLocations == .many {
+***REMOVED******REMOVED******REMOVED***userAlert = .startingLocationsNotDefined
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***

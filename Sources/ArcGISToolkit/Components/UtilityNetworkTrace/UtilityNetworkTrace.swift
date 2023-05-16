@@ -97,7 +97,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ Allows the user to switch between the trace creation and viewing tabs.
 ***REMOVED***private var activityPicker: some View {
 ***REMOVED******REMOVED***Picker(
-***REMOVED******REMOVED******REMOVED***"Mode",
+***REMOVED******REMOVED******REMOVED***String.modePickerTitle,
 ***REMOVED******REMOVED******REMOVED***selection: Binding<UserActivity>(
 ***REMOVED******REMOVED******REMOVED******REMOVED***get: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch currentActivity {
@@ -111,8 +111,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***Text("New trace").tag(UserActivity.creatingTrace(nil))
-***REMOVED******REMOVED******REMOVED***Text("Results").tag(UserActivity.viewingTraces(nil))
+***REMOVED******REMOVED******REMOVED***Text(String.newTraceOptionLabel).tag(UserActivity.creatingTrace(nil))
+***REMOVED******REMOVED******REMOVED***Text(String.resultsOptionLabel).tag(UserActivity.viewingTraces(nil))
 ***REMOVED***
 ***REMOVED******REMOVED***.pickerStyle(.segmented)
 ***REMOVED******REMOVED***.padding()
@@ -120,11 +120,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to cancel out of selecting a new starting point.
 ***REMOVED***private var cancelAddStartingPoints: some View {
-***REMOVED******REMOVED***Button(role: .destructive) {
+***REMOVED******REMOVED***Button(String.cancelStartingPointSelection, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
 ***REMOVED******REMOVED******REMOVED***activeDetent = .half
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text("Cancel starting point selection")
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED***
@@ -133,7 +131,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***@ViewBuilder private var assetGroupDetail: some View {
 ***REMOVED******REMOVED***if let assetGroupName = selectedAssetGroupName,
 ***REMOVED******REMOVED***   let assetTypeGroups = viewModel.selectedTrace?.elementsByType(inGroupNamed: assetGroupName) {
-***REMOVED******REMOVED******REMOVED***makeBackButton(title: featureResultsTitle) {
+***REMOVED******REMOVED******REMOVED***makeBackButton(title: .featureResultsTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingFeatureResults)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***makeDetailSectionHeader(title: assetGroupName)
@@ -159,7 +157,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Object ID \(element.objectID, format: .number.grouping(.never))")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("\(String.objectID) \(element.objectID, format: .number.grouping(.never))")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** icon: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "scope")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -177,7 +175,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ Displays the list of available named trace configurations.
 ***REMOVED***@ViewBuilder private var configurationsList: some View {
 ***REMOVED******REMOVED***if viewModel.configurations.isEmpty {
-***REMOVED******REMOVED******REMOVED***Text("No configurations available")
+***REMOVED******REMOVED******REMOVED***Text(String.noConfigurationsAvailable)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***ForEach(viewModel.configurations, id: \.name) { configuration in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -208,9 +206,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***@ViewBuilder private var newTraceTab: some View {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***if viewModel.networks.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section("Network") {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section(String.networkSectionLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.network?.name ?? "None selected",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.network?.name ?? .noneSelected,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceCreationActivity: .viewingNetworkOptions) ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .creatingTrace($0 ? .viewingNetworkOptions : nil) ***REMOVED***
@@ -220,67 +218,66 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Section("Trace Configuration") {
+***REMOVED******REMOVED******REMOVED***Section(String.traceConfigurationSectionLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.configuration?.name ?? "None selected",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceCreationActivity: .viewingTraceConfigurations) ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .creatingTrace($0 ? .viewingTraceConfigurations : nil) ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.configuration?.name ?? .noneSelected,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused(traceCreationActivity: .viewingTraceConfigurations)
+***REMOVED******REMOVED******REMOVED******REMOVED*** set: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace($0 ? .viewingTraceConfigurations : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configurationsList
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Section(startingPointsTitle) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***Section(String.startingPointsTitle) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.addNewButtonLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .summary
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Add new")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.pendingTrace.startingPoints.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"\(viewModel.pendingTrace.startingPoints.count) selected",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceCreationActivity: .viewingStartingPoints) ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .creatingTrace($0 ? .viewingStartingPoints : nil) ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused(traceCreationActivity: .viewingStartingPoints)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** set: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace($0 ? .viewingStartingPoints : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPointsList
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"\(viewModel.pendingTrace.startingPoints.count, specifier: "%lld") selected",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label declaring the number of starting points selected for a utility network trace."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Advanced Options",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceCreationActivity: .viewingAdvancedOptions) ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .creatingTrace($0 ? .viewingAdvancedOptions : nil) ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Name")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Name",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $viewModel.pendingTrace.name
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.userDidSpecifyName = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***String.advancedOptionsHeaderLabel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused(traceCreationActivity: .viewingAdvancedOptions)
+***REMOVED******REMOVED******REMOVED******REMOVED*** set: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace($0 ? .viewingAdvancedOptions : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***, content: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.nameLabel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(String.nameLabel, text: $viewModel.pendingTrace.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.userDidSpecifyName = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.trailing)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.trailing)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(selection: $viewModel.pendingTrace.color) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Color")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(isOn: $shouldZoomOnTraceCompletion) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Zoom to result")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED***Button(String.traceButtonLabel) {
 ***REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if await viewModel.trace() {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(nil)
@@ -290,8 +287,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text("Trace")
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED***.disabled(!viewModel.canRunTrace)
@@ -328,7 +323,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***if let selectedTrace = viewModel.selectedTrace {
 ***REMOVED******REMOVED******REMOVED***Menu(selectedTrace.name) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let resultExtent = selectedTrace.resultExtent {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Zoom To") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(String.zoomToButtonLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: resultExtent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) ***REMOVED***
@@ -337,7 +332,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Delete", role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.deleteButtonLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.completedTraces.count == 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -348,13 +343,14 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***if activeDetent != .summary {
 ***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section(featureResultsTitle) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section(String.featureResultsTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"(\(viewModel.selectedTrace?.elementResults.count ?? 0))",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingFeatureResults) ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil) ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused(traceViewingActivity: .viewingFeatureResults)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** set: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedTrace = viewModel.selectedTrace {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(selectedTrace.assetGroupNames.sorted(), id: \.self) { assetGroupName in
@@ -372,7 +368,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Section("Function Results") {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section(String.functionResultsSectionTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"(\(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0))",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
@@ -398,55 +394,53 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Advanced Options",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingAdvancedOptions) ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .viewingTraces($0 ? .viewingAdvancedOptions : nil) ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***String.advancedOptionsHeaderLabel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused(traceViewingActivity: .viewingAdvancedOptions)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** set: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces($0 ? .viewingAdvancedOptions : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: Binding(get: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***String.colorLabel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: Binding {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.color ?? Color.clear
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***, set: { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** set: { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if var trace = viewModel.selectedTrace {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***trace.color = newValue
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.update(completedTrace: trace)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Color")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.vertical], 2)
-***REMOVED******REMOVED******REMOVED***Button("Clear All Results", role: .destructive) {
+***REMOVED******REMOVED******REMOVED***Button(String.clearAllResultsButtonLabel, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isShowingClearAllResultsConfirmationDialog = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED***.confirmationDialog(
-***REMOVED******REMOVED******REMOVED******REMOVED***"Clear all results?",
+***REMOVED******REMOVED******REMOVED******REMOVED***String.clearAllResultsQuestion,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isShowingClearAllResultsConfirmationDialog
 ***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.clearAllResultsButtonLabel, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Clear All Results")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("All the trace inputs and results will be lost.")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(String.clearAllResultsMessage)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays information about a chosen starting point.
 ***REMOVED***@ViewBuilder private var startingPointDetail: some View {
-***REMOVED******REMOVED***makeBackButton(title: startingPointsTitle) {
+***REMOVED******REMOVED***makeBackButton(title: .startingPointsTitle) {
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
 ***REMOVED***
-***REMOVED******REMOVED***Menu(selectedStartingPoint?.utilityElement?.assetType.name ?? "Unnamed Asset Type") {
-***REMOVED******REMOVED******REMOVED***Button("Zoom To") {
+***REMOVED******REMOVED***Menu(selectedStartingPoint?.utilityElement?.assetType.name ?? String.unnamedAssetType) {
+***REMOVED******REMOVED******REMOVED***Button(String.zoomToButtonLabel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedStartingPoint = selectedStartingPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let extent = selectedStartingPoint.geoElement.geometry?.extent {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: extent)
@@ -457,7 +451,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button("Delete", role: .destructive) {
+***REMOVED******REMOVED******REMOVED***Button(String.deleteButtonLabel, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let startingPoint = selectedStartingPoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteStartingPoint(startingPoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
@@ -467,31 +461,33 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***.font(.title3)
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section("Fraction Along Edge") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Slider(value: Binding(get: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.startingPoints.first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0 == selectedStartingPoint
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***?.utilityElement?.fractionAlongEdge ?? .zero
-***REMOVED******REMOVED******REMOVED******REMOVED***, set: { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedStartingPoint = selectedStartingPoint {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFractionAlongEdgeFor(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPoint: selectedStartingPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***to: newValue
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***Section(String.fractionAlongEdgeSectionTitle) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Slider(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: Binding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.startingPoints.first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0 == selectedStartingPoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***?.utilityElement?.fractionAlongEdge ?? .zero
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** set: { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedStartingPoint = selectedStartingPoint {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFractionAlongEdgeFor(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPoint: selectedStartingPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***to: newValue
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else if selectedStartingPoint?.utilityElement?.networkSource.kind == .junction &&
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedStartingPoint?.utilityElement?.terminal != nil &&
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***!(selectedStartingPoint?.utilityElement?.assetType.terminalConfiguration?.terminals.isEmpty ?? true) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Picker(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Terminal Configuration",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: Binding(get: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***String.terminalConfigurationPickerTitle,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: Binding {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedStartingPoint!.utilityElement!.terminal!
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***, set: { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** set: { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setTerminalConfigurationFor(startingPoint: selectedStartingPoint!, to: newValue)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.pendingTrace.startingPoints.first {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0 == selectedStartingPoint
@@ -502,7 +498,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Section("Attributes") {
+***REMOVED******REMOVED******REMOVED***Section(String.attributesSectionTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key***REMOVED***)), id: \.key) { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack{
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.key)
@@ -655,9 +651,13 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED*** MARK: Computed Properties
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates the number of the trace currently being viewed out the total number of traces.
-***REMOVED***private var currentTraceLabel: LocalizedStringKey {
+***REMOVED***private var currentTraceLabel: String {
 ***REMOVED******REMOVED***guard let index = viewModel.selectedTraceIndex else { return "Error" ***REMOVED***
-***REMOVED******REMOVED***return "Trace \(index+1) of \(viewModel.completedTraces.count)"
+***REMOVED******REMOVED***return String(
+***REMOVED******REMOVED******REMOVED***localized: "Trace \(index+1, specifier: "%lld") of \(viewModel.completedTraces.count, specifier: "%lld")",
+***REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating the index of the trace being viewed out of the total number of traces completed."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name of the selected utility element asset group.
@@ -726,9 +726,148 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
 ***REMOVED***
 ***REMOVED***
+
+private extension String {
+***REMOVED***static let addNewButtonLabel = String(
+***REMOVED******REMOVED***localized: "Add new",
+***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***comment: "A button to add new utility trace starting points."
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let advancedOptionsHeaderLabel = String(
+***REMOVED******REMOVED***localized: "Advanced Options",
+***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***comment: "A section header for advanced options."
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let attributesSectionTitle = String(
+***REMOVED******REMOVED***localized: "Attributes",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let cancelStartingPointSelection = String(
+***REMOVED******REMOVED***localized: "Cancel starting point selection",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let clearAllResultsButtonLabel = String(
+***REMOVED******REMOVED***localized: "Clear All Results",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let clearAllResultsQuestion = String(
+***REMOVED******REMOVED***localized: "Clear all results?",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let clearAllResultsMessage = String(
+***REMOVED******REMOVED***localized: "All the trace inputs and results will be lost.",
+***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***comment: "A message describing the outcome of clearing all utility network trace results."
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let colorLabel = String(
+***REMOVED******REMOVED***localized: "Color",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let deleteButtonLabel = String(
+***REMOVED******REMOVED***localized: "Delete",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
 ***REMOVED******REMOVED***/ Title for the feature results section
-***REMOVED***private let featureResultsTitle = "Feature Results"
+***REMOVED***static let featureResultsTitle = String(
+***REMOVED******REMOVED***localized: "Feature Results",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let fractionAlongEdgeSectionTitle = String(
+***REMOVED******REMOVED***localized: "Fraction Along Edge",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let functionResultsSectionTitle = String(
+***REMOVED******REMOVED***localized: "Function Results",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let modePickerTitle = String(
+***REMOVED******REMOVED***localized: "Mode",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let nameLabel = String(
+***REMOVED******REMOVED***localized: "Name",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let networkSectionLabel = String(
+***REMOVED******REMOVED***localized: "Network",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let newTraceOptionLabel = String(
+***REMOVED******REMOVED***localized: "New trace",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let noConfigurationsAvailable = String(
+***REMOVED******REMOVED***localized: "No configurations available",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let noneSelected = String(
+***REMOVED******REMOVED***localized: "None selected",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let objectID = String(
+***REMOVED******REMOVED***localized: "Object ID",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let resultsOptionLabel = String(
+***REMOVED******REMOVED***localized: "Results",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title for the starting points section
-***REMOVED***private let startingPointsTitle = "Starting Points"
+***REMOVED***static let startingPointsTitle = String(
+***REMOVED******REMOVED***localized: "Starting Points",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let terminalConfigurationPickerTitle = String(
+***REMOVED******REMOVED***localized: "Terminal Configuration",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let traceButtonLabel = String(
+***REMOVED******REMOVED***localized: "Trace",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let traceConfigurationSectionLabel = String(
+***REMOVED******REMOVED***localized: "Trace Configuration",
+***REMOVED******REMOVED***bundle: .module
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let unnamedAssetType = String(
+***REMOVED******REMOVED***localized: "Unnamed Asset Type",
+***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***comment: "A label to use in place of a utility element asset type name."
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let zoomToButtonLabel = String(
+***REMOVED******REMOVED***localized: "Zoom To",
+***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***comment: "A button to change the map to the extent of the selected trace."
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let zoomToResult = String(
+***REMOVED******REMOVED***localized: "Zoom to result",
+***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***comment: "A user option specifying that a map should automatically change to show completed trace results."
+***REMOVED***)
 ***REMOVED***
