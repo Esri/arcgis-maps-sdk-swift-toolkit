@@ -53,10 +53,10 @@ final class ScalebarViewModel: ObservableObject {
             value: displayFactor
         )
         let altScreenLength = altMapLength / convertedDisplayFactor
-        let label = String.totalLengthLabel(
-            length: altMapLength,
-            linearUnit: altDisplayUnits
-        )
+        
+        let measurement = Measurement(value: altMapLength, linearUnit: altDisplayUnits)
+        let label = measurement.formatted(.scaleMeasurement)
+        
         return (altScreenLength, label)
     }
     
@@ -188,16 +188,15 @@ final class ScalebarViewModel: ObservableObject {
             currSegmentX += segmentScreenLength
             let segmentMapLength = Double((segmentScreenLength * CGFloat(index + 1)) / lineDisplayLength) * lineMapLength
             
-            var segmentText = NumberFormatter.localizedString(
-                from: NSNumber(value: segmentMapLength),
-                number: .decimal
-            )
-            
+            let segmentText: String
             if index == numSegments - 1, let displayUnit {
-                segmentText = String.totalLengthLabel(
-                    length: segmentMapLength,
+                let measurement = Measurement(
+                    value: segmentMapLength,
                     linearUnit: displayUnit
                 )
+                segmentText = measurement.formatted(.scaleMeasurement)
+            } else {
+                segmentText = segmentMapLength.formatted(.number)
             }
             
             let label = ScalebarLabel(
@@ -323,22 +322,14 @@ final class ScalebarViewModel: ObservableObject {
     }
 }
 
-private extension String {
-    /// Generates a localized label indicating the total length represented by the scalebar.
-    /// - Parameters:
-    ///   - length: The total length represented by the scalebar.
-    ///   - linearUnit: The unit of length used by the scalebar.
-    /// - Returns: The total length label.
-    static func totalLengthLabel(length: Double, linearUnit: LinearUnit) -> String {
-        let formatter = MeasurementFormatter()
-        // Specify `.providedUnit`, otherwise the formatter will continue to use miles when the
-        // provided units switch over to feet.
-        formatter.unitOptions = .providedUnit
-        return formatter.string(
-            from: Measurement(
-                value: length,
-                unit: UnitLength.fromLinearUnit(linearUnit)
-            )
-        )
+private extension Measurement where UnitType == UnitLength {
+    init(value: Double, linearUnit: LinearUnit) {
+        self.init(value: value, unit: .fromLinearUnit(linearUnit))
+    }
+}
+
+private extension FormatStyle where Self == Measurement<UnitLength>.FormatStyle {
+    static var scaleMeasurement: Self {
+        .measurement(width: .abbreviated, usage: .asProvided)
     }
 }
