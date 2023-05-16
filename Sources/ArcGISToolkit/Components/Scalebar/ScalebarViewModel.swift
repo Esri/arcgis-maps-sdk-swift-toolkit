@@ -331,7 +331,7 @@ private extension String {
 ***REMOVED******REMOVED***/ - Returns: The total length label.
 ***REMOVED***static func totalLengthLabel(length: Double, linearUnit: LinearUnit) -> String {
 ***REMOVED******REMOVED***let formatter = MeasurementFormatter()
-***REMOVED******REMOVED******REMOVED*** Specify .providedUnits, otherwise the formatter will continue to use miles when the
+***REMOVED******REMOVED******REMOVED*** Specify `.providedUnit`, otherwise the formatter will continue to use miles when the
 ***REMOVED******REMOVED******REMOVED*** provided units switch over to feet.
 ***REMOVED******REMOVED***formatter.unitOptions = .providedUnit
 ***REMOVED******REMOVED***return formatter.string(
