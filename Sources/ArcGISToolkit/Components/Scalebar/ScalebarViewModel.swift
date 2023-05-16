@@ -331,6 +331,8 @@ private extension String {
     /// - Returns: The total length label.
     static func totalLengthLabel(length: Double, linearUnit: LinearUnit) -> String {
         let formatter = MeasurementFormatter()
+        // Specify .providedUnits, otherwise the formatter will continue to use miles when the
+        // provided units switch over to feet.
         formatter.unitOptions = .providedUnit
         return formatter.string(
             from: Measurement(
