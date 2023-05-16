@@ -56,15 +56,9 @@ final class ScalebarViewModel: ObservableObject {
         let numberString = numberFormatter.string(
             from: NSNumber(value: altMapLength)
         ) ?? ""
-        let bottomUnitsText = " \(altDisplayUnits.localizedAbbreviation)"
-        let label = String(
-            localized: "\(numberString)\(bottomUnitsText)",
-            bundle: .module,
-            comment: """
-                     A label indicating the linear distance represented by a scalebar. The
-                     first variable is the linear distance and the second value is the
-                     linear unit of measurement, either feet/miles or meters/kilometers.
-                     """
+        let label = String.totalLengthLabel(
+            length: numberString,
+            unitLabel: altDisplayUnits.localizedAbbreviation
         )
         return (altScreenLength, label)
     }
@@ -209,15 +203,7 @@ final class ScalebarViewModel: ObservableObject {
             
             var segmentText = numberFormatter.string(from: NSNumber(value: segmentMapLength)) ?? ""
             if index == numSegments - 1, let displayUnit = displayUnit?.localizedAbbreviation {
-                segmentText = String(
-                    localized: "\(segmentText) \(displayUnit)",
-                    bundle: .module,
-                    comment: """
-                             A label indicating the linear distance represented by a scalebar. The
-                             first variable is the linear distance and the second value is the
-                             linear unit of measurement, either feet/miles or meters/kilometers.
-                             """
-                )
+                segmentText = String.totalLengthLabel(length: segmentText, unitLabel: displayUnit)
             }
             
             let label = ScalebarLabel(
@@ -340,5 +326,24 @@ final class ScalebarViewModel: ObservableObject {
         initialScaleWasCalculated = true
         
         updateLabels()
+    }
+}
+
+private extension String {
+    /// Generates a localized label indicating the total length represented by the scalebar.
+    /// - Parameters:
+    ///   - length: The total length represented by the scalebar.
+    ///   - unitLabel: The unit of length used by the scalebar.
+    /// - Returns: The total length label.
+    static func totalLengthLabel(length: String, unitLabel: String) -> String {
+        .init(
+            localized: "\(length) \(unitLabel)",
+            bundle: .module,
+            comment: """
+                     A label indicating the linear distance represented by a scalebar. The
+                     first variable is the linear distance and the second value is the
+                     linear unit of measurement, either feet/miles or meters/kilometers.
+                     """
+        )
     }
 }

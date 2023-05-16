@@ -1,2 +1,19 @@
 /* No comment provided by engineer. */
 "Delete" = "حذف";
+
+/* Abbreviation of 'feet'. */
+"ft" = "قدم";
+
+/* Abbreviation of 'kilometers'. */
+"km" = "كم";
+
+/* Abbreviation of 'meters'. */
+"m" = "م";
+
+/* Abbreviation of 'miles'. */
+"mi" = "ميل";
+
+/* A label indicating the linear distance represented by a scalebar. The
+first variable is the linear distance and the second value is the
+linear unit of measurement, either feet/miles or meters/kilometers. */
+"%@ %@" = "%2$@ %1$@";
