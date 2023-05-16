@@ -53,12 +53,9 @@ final class ScalebarViewModel: ObservableObject {
             value: displayFactor
         )
         let altScreenLength = altMapLength / convertedDisplayFactor
-        let numberString = numberFormatter.string(
-            from: NSNumber(value: altMapLength)
-        ) ?? ""
         let label = String.totalLengthLabel(
-            length: numberString,
-            unitLabel: altDisplayUnits.localizedAbbreviation
+            length: altMapLength,
+            linearUnit: altDisplayUnits
         )
         return (altScreenLength, label)
     }
@@ -94,16 +91,6 @@ final class ScalebarViewModel: ObservableObject {
     
     /// A `minScale` of 0 means the scalebar segments will always recalculate.
     private let minScale: Double
-    
-    /// Converts numbers into a readable format.
-    private let numberFormatter: NumberFormatter = {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .decimal
-        numberFormatter.formatterBehavior = .behavior10_4
-        numberFormatter.maximumFractionDigits = 2
-        numberFormatter.minimumFractionDigits = 0
-        return numberFormatter
-    }()
     
     /// The visual appearance of the scalebar.
     private let style: ScalebarStyle
@@ -193,7 +180,7 @@ final class ScalebarViewModel: ObservableObject {
             ScalebarLabel(
                 index: -1,
                 xOffset: .zero,
-                text: "0"
+                text: NumberFormatter.localizedString(from: 0, number: .decimal)
             )
         )
         
@@ -201,9 +188,16 @@ final class ScalebarViewModel: ObservableObject {
             currSegmentX += segmentScreenLength
             let segmentMapLength = Double((segmentScreenLength * CGFloat(index + 1)) / lineDisplayLength) * lineMapLength
             
-            var segmentText = numberFormatter.string(from: NSNumber(value: segmentMapLength)) ?? ""
-            if index == numSegments - 1, let displayUnit = displayUnit?.localizedAbbreviation {
-                segmentText = String.totalLengthLabel(length: segmentText, unitLabel: displayUnit)
+            var segmentText = NumberFormatter.localizedString(
+                from: NSNumber(value: segmentMapLength),
+                number: .decimal
+            )
+            
+            if index == numSegments - 1, let displayUnit {
+                segmentText = String.totalLengthLabel(
+                    length: segmentMapLength,
+                    linearUnit: displayUnit
+                )
             }
             
             let label = ScalebarLabel(
@@ -333,17 +327,16 @@ private extension String {
     /// Generates a localized label indicating the total length represented by the scalebar.
     /// - Parameters:
     ///   - length: The total length represented by the scalebar.
-    ///   - unitLabel: The unit of length used by the scalebar.
+    ///   - linearUnit: The unit of length used by the scalebar.
     /// - Returns: The total length label.
-    static func totalLengthLabel(length: String, unitLabel: String) -> String {
-        .init(
-            localized: "\(length) \(unitLabel)",
-            bundle: .module,
-            comment: """
-                     A label indicating the linear distance represented by a scalebar. The
-                     first variable is the linear distance and the second value is the
-                     linear unit of measurement, either feet/miles or meters/kilometers.
-                     """
+    static func totalLengthLabel(length: Double, linearUnit: LinearUnit) -> String {
+        let formatter = MeasurementFormatter()
+        formatter.unitOptions = .providedUnit
+        return formatter.string(
+            from: Measurement(
+                value: length,
+                unit: UnitLength.fromLinearUnit(linearUnit)
+            )
         )
     }
 }
