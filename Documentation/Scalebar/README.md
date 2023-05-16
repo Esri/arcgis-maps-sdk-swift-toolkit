@@ -36,12 +36,12 @@ Scalebar:
 ***REMOVED******REMOVED***maxWidth: Double,
 ***REMOVED******REMOVED***minScale: Double = .zero,
 ***REMOVED******REMOVED***settings: ScalebarSettings = ScalebarSettings(),
-***REMOVED******REMOVED***spatialReference: Binding<SpatialReference?>,
+***REMOVED******REMOVED***spatialReference: SpatialReference?,
 ***REMOVED******REMOVED***style: ScalebarStyle = .alternatingBar,
 ***REMOVED******REMOVED***units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
-***REMOVED******REMOVED***unitsPerPoint: Binding<Double?>,
+***REMOVED******REMOVED***unitsPerPoint: Double?,
 ***REMOVED******REMOVED***useGeodeticCalculations: Bool = true,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
+***REMOVED******REMOVED***viewpoint: Viewpoint?
 ***REMOVED***)
 ```
 
@@ -91,9 +91,9 @@ MapView(map: map)
 ***REMOVED***.overlay(alignment: alignment) {
 ***REMOVED******REMOVED***Scalebar(
 ***REMOVED******REMOVED******REMOVED***maxWidth: maxWidth,
-***REMOVED******REMOVED******REMOVED***spatialReference: $spatialReference,
-***REMOVED******REMOVED******REMOVED***unitsPerPoint: $unitsPerPoint,
-***REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED***spatialReference: spatialReference,
+***REMOVED******REMOVED******REMOVED***unitsPerPoint: unitsPerPoint,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ```

@@ -94,7 +94,7 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: zero))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: zero, y: maxY))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Horiontal cross bar
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Horizontal cross bar
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: midY))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: midY))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***

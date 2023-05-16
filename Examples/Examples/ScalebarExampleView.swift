@@ -44,9 +44,9 @@ struct ScalebarExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: alignment) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: maxWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: $spatialReference,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint: $unitsPerPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: spatialReference,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint: unitsPerPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 50)
