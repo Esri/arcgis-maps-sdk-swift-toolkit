@@ -27,7 +27,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Public vars
 ***REMOVED***
-***REMOVED******REMOVED***/ A screen length and displayable localized string for the equivalent length in the alternate unit.
+***REMOVED******REMOVED***/ A screen length and displayable string for the equivalent length in the alternate unit.
 ***REMOVED***var alternateUnit: (screenLength: CGFloat, label: String) {
 ***REMOVED******REMOVED***guard let displayUnit = displayUnit else {
 ***REMOVED******REMOVED******REMOVED***return (.zero, "")
@@ -56,16 +56,8 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***let numberString = numberFormatter.string(
 ***REMOVED******REMOVED******REMOVED***from: NSNumber(value: altMapLength)
 ***REMOVED******REMOVED***) ?? ""
-***REMOVED******REMOVED***let bottomUnitsText = " \(altDisplayUnits.localizedAbbreviation)"
-***REMOVED******REMOVED***let label = String(
-***REMOVED******REMOVED******REMOVED***localized: "\(numberString)\(bottomUnitsText)",
-***REMOVED******REMOVED******REMOVED***bundle: .module,
-***REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label indicating the linear distance represented by a scalebar. The
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** first variable is the linear distance and the second value is the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** linear unit of measurement, either feet/miles or meters/kilometers.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let bottomUnitsText = " \(altDisplayUnits.abbreviation)"
+***REMOVED******REMOVED***let label = "\(numberString)\(bottomUnitsText)"
 ***REMOVED******REMOVED***return (altScreenLength, label)
 ***REMOVED***
 ***REMOVED***
@@ -208,16 +200,8 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***let segmentMapLength = Double((segmentScreenLength * CGFloat(index + 1)) / lineDisplayLength) * lineMapLength
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***var segmentText = numberFormatter.string(from: NSNumber(value: segmentMapLength)) ?? ""
-***REMOVED******REMOVED******REMOVED***if index == numSegments - 1, let displayUnit = displayUnit?.localizedAbbreviation {
-***REMOVED******REMOVED******REMOVED******REMOVED***segmentText = String(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "\(segmentText) \(displayUnit)",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label indicating the linear distance represented by a scalebar. The
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** first variable is the linear distance and the second value is the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** linear unit of measurement, either feet/miles or meters/kilometers.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***if index == numSegments - 1, let displayUnit = displayUnit?.abbreviation {
+***REMOVED******REMOVED******REMOVED******REMOVED***segmentText += " \(displayUnit)"
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let label = ScalebarLabel(
