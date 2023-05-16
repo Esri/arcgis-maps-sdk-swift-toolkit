@@ -53,10 +53,10 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***value: displayFactor
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let altScreenLength = altMapLength / convertedDisplayFactor
-***REMOVED******REMOVED***let label = String.totalLengthLabel(
-***REMOVED******REMOVED******REMOVED***length: altMapLength,
-***REMOVED******REMOVED******REMOVED***linearUnit: altDisplayUnits
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let measurement = Measurement(value: altMapLength, linearUnit: altDisplayUnits)
+***REMOVED******REMOVED***let label = measurement.formatted(.scaleMeasurement)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return (altScreenLength, label)
 ***REMOVED***
 ***REMOVED***
@@ -188,16 +188,15 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***currSegmentX += segmentScreenLength
 ***REMOVED******REMOVED******REMOVED***let segmentMapLength = Double((segmentScreenLength * CGFloat(index + 1)) / lineDisplayLength) * lineMapLength
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***var segmentText = NumberFormatter.localizedString(
-***REMOVED******REMOVED******REMOVED******REMOVED***from: NSNumber(value: segmentMapLength),
-***REMOVED******REMOVED******REMOVED******REMOVED***number: .decimal
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let segmentText: String
 ***REMOVED******REMOVED******REMOVED***if index == numSegments - 1, let displayUnit {
-***REMOVED******REMOVED******REMOVED******REMOVED***segmentText = String.totalLengthLabel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***length: segmentMapLength,
+***REMOVED******REMOVED******REMOVED******REMOVED***let measurement = Measurement(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: segmentMapLength,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***linearUnit: displayUnit
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***segmentText = measurement.formatted(.scaleMeasurement)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***segmentText = segmentMapLength.formatted(.number)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let label = ScalebarLabel(
@@ -323,22 +322,14 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 
-private extension String {
-***REMOVED******REMOVED***/ Generates a localized label indicating the total length represented by the scalebar.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - length: The total length represented by the scalebar.
-***REMOVED******REMOVED***/   - linearUnit: The unit of length used by the scalebar.
-***REMOVED******REMOVED***/ - Returns: The total length label.
-***REMOVED***static func totalLengthLabel(length: Double, linearUnit: LinearUnit) -> String {
-***REMOVED******REMOVED***let formatter = MeasurementFormatter()
-***REMOVED******REMOVED******REMOVED*** Specify `.providedUnit`, otherwise the formatter will continue to use miles when the
-***REMOVED******REMOVED******REMOVED*** provided units switch over to feet.
-***REMOVED******REMOVED***formatter.unitOptions = .providedUnit
-***REMOVED******REMOVED***return formatter.string(
-***REMOVED******REMOVED******REMOVED***from: Measurement(
-***REMOVED******REMOVED******REMOVED******REMOVED***value: length,
-***REMOVED******REMOVED******REMOVED******REMOVED***unit: UnitLength.fromLinearUnit(linearUnit)
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
+private extension Measurement where UnitType == UnitLength {
+***REMOVED***init(value: Double, linearUnit: LinearUnit) {
+***REMOVED******REMOVED***self.init(value: value, unit: .fromLinearUnit(linearUnit))
+***REMOVED***
+***REMOVED***
+
+private extension FormatStyle where Self == Measurement<UnitLength>.FormatStyle {
+***REMOVED***static var scaleMeasurement: Self {
+***REMOVED******REMOVED***.measurement(width: .abbreviated, usage: .asProvided)
 ***REMOVED***
 ***REMOVED***
