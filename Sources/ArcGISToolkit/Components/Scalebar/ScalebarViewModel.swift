@@ -56,15 +56,9 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***let numberString = numberFormatter.string(
 ***REMOVED******REMOVED******REMOVED***from: NSNumber(value: altMapLength)
 ***REMOVED******REMOVED***) ?? ""
-***REMOVED******REMOVED***let bottomUnitsText = " \(altDisplayUnits.localizedAbbreviation)"
-***REMOVED******REMOVED***let label = String(
-***REMOVED******REMOVED******REMOVED***localized: "\(numberString)\(bottomUnitsText)",
-***REMOVED******REMOVED******REMOVED***bundle: .module,
-***REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label indicating the linear distance represented by a scalebar. The
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** first variable is the linear distance and the second value is the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** linear unit of measurement, either feet/miles or meters/kilometers.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED***let label = String.totalLengthLabel(
+***REMOVED******REMOVED******REMOVED***length: numberString,
+***REMOVED******REMOVED******REMOVED***unitLabel: altDisplayUnits.localizedAbbreviation
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***return (altScreenLength, label)
 ***REMOVED***
@@ -209,15 +203,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***var segmentText = numberFormatter.string(from: NSNumber(value: segmentMapLength)) ?? ""
 ***REMOVED******REMOVED******REMOVED***if index == numSegments - 1, let displayUnit = displayUnit?.localizedAbbreviation {
-***REMOVED******REMOVED******REMOVED******REMOVED***segmentText = String(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "\(segmentText) \(displayUnit)",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label indicating the linear distance represented by a scalebar. The
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** first variable is the linear distance and the second value is the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** linear unit of measurement, either feet/miles or meters/kilometers.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***segmentText = String.totalLengthLabel(length: segmentText, unitLabel: displayUnit)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let label = ScalebarLabel(
@@ -340,5 +326,24 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***initialScaleWasCalculated = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***updateLabels()
+***REMOVED***
+***REMOVED***
+
+private extension String {
+***REMOVED******REMOVED***/ Generates a localized label indicating the total length represented by the scalebar.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - length: The total length represented by the scalebar.
+***REMOVED******REMOVED***/   - unitLabel: The unit of length used by the scalebar.
+***REMOVED******REMOVED***/ - Returns: The total length label.
+***REMOVED***static func totalLengthLabel(length: String, unitLabel: String) -> String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "\(length) \(unitLabel)",
+***REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label indicating the linear distance represented by a scalebar. The
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** first variable is the linear distance and the second value is the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** linear unit of measurement, either feet/miles or meters/kilometers.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

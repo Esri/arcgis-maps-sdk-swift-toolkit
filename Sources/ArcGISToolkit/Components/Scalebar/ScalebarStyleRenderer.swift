@@ -125,6 +125,8 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.fontHeight)
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Despite the language direction, this renderer should always place labels on the right.
+***REMOVED******REMOVED***.environment(\.layoutDirection, .leftToRight)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.graduatedLine`.

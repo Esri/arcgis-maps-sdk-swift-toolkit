@@ -14,31 +14,34 @@
 ***REMOVED***
 
 extension LinearUnit {
+***REMOVED******REMOVED***/ A localized abbreviation of this unit.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Note: Only feet, kilometers, meters and miles are translated at this time.
 ***REMOVED***var localizedAbbreviation: String {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .feet:
 ***REMOVED******REMOVED******REMOVED***return .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "ft",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: "An abbreviation of 'feet'."
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Abbreviation of 'feet'."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .kilometers:
 ***REMOVED******REMOVED******REMOVED***return .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "km",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: "An abbreviation of 'kilometers'."
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Abbreviation of 'kilometers'."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .meters:
 ***REMOVED******REMOVED******REMOVED***return .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "m",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: "An abbreviation of 'meters'."
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Abbreviation of 'meters'."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .miles:
 ***REMOVED******REMOVED******REMOVED***return .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "mi",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: "An abbreviation of 'miles'."
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Abbreviation of 'miles'."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***return ""
