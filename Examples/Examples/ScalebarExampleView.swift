@@ -44,9 +44,9 @@ struct ScalebarExampleView: View {
             .overlay(alignment: alignment) {
                 Scalebar(
                     maxWidth: maxWidth,
-                    spatialReference: $spatialReference,
-                    unitsPerPoint: $unitsPerPoint,
-                    viewpoint: $viewpoint
+                    spatialReference: spatialReference,
+                    unitsPerPoint: unitsPerPoint,
+                    viewpoint: viewpoint
                 )
                 .padding(.horizontal, 10)
                 .padding(.vertical, 50)

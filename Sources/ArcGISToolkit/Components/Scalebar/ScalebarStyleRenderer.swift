@@ -94,7 +94,7 @@ extension Scalebar {
                     path.move(to: CGPoint(x: zero, y: zero))
                     path.addLine(to: CGPoint(x: zero, y: maxY))
                     
-                    // Horiontal cross bar
+                    // Horizontal cross bar
                     path.move(to: CGPoint(x: zero, y: midY))
                     path.addLine(to: CGPoint(x: maxX, y: midY))
                     
