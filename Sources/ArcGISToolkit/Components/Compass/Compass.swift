@@ -66,7 +66,18 @@ public struct Compass: View {
                 .onTapGesture {
                     Task { await mapViewProxy?.setViewpointRotation(0) }
                 }
-                .accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
+                .accessibilityLabel(
+                    String(
+                        localized: "Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)",
+                        bundle: .module,
+                        comment: """
+                                 An compass description to be read by a screen reader describing the
+                                 current heading. The first variable being a degree value and the
+                                 second being a corresponding cardinal direction (north, northeast,
+                                 east, etc.).
+                                 """
+                    )
+                )
         }
     }
 }

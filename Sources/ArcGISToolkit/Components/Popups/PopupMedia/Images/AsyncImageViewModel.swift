@@ -109,6 +109,7 @@ extension LoadImageError: LocalizedError {
     public var errorDescription: String? {
         return NSLocalizedString(
             "The URL could not be reached or did not contain image data",
+            bundle: .module,
             comment: "No Data"
         )
     }

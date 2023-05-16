@@ -38,7 +38,7 @@ public struct PopupView: View {
 
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>?
-
+    
     public var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -65,11 +65,11 @@ public struct PopupView: View {
                     case .success(_):
                         PopupElementScrollView(popupElements: popup.evaluatedElements)
                     case .failure(let error):
-                        Text("Popup evaluation failed: \(error.localizedDescription)")
+                        Text("Popup evaluation failed: \(error.localizedDescription)", bundle: .module)
                     }
                 } else {
                     VStack(alignment: .center) {
-                        Text("Evaluating popup expressions...")
+                        Text("Evaluating popup expressions...", bundle: .module)
                         ProgressView()
                     }
                     .frame(maxWidth: .infinity)

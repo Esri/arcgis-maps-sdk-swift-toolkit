@@ -67,7 +67,10 @@ struct AsyncImageView: View {
                     Image(systemName: "exclamationmark.circle")
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(.red)
-                    Text("An error occurred loading the image: \(error.localizedDescription).")
+                    Text(
+                        "An error occurred loading the image: \(error.localizedDescription).",
+                        bundle: .module
+                    )
                 }
                 .padding([.top, .bottom])
             }
