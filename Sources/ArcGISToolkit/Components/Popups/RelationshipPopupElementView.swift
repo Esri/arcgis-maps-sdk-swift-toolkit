@@ -83,8 +83,7 @@ struct RelationshipPopupElementView: View {
                 }
             }
             Divider()
-            // TODO: put back `popupElement.displayCount`.
-            if viewModel.relatedPopups.count > 0/*popupElement.displayCount*/ {
+            if viewModel.relatedPopups.count > popupElement.displayCount {
                 NavigationLink(value: viewModel.relatedPopups) {
                     HStack {
                         VStack(alignment: .leading) {
