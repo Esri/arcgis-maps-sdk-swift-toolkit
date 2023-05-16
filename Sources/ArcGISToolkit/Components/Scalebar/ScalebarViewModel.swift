@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import ArcGIS
-import Combine
 import Foundation
 import SwiftUI
 
@@ -62,58 +61,31 @@ final class ScalebarViewModel: ObservableObject {
         return (altScreenLength, label)
     }
     
-    /// A subject to which viewpoint updates can be submitted.
-    var viewpointSubject = PassthroughSubject<Viewpoint?, Never>()
-    
     // - MARK: Public methods
     
     /// A scalebar view model controls the underlying data used to render a scalebar.
     /// - Parameters:
     ///   - maxWidth: The maximum screen width allotted to the scalebar.
     ///   - minScale: A value of 0 indicates the scalebar segments should always recalculate.
-    ///   - spatialReference: The map's spatial reference.
     ///   - style: The visual appearance of the scalebar.
     ///   - units: The units to be displayed in the scalebar.
-    ///   - unitsPerPoint: The current number of device independent pixels to map display units.
     ///   - useGeodeticCalculations: Determines if a geodesic curve should be used to compute
     ///     the scale.
-    ///   - viewpoint: The map's current viewpoint.
     init(
         _ maxWidth: Double,
         _ minScale: Double,
-        _ spatialReference: Binding<SpatialReference?>,
         _ style: ScalebarStyle,
         _ units: ScalebarUnits,
-        _ unitsPerPoint: Binding<Double?>,
-        _ useGeodeticCalculations: Bool,
-        _ viewpoint: Viewpoint?
+        _ useGeodeticCalculations: Bool
     ) {
         self.maxWidth = maxWidth
         self.minScale = minScale
-        self.spatialReference = spatialReference
         self.style = style
         self.units = units
-        self.unitsPerPoint = unitsPerPoint
         self.useGeodeticCalculations = useGeodeticCalculations
-        self.viewpoint = viewpoint
-        
-        viewpointSubscription = viewpointSubject
-            .debounce(for: delay, scheduler: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] in
-                guard let self = self else {
-                    return
-                }
-                self.viewpoint = $0
-                self.updateScaleDisplay()
-            })
-        
-        updateScaleDisplay()
     }
     
     // - MARK: Private constants
-    
-    /// The amount of time to wait between value calculations.
-    private let delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.05)
     
     /// The curve type to use when performing scale calculations.
     private let geodeticCurveType: GeometryEngine.GeodeticCurveType = .geodesic
@@ -134,7 +106,7 @@ final class ScalebarViewModel: ObservableObject {
     /// The visual appearance of the scalebar.
     private let style: ScalebarStyle
     
-    // - MARK: Private vars
+    // - MARK: Private variables
     
     /// Determines the amount of display space to use based on the scalebar style.
     private var availableLineDisplayLength: CGFloat {
@@ -151,31 +123,35 @@ final class ScalebarViewModel: ObservableObject {
     /// The units to be displayed in the scalebar.
     private var displayUnit: LinearUnit? = nil
     
+    /// A Boolean value indicating whether an initial scale has been calculated.
+    ///
+    /// The scale requires 3 values (spatial reference, units per point and a viewpoint) to be
+    /// calculated. As these values are initially received in a non-deterministic order, this allows
+    /// a calculation to be attempted upon initial receipt of each of the 3 values.
+    private var initialScaleWasCalculated = false
+    
     /// The length of the line to display in map units.
     private var lineMapLength: Double = .zero
     
     /// The maximum screen width allotted to the scalebar.
     private var maxWidth: Double
     
-    /// The map's spatial reference.
-    private var spatialReference: Binding<SpatialReference?>
+    /// The spatial reference to calculate the scale with.
+    private var spatialReference: SpatialReference?
     
     /// Unit of measure in use.
     private var units: ScalebarUnits
     
-    /// The current number of device independent pixels to map display units.
-    private var unitsPerPoint: Binding<Double?>
+    /// The units per point to calculate the scale with.
+    private var unitsPerPoint: Double?
     
     /// Allows a user to toggle geodetic calculations.
     private var useGeodeticCalculations: Bool
     
-    /// Acts as a data provider of the current scale.
+    /// The viewpoint to calculate the scale with.
     private var viewpoint: Viewpoint?
     
-    /// A subscription to handle listening for viewpoint changes.
-    private var viewpointSubscription: AnyCancellable?
-    
-    // - MARK: Private methods
+    // - MARK: Methods
     
     /// Updates the labels to be displayed by the scalebar.
     private func updateLabels() {
@@ -183,7 +159,7 @@ final class ScalebarViewModel: ObservableObject {
         
         // Use a string with at least a few characters in case the number string
         // only has 1. The dividers will be decimal values and we want to make
-        // sure they all fit very basic hueristics.
+        // sure they all fit very basic heuristics.
         let minSegmentTestString: String
         if lineMapLength >= 100 {
             minSegmentTestString = String(Int(lineMapLength))
@@ -243,12 +219,31 @@ final class ScalebarViewModel: ObservableObject {
         }
     }
     
-    /// Updates the information necessary to render a scalebar based off the latest viewpoint and units per
-    /// point information.
-    private func updateScaleDisplay() {
-        guard let spatialReference = spatialReference.wrappedValue,
-              let unitsPerPoint = unitsPerPoint.wrappedValue,
-              let viewpoint = viewpoint,
+    /// Update the stored spatial reference value for use in the next scale calculation.
+    /// - Parameter spatialReference: The spatial reference to calculate the scale with.
+    func update(_ spatialReference: SpatialReference?) {
+        self.spatialReference = spatialReference
+        if !initialScaleWasCalculated { updateScale() }
+    }
+    
+    /// Updates the stored units per point value for use in the next scale calculation.
+    /// - Parameter unitsPerPoint: The units per point to calculate the scale with.
+    func update(_ unitsPerPoint: Double?) {
+        self.unitsPerPoint = unitsPerPoint
+        if !initialScaleWasCalculated { updateScale() }
+    }
+    
+    /// Updates the stored units viewpoint value for use in the next scale calculation.
+    /// - Parameter viewpoint: The viewpoint to calculate the scale with.
+    func update(_ viewpoint: Viewpoint?) {
+        self.viewpoint = viewpoint
+        if !initialScaleWasCalculated { updateScale() }
+    }
+    
+    /// Update the information necessary to render a scalebar based off the stored viewpoint, units
+    /// per point and spatial reference values.
+    func updateScale() {
+        guard let spatialReference, let unitsPerPoint, let viewpoint,
               minScale <= 0 || viewpoint.targetScale < minScale else {
             return
         }
@@ -325,6 +320,8 @@ final class ScalebarViewModel: ObservableObject {
         self.displayLength = displayLength
         self.displayUnit = displayUnit
         self.lineMapLength = lineMapLength
+        
+        initialScaleWasCalculated = true
         
         updateLabels()
     }
