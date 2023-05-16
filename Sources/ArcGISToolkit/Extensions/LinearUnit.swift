@@ -14,31 +14,34 @@
 import ArcGIS
 
 extension LinearUnit {
+    /// A localized abbreviation of this unit.
+    ///
+    /// - Note: Only feet, kilometers, meters and miles are translated at this time.
     var localizedAbbreviation: String {
         switch self {
         case .feet:
             return .init(
                 localized: "ft",
                 bundle: .module,
-                comment: "An abbreviation of 'feet'."
+                comment: "Abbreviation of 'feet'."
             )
         case .kilometers:
             return .init(
                 localized: "km",
                 bundle: .module,
-                comment: "An abbreviation of 'kilometers'."
+                comment: "Abbreviation of 'kilometers'."
             )
         case .meters:
             return .init(
                 localized: "m",
                 bundle: .module,
-                comment: "An abbreviation of 'meters'."
+                comment: "Abbreviation of 'meters'."
             )
         case .miles:
             return .init(
                 localized: "mi",
                 bundle: .module,
-                comment: "An abbreviation of 'miles'."
+                comment: "Abbreviation of 'miles'."
             )
         default:
             return ""

@@ -125,6 +125,8 @@ extension Scalebar {
                 )
                 .frame(height: Scalebar.fontHeight)
         }
+        // Despite the language direction, this renderer should always place labels on the right.
+        .environment(\.layoutDirection, .leftToRight)
     }
     
     /// Renders a scalebar with `ScalebarStyle.graduatedLine`.
