@@ -38,7 +38,7 @@ struct BasemapGalleryExampleView: View {
                     doneButton
                         .padding()
                     BasemapGallery(items: basemaps, geoModel: map)
-                        .style(.automatic())
+                        .style(.grid(maxItemWidth: 100))
                         .padding()
                 }
             }
