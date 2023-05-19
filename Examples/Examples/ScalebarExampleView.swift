@@ -17,7 +17,7 @@ import SwiftUI
 
 struct ScalebarExampleView: View {
     /// The height of the map view's attribution bar.
-    @State private var attributionBarHeight: CGFloat = .zero
+    @State private var attributionBarHeight = 0.0
     
     /// Allows for communication between the `Scalebar` and `MapView`.
     @State private var spatialReference: SpatialReference?
