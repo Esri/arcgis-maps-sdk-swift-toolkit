@@ -122,6 +122,9 @@ public struct SearchView: View {
     /// Determines whether the results lists are displayed.
     @State private var isResultListHidden = false
     
+    /// A Boolean value indicating whether the search field is focused or not.
+    @FocusState private var searchFieldIsFocused: Bool
+    
     public var body: some View {
         VStack {
             GeometryReader { geometry in
@@ -131,6 +134,7 @@ public struct SearchView: View {
                         SearchField(
                             query: $viewModel.currentQuery,
                             prompt: prompt,
+                            isFocused: $searchFieldIsFocused,
                             isResultsButtonHidden: !enableResultListView,
                             isResultListHidden: $isResultListHidden
                         )
@@ -187,6 +191,12 @@ public struct SearchView: View {
         .onReceive(viewModel.$currentQuery) { _ in
             onQueryChangedAction?(viewModel.currentQuery)
             viewModel.updateSuggestions()
+        }
+        .onChange(of: viewModel.selectedResult) { _ in
+            searchFieldIsFocused = false
+        }
+        .onChange(of: viewModel.currentSuggestion) { _ in
+            searchFieldIsFocused = false
         }
         .onChange(of: geoViewExtent) { _ in
             viewModel.geoViewExtent = geoViewExtent
