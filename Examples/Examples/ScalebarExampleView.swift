@@ -17,7 +17,7 @@
 
 struct ScalebarExampleView: View {
 ***REMOVED******REMOVED***/ The height of the map view's attribution bar.
-***REMOVED***@State private var attributionBarHeight: CGFloat = .zero
+***REMOVED***@State private var attributionBarHeight = 0.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView`.
 ***REMOVED***@State private var spatialReference: SpatialReference?
