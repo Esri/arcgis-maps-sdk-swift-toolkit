@@ -31,6 +31,9 @@ struct SearchExampleView: View {
     /// The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
     private let searchResultsOverlay = GraphicsOverlay()
     
+    /// The height of the map view's attribution bar.
+    @State private var attributionBarHeight = 0.0
+    
     /// The map viewpoint used by the `SearchView` to pan/zoom the map
     /// to the extent of the search results.
     @State private var searchResultViewpoint: Viewpoint? = Viewpoint(
@@ -57,6 +60,9 @@ struct SearchExampleView: View {
                 viewpoint: searchResultViewpoint,
                 graphicsOverlays: [searchResultsOverlay]
             )
+            .onAttributionBarHeightChanged { newValue in
+                withAnimation { attributionBarHeight = newValue }
+            }
             .onNavigatingChanged { isGeoViewNavigating = $0 }
             .onViewpointChanged(kind: .centerAndScale) {
                 queryCenter = $0.targetGeometry as? Point
@@ -81,7 +87,8 @@ struct SearchExampleView: View {
                 .queryCenter($queryCenter)
                 .geoViewExtent($geoViewExtent)
                 .isGeoViewNavigating($isGeoViewNavigating)
-                .padding()
+                .padding([.leading, .top, .trailing])
+                .padding([.bottom], 10 + attributionBarHeight)
             }
         }
     }
