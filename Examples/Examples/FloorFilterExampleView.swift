@@ -28,7 +28,7 @@ struct FloorFilterExampleView: View {
     private let floorFilterAlignment = Alignment.bottomLeading
     
     /// The height of the map view's attribution bar.
-    @State private var attributionBarHeight: CGFloat = .zero
+    @State private var attributionBarHeight = 0.0
     
     /// Determines the appropriate time to initialize the `FloorFilter`.
     @State private var isMapLoaded = false
