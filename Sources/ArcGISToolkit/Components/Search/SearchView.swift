@@ -122,6 +122,9 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
 ***REMOVED***@State private var isResultListHidden = false
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the search field is focused or not.
+***REMOVED***@FocusState private var searchFieldIsFocused: Bool
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
@@ -131,6 +134,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchField(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $viewModel.currentQuery,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: prompt,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused: $searchFieldIsFocused,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isResultsButtonHidden: !enableResultListView,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isResultListHidden: $isResultListHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -187,6 +191,12 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***.onReceive(viewModel.$currentQuery) { _ in
 ***REMOVED******REMOVED******REMOVED***onQueryChangedAction?(viewModel.currentQuery)
 ***REMOVED******REMOVED******REMOVED***viewModel.updateSuggestions()
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewModel.selectedResult) { _ in
+***REMOVED******REMOVED******REMOVED***searchFieldIsFocused = false
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewModel.currentSuggestion) { _ in
+***REMOVED******REMOVED******REMOVED***searchFieldIsFocused = false
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: geoViewExtent) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.geoViewExtent = geoViewExtent
