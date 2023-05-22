@@ -77,7 +77,7 @@ Selecting a basemap with a spatial reference that does not match that of the geo
 ### Basic usage for displaying a `BasemapGallery`.
 
 ```swift
-@StateObject var map = Map(basemapStyle: .arcGISImagery)
+@State private var map = Map(basemapStyle: .arcGISImagery)
 
 var body: some View {
     MapView(map: map)
