@@ -31,16 +31,14 @@ struct ScalebarExampleView: View {
     /// The location of the scalebar on screen.
     private let alignment: Alignment = .bottomLeading
     
-    /// The data model containing the `Map` displayed in the `MapView`.
-    @StateObject private var dataModel = MapDataModel(
-        map: Map(basemapStyle: .arcGISTopographic)
-    )
+    /// The `Map` displayed in the `MapView`.
+    @State private var map = Map(basemapStyle: .arcGISTopographic)
     
     /// The maximum screen width allotted to the scalebar.
     private let maxWidth: Double = 175.0
     
     var body: some View {
-        MapView(map: dataModel.map)
+        MapView(map: map)
             .onAttributionBarHeightChanged { newHeight in
                 withAnimation { attributionBarHeight = newHeight }
             }
