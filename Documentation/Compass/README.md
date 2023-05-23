@@ -16,7 +16,7 @@ Compass:
 
 ## Key properties
 
-`Compass` has the following initializer:
+`Compass` has the following initializers:
 
 ```swift
     /// Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
@@ -25,6 +25,13 @@ Compass:
     ///   - rotation: The rotation whose value determines the heading of the compass.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
     public init(rotation: Double?, mapViewProxy: MapViewProxy)
+    
+    /// Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
+    /// a direction toward true West, etc.).
+    /// - Parameters:
+    ///   - rotation: The rotation whose value determines the heading of the compass.
+    ///   - action: The action to perform when the compass is tapped.
+    public init(rotation: Double?, action: @escaping () -> Void)
 ```
 
 `Compass` has the following modifiers:
@@ -34,7 +41,7 @@ Compass:
 
 ## Behavior:
 
-Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to north, it disappears. The `automaticallyHides` view modifier allows you to disable the auto-hide feature so that it is always displayed.
+Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to north, it disappears. The `autoHideDisabled` view modifier allows you to disable the auto-hide feature so that it is always displayed.
 
 When the compass is tapped, the map orients back to north (zero bearing).
 
@@ -58,5 +65,32 @@ var body: some View {
     }
 }
 ```
+
+To add a `Compass` to a SceneView, use the initializer which takes an `action` argument to perform a custom action when the compass is tapped on.
+
+```swift
+@State private var scene = Scene(basemapStyle: .arcGISImagery)
+
+@State private var viewpoint: Viewpoint?
+
+var body: some View {
+    SceneViewReader { proxy in
+        SceneView(scene: scene)
+            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
+            .overlay(alignment: .topTrailing) {
+                Compass(rotation: viewpoint?.rotation) {
+                    if let viewpoint {
+                        Task {
+                            await proxy.setViewpoint(viewpoint.withRotation(.zero))
+                        }
+                    }
+                }
+                .padding()
+            }
+    }
+}
+```
+
+
 
 To see it in action, try out the [Examples](../../Examples/Examples) and refer to [CompassExampleView.swift](../../Examples/Examples/CompassExampleView.swift) in the project.
