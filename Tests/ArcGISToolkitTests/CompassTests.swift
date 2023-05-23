@@ -21,33 +21,33 @@ final class CompassTests: XCTestCase {
     /// is applied.
     func testHiddenWithAutoHideOff() {
         let compass1Heading = Double.zero
-        let compass1 = Compass(heading: compass1Heading)
-            .autoHideDisabled() as! Compass
+        let compass1 = Compass(rotation: compass1Heading, mapViewProxy: nil, action: nil)
+            .autoHideDisabled()
         XCTAssertFalse(compass1.shouldHide(forHeading: compass1Heading))
         
         let compass2Heading = 45.0
-        let compass2 = Compass(heading: compass2Heading)
-            .autoHideDisabled() as! Compass
+        let compass2 = Compass(rotation: compass2Heading, mapViewProxy: nil, action: nil)
+            .autoHideDisabled()
         XCTAssertFalse(compass2.shouldHide(forHeading: compass2Heading))
         
         let compass3Heading = Double.nan
-        let compass3 = Compass(heading: compass3Heading)
-            .autoHideDisabled() as! Compass
+        let compass3 = Compass(rotation: compass3Heading, mapViewProxy: nil, action: nil)
+            .autoHideDisabled()
         XCTAssertFalse(compass3.shouldHide(forHeading: compass3Heading))
     }
     
     /// Verifies that the compass accurately indicates when it should be hidden.
     func testHiddenWithAutoHideOn() {
         let compass1Heading: Double = .zero
-        let compass1 = Compass(heading: compass1Heading)
+        let compass1 = Compass(rotation: compass1Heading, mapViewProxy: nil, action: nil)
         XCTAssertTrue(compass1.shouldHide(forHeading: compass1Heading))
         
         let compass2Heading = 45.0
-        let compass2 = Compass(heading: compass2Heading)
+        let compass2 = Compass(rotation: compass2Heading, mapViewProxy: nil, action: nil)
         XCTAssertFalse(compass2.shouldHide(forHeading: compass2Heading))
         
         let compass3Heading = Double.nan
-        let compass3 = Compass(heading: compass3Heading)
+        let compass3 = Compass(rotation: compass3Heading, mapViewProxy: nil, action: nil)
         XCTAssertTrue(compass3.shouldHide(forHeading: compass3Heading))
     }
 }
