@@ -179,7 +179,7 @@
 /* No comment provided by engineer. */
 "Please set at least 2 starting locations." = "Please set at least 2 starting locations.";
 
-/* An error message shown when a popup cannot be shown. The
+/* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Popup evaluation failed: %@";
 
