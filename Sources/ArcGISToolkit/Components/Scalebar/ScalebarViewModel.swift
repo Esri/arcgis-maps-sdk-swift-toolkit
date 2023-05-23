@@ -27,7 +27,7 @@ final class ScalebarViewModel: ObservableObject {
     
     // - MARK: Public vars
     
-    /// A screen length and displayable string for the equivalent length in the alternate unit.
+    /// A screen length and displayable localized string for the equivalent length in the alternate unit.
     var alternateUnit: (screenLength: CGFloat, label: String) {
         guard let displayUnit = displayUnit else {
             return (.zero, "")
@@ -53,11 +53,10 @@ final class ScalebarViewModel: ObservableObject {
             value: displayFactor
         )
         let altScreenLength = altMapLength / convertedDisplayFactor
-        let numberString = numberFormatter.string(
-            from: NSNumber(value: altMapLength)
-        ) ?? ""
-        let bottomUnitsText = " \(altDisplayUnits.abbreviation)"
-        let label = "\(numberString)\(bottomUnitsText)"
+        
+        let measurement = Measurement(value: altMapLength, linearUnit: altDisplayUnits)
+        let label = measurement.formatted(.scaleMeasurement)
+        
         return (altScreenLength, label)
     }
     
@@ -92,16 +91,6 @@ final class ScalebarViewModel: ObservableObject {
     
     /// A `minScale` of 0 means the scalebar segments will always recalculate.
     private let minScale: Double
-    
-    /// Converts numbers into a readable format.
-    private let numberFormatter: NumberFormatter = {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .decimal
-        numberFormatter.formatterBehavior = .behavior10_4
-        numberFormatter.maximumFractionDigits = 2
-        numberFormatter.minimumFractionDigits = 0
-        return numberFormatter
-    }()
     
     /// The visual appearance of the scalebar.
     private let style: ScalebarStyle
@@ -191,7 +180,7 @@ final class ScalebarViewModel: ObservableObject {
             ScalebarLabel(
                 index: -1,
                 xOffset: .zero,
-                text: "0"
+                text: NumberFormatter.localizedString(from: 0, number: .decimal)
             )
         )
         
@@ -199,9 +188,15 @@ final class ScalebarViewModel: ObservableObject {
             currSegmentX += segmentScreenLength
             let segmentMapLength = Double((segmentScreenLength * CGFloat(index + 1)) / lineDisplayLength) * lineMapLength
             
-            var segmentText = numberFormatter.string(from: NSNumber(value: segmentMapLength)) ?? ""
-            if index == numSegments - 1, let displayUnit = displayUnit?.abbreviation {
-                segmentText += " \(displayUnit)"
+            let segmentText: String
+            if index == numSegments - 1, let displayUnit {
+                let measurement = Measurement(
+                    value: segmentMapLength,
+                    linearUnit: displayUnit
+                )
+                segmentText = measurement.formatted(.scaleMeasurement)
+            } else {
+                segmentText = segmentMapLength.formatted(.number)
             }
             
             let label = ScalebarLabel(
@@ -324,5 +319,17 @@ final class ScalebarViewModel: ObservableObject {
         initialScaleWasCalculated = true
         
         updateLabels()
+    }
+}
+
+private extension Measurement where UnitType == UnitLength {
+    init(value: Double, linearUnit: LinearUnit) {
+        self.init(value: value, unit: .fromLinearUnit(linearUnit))
+    }
+}
+
+private extension FormatStyle where Self == Measurement<UnitLength>.FormatStyle {
+    static var scaleMeasurement: Self {
+        .measurement(width: .abbreviated, usage: .asProvided)
     }
 }

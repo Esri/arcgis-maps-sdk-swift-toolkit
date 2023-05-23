@@ -65,7 +65,14 @@ public struct PopupView: View {
                     case .success(_):
                         PopupElementScrollView(popupElements: popup.evaluatedElements)
                     case .failure(let error):
-                        Text("Popup evaluation failed: \(error.localizedDescription)", bundle: .module)
+                        Text(
+                            "Popup evaluation failed: \(error.localizedDescription)",
+                            bundle: .module,
+                            comment: """
+                                     An error message shown when a popup cannot be displayed. The
+                                     variable provides additional data.
+                                     """
+                        )
                     }
                 } else {
                     VStack(alignment: .center) {

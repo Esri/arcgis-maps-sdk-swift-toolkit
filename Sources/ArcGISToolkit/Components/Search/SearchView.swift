@@ -102,7 +102,7 @@ public struct SearchView: View {
     private var noResultsMessage = String(
         localized: "No results found",
         bundle: .module,
-        comment: "A message to show when there are no results or suggestions"
+        comment: "A message to show when there are no results or suggestions."
     )
     
     /// The width of the search bar, taking into account the horizontal and vertical size classes
