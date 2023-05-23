@@ -69,7 +69,7 @@ public struct PopupView: View {
                             "Popup evaluation failed: \(error.localizedDescription)",
                             bundle: .module,
                             comment: """
-                                     An error message shown when a popup cannot be shown. The
+                                     An error message shown when a popup cannot be displayed. The
                                      variable provides additional data.
                                      """
                         )
