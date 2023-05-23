@@ -31,6 +31,9 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
 ***REMOVED***private let searchResultsOverlay = GraphicsOverlay()
 ***REMOVED***
+***REMOVED******REMOVED***/ The height of the map view's attribution bar.
+***REMOVED***@State private var attributionBarHeight = 0.0
+***REMOVED***
 ***REMOVED******REMOVED***/ The map viewpoint used by the `SearchView` to pan/zoom the map
 ***REMOVED******REMOVED***/ to the extent of the search results.
 ***REMOVED***@State private var searchResultViewpoint: Viewpoint? = Viewpoint(
@@ -57,6 +60,9 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: searchResultViewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [searchResultsOverlay]
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { attributionBarHeight = newValue ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onNavigatingChanged { isGeoViewNavigating = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***queryCenter = $0.targetGeometry as? Point
@@ -81,7 +87,8 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.queryCenter($queryCenter)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.geoViewExtent($geoViewExtent)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.isGeoViewNavigating($isGeoViewNavigating)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing])
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], 10 + attributionBarHeight)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
