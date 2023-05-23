@@ -27,7 +27,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Public vars
 ***REMOVED***
-***REMOVED******REMOVED***/ A screen length and displayable string for the equivalent length in the alternate unit.
+***REMOVED******REMOVED***/ A screen length and displayable localized string for the equivalent length in the alternate unit.
 ***REMOVED***var alternateUnit: (screenLength: CGFloat, label: String) {
 ***REMOVED******REMOVED***guard let displayUnit = displayUnit else {
 ***REMOVED******REMOVED******REMOVED***return (.zero, "")
@@ -53,11 +53,10 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***value: displayFactor
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let altScreenLength = altMapLength / convertedDisplayFactor
-***REMOVED******REMOVED***let numberString = numberFormatter.string(
-***REMOVED******REMOVED******REMOVED***from: NSNumber(value: altMapLength)
-***REMOVED******REMOVED***) ?? ""
-***REMOVED******REMOVED***let bottomUnitsText = " \(altDisplayUnits.abbreviation)"
-***REMOVED******REMOVED***let label = "\(numberString)\(bottomUnitsText)"
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let measurement = Measurement(value: altMapLength, linearUnit: altDisplayUnits)
+***REMOVED******REMOVED***let label = measurement.formatted(.scaleMeasurement)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return (altScreenLength, label)
 ***REMOVED***
 ***REMOVED***
@@ -92,16 +91,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A `minScale` of 0 means the scalebar segments will always recalculate.
 ***REMOVED***private let minScale: Double
-***REMOVED***
-***REMOVED******REMOVED***/ Converts numbers into a readable format.
-***REMOVED***private let numberFormatter: NumberFormatter = {
-***REMOVED******REMOVED***let numberFormatter = NumberFormatter()
-***REMOVED******REMOVED***numberFormatter.numberStyle = .decimal
-***REMOVED******REMOVED***numberFormatter.formatterBehavior = .behavior10_4
-***REMOVED******REMOVED***numberFormatter.maximumFractionDigits = 2
-***REMOVED******REMOVED***numberFormatter.minimumFractionDigits = 0
-***REMOVED******REMOVED***return numberFormatter
-***REMOVED***()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visual appearance of the scalebar.
 ***REMOVED***private let style: ScalebarStyle
@@ -191,7 +180,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***ScalebarLabel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***index: -1,
 ***REMOVED******REMOVED******REMOVED******REMOVED***xOffset: .zero,
-***REMOVED******REMOVED******REMOVED******REMOVED***text: "0"
+***REMOVED******REMOVED******REMOVED******REMOVED***text: NumberFormatter.localizedString(from: 0, number: .decimal)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -199,9 +188,15 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***currSegmentX += segmentScreenLength
 ***REMOVED******REMOVED******REMOVED***let segmentMapLength = Double((segmentScreenLength * CGFloat(index + 1)) / lineDisplayLength) * lineMapLength
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***var segmentText = numberFormatter.string(from: NSNumber(value: segmentMapLength)) ?? ""
-***REMOVED******REMOVED******REMOVED***if index == numSegments - 1, let displayUnit = displayUnit?.abbreviation {
-***REMOVED******REMOVED******REMOVED******REMOVED***segmentText += " \(displayUnit)"
+***REMOVED******REMOVED******REMOVED***let segmentText: String
+***REMOVED******REMOVED******REMOVED***if index == numSegments - 1, let displayUnit {
+***REMOVED******REMOVED******REMOVED******REMOVED***let measurement = Measurement(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: segmentMapLength,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***linearUnit: displayUnit
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***segmentText = measurement.formatted(.scaleMeasurement)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***segmentText = segmentMapLength.formatted(.number)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let label = ScalebarLabel(
@@ -324,5 +319,17 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***initialScaleWasCalculated = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***updateLabels()
+***REMOVED***
+***REMOVED***
+
+private extension Measurement where UnitType == UnitLength {
+***REMOVED***init(value: Double, linearUnit: LinearUnit) {
+***REMOVED******REMOVED***self.init(value: value, unit: .fromLinearUnit(linearUnit))
+***REMOVED***
+***REMOVED***
+
+private extension FormatStyle where Self == Measurement<UnitLength>.FormatStyle {
+***REMOVED***static var scaleMeasurement: Self {
+***REMOVED******REMOVED***.measurement(width: .abbreviated, usage: .asProvided)
 ***REMOVED***
 ***REMOVED***
