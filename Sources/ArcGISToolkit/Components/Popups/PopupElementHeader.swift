@@ -37,6 +37,5 @@ struct PopupElementHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.padding([.bottom], 4)
 ***REMOVED***
 ***REMOVED***

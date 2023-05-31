@@ -35,33 +35,14 @@ struct FieldsPopupElementView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
-***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, 4)
-***REMOVED******REMOVED******REMOVED***FieldsList(fields: displayFields)
+***REMOVED******REMOVED******REMOVED***ForEach(displayFields) { field in
+***REMOVED******REMOVED******REMOVED******REMOVED***FieldRow(field: field)
+***REMOVED******REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.displayTitle,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***Divider()
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A view displaying the labels and values.
-***REMOVED***private struct FieldsList: View {
-***REMOVED******REMOVED***let fields: [DisplayField]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(fields) { field in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FieldRow(field: field)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if field != fields.last {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***PopupElementHeader(
+***REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.displayTitle,
+***REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
