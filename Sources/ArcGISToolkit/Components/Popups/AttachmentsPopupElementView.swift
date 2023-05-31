@@ -52,8 +52,6 @@ struct AttachmentsPopupElementView: View {
                     .padding()
             } else if viewModel.attachmentModels.count > 0 {
                 DisclosureGroup(isExpanded: $isExpanded) {
-                    Divider()
-                        .padding(.bottom, 4)
                     switch popupElement.displayType {
                     case .list:
                         AttachmentList(attachmentModels: viewModel.attachmentModels)
@@ -69,14 +67,11 @@ struct AttachmentsPopupElementView: View {
                         EmptyView()
                     }
                 } label: {
-                    VStack(alignment: .leading) {
-                        PopupElementHeader(
-                            title: popupElement.displayTitle,
-                            description: popupElement.description
-                        )
-                    }
+                    PopupElementHeader(
+                        title: popupElement.displayTitle,
+                        description: popupElement.description
+                    )
                 }
-                Divider()
             }
         }
         .task {

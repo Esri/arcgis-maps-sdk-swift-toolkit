@@ -24,21 +24,16 @@ struct MediaPopupElementView: View {
     var body: some View {
         if displayableMediaCount > 0 {
             DisclosureGroup(isExpanded: $isExpanded) {
-                Divider()
-                    .padding(.bottom, 4)
                 PopupMediaView(
                     popupMedia: popupElement.media,
                     displayableMediaCount: displayableMediaCount
                 )
             } label: {
-                VStack(alignment: .leading) {
-                    PopupElementHeader(
-                        title: popupElement.displayTitle,
-                        description: popupElement.description
-                    )
-                }
+                PopupElementHeader(
+                    title: popupElement.displayTitle,
+                    description: popupElement.description
+                )
             }
-            Divider()
         }
     }
     
