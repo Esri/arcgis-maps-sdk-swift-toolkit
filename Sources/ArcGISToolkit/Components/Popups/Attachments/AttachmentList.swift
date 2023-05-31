@@ -20,13 +20,8 @@ struct AttachmentList: View {
     var attachmentModels: [AttachmentModel]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            ForEach(attachmentModels) { attachmentModel in
-                AttachmentRow(attachmentModel: attachmentModel)
-                if attachmentModel != attachmentModels.last {
-                    Divider()
-                }
-            }
+        ForEach(attachmentModels) { attachmentModel in
+            AttachmentRow(attachmentModel: attachmentModel)
         }
     }
 }

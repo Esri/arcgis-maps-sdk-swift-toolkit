@@ -37,6 +37,5 @@ struct PopupElementHeader: View {
                     .foregroundColor(.secondary)
             }
         }
-        .padding([.bottom], 4)
     }
 }
