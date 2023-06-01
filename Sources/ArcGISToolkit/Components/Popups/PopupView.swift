@@ -40,25 +40,7 @@ public struct PopupView: View {
     private var isPresented: Binding<Bool>?
     
     public var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                if !popup.title.isEmpty {
-                    Text(popup.title)
-                        .font(.title)
-                        .fontWeight(.bold)
-                }
-                Spacer()
-                if showCloseButton {
-                    Button(action: {
-                        isPresented?.wrappedValue = false
-                    }, label: {
-                        Image(systemName: "xmark.circle")
-                            .foregroundColor(.secondary)
-                            .padding([.top, .bottom, .trailing], 4)
-                    })
-                }
-            }
-            Divider()
+        NavigationView {
             Group {
                 if let evaluateExpressionsResult {
                     switch evaluateExpressionsResult {
@@ -82,13 +64,30 @@ public struct PopupView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
-        }
-        .task(id: ObjectIdentifier(popup)) {
-            evaluateExpressionsResult = nil
-            evaluateExpressionsResult = await Result {
-                try await popup.evaluateExpressions()
+            .navigationTitle(popup.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if showCloseButton {
+                        Button {
+                            isPresented?.wrappedValue = false
+                        } label: {
+                            Image(systemName: "xmark.circle")
+                                .foregroundColor(.secondary)
+                                .padding(4)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+            .task(id: ObjectIdentifier(popup)) {
+                evaluateExpressionsResult = nil
+                evaluateExpressionsResult = await Result {
+                    try await popup.evaluateExpressions()
+                }
             }
         }
+        .navigationViewStyle(.stack)
     }
     
     struct PopupElementScrollView: View {
