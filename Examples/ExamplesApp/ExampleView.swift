@@ -20,6 +20,7 @@ struct ExampleView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***example.makeBody()
 ***REMOVED******REMOVED******REMOVED***.navigationTitle(example.name)
+***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
 ***REMOVED***
 
