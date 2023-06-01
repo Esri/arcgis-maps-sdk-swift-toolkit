@@ -76,7 +76,7 @@ public struct PopupView: View {
                     }
                 } else {
                     VStack(alignment: .center) {
-                        Text("Evaluating popup expressions...", bundle: .module)
+                        Text("Evaluating popup expressions…", bundle: .module)
                         ProgressView()
                     }
                     .frame(maxWidth: .infinity)
