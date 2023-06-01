@@ -20,6 +20,7 @@ struct ExampleView: View {
     var body: some View {
         example.makeBody()
             .navigationTitle(example.name)
+            .navigationBarTitleDisplayMode(.inline)
     }
 }
 
