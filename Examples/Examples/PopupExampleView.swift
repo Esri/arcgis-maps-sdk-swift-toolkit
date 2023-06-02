@@ -77,6 +77,7 @@ struct PopupExampleView: View {
                                     .showCloseButton(true)
                             }
                         }
+                        .padding()
                     }
             }
         }
