@@ -111,7 +111,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.listRowInsets(.init(top: 8, leading: 8, bottom: 8, trailing: 8))
+***REMOVED******REMOVED******REMOVED******REMOVED***.listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
