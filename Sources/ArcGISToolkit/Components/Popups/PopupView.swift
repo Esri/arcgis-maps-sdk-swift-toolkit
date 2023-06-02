@@ -40,12 +40,31 @@ public struct PopupView: View {
     private var isPresented: Binding<Bool>?
     
     public var body: some View {
-        NavigationView {
+        VStack(alignment: .leading) {
+            HStack {
+                if !popup.title.isEmpty {
+                    Text(popup.title)
+                        .font(.title)
+                        .fontWeight(.bold)
+                }
+                Spacer()
+                if showCloseButton {
+                    Button(action: {
+                        isPresented?.wrappedValue = false
+                    }, label: {
+                        Image(systemName: "xmark.circle")
+                            .foregroundColor(.secondary)
+                            .padding([.top, .bottom, .trailing], 4)
+                    })
+                }
+            }
+            .padding()
+            Divider()
             Group {
                 if let evaluateExpressionsResult {
                     switch evaluateExpressionsResult {
                     case .success(_):
-                        PopupElementScrollView(popupElements: popup.evaluatedElements)
+                        PopupElementList(popupElements: popup.evaluatedElements)
                     case .failure(let error):
                         Text(
                             "Popup evaluation failed: \(error.localizedDescription)",
@@ -64,33 +83,16 @@ public struct PopupView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
-            .navigationTitle(popup.title)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    if showCloseButton {
-                        Button {
-                            isPresented?.wrappedValue = false
-                        } label: {
-                            Image(systemName: "xmark.circle")
-                                .foregroundColor(.secondary)
-                                .padding(4)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-            }
-            .task(id: ObjectIdentifier(popup)) {
-                evaluateExpressionsResult = nil
-                evaluateExpressionsResult = await Result {
-                    try await popup.evaluateExpressions()
-                }
+        }
+        .task(id: ObjectIdentifier(popup)) {
+            evaluateExpressionsResult = nil
+            evaluateExpressionsResult = await Result {
+                try await popup.evaluateExpressions()
             }
         }
-        .navigationViewStyle(.stack)
     }
     
-    struct PopupElementScrollView: View {
+    private struct PopupElementList: View {
         let popupElements: [PopupElement]
         
         var body: some View {
@@ -110,6 +112,8 @@ public struct PopupView: View {
                     }
                 }
             }
+            .listStyle(.plain)
+            .listRowSeparator(.hidden, edges: .bottom)
         }
     }
 }

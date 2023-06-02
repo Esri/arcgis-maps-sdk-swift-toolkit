@@ -71,9 +71,11 @@ struct PopupExampleView: View {
                         horizontalAlignment: .leading,
                         isPresented: $showPopup
                     ) {
-                        if let popup = popup {
-                            PopupView(popup: popup, isPresented: $showPopup)
-                                .showCloseButton(true)
+                        Group {
+                            if let popup = popup {
+                                PopupView(popup: popup, isPresented: $showPopup)
+                                    .showCloseButton(true)
+                            }
                         }
                     }
             }
