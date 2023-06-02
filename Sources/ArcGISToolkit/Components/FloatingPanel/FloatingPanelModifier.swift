@@ -42,7 +42,7 @@ public extension View {
         horizontalAlignment: HorizontalAlignment = .trailing,
         isPresented: Binding<Bool> = .constant(true),
         maxWidth: CGFloat = 400,
-        _ content: () -> Content
+        _ content: @escaping () -> Content
     ) -> some View where Content: View {
         modifier(
             FloatingPanelModifier(
