@@ -40,12 +40,31 @@ public struct PopupView: View {
 ***REMOVED***private var isPresented: Binding<Bool>?
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***NavigationView {
+***REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !popup.title.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(popup.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***if showCloseButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(action: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented?.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED***, label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom, .trailing], 4)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let evaluateExpressionsResult {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch evaluateExpressionsResult {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .success(_):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementScrollView(popupElements: popup.evaluatedElements)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementList(popupElements: popup.evaluatedElements)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Popup evaluation failed: \(error.localizedDescription)",
@@ -64,33 +83,16 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationTitle(popup.title)
-***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
-***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showCloseButton {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented?.wrappedValue = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.task(id: ObjectIdentifier(popup)) {
-***REMOVED******REMOVED******REMOVED******REMOVED***evaluateExpressionsResult = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***evaluateExpressionsResult = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await popup.evaluateExpressions()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.task(id: ObjectIdentifier(popup)) {
+***REMOVED******REMOVED******REMOVED***evaluateExpressionsResult = nil
+***REMOVED******REMOVED******REMOVED***evaluateExpressionsResult = await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await popup.evaluateExpressions()
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.navigationViewStyle(.stack)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***struct PopupElementScrollView: View {
+***REMOVED***private struct PopupElementList: View {
 ***REMOVED******REMOVED***let popupElements: [PopupElement]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
@@ -110,6 +112,8 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.listRowSeparator(.hidden, edges: .bottom)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
