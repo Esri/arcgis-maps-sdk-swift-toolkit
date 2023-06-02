@@ -56,9 +56,9 @@ public struct PopupView: View {
                             .foregroundColor(.secondary)
                             .padding([.top, .bottom, .trailing], 4)
                     })
+                    .buttonStyle(.plain)
                 }
             }
-            .padding()
             Divider()
             Group {
                 if let evaluateExpressionsResult {
@@ -97,18 +97,21 @@ public struct PopupView: View {
         
         var body: some View {
             List(popupElements) { popupElement in
-                switch popupElement {
-                case let popupElement as AttachmentsPopupElement:
-                    AttachmentsPopupElementView(popupElement: popupElement)
-                case let popupElement as FieldsPopupElement:
-                    FieldsPopupElementView(popupElement: popupElement)
-                case let popupElement as MediaPopupElement:
-                    MediaPopupElementView(popupElement: popupElement)
-                case let popupElement as TextPopupElement:
-                    TextPopupElementView(popupElement: popupElement)
-                default:
-                    EmptyView()
+                Group {
+                    switch popupElement {
+                    case let popupElement as AttachmentsPopupElement:
+                        AttachmentsPopupElementView(popupElement: popupElement)
+                    case let popupElement as FieldsPopupElement:
+                        FieldsPopupElementView(popupElement: popupElement)
+                    case let popupElement as MediaPopupElement:
+                        MediaPopupElementView(popupElement: popupElement)
+                    case let popupElement as TextPopupElement:
+                        TextPopupElementView(popupElement: popupElement)
+                    default:
+                        EmptyView()
+                    }
                 }
+                .listRowInsets(.init(top: 8, leading: 8, bottom: 8, trailing: 8))
             }
             .listStyle(.plain)
         }
