@@ -96,24 +96,21 @@ public struct PopupView: View {
         let popupElements: [PopupElement]
         
         var body: some View {
-            List {
-                ForEach(popupElements) { popupElement in
-                    switch popupElement {
-                    case let popupElement as AttachmentsPopupElement:
-                        AttachmentsPopupElementView(popupElement: popupElement)
-                    case let popupElement as FieldsPopupElement:
-                        FieldsPopupElementView(popupElement: popupElement)
-                    case let popupElement as MediaPopupElement:
-                        MediaPopupElementView(popupElement: popupElement)
-                    case let popupElement as TextPopupElement:
-                        TextPopupElementView(popupElement: popupElement)
-                    default:
-                        EmptyView()
-                    }
+            List(popupElements) { popupElement in
+                switch popupElement {
+                case let popupElement as AttachmentsPopupElement:
+                    AttachmentsPopupElementView(popupElement: popupElement)
+                case let popupElement as FieldsPopupElement:
+                    FieldsPopupElementView(popupElement: popupElement)
+                case let popupElement as MediaPopupElement:
+                    MediaPopupElementView(popupElement: popupElement)
+                case let popupElement as TextPopupElement:
+                    TextPopupElementView(popupElement: popupElement)
+                default:
+                    EmptyView()
                 }
             }
             .listStyle(.plain)
-            .listRowSeparator(.hidden, edges: .bottom)
         }
     }
 }
