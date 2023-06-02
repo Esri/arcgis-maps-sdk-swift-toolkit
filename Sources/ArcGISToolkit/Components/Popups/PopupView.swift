@@ -111,7 +111,7 @@ public struct PopupView: View {
                         EmptyView()
                     }
                 }
-                .listRowInsets(.init(top: 8, leading: 8, bottom: 8, trailing: 8))
+                .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
             }
             .listStyle(.plain)
         }
