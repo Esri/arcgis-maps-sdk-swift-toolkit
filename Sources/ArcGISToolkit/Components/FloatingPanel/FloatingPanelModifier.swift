@@ -42,7 +42,7 @@ public extension View {
 ***REMOVED******REMOVED***horizontalAlignment: HorizontalAlignment = .trailing,
 ***REMOVED******REMOVED***isPresented: Binding<Bool> = .constant(true),
 ***REMOVED******REMOVED***maxWidth: CGFloat = 400,
-***REMOVED******REMOVED***_ content: () -> Content
+***REMOVED******REMOVED***_ content: @escaping () -> Content
 ***REMOVED***) -> some View where Content: View {
 ***REMOVED******REMOVED***modifier(
 ***REMOVED******REMOVED******REMOVED***FloatingPanelModifier(
