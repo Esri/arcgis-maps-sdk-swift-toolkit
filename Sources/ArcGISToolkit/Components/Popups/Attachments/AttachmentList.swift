@@ -80,6 +80,7 @@ struct AttachmentLoadButton: View  {
                     Image(systemName: "square.and.arrow.down")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
+                        .foregroundColor(.accentColor)
                 case .loading:
                     ProgressView()
                 case .loaded:
