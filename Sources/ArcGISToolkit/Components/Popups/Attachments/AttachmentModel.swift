@@ -15,17 +15,11 @@
 ***REMOVED***
 import QuickLook
 
-***REMOVED***/ The view model for an `AttachmentPopupElement`.
-@MainActor class AttachmentsPopupElementModel: ObservableObject {
-***REMOVED******REMOVED***/ The array of `AttachmentModels`, one for each popup attachment.
-***REMOVED***@Published var attachmentModels = [AttachmentModel]()
-***REMOVED***
-
 ***REMOVED***/ A view model representing the combination of a `PopupAttachment` and
 ***REMOVED***/ an associated `UIImage` used as a thumbnail.
 @MainActor class AttachmentModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `PopupAttachment`.
-***REMOVED***@Published var attachment: PopupAttachment
+***REMOVED***let attachment: PopupAttachment
 ***REMOVED***
 ***REMOVED******REMOVED***/ The thumbnail representing the attachment.
 ***REMOVED***@Published var thumbnail: UIImage? {
