@@ -18,7 +18,7 @@ import SwiftUI
 struct FormsExampleView: View {
     @State private var isPresented = true
     
-    @State private var map = Map(url: .sample1)!
+    @State private var map = Map(url: .sampleData)!
     
     var body: some View {
         MapView(map: map)
