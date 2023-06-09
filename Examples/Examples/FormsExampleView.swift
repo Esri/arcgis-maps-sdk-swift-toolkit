@@ -16,9 +16,17 @@
 ***REMOVED***
 
 struct FormsExampleView: View {
-***REMOVED***@State private var map = Map(basemapStyle: .arcGISCommunity)
+***REMOVED***@State private var isPresented = true
+***REMOVED***
+***REMOVED***@State private var map = Map(url: .sample1)!
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED***.floatingPanel(selectedDetent: .constant(.half), horizontalAlignment: .leading, isPresented: $isPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Forms(map: map)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
