@@ -16,16 +16,27 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FormsExampleView: View {
-    @State private var isPresented = true
+    @State private var isPresented = false
     
     @State private var map = Map(url: .sampleData)!
     
     var body: some View {
-        MapView(map: map)
-            .floatingPanel(selectedDetent: .constant(.half), horizontalAlignment: .leading, isPresented: $isPresented) {
-                Forms(map: map)
-                    .padding()
-            }
+        MapViewReader { mapViewProxy in
+            MapView(map: map)
+                .onSingleTapGesture { screenPoint, _ in
+                    Task {
+                        guard let feature = try await mapViewProxy.identify(on: map.operationalLayers.first!, screenPoint: screenPoint, tolerance: 10).geoElements.first as? ArcGISFeature else {
+                            isPresented = false
+                            return
+                        }
+                        isPresented = true
+                    }
+                }
+                .floatingPanel(selectedDetent: .constant(.half), horizontalAlignment: .leading, isPresented: $isPresented) {
+                    Forms(map: map)
+                        .padding()
+                }
+        }
     }
 }
 
