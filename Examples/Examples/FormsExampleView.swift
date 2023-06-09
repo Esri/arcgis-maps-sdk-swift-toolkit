@@ -28,5 +28,9 @@ struct FormsExampleView: View {
             }
     }
 }
+
+extension URL {
+    static var sampleData: Self {
+        .init(string: "<#URL#>")!
     }
 }
