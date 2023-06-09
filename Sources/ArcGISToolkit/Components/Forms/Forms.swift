@@ -32,18 +32,31 @@ public struct Forms: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public var body: some View {
 ***REMOVED******REMOVED******REMOVED***TextField(title, text: $text)
-***REMOVED******REMOVED******REMOVED******REMOVED***.border(.gray.opacity(0.2))
-***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(5)
+***REMOVED******REMOVED******REMOVED******REMOVED***.textFieldStyle(.roundedBorder)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct TextAreaEntry: View {
 ***REMOVED******REMOVED***@State private var text: String = ""
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***@FocusState var isActive: Bool
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public var body: some View {
 ***REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(1.5)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.border(.gray.opacity(0.2))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(5)
+***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isActive)
+***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isActive {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isActive.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
