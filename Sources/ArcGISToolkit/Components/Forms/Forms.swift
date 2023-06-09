@@ -32,18 +32,31 @@ public struct Forms: View {
         
         public var body: some View {
             TextField(title, text: $text)
-                .border(.gray.opacity(0.2))
-                .cornerRadius(5)
+                .textFieldStyle(.roundedBorder)
         }
     }
     
     struct TextAreaEntry: View {
         @State private var text: String = ""
         
+        @FocusState var isActive: Bool
+        
         public var body: some View {
             TextEditor(text: $text)
+                .padding(1.5)
                 .border(.gray.opacity(0.2))
                 .cornerRadius(5)
+                .focused($isActive)
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        if isActive {
+                            Spacer()
+                            Button("Done") {
+                                isActive.toggle()
+                            }
+                        }
+                    }
+                }
         }
     }
     
