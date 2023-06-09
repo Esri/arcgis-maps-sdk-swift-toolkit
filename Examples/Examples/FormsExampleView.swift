@@ -36,6 +36,7 @@ struct FormsExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Forms(map: map)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
