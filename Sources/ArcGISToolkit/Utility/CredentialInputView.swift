@@ -118,7 +118,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***textField.autocapitalizationType = .none
 ***REMOVED******REMOVED******REMOVED******REMOVED***textField.autocorrectionType = .no
-***REMOVED******REMOVED******REMOVED******REMOVED***textField.placeholder = String(localized: "Username", bundle: .module)
+***REMOVED******REMOVED******REMOVED******REMOVED***textField.placeholder = String(localized: "Username", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED******REMOVED***textField.returnKeyType = .next
 ***REMOVED******REMOVED******REMOVED******REMOVED***textField.textContentType = .username
 ***REMOVED******REMOVED***
@@ -140,7 +140,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***textField.delegate = context.coordinator
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***textField.isSecureTextEntry = true
-***REMOVED******REMOVED******REMOVED***textField.placeholder = String(localized: "Password", bundle: .module)
+***REMOVED******REMOVED******REMOVED***textField.placeholder = String(localized: "Password", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED***textField.returnKeyType = .go
 ***REMOVED******REMOVED******REMOVED***textField.textContentType = .password
 ***REMOVED***

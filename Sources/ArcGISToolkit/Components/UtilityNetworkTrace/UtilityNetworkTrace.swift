@@ -247,7 +247,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"\(viewModel.pendingTrace.startingPoints.count, specifier: "%lld") selected",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label declaring the number of starting points selected for a utility network trace."
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -655,7 +655,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***guard let index = viewModel.selectedTraceIndex else { return "Error" ***REMOVED***
 ***REMOVED******REMOVED***return String(
 ***REMOVED******REMOVED******REMOVED***localized: "Trace \(index+1, specifier: "%lld") of \(viewModel.completedTraces.count, specifier: "%lld")",
-***REMOVED******REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label indicating the index of the trace being viewed out of the total number of traces completed."
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -730,144 +730,144 @@ public struct UtilityNetworkTrace: View {
 private extension String {
 ***REMOVED***static let addNewButtonLabel = String(
 ***REMOVED******REMOVED***localized: "Add new",
-***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: "A button to add new utility trace starting points."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let advancedOptionsHeaderLabel = String(
 ***REMOVED******REMOVED***localized: "Advanced Options",
-***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: "A section header for advanced options."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let attributesSectionTitle = String(
 ***REMOVED******REMOVED***localized: "Attributes",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let cancelStartingPointSelection = String(
 ***REMOVED******REMOVED***localized: "Cancel starting point selection",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let clearAllResultsButtonLabel = String(
 ***REMOVED******REMOVED***localized: "Clear All Results",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let clearAllResultsQuestion = String(
 ***REMOVED******REMOVED***localized: "Clear all results?",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let clearAllResultsMessage = String(
 ***REMOVED******REMOVED***localized: "All the trace inputs and results will be lost.",
-***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: "A message describing the outcome of clearing all utility network trace results."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let colorLabel = String(
 ***REMOVED******REMOVED***localized: "Color",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let deleteButtonLabel = String(
 ***REMOVED******REMOVED***localized: "Delete",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title for the feature results section
 ***REMOVED***static let featureResultsTitle = String(
 ***REMOVED******REMOVED***localized: "Feature Results",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let fractionAlongEdgeSectionTitle = String(
 ***REMOVED******REMOVED***localized: "Fraction Along Edge",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let functionResultsSectionTitle = String(
 ***REMOVED******REMOVED***localized: "Function Results",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let modePickerTitle = String(
 ***REMOVED******REMOVED***localized: "Mode",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let nameLabel = String(
 ***REMOVED******REMOVED***localized: "Name",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let networkSectionLabel = String(
 ***REMOVED******REMOVED***localized: "Network",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let newTraceOptionLabel = String(
 ***REMOVED******REMOVED***localized: "New trace",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let noConfigurationsAvailable = String(
 ***REMOVED******REMOVED***localized: "No configurations available",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let noneSelected = String(
 ***REMOVED******REMOVED***localized: "None selected",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let objectID = String(
 ***REMOVED******REMOVED***localized: "Object ID",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let resultsOptionLabel = String(
 ***REMOVED******REMOVED***localized: "Results",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title for the starting points section
 ***REMOVED***static let startingPointsTitle = String(
 ***REMOVED******REMOVED***localized: "Starting Points",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let terminalConfigurationPickerTitle = String(
 ***REMOVED******REMOVED***localized: "Terminal Configuration",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let traceButtonLabel = String(
 ***REMOVED******REMOVED***localized: "Trace",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let traceConfigurationSectionLabel = String(
 ***REMOVED******REMOVED***localized: "Trace Configuration",
-***REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let unnamedAssetType = String(
 ***REMOVED******REMOVED***localized: "Unnamed Asset Type",
-***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: "A label to use in place of a utility element asset type name."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let zoomToButtonLabel = String(
 ***REMOVED******REMOVED***localized: "Zoom To",
-***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: "A button to change the map to the extent of the selected trace."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let zoomToResult = String(
 ***REMOVED******REMOVED***localized: "Zoom to result",
-***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: "A user option specifying that a map should automatically change to show completed trace results."
 ***REMOVED***)
 ***REMOVED***

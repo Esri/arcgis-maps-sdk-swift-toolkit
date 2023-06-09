@@ -39,7 +39,7 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if bookmarks.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("No bookmarks", bundle: .module)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("No bookmarks", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED*** icon: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "bookmark.slash")
 ***REMOVED******REMOVED******REMOVED***
