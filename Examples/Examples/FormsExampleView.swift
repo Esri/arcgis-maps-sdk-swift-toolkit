@@ -11,14 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-import ArcGISToolkit
 import ArcGIS
+import ArcGISToolkit
+import SwiftUI
 
 struct FormsExampleView: View {
-    @State private var map = Map(basemapStyle: .arcGISCommunity)
+    @State private var isPresented = true
+    
+    @State private var map = Map(url: .sample1)!
     
     var body: some View {
         MapView(map: map)
+            .floatingPanel(selectedDetent: .constant(.half), horizontalAlignment: .leading, isPresented: $isPresented) {
+                Forms(map: map)
+                    .padding()
+            }
+    }
+}
     }
 }
