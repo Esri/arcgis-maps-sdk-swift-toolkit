@@ -69,7 +69,7 @@ struct AsyncImageView: View {
                         .foregroundColor(.red)
                     Text(
                         "An error occurred loading the image: \(error.localizedDescription).",
-                        bundle: .module
+                        bundle: .toolkitModule
                     )
                 }
                 .padding([.top, .bottom])

@@ -85,7 +85,7 @@ public struct Compass: View {
                 .accessibilityLabel(
                     String(
                         localized: "Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)",
-                        bundle: .module,
+                        bundle: .toolkitModule,
                         comment: """
                                  An compass description to be read by a screen reader describing the
                                  current heading. The first variable being a degree value and the
