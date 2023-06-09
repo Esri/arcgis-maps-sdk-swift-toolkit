@@ -36,6 +36,7 @@ struct FormsExampleView: View {
                     Forms(map: map)
                         .padding()
                 }
+                .ignoresSafeArea(.keyboard)
         }
     }
 }
