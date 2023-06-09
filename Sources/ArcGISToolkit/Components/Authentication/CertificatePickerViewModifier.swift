@@ -115,13 +115,13 @@ extension CertificateImportError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidData:
-            return String(localized: "The certificate file was invalid.", bundle: .module)
+            return String(localized: "The certificate file was invalid.", bundle: .toolkitModule)
         case .invalidPassword:
-            return String(localized: "The password was invalid.", bundle: .module)
+            return String(localized: "The password was invalid.", bundle: .toolkitModule)
         default:
             return SecCopyErrorMessageString(rawValue, nil) as String? ?? String(
                 localized: "The certificate file or password was invalid.",
-                bundle: .module
+                bundle: .toolkitModule
             )
         }
     }
@@ -131,7 +131,7 @@ extension CertificatePickerViewModel.CertificateError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .couldNotAccessCertificateFile:
-            return String(localized: "Could not access the certificate file.", bundle: .module)
+            return String(localized: "Could not access the certificate file.", bundle: .toolkitModule)
         case .importError(let error):
             return error.localizedDescription
         case .other(let error):
@@ -166,20 +166,20 @@ struct CertificatePickerViewModifier: ViewModifier {
                 isPresented: $viewModel.showPassword,
                 message: String(
                     localized: "Please enter a password for the chosen certificate.",
-                    bundle: .module
+                    bundle: .toolkitModule
                 ),
                 title: String(
                     localized: "Password Required",
-                    bundle: .module
+                    bundle: .toolkitModule
                 ),
                 cancelAction: .init(
-                    title: String(localized: "Cancel", bundle: .module),
+                    title: String(localized: "Cancel", bundle: .toolkitModule),
                     handler: { _, _ in
                         viewModel.cancel()
                     }
                 ),
                 continueAction: .init(
-                    title: String(localized: "OK", bundle: .module),
+                    title: String(localized: "OK", bundle: .toolkitModule),
                     handler: { _, password in
                         viewModel.proceed(withPassword: password)
                     }
@@ -207,24 +207,24 @@ private extension View {
         viewModel: CertificatePickerViewModel
     ) -> some View {
         alert(
-            Text("Certificate Required", bundle: .module),
+            Text("Certificate Required", bundle: .toolkitModule),
             isPresented: isPresented,
             presenting: viewModel.challengingHost
         ) { _ in
             Button {
                 viewModel.proceedFromPrompt()
             } label: {
-                Text("Browse For Certificate", bundle: .module)
+                Text("Browse For Certificate", bundle: .toolkitModule)
             }
             Button(role: .cancel) {
                 viewModel.cancel()
             } label: {
-                Text("Cancel", bundle: .module)
+                Text("Cancel", bundle: .toolkitModule)
             }
         } message: { _ in
             Text(
                 "A certificate is required to access content on \(viewModel.challengingHost).",
-                bundle: .module,
+                bundle: .toolkitModule,
                 comment: """
                          An alert message indicating that a certificate is required to access
                          content on a remote host. The variable is the host that prompted the challenge.
@@ -265,24 +265,24 @@ private extension View {
         viewModel: CertificatePickerViewModel
     ) -> some View {
         alert(
-            Text("Error importing certificate", bundle: .module),
+            Text("Error importing certificate", bundle: .toolkitModule),
             isPresented: isPresented
         ) {
             Button {
                 viewModel.proceedFromPrompt()
             } label: {
-                Text("Try Again", bundle: .module)
+                Text("Try Again", bundle: .toolkitModule)
             }
             Button(role: .cancel) {
                 viewModel.cancel()
             } label: {
-                Text("Cancel", bundle: .module)
+                Text("Cancel", bundle: .toolkitModule)
             }
         } message: {
             Text(
                 viewModel.certificateError?.localizedDescription ?? String(
                     localized: "The certificate file or password was invalid.",
-                    bundle: .module
+                    bundle: .toolkitModule
                  )
             )
         }

@@ -88,7 +88,7 @@ public struct SearchView: View {
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
     /// `prompt` modifier.
-    private var prompt = String(localized: "Find a place or address", bundle: .module)
+    private var prompt = String(localized: "Find a place or address", bundle: .toolkitModule)
     
     /// Determines whether a built-in result view will be shown. Defaults to `true`.
     /// If `false`, the result display/selection list is not shown. Set to false if you want to hide the results
@@ -101,7 +101,7 @@ public struct SearchView: View {
     /// Note: this is set using the `noResultsMessage` modifier.
     private var noResultsMessage = String(
         localized: "No results found",
-        bundle: .module,
+        bundle: .toolkitModule,
         comment: "A message to show when there are no results or suggestions."
     )
     
@@ -177,7 +177,7 @@ public struct SearchView: View {
                 } label: {
                     Text(
                         "Repeat Search Here",
-                        bundle: .module,
+                        bundle: .toolkitModule,
                         comment: """
                                   A button to show when a user has panned the map away from the
                                   original search location.
@@ -439,7 +439,8 @@ extension ResultRow {
                     Image(
                         uiImage: UIImage(
                             named: "pin",
-                            in: Bundle.module, with: nil
+                            in: .toolkitModule,
+                            with: nil
                         )!
                     )
                 )
