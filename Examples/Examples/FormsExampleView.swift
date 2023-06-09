@@ -16,16 +16,27 @@
 ***REMOVED***
 
 struct FormsExampleView: View {
-***REMOVED***@State private var isPresented = true
+***REMOVED***@State private var isPresented = false
 ***REMOVED***
 ***REMOVED***@State private var map = Map(url: .sampleData)!
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: map)
-***REMOVED******REMOVED******REMOVED***.floatingPanel(selectedDetent: .constant(.half), horizontalAlignment: .leading, isPresented: $isPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Forms(map: map)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***MapViewReader { mapViewProxy in
+***REMOVED******REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let feature = try await mapViewProxy.identify(on: map.operationalLayers.first!, screenPoint: screenPoint, tolerance: 10).geoElements.first as? ArcGISFeature else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(selectedDetent: .constant(.half), horizontalAlignment: .leading, isPresented: $isPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Forms(map: map)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
