@@ -28,5 +28,9 @@ struct FormsExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+extension URL {
+***REMOVED***static var sampleData: Self {
+***REMOVED******REMOVED***.init(string: "<#URL#>")!
 ***REMOVED***
 ***REMOVED***
