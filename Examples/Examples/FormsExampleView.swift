@@ -18,7 +18,7 @@
 struct FormsExampleView: View {
 ***REMOVED***@State private var isPresented = true
 ***REMOVED***
-***REMOVED***@State private var map = Map(url: .sample1)!
+***REMOVED***@State private var map = Map(url: .sampleData)!
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map)
