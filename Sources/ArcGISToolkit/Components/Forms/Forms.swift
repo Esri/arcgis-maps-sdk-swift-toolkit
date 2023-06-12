@@ -62,10 +62,10 @@ public struct Forms: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED***Text(mapInfo?.operationalLayers.first?.formInfo.title ?? "Form Title Unavailable")
+***REMOVED******REMOVED******REMOVED***Text(mapInfo?.operationalLayers.first?.featureFormDefinition.title ?? "Form Title Unavailable")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.largeTitle)
 ***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED***ForEach(mapInfo?.operationalLayers.first?.formInfo.formElements ?? [], id: \.fieldName) { element in
+***REMOVED******REMOVED******REMOVED***ForEach(mapInfo?.operationalLayers.first?.featureFormDefinition.formElements ?? [], id: \.fieldName) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.label)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
@@ -86,34 +86,101 @@ public struct Forms: View {
 ***REMOVED******REMOVED******REMOVED***rawJSON = map.toJSON()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let decoder = JSONDecoder()
-***REMOVED******REMOVED******REMOVED***mapInfo = try? decoder.decode(MapInfo.self, from: self.rawJSON!.data(using: .utf8)!)
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***mapInfo = try decoder.decode(MapInfo.self, from: self.rawJSON!.data(using: .utf8)!)
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-struct MapInfo: Decodable {
+public final class MapInfo: Decodable {
 ***REMOVED***var operationalLayers: [OperationalLayer]
 ***REMOVED***
 
-struct OperationalLayer: Decodable {
-***REMOVED***var formInfo: FormInfo
+public final class OperationalLayer: Decodable {
+***REMOVED***var featureFormDefinition: FeatureFormDefinition
+***REMOVED***
+***REMOVED***enum CodingKeys: String, CodingKey {
+***REMOVED******REMOVED***case formInfo
+***REMOVED***
+***REMOVED***
+***REMOVED***public required init(from decoder: Decoder) throws {
+***REMOVED******REMOVED***let values = try decoder.container(keyedBy: CodingKeys.self)
+***REMOVED******REMOVED***featureFormDefinition = try values.decode(FeatureFormDefinition.self, forKey: CodingKeys.formInfo)
+***REMOVED***
 ***REMOVED***
 
-struct FormInfo: Decodable {
-***REMOVED***var title: String
-***REMOVED***var formElements: [FormElement]
+public final class FeatureFormDefinition: Decodable {
+***REMOVED******REMOVED***/ A string that describes the element in detail.
+***REMOVED******REMOVED*** public var description: String
+***REMOVED***
+***REMOVED******REMOVED***/ An array of FeatureFormExpressionInfo objects that represent the Arcade expressions used in the form.
+***REMOVED***public var expressionInfos: [FeatureFormExpressionInfo]
+***REMOVED***
+***REMOVED******REMOVED***/ An array of FormElement objects that represent an ordered list of form elements.
+***REMOVED***public var formElements: [FeatureFormElement]
+***REMOVED***
+***REMOVED******REMOVED***/ Determines whether a previously visible formFieldElement value is retained or
+***REMOVED******REMOVED***/ cleared when a visibilityExpression applied on the formFieldElement or its parent
+***REMOVED******REMOVED***/ formGroupElement evaluates to `false`. Default is `false`.
+***REMOVED******REMOVED*** public var preserveFieldValuesWhenHidden: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ The form title.
+***REMOVED***public var title: String
 ***REMOVED***
 
-struct FormElement: Decodable {
+***REMOVED***/ Arcade expression used in the form.
+public final class FeatureFormExpressionInfo: Decodable {
+***REMOVED******REMOVED***/ The Arcade expression.
+***REMOVED***public var expression: String
+***REMOVED***
+***REMOVED******REMOVED***/ Unique identifier for the expression.
+***REMOVED***public var name: String
+***REMOVED***
+***REMOVED******REMOVED***/ Return type of the Arcade expression. This can be determined by the authoring
+***REMOVED******REMOVED***/ client by executing the expression using a sample feature(s), although it can
+***REMOVED******REMOVED***/ be corrected by the user.
+***REMOVED***public var returnType: String
+***REMOVED***
+***REMOVED******REMOVED***/ Title of the expression.
+***REMOVED***public var title: String
+***REMOVED***
+***REMOVED***init(expression: String, name: String, returnType: String, title: String) {
+***REMOVED******REMOVED***self.expression = expression
+***REMOVED******REMOVED***self.name = name
+***REMOVED******REMOVED***self.returnType = returnType
+***REMOVED******REMOVED***self.title = title
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ An interface containing properties common to feature form elements.
+public final class FeatureFormElement: Decodable {
+***REMOVED******REMOVED***/ A string that describes the element in detail.
 ***REMOVED***var description: String
+***REMOVED***
 ***REMOVED***var fieldName: String
+***REMOVED***
 ***REMOVED***var hint: String
+***REMOVED***
 ***REMOVED***var inputType: InputType
+***REMOVED***
+***REMOVED******REMOVED***/ A string indicating what the element represents. If not supplied, the label is derived
+***REMOVED******REMOVED***/ from the alias property in the referenced field in the service.
 ***REMOVED***var label: String
+***REMOVED***
+***REMOVED******REMOVED***/ A reference to an Arcade expression that returns a boolean value. When this expression evaluates to `true`,
+***REMOVED******REMOVED***/ the element is displayed. When the expression evaluates to `false` the element is not displayed. If no expression
+***REMOVED******REMOVED***/ is provided, the default behavior is that the element is displayed. Care must be taken when defining a
+***REMOVED******REMOVED***/ visibility expression for a non-nullable field i.e. to make sure that such fields either have default values
+***REMOVED******REMOVED***/ or are made visible to users so that they can provide a value before submitting the form.
+***REMOVED******REMOVED*** var visibilityExpressionName: String { get set ***REMOVED***
+***REMOVED***
 ***REMOVED***var type: String
 ***REMOVED***
 
-struct InputType: Decodable {
+public final class InputType: Decodable {
 ***REMOVED***var type: String
 ***REMOVED***var minLength: Int
 ***REMOVED***var maxLength: Int
