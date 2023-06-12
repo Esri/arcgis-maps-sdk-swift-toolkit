@@ -62,10 +62,10 @@ public struct Forms: View {
     
     public var body: some View {
         VStack(alignment: .leading) {
-            Text(mapInfo?.operationalLayers.first?.formInfo.title ?? "Form Title Unavailable")
+            Text(mapInfo?.operationalLayers.first?.featureFormDefinition.title ?? "Form Title Unavailable")
                 .font(.largeTitle)
             Divider()
-            ForEach(mapInfo?.operationalLayers.first?.formInfo.formElements ?? [], id: \.fieldName) { element in
+            ForEach(mapInfo?.operationalLayers.first?.featureFormDefinition.formElements ?? [], id: \.fieldName) { element in
                 Text(element.label)
                     .font(.headline)
                 Text(element.description)
@@ -86,34 +86,101 @@ public struct Forms: View {
             rawJSON = map.toJSON()
             
             let decoder = JSONDecoder()
-            mapInfo = try? decoder.decode(MapInfo.self, from: self.rawJSON!.data(using: .utf8)!)
+            do {
+                mapInfo = try decoder.decode(MapInfo.self, from: self.rawJSON!.data(using: .utf8)!)
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
 }
 
-struct MapInfo: Decodable {
+public final class MapInfo: Decodable {
     var operationalLayers: [OperationalLayer]
 }
 
-struct OperationalLayer: Decodable {
-    var formInfo: FormInfo
+public final class OperationalLayer: Decodable {
+    var featureFormDefinition: FeatureFormDefinition
+    
+    enum CodingKeys: String, CodingKey {
+        case formInfo
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        featureFormDefinition = try values.decode(FeatureFormDefinition.self, forKey: CodingKeys.formInfo)
+    }
 }
 
-struct FormInfo: Decodable {
-    var title: String
-    var formElements: [FormElement]
+public final class FeatureFormDefinition: Decodable {
+    /// A string that describes the element in detail.
+    // public var description: String
+    
+    /// An array of FeatureFormExpressionInfo objects that represent the Arcade expressions used in the form.
+    public var expressionInfos: [FeatureFormExpressionInfo]
+    
+    /// An array of FormElement objects that represent an ordered list of form elements.
+    public var formElements: [FeatureFormElement]
+    
+    /// Determines whether a previously visible formFieldElement value is retained or
+    /// cleared when a visibilityExpression applied on the formFieldElement or its parent
+    /// formGroupElement evaluates to `false`. Default is `false`.
+    // public var preserveFieldValuesWhenHidden: Bool
+    
+    /// The form title.
+    public var title: String
 }
 
-struct FormElement: Decodable {
+/// Arcade expression used in the form.
+public final class FeatureFormExpressionInfo: Decodable {
+    /// The Arcade expression.
+    public var expression: String
+    
+    /// Unique identifier for the expression.
+    public var name: String
+    
+    /// Return type of the Arcade expression. This can be determined by the authoring
+    /// client by executing the expression using a sample feature(s), although it can
+    /// be corrected by the user.
+    public var returnType: String
+    
+    /// Title of the expression.
+    public var title: String
+    
+    init(expression: String, name: String, returnType: String, title: String) {
+        self.expression = expression
+        self.name = name
+        self.returnType = returnType
+        self.title = title
+    }
+}
+
+/// An interface containing properties common to feature form elements.
+public final class FeatureFormElement: Decodable {
+    /// A string that describes the element in detail.
     var description: String
+    
     var fieldName: String
+    
     var hint: String
+    
     var inputType: InputType
+    
+    /// A string indicating what the element represents. If not supplied, the label is derived
+    /// from the alias property in the referenced field in the service.
     var label: String
+    
+    /// A reference to an Arcade expression that returns a boolean value. When this expression evaluates to `true`,
+    /// the element is displayed. When the expression evaluates to `false` the element is not displayed. If no expression
+    /// is provided, the default behavior is that the element is displayed. Care must be taken when defining a
+    /// visibility expression for a non-nullable field i.e. to make sure that such fields either have default values
+    /// or are made visible to users so that they can provide a value before submitting the form.
+    // var visibilityExpressionName: String { get set }
+    
     var type: String
 }
 
-struct InputType: Decodable {
+public final class InputType: Decodable {
     var type: String
     var minLength: Int
     var maxLength: Int
