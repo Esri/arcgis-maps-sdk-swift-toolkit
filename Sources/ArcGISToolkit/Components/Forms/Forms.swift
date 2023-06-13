@@ -72,10 +72,10 @@ public struct Forms: View {
                     Text(element.description)
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    switch element.inputType.type {
-                    case "text-box":
+                    switch element.inputType.input {
+                    case is TextBoxFeatureFormInput:
                         TextBoxEntry(title: element.hint)
-                    case "text-area":
+                    case is TextAreaFeatureFormInput:
                         TextAreaEntry()
                     default:
                         Text("Unknown Input Type", bundle: .module, comment: "An error when a form element has an unknown type.")
@@ -215,17 +215,11 @@ public final class FieldFeatureFormElement: FeatureFormElement {
     
     public var hint: String
     
-    public var inputType: InputType
+    public var inputType: FeatureFormInputContainer
     
     public var label: String
     
     public var type: String
-}
-
-public final class InputType: Decodable {
-    var type: String
-    var minLength: Int
-    var maxLength: Int
 }
 
 /// The list of possible values for specifying if the feature form element group
@@ -235,4 +229,52 @@ public enum FeatureFormGroupState: Decodable {
     case collapsed
     /// The group element should be expanded.
     case expanded
+}
+
+/// Represents an input user interface for a FieldFeatureFormElement.
+public protocol FeatureFormInput: Decodable {}
+
+/// A feature form input container.
+public final class FeatureFormInputContainer: Decodable {
+    var input: FeatureFormInput?
+    
+    enum CodingKeys: CodingKey {
+        case type
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(String.self, forKey: .type)
+        
+        switch type {
+        case "text-box":
+            input = try TextBoxFeatureFormInput(from: decoder)
+        case "text-area":
+            input = try TextAreaFeatureFormInput(from: decoder)
+        default:
+            break
+        }
+    }
+}
+
+/// A user interface for a multi-line text area.
+public final class TextAreaFeatureFormInput: FeatureFormInput {
+    /// This represents the maximum number of characters allowed. If not supplied,
+    /// the value is derived from the length property of the referenced field in the service.
+    public var maxLength: Int
+    
+    /// This represents the minimum number of characters allowed. If not supplied,
+    /// the value is 0, meaning there is no minimum constraint.
+    public var minLength: Int
+}
+
+/// A user interface for a single-line text box.
+public final class TextBoxFeatureFormInput: FeatureFormInput {
+    /// This represents the maximum number of characters allowed. This only applies for string fields.
+    /// If not supplied,the value is derived from the length property of the referenced field in the service.
+    public var maxLength: Int
+    
+    /// This represents the minimum number of characters allowed. This only applies for string fields.
+    /// If not supplied, the value is 0, meaning there is no minimum constraint.
+    public var minLength: Int
 }
