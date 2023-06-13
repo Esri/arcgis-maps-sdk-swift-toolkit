@@ -65,19 +65,21 @@ public struct Forms: View {
 ***REMOVED******REMOVED******REMOVED***Text(mapInfo?.operationalLayers.first?.featureFormDefinition.title ?? "Form Title Unavailable")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.largeTitle)
 ***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED***ForEach(mapInfo?.operationalLayers.first?.featureFormDefinition.formElements ?? [], id: \.fieldName) { element in
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.label)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***switch element.inputType.type {
-***REMOVED******REMOVED******REMOVED******REMOVED***case "text-box":
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextBoxEntry(title: element.hint)
-***REMOVED******REMOVED******REMOVED******REMOVED***case "text-area":
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextAreaEntry()
-***REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Unknown Input Type", bundle: .module, comment: "An error when a form element has an unknown type.")
+***REMOVED******REMOVED******REMOVED***ForEach(mapInfo?.operationalLayers.first?.featureFormDefinition.formElements ?? [], id: \.element?.label) { container in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let element = container.element as? FieldFeatureFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.label)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch element.inputType.type {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case "text-box":
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextBoxEntry(title: element.hint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case "text-area":
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextAreaEntry()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Unknown Input Type", bundle: .module, comment: "An error when a form element has an unknown type.")
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -120,7 +122,7 @@ public final class FeatureFormDefinition: Decodable {
 ***REMOVED***public var expressionInfos: [FeatureFormExpressionInfo]
 ***REMOVED***
 ***REMOVED******REMOVED***/ An array of FormElement objects that represent an ordered list of form elements.
-***REMOVED***public var formElements: [FeatureFormElement]
+***REMOVED***public var formElements: [FeatureFormElementContainer]
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether a previously visible formFieldElement value is retained or
 ***REMOVED******REMOVED***/ cleared when a visibilityExpression applied on the formFieldElement or its parent
@@ -155,20 +157,32 @@ public final class FeatureFormExpressionInfo: Decodable {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A feature form element container.
+public final class FeatureFormElementContainer: Decodable {
+***REMOVED***var element: FeatureFormElement?
+***REMOVED***
+***REMOVED***enum CodingKeys: CodingKey {
+***REMOVED******REMOVED***case type
+***REMOVED***
+***REMOVED***
+***REMOVED***public init(from decoder: Decoder) throws {
+***REMOVED******REMOVED***let container = try decoder.container(keyedBy: CodingKeys.self)
+***REMOVED******REMOVED***let type = try container.decode(String.self, forKey: .type)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if type == "field" {
+***REMOVED******REMOVED******REMOVED***element = try FieldFeatureFormElement(from: decoder)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***/ An interface containing properties common to feature form elements.
-public final class FeatureFormElement: Decodable {
+public protocol FeatureFormElement: Decodable {
 ***REMOVED******REMOVED***/ A string that describes the element in detail.
-***REMOVED***var description: String
-***REMOVED***
-***REMOVED***var fieldName: String
-***REMOVED***
-***REMOVED***var hint: String
-***REMOVED***
-***REMOVED***var inputType: InputType
+***REMOVED***var description: String { get set ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A string indicating what the element represents. If not supplied, the label is derived
 ***REMOVED******REMOVED***/ from the alias property in the referenced field in the service.
-***REMOVED***var label: String
+***REMOVED***var label: String { get set ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A reference to an Arcade expression that returns a boolean value. When this expression evaluates to `true`,
 ***REMOVED******REMOVED***/ the element is displayed. When the expression evaluates to `false` the element is not displayed. If no expression
@@ -177,7 +191,27 @@ public final class FeatureFormElement: Decodable {
 ***REMOVED******REMOVED***/ or are made visible to users so that they can provide a value before submitting the form.
 ***REMOVED******REMOVED*** var visibilityExpressionName: String { get set ***REMOVED***
 ***REMOVED***
-***REMOVED***var type: String
+
+public final class GroupFeatureFormElement: FeatureFormElement {
+***REMOVED***public var description: String
+***REMOVED***
+***REMOVED***public var label: String
+***REMOVED***
+***REMOVED***public var visibilityExpressionName: String
+***REMOVED***
+
+public final class FieldFeatureFormElement: FeatureFormElement {
+***REMOVED***public var description: String
+***REMOVED***
+***REMOVED***public var fieldName: String
+***REMOVED***
+***REMOVED***public var hint: String
+***REMOVED***
+***REMOVED***public var inputType: InputType
+***REMOVED***
+***REMOVED***public var label: String
+***REMOVED***
+***REMOVED***public var type: String
 ***REMOVED***
 
 public final class InputType: Decodable {
