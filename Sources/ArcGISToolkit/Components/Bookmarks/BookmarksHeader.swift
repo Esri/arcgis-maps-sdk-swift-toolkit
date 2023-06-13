@@ -34,9 +34,9 @@ struct BookmarksHeader: View {
         HStack(alignment: .top) {
             Image(systemName: "bookmark")
             VStack(alignment: .leading) {
-                Text("Bookmarks", bundle: .module)
+                Text("Bookmarks", bundle: .toolkitModule)
                     .font(.headline)
-                Text("Select a bookmark", bundle: .module)
+                Text("Select a bookmark", bundle: .toolkitModule)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -51,7 +51,7 @@ struct BookmarksHeader: View {
                 } label: {
                     Text(
                         "Done",
-                        bundle: .module,
+                        bundle: .toolkitModule,
                         comment: "A button to close the bookmark selection menu."
                     )
                     .fontWeight(.semibold)

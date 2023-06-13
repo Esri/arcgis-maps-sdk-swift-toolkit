@@ -16,7 +16,7 @@ import SwiftUI
 /// A user presentable alert.
 struct UtilityNetworkTraceUserAlert {
     /// Title of the alert.
-    var title: String = String(localized: "Error", bundle: .module)
+    var title: String = String(localized: "Error", bundle: .toolkitModule)
     
     /// Description of the alert.
     var description: String
@@ -30,7 +30,7 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "Please set at least 1 starting location.",
-                bundle: .module
+                bundle: .toolkitModule
             )
         )
     }
@@ -39,7 +39,7 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "Please set at least 2 starting locations.",
-                bundle: .module
+                bundle: .toolkitModule
             )
         )
     }
@@ -48,11 +48,11 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             title: String(
                 localized: "Failed to set starting point",
-                bundle: .module
+                bundle: .toolkitModule
             ),
             description: String(
                 localized: "Duplicate starting points cannot be added.",
-                bundle: .module
+                bundle: .toolkitModule
             )
         )
     }
@@ -61,7 +61,7 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "No trace types found.",
-                bundle: .module
+                bundle: .toolkitModule
             )
         )
     }
@@ -70,7 +70,7 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "No utility networks found.",
-                bundle: .module
+                bundle: .toolkitModule
             )
         )
     }
@@ -79,7 +79,7 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "Element could not be identified.",
-                bundle: .module
+                bundle: .toolkitModule
             )
         )
     }
