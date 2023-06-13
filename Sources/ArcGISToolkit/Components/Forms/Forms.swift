@@ -65,19 +65,21 @@ public struct Forms: View {
             Text(mapInfo?.operationalLayers.first?.featureFormDefinition.title ?? "Form Title Unavailable")
                 .font(.largeTitle)
             Divider()
-            ForEach(mapInfo?.operationalLayers.first?.featureFormDefinition.formElements ?? [], id: \.fieldName) { element in
-                Text(element.label)
-                    .font(.headline)
-                Text(element.description)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                switch element.inputType.type {
-                case "text-box":
-                    TextBoxEntry(title: element.hint)
-                case "text-area":
-                    TextAreaEntry()
-                default:
-                    Text("Unknown Input Type", bundle: .module, comment: "An error when a form element has an unknown type.")
+            ForEach(mapInfo?.operationalLayers.first?.featureFormDefinition.formElements ?? [], id: \.element?.label) { container in
+                if let element = container.element as? FieldFeatureFormElement {
+                    Text(element.label)
+                        .font(.headline)
+                    Text(element.description)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    switch element.inputType.type {
+                    case "text-box":
+                        TextBoxEntry(title: element.hint)
+                    case "text-area":
+                        TextAreaEntry()
+                    default:
+                        Text("Unknown Input Type", bundle: .module, comment: "An error when a form element has an unknown type.")
+                    }
                 }
             }
         }
@@ -120,7 +122,7 @@ public final class FeatureFormDefinition: Decodable {
     public var expressionInfos: [FeatureFormExpressionInfo]
     
     /// An array of FormElement objects that represent an ordered list of form elements.
-    public var formElements: [FeatureFormElement]
+    public var formElements: [FeatureFormElementContainer]
     
     /// Determines whether a previously visible formFieldElement value is retained or
     /// cleared when a visibilityExpression applied on the formFieldElement or its parent
@@ -155,20 +157,32 @@ public final class FeatureFormExpressionInfo: Decodable {
     }
 }
 
+/// A feature form element container.
+public final class FeatureFormElementContainer: Decodable {
+    var element: FeatureFormElement?
+    
+    enum CodingKeys: CodingKey {
+        case type
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(String.self, forKey: .type)
+        
+        if type == "field" {
+            element = try FieldFeatureFormElement(from: decoder)
+        }
+    }
+}
+
 /// An interface containing properties common to feature form elements.
-public final class FeatureFormElement: Decodable {
+public protocol FeatureFormElement: Decodable {
     /// A string that describes the element in detail.
-    var description: String
-    
-    var fieldName: String
-    
-    var hint: String
-    
-    var inputType: InputType
+    var description: String { get set }
     
     /// A string indicating what the element represents. If not supplied, the label is derived
     /// from the alias property in the referenced field in the service.
-    var label: String
+    var label: String { get set }
     
     /// A reference to an Arcade expression that returns a boolean value. When this expression evaluates to `true`,
     /// the element is displayed. When the expression evaluates to `false` the element is not displayed. If no expression
@@ -176,8 +190,28 @@ public final class FeatureFormElement: Decodable {
     /// visibility expression for a non-nullable field i.e. to make sure that such fields either have default values
     /// or are made visible to users so that they can provide a value before submitting the form.
     // var visibilityExpressionName: String { get set }
+}
+
+public final class GroupFeatureFormElement: FeatureFormElement {
+    public var description: String
     
-    var type: String
+    public var label: String
+    
+    public var visibilityExpressionName: String
+}
+
+public final class FieldFeatureFormElement: FeatureFormElement {
+    public var description: String
+    
+    public var fieldName: String
+    
+    public var hint: String
+    
+    public var inputType: InputType
+    
+    public var label: String
+    
+    public var type: String
 }
 
 public final class InputType: Decodable {
