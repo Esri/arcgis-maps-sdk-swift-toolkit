@@ -72,10 +72,10 @@ public struct Forms: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch element.inputType.type {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case "text-box":
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch element.inputType.input {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case is TextBoxFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextBoxEntry(title: element.hint)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case "text-area":
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case is TextAreaFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextAreaEntry()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Unknown Input Type", bundle: .module, comment: "An error when a form element has an unknown type.")
@@ -215,17 +215,11 @@ public final class FieldFeatureFormElement: FeatureFormElement {
 ***REMOVED***
 ***REMOVED***public var hint: String
 ***REMOVED***
-***REMOVED***public var inputType: InputType
+***REMOVED***public var inputType: FeatureFormInputContainer
 ***REMOVED***
 ***REMOVED***public var label: String
 ***REMOVED***
 ***REMOVED***public var type: String
-***REMOVED***
-
-public final class InputType: Decodable {
-***REMOVED***var type: String
-***REMOVED***var minLength: Int
-***REMOVED***var maxLength: Int
 ***REMOVED***
 
 ***REMOVED***/ The list of possible values for specifying if the feature form element group
@@ -235,4 +229,52 @@ public enum FeatureFormGroupState: Decodable {
 ***REMOVED***case collapsed
 ***REMOVED******REMOVED***/ The group element should be expanded.
 ***REMOVED***case expanded
+***REMOVED***
+
+***REMOVED***/ Represents an input user interface for a FieldFeatureFormElement.
+public protocol FeatureFormInput: Decodable {***REMOVED***
+
+***REMOVED***/ A feature form input container.
+public final class FeatureFormInputContainer: Decodable {
+***REMOVED***var input: FeatureFormInput?
+***REMOVED***
+***REMOVED***enum CodingKeys: CodingKey {
+***REMOVED******REMOVED***case type
+***REMOVED***
+***REMOVED***
+***REMOVED***public init(from decoder: Decoder) throws {
+***REMOVED******REMOVED***let container = try decoder.container(keyedBy: CodingKeys.self)
+***REMOVED******REMOVED***let type = try container.decode(String.self, forKey: .type)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch type {
+***REMOVED******REMOVED***case "text-box":
+***REMOVED******REMOVED******REMOVED***input = try TextBoxFeatureFormInput(from: decoder)
+***REMOVED******REMOVED***case "text-area":
+***REMOVED******REMOVED******REMOVED***input = try TextAreaFeatureFormInput(from: decoder)
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***break
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ A user interface for a multi-line text area.
+public final class TextAreaFeatureFormInput: FeatureFormInput {
+***REMOVED******REMOVED***/ This represents the maximum number of characters allowed. If not supplied,
+***REMOVED******REMOVED***/ the value is derived from the length property of the referenced field in the service.
+***REMOVED***public var maxLength: Int
+***REMOVED***
+***REMOVED******REMOVED***/ This represents the minimum number of characters allowed. If not supplied,
+***REMOVED******REMOVED***/ the value is 0, meaning there is no minimum constraint.
+***REMOVED***public var minLength: Int
+***REMOVED***
+
+***REMOVED***/ A user interface for a single-line text box.
+public final class TextBoxFeatureFormInput: FeatureFormInput {
+***REMOVED******REMOVED***/ This represents the maximum number of characters allowed. This only applies for string fields.
+***REMOVED******REMOVED***/ If not supplied,the value is derived from the length property of the referenced field in the service.
+***REMOVED***public var maxLength: Int
+***REMOVED***
+***REMOVED******REMOVED***/ This represents the minimum number of characters allowed. This only applies for string fields.
+***REMOVED******REMOVED***/ If not supplied, the value is 0, meaning there is no minimum constraint.
+***REMOVED***public var minLength: Int
 ***REMOVED***
