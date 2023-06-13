@@ -226,15 +226,15 @@ extension AlertItem {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
 ***REMOVED******REMOVED***case (.some(_), .some(_)):
-***REMOVED******REMOVED******REMOVED***message = String(localized: "The basemap has a spatial reference that is incompatible with the map.", bundle: .module)
+***REMOVED******REMOVED******REMOVED***message = String(localized: "The basemap has a spatial reference that is incompatible with the map.", bundle: .toolkitModule)
 ***REMOVED******REMOVED***case (_, .none):
-***REMOVED******REMOVED******REMOVED***message = String(localized: "The map does not have a spatial reference.", bundle: .module)
+***REMOVED******REMOVED******REMOVED***message = String(localized: "The map does not have a spatial reference.", bundle: .toolkitModule)
 ***REMOVED******REMOVED***case (.none, _):
-***REMOVED******REMOVED******REMOVED***message = String(localized: "The basemap does not have a spatial reference.", bundle: .module)
+***REMOVED******REMOVED******REMOVED***message = String(localized: "The basemap does not have a spatial reference.", bundle: .toolkitModule)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.init(
-***REMOVED******REMOVED******REMOVED***title: String(localized: "Spatial reference mismatch.", bundle: .module),
+***REMOVED******REMOVED******REMOVED***title: String(localized: "Spatial reference mismatch.", bundle: .toolkitModule),
 ***REMOVED******REMOVED******REMOVED***message: message
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -243,7 +243,7 @@ extension AlertItem {
 private extension String {
 ***REMOVED***static let basemapFailedToLoadFallbackError = String(
 ***REMOVED******REMOVED***localized: "The basemap failed to load for an unknown reason.",
-***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED*** An error to be displayed when a basemap chosen from the basemap gallery fails to
 ***REMOVED******REMOVED******REMOVED******REMOVED*** load for an unknown reason.
@@ -252,7 +252,7 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let basemapFailedToLoadTitle = String(
 ***REMOVED******REMOVED***localized: "Error loading basemap.",
-***REMOVED******REMOVED***bundle: .module,
+***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: "An error to be displayed when a basemap chosen from the basemap gallery fails to load."
 ***REMOVED***)
 ***REMOVED***
