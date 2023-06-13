@@ -226,15 +226,15 @@ extension AlertItem {
         
         switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
         case (.some(_), .some(_)):
-            message = String(localized: "The basemap has a spatial reference that is incompatible with the map.", bundle: .module)
+            message = String(localized: "The basemap has a spatial reference that is incompatible with the map.", bundle: .toolkitModule)
         case (_, .none):
-            message = String(localized: "The map does not have a spatial reference.", bundle: .module)
+            message = String(localized: "The map does not have a spatial reference.", bundle: .toolkitModule)
         case (.none, _):
-            message = String(localized: "The basemap does not have a spatial reference.", bundle: .module)
+            message = String(localized: "The basemap does not have a spatial reference.", bundle: .toolkitModule)
         }
         
         self.init(
-            title: String(localized: "Spatial reference mismatch.", bundle: .module),
+            title: String(localized: "Spatial reference mismatch.", bundle: .toolkitModule),
             message: message
         )
     }
@@ -243,7 +243,7 @@ extension AlertItem {
 private extension String {
     static let basemapFailedToLoadFallbackError = String(
         localized: "The basemap failed to load for an unknown reason.",
-        bundle: .module,
+        bundle: .toolkitModule,
         comment: """
                  An error to be displayed when a basemap chosen from the basemap gallery fails to
                  load for an unknown reason.
@@ -252,7 +252,7 @@ private extension String {
     
     static let basemapFailedToLoadTitle = String(
         localized: "Error loading basemap.",
-        bundle: .module,
+        bundle: .toolkitModule,
         comment: "An error to be displayed when a basemap chosen from the basemap gallery fails to load."
     )
 }
