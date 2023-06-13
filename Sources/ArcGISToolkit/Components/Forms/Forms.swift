@@ -193,6 +193,14 @@ public protocol FeatureFormElement: Decodable {
 ***REMOVED***
 
 public final class GroupFeatureFormElement: FeatureFormElement {
+***REMOVED******REMOVED***/ An array of Form Element objects that represent an ordered list of form elements.
+***REMOVED******REMOVED***/ Nested group elements are not supported.
+***REMOVED*** public var formElements: [FeatureFormElementContainer]
+***REMOVED***
+***REMOVED******REMOVED***/ Defines if the group should be expanded or collapsed when the form is
+***REMOVED******REMOVED***/ initially displayed. If not provided, the default value is expanded.
+***REMOVED***public var initialState: FeatureFormGroupState
+***REMOVED***
 ***REMOVED***public var description: String
 ***REMOVED***
 ***REMOVED***public var label: String
@@ -218,4 +226,13 @@ public final class InputType: Decodable {
 ***REMOVED***var type: String
 ***REMOVED***var minLength: Int
 ***REMOVED***var maxLength: Int
+***REMOVED***
+
+***REMOVED***/ The list of possible values for specifying if the feature form element group
+***REMOVED***/ should be expanded or collapsed when the form is initially displayed.
+public enum FeatureFormGroupState: Decodable {
+***REMOVED******REMOVED***/ The group element should be collapsed.
+***REMOVED***case collapsed
+***REMOVED******REMOVED***/ The group element should be expanded.
+***REMOVED***case expanded
 ***REMOVED***
