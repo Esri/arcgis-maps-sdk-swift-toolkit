@@ -71,7 +71,7 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED***try await self.attachment.load()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let request = QLThumbnailGenerator.Request(
-***REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL,
+***REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
 ***REMOVED******REMOVED******REMOVED******REMOVED***size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
 ***REMOVED******REMOVED******REMOVED******REMOVED***scale: displayScale,
 ***REMOVED******REMOVED******REMOVED******REMOVED***representationTypes: .thumbnail)
