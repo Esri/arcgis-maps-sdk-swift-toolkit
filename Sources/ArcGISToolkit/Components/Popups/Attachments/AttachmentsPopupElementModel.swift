@@ -71,7 +71,7 @@ import QuickLook
             try await self.attachment.load()
             
             let request = QLThumbnailGenerator.Request(
-                fileAt: attachment.fileURL,
+                fileAt: attachment.fileURL!,
                 size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
                 scale: displayScale,
                 representationTypes: .thumbnail)
