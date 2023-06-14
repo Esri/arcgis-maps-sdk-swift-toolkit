@@ -27,41 +27,6 @@ public struct Forms: View {
         self.map = map
     }
     
-    struct TextBoxEntry: View {
-        @State private var text: String = ""
-        
-        var title: String
-        
-        public var body: some View {
-            TextField(title, text: $text)
-                .textFieldStyle(.roundedBorder)
-        }
-    }
-    
-    struct TextAreaEntry: View {
-        @State private var text: String = ""
-        
-        @FocusState var isActive: Bool
-        
-        public var body: some View {
-            TextEditor(text: $text)
-                .padding(1.5)
-                .border(.gray.opacity(0.2))
-                .cornerRadius(5)
-                .focused($isActive)
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        if isActive {
-                            Spacer()
-                            Button("Done") {
-                                isActive.toggle()
-                            }
-                        }
-                    }
-                }
-        }
-    }
-    
     public var body: some View {
         VStack(alignment: .leading) {
             Text(mapInfo?.operationalLayers.first?.featureFormDefinition.title ?? "Form Title Unavailable")
@@ -76,9 +41,9 @@ public struct Forms: View {
                         .foregroundColor(.secondary)
                     switch element.inputType.input {
                     case is TextBoxFeatureFormInput:
-                        TextBoxEntry(title: element.hint)
+                        SingleLineTextEntry(title: element.hint)
                     case is TextAreaFeatureFormInput:
-                        TextAreaEntry()
+                        MultiLineTextEntry()
                     default:
                         Text("Unknown Input Type", bundle: .module, comment: "An error when a form element has an unknown type.")
                     }
