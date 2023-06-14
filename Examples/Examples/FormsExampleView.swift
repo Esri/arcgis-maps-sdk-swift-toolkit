@@ -20,20 +20,45 @@ struct FormsExampleView: View {
     
     @State private var map = Map(url: .sampleData)!
     
+    @State private var attributes: [String: Any]?
+    
+    /// The point on the screen the user tapped on to identify a feature.
+    @State private var identifyScreenPoint: CGPoint?
+    
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
                 .onSingleTapGesture { screenPoint, _ in
-                    Task {
-                        guard let feature = try await mapViewProxy.identify(on: map.operationalLayers.first!, screenPoint: screenPoint, tolerance: 10).geoElements.first as? ArcGISFeature else {
-                            isPresented = false
-                            return
-                        }
-                        isPresented = true
-                    }
+                    identifyScreenPoint = screenPoint
                 }
-                .floatingPanel(selectedDetent: .constant(.half), horizontalAlignment: .leading, isPresented: $isPresented) {
+                .task(id: identifyScreenPoint) {
+                    guard let screenPoint = identifyScreenPoint,
+                          let feature = try? await Result(awaiting: {
+                              try await mapViewProxy.identify(
+                                on: map.operationalLayers.first!,
+                                screenPoint: screenPoint,
+                                tolerance: 10
+                              )
+                          })
+                        .cancellationToNil()?
+                        .get()
+                        .geoElements
+                        .first as? ArcGISFeature else {
+                        isPresented = false
+                        attributes = nil
+                        return
+                    }
+                    isPresented = true
+                    print(feature.attributes.count)
+                    self.attributes = feature.attributes
+                }
+                .floatingPanel(
+                    selectedDetent: .constant(.half),
+                    horizontalAlignment: .leading,
+                    isPresented: $isPresented
+                ) {
                     Forms(map: map)
+                        .data(attributes)
                         .padding()
                 }
                 .ignoresSafeArea(.keyboard)

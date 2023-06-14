@@ -21,10 +21,18 @@ public struct Forms: View {
     
     @State private var mapInfo: MapInfo?
     
+    private var attributes: [String : Any]?
+    
     private let map: Map
     
     public init(map: Map) {
         self.map = map
+    }
+    
+    public func data(_ attributes: [String: Any]?) -> Forms {
+        var copy = self
+        copy.attributes = attributes
+        return copy
     }
     
     public var body: some View {
