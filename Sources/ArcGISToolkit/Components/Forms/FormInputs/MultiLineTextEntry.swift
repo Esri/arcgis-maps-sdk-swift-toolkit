@@ -34,7 +34,7 @@ struct MultiLineTextEntry: View {
                         Button {
                             isActive.toggle()
                         } label: {
-                            Text("Done", bundle: .module, comment: "Dismisses a keyboard.")
+                            Text("Done", bundle: .toolkitModule, comment: "Dismisses a keyboard.")
                         }
                     }
                 }
