@@ -41,9 +41,12 @@ struct FormsExampleView: View {
                     horizontalAlignment: .leading,
                     isPresented: Binding { feature != nil } set: { _ in }
                 ) {
-                    Forms(map: map)
-                        .feature(feature)
-                        .padding()
+                    Group {
+                        if let feature {
+                            Forms(map: map, feature: feature)
+                                .padding()
+                        }
+                    }
                 }
                 .ignoresSafeArea(.keyboard)
         }

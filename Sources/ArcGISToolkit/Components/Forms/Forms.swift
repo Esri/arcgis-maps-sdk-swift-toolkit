@@ -25,16 +25,10 @@ public struct Forms: View {
     
     private let map: Map
     
-    public init(map: Map) {
-        self.map = map
-    }
-    
-    /// Provides the feature to be edited to the form.
     /// - Parameter feature: The feature to be edited.
-    public func feature(_ feature: ArcGISFeature?) -> Forms {
-        var copy = self
-        copy.attributes = feature?.attributes ?? nil
-        return copy
+    public init(map: Map, feature: ArcGISFeature) {
+        self.map = map
+        self.attributes = feature.attributes
     }
     
     public var body: some View {
@@ -51,7 +45,11 @@ public struct Forms: View {
                         .foregroundColor(.secondary)
                     switch element.inputType.input {
                     case is TextBoxFeatureFormInput:
-                        SingleLineTextEntry(title: element.hint)
+                        SingleLineTextEntry(
+                            title: element.label,
+                            value: attributes?[element.fieldName] as? String ?? "",
+                            prompt: element.hint
+                        )
                     case is TextAreaFeatureFormInput:
                         MultiLineTextEntry()
                     default:
