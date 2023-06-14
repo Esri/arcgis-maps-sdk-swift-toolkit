@@ -15,12 +15,25 @@ import SwiftUI
 
 /// A view for single line text entry.
 struct SingleLineTextEntry: View {
-    @State private var text: String = ""
+    @State private var text: String
     
     var title: String
     
+    var prompt: String
+    
+    /// Creates a view for single line text entry.
+    /// - Parameters:
+    ///   - title: The title of the item.
+    ///   - value: The current value.
+    ///   - prompt: The text to to be shown in the entry area if no value is present.
+    init(title: String, value: String?, prompt: String) {
+        self.text = value ?? ""
+        self.title = title
+        self.prompt = prompt
+    }
+    
     public var body: some View {
-        TextField(title, text: $text)
+        TextField(title, text: $text, prompt: Text(prompt))
             .textFieldStyle(.roundedBorder)
     }
 }
