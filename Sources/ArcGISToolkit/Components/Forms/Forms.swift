@@ -29,9 +29,11 @@ public struct Forms: View {
         self.map = map
     }
     
-    public func data(_ attributes: [String: Any]?) -> Forms {
+    /// Provides the feature to be edited to the form.
+    /// - Parameter feature: The feature to be edited.
+    public func feature(_ feature: ArcGISFeature?) -> Forms {
         var copy = self
-        copy.attributes = attributes
+        copy.attributes = feature?.attributes ?? nil
         return copy
     }
     
