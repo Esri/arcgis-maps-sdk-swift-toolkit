@@ -51,6 +51,9 @@ struct FormsExampleView: View {
 }
 
 extension FormsExampleView {
+    /// Identifies features, if any, at the current screen point.
+    /// - Parameter proxy: The proxy to use for identification.
+    /// - Returns: The first identified feature.
     func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
         if let screenPoint = identifyScreenPoint,
               let feature = try? await Result(awaiting: {
