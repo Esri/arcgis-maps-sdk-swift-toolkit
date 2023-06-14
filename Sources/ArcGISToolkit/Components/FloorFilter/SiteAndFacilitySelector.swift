@@ -102,13 +102,13 @@ struct SiteAndFacilitySelector: View {
                 placement: .navigationBarDrawer(displayMode: .always),
                 prompt: String(
                     localized: "Filter sites",
-                    bundle: .module,
+                    bundle: .toolkitModule,
                     comment: "A search field allowing user to filter a list of sites by name."
                 )
             )
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
-            .navigationTitle(String(localized: "Sites", bundle: .module))
+            .navigationTitle(String(localized: "Sites", bundle: .toolkitModule))
         }
         
         /// The "All sites" button.
@@ -130,7 +130,7 @@ struct SiteAndFacilitySelector: View {
             } label: {
                 Text(
                     "All sites",
-                    bundle: .module,
+                    bundle: .toolkitModule,
                     comment: "A button allowing users to view a list of all sites defined in a floor aware map."
                 )
             }
@@ -232,7 +232,7 @@ struct SiteAndFacilitySelector: View {
                 placement: .navigationBarDrawer(displayMode: .always),
                 prompt: String(
                     localized: "Filter facilities",
-                    bundle: .module,
+                    bundle: .toolkitModule,
                     comment: "A search field allowing user to filter a list of facilities by name."
                 )
             )
@@ -240,8 +240,8 @@ struct SiteAndFacilitySelector: View {
             .disableAutocorrection(true)
             .navigationTitle(
                 usesAllSitesStyling ?
-                String(localized: "All Sites", bundle: .module) :
-                    viewModel.selection?.site?.name ?? String(localized: "Select a facility", bundle: .module)
+                String(localized: "All Sites", bundle: .toolkitModule) :
+                    viewModel.selection?.site?.name ?? String(localized: "Select a facility", bundle: .toolkitModule)
             )
         }
         
@@ -298,7 +298,7 @@ struct SiteAndFacilitySelector: View {
 /// Displays text "No matches found".
 private struct NoMatchesView: View {
     var body: some View {
-        Text("No matches found", bundle: .module)
+        Text("No matches found", bundle: .toolkitModule)
             .frame(maxHeight: .infinity)
     }
 }
