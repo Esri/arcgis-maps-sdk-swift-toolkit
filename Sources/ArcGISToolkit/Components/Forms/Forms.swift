@@ -29,9 +29,11 @@ public struct Forms: View {
 ***REMOVED******REMOVED***self.map = map
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func data(_ attributes: [String: Any]?) -> Forms {
+***REMOVED******REMOVED***/ Provides the feature to be edited to the form.
+***REMOVED******REMOVED***/ - Parameter feature: The feature to be edited.
+***REMOVED***public func feature(_ feature: ArcGISFeature?) -> Forms {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.attributes = attributes
+***REMOVED******REMOVED***copy.attributes = feature?.attributes ?? nil
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
