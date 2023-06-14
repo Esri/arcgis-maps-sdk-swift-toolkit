@@ -27,41 +27,6 @@ public struct Forms: View {
 ***REMOVED******REMOVED***self.map = map
 ***REMOVED***
 ***REMOVED***
-***REMOVED***struct TextBoxEntry: View {
-***REMOVED******REMOVED***@State private var text: String = ""
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var title: String
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***public var body: some View {
-***REMOVED******REMOVED******REMOVED***TextField(title, text: $text)
-***REMOVED******REMOVED******REMOVED******REMOVED***.textFieldStyle(.roundedBorder)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***struct TextAreaEntry: View {
-***REMOVED******REMOVED***@State private var text: String = ""
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***@FocusState var isActive: Bool
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***public var body: some View {
-***REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(1.5)
-***REMOVED******REMOVED******REMOVED******REMOVED***.border(.gray.opacity(0.2))
-***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(5)
-***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isActive)
-***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isActive {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isActive.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED***Text(mapInfo?.operationalLayers.first?.featureFormDefinition.title ?? "Form Title Unavailable")
@@ -76,9 +41,9 @@ public struct Forms: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch element.inputType.input {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case is TextBoxFeatureFormInput:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextBoxEntry(title: element.hint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SingleLineTextEntry(title: element.hint)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case is TextAreaFeatureFormInput:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextAreaEntry()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***MultiLineTextEntry()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Unknown Input Type", bundle: .module, comment: "An error when a form element has an unknown type.")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
