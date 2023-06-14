@@ -67,7 +67,7 @@ public struct PopupView: View {
                     case .failure(let error):
                         Text(
                             "Popup evaluation failed: \(error.localizedDescription)",
-                            bundle: .module,
+                            bundle: .toolkitModule,
                             comment: """
                                      An error message shown when a popup cannot be displayed. The
                                      variable provides additional data.
@@ -76,7 +76,7 @@ public struct PopupView: View {
                     }
                 } else {
                     VStack(alignment: .center) {
-                        Text("Evaluating popup expressions…", bundle: .module)
+                        Text("Evaluating popup expressions…", bundle: .toolkitModule)
                         ProgressView()
                     }
                     .frame(maxWidth: .infinity)

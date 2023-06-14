@@ -247,7 +247,7 @@ public struct UtilityNetworkTrace: View {
                     } label: {
                         Text(
                             "\(viewModel.pendingTrace.startingPoints.count, specifier: "%lld") selected",
-                            bundle: .module,
+                            bundle: .toolkitModule,
                             comment: "A label declaring the number of starting points selected for a utility network trace."
                         )
                     }
@@ -655,7 +655,7 @@ public struct UtilityNetworkTrace: View {
         guard let index = viewModel.selectedTraceIndex else { return "Error" }
         return String(
             localized: "Trace \(index+1, specifier: "%lld") of \(viewModel.completedTraces.count, specifier: "%lld")",
-            bundle: .module,
+            bundle: .toolkitModule,
             comment: "A label indicating the index of the trace being viewed out of the total number of traces completed."
         )
     }
@@ -730,144 +730,144 @@ public struct UtilityNetworkTrace: View {
 private extension String {
     static let addNewButtonLabel = String(
         localized: "Add new",
-        bundle: .module,
+        bundle: .toolkitModule,
         comment: "A button to add new utility trace starting points."
     )
     
     static let advancedOptionsHeaderLabel = String(
         localized: "Advanced Options",
-        bundle: .module,
+        bundle: .toolkitModule,
         comment: "A section header for advanced options."
     )
     
     static let attributesSectionTitle = String(
         localized: "Attributes",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let cancelStartingPointSelection = String(
         localized: "Cancel starting point selection",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let clearAllResultsButtonLabel = String(
         localized: "Clear All Results",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let clearAllResultsQuestion = String(
         localized: "Clear all results?",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let clearAllResultsMessage = String(
         localized: "All the trace inputs and results will be lost.",
-        bundle: .module,
+        bundle: .toolkitModule,
         comment: "A message describing the outcome of clearing all utility network trace results."
     )
     
     static let colorLabel = String(
         localized: "Color",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let deleteButtonLabel = String(
         localized: "Delete",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     /// Title for the feature results section
     static let featureResultsTitle = String(
         localized: "Feature Results",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let fractionAlongEdgeSectionTitle = String(
         localized: "Fraction Along Edge",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let functionResultsSectionTitle = String(
         localized: "Function Results",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let modePickerTitle = String(
         localized: "Mode",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let nameLabel = String(
         localized: "Name",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let networkSectionLabel = String(
         localized: "Network",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let newTraceOptionLabel = String(
         localized: "New trace",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let noConfigurationsAvailable = String(
         localized: "No configurations available",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let noneSelected = String(
         localized: "None selected",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let objectID = String(
         localized: "Object ID",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let resultsOptionLabel = String(
         localized: "Results",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     /// Title for the starting points section
     static let startingPointsTitle = String(
         localized: "Starting Points",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let terminalConfigurationPickerTitle = String(
         localized: "Terminal Configuration",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let traceButtonLabel = String(
         localized: "Trace",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let traceConfigurationSectionLabel = String(
         localized: "Trace Configuration",
-        bundle: .module
+        bundle: .toolkitModule
     )
     
     static let unnamedAssetType = String(
         localized: "Unnamed Asset Type",
-        bundle: .module,
+        bundle: .toolkitModule,
         comment: "A label to use in place of a utility element asset type name."
     )
     
     static let zoomToButtonLabel = String(
         localized: "Zoom To",
-        bundle: .module,
+        bundle: .toolkitModule,
         comment: "A button to change the map to the extent of the selected trace."
     )
     
     static let zoomToResult = String(
         localized: "Zoom to result",
-        bundle: .module,
+        bundle: .toolkitModule,
         comment: "A user option specifying that a map should automatically change to show completed trace results."
     )
 }

@@ -41,7 +41,7 @@ struct TrustHostViewModifier: ViewModifier {
             .alert(
                 Text(
                     "Certificate Trust Warning",
-                    bundle: .module,
+                    bundle: .toolkitModule,
                     comment: "A label indicating that the remote host's certificate is not trusted."
                 ),
                 isPresented: $isPresented,
@@ -52,19 +52,19 @@ struct TrustHostViewModifier: ViewModifier {
                 } label: {
                     Text(
                         "Allow",
-                        bundle: .module,
+                        bundle: .toolkitModule,
                         comment: "A button indicating the user accepts a potentially dangerous action."
                     )
                 }
                 Button(role: .cancel) {
                     challenge.resume(with: .cancel)
                 } label: {
-                    Text("Cancel", bundle: .module)
+                    Text("Cancel", bundle: .toolkitModule)
                 }
             } message: { _ in
                 Text(
                     "Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
-                    bundle: .module,
+                    bundle: .toolkitModule,
                     comment: "A warning that the host service (challenge.host) is providing a potentially unsafe certificate."
                 )
             }
