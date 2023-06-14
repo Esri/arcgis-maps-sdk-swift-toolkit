@@ -45,7 +45,11 @@ public struct Forms: View {
                     case is TextAreaFeatureFormInput:
                         MultiLineTextEntry()
                     default:
-                        Text("Unknown Input Type", bundle: .module, comment: "An error when a form element has an unknown type.")
+                        Text(
+                            "Unknown Input Type",
+                            bundle: .module,
+                            comment: "An error when a form element is of an unknown type."
+                        )
                     }
                 }
             }

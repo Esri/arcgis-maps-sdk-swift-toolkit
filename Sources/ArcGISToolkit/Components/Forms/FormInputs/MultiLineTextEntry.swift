@@ -31,8 +31,10 @@ struct MultiLineTextEntry: View {
                 ToolbarItemGroup(placement: .keyboard) {
                     if isActive {
                         Spacer()
-                        Button("Done") {
+                        Button {
                             isActive.toggle()
+                        } label: {
+                            Text("Done", bundle: .module, comment: "Dismisses a keyboard.")
                         }
                     }
                 }
