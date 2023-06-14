@@ -25,16 +25,10 @@ public struct Forms: View {
 ***REMOVED***
 ***REMOVED***private let map: Map
 ***REMOVED***
-***REMOVED***public init(map: Map) {
-***REMOVED******REMOVED***self.map = map
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Provides the feature to be edited to the form.
 ***REMOVED******REMOVED***/ - Parameter feature: The feature to be edited.
-***REMOVED***public func feature(_ feature: ArcGISFeature?) -> Forms {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.attributes = feature?.attributes ?? nil
-***REMOVED******REMOVED***return copy
+***REMOVED***public init(map: Map, feature: ArcGISFeature) {
+***REMOVED******REMOVED***self.map = map
+***REMOVED******REMOVED***self.attributes = feature.attributes
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -51,7 +45,11 @@ public struct Forms: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch element.inputType.input {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case is TextBoxFeatureFormInput:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SingleLineTextEntry(title: element.hint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SingleLineTextEntry(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: element.label,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: attributes?[element.fieldName] as? String ?? "",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: element.hint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case is TextAreaFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***MultiLineTextEntry()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:

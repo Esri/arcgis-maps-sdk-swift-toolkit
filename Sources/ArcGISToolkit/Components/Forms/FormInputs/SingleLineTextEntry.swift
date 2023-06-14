@@ -15,12 +15,25 @@
 
 ***REMOVED***/ A view for single line text entry.
 struct SingleLineTextEntry: View {
-***REMOVED***@State private var text: String = ""
+***REMOVED***@State private var text: String
 ***REMOVED***
 ***REMOVED***var title: String
 ***REMOVED***
+***REMOVED***var prompt: String
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a view for single line text entry.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - title: The title of the item.
+***REMOVED******REMOVED***/   - value: The current value.
+***REMOVED******REMOVED***/   - prompt: The text to to be shown in the entry area if no value is present.
+***REMOVED***init(title: String, value: String?, prompt: String) {
+***REMOVED******REMOVED***self.text = value ?? ""
+***REMOVED******REMOVED***self.title = title
+***REMOVED******REMOVED***self.prompt = prompt
+***REMOVED***
+***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***TextField(title, text: $text)
+***REMOVED******REMOVED***TextField(title, text: $text, prompt: Text(prompt))
 ***REMOVED******REMOVED******REMOVED***.textFieldStyle(.roundedBorder)
 ***REMOVED***
 ***REMOVED***
