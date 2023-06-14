@@ -123,6 +123,6 @@ extension PopupMedia: Identifiable {***REMOVED***
 private extension MediaPopupElement {
 ***REMOVED******REMOVED***/ Provides a default title to display if `title` is empty.
 ***REMOVED***var displayTitle: String {
-***REMOVED******REMOVED***title.isEmpty ? String(localized: "Media", bundle: .module) : title
+***REMOVED******REMOVED***title.isEmpty ? String(localized: "Media", bundle: .toolkitModule) : title
 ***REMOVED***
 ***REMOVED***
