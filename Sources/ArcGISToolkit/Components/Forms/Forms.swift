@@ -47,7 +47,7 @@ public struct Forms: View {
                     default:
                         Text(
                             "Unknown Input Type",
-                            bundle: .module,
+                            bundle: .toolkitModule,
                             comment: "An error when a form element is of an unknown type."
                         )
                     }
