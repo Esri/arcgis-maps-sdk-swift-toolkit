@@ -69,9 +69,14 @@ import QuickLook
         Task {
             loadStatus = .loading
             try await self.attachment.load()
+            loadStatus = attachment.loadStatus
+            if attachment.loadStatus == .failed || attachment.fileURL == nil {
+                defaultSystemName = "exclamationmark.circle.fill"
+                return
+            }
             
             let request = QLThumbnailGenerator.Request(
-                fileAt: attachment.fileURL,
+                fileAt: attachment.fileURL!,
                 size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
                 scale: displayScale,
                 representationTypes: .thumbnail)
@@ -83,11 +88,6 @@ import QuickLook
                     if let thumbnail = thumbnail {
                         self.thumbnail = thumbnail.uiImage
                     }
-                    else if self.attachment.loadStatus == .failed {
-                        self.defaultSystemName = "exclamationmark.circle.fill"
-                    }
-                    
-                    self.loadStatus = self.attachment.loadStatus
                 }
             }
         }
