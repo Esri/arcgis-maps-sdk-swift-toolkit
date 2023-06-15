@@ -59,13 +59,13 @@ extension FormsExampleView {
 ***REMOVED******REMOVED***/ - Returns: The first identified feature.
 ***REMOVED***func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
 ***REMOVED******REMOVED***if let screenPoint = identifyScreenPoint,
-***REMOVED******REMOVED******REMOVED***  let feature = try? await Result(awaiting: {
-***REMOVED******REMOVED******REMOVED******REMOVED***  try await proxy.identify(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***on: map.operationalLayers.first!,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***screenPoint: screenPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tolerance: 10
-***REMOVED******REMOVED******REMOVED******REMOVED***  )
-***REMOVED***  ***REMOVED***)
+***REMOVED******REMOVED***   let feature = try? await Result(awaiting: {
+***REMOVED******REMOVED******REMOVED***   try await proxy.identify(
+***REMOVED******REMOVED******REMOVED******REMOVED***on: map.operationalLayers.first!,
+***REMOVED******REMOVED******REMOVED******REMOVED***screenPoint: screenPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***tolerance: 10
+***REMOVED******REMOVED******REMOVED***   )
+   ***REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.cancellationToNil()?
 ***REMOVED******REMOVED******REMOVED***.get()
 ***REMOVED******REMOVED******REMOVED***.geoElements
