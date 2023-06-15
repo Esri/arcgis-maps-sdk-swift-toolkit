@@ -69,9 +69,14 @@ import QuickLook
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***loadStatus = .loading
 ***REMOVED******REMOVED******REMOVED***try await self.attachment.load()
+***REMOVED******REMOVED******REMOVED***loadStatus = attachment.loadStatus
+***REMOVED******REMOVED******REMOVED***if attachment.loadStatus == .failed || attachment.fileURL == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***defaultSystemName = "exclamationmark.circle.fill"
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let request = QLThumbnailGenerator.Request(
-***REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL,
+***REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
 ***REMOVED******REMOVED******REMOVED******REMOVED***size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
 ***REMOVED******REMOVED******REMOVED******REMOVED***scale: displayScale,
 ***REMOVED******REMOVED******REMOVED******REMOVED***representationTypes: .thumbnail)
@@ -83,11 +88,6 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnail = thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else if self.attachment.loadStatus == .failed {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.defaultSystemName = "exclamationmark.circle.fill"
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = self.attachment.loadStatus
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
