@@ -59,13 +59,13 @@ extension FormsExampleView {
     /// - Returns: The first identified feature.
     func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
         if let screenPoint = identifyScreenPoint,
-              let feature = try? await Result(awaiting: {
-                  try await proxy.identify(
-                    on: map.operationalLayers.first!,
-                    screenPoint: screenPoint,
-                    tolerance: 10
-                  )
-              })
+           let feature = try? await Result(awaiting: {
+               try await proxy.identify(
+                on: map.operationalLayers.first!,
+                screenPoint: screenPoint,
+                tolerance: 10
+               )
+           })
             .cancellationToNil()?
             .get()
             .geoElements
