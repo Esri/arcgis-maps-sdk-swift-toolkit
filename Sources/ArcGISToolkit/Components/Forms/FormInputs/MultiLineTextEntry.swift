@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import FormsPlugin
 import SwiftUI
 
 /// A view for text entry spanning multiple lines.
@@ -21,30 +22,39 @@ struct MultiLineTextEntry: View {
     
     @FocusState var isActive: Bool
     
+    let config: TextAreaFeatureFormInput
+    
     /// Creates a view for text entry spanning multiple lines.
     /// - Parameters:
     ///   - value: The current value.
-    init(value: String) {
+    init(value: String, input: TextAreaFeatureFormInput) {
         self.text = value
+        self.config = input
     }
     
     public var body: some View {
-        TextEditor(text: $text)
-            .padding(1.5)
-            .border(.gray.opacity(0.2))
-            .cornerRadius(5)
-            .focused($isActive)
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    if isActive {
-                        Spacer()
-                        Button {
-                            isActive.toggle()
-                        } label: {
-                            Text("Done", bundle: .toolkitModule, comment: "Dismisses a keyboard.")
+        VStack(alignment: .leading, spacing: 2) {
+            TextEditor(text: $text)
+                .padding(1.5)
+                .border(.gray.opacity(0.2))
+                .cornerRadius(5)
+                .focused($isActive)
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        if isActive {
+                            Spacer()
+                            Button {
+                                isActive.toggle()
+                            } label: {
+                                Text("Done", bundle: .toolkitModule, comment: "Dismisses a keyboard.")
+                            }
                         }
                     }
                 }
-            }
+            Text("\(text.count) / \(config.maxLength)")
+                .font(.caption2)
+                .foregroundStyle(.black)
+        }
+        
     }
 }
