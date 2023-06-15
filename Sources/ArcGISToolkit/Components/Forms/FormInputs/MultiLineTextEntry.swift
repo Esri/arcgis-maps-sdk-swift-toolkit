@@ -17,9 +17,16 @@
 ***REMOVED***/
 ***REMOVED***/ Includes UI for easy keyboard dismissal upon completion.
 struct MultiLineTextEntry: View {
-***REMOVED***@State private var text: String = ""
+***REMOVED***@State private var text: String
 ***REMOVED***
 ***REMOVED***@FocusState var isActive: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a view for text entry spanning multiple lines.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - value: The current value.
+***REMOVED***init(value: String) {
+***REMOVED******REMOVED***self.text = value
+***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***TextEditor(text: $text)
