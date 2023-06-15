@@ -17,9 +17,16 @@ import SwiftUI
 ///
 /// Includes UI for easy keyboard dismissal upon completion.
 struct MultiLineTextEntry: View {
-    @State private var text: String = ""
+    @State private var text: String
     
     @FocusState var isActive: Bool
+    
+    /// Creates a view for text entry spanning multiple lines.
+    /// - Parameters:
+    ///   - value: The current value.
+    init(value: String) {
+        self.text = value
+    }
     
     public var body: some View {
         TextEditor(text: $text)

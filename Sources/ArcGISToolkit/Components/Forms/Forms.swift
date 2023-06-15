@@ -51,7 +51,7 @@ public struct Forms: View {
                             prompt: element.hint
                         )
                     case is TextAreaFeatureFormInput:
-                        MultiLineTextEntry()
+                        MultiLineTextEntry(value: attributes?[element.fieldName] as? String ?? "")
                     default:
                         Text(
                             "Unknown Input Type",
