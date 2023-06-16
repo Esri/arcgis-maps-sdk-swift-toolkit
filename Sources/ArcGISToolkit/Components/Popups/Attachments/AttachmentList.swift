@@ -20,13 +20,8 @@ struct AttachmentList: View {
 ***REMOVED***var attachmentModels: [AttachmentModel]
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack(alignment: .leading, spacing: 6) {
-***REMOVED******REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
-***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentRow(attachmentModel: attachmentModel)
-***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel != attachmentModels.last {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
+***REMOVED******REMOVED******REMOVED***AttachmentRow(attachmentModel: attachmentModel)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -85,6 +80,7 @@ struct AttachmentLoadButton: View  {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "square.and.arrow.down")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .loading:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .loaded:
