@@ -110,7 +110,7 @@ extension LoadImageError: LocalizedError {
 ***REMOVED******REMOVED***return String(
 ***REMOVED******REMOVED******REMOVED***localized: "The URL could not be reached or did not contain image data",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "No Data"
+***REMOVED******REMOVED******REMOVED***comment: "Description of error thrown when a remote image could not be loaded."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
