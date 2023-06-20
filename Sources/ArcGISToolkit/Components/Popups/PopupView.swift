@@ -56,6 +56,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom, .trailing], 4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Divider()
@@ -63,7 +64,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let evaluateExpressionsResult {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch evaluateExpressionsResult {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .success(_):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementScrollView(popupElements: popup.evaluatedElements)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementList(popupElements: popup.evaluatedElements)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Popup evaluation failed: \(error.localizedDescription)",
@@ -91,28 +92,28 @@ public struct PopupView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***struct PopupElementScrollView: View {
+***REMOVED***private struct PopupElementList: View {
 ***REMOVED******REMOVED***let popupElements: [PopupElement]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(popupElements) { popupElement in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch popupElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let popupElement as AttachmentsPopupElement:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentsPopupElementView(popupElement: popupElement)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let popupElement as FieldsPopupElement:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FieldsPopupElementView(popupElement: popupElement)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let popupElement as MediaPopupElement:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***MediaPopupElementView(popupElement: popupElement)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let popupElement as TextPopupElement:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextPopupElementView(popupElement: popupElement)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***List(popupElements) { popupElement in
+***REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch popupElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let popupElement as AttachmentsPopupElement:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentsPopupElementView(popupElement: popupElement)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let popupElement as FieldsPopupElement:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FieldsPopupElementView(popupElement: popupElement)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let popupElement as MediaPopupElement:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***MediaPopupElementView(popupElement: popupElement)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let popupElement as TextPopupElement:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextPopupElementView(popupElement: popupElement)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

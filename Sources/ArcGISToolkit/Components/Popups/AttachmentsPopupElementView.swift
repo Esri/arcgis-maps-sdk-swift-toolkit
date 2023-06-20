@@ -20,9 +20,6 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED***/ The `PopupElement` to display.
 ***REMOVED***var popupElement: AttachmentsPopupElement
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the view.
-***REMOVED***@StateObject private var viewModel: AttachmentsPopupElementModel
-***REMOVED***
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
@@ -31,60 +28,66 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED***!(horizontalSizeClass == .compact && verticalSizeClass == .regular)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value specifying whether the attachments are currently being loaded.
-***REMOVED***@State var isLoadingAttachments = true
+***REMOVED******REMOVED***/ The states of loading attachments.
+***REMOVED***private enum AttachmentLoadingState {
+***REMOVED******REMOVED******REMOVED***/ Attachments have not been loaded.
+***REMOVED******REMOVED***case notLoaded
+***REMOVED******REMOVED******REMOVED***/ Attachments are being loaded.
+***REMOVED******REMOVED***case loading
+***REMOVED******REMOVED******REMOVED***/ Attachments have been loaded.
+***REMOVED******REMOVED***case loaded([AttachmentModel])
+***REMOVED***
+***REMOVED***
+***REMOVED***@State private var attachmentLoadingState: AttachmentLoadingState = .notLoaded
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a new `AttachmentsPopupElementView`.
 ***REMOVED******REMOVED***/ - Parameter popupElement: The `AttachmentsPopupElement`.
 ***REMOVED***init(popupElement: AttachmentsPopupElement) {
 ***REMOVED******REMOVED***self.popupElement = popupElement
-***REMOVED******REMOVED***_viewModel = StateObject(
-***REMOVED******REMOVED******REMOVED***wrappedValue: AttachmentsPopupElementModel()
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State var isExpanded: Bool = true
+***REMOVED***@State private var isExpanded: Bool = true
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if isLoadingAttachments {
+***REMOVED******REMOVED******REMOVED***switch attachmentLoadingState {
+***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading:
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED*** else if viewModel.attachmentModels.count > 0 {
-***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, 4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch popupElement.displayType {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .list:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: viewModel.attachmentModels)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .preview:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentModels: viewModel.attachmentModels)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .auto:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentModels: viewModel.attachmentModels)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: viewModel.attachmentModels)
+***REMOVED******REMOVED******REMOVED***case .loaded(let attachmentModels):
+***REMOVED******REMOVED******REMOVED******REMOVED***if !attachmentModels.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch popupElement.displayType {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .list:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .preview:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentModels: attachmentModels)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .auto:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentModels: attachmentModels)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.displayTitle,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***let attachmentModels = try? await popupElement.attachments.reversed().map { attachment in
-***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(attachment: attachment)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***viewModel.attachmentModels.append(contentsOf: attachmentModels ?? [])
-***REMOVED******REMOVED******REMOVED***isLoadingAttachments = false
+***REMOVED******REMOVED******REMOVED***guard case .notLoaded = attachmentLoadingState else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loading
+***REMOVED******REMOVED******REMOVED***let attachments = (try? await popupElement.attachments) ?? []
+***REMOVED******REMOVED******REMOVED***let attachmentModels = attachments
+***REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
+***REMOVED******REMOVED******REMOVED******REMOVED***.map { AttachmentModel(attachment: $0) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loaded(attachmentModels)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

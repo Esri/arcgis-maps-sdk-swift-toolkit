@@ -65,7 +65,7 @@ The floating panel is displayed via a view modifier that allows you to set the c
 MapView(
 ***REMOVED***map: map
 )
-.floatingPanel() {
+.floatingPanel {
 ***REMOVED***List(1..<21) { Text("\($0)") ***REMOVED***
 ***REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
