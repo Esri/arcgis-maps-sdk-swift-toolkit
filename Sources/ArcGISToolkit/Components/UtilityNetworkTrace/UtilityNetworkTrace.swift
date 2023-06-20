@@ -157,7 +157,11 @@ public struct UtilityNetworkTrace: View {
                                     }
                                 } label: {
                                     Label {
-                                        Text("\(String.objectID) \(element.objectID, format: .number.grouping(.never))")
+                                        Text(
+                                            "Object ID: \(element.objectID, format: .number.grouping(.never))",
+                                            bundle: .toolkitModule,
+                                            comment: "A string identifying a utility network object."
+                                        )
                                     } icon: {
                                         Image(systemName: "scope")
                                     }
@@ -819,11 +823,6 @@ private extension String {
     
     static let noneSelected = String(
         localized: "None selected",
-        bundle: .toolkitModule
-    )
-    
-    static let objectID = String(
-        localized: "Object ID",
         bundle: .toolkitModule
     )
     
