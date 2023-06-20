@@ -389,7 +389,11 @@ public struct UtilityNetworkTrace: View {
                                         Text(item.function.functionType.title)
                                             .font(.caption)
                                             .foregroundColor(.secondary)
-                                        Text((item.result as? Double).map { "\($0)" } ?? "N/A")
+                                        if let result = item.result as? Double {
+                                            Text(result, format: .number)
+                                        } else {
+                                            Text("N/A", bundle: .toolkitModule, comment: "Shorthand for Not Available")
+                                        }
                                     }
                                 }
                             }
