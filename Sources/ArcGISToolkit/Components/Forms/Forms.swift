@@ -32,35 +32,37 @@ public struct Forms: View {
     }
     
     public var body: some View {
-        VStack(alignment: .leading) {
-            Text(mapInfo?.operationalLayers.first?.featureFormDefinition.title ?? "Form Title Unavailable")
-                .font(.largeTitle)
-            Divider()
-            ForEach(mapInfo?.operationalLayers.first?.featureFormDefinition.formElements ?? [], id: \.element?.label) { container in
-                if let element = container.element as? FieldFeatureFormElement {
-                    Text(element.label)
-                        .font(.headline)
-                    Text(element.description)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    switch element.inputType.input {
-                    case is TextBoxFeatureFormInput:
-                        SingleLineTextEntry(
-                            title: element.label,
-                            value: attributes?[element.fieldName] as? String ?? "",
-                            prompt: element.hint
-                        )
-                    case is TextAreaFeatureFormInput:
-                        MultiLineTextEntry(
-                            value: attributes?[element.fieldName] as? String ?? "",
-                            input: element.inputType.input as! TextAreaFeatureFormInput
-                        )
-                    default:
-                        Text(
-                            "Unknown Input Type",
-                            bundle: .toolkitModule,
-                            comment: "An error when a form element is of an unknown type."
-                        )
+        ScrollView {
+            VStack(alignment: .leading) {
+                Text(mapInfo?.operationalLayers.first?.featureFormDefinition.title ?? "Form Title Unavailable")
+                    .font(.largeTitle)
+                Divider()
+                ForEach(mapInfo?.operationalLayers.first?.featureFormDefinition.formElements ?? [], id: \.element?.label) { container in
+                    if let element = container.element as? FieldFeatureFormElement {
+                        Text(element.label)
+                            .font(.headline)
+                        Text(element.description)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        switch element.inputType.input {
+                        case is TextBoxFeatureFormInput:
+                            SingleLineTextEntry(
+                                title: element.label,
+                                value: attributes?[element.fieldName] as? String ?? "",
+                                prompt: element.hint
+                            )
+                        case is TextAreaFeatureFormInput:
+                            MultiLineTextEntry(
+                                value: attributes?[element.fieldName] as? String ?? "",
+                                input: element.inputType.input as! TextAreaFeatureFormInput
+                            )
+                        default:
+                            Text(
+                                "Unknown Input Type",
+                                bundle: .toolkitModule,
+                                comment: "An error when a form element is of an unknown type."
+                            )
+                        }
                     }
                 }
             }
