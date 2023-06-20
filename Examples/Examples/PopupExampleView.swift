@@ -71,13 +71,11 @@ struct PopupExampleView: View {
                         horizontalAlignment: .leading,
                         isPresented: $showPopup
                     ) {
-                        Group {
-                            if let popup = popup {
-                                PopupView(popup: popup, isPresented: $showPopup)
-                                    .showCloseButton(true)
-                            }
+                        if let popup = popup {
+                            PopupView(popup: popup, isPresented: $showPopup)
+                                .showCloseButton(true)
+                                .padding()
                         }
-                        .padding()
                     }
             }
         }

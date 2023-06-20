@@ -15,17 +15,11 @@ import SwiftUI
 import ArcGIS
 import QuickLook
 
-/// The view model for an `AttachmentPopupElement`.
-@MainActor class AttachmentsPopupElementModel: ObservableObject {
-    /// The array of `AttachmentModels`, one for each popup attachment.
-    @Published var attachmentModels = [AttachmentModel]()
-}
-
 /// A view model representing the combination of a `PopupAttachment` and
 /// an associated `UIImage` used as a thumbnail.
 @MainActor class AttachmentModel: ObservableObject {
     /// The `PopupAttachment`.
-    @Published var attachment: PopupAttachment
+    let attachment: PopupAttachment
     
     /// The thumbnail representing the attachment.
     @Published var thumbnail: UIImage? {
