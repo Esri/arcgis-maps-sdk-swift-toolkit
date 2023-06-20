@@ -56,6 +56,7 @@ public struct PopupView: View {
                             .foregroundColor(.secondary)
                             .padding([.top, .bottom, .trailing], 4)
                     })
+                    .buttonStyle(.plain)
                 }
             }
             Divider()
@@ -63,7 +64,7 @@ public struct PopupView: View {
                 if let evaluateExpressionsResult {
                     switch evaluateExpressionsResult {
                     case .success(_):
-                        PopupElementScrollView(popupElements: popup.evaluatedElements)
+                        PopupElementList(popupElements: popup.evaluatedElements)
                     case .failure(let error):
                         Text(
                             "Popup evaluation failed: \(error.localizedDescription)",
@@ -91,28 +92,28 @@ public struct PopupView: View {
         }
     }
     
-    struct PopupElementScrollView: View {
+    private struct PopupElementList: View {
         let popupElements: [PopupElement]
         
         var body: some View {
-            ScrollView {
-                VStack(alignment: .leading) {
-                    ForEach(popupElements) { popupElement in
-                        switch popupElement {
-                        case let popupElement as AttachmentsPopupElement:
-                            AttachmentsPopupElementView(popupElement: popupElement)
-                        case let popupElement as FieldsPopupElement:
-                            FieldsPopupElementView(popupElement: popupElement)
-                        case let popupElement as MediaPopupElement:
-                            MediaPopupElementView(popupElement: popupElement)
-                        case let popupElement as TextPopupElement:
-                            TextPopupElementView(popupElement: popupElement)
-                        default:
-                            EmptyView()
-                        }
+            List(popupElements) { popupElement in
+                Group {
+                    switch popupElement {
+                    case let popupElement as AttachmentsPopupElement:
+                        AttachmentsPopupElementView(popupElement: popupElement)
+                    case let popupElement as FieldsPopupElement:
+                        FieldsPopupElementView(popupElement: popupElement)
+                    case let popupElement as MediaPopupElement:
+                        MediaPopupElementView(popupElement: popupElement)
+                    case let popupElement as TextPopupElement:
+                        TextPopupElementView(popupElement: popupElement)
+                    default:
+                        EmptyView()
                     }
                 }
+                .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
             }
+            .listStyle(.plain)
         }
     }
 }

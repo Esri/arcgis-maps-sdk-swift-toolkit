@@ -57,7 +57,9 @@ struct BasemapGalleryCell: View {
                     .multilineTextAlignment(.center)
                     .foregroundColor(item.hasError ? .secondary : .primary)
             }
-        }).disabled(item.isBasemapLoading)
+        })
+        .buttonStyle(.plain)
+        .disabled(item.isBasemapLoading)
     }
     
     /// Creates an overlay which is either a selection outline or an error icon.

@@ -20,13 +20,8 @@ struct AttachmentList: View {
     var attachmentModels: [AttachmentModel]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            ForEach(attachmentModels) { attachmentModel in
-                AttachmentRow(attachmentModel: attachmentModel)
-                if attachmentModel != attachmentModels.last {
-                    Divider()
-                }
-            }
+        ForEach(attachmentModels) { attachmentModel in
+            AttachmentRow(attachmentModel: attachmentModel)
         }
     }
 }
@@ -85,6 +80,7 @@ struct AttachmentLoadButton: View  {
                     Image(systemName: "square.and.arrow.down")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
+                        .foregroundColor(.accentColor)
                 case .loading:
                     ProgressView()
                 case .loaded:
