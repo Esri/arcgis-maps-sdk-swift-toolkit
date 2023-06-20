@@ -2,9 +2,6 @@
 "(%lld)" = "(%lld)";
 
 /* No comment provided by engineer. */
-"%@ %@" = "%@ %@";
-
-/* No comment provided by engineer. */
 "%lf" = "%lf";
 
 /* A label declaring the number of starting points selected for a utility network trace. */
@@ -176,8 +173,8 @@ east, etc.). */
 /* No comment provided by engineer. */
 "None selected" = "None selected";
 
-/* No comment provided by engineer. */
-"Object ID" = "Object ID";
+/* A string identifying a utility network object. */
+"Object ID: %@" = "Object ID: %@";
 
 /* No comment provided by engineer. */
 "OK" = "OK";
