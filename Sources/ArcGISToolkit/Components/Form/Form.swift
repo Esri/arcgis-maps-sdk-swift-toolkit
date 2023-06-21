@@ -44,17 +44,17 @@ public struct Form: View {
                     if let element = container.element as? FieldFeatureFormElement {
                         FormElementHeader(element: element)
                         switch element.inputType.input {
-                        case is TextBoxFeatureFormInput:
+                        case let `input` as TextBoxFeatureFormInput:
                             SingleLineTextEntry(
                                 title: element.label,
                                 text: attributes?[element.fieldName] as? String ?? "",
                                 prompt: element.hint,
-                                input: element.inputType.input as! TextBoxFeatureFormInput
+                                input: `input`
                             )
-                        case is TextAreaFeatureFormInput:
+                        case let `input` as TextAreaFeatureFormInput:
                             MultiLineTextEntry(
                                 text: attributes?[element.fieldName] as? String ?? "",
-                                input: element.inputType.input as! TextAreaFeatureFormInput
+                                input: `input`
                             )
                         default:
                             EmptyView()
