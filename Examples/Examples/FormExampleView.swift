@@ -15,7 +15,7 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-struct FormsExampleView: View {
+struct FormExampleView: View {
     @State private var map = Map(url: .sampleData)!
     
     @State private var feature: ArcGISFeature?
@@ -36,16 +36,26 @@ struct FormsExampleView: View {
                         feature = nil
                     }
                 }
-                .floatingPanel(
-                    selectedDetent: .constant(.half),
-                    horizontalAlignment: .leading,
-                    isPresented: Binding { feature != nil } set: { _ in }
-                ) {
-                    Group {
-                        if let feature {
-                            Forms(map: map, feature: feature)
-                                .padding()
-                        }
+//                .floatingPanel(
+//                    selectedDetent: .constant(.half),
+//                    horizontalAlignment: .leading,
+//                    isPresented: Binding { feature != nil } set: { _ in }
+//                ) {
+//                    Group {
+//                        if let feature {
+//                            Form(map: map, feature: feature)
+//                                .padding()
+//                        }
+//                    }
+//                }
+                .sheet(isPresented: Binding { feature != nil } set: { _ in }) {
+                    if #available(iOS 16.0, *) {
+                        Form(map: map, feature: feature!)
+                            .presentationDetents([.medium])
+                            .padding()
+                    } else {
+                        Form(map: map, feature: feature!)
+                            .padding()
                     }
                 }
                 .ignoresSafeArea(.keyboard)
@@ -53,7 +63,7 @@ struct FormsExampleView: View {
     }
 }
 
-extension FormsExampleView {
+extension FormExampleView {
     /// Identifies features, if any, at the current screen point.
     /// - Parameter proxy: The proxy to use for identification.
     /// - Returns: The first identified feature.
@@ -77,8 +87,7 @@ extension FormsExampleView {
     }
 }
 
-extension URL {
+private extension URL {
     static var sampleData: Self {
-        .init(string: "<#URL#>")!
     }
 }
