@@ -19,9 +19,6 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text: String
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating if the text editor is active.
-***REMOVED***@FocusState var isActive: Bool
-***REMOVED***
 ***REMOVED******REMOVED***/ A `TextAreaFeatureFormInput` which acts as a configuration.
 ***REMOVED***let input: TextAreaFeatureFormInput
 ***REMOVED***
@@ -35,21 +32,16 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***VStack(alignment: .leading, spacing: 2) {
-***REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: 100, maxHeight: 200)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(2)
-***REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.secondary.opacity(0.5), lineWidth: 0.5)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isActive)
-***REMOVED******REMOVED******REMOVED***if isActive {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("\(text.count) / \(input.maxLength)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.black)
+***REMOVED******REMOVED***TextEditor(text: $text)
+***REMOVED******REMOVED******REMOVED***.frame(minHeight: 100, maxHeight: 200)
+***REMOVED******REMOVED******REMOVED***.formTextEntryBorder()
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Upon iOS 16 min support, the following can be swapped with
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** .scrollContentBackground(.hidden)
+***REMOVED******REMOVED******REMOVED******REMOVED***UITextView.appearance().backgroundColor = .clear
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***Text("\(text.count) / \(input.maxLength)")
+***REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED***
 ***REMOVED***

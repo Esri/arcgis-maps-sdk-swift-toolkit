@@ -43,10 +43,6 @@ struct SingleLineTextEntry: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***TextField(title, text: $text, prompt: Text(prompt))
-***REMOVED******REMOVED******REMOVED***.padding(2)
-***REMOVED******REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.secondary.opacity(0.5), lineWidth: 0.5)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.formTextEntryBorder()
 ***REMOVED***
 ***REMOVED***
