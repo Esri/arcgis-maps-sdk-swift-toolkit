@@ -26,8 +26,8 @@ struct MultiLineTextEntry: View {
     /// - Parameters:
     ///   - text: The current text value.
     ///   - input: A `TextAreaFeatureFormInput` which acts as a configuration.
-    init(text: String, input: TextAreaFeatureFormInput) {
-        self.text = text
+    init(text: String?, input: TextAreaFeatureFormInput) {
+        self.text = text ?? ""
         self.input = input
     }
     

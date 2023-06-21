@@ -46,14 +46,13 @@ public struct Form: View {
                         switch element.inputType.input {
                         case let `input` as TextBoxFeatureFormInput:
                             SingleLineTextEntry(
-                                title: element.label,
-                                text: attributes?[element.fieldName] as? String ?? "",
-                                prompt: element.hint,
+                                element: element,
+                                text: attributes?[element.fieldName] as? String,
                                 input: `input`
                             )
                         case let `input` as TextAreaFeatureFormInput:
                             MultiLineTextEntry(
-                                text: attributes?[element.fieldName] as? String ?? "",
+                                text: attributes?[element.fieldName] as? String,
                                 input: `input`
                             )
                         default:

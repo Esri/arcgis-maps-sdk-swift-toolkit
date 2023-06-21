@@ -20,10 +20,10 @@ struct SingleLineTextEntry: View {
     @State private var text: String
     
     /// The title of the item.
-    var title: String
+    let title: String
     
     /// The text to to be shown in the entry area if no value is present.
-    var prompt: String
+    let prompt: String
     
     /// A `TextBoxFeatureFormInput` which acts as a configuration.
     let input: TextBoxFeatureFormInput
@@ -34,10 +34,10 @@ struct SingleLineTextEntry: View {
     ///   - text: The current text value.
     ///   - prompt: The text to to be shown in the entry area if no value is present.
     ///   - input: A `TextBoxFeatureFormInput` which acts as a configuration.
-    init(title: String, text: String?, prompt: String, input: TextBoxFeatureFormInput) {
+    init(element: FieldFeatureFormElement, text: String?, input: TextBoxFeatureFormInput) {
         self.text = text ?? ""
-        self.title = title
-        self.prompt = prompt
+        self.title = element.label
+        self.prompt = element.hint
         self.input = input
     }
     
