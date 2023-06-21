@@ -15,7 +15,7 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-struct FormsExampleView: View {
+struct FormExampleView: View {
 ***REMOVED***@State private var map = Map(url: .sampleData)!
 ***REMOVED***
 ***REMOVED***@State private var feature: ArcGISFeature?
@@ -36,16 +36,26 @@ struct FormsExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***feature = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: .constant(.half),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: Binding { feature != nil ***REMOVED*** set: { _ in ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Forms(map: map, feature: feature)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: .constant(.half),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: Binding { feature != nil ***REMOVED*** set: { _ in ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Form(map: map, feature: feature)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: Binding { feature != nil ***REMOVED*** set: { _ in ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Form(map: map, feature: feature!)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Form(map: map, feature: feature!)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
@@ -53,7 +63,7 @@ struct FormsExampleView: View {
 ***REMOVED***
 ***REMOVED***
 
-extension FormsExampleView {
+extension FormExampleView {
 ***REMOVED******REMOVED***/ Identifies features, if any, at the current screen point.
 ***REMOVED******REMOVED***/ - Parameter proxy: The proxy to use for identification.
 ***REMOVED******REMOVED***/ - Returns: The first identified feature.
@@ -77,8 +87,7 @@ extension FormsExampleView {
 ***REMOVED***
 ***REMOVED***
 
-extension URL {
+private extension URL {
 ***REMOVED***static var sampleData: Self {
-***REMOVED******REMOVED***.init(string: "<#URL#>")!
 ***REMOVED***
 ***REMOVED***
