@@ -19,9 +19,6 @@ struct MultiLineTextEntry: View {
     /// The current text value.
     @State private var text: String
     
-    /// A Boolean value indicating if the text editor is active.
-    @FocusState var isActive: Bool
-    
     /// A `TextAreaFeatureFormInput` which acts as a configuration.
     let input: TextAreaFeatureFormInput
     
@@ -35,21 +32,16 @@ struct MultiLineTextEntry: View {
     }
     
     public var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            TextEditor(text: $text)
-                .frame(minHeight: 100, maxHeight: 200)
-                .padding(2)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(.secondary.opacity(0.5), lineWidth: 0.5)
-                }
-                .focused($isActive)
-            if isActive {
-                Text("\(text.count) / \(input.maxLength)")
-                    .font(.caption2)
-                    .foregroundStyle(.black)
+        TextEditor(text: $text)
+            .frame(minHeight: 100, maxHeight: 200)
+            .formTextEntryBorder()
+            .onAppear {
+                // Upon iOS 16 min support, the following can be swapped with
+                // .scrollContentBackground(.hidden)
+                UITextView.appearance().backgroundColor = .clear
             }
-        }
-        
+        Text("\(text.count) / \(input.maxLength)")
+            .font(.caption2)
+            .foregroundColor(.secondary)
     }
 }
