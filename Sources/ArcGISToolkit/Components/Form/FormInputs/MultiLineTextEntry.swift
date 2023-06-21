@@ -35,25 +35,18 @@ struct MultiLineTextEntry: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             TextEditor(text: $text)
+                .frame(minHeight: 100, maxHeight: 200)
                 .padding(1.5)
-                .border(.gray.opacity(0.2))
-                .cornerRadius(5)
-                .focused($isActive)
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        if isActive {
-                            Spacer()
-                            Button {
-                                isActive.toggle()
-                            } label: {
-                                Text("Done", bundle: .toolkitModule, comment: "Dismisses a keyboard.")
-                            }
-                        }
-                    }
+                .overlay {
+                    RoundedRectangle(cornerRadius: 5)
+                        .stroke(.secondary.opacity(0.5), lineWidth: 0.5)
                 }
-            Text("\(text.count) / \(config.maxLength)")
-                .font(.caption2)
-                .foregroundStyle(.black)
+                .focused($isActive)
+            if isActive {
+                Text("\(text.count) / \(config.maxLength)")
+                    .font(.caption2)
+                    .foregroundStyle(.black)
+            }
         }
         
     }
