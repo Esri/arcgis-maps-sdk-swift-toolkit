@@ -12,11 +12,11 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import FormsPlugin
 ***REMOVED***
 
-import FormsPlugin
-
 ***REMOVED***/ Forms allow users to edit information about GIS features.
+***REMOVED***/ - Since: 200.2
 public struct Form: View {
 ***REMOVED******REMOVED***/ Info obtained from the map's JSON which contains the underlying form definition.
 ***REMOVED***@State private var mapInfo: MapInfo?
@@ -24,6 +24,7 @@ public struct Form: View {
 ***REMOVED******REMOVED***/ The attributes of the provided feature.
 ***REMOVED***private var attributes: [String : Any]?
 ***REMOVED***
+***REMOVED******REMOVED***/ The map containing the underlying form definition.
 ***REMOVED***private let map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `Form` with the given map and feature.
@@ -51,12 +52,13 @@ public struct Form: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case is TextBoxFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SingleLineTextEntry(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: element.label,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: attributes?[element.fieldName] as? String ?? "",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: element.hint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: attributes?[element.fieldName] as? String ?? "",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: element.hint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***input: element.inputType.input as! TextBoxFeatureFormInput
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case is TextAreaFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***MultiLineTextEntry(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: attributes?[element.fieldName] as? String ?? "",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: attributes?[element.fieldName] as? String ?? "",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***input: element.inputType.input as! TextAreaFeatureFormInput
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
