@@ -36,6 +36,21 @@ struct FormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***feature = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present a Form in a native SwiftUI sheet
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: Binding { feature != nil ***REMOVED*** set: { _ in ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Form(map: map, feature: feature!)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Form(map: map, feature: feature!)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Or present a Form in a Floating Panel (provided via the Toolkit)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: .constant(.half),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
@@ -48,17 +63,6 @@ struct FormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: Binding { feature != nil ***REMOVED*** set: { _ in ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Form(map: map, feature: feature!)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Form(map: map, feature: feature!)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
