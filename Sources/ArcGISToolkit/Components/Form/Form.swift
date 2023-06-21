@@ -22,7 +22,7 @@ public struct Form: View {
 ***REMOVED***@State private var mapInfo: MapInfo?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The attributes of the provided feature.
-***REMOVED***private var attributes: [String : Any]?
+***REMOVED***private let attributes: [String : Any]?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map containing the underlying form definition.
 ***REMOVED***private let map: Map
