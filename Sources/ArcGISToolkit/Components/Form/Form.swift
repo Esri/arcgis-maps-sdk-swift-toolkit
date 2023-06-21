@@ -16,15 +16,18 @@ import SwiftUI
 
 import FormsPlugin
 
-public struct Forms: View {
-    @State private var rawJSON: String?
-    
+/// Forms allow users to edit information about GIS features.
+public struct Form: View {
+    /// Info obtained from the map's JSON which contains the underlying form definition.
     @State private var mapInfo: MapInfo?
     
+    /// The attributes of the provided feature.
     private var attributes: [String : Any]?
     
     private let map: Map
     
+    /// Creates a `Form` with the given map and feature.
+    /// - Parameter map: The map containing the underlying form definition.
     /// - Parameter feature: The feature to be edited.
     public init(map: Map, feature: ArcGISFeature) {
         self.map = map
@@ -68,15 +71,9 @@ public struct Forms: View {
             }
         }
         .task {
-            try? await map.load()
-            rawJSON = map.toJSON()
-            
+            let rawJSON = map.toJSON()
             let decoder = JSONDecoder()
-            do {
-                mapInfo = try decoder.decode(MapInfo.self, from: self.rawJSON!.data(using: .utf8)!)
-            } catch {
-                print(error.localizedDescription)
-            }
+            mapInfo = try? decoder.decode(MapInfo.self, from: rawJSON.data(using: .utf8)!)
         }
     }
 }
