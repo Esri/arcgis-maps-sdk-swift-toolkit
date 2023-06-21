@@ -32,16 +32,17 @@ struct MultiLineTextEntry: View {
     }
     
     public var body: some View {
-        TextEditor(text: $text)
-            .frame(minHeight: 100, maxHeight: 200)
-            .formTextEntryBorder()
-            .onAppear {
-                // Upon iOS 16 min support, the following can be swapped with
-                // .scrollContentBackground(.hidden)
-                UITextView.appearance().backgroundColor = .clear
+        Group {
+            if #available(iOS 16.0, *) {
+                TextEditor(text: $text)
+                    .scrollContentBackground(.hidden)
+            } else {
+                TextEditor(text: $text)
             }
-        Text("\(text.count) / \(input.maxLength)")
-            .font(.caption2)
-            .foregroundColor(.secondary)
+        }
+        .background(.clear)
+        .frame(minHeight: 100, maxHeight: 200)
+        .formTextEntryBorder()
+        TextEntryProgress(current: text.count, max: input.maxLength)
     }
 }

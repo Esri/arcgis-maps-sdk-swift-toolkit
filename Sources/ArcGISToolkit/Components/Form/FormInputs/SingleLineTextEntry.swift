@@ -44,5 +44,6 @@ struct SingleLineTextEntry: View {
     public var body: some View {
         TextField(title, text: $text, prompt: Text(prompt))
             .formTextEntryBorder()
+        TextEntryProgress(current: text.count, max: input.maxLength)
     }
 }
