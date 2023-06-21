@@ -11,29 +11,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import FormsPlugin
 import SwiftUI
 
 /// A view for single line text entry.
 struct SingleLineTextEntry: View {
+    /// The current text value.
     @State private var text: String
     
+    /// The title of the item.
     var title: String
     
+    /// The text to to be shown in the entry area if no value is present.
     var prompt: String
+    
+    /// A `TextBoxFeatureFormInput` which acts as a configuration.
+    let input: TextBoxFeatureFormInput
     
     /// Creates a view for single line text entry.
     /// - Parameters:
     ///   - title: The title of the item.
-    ///   - value: The current value.
+    ///   - text: The current text value.
     ///   - prompt: The text to to be shown in the entry area if no value is present.
-    init(title: String, value: String?, prompt: String) {
-        self.text = value ?? ""
+    ///   - input: A `TextBoxFeatureFormInput` which acts as a configuration.
+    init(title: String, text: String?, prompt: String, input: TextBoxFeatureFormInput) {
+        self.text = text ?? ""
         self.title = title
         self.prompt = prompt
+        self.input = input
     }
     
     public var body: some View {
         TextField(title, text: $text, prompt: Text(prompt))
-            .textFieldStyle(.roundedBorder)
+            .padding(2)
+            .overlay {
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(.secondary.opacity(0.5), lineWidth: 0.5)
+            }
     }
 }
