@@ -11,19 +11,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
 import SwiftUI
 
-/// A view shown at the top of each field element in a form.
-struct FormElementHeader: View {
-    /// The form element the header is for.
-    let element: FieldFeatureFormElement
+/// Displays the number of characters entered in a text field out of the maximum.
+struct TextEntryProgress: View {
+    /// The number of characters entered.
+    let current: Int
+    
+    /// The maximum number of characters.
+    let max: Int
     
     var body: some View {
-        Text(element.label)
-            .font(.headline)
-        Text(element.description)
-            .font(.footnote)
-            .foregroundColor(.secondary)
+        Text(
+            "\(current) / \(max)",
+            bundle: .toolkitModule,
+            comment: "The number of characters entered in a text field out of the maximum."
+        )
+        .font(.caption)
+        .foregroundColor(.secondary)
     }
 }
