@@ -1,6 +1,3 @@
-/* No comment provided by engineer. */
-"(%lld)" = "(%lld)";
-
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld selected";
 
