@@ -30,9 +30,8 @@ struct SingleLineTextEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for single line text entry.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - title: The title of the item.
+***REMOVED******REMOVED***/   - element: The form element that corresponds to this text field.
 ***REMOVED******REMOVED***/   - text: The current text value.
-***REMOVED******REMOVED***/   - prompt: The text to to be shown in the entry area if no value is present.
 ***REMOVED******REMOVED***/   - input: A `TextBoxFeatureFormInput` which acts as a configuration.
 ***REMOVED***init(element: FieldFeatureFormElement, text: String?, input: TextBoxFeatureFormInput) {
 ***REMOVED******REMOVED***self.text = text ?? ""
