@@ -349,7 +349,6 @@ public struct UtilityNetworkTrace: View {
             List {
                 Section(String.featureResultsTitle) {
                     DisclosureGroup(
-                        "(\(viewModel.selectedTrace?.elementResults.count ?? 0))",
                         isExpanded: Binding {
                             isFocused(traceViewingActivity: .viewingFeatureResults)
                         } set: {
@@ -370,15 +369,17 @@ public struct UtilityNetworkTrace: View {
                                 }
                             }
                         }
+                    } label: {
+                        Text(viewModel.selectedTrace?.elementResults.count ?? 0, format: .number)
                     }
                 }
                 Section(String.functionResultsSectionTitle) {
                     DisclosureGroup(
-                        "(\(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0))",
-                        isExpanded: Binding(
-                            get: { isFocused(traceViewingActivity: .viewingFunctionResults) },
-                            set: { currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil) }
-                        )
+                        isExpanded: Binding {
+                            isFocused(traceViewingActivity: .viewingFunctionResults)
+                        } set: {
+                            currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil)
+                        }
                     ) {
                         if let selectedTrace = viewModel.selectedTrace {
                             ForEach(selectedTrace.functionOutputs, id: \.objectID) { item in
@@ -398,6 +399,8 @@ public struct UtilityNetworkTrace: View {
                                 }
                             }
                         }
+                    } label: {
+                        Text(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0, format: .number)
                     }
                 }
                 Section {
