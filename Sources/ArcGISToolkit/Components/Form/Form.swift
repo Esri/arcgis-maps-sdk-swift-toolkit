@@ -45,9 +45,6 @@ public struct Form: View {
                     if let element = container.element as? FieldFeatureFormElement {
                         Text(element.label)
                             .font(.headline)
-                        Text(element.description)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
                         switch element.inputType.input {
                         case is TextBoxFeatureFormInput:
                             SingleLineTextEntry(
@@ -67,6 +64,11 @@ public struct Form: View {
                                 bundle: .toolkitModule,
                                 comment: "An error when a form element is of an unknown type."
                             )
+                        }
+                        if !element.description.isEmpty {
+                            Text(element.description)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                         }
                     }
                 }
