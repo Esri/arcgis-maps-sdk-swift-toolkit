@@ -22,7 +22,7 @@ public struct Form: View {
     @State private var mapInfo: MapInfo?
     
     /// The attributes of the provided feature.
-    private var attributes: [String : Any]?
+    private let attributes: [String : Any]?
     
     /// The map containing the underlying form definition.
     private let map: Map
