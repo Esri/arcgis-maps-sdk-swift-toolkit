@@ -20,10 +20,10 @@ struct SingleLineTextEntry: View {
 ***REMOVED***@State private var text: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title of the item.
-***REMOVED***var title: String
+***REMOVED***let title: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The text to to be shown in the entry area if no value is present.
-***REMOVED***var prompt: String
+***REMOVED***let prompt: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ A `TextBoxFeatureFormInput` which acts as a configuration.
 ***REMOVED***let input: TextBoxFeatureFormInput
@@ -34,10 +34,10 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***/   - text: The current text value.
 ***REMOVED******REMOVED***/   - prompt: The text to to be shown in the entry area if no value is present.
 ***REMOVED******REMOVED***/   - input: A `TextBoxFeatureFormInput` which acts as a configuration.
-***REMOVED***init(title: String, text: String?, prompt: String, input: TextBoxFeatureFormInput) {
+***REMOVED***init(element: FieldFeatureFormElement, text: String?, input: TextBoxFeatureFormInput) {
 ***REMOVED******REMOVED***self.text = text ?? ""
-***REMOVED******REMOVED***self.title = title
-***REMOVED******REMOVED***self.prompt = prompt
+***REMOVED******REMOVED***self.title = element.label
+***REMOVED******REMOVED***self.prompt = element.hint
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
 ***REMOVED***

@@ -26,8 +26,8 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - text: The current text value.
 ***REMOVED******REMOVED***/   - input: A `TextAreaFeatureFormInput` which acts as a configuration.
-***REMOVED***init(text: String, input: TextAreaFeatureFormInput) {
-***REMOVED******REMOVED***self.text = text
+***REMOVED***init(text: String?, input: TextAreaFeatureFormInput) {
+***REMOVED******REMOVED***self.text = text ?? ""
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
 ***REMOVED***
