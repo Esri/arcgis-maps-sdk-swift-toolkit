@@ -30,9 +30,8 @@ struct SingleLineTextEntry: View {
     
     /// Creates a view for single line text entry.
     /// - Parameters:
-    ///   - title: The title of the item.
+    ///   - element: The form element that corresponds to this text field.
     ///   - text: The current text value.
-    ///   - prompt: The text to to be shown in the entry area if no value is present.
     ///   - input: A `TextBoxFeatureFormInput` which acts as a configuration.
     init(element: FieldFeatureFormElement, text: String?, input: TextBoxFeatureFormInput) {
         self.text = text ?? ""
