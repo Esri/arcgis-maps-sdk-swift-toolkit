@@ -36,6 +36,21 @@ struct FormExampleView: View {
                         feature = nil
                     }
                 }
+                .ignoresSafeArea(.keyboard)
+                
+                // Present a Form in a native SwiftUI sheet
+                .sheet(isPresented: Binding { feature != nil } set: { _ in }) {
+                    if #available(iOS 16.0, *) {
+                        Form(map: map, feature: feature!)
+                            .presentationDetents([.medium])
+                            .padding()
+                    } else {
+                        Form(map: map, feature: feature!)
+                            .padding()
+                    }
+                }
+            
+                // Or present a Form in a Floating Panel (provided via the Toolkit)
 //                .floatingPanel(
 //                    selectedDetent: .constant(.half),
 //                    horizontalAlignment: .leading,
@@ -48,17 +63,6 @@ struct FormExampleView: View {
 //                        }
 //                    }
 //                }
-                .sheet(isPresented: Binding { feature != nil } set: { _ in }) {
-                    if #available(iOS 16.0, *) {
-                        Form(map: map, feature: feature!)
-                            .presentationDetents([.medium])
-                            .padding()
-                    } else {
-                        Form(map: map, feature: feature!)
-                            .padding()
-                    }
-                }
-                .ignoresSafeArea(.keyboard)
         }
     }
 }

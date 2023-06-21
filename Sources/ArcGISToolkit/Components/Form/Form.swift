@@ -38,13 +38,11 @@ public struct Form: View {
     public var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                Text(mapInfo?.operationalLayers.first?.featureFormDefinition.title ?? "Form Title Unavailable")
-                    .font(.largeTitle)
+                FormHeader(title: formDefinition?.title)
                 Divider()
-                ForEach(mapInfo?.operationalLayers.first?.featureFormDefinition.formElements ?? [], id: \.element?.label) { container in
+                ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
                     if let element = container.element as? FieldFeatureFormElement {
-                        Text(element.label)
-                            .font(.headline)
+                        FormElementHeader(element: element)
                         switch element.inputType.input {
                         case is TextBoxFeatureFormInput:
                             SingleLineTextEntry(
@@ -59,11 +57,7 @@ public struct Form: View {
                                 input: element.inputType.input as! TextAreaFeatureFormInput
                             )
                         default:
-                            Text(
-                                "Unknown Input Type",
-                                bundle: .toolkitModule,
-                                comment: "An error when a form element is of an unknown type."
-                            )
+                            EmptyView()
                         }
                         if !element.description.isEmpty {
                             Text(element.description)
@@ -79,5 +73,11 @@ public struct Form: View {
             let decoder = JSONDecoder()
             mapInfo = try? decoder.decode(MapInfo.self, from: rawJSON.data(using: .utf8)!)
         }
+    }
+}
+
+extension Form {
+    var formDefinition: FeatureFormDefinition? {
+        mapInfo?.operationalLayers.first?.featureFormDefinition
     }
 }
