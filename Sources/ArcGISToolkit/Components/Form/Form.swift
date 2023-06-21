@@ -71,6 +71,7 @@ public struct Form: View {
 }
 
 extension Form {
+    /// A shortcut to `mapInfo`s first operational layer form definition.
     var formDefinition: FeatureFormDefinition? {
         mapInfo?.operationalLayers.first?.featureFormDefinition
     }
