@@ -393,7 +393,11 @@ public struct UtilityNetworkTrace: View {
                                         if let result = item.result as? Double {
                                             Text(result, format: .number)
                                         } else {
-                                            Text("N/A", bundle: .toolkitModule, comment: "Shorthand for Not Available")
+                                            Text(
+                                                "Not Available",
+                                                bundle: .toolkitModule,
+                                                comment: "A trace function output result is not available."
+                                            )
                                         }
                                     }
                                 }

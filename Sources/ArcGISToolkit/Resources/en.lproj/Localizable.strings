@@ -134,9 +134,6 @@ east, etc.). */
 /* No comment provided by engineer. */
 "Mode" = "Mode";
 
-/* Shorthand for Not Available */
-"N/A" = "N/A";
-
 /* No comment provided by engineer. */
 "Name" = "Name";
 
@@ -166,6 +163,9 @@ east, etc.). */
 
 /* No comment provided by engineer. */
 "None selected" = "None selected";
+
+/* A trace function output result is not available. */
+"Not Available" = "Not Available";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Object ID: %@";
