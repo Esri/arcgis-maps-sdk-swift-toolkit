@@ -250,7 +250,7 @@ public struct UtilityNetworkTrace: View {
                         startingPointsList
                     } label: {
                         Text(
-                            "\(viewModel.pendingTrace.startingPoints.count, specifier: "%lld") selected",
+                            "\(viewModel.pendingTrace.startingPoints.count) selected",
                             bundle: .toolkitModule,
                             comment: "A label declaring the number of starting points selected for a utility network trace."
                         )
