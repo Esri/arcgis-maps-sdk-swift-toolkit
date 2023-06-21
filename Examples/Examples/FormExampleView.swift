@@ -40,10 +40,12 @@ struct FormExampleView: View {
                 
                 // Present a Form in a native SwiftUI sheet
                 .sheet(isPresented: Binding { feature != nil } set: { _ in }) {
-                    if #available(iOS 16.0, *) {
+                    if #available(iOS 16.4, *) {
                         Form(map: map, feature: feature!)
-                            .presentationDetents([.medium])
                             .padding()
+                            .presentationBackground(.thinMaterial)
+                            .presentationBackgroundInteraction(.enabled)
+                            .presentationDetents([.medium])
                     } else {
                         Form(map: map, feature: feature!)
                             .padding()

@@ -43,10 +43,6 @@ struct SingleLineTextEntry: View {
     
     public var body: some View {
         TextField(title, text: $text, prompt: Text(prompt))
-            .padding(2)
-            .overlay {
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(.secondary.opacity(0.5), lineWidth: 0.5)
-            }
+            .formTextEntryBorder()
     }
 }
