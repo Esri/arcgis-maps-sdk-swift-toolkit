@@ -35,25 +35,18 @@ struct MultiLineTextEntry: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading, spacing: 2) {
 ***REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: 100, maxHeight: 200)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(1.5)
-***REMOVED******REMOVED******REMOVED******REMOVED***.border(.gray.opacity(0.2))
-***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(5)
-***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isActive)
-***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isActive {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isActive.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Done", bundle: .toolkitModule, comment: "Dismisses a keyboard.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.secondary.opacity(0.5), lineWidth: 0.5)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Text("\(text.count) / \(config.maxLength)")
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.black)
+***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isActive)
+***REMOVED******REMOVED******REMOVED***if isActive {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("\(text.count) / \(config.maxLength)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.black)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

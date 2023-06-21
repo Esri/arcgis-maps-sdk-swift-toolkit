@@ -16,15 +16,18 @@
 
 import FormsPlugin
 
-public struct Forms: View {
-***REMOVED***@State private var rawJSON: String?
-***REMOVED***
+***REMOVED***/ Forms allow users to edit information about GIS features.
+public struct Form: View {
+***REMOVED******REMOVED***/ Info obtained from the map's JSON which contains the underlying form definition.
 ***REMOVED***@State private var mapInfo: MapInfo?
 ***REMOVED***
+***REMOVED******REMOVED***/ The attributes of the provided feature.
 ***REMOVED***private var attributes: [String : Any]?
 ***REMOVED***
 ***REMOVED***private let map: Map
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `Form` with the given map and feature.
+***REMOVED******REMOVED***/ - Parameter map: The map containing the underlying form definition.
 ***REMOVED******REMOVED***/ - Parameter feature: The feature to be edited.
 ***REMOVED***public init(map: Map, feature: ArcGISFeature) {
 ***REMOVED******REMOVED***self.map = map
@@ -68,15 +71,9 @@ public struct Forms: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***try? await map.load()
-***REMOVED******REMOVED******REMOVED***rawJSON = map.toJSON()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let rawJSON = map.toJSON()
 ***REMOVED******REMOVED******REMOVED***let decoder = JSONDecoder()
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***mapInfo = try decoder.decode(MapInfo.self, from: self.rawJSON!.data(using: .utf8)!)
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***mapInfo = try? decoder.decode(MapInfo.self, from: rawJSON.data(using: .utf8)!)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
