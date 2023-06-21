@@ -11,19 +11,23 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import FormsPlugin
 ***REMOVED***
 
-***REMOVED***/ A view shown at the top of each field element in a form.
-struct FormElementHeader: View {
-***REMOVED******REMOVED***/ The form element the header is for.
-***REMOVED***let element: FieldFeatureFormElement
+***REMOVED***/ Displays the number of characters entered in a text field out of the maximum.
+struct TextEntryProgress: View {
+***REMOVED******REMOVED***/ The number of characters entered.
+***REMOVED***let current: Int
+***REMOVED***
+***REMOVED******REMOVED***/ The maximum number of characters.
+***REMOVED***let max: Int
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(element.label)
-***REMOVED******REMOVED******REMOVED***.font(.headline)
-***REMOVED******REMOVED***Text(element.description)
-***REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"\(current) / \(max)",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "The number of characters entered in a text field out of the maximum."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED***
 ***REMOVED***

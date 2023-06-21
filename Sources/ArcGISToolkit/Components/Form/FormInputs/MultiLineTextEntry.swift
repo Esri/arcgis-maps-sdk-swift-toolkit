@@ -32,16 +32,17 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***TextEditor(text: $text)
-***REMOVED******REMOVED******REMOVED***.frame(minHeight: 100, maxHeight: 200)
-***REMOVED******REMOVED******REMOVED***.formTextEntryBorder()
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Upon iOS 16 min support, the following can be swapped with
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** .scrollContentBackground(.hidden)
-***REMOVED******REMOVED******REMOVED******REMOVED***UITextView.appearance().backgroundColor = .clear
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Text("\(text.count) / \(input.maxLength)")
-***REMOVED******REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED***
+***REMOVED******REMOVED***.background(.clear)
+***REMOVED******REMOVED***.frame(minHeight: 100, maxHeight: 200)
+***REMOVED******REMOVED***.formTextEntryBorder()
+***REMOVED******REMOVED***TextEntryProgress(current: text.count, max: input.maxLength)
 ***REMOVED***
 ***REMOVED***
