@@ -12,11 +12,11 @@
 // limitations under the License.
 
 import ArcGIS
+import FormsPlugin
 import SwiftUI
 
-import FormsPlugin
-
 /// Forms allow users to edit information about GIS features.
+/// - Since: 200.2
 public struct Form: View {
     /// Info obtained from the map's JSON which contains the underlying form definition.
     @State private var mapInfo: MapInfo?
@@ -24,6 +24,7 @@ public struct Form: View {
     /// The attributes of the provided feature.
     private var attributes: [String : Any]?
     
+    /// The map containing the underlying form definition.
     private let map: Map
     
     /// Creates a `Form` with the given map and feature.
@@ -51,12 +52,13 @@ public struct Form: View {
                         case is TextBoxFeatureFormInput:
                             SingleLineTextEntry(
                                 title: element.label,
-                                value: attributes?[element.fieldName] as? String ?? "",
-                                prompt: element.hint
+                                text: attributes?[element.fieldName] as? String ?? "",
+                                prompt: element.hint,
+                                input: element.inputType.input as! TextBoxFeatureFormInput
                             )
                         case is TextAreaFeatureFormInput:
                             MultiLineTextEntry(
-                                value: attributes?[element.fieldName] as? String ?? "",
+                                text: attributes?[element.fieldName] as? String ?? "",
                                 input: element.inputType.input as! TextAreaFeatureFormInput
                             )
                         default:

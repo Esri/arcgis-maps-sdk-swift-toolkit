@@ -15,35 +15,37 @@ import FormsPlugin
 import SwiftUI
 
 /// A view for text entry spanning multiple lines.
-///
-/// Includes UI for easy keyboard dismissal upon completion.
 struct MultiLineTextEntry: View {
+    /// The current text value.
     @State private var text: String
     
+    /// A Boolean value indicating if the text editor is active.
     @FocusState var isActive: Bool
     
-    let config: TextAreaFeatureFormInput
+    /// A `TextAreaFeatureFormInput` which acts as a configuration.
+    let input: TextAreaFeatureFormInput
     
     /// Creates a view for text entry spanning multiple lines.
     /// - Parameters:
-    ///   - value: The current value.
-    init(value: String, input: TextAreaFeatureFormInput) {
-        self.text = value
-        self.config = input
+    ///   - text: The current text value.
+    ///   - input: A `TextAreaFeatureFormInput` which acts as a configuration.
+    init(text: String, input: TextAreaFeatureFormInput) {
+        self.text = text
+        self.input = input
     }
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             TextEditor(text: $text)
                 .frame(minHeight: 100, maxHeight: 200)
-                .padding(1.5)
+                .padding(2)
                 .overlay {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.5), lineWidth: 0.5)
                 }
                 .focused($isActive)
             if isActive {
-                Text("\(text.count) / \(config.maxLength)")
+                Text("\(text.count) / \(input.maxLength)")
                     .font(.caption2)
                     .foregroundStyle(.black)
             }
