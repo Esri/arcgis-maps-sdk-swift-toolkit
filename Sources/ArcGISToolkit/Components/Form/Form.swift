@@ -71,6 +71,7 @@ public struct Form: View {
 ***REMOVED***
 
 extension Form {
+***REMOVED******REMOVED***/ A shortcut to `mapInfo`s first operational layer form definition.
 ***REMOVED***var formDefinition: FeatureFormDefinition? {
 ***REMOVED******REMOVED***mapInfo?.operationalLayers.first?.featureFormDefinition
 ***REMOVED***
