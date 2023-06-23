@@ -22,12 +22,8 @@ struct TextEntryProgress: View {
     let max: Int
     
     var body: some View {
-        Text(
-            "\(current) / \(max)",
-            bundle: .toolkitModule,
-            comment: "The number of characters entered in a text field out of the maximum."
-        )
-        .font(.caption)
-        .foregroundColor(.secondary)
+        Text(current, format: .number)
+            .font(.caption)
+            .foregroundColor(.secondary)
     }
 }
