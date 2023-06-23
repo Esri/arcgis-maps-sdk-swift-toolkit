@@ -41,23 +41,8 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: formDefinition?.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = container.element as? FieldFeatureFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch element.inputType.input {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let `input` as TextBoxFeatureFormInput:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SingleLineTextEntry(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element: element,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: attributes?[element.fieldName] as? String,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***input: `input`
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let `input` as TextAreaFeatureFormInput:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***MultiLineTextEntry(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element: element,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: attributes?[element.fieldName] as? String,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***input: `input`
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = container.element {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -74,5 +59,51 @@ extension FormView {
 ***REMOVED******REMOVED***/ A shortcut to `mapInfo`s first operational layer form definition.
 ***REMOVED***var formDefinition: FeatureFormDefinition? {
 ***REMOVED******REMOVED***mapInfo?.operationalLayers.first?.featureFormDefinition
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Makes UI for a form element.
+***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
+***REMOVED***@ViewBuilder func makeElement(_ element: FeatureFormElement) -> some View {
+***REMOVED******REMOVED***switch element {
+***REMOVED******REMOVED***case let element as FieldFeatureFormElement:
+***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
+***REMOVED******REMOVED***case let element as GroupFeatureFormElement:
+***REMOVED******REMOVED******REMOVED***makeGroupElement(element)
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Makes UI for a field form element.
+***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
+***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFeatureFormElement) -> some View {
+***REMOVED******REMOVED***switch element.inputType.input {
+***REMOVED******REMOVED***case let `input` as TextBoxFeatureFormInput:
+***REMOVED******REMOVED******REMOVED***SingleLineTextEntry(
+***REMOVED******REMOVED******REMOVED******REMOVED***element: element,
+***REMOVED******REMOVED******REMOVED******REMOVED***text: attributes?[element.fieldName] as? String,
+***REMOVED******REMOVED******REMOVED******REMOVED***input: `input`
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case let `input` as TextAreaFeatureFormInput:
+***REMOVED******REMOVED******REMOVED***MultiLineTextEntry(
+***REMOVED******REMOVED******REMOVED******REMOVED***element: element,
+***REMOVED******REMOVED******REMOVED******REMOVED***text: attributes?[element.fieldName] as? String,
+***REMOVED******REMOVED******REMOVED******REMOVED***input: `input`
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Makes UI for a group form element.
+***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
+***REMOVED***@ViewBuilder func makeGroupElement(_ element: GroupFeatureFormElement) -> some View {
+***REMOVED******REMOVED***DisclosureGroup(element.label) {
+***REMOVED******REMOVED******REMOVED***ForEach(element.formElements, id: \.element?.label) { container in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let element = container.element as? FieldFeatureFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFieldElement(element)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
