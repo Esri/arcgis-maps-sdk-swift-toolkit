@@ -16,6 +16,7 @@
 ***REMOVED***
 
 struct FormExampleView: View {
+***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
 ***REMOVED***@State private var map = Map(url: .sampleData)!
 ***REMOVED***
 ***REMOVED***@State private var feature: ArcGISFeature?
