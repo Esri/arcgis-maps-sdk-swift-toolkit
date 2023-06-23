@@ -38,6 +38,9 @@ struct FormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present a FormView in a native SwiftUI sheet
 ***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: Binding { feature != nil ***REMOVED*** set: { _ in ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Clear the feature on dismiss
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***feature = nil
+***REMOVED******REMOVED******REMOVED*** content: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16.4, *) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView(map: map, feature: feature!)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
