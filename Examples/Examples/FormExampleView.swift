@@ -75,8 +75,12 @@ struct FormExampleView: View {
 //                ) {
 //                    Group {
 //                        if let feature {
-//                            FormView(map: map, feature: feature)
-//                                .padding()
+//                            FormView(map: map, feature: feature) {
+//                                self.feature = nil
+//                            } onCancelled: {
+//                                self.feature = nil
+//                            }
+//                            .padding()
 //                        }
 //                    }
 //                }
