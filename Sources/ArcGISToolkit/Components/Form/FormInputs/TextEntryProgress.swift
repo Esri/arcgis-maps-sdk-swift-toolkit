@@ -22,12 +22,8 @@ struct TextEntryProgress: View {
 ***REMOVED***let max: Int
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"\(current) / \(max)",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "The number of characters entered in a text field out of the maximum."
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED***Text(current, format: .number)
+***REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED***
 ***REMOVED***
