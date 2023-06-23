@@ -45,7 +45,7 @@ struct FormExampleView: View {
                         FormView(map: map, feature: feature!)
                             .padding()
                             .presentationBackground(.thinMaterial)
-                            .presentationBackgroundInteraction(.enabled)
+                            .presentationBackgroundInteraction(.enabled(upThrough: .medium))
                             .presentationDetents([.medium])
                     } else {
                         FormView(map: map, feature: feature!)
