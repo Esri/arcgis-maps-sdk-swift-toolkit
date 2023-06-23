@@ -16,6 +16,7 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FormExampleView: View {
+    /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
     
     @State private var feature: ArcGISFeature?
