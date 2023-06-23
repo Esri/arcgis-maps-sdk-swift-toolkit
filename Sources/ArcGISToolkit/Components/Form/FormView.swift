@@ -17,7 +17,7 @@ import SwiftUI
 
 /// Forms allow users to edit information about GIS features.
 /// - Since: 200.2
-public struct Form: View {
+public struct FormView: View {
     /// Info obtained from the map's JSON which contains the underlying form definition.
     @State private var mapInfo: MapInfo?
     
@@ -27,7 +27,7 @@ public struct Form: View {
     /// The map containing the underlying form definition.
     private let map: Map
     
-    /// Creates a `Form` with the given map and feature.
+    /// Creates a `FormView` with the given map and feature.
     /// - Parameter map: The map containing the underlying form definition.
     /// - Parameter feature: The feature to be edited.
     public init(map: Map, feature: ArcGISFeature) {
@@ -70,7 +70,7 @@ public struct Form: View {
     }
 }
 
-extension Form {
+extension FormView {
     /// A shortcut to `mapInfo`s first operational layer form definition.
     var formDefinition: FeatureFormDefinition? {
         mapInfo?.operationalLayers.first?.featureFormDefinition

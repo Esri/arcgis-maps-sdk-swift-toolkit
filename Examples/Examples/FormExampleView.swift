@@ -36,21 +36,21 @@ struct FormExampleView: View {
                 }
                 .ignoresSafeArea(.keyboard)
                 
-                // Present a Form in a native SwiftUI sheet
+                // Present a FormView in a native SwiftUI sheet
                 .sheet(isPresented: Binding { feature != nil } set: { _ in }) {
                     if #available(iOS 16.4, *) {
-                        Form(map: map, feature: feature!)
+                        FormView(map: map, feature: feature!)
                             .padding()
                             .presentationBackground(.thinMaterial)
                             .presentationBackgroundInteraction(.enabled)
                             .presentationDetents([.medium])
                     } else {
-                        Form(map: map, feature: feature!)
+                        FormView(map: map, feature: feature!)
                             .padding()
                     }
                 }
             
-                // Or present a Form in a Floating Panel (provided via the Toolkit)
+                // Or present a FormView in a Floating Panel (provided via the Toolkit)
 //                .floatingPanel(
 //                    selectedDetent: .constant(.half),
 //                    horizontalAlignment: .leading,
@@ -58,7 +58,7 @@ struct FormExampleView: View {
 //                ) {
 //                    Group {
 //                        if let feature {
-//                            Form(map: map, feature: feature)
+//                            FormView(map: map, feature: feature)
 //                                .padding()
 //                        }
 //                    }
