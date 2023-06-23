@@ -19,19 +19,25 @@ struct MultiLineTextEntry: View {
     /// The current text value.
     @State private var text: String
     
+    /// The form element that corresponds to this text field.
+    let element: FieldFeatureFormElement
+    
     /// A `TextAreaFeatureFormInput` which acts as a configuration.
     let input: TextAreaFeatureFormInput
     
     /// Creates a view for text entry spanning multiple lines.
     /// - Parameters:
+    ///   - element: The form element that corresponds to this text field.
     ///   - text: The current text value.
     ///   - input: A `TextAreaFeatureFormInput` which acts as a configuration.
-    init(text: String?, input: TextAreaFeatureFormInput) {
+    init(element: FieldFeatureFormElement, text: String?, input: TextAreaFeatureFormInput) {
+        self.element =  element
         self.text = text ?? ""
         self.input = input
     }
     
     public var body: some View {
+        FormElementHeader(element: element)
         Group {
             if #available(iOS 16.0, *) {
                 TextEditor(text: $text)
@@ -43,6 +49,10 @@ struct MultiLineTextEntry: View {
         .background(.clear)
         .frame(minHeight: 100, maxHeight: 200)
         .formTextEntryBorder()
-        TextEntryProgress(current: text.count, max: input.maxLength)
+        HStack {
+            FormElementFooter(element: element)
+            Spacer()
+            TextEntryProgress(current: text.count, max: input.maxLength)
+        }
     }
 }

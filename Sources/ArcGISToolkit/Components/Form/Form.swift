@@ -42,7 +42,6 @@ public struct Form: View {
                 Divider()
                 ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
                     if let element = container.element as? FieldFeatureFormElement {
-                        FormElementHeader(element: element)
                         switch element.inputType.input {
                         case let `input` as TextBoxFeatureFormInput:
                             SingleLineTextEntry(
@@ -52,6 +51,7 @@ public struct Form: View {
                             )
                         case let `input` as TextAreaFeatureFormInput:
                             MultiLineTextEntry(
+                                element: element,
                                 text: attributes?[element.fieldName] as? String,
                                 input: `input`
                             )
