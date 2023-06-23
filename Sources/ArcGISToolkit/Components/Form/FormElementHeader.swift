@@ -22,8 +22,5 @@ struct FormElementHeader: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Text(element.label)
 ***REMOVED******REMOVED******REMOVED***.font(.headline)
-***REMOVED******REMOVED***Text(element.description)
-***REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED***
 ***REMOVED***
