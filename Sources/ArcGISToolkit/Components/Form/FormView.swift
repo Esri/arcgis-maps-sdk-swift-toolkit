@@ -41,23 +41,8 @@ public struct FormView: View {
                 FormHeader(title: formDefinition?.title)
                 Divider()
                 ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
-                    if let element = container.element as? FieldFeatureFormElement {
-                        switch element.inputType.input {
-                        case let `input` as TextBoxFeatureFormInput:
-                            SingleLineTextEntry(
-                                element: element,
-                                text: attributes?[element.fieldName] as? String,
-                                input: `input`
-                            )
-                        case let `input` as TextAreaFeatureFormInput:
-                            MultiLineTextEntry(
-                                element: element,
-                                text: attributes?[element.fieldName] as? String,
-                                input: `input`
-                            )
-                        default:
-                            EmptyView()
-                        }
+                    if let element = container.element {
+                        makeElement(element)
                     }
                 }
             }
@@ -74,5 +59,51 @@ extension FormView {
     /// A shortcut to `mapInfo`s first operational layer form definition.
     var formDefinition: FeatureFormDefinition? {
         mapInfo?.operationalLayers.first?.featureFormDefinition
+    }
+    
+    /// Makes UI for a form element.
+    /// - Parameter element: The element to generate UI for.
+    @ViewBuilder func makeElement(_ element: FeatureFormElement) -> some View {
+        switch element {
+        case let element as FieldFeatureFormElement:
+            makeFieldElement(element)
+        case let element as GroupFeatureFormElement:
+            makeGroupElement(element)
+        default:
+            EmptyView()
+        }
+    }
+    
+    /// Makes UI for a field form element.
+    /// - Parameter element: The element to generate UI for.
+    @ViewBuilder func makeFieldElement(_ element: FieldFeatureFormElement) -> some View {
+        switch element.inputType.input {
+        case let `input` as TextBoxFeatureFormInput:
+            SingleLineTextEntry(
+                element: element,
+                text: attributes?[element.fieldName] as? String,
+                input: `input`
+            )
+        case let `input` as TextAreaFeatureFormInput:
+            MultiLineTextEntry(
+                element: element,
+                text: attributes?[element.fieldName] as? String,
+                input: `input`
+            )
+        default:
+            EmptyView()
+        }
+    }
+    
+    /// Makes UI for a group form element.
+    /// - Parameter element: The element to generate UI for.
+    @ViewBuilder func makeGroupElement(_ element: GroupFeatureFormElement) -> some View {
+        DisclosureGroup(element.label) {
+            ForEach(element.formElements, id: \.element?.label) { container in
+                if let element = container.element as? FieldFeatureFormElement {
+                    makeFieldElement(element)
+                }
+            }
+        }
     }
 }
