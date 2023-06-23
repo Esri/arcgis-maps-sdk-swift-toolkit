@@ -19,6 +19,7 @@ struct FormExampleView: View {
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
 ***REMOVED***@State private var map = Map(url: .sampleData)!
 ***REMOVED***
+***REMOVED******REMOVED***/ The `ArcGISFeature` to edit in the form.
 ***REMOVED***@State private var feature: ArcGISFeature?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The point on the screen the user tapped on to identify a feature.
