@@ -85,9 +85,8 @@ extension FormExampleView {
             .geoElements
             .first as? ArcGISFeature {
             return feature
-        } else {
-            return nil
         }
+        return nil
     }
 }
 
