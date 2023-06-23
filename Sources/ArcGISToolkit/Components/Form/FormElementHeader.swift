@@ -22,8 +22,5 @@ struct FormElementHeader: View {
     var body: some View {
         Text(element.label)
             .font(.headline)
-        Text(element.description)
-            .font(.footnote)
-            .foregroundColor(.secondary)
     }
 }
