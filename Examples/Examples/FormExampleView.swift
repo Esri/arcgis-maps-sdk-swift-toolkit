@@ -48,8 +48,14 @@ struct FormExampleView: View {
                         FormView(map: map, feature: feature!)
                             .padding()
                     }
+                    #if targetEnvironment(macCatalyst)
+                    Button("Dismiss") {
+                        feature = nil
+                    }
+                    .padding()
+                    #endif
                 }
-            
+                
                 // Or present a FormView in a Floating Panel (provided via the Toolkit)
 //                .floatingPanel(
 //                    selectedDetent: .constant(.half),
