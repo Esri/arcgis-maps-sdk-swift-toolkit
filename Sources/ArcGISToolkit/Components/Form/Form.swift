@@ -42,7 +42,6 @@ public struct Form: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = container.element as? FieldFeatureFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch element.inputType.input {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let `input` as TextBoxFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SingleLineTextEntry(
@@ -52,6 +51,7 @@ public struct Form: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let `input` as TextAreaFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***MultiLineTextEntry(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element: element,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: attributes?[element.fieldName] as? String,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***input: `input`
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)

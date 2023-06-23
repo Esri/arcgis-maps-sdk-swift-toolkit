@@ -19,11 +19,8 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text: String
 ***REMOVED***
-***REMOVED******REMOVED***/ The title of the item.
-***REMOVED***let title: String
-***REMOVED***
-***REMOVED******REMOVED***/ The text to to be shown in the entry area if no value is present.
-***REMOVED***let prompt: String
+***REMOVED******REMOVED***/ The form element that corresponds to this text field.
+***REMOVED***let element: FieldFeatureFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ A `TextBoxFeatureFormInput` which acts as a configuration.
 ***REMOVED***let input: TextBoxFeatureFormInput
@@ -34,15 +31,19 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***/   - text: The current text value.
 ***REMOVED******REMOVED***/   - input: A `TextBoxFeatureFormInput` which acts as a configuration.
 ***REMOVED***init(element: FieldFeatureFormElement, text: String?, input: TextBoxFeatureFormInput) {
+***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.text = text ?? ""
-***REMOVED******REMOVED***self.title = element.label
-***REMOVED******REMOVED***self.prompt = element.hint
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***TextField(title, text: $text, prompt: Text(prompt))
+***REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint))
 ***REMOVED******REMOVED******REMOVED***.formTextEntryBorder()
-***REMOVED******REMOVED***TextEntryProgress(current: text.count, max: input.maxLength)
+***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED***FormElementFooter(element: element)
+***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***TextEntryProgress(current: text.count, max: input.maxLength)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
