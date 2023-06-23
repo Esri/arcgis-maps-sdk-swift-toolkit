@@ -85,9 +85,8 @@ extension FormExampleView {
 ***REMOVED******REMOVED******REMOVED***.geoElements
 ***REMOVED******REMOVED******REMOVED***.first as? ArcGISFeature {
 ***REMOVED******REMOVED******REMOVED***return feature
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
+***REMOVED******REMOVED***return nil
 ***REMOVED***
 ***REMOVED***
 
