@@ -19,11 +19,8 @@ struct SingleLineTextEntry: View {
     /// The current text value.
     @State private var text: String
     
-    /// The title of the item.
-    let title: String
-    
-    /// The text to to be shown in the entry area if no value is present.
-    let prompt: String
+    /// The form element that corresponds to this text field.
+    let element: FieldFeatureFormElement
     
     /// A `TextBoxFeatureFormInput` which acts as a configuration.
     let input: TextBoxFeatureFormInput
@@ -34,15 +31,19 @@ struct SingleLineTextEntry: View {
     ///   - text: The current text value.
     ///   - input: A `TextBoxFeatureFormInput` which acts as a configuration.
     init(element: FieldFeatureFormElement, text: String?, input: TextBoxFeatureFormInput) {
+        self.element = element
         self.text = text ?? ""
-        self.title = element.label
-        self.prompt = element.hint
         self.input = input
     }
     
     public var body: some View {
-        TextField(title, text: $text, prompt: Text(prompt))
+        FormElementHeader(element: element)
+        TextField(element.label, text: $text, prompt: Text(element.hint))
             .formTextEntryBorder()
-        TextEntryProgress(current: text.count, max: input.maxLength)
+        HStack {
+            FormElementFooter(element: element)
+            Spacer()
+            TextEntryProgress(current: text.count, max: input.maxLength)
+        }
     }
 }
