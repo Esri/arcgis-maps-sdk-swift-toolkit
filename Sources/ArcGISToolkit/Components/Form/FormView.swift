@@ -17,7 +17,7 @@ import FormsPlugin
 
 ***REMOVED***/ Forms allow users to edit information about GIS features.
 ***REMOVED***/ - Since: 200.2
-public struct Form: View {
+public struct FormView: View {
 ***REMOVED******REMOVED***/ Info obtained from the map's JSON which contains the underlying form definition.
 ***REMOVED***@State private var mapInfo: MapInfo?
 ***REMOVED***
@@ -27,7 +27,7 @@ public struct Form: View {
 ***REMOVED******REMOVED***/ The map containing the underlying form definition.
 ***REMOVED***private let map: Map
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `Form` with the given map and feature.
+***REMOVED******REMOVED***/ Creates a `FormView` with the given map and feature.
 ***REMOVED******REMOVED***/ - Parameter map: The map containing the underlying form definition.
 ***REMOVED******REMOVED***/ - Parameter feature: The feature to be edited.
 ***REMOVED***public init(map: Map, feature: ArcGISFeature) {
@@ -70,7 +70,7 @@ public struct Form: View {
 ***REMOVED***
 ***REMOVED***
 
-extension Form {
+extension FormView {
 ***REMOVED******REMOVED***/ A shortcut to `mapInfo`s first operational layer form definition.
 ***REMOVED***var formDefinition: FeatureFormDefinition? {
 ***REMOVED******REMOVED***mapInfo?.operationalLayers.first?.featureFormDefinition
