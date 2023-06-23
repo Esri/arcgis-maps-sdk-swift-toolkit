@@ -38,6 +38,9 @@ struct FormExampleView: View {
                 
                 // Present a FormView in a native SwiftUI sheet
                 .sheet(isPresented: Binding { feature != nil } set: { _ in }) {
+                    // Clear the feature on dismiss
+                    feature = nil
+                } content: {
                     if #available(iOS 16.4, *) {
                         FormView(map: map, feature: feature!)
                             .padding()
