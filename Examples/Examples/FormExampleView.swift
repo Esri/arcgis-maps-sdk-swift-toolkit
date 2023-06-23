@@ -32,11 +32,7 @@ struct FormExampleView: View {
                     identifyScreenPoint = screenPoint
                 }
                 .task(id: identifyScreenPoint) {
-                    if let feature = await identifyFeature(with: mapViewProxy) {
-                        self.feature = feature
-                    } else {
-                        feature = nil
-                    }
+                    feature = await identifyFeature(with: mapViewProxy)
                 }
                 .ignoresSafeArea(.keyboard)
                 
