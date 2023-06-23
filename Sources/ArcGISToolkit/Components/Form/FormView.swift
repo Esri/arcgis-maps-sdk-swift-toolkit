@@ -27,25 +27,42 @@ public struct FormView: View {
     /// The map containing the underlying form definition.
     private let map: Map
     
+    /// The closure to execute when cancelling the form.
+    private let onCancel: () -> Void
+    
+    /// The closure to execute when submitting the form.
+    private let onSubmit: () -> Void
+    
     /// Creates a `FormView` with the given map and feature.
     /// - Parameter map: The map containing the underlying form definition.
     /// - Parameter feature: The feature to be edited.
-    public init(map: Map, feature: ArcGISFeature) {
+    /// - Parameter onSubmitted: The closure to execute when submitting the form.
+    /// - Parameter onCancelled: The closure to execute when cancelling the form.
+    public init(
+        map: Map,
+        feature: ArcGISFeature,
+        onSubmitted: @escaping () -> Void,
+        onCancelled: @escaping () -> Void
+    ) {
         self.map = map
         self.attributes = feature.attributes
+        self.onSubmit = onSubmitted
+        self.onCancel = onCancelled
     }
     
     public var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
-                FormHeader(title: formDefinition?.title)
-                Divider()
+            FormHeader(title: formDefinition?.title)
+                .padding([.bottom], 25)
+            VStack(alignment: .leading, spacing: 5) {
                 ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
                     if let element = container.element {
                         makeElement(element)
                     }
                 }
             }
+            FormFooter { onSubmit() } onCancel: { onCancel() }
+                .padding([.top], 25)
         }
         .task {
             let rawJSON = map.toJSON()
