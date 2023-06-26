@@ -49,7 +49,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED***self.text = text
 ***REMOVED******REMOVED******REMOVED***isPlaceholder = false
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***self.text = element.hint
+***REMOVED******REMOVED******REMOVED***self.text = element.hint ?? ""
 ***REMOVED******REMOVED******REMOVED***isPlaceholder = true
 ***REMOVED***
 ***REMOVED***
@@ -74,7 +74,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = ""
 ***REMOVED******REMOVED*** else if !focused && text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
-***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint
+***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint ?? ""
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formTextEntryBorder()
