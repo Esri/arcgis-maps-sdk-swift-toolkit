@@ -39,8 +39,19 @@ struct TextEntryFooter: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***if !description.isEmpty {
+***REMOVED******REMOVED******REMOVED***if let validationError {
+***REMOVED******REMOVED******REMOVED******REMOVED***switch validationError {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .emptyWhenRequired:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***requiredText
+***REMOVED******REMOVED******REMOVED******REMOVED***case .tooLong:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maximumText
+***REMOVED******REMOVED******REMOVED******REMOVED***case .tooShort:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minimumText
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else if !description.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED*** else if description.isEmpty && isFocused {
+***REMOVED******REMOVED******REMOVED******REMOVED***maximumText
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if isFocused {
@@ -72,6 +83,33 @@ extension TextEntryFooter {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***validationError = nil
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Text indicating a field's maximum number of allowed characters.
+***REMOVED***var maximumText: Text {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Maximum \(maxLength) characters",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's maximum number of allowed characters."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Text indicating a field's minimum and maximum number of allowed characters.
+***REMOVED***var minimumText: Text {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Enter \(minLength) to \(maxLength) characters",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's minimum and maximum number of allowed characters."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Text indicating a field is required.
+***REMOVED***var requiredText: Text {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Required",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field is required"
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
