@@ -39,8 +39,19 @@ struct TextEntryFooter: View {
     
     var body: some View {
         HStack {
-            if !description.isEmpty {
+            if let validationError {
+                switch validationError {
+                case .emptyWhenRequired:
+                    requiredText
+                case .tooLong:
+                    maximumText
+                case .tooShort:
+                    minimumText
+                }
+            } else if !description.isEmpty {
                 Text(description)
+            } else if description.isEmpty && isFocused {
+                maximumText
             }
             Spacer()
             if isFocused {
@@ -72,6 +83,33 @@ extension TextEntryFooter {
         } else {
             validationError = nil
         }
+    }
+    
+    /// Text indicating a field's maximum number of allowed characters.
+    var maximumText: Text {
+        Text(
+            "Maximum \(maxLength) characters",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field's maximum number of allowed characters."
+        )
+    }
+    
+    /// Text indicating a field's minimum and maximum number of allowed characters.
+    var minimumText: Text {
+        Text(
+            "Enter \(minLength) to \(maxLength) characters",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field's minimum and maximum number of allowed characters."
+        )
+    }
+    
+    /// Text indicating a field is required.
+    var requiredText: Text {
+        Text(
+            "Required",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field is required"
+        )
     }
 }
 
