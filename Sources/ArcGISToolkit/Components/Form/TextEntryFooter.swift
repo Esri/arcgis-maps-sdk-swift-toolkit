@@ -49,19 +49,25 @@ struct TextEntryFooter: View {
         }
         .font(.footnote)
         .foregroundColor(validationError == nil ? .secondary : .red)
-        .onChange(of: currentLength) { _ in validateLength() }
-        .onChange(of: isFocused) { _ in validateLength() }
+        .onChange(of: currentLength) { newLength in
+            validate(length: newLength, focused: isFocused)
+        }
+        .onChange(of: isFocused) { newFocus in
+            validate(length: currentLength, focused: newFocus)
+        }
     }
 }
 
 extension TextEntryFooter {
     /// <#Description#>
-    func validateLength() {
-        if currentLength == .zero && isRequired {
+    /// - Parameter length: <#length description#>
+    /// - Parameter focused: <#focused description#>
+    func validate(length: Int, focused: Bool) {
+        if length == .zero && isRequired && !focused {
             validationError = .emptyWhenRequired
-        } else if currentLength < minLength {
+        } else if length < minLength {
             validationError = .tooShort
-        } else if currentLength > maxLength {
+        } else if length > maxLength {
             validationError = .tooLong
         } else {
             validationError = nil
