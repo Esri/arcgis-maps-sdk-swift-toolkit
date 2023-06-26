@@ -16,6 +16,9 @@ import SwiftUI
 
 /// A view for single line text entry.
 struct SingleLineTextEntry: View {
+    /// A Boolean value indicating whether or not the field is focused.
+    @FocusState private var isFocused: Bool
+    
     /// The current text value.
     @State private var text: String
     
@@ -39,6 +42,7 @@ struct SingleLineTextEntry: View {
     public var body: some View {
         FormElementHeader(element: element)
         TextField(element.label, text: $text, prompt: Text(element.hint))
+            .focused($isFocused)
             .formTextEntryBorder()
         HStack {
             FormElementFooter(element: element)
