@@ -30,10 +30,10 @@ struct MultiLineTextEntry: View {
 ***REMOVED***@State private var isPlaceholder: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The form element that corresponds to this text field.
-***REMOVED***let element: FieldFeatureFormElement
+***REMOVED***private let element: FieldFeatureFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ A `TextAreaFeatureFormInput` which acts as a configuration.
-***REMOVED***let input: TextAreaFeatureFormInput
+***REMOVED***private let input: TextAreaFeatureFormInput
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for text entry spanning multiple lines.
 ***REMOVED******REMOVED***/ - Parameters:

@@ -23,10 +23,10 @@ struct SingleLineTextEntry: View {
 ***REMOVED***@State private var text: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The form element that corresponds to this text field.
-***REMOVED***let element: FieldFeatureFormElement
+***REMOVED***private let element: FieldFeatureFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ A `TextBoxFeatureFormInput` which acts as a configuration.
-***REMOVED***let input: TextBoxFeatureFormInput
+***REMOVED***private let input: TextBoxFeatureFormInput
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for single line text entry.
 ***REMOVED******REMOVED***/ - Parameters:
