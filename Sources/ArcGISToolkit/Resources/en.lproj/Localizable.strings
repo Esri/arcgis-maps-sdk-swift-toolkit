@@ -2,7 +2,7 @@
 "%lld selected" = "%lld selected";
 
 /* An alert message indicating that a certificate is required to access
- content on a remote host. The variable is the host that prompted the challenge. */
+content on a remote host. The variable is the host that prompted the challenge. */
 "A certificate is required to access content on %@." = "A certificate is required to access content on %@.";
 
 /* A button to add new utility trace starting points. */
@@ -14,6 +14,9 @@
 /* A button allowing users to view a list of all sites defined in a floor aware map. */
 "All sites" = "All sites";
 
+/* No comment provided by engineer. */
+"All Sites" = "All Sites";
+
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "All the trace inputs and results will be lost.";
 
@@ -21,13 +24,13 @@
 "Allow" = "Allow";
 
 /* No comment provided by engineer. */
-"Attributes" = "Attributes";
-
-/* No comment provided by engineer. */
 "An error occurred loading the image: %@." = "An error occurred loading the image: %@.";
 
 /* No comment provided by engineer. */
 "Attachments" = "Attachments";
+
+/* No comment provided by engineer. */
+"Attributes" = "Attributes";
 
 /* No comment provided by engineer. */
 "Authentication Required" = "Authentication Required";
@@ -60,9 +63,9 @@
 "Color" = "Color";
 
 /* An compass description to be read by a screen reader describing the
- current heading. The first variable being a degree value and the
- second being a corresponding cardinal direction (north, northeast,
- east, etc.). */
+current heading. The first variable being a degree value and the
+second being a corresponding cardinal direction (north, northeast,
+east, etc.). */
 "Compass, heading %lld degrees %@" = "Compass, heading %lld degrees %@";
 
 /* No comment provided by engineer. */
@@ -77,7 +80,7 @@
 /* No comment provided by engineer. */
 "Delete" = "Delete";
 
-/* No comment provided by engineer. */
+/* A button to close the bookmark selection menu. */
 "Done" = "Done";
 
 /* No comment provided by engineer. */
@@ -103,6 +106,9 @@
 
 /* No comment provided by engineer. */
 "Feature Results" = "Feature Results";
+
+/* No comment provided by engineer. */
+"Field" = "Field";
 
 /* No comment provided by engineer. */
 "Fields" = "Fields";
@@ -158,8 +164,11 @@
 /* No comment provided by engineer. */
 "None selected" = "None selected";
 
-/* No comment provided by engineer. */
-"Object ID" = "Object ID";
+/* A trace function output result is not available. */
+"Not Available" = "Not Available";
+
+/* A string identifying a utility network object. */
+"Object ID: %@" = "Object ID: %@";
 
 /* No comment provided by engineer. */
 "OK" = "OK";
@@ -168,10 +177,10 @@
 "Password" = "Password";
 
 /* No comment provided by engineer. */
-"Password Required";
+"Password Required" = "Password Required";
 
 /* No comment provided by engineer. */
-"Please enter a password for the chosen certificate.";
+"Please enter a password for the chosen certificate." = "Please enter a password for the chosen certificate.";
 
 /* No comment provided by engineer. */
 "Please set at least 1 starting location." = "Please set at least 1 starting location.";
@@ -189,6 +198,9 @@ original search location. */
 
 /* No comment provided by engineer. */
 "Results" = "Results";
+
+/* No comment provided by engineer. */
+"Search Query" = "Search Query";
 
 /* No comment provided by engineer. */
 "Select a bookmark" = "Select a bookmark";
@@ -215,7 +227,7 @@ original search location. */
 "The basemap does not have a spatial reference." = "The basemap does not have a spatial reference.";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to
- load for an unknown reason. */
+load for an unknown reason. */
 "The basemap failed to load for an unknown reason." = "The basemap failed to load for an unknown reason.";
 
 /* No comment provided by engineer. */
@@ -233,14 +245,14 @@ original search location. */
 /* No comment provided by engineer. */
 "The password was invalid." = "The password was invalid.";
 
-/* No Data */
+/* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data" = "The URL could not be reached or did not contain image data";
-
-/* A label indicating the index of the trace being viewed out of the total number of traces completed. */
-"Trace %lld of %lld" = "Trace %lld of %lld";
 
 /* No comment provided by engineer. */
 "Trace" = "Trace";
+
+/* A label indicating the index of the trace being viewed out of the total number of traces completed. */
+"Trace %lld of %lld" = "Trace %lld of %lld";
 
 /* No comment provided by engineer. */
 "Trace Configuration" = "Trace Configuration";
@@ -254,8 +266,11 @@ original search location. */
 /* No comment provided by engineer. */
 "Username" = "Username";
 
+/* No comment provided by engineer. */
+"Value" = "Value";
+
 /* A label explaining that credentials are required to authenticate with specified host.
- The host is indicated in the variable. */
+The host is indicated in the variable. */
 "You must sign in to access '%@'" = "You must sign in to access '%@'";
 
 /* A button to change the map to the extent of the selected trace. */
@@ -263,3 +278,4 @@ original search location. */
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
 "Zoom to result" = "Zoom to result";
+
