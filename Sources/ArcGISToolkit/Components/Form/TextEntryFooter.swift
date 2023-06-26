@@ -16,16 +16,25 @@ import SwiftUI
 
 /// A view shown at the bottom of each text entry element in a form.
 struct TextEntryFooter: View {
-    let description: String
+    /// <#Description#>
+    @State private var validationError: LengthError? = nil
     
+    /// <#Description#>
     let currentLength: Int
     
+    /// <#Description#>
     let isFocused: Bool
     
+    /// <#Description#>
+    let description: String
+    
+    /// <#Description#>
     let isRequired: Bool
     
+    /// <#Description#>
     let maxLength: Int
     
+    /// <#Description#>
     let minLength: Int
     
     var body: some View {
@@ -39,6 +48,30 @@ struct TextEntryFooter: View {
             }
         }
         .font(.footnote)
-        .foregroundColor(.secondary)
+        .foregroundColor(validationError == nil ? .secondary : .red)
+        .onChange(of: currentLength) { _ in validateLength() }
+        .onChange(of: isFocused) { _ in validateLength() }
     }
+}
+
+extension TextEntryFooter {
+    /// <#Description#>
+    func validateLength() {
+        if currentLength == .zero && isRequired {
+            validationError = .emptyWhenRequired
+        } else if currentLength < minLength {
+            validationError = .tooShort
+        } else if currentLength > maxLength {
+            validationError = .tooLong
+        } else {
+            validationError = nil
+        }
+    }
+}
+
+/// <#Description#>
+enum LengthError {
+    case emptyWhenRequired
+    case tooLong
+    case tooShort
 }

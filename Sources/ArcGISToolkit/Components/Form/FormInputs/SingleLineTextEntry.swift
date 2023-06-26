@@ -46,9 +46,9 @@ struct SingleLineTextEntry: View {
             .focused($isFocused)
             .formTextEntryBorder()
         TextEntryFooter(
-            description: element.description,
             currentLength: text.count,
             isFocused: isFocused,
+            description: element.description,
             isRequired: true,
             maxLength: input.maxLength,
             minLength: input.minLength
