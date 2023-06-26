@@ -14,14 +14,31 @@
 import FormsPlugin
 import SwiftUI
 
-/// A view shown at the bottom of each field element in a form.
-struct FormElementFooter: View {
-    /// The form element the header is for.
-    let element: FieldFeatureFormElement
+/// A view shown at the bottom of each text entry element in a form.
+struct TextEntryFooter: View {
+    let description: String
+    
+    let currentLength: Int
+    
+    let isFocused: Bool
+    
+    let isRequired: Bool
+    
+    let maxLength: Int
+    
+    let minLength: Int
     
     var body: some View {
-        Text(element.description)
-            .font(.footnote)
-            .foregroundColor(.secondary)
+        HStack {
+            if !description.isEmpty {
+                Text(description)
+            }
+            Spacer()
+            if isFocused {
+                Text(currentLength, format: .number)
+            }
+        }
+        .font(.footnote)
+        .foregroundColor(.secondary)
     }
 }
