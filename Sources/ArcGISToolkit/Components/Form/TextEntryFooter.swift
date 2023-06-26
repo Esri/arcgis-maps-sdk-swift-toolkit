@@ -16,16 +16,25 @@ import FormsPlugin
 
 ***REMOVED***/ A view shown at the bottom of each text entry element in a form.
 struct TextEntryFooter: View {
-***REMOVED***let description: String
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var validationError: LengthError? = nil
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let currentLength: Int
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let isFocused: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let description: String
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let isRequired: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let maxLength: Int
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let minLength: Int
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -39,6 +48,30 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED***.foregroundColor(validationError == nil ? .secondary : .red)
+***REMOVED******REMOVED***.onChange(of: currentLength) { _ in validateLength() ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: isFocused) { _ in validateLength() ***REMOVED***
 ***REMOVED***
+***REMOVED***
+
+extension TextEntryFooter {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***func validateLength() {
+***REMOVED******REMOVED***if currentLength == .zero && isRequired {
+***REMOVED******REMOVED******REMOVED***validationError = .emptyWhenRequired
+***REMOVED*** else if currentLength < minLength {
+***REMOVED******REMOVED******REMOVED***validationError = .tooShort
+***REMOVED*** else if currentLength > maxLength {
+***REMOVED******REMOVED******REMOVED***validationError = .tooLong
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***validationError = nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ <#Description#>
+enum LengthError {
+***REMOVED***case emptyWhenRequired
+***REMOVED***case tooLong
+***REMOVED***case tooShort
 ***REMOVED***
