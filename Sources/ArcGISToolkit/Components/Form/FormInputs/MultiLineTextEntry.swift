@@ -22,6 +22,13 @@ struct MultiLineTextEntry: View {
     /// The current text value.
     @State private var text: String
     
+    /// A Boolean value indicating whether placeholder text is shown, thereby indicating the
+    /// presence of a value.
+    ///
+    /// - Note: As of Swift 5.9, SwiftUI text editors do not have built-in placeholder functionality
+    /// so it must be implemented manually.
+    @State private var isPlaceholder: Bool
+    
     /// The form element that corresponds to this text field.
     let element: FieldFeatureFormElement
     
@@ -37,6 +44,14 @@ struct MultiLineTextEntry: View {
         self.element =  element
         self.text = text ?? ""
         self.input = input
+        
+        if let text, !text.isEmpty {
+            self.text = text
+            isPlaceholder = false
+        } else {
+            self.text = element.hint
+            isPlaceholder = true
+        }
     }
     
     public var body: some View {
@@ -49,9 +64,19 @@ struct MultiLineTextEntry: View {
                 TextEditor(text: $text)
             }
         }
-        .focused($isFocused)
         .background(.clear)
+        .focused($isFocused)
+        .foregroundColor(isPlaceholder ? .secondary : .primary)
         .frame(minHeight: 100, maxHeight: 200)
+        .onChange(of: isFocused) { focused in
+            if focused && isPlaceholder {
+                isPlaceholder = false
+                text = ""
+            } else if !focused && text.isEmpty {
+                isPlaceholder = true
+                text = element.hint
+            }
+        }
         .formTextEntryBorder()
         HStack {
             FormElementFooter(element: element)
