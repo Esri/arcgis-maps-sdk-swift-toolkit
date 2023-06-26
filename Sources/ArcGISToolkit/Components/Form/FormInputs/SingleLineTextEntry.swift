@@ -45,10 +45,13 @@ struct SingleLineTextEntry: View {
         TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
             .focused($isFocused)
             .formTextEntryBorder()
-        HStack {
-            FormElementFooter(element: element)
-            Spacer()
-            TextEntryProgress(current: text.count, max: input.maxLength)
-        }
+        TextEntryFooter(
+            description: element.description,
+            currentLength: text.count,
+            isFocused: isFocused,
+            isRequired: true,
+            maxLength: input.maxLength,
+            minLength: input.minLength
+        )
     }
 }

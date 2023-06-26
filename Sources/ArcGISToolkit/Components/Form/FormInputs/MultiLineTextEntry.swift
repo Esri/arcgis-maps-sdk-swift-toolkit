@@ -78,10 +78,13 @@ struct MultiLineTextEntry: View {
             }
         }
         .formTextEntryBorder()
-        HStack {
-            FormElementFooter(element: element)
-            Spacer()
-            TextEntryProgress(current: text.count, max: input.maxLength)
-        }
+        TextEntryFooter(
+            description: element.description,
+            currentLength: isPlaceholder ? .zero : text.count,
+            isFocused: isFocused,
+            isRequired: true,
+            maxLength: input.maxLength,
+            minLength: input.minLength
+        )
     }
 }
