@@ -49,7 +49,7 @@ struct MultiLineTextEntry: View {
             self.text = text
             isPlaceholder = false
         } else {
-            self.text = element.hint
+            self.text = element.hint ?? ""
             isPlaceholder = true
         }
     }
@@ -74,7 +74,7 @@ struct MultiLineTextEntry: View {
                 text = ""
             } else if !focused && text.isEmpty {
                 isPlaceholder = true
-                text = element.hint
+                text = element.hint ?? ""
             }
         }
         .formTextEntryBorder()
