@@ -41,7 +41,8 @@ struct SingleLineTextEntry: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***FormElementHeader(element: element)
-***REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint))
+***REMOVED******REMOVED******REMOVED*** `MultiLineTextEntry` uses secondary foreground color so it's applied here for consistency.
+***REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
 ***REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED***.formTextEntryBorder()
 ***REMOVED******REMOVED***HStack {
