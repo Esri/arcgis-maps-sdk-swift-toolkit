@@ -79,9 +79,9 @@ struct MultiLineTextEntry: View {
         }
         .formTextEntryBorder()
         TextEntryFooter(
-            description: element.description,
             currentLength: isPlaceholder ? .zero : text.count,
             isFocused: isFocused,
+            description: element.description,
             isRequired: true,
             maxLength: input.maxLength,
             minLength: input.minLength
