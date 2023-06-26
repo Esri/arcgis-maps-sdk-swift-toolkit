@@ -54,7 +54,7 @@ struct MultiLineTextEntry: View {
         }
     }
     
-    public var body: some View {
+    var body: some View {
         FormElementHeader(element: element)
         Group {
             if #available(iOS 16.0, *) {
