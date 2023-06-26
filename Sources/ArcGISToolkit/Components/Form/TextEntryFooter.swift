@@ -49,19 +49,25 @@ struct TextEntryFooter: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.foregroundColor(validationError == nil ? .secondary : .red)
-***REMOVED******REMOVED***.onChange(of: currentLength) { _ in validateLength() ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: isFocused) { _ in validateLength() ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: currentLength) { newLength in
+***REMOVED******REMOVED******REMOVED***validate(length: newLength, focused: isFocused)
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: isFocused) { newFocus in
+***REMOVED******REMOVED******REMOVED***validate(length: currentLength, focused: newFocus)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 extension TextEntryFooter {
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***func validateLength() {
-***REMOVED******REMOVED***if currentLength == .zero && isRequired {
+***REMOVED******REMOVED***/ - Parameter length: <#length description#>
+***REMOVED******REMOVED***/ - Parameter focused: <#focused description#>
+***REMOVED***func validate(length: Int, focused: Bool) {
+***REMOVED******REMOVED***if length == .zero && isRequired && !focused {
 ***REMOVED******REMOVED******REMOVED***validationError = .emptyWhenRequired
-***REMOVED*** else if currentLength < minLength {
+***REMOVED*** else if length < minLength {
 ***REMOVED******REMOVED******REMOVED***validationError = .tooShort
-***REMOVED*** else if currentLength > maxLength {
+***REMOVED*** else if length > maxLength {
 ***REMOVED******REMOVED******REMOVED***validationError = .tooLong
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***validationError = nil
