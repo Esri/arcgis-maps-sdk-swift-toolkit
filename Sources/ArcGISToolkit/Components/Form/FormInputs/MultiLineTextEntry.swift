@@ -78,10 +78,13 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formTextEntryBorder()
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***FormElementFooter(element: element)
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***TextEntryProgress(current: text.count, max: input.maxLength)
-***REMOVED***
+***REMOVED******REMOVED***TextEntryFooter(
+***REMOVED******REMOVED******REMOVED***description: element.description,
+***REMOVED******REMOVED******REMOVED***currentLength: isPlaceholder ? .zero : text.count,
+***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
+***REMOVED******REMOVED******REMOVED***isRequired: true,
+***REMOVED******REMOVED******REMOVED***maxLength: input.maxLength,
+***REMOVED******REMOVED******REMOVED***minLength: input.minLength
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
