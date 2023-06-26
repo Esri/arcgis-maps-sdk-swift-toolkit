@@ -54,7 +54,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public var body: some View {
+***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FormElementHeader(element: element)
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
