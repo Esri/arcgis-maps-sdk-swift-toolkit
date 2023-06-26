@@ -16,6 +16,9 @@ import FormsPlugin
 
 ***REMOVED***/ A view for single line text entry.
 struct SingleLineTextEntry: View {
+***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
+***REMOVED***@FocusState private var isFocused: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text: String
 ***REMOVED***
@@ -39,6 +42,7 @@ struct SingleLineTextEntry: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***FormElementHeader(element: element)
 ***REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint))
+***REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED***.formTextEntryBorder()
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***FormElementFooter(element: element)

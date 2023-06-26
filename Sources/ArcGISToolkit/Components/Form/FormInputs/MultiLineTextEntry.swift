@@ -16,6 +16,9 @@ import FormsPlugin
 
 ***REMOVED***/ A view for text entry spanning multiple lines.
 struct MultiLineTextEntry: View {
+***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
+***REMOVED***@FocusState private var isFocused: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text: String
 ***REMOVED***
@@ -46,6 +49,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED***.background(.clear)
 ***REMOVED******REMOVED***.frame(minHeight: 100, maxHeight: 200)
 ***REMOVED******REMOVED***.formTextEntryBorder()
