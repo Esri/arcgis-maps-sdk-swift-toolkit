@@ -16,6 +16,9 @@ import SwiftUI
 
 /// A view for text entry spanning multiple lines.
 struct MultiLineTextEntry: View {
+    /// A Boolean value indicating whether or not the field is focused.
+    @FocusState private var isFocused: Bool
+    
     /// The current text value.
     @State private var text: String
     
@@ -46,6 +49,7 @@ struct MultiLineTextEntry: View {
                 TextEditor(text: $text)
             }
         }
+        .focused($isFocused)
         .background(.clear)
         .frame(minHeight: 100, maxHeight: 200)
         .formTextEntryBorder()
