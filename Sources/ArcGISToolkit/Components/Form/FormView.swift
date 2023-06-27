@@ -27,27 +27,15 @@ public struct FormView: View {
 ***REMOVED******REMOVED***/ The map containing the underlying form definition.
 ***REMOVED***private let map: Map
 ***REMOVED***
-***REMOVED******REMOVED***/ The closure to execute when cancelling the form.
-***REMOVED***private let onCancel: () -> Void
-***REMOVED***
-***REMOVED******REMOVED***/ The closure to execute when submitting the form.
-***REMOVED***private let onSubmit: () -> Void
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FormView` with the given map and feature.
 ***REMOVED******REMOVED***/ - Parameter map: The map containing the underlying form definition.
 ***REMOVED******REMOVED***/ - Parameter feature: The feature to be edited.
-***REMOVED******REMOVED***/ - Parameter onSubmitted: The closure to execute when submitting the form.
-***REMOVED******REMOVED***/ - Parameter onCancelled: The closure to execute when cancelling the form.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***map: Map,
-***REMOVED******REMOVED***feature: ArcGISFeature,
-***REMOVED******REMOVED***onSubmitted: @escaping () -> Void,
-***REMOVED******REMOVED***onCancelled: @escaping () -> Void
+***REMOVED******REMOVED***feature: ArcGISFeature
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.map = map
 ***REMOVED******REMOVED***self.attributes = feature.attributes
-***REMOVED******REMOVED***self.onSubmit = onSubmitted
-***REMOVED******REMOVED***self.onCancel = onCancelled
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -61,8 +49,6 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***FormFooter { onSubmit() ***REMOVED*** onCancel: { onCancel() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], 25)
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***let rawJSON = map.toJSON()
