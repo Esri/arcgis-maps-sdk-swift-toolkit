@@ -19,22 +19,22 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***@State private var validationError: LengthError? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The current length of the text in the text entry field.
 ***REMOVED***let currentLength: Int
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ A Boolean value indicating whether the text entry field is focused.
 ***REMOVED***let isFocused: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The description of the text entry field.
 ***REMOVED***let description: String
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ A Boolean value indicating whether the text entry field is required.
 ***REMOVED***let isRequired: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The maximum allowable length of text in the text entry field.
 ***REMOVED***let maxLength: Int
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ ***REMOVED***/ The minimum allowable length of text in the text entry field.
 ***REMOVED***let minLength: Int
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -70,9 +70,9 @@ struct TextEntryFooter: View {
 ***REMOVED***
 
 extension TextEntryFooter {
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***/ - Parameter length: <#length description#>
-***REMOVED******REMOVED***/ - Parameter focused: <#focused description#>
+***REMOVED******REMOVED***/ Checks for any validation errors and updates the value of `validationError`.
+***REMOVED******REMOVED***/ - Parameter length: The length of text to use for validation.
+***REMOVED******REMOVED***/ - Parameter focused: The focus state to use for validation.
 ***REMOVED***func validate(length: Int, focused: Bool) {
 ***REMOVED******REMOVED***if length == .zero && isRequired && !focused {
 ***REMOVED******REMOVED******REMOVED***validationError = .emptyWhenRequired
@@ -111,11 +111,4 @@ extension TextEntryFooter {
 ***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field is required"
 ***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***
-
-***REMOVED***/ <#Description#>
-enum LengthError {
-***REMOVED***case emptyWhenRequired
-***REMOVED***case tooLong
-***REMOVED***case tooShort
 ***REMOVED***
