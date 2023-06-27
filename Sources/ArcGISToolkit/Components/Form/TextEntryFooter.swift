@@ -19,22 +19,22 @@ struct TextEntryFooter: View {
     /// <#Description#>
     @State private var validationError: LengthError? = nil
     
-    /// <#Description#>
+    /// The current length of the text in the text entry field.
     let currentLength: Int
     
-    /// <#Description#>
+    /// A Boolean value indicating whether the text entry field is focused.
     let isFocused: Bool
     
-    /// <#Description#>
+    /// The description of the text entry field.
     let description: String
     
-    /// <#Description#>
+    /// A Boolean value indicating whether the text entry field is required.
     let isRequired: Bool
     
-    /// <#Description#>
+    /// The maximum allowable length of text in the text entry field.
     let maxLength: Int
     
-    /// <#Description#>
+    /// /// The minimum allowable length of text in the text entry field.
     let minLength: Int
     
     var body: some View {
@@ -70,9 +70,9 @@ struct TextEntryFooter: View {
 }
 
 extension TextEntryFooter {
-    /// <#Description#>
-    /// - Parameter length: <#length description#>
-    /// - Parameter focused: <#focused description#>
+    /// Checks for any validation errors and updates the value of `validationError`.
+    /// - Parameter length: The length of text to use for validation.
+    /// - Parameter focused: The focus state to use for validation.
     func validate(length: Int, focused: Bool) {
         if length == .zero && isRequired && !focused {
             validationError = .emptyWhenRequired
@@ -111,11 +111,4 @@ extension TextEntryFooter {
             comment: "Text indicating a field is required"
         )
     }
-}
-
-/// <#Description#>
-enum LengthError {
-    case emptyWhenRequired
-    case tooLong
-    case tooShort
 }
