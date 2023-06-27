@@ -27,27 +27,15 @@ public struct FormView: View {
     /// The map containing the underlying form definition.
     private let map: Map
     
-    /// The closure to execute when cancelling the form.
-    private let onCancel: () -> Void
-    
-    /// The closure to execute when submitting the form.
-    private let onSubmit: () -> Void
-    
     /// Creates a `FormView` with the given map and feature.
     /// - Parameter map: The map containing the underlying form definition.
     /// - Parameter feature: The feature to be edited.
-    /// - Parameter onSubmitted: The closure to execute when submitting the form.
-    /// - Parameter onCancelled: The closure to execute when cancelling the form.
     public init(
         map: Map,
-        feature: ArcGISFeature,
-        onSubmitted: @escaping () -> Void,
-        onCancelled: @escaping () -> Void
+        feature: ArcGISFeature
     ) {
         self.map = map
         self.attributes = feature.attributes
-        self.onSubmit = onSubmitted
-        self.onCancel = onCancelled
     }
     
     public var body: some View {
@@ -61,8 +49,6 @@ public struct FormView: View {
                     }
                 }
             }
-            FormFooter { onSubmit() } onCancel: { onCancel() }
-                .padding([.top], 25)
         }
         .task {
             let rawJSON = map.toJSON()
