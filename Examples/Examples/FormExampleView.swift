@@ -42,22 +42,14 @@ struct FormExampleView: View {
                     feature = nil
                 } content: {
                     if #available(iOS 16.4, *) {
-                        FormView(map: map, feature: feature!) {
-                            feature = nil
-                        } onCancelled: {
-                            feature = nil
-                        }
-                        .padding()
-                        .presentationBackground(.thinMaterial)
-                        .presentationBackgroundInteraction(.enabled(upThrough: .medium))
-                        .presentationDetents([.medium])
+                        FormView(map: map, feature: feature!)
+                            .padding()
+                            .presentationBackground(.thinMaterial)
+                            .presentationBackgroundInteraction(.enabled(upThrough: .medium))
+                            .presentationDetents([.medium])
                     } else {
-                        FormView(map: map, feature: feature!) {
-                            feature = nil
-                        } onCancelled: {
-                            feature = nil
-                        }
-                        .padding()
+                        FormView(map: map, feature: feature!)
+                            .padding()
                     }
                     #if targetEnvironment(macCatalyst)
                     Button("Dismiss") {
@@ -75,12 +67,8 @@ struct FormExampleView: View {
 //                ) {
 //                    Group {
 //                        if let feature {
-//                            FormView(map: map, feature: feature) {
-//                                self.feature = nil
-//                            } onCancelled: {
-//                                self.feature = nil
-//                            }
-//                            .padding()
+//                            FormView(map: map, feature: feature)
+//                                .padding()
 //                        }
 //                    }
 //                }
