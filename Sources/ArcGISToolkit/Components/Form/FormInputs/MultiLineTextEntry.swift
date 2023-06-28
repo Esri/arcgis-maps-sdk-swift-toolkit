@@ -16,6 +16,8 @@ import FormsPlugin
 
 ***REMOVED***/ A view for text entry spanning multiple lines.
 struct MultiLineTextEntry: View {
+***REMOVED***@Environment(\.formElementPadding) var padding
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
@@ -56,6 +58,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED******REMOVED***.padding([.top], padding)
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
@@ -86,5 +89,6 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED***maxLength: input.maxLength,
 ***REMOVED******REMOVED******REMOVED***minLength: input.minLength
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.padding([.bottom], padding)
 ***REMOVED***
 ***REMOVED***

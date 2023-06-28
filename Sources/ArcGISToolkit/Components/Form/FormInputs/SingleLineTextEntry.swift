@@ -16,6 +16,8 @@ import FormsPlugin
 
 ***REMOVED***/ A view for single line text entry.
 struct SingleLineTextEntry: View {
+***REMOVED***@Environment(\.formElementPadding) var padding
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
@@ -41,6 +43,7 @@ struct SingleLineTextEntry: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED******REMOVED***.padding([.top], padding)
 ***REMOVED******REMOVED******REMOVED*** `MultiLineTextEntry` uses secondary foreground color so it's applied here for consistency.
 ***REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
 ***REMOVED******REMOVED******REMOVED***.focused($isFocused)
@@ -53,5 +56,6 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED***maxLength: input.maxLength,
 ***REMOVED******REMOVED******REMOVED***minLength: input.minLength
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.padding([.bottom], padding)
 ***REMOVED***
 ***REMOVED***
