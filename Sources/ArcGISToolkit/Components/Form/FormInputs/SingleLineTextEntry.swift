@@ -52,7 +52,7 @@ struct SingleLineTextEntry: View {
             currentLength: text.count,
             isFocused: isFocused,
             description: element.description ?? "",
-            isRequired: true,
+            isRequired: element.required,
             maxLength: input.maxLength,
             minLength: input.minLength
         )
