@@ -48,7 +48,7 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***TextEntryFooter(
 ***REMOVED******REMOVED******REMOVED***currentLength: text.count,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
-***REMOVED******REMOVED******REMOVED***description: element.description,
+***REMOVED******REMOVED******REMOVED***description: element.description ?? "",
 ***REMOVED******REMOVED******REMOVED***isRequired: true,
 ***REMOVED******REMOVED******REMOVED***maxLength: input.maxLength,
 ***REMOVED******REMOVED******REMOVED***minLength: input.minLength
