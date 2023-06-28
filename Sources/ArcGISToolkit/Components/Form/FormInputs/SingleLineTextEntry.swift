@@ -48,7 +48,7 @@ struct SingleLineTextEntry: View {
         TextEntryFooter(
             currentLength: text.count,
             isFocused: isFocused,
-            description: element.description,
+            description: element.description ?? "",
             isRequired: true,
             maxLength: input.maxLength,
             minLength: input.minLength
