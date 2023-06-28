@@ -34,7 +34,7 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED***/ The maximum allowable length of text in the text entry field.
 ***REMOVED***let maxLength: Int
 ***REMOVED***
-***REMOVED******REMOVED***/ ***REMOVED***/ The minimum allowable length of text in the text entry field.
+***REMOVED******REMOVED***/ The minimum allowable length of text in the text entry field.
 ***REMOVED***let minLength: Int
 ***REMOVED***
 ***REMOVED***var body: some View {
