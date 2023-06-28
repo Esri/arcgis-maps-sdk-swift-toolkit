@@ -67,7 +67,6 @@ struct MultiLineTextEntry: View {
                 TextEditor(text: $text)
             }
         }
-        .background(.clear)
         .focused($isFocused)
         .foregroundColor(isPlaceholder ? .secondary : .primary)
         .frame(minHeight: 100, maxHeight: 200)
@@ -80,7 +79,7 @@ struct MultiLineTextEntry: View {
                 text = element.hint ?? ""
             }
         }
-        .formTextEntryBorder()
+        .formTextEntryStyle()
         TextEntryFooter(
             currentLength: isPlaceholder ? .zero : text.count,
             isFocused: isFocused,

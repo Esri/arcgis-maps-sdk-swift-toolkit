@@ -47,7 +47,7 @@ struct SingleLineTextEntry: View {
         // `MultiLineTextEntry` uses secondary foreground color so it's applied here for consistency.
         TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
             .focused($isFocused)
-            .formTextEntryBorder()
+            .formTextEntryStyle()
         TextEntryFooter(
             currentLength: text.count,
             isFocused: isFocused,

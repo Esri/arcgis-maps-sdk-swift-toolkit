@@ -15,20 +15,18 @@ import SwiftUI
 
 /// SwiftUI `TextEditor` and `TextField` views have different styling. `TextField`s have
 /// `textFieldStyle` and `TextEditor`s do not. This modifier allows for common styling.
-struct FormTextEntryBorder: ViewModifier {
+struct FormTextEntryStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .padding(2)
-            .overlay {
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(.secondary.opacity(0.5), lineWidth: 0.5)
-            }
+            .padding(4)
+            .background(Color(uiColor: .tertiarySystemFill))
+            .cornerRadius(10)
     }
 }
 
 extension View {
-    /// Adds a common padding and border around form field text elements.
-    func formTextEntryBorder() -> some View {
-        modifier(FormTextEntryBorder())
+    /// Adds a common padding and background around form field text elements.
+    func formTextEntryStyle() -> some View {
+        modifier(FormTextEntryStyle())
     }
 }
