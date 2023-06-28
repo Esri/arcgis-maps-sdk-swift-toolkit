@@ -67,7 +67,6 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.background(.clear)
 ***REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED***.foregroundColor(isPlaceholder ? .secondary : .primary)
 ***REMOVED******REMOVED***.frame(minHeight: 100, maxHeight: 200)
@@ -80,7 +79,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint ?? ""
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.formTextEntryBorder()
+***REMOVED******REMOVED***.formTextEntryStyle()
 ***REMOVED******REMOVED***TextEntryFooter(
 ***REMOVED******REMOVED******REMOVED***currentLength: isPlaceholder ? .zero : text.count,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
