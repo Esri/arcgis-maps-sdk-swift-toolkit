@@ -16,6 +16,8 @@ import SwiftUI
 
 /// A view for single line text entry.
 struct SingleLineTextEntry: View {
+    @Environment(\.formElementPadding) var padding
+    
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
@@ -41,6 +43,7 @@ struct SingleLineTextEntry: View {
     
     var body: some View {
         FormElementHeader(element: element)
+            .padding([.top], padding)
         // `MultiLineTextEntry` uses secondary foreground color so it's applied here for consistency.
         TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
             .focused($isFocused)
@@ -53,5 +56,6 @@ struct SingleLineTextEntry: View {
             maxLength: input.maxLength,
             minLength: input.minLength
         )
+        .padding([.bottom], padding)
     }
 }
