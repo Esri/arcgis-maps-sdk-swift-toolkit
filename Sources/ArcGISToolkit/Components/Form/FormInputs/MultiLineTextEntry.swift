@@ -67,6 +67,7 @@ struct MultiLineTextEntry: View {
                 TextEditor(text: $text)
             }
         }
+        .background(.clear)
         .focused($isFocused)
         .foregroundColor(isPlaceholder ? .secondary : .primary)
         .frame(minHeight: 100, maxHeight: 200)
