@@ -38,7 +38,7 @@ struct TextEntryFooter: View {
     let minLength: Int
     
     var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             if let validationError {
                 switch validationError {
                 case .emptyWhenRequired:
