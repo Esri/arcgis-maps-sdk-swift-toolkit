@@ -38,7 +38,7 @@ struct TextEntryFooter: View {
 ***REMOVED***let minLength: Int
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED***if let validationError {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch validationError {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .emptyWhenRequired:
