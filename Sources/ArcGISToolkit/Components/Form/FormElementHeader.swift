@@ -20,8 +20,14 @@ struct FormElementHeader: View {
     let element: FieldFeatureFormElement
     
     var body: some View {
-        Text(element.label)
-            .font(.subheadline)
-            .foregroundColor(.secondary)
+        Group {
+            if element.required {
+                Text(verbatim: "\(element.label) *")
+            } else {
+                Text(element.label)
+            }
+        }
+        .font(.subheadline)
+        .foregroundColor(.secondary)
     }
 }
