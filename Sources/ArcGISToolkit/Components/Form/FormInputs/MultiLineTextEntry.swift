@@ -16,6 +16,8 @@ import SwiftUI
 
 /// A view for text entry spanning multiple lines.
 struct MultiLineTextEntry: View {
+    @Environment(\.formElementPadding) var padding
+    
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
@@ -56,6 +58,7 @@ struct MultiLineTextEntry: View {
     
     var body: some View {
         FormElementHeader(element: element)
+            .padding([.top], padding)
         Group {
             if #available(iOS 16.0, *) {
                 TextEditor(text: $text)
@@ -86,5 +89,6 @@ struct MultiLineTextEntry: View {
             maxLength: input.maxLength,
             minLength: input.minLength
         )
+        .padding([.bottom], padding)
     }
 }
