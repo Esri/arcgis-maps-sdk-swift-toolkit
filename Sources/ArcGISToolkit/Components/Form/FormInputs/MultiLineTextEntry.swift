@@ -85,7 +85,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED***currentLength: isPlaceholder ? .zero : text.count,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
 ***REMOVED******REMOVED******REMOVED***description: element.description ?? "",
-***REMOVED******REMOVED******REMOVED***isRequired: true,
+***REMOVED******REMOVED******REMOVED***isRequired: element.required,
 ***REMOVED******REMOVED******REMOVED***maxLength: input.maxLength,
 ***REMOVED******REMOVED******REMOVED***minLength: input.minLength
 ***REMOVED******REMOVED***)
