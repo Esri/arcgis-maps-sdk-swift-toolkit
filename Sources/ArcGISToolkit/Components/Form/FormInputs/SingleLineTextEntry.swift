@@ -45,9 +45,14 @@ struct SingleLineTextEntry: View {
         FormElementHeader(element: element)
             .padding([.top], padding)
         // `MultiLineTextEntry` uses secondary foreground color so it's applied here for consistency.
-        TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
-            .focused($isFocused)
-            .formTextEntryStyle()
+        HStack {
+            TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
+                .focused($isFocused)
+            if isFocused && !text.isEmpty {
+                ClearButton { text.removeAll() }
+            }
+        }
+        .formTextEntryStyle()
         TextEntryFooter(
             currentLength: text.count,
             isFocused: isFocused,
