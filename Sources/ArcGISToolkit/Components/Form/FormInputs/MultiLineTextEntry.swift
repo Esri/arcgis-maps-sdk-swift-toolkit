@@ -59,18 +59,21 @@ struct MultiLineTextEntry: View {
     var body: some View {
         FormElementHeader(element: element)
             .padding([.top], padding)
-        Group {
+        HStack(alignment: .bottom) {
             if #available(iOS 16.0, *) {
                 TextEditor(text: $text)
                     .scrollContentBackground(.hidden)
             } else {
                 TextEditor(text: $text)
             }
+            if isFocused && !text.isEmpty {
+                ClearButton { text.removeAll() }
+            }
         }
         .background(.clear)
         .focused($isFocused)
         .foregroundColor(isPlaceholder ? .secondary : .primary)
-        .frame(minHeight: 100, maxHeight: 200)
+        .frame(minHeight: 75, maxHeight: 150)
         .onChange(of: isFocused) { focused in
             if focused && isPlaceholder {
                 isPlaceholder = false
