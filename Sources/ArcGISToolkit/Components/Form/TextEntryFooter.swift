@@ -16,7 +16,7 @@ import SwiftUI
 
 /// A view shown at the bottom of each text entry element in a form.
 struct TextEntryFooter: View {
-    /// <#Description#>
+    /// An error that is present when a length constraint is not met.
     @State private var validationError: LengthError? = nil
     
     /// The current length of the text in the text entry field.
@@ -36,6 +36,37 @@ struct TextEntryFooter: View {
     
     /// The minimum allowable length of text in the text entry field.
     let minLength: Int
+    
+    /// Creates a footer shown at the bottom of each text entry element in a form.
+    /// - Parameters:
+    ///   - currentLength: The current length of the text in the text entry field.
+    ///   - isFocused: A Boolean value indicating whether the text entry field is focused.
+    ///   - element: A field element that provides a description for the text entry and whether
+    ///  or not text is required for this entry.
+    ///   - input: A form input that provides length constraints for the text entry.
+    init(
+        currentLength: Int,
+        isFocused: Bool,
+        element: FieldFeatureFormElement,
+        input: FeatureFormInput
+    ) {
+        self.currentLength = currentLength
+        self.isFocused = isFocused
+        self.description = element.description ?? ""
+        self.isRequired = element.required
+        
+        switch input {
+        case let input as TextBoxFeatureFormInput:
+            self.maxLength = input.maxLength
+            self.minLength = input.minLength
+        case let input as TextAreaFeatureFormInput:
+            self.maxLength = input.maxLength
+            self.minLength = input.minLength
+        default:
+            self.maxLength = .zero
+            self.minLength = .zero
+        }
+    }
     
     var body: some View {
         HStack(alignment: .top) {
