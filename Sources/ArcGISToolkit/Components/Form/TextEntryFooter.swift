@@ -20,22 +20,22 @@ struct TextEntryFooter: View {
     @State private var validationError: LengthError? = nil
     
     /// The current length of the text in the text entry field.
-    let currentLength: Int
+    private let currentLength: Int
     
     /// A Boolean value indicating whether the text entry field is focused.
-    let isFocused: Bool
+    private let isFocused: Bool
     
     /// The description of the text entry field.
-    let description: String
+    private let description: String
     
     /// A Boolean value indicating whether the text entry field is required.
-    let isRequired: Bool
+    private let isRequired: Bool
     
     /// The maximum allowable length of text in the text entry field.
-    let maxLength: Int
+    private let maxLength: Int
     
     /// The minimum allowable length of text in the text entry field.
-    let minLength: Int
+    private let minLength: Int
     
     /// Creates a footer shown at the bottom of each text entry element in a form.
     /// - Parameters:
