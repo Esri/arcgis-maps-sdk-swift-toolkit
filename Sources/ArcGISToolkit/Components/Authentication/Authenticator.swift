@@ -14,6 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 import Combine
+import CryptoTokenKit
 
 ***REMOVED***/ A configurable object that handles authentication challenges.
 @MainActor
@@ -67,11 +68,18 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
 extension Authenticator: NetworkAuthenticationChallengeHandler {
 ***REMOVED***public func handleNetworkAuthenticationChallenge(
 ***REMOVED******REMOVED***_ challenge: NetworkAuthenticationChallenge
-***REMOVED***) async -> NetworkAuthenticationChallenge.Disposition  {
+***REMOVED***) async -> NetworkAuthenticationChallenge.Disposition {
 ***REMOVED******REMOVED******REMOVED*** If `promptForUntrustedHosts` is `false` then perform default handling
 ***REMOVED******REMOVED******REMOVED*** for server trust challenges.
 ***REMOVED******REMOVED***guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
 ***REMOVED******REMOVED******REMOVED***return .continueWithoutCredential
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** If smart card is connected to the device then continue with smart card network credential.
+***REMOVED******REMOVED***if challenge.kind == .clientCertificate,
+***REMOVED******REMOVED***   let pivToken = TKTokenWatcher().tokenIDs.filter({ $0.localizedCaseInsensitiveContains("pivtoken") ***REMOVED***).first,
+***REMOVED******REMOVED***   let credential = try? NetworkCredential.smartCard(pivToken: pivToken) {
+***REMOVED******REMOVED******REMOVED***return .continueWithCredential(credential)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)
