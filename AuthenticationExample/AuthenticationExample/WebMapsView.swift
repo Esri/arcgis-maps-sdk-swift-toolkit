@@ -14,23 +14,23 @@
 import SwiftUI
 import ArcGIS
 
-/// A view that displays the featured maps of a portal.
-struct FeaturedMapsView: View {
+/// A view that displays the web maps of a portal.
+struct WebMapsView: View {
     /// The portal from which the featured content can be fetched.
     var portal: Portal
     
     /// A Boolean value indicating whether the featured content is being loaded.
     @State var isLoading = true
     
-    /// The featured items.
-    @State var featuredItems = [PortalItem]()
+    /// The web map portal items.
+    @State var webMapItems = [PortalItem]()
     
     var body: some View {
         VStack {
             if isLoading {
                 ProgressView()
             } else {
-                List(featuredItems, id: \.id) { item in
+                List(webMapItems, id: \.id) { item in
                     NavigationLink {
                         MapItemView(map: Map(item: item))
                     } label: {
@@ -40,10 +40,17 @@ struct FeaturedMapsView: View {
             }
         }
         .task {
-            guard featuredItems.isEmpty else { return }
+            guard webMapItems.isEmpty else { return }
             do {
-                featuredItems = try await portal.featuredItems
+                var items = try await portal.featuredItems
                     .filter { $0.kind == .webMap }
+                if items.isEmpty {
+                    items = try await portal.findItems(
+                        queryParameters: .items(ofKinds: [.webMap])
+                    )
+                    .results
+                }
+                webMapItems = items
             } catch {}
             
             isLoading = false

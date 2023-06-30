@@ -14,6 +14,7 @@
 import ArcGIS
 import SwiftUI
 import Combine
+import CryptoTokenKit
 
 /// A configurable object that handles authentication challenges.
 @MainActor
@@ -67,11 +68,18 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
 extension Authenticator: NetworkAuthenticationChallengeHandler {
     public func handleNetworkAuthenticationChallenge(
         _ challenge: NetworkAuthenticationChallenge
-    ) async -> NetworkAuthenticationChallenge.Disposition  {
+    ) async -> NetworkAuthenticationChallenge.Disposition {
         // If `promptForUntrustedHosts` is `false` then perform default handling
         // for server trust challenges.
         guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
             return .continueWithoutCredential
+        }
+        
+        // If smart card is connected to the device then continue with smart card network credential.
+        if challenge.kind == .clientCertificate,
+           let pivToken = TKTokenWatcher().tokenIDs.filter({ $0.localizedCaseInsensitiveContains("pivtoken") }).first,
+           let credential = try? NetworkCredential.smartCard(pivToken: pivToken) {
+            return .continueWithCredential(credential)
         }
         
         let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)
