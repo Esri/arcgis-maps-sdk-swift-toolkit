@@ -18,7 +18,7 @@ import FormsPlugin
 ***REMOVED***/ Forms allow users to edit information about GIS features.
 ***REMOVED***/ - Since: 200.2
 public struct FormView: View {
-***REMOVED***@Environment(\.formElementPadding) var padding
+***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ Info obtained from the map's JSON which contains the underlying form definition.
 ***REMOVED***@State private var mapInfo: MapInfo?
