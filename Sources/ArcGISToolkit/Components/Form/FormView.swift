@@ -43,7 +43,7 @@ public struct FormView: View {
     public var body: some View {
         ScrollView {
             FormHeader(title: formDefinition?.title)
-                .padding([.bottom], padding)
+                .padding([.bottom], elementPadding)
             VStack(alignment: .leading) {
                 ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
                     if let element = container.element {
