@@ -53,10 +53,8 @@ struct SingleLineTextEntry: View {
         TextEntryFooter(
             currentLength: text.count,
             isFocused: isFocused,
-            description: element.description ?? "",
-            isRequired: element.required,
-            maxLength: input.maxLength,
-            minLength: input.minLength
+            element: element,
+            input: input
         )
         .padding([.bottom], elementPadding)
     }
