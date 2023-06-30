@@ -51,6 +51,7 @@ public struct FormView: View {
             let rawJSON = map.toJSON()
             let decoder = JSONDecoder()
             mapInfo = try? decoder.decode(MapInfo.self, from: rawJSON.data(using: .utf8)!)
+            await evaluate()
         }
     }
 }
@@ -105,5 +106,23 @@ extension FormView {
                 }
             }
         }
+    }
+}
+
+extension FormView {
+    func evaluate() async {
+        // This is where `FeatureForm.evaluate()` would go.
+        // We're also going to evaluate FieldFeatureFormElement.visibilityExpressionName
+        // and `.editableExpressionName` would be called.
+        
+    }
+    
+    func evaluateVisibilityExpression() async {
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        
+    }
+    
+    func evaluateEditableExpression() async {
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
     }
 }
