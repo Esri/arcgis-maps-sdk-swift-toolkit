@@ -63,8 +63,7 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED******REMOVED***self.maxLength = input.maxLength
 ***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
 ***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***self.maxLength = .zero
-***REMOVED******REMOVED******REMOVED***self.minLength = .zero
+***REMOVED******REMOVED******REMOVED***fatalError("TextEntryFooter can only be used with TextAreaFeatureFormInput or TextBoxFeatureFormInput")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
