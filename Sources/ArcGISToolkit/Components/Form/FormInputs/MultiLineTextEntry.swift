@@ -58,7 +58,7 @@ struct MultiLineTextEntry: View {
     
     var body: some View {
         FormElementHeader(element: element)
-            .padding([.top], padding)
+            .padding([.top], elementPadding)
         Group {
             if #available(iOS 16.0, *) {
                 TextEditor(text: $text)
@@ -89,6 +89,6 @@ struct MultiLineTextEntry: View {
             maxLength: input.maxLength,
             minLength: input.minLength
         )
-        .padding([.bottom], padding)
+        .padding([.bottom], elementPadding)
     }
 }
