@@ -16,7 +16,7 @@ import SwiftUI
 
 /// A view for text entry spanning multiple lines.
 struct MultiLineTextEntry: View {
-    @Environment(\.formElementPadding) var padding
+    @Environment(\.formElementPadding) var elementPadding
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
