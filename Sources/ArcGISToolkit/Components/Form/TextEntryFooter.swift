@@ -16,7 +16,7 @@ import FormsPlugin
 
 ***REMOVED***/ A view shown at the bottom of each text entry element in a form.
 struct TextEntryFooter: View {
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ An error that is present when a length constraint is not met.
 ***REMOVED***@State private var validationError: LengthError? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current length of the text in the text entry field.
@@ -36,6 +36,37 @@ struct TextEntryFooter: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The minimum allowable length of text in the text entry field.
 ***REMOVED***let minLength: Int
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a footer shown at the bottom of each text entry element in a form.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - currentLength: The current length of the text in the text entry field.
+***REMOVED******REMOVED***/   - isFocused: A Boolean value indicating whether the text entry field is focused.
+***REMOVED******REMOVED***/   - element: A field element that provides a description for the text entry and whether
+***REMOVED******REMOVED***/  or not text is required for this entry.
+***REMOVED******REMOVED***/   - input: A form input that provides length constraints for the text entry.
+***REMOVED***init(
+***REMOVED******REMOVED***currentLength: Int,
+***REMOVED******REMOVED***isFocused: Bool,
+***REMOVED******REMOVED***element: FieldFeatureFormElement,
+***REMOVED******REMOVED***input: FeatureFormInput
+***REMOVED***) {
+***REMOVED******REMOVED***self.currentLength = currentLength
+***REMOVED******REMOVED***self.isFocused = isFocused
+***REMOVED******REMOVED***self.description = element.description ?? ""
+***REMOVED******REMOVED***self.isRequired = element.required
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch input {
+***REMOVED******REMOVED***case let input as TextBoxFeatureFormInput:
+***REMOVED******REMOVED******REMOVED***self.maxLength = input.maxLength
+***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
+***REMOVED******REMOVED***case let input as TextAreaFeatureFormInput:
+***REMOVED******REMOVED******REMOVED***self.maxLength = input.maxLength
+***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***self.maxLength = .zero
+***REMOVED******REMOVED******REMOVED***self.minLength = .zero
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .top) {
