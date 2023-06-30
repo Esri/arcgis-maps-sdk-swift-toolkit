@@ -16,7 +16,7 @@ import FormsPlugin
 
 ***REMOVED***/ A view for text entry spanning multiple lines.
 struct MultiLineTextEntry: View {
-***REMOVED***@Environment(\.formElementPadding) var padding
+***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
