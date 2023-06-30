@@ -43,7 +43,7 @@ public struct FormView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED***FormHeader(title: formDefinition?.title)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], padding)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = container.element {
