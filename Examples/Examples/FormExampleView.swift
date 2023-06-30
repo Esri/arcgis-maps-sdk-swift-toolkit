@@ -42,13 +42,13 @@ struct FormExampleView: View {
                     feature = nil
                 } content: {
                     if #available(iOS 16.4, *) {
-                        FormView(map: map, feature: feature!)
+                        FormView(feature: feature!)
                             .padding()
                             .presentationBackground(.thinMaterial)
                             .presentationBackgroundInteraction(.enabled(upThrough: .medium))
                             .presentationDetents([.medium])
                     } else {
-                        FormView(map: map, feature: feature!)
+                        FormView(feature: feature!)
                             .padding()
                     }
                     #if targetEnvironment(macCatalyst)
@@ -67,7 +67,7 @@ struct FormExampleView: View {
 //                ) {
 //                    Group {
 //                        if let feature {
-//                            FormView(map: map, feature: feature)
+//                            FormView(feature: feature)
 //                                .padding()
 //                        }
 //                    }
