@@ -58,7 +58,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FormElementHeader(element: element)
-***REMOVED******REMOVED******REMOVED***.padding([.top], padding)
+***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
@@ -89,6 +89,6 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED***maxLength: input.maxLength,
 ***REMOVED******REMOVED******REMOVED***minLength: input.minLength
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.padding([.bottom], padding)
+***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED***
 ***REMOVED***
