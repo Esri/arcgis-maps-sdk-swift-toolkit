@@ -80,7 +80,7 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else if !description.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED*** else if description.isEmpty && isFocused {
+***REMOVED******REMOVED*** else if isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumText
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
