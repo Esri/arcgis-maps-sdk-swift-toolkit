@@ -20,24 +20,19 @@ import SwiftUI
 public struct FormView: View {
     @Environment(\.formElementPadding) var padding
     
+    /// The structure of the form.
+    @State private var formDefinition: FeatureFormDefinition?
+    
     /// Info obtained from the map's JSON which contains the underlying form definition.
     @State private var mapInfo: MapInfo?
     
-    /// The attributes of the provided feature.
-    private let attributes: [String : Any]?
+    /// The feature being edited in the form.
+    private let feature: ArcGISFeature
     
-    /// The map containing the underlying form definition.
-    private let map: Map
-    
-    /// Creates a `FormView` with the given map and feature.
-    /// - Parameter map: The map containing the underlying form definition.
+    /// Creates a `FormView` with the given feature.
     /// - Parameter feature: The feature to be edited.
-    public init(
-        map: Map,
-        feature: ArcGISFeature
-    ) {
-        self.map = map
-        self.attributes = feature.attributes
+    public init(feature: ArcGISFeature) {
+        self.feature = feature
     }
     
     public var body: some View {
@@ -53,19 +48,20 @@ public struct FormView: View {
             }
         }
         .task {
-            let rawJSON = map.toJSON()
             let decoder = JSONDecoder()
-            mapInfo = try? decoder.decode(MapInfo.self, from: rawJSON.data(using: .utf8)!)
+            if let layer = feature.table?.layer as? FeatureLayer,
+               let formInfoDictionary = layer._unsupportedJSON["formInfo"],
+               let jsonData = try? JSONSerialization.data(withJSONObject: formInfoDictionary),
+               let formDefinition = try? decoder.decode(FeatureFormDefinition.self, from: jsonData) {
+                self.formDefinition = formDefinition
+            } else {
+                print("Error processing form definition")
+            }
         }
     }
 }
 
 extension FormView {
-    /// A shortcut to `mapInfo`s first operational layer form definition.
-    var formDefinition: FeatureFormDefinition? {
-        mapInfo?.operationalLayers.first?.featureFormDefinition
-    }
-    
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FeatureFormElement) -> some View {
@@ -86,13 +82,13 @@ extension FormView {
         case let `input` as TextBoxFeatureFormInput:
             SingleLineTextEntry(
                 element: element,
-                text: attributes?[element.fieldName] as? String,
+                text: feature.attributes[element.fieldName] as? String,
                 input: `input`
             )
         case let `input` as TextAreaFeatureFormInput:
             MultiLineTextEntry(
                 element: element,
-                text: attributes?[element.fieldName] as? String,
+                text: feature.attributes[element.fieldName] as? String,
                 input: `input`
             )
         default:
