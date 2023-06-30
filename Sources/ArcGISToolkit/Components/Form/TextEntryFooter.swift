@@ -80,7 +80,7 @@ struct TextEntryFooter: View {
                 }
             } else if !description.isEmpty {
                 Text(description)
-            } else if description.isEmpty && isFocused {
+            } else if isFocused {
                 maximumText
             }
             Spacer()
