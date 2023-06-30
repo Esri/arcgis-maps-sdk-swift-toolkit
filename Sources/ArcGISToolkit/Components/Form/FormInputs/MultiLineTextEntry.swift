@@ -56,6 +56,8 @@ struct MultiLineTextEntry: View {
         }
     }
     
+    /// - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.
+    /// [More info](https://openradar.appspot.com/FB12432084)
     var body: some View {
         FormElementHeader(element: element)
             .padding([.top], elementPadding)
