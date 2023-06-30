@@ -18,7 +18,7 @@ import SwiftUI
 /// Forms allow users to edit information about GIS features.
 /// - Since: 200.2
 public struct FormView: View {
-    @Environment(\.formElementPadding) var padding
+    @Environment(\.formElementPadding) var elementPadding
     
     /// Info obtained from the map's JSON which contains the underlying form definition.
     @State private var mapInfo: MapInfo?
