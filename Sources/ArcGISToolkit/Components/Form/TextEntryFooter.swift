@@ -76,7 +76,7 @@ struct TextEntryFooter: View {
                 case .tooLong:
                     maximumText
                 case .tooShort:
-                    minimumText
+                    minAndMaxText
                 }
             } else if !description.isEmpty {
                 Text(description)
@@ -125,7 +125,7 @@ extension TextEntryFooter {
     }
     
     /// Text indicating a field's minimum and maximum number of allowed characters.
-    var minimumText: Text {
+    var minAndMaxText: Text {
         Text(
             "Enter \(minLength) to \(maxLength) characters",
             bundle: .toolkitModule,
