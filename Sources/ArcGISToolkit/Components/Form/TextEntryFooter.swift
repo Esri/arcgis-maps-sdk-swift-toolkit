@@ -19,6 +19,10 @@ struct TextEntryFooter: View {
     /// An error that is present when a length constraint is not met.
     @State private var validationError: LengthError? = nil
     
+    /// A Boolean value indicating whether the text entry field has previously satisfied the minimum
+    /// length at any point in time.
+    @State private var hasPreviouslySatisfiedMinimum: Bool
+    
     /// The current length of the text in the text entry field.
     private let currentLength: Int
     
@@ -59,9 +63,11 @@ struct TextEntryFooter: View {
         case let input as TextBoxFeatureFormInput:
             self.maxLength = input.maxLength
             self.minLength = input.minLength
+            self.hasPreviouslySatisfiedMinimum = currentLength >= input.minLength
         case let input as TextAreaFeatureFormInput:
             self.maxLength = input.maxLength
             self.minLength = input.minLength
+            self.hasPreviouslySatisfiedMinimum = currentLength >= input.minLength
         default:
             fatalError("TextEntryFooter can only be used with TextAreaFeatureFormInput or TextBoxFeatureFormInput")
         }
@@ -81,7 +87,11 @@ struct TextEntryFooter: View {
             } else if !description.isEmpty {
                 Text(description)
             } else if isFocused {
-                maximumText
+                if !hasPreviouslySatisfiedMinimum {
+                    minAndMaxText
+                } else {
+                    maximumText
+                }
             }
             Spacer()
             if isFocused {
@@ -91,7 +101,13 @@ struct TextEntryFooter: View {
         .font(.footnote)
         .foregroundColor(validationError == nil ? .secondary : .red)
         .onChange(of: currentLength) { newLength in
-            validate(length: newLength, focused: isFocused)
+            if !hasPreviouslySatisfiedMinimum {
+                if newLength >= minLength {
+                    hasPreviouslySatisfiedMinimum = true
+                }
+            } else {
+                validate(length: newLength, focused: isFocused)
+            }
         }
         .onChange(of: isFocused) { newFocus in
             validate(length: currentLength, focused: newFocus)
