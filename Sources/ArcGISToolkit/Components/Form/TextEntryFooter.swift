@@ -76,7 +76,7 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .tooLong:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maximumText
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .tooShort:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minimumText
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minAndMaxText
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else if !description.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
@@ -125,7 +125,7 @@ extension TextEntryFooter {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Text indicating a field's minimum and maximum number of allowed characters.
-***REMOVED***var minimumText: Text {
+***REMOVED***var minAndMaxText: Text {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Enter \(minLength) to \(maxLength) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
