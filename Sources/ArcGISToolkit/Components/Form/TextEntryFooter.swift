@@ -19,6 +19,10 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED***/ An error that is present when a length constraint is not met.
 ***REMOVED***@State private var validationError: LengthError? = nil
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the text entry field has previously satisfied the minimum
+***REMOVED******REMOVED***/ length at any point in time.
+***REMOVED***@State private var hasPreviouslySatisfiedMinimum: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ The current length of the text in the text entry field.
 ***REMOVED***private let currentLength: Int
 ***REMOVED***
@@ -59,9 +63,11 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED***case let input as TextBoxFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED***self.maxLength = input.maxLength
 ***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
+***REMOVED******REMOVED******REMOVED***self.hasPreviouslySatisfiedMinimum = currentLength >= input.minLength
 ***REMOVED******REMOVED***case let input as TextAreaFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED***self.maxLength = input.maxLength
 ***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
+***REMOVED******REMOVED******REMOVED***self.hasPreviouslySatisfiedMinimum = currentLength >= input.minLength
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***fatalError("TextEntryFooter can only be used with TextAreaFeatureFormInput or TextBoxFeatureFormInput")
 ***REMOVED***
@@ -81,7 +87,11 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED*** else if !description.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
 ***REMOVED******REMOVED*** else if isFocused {
-***REMOVED******REMOVED******REMOVED******REMOVED***maximumText
+***REMOVED******REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minAndMaxText
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maximumText
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if isFocused {
@@ -91,7 +101,13 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.foregroundColor(validationError == nil ? .secondary : .red)
 ***REMOVED******REMOVED***.onChange(of: currentLength) { newLength in
-***REMOVED******REMOVED******REMOVED***validate(length: newLength, focused: isFocused)
+***REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum {
+***REMOVED******REMOVED******REMOVED******REMOVED***if newLength >= minLength {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***hasPreviouslySatisfiedMinimum = true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: newLength, focused: isFocused)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { newFocus in
 ***REMOVED******REMOVED******REMOVED***validate(length: currentLength, focused: newFocus)
