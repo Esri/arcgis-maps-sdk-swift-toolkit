@@ -1,0 +1,281 @@
+/* A label declaring the number of starting points selected for a utility network trace. */
+"%lld selected" = "й_%lld selected______________й";
+
+/* An alert message indicating that a certificate is required to access
+content on a remote host. The variable is the host that prompted the challenge. */
+"A certificate is required to access content on %@." = "й_A certificate is required to access content on %@__________________________й.";
+
+/* A button to add new utility trace starting points. */
+"Add new" = "й_Add new_______________й";
+
+/* A section header for advanced options. */
+"Advanced Options" = "й_Advanced Options_________________й";
+
+/* A button allowing users to view a list of all sites defined in a floor aware map. */
+"All sites" = "й_All sites___________________й";
+
+/* No comment provided by engineer. */
+"All Sites" = "й_All Sites___________________й";
+
+/* A message describing the outcome of clearing all utility network trace results. */
+"All the trace inputs and results will be lost." = "й_All the trace inputs and results will be lost________________________й.";
+
+/* A button indicating the user accepts a potentially dangerous action. */
+"Allow" = "й_Allow___________й";
+
+/* No comment provided by engineer. */
+"An error occurred loading the image: %@." = "й_An error occurred loading the image: %@_____________________й.";
+
+/* No comment provided by engineer. */
+"Attachments" = "й_Attachments____________й";
+
+/* No comment provided by engineer. */
+"Attributes" = "й_Attributes_____________________й";
+
+/* No comment provided by engineer. */
+"Authentication Required" = "й_Authentication Required________________________й";
+
+/* No comment provided by engineer. */
+"Bookmarks" = "й_Bookmarks___________________й";
+
+/* No comment provided by engineer. */
+"Browse For Certificate" = "й_Browse For Certificate_______________________й";
+
+/* No comment provided by engineer. */
+"Cancel" = "й_Cancel_____________й";
+
+/* No comment provided by engineer. */
+"Cancel starting point selection" = "й_Cancel starting point selection_________________й";
+
+/* No comment provided by engineer. */
+"Certificate Required" = "й_Certificate Required_____________________й";
+
+/* A label indicating that the remote host's certificate is not trusted. */
+"Certificate Trust Warning" = "й_Certificate Trust Warning__________________________й";
+
+/* No comment provided by engineer. */
+"Clear All Results" = "й_Clear All Results__________________й";
+
+/* No comment provided by engineer. */
+"Clear all results?" = "й_Clear all results___________________й?";
+
+/* No comment provided by engineer. */
+"Color" = "й_Color___________й";
+
+/* An compass description to be read by a screen reader describing the
+current heading. The first variable being a degree value and the
+second being a corresponding cardinal direction (north, northeast,
+east, etc.). */
+"Compass, heading %lld degrees %@" = "й_Compass, heading %lld degrees %@_________________й";
+
+/* No comment provided by engineer. */
+"Continue" = "й_Continue_________________й";
+
+/* No comment provided by engineer. */
+"Could not access the certificate file." = "й_Could not access the certificate file____________________й.";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "й_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________й.";
+
+/* No comment provided by engineer. */
+"Delete" = "й_Delete_____________й";
+
+/* A button to close the bookmark selection menu. */
+"Done" = "й_Done_________й";
+
+/* No comment provided by engineer. */
+"Duplicate starting points cannot be added." = "й_Duplicate starting points cannot be added______________________й.";
+
+/* No comment provided by engineer. */
+"Element could not be identified." = "й_Element could not be identified_________________й.";
+
+/* No comment provided by engineer. */
+"Error" = "й_Error___________й";
+
+/* No comment provided by engineer. */
+"Error importing certificate" = "й_Error importing certificate____________________________й";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
+"Error loading basemap." = "й_Error loading basemap_______________________й.";
+
+/* No comment provided by engineer. */
+"Evaluating popup expressionsâ€¦" = "й_Evaluating popup expressionsâ€¦_________________й";
+
+/* No comment provided by engineer. */
+"Failed to set starting point" = "й_Failed to set starting point_____________________________й";
+
+/* No comment provided by engineer. */
+"Feature Results" = "й_Feature Results________________й";
+
+/* No comment provided by engineer. */
+"Field" = "й_Field___________й";
+
+/* No comment provided by engineer. */
+"Fields" = "й_Fields_____________й";
+
+/* A search field allowing user to filter a list of facilities by name. */
+"Filter facilities" = "й_Filter facilities__________________й";
+
+/* A search field allowing user to filter a list of sites by name. */
+"Filter sites" = "й_Filter sites_____________й";
+
+/* No comment provided by engineer. */
+"Find a place or address" = "й_Find a place or address________________________й";
+
+/* No comment provided by engineer. */
+"Fraction Along Edge" = "й_Fraction Along Edge____________________й";
+
+/* No comment provided by engineer. */
+"Function Results" = "й_Function Results_________________й";
+
+/* No comment provided by engineer. */
+"Media" = "й_Media___________й";
+
+/* No comment provided by engineer. */
+"Mode" = "й_Mode_________й";
+
+/* No comment provided by engineer. */
+"Name" = "й_Name_________й";
+
+/* No comment provided by engineer. */
+"Network" = "й_Network_______________й";
+
+/* No comment provided by engineer. */
+"New trace" = "й_New trace___________________й";
+
+/* No comment provided by engineer. */
+"No bookmarks" = "й_No bookmarks_____________й";
+
+/* No comment provided by engineer. */
+"No configurations available" = "й_No configurations available____________________________й";
+
+/* No comment provided by engineer. */
+"No matches found" = "й_No matches found_________________й";
+
+/* A message to show when there are no results or suggestions. */
+"No results found" = "й_No results found_________________й";
+
+/* No comment provided by engineer. */
+"No trace types found." = "й_No trace types found______________________й.";
+
+/* No comment provided by engineer. */
+"No utility networks found." = "й_No utility networks found___________________________й.";
+
+/* No comment provided by engineer. */
+"None selected" = "й_None selected______________й";
+
+/* A trace function output result is not available. */
+"Not Available" = "й_Not Available______________й";
+
+/* A string identifying a utility network object. */
+"Object ID: %@" = "й_Object ID: %@______________й";
+
+/* No comment provided by engineer. */
+"OK" = "й_OK_____й";
+
+/* No comment provided by engineer. */
+"Password" = "й_Password_________________й";
+
+/* No comment provided by engineer. */
+"Password Required" = "й_Password Required__________________й";
+
+/* No comment provided by engineer. */
+"Please enter a password for the chosen certificate." = "й_Please enter a password for the chosen certificate___________________________й.";
+
+/* No comment provided by engineer. */
+"Please set at least 1 starting location." = "й_Please set at least 1 starting location_____________________й.";
+
+/* No comment provided by engineer. */
+"Please set at least 2 starting locations." = "й_Please set at least 2 starting locations______________________й.";
+
+/* An error message shown when a popup cannot be displayed. The
+variable provides additional data. */
+"Popup evaluation failed: %@" = "й_Popup evaluation failed: %@____________________________й";
+
+/* A button to show when a user has panned the map away from the
+original search location. */
+"Repeat Search Here" = "й_Repeat Search Here___________________й";
+
+/* No comment provided by engineer. */
+"Results" = "й_Results_______________й";
+
+/* No comment provided by engineer. */
+"Search Query" = "й_Search Query_____________й";
+
+/* No comment provided by engineer. */
+"Select a bookmark" = "й_Select a bookmark__________________й";
+
+/* No comment provided by engineer. */
+"Select a facility" = "й_Select a facility__________________й";
+
+/* No comment provided by engineer. */
+"Sites" = "й_Sites___________й";
+
+/* No comment provided by engineer. */
+"Spatial reference mismatch." = "й_Spatial reference mismatch____________________________й.";
+
+/* No comment provided by engineer. */
+"Starting Points" = "й_Starting Points________________й";
+
+/* No comment provided by engineer. */
+"Tap on the image for more information." = "й_Tap on the image for more information____________________й.";
+
+/* No comment provided by engineer. */
+"Terminal Configuration" = "й_Terminal Configuration_______________________й";
+
+/* No comment provided by engineer. */
+"The basemap does not have a spatial reference." = "й_The basemap does not have a spatial reference________________________й.";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to
+load for an unknown reason. */
+"The basemap failed to load for an unknown reason." = "й_The basemap failed to load for an unknown reason__________________________й.";
+
+/* No comment provided by engineer. */
+"The basemap has a spatial reference that is incompatible with the map." = "й_The basemap has a spatial reference that is incompatible with the map____________________________________й.";
+
+/* No comment provided by engineer. */
+"The certificate file or password was invalid." = "й_The certificate file or password was invalid________________________й.";
+
+/* No comment provided by engineer. */
+"The certificate file was invalid." = "й_The certificate file was invalid__________________й.";
+
+/* No comment provided by engineer. */
+"The map does not have a spatial reference." = "й_The map does not have a spatial reference______________________й.";
+
+/* No comment provided by engineer. */
+"The password was invalid." = "й_The password was invalid__________________________й.";
+
+/* Description of error thrown when a remote image could not be loaded. */
+"The URL could not be reached or did not contain image data" = "й_The URL could not be reached or did not contain image data______________________________й";
+
+/* No comment provided by engineer. */
+"Trace" = "й_Trace___________й";
+
+/* A label indicating the index of the trace being viewed out of the total number of traces completed. */
+"Trace %lld of %lld" = "й_Trace %lld of %lld___________________й";
+
+/* No comment provided by engineer. */
+"Trace Configuration" = "й_Trace Configuration____________________й";
+
+/* No comment provided by engineer. */
+"Try Again" = "й_Try Again___________________й";
+
+/* A label to use in place of a utility element asset type name. */
+"Unnamed Asset Type" = "й_Unnamed Asset Type___________________й";
+
+/* No comment provided by engineer. */
+"Username" = "й_Username_________________й";
+
+/* No comment provided by engineer. */
+"Value" = "й_Value___________й";
+
+/* A label explaining that credentials are required to authenticate with specified host.
+The host is indicated in the variable. */
+"You must sign in to access '%@'" = "й_You must sign in to access '%@'_________________й";
+
+/* A button to change the map to the extent of the selected trace. */
+"Zoom To" = "й_Zoom To_______________й";
+
+/* A user option specifying that a map should automatically change to show completed trace results. */
+"Zoom to result" = "й_Zoom to result_______________й";
+

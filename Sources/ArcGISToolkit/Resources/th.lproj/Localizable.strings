@@ -1,2 +1,281 @@
+/* A label declaring the number of starting points selected for a utility network trace. */
+"%lld selected" = "ก้_%lld selected______________ษฺ";
+
+/* An alert message indicating that a certificate is required to access
+content on a remote host. The variable is the host that prompted the challenge. */
+"A certificate is required to access content on %@." = "ก้_A certificate is required to access content on %@__________________________ษฺ.";
+
+/* A button to add new utility trace starting points. */
+"Add new" = "ก้_Add new_______________ษฺ";
+
+/* A section header for advanced options. */
+"Advanced Options" = "ก้_Advanced Options_________________ษฺ";
+
+/* A button allowing users to view a list of all sites defined in a floor aware map. */
+"All sites" = "ก้_All sites___________________ษฺ";
+
 /* No comment provided by engineer. */
-"Delete" = "ลบ";
+"All Sites" = "ก้_All Sites___________________ษฺ";
+
+/* A message describing the outcome of clearing all utility network trace results. */
+"All the trace inputs and results will be lost." = "ก้_All the trace inputs and results will be lost________________________ษฺ.";
+
+/* A button indicating the user accepts a potentially dangerous action. */
+"Allow" = "ก้_Allow___________ษฺ";
+
+/* No comment provided by engineer. */
+"An error occurred loading the image: %@." = "ก้_An error occurred loading the image: %@_____________________ษฺ.";
+
+/* No comment provided by engineer. */
+"Attachments" = "ก้_Attachments____________ษฺ";
+
+/* No comment provided by engineer. */
+"Attributes" = "ก้_Attributes_____________________ษฺ";
+
+/* No comment provided by engineer. */
+"Authentication Required" = "ก้_Authentication Required________________________ษฺ";
+
+/* No comment provided by engineer. */
+"Bookmarks" = "ก้_Bookmarks___________________ษฺ";
+
+/* No comment provided by engineer. */
+"Browse For Certificate" = "ก้_Browse For Certificate_______________________ษฺ";
+
+/* No comment provided by engineer. */
+"Cancel" = "ก้_Cancel_____________ษฺ";
+
+/* No comment provided by engineer. */
+"Cancel starting point selection" = "ก้_Cancel starting point selection_________________ษฺ";
+
+/* No comment provided by engineer. */
+"Certificate Required" = "ก้_Certificate Required_____________________ษฺ";
+
+/* A label indicating that the remote host's certificate is not trusted. */
+"Certificate Trust Warning" = "ก้_Certificate Trust Warning__________________________ษฺ";
+
+/* No comment provided by engineer. */
+"Clear All Results" = "ก้_Clear All Results__________________ษฺ";
+
+/* No comment provided by engineer. */
+"Clear all results?" = "ก้_Clear all results___________________ษฺ?";
+
+/* No comment provided by engineer. */
+"Color" = "ก้_Color___________ษฺ";
+
+/* An compass description to be read by a screen reader describing the
+current heading. The first variable being a degree value and the
+second being a corresponding cardinal direction (north, northeast,
+east, etc.). */
+"Compass, heading %lld degrees %@" = "ก้_Compass, heading %lld degrees %@_________________ษฺ";
+
+/* No comment provided by engineer. */
+"Continue" = "ก้_Continue_________________ษฺ";
+
+/* No comment provided by engineer. */
+"Could not access the certificate file." = "ก้_Could not access the certificate file____________________ษฺ.";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "ก้_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________ษฺ.";
+
+/* No comment provided by engineer. */
+"Delete" = "ก้_Delete_____________ษฺ";
+
+/* A button to close the bookmark selection menu. */
+"Done" = "ก้_Done_________ษฺ";
+
+/* No comment provided by engineer. */
+"Duplicate starting points cannot be added." = "ก้_Duplicate starting points cannot be added______________________ษฺ.";
+
+/* No comment provided by engineer. */
+"Element could not be identified." = "ก้_Element could not be identified_________________ษฺ.";
+
+/* No comment provided by engineer. */
+"Error" = "ก้_Error___________ษฺ";
+
+/* No comment provided by engineer. */
+"Error importing certificate" = "ก้_Error importing certificate____________________________ษฺ";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
+"Error loading basemap." = "ก้_Error loading basemap_______________________ษฺ.";
+
+/* No comment provided by engineer. */
+"Evaluating popup expressionsâ€¦" = "ก้_Evaluating popup expressionsâ€¦_________________ษฺ";
+
+/* No comment provided by engineer. */
+"Failed to set starting point" = "ก้_Failed to set starting point_____________________________ษฺ";
+
+/* No comment provided by engineer. */
+"Feature Results" = "ก้_Feature Results________________ษฺ";
+
+/* No comment provided by engineer. */
+"Field" = "ก้_Field___________ษฺ";
+
+/* No comment provided by engineer. */
+"Fields" = "ก้_Fields_____________ษฺ";
+
+/* A search field allowing user to filter a list of facilities by name. */
+"Filter facilities" = "ก้_Filter facilities__________________ษฺ";
+
+/* A search field allowing user to filter a list of sites by name. */
+"Filter sites" = "ก้_Filter sites_____________ษฺ";
+
+/* No comment provided by engineer. */
+"Find a place or address" = "ก้_Find a place or address________________________ษฺ";
+
+/* No comment provided by engineer. */
+"Fraction Along Edge" = "ก้_Fraction Along Edge____________________ษฺ";
+
+/* No comment provided by engineer. */
+"Function Results" = "ก้_Function Results_________________ษฺ";
+
+/* No comment provided by engineer. */
+"Media" = "ก้_Media___________ษฺ";
+
+/* No comment provided by engineer. */
+"Mode" = "ก้_Mode_________ษฺ";
+
+/* No comment provided by engineer. */
+"Name" = "ก้_Name_________ษฺ";
+
+/* No comment provided by engineer. */
+"Network" = "ก้_Network_______________ษฺ";
+
+/* No comment provided by engineer. */
+"New trace" = "ก้_New trace___________________ษฺ";
+
+/* No comment provided by engineer. */
+"No bookmarks" = "ก้_No bookmarks_____________ษฺ";
+
+/* No comment provided by engineer. */
+"No configurations available" = "ก้_No configurations available____________________________ษฺ";
+
+/* No comment provided by engineer. */
+"No matches found" = "ก้_No matches found_________________ษฺ";
+
+/* A message to show when there are no results or suggestions. */
+"No results found" = "ก้_No results found_________________ษฺ";
+
+/* No comment provided by engineer. */
+"No trace types found." = "ก้_No trace types found______________________ษฺ.";
+
+/* No comment provided by engineer. */
+"No utility networks found." = "ก้_No utility networks found___________________________ษฺ.";
+
+/* No comment provided by engineer. */
+"None selected" = "ก้_None selected______________ษฺ";
+
+/* A trace function output result is not available. */
+"Not Available" = "ก้_Not Available______________ษฺ";
+
+/* A string identifying a utility network object. */
+"Object ID: %@" = "ก้_Object ID: %@______________ษฺ";
+
+/* No comment provided by engineer. */
+"OK" = "ก้_OK_____ษฺ";
+
+/* No comment provided by engineer. */
+"Password" = "ก้_Password_________________ษฺ";
+
+/* No comment provided by engineer. */
+"Password Required" = "ก้_Password Required__________________ษฺ";
+
+/* No comment provided by engineer. */
+"Please enter a password for the chosen certificate." = "ก้_Please enter a password for the chosen certificate___________________________ษฺ.";
+
+/* No comment provided by engineer. */
+"Please set at least 1 starting location." = "ก้_Please set at least 1 starting location_____________________ษฺ.";
+
+/* No comment provided by engineer. */
+"Please set at least 2 starting locations." = "ก้_Please set at least 2 starting locations______________________ษฺ.";
+
+/* An error message shown when a popup cannot be displayed. The
+variable provides additional data. */
+"Popup evaluation failed: %@" = "ก้_Popup evaluation failed: %@____________________________ษฺ";
+
+/* A button to show when a user has panned the map away from the
+original search location. */
+"Repeat Search Here" = "ก้_Repeat Search Here___________________ษฺ";
+
+/* No comment provided by engineer. */
+"Results" = "ก้_Results_______________ษฺ";
+
+/* No comment provided by engineer. */
+"Search Query" = "ก้_Search Query_____________ษฺ";
+
+/* No comment provided by engineer. */
+"Select a bookmark" = "ก้_Select a bookmark__________________ษฺ";
+
+/* No comment provided by engineer. */
+"Select a facility" = "ก้_Select a facility__________________ษฺ";
+
+/* No comment provided by engineer. */
+"Sites" = "ก้_Sites___________ษฺ";
+
+/* No comment provided by engineer. */
+"Spatial reference mismatch." = "ก้_Spatial reference mismatch____________________________ษฺ.";
+
+/* No comment provided by engineer. */
+"Starting Points" = "ก้_Starting Points________________ษฺ";
+
+/* No comment provided by engineer. */
+"Tap on the image for more information." = "ก้_Tap on the image for more information____________________ษฺ.";
+
+/* No comment provided by engineer. */
+"Terminal Configuration" = "ก้_Terminal Configuration_______________________ษฺ";
+
+/* No comment provided by engineer. */
+"The basemap does not have a spatial reference." = "ก้_The basemap does not have a spatial reference________________________ษฺ.";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to
+load for an unknown reason. */
+"The basemap failed to load for an unknown reason." = "ก้_The basemap failed to load for an unknown reason__________________________ษฺ.";
+
+/* No comment provided by engineer. */
+"The basemap has a spatial reference that is incompatible with the map." = "ก้_The basemap has a spatial reference that is incompatible with the map____________________________________ษฺ.";
+
+/* No comment provided by engineer. */
+"The certificate file or password was invalid." = "ก้_The certificate file or password was invalid________________________ษฺ.";
+
+/* No comment provided by engineer. */
+"The certificate file was invalid." = "ก้_The certificate file was invalid__________________ษฺ.";
+
+/* No comment provided by engineer. */
+"The map does not have a spatial reference." = "ก้_The map does not have a spatial reference______________________ษฺ.";
+
+/* No comment provided by engineer. */
+"The password was invalid." = "ก้_The password was invalid__________________________ษฺ.";
+
+/* Description of error thrown when a remote image could not be loaded. */
+"The URL could not be reached or did not contain image data" = "ก้_The URL could not be reached or did not contain image data______________________________ษฺ";
+
+/* No comment provided by engineer. */
+"Trace" = "ก้_Trace___________ษฺ";
+
+/* A label indicating the index of the trace being viewed out of the total number of traces completed. */
+"Trace %lld of %lld" = "ก้_Trace %lld of %lld___________________ษฺ";
+
+/* No comment provided by engineer. */
+"Trace Configuration" = "ก้_Trace Configuration____________________ษฺ";
+
+/* No comment provided by engineer. */
+"Try Again" = "ก้_Try Again___________________ษฺ";
+
+/* A label to use in place of a utility element asset type name. */
+"Unnamed Asset Type" = "ก้_Unnamed Asset Type___________________ษฺ";
+
+/* No comment provided by engineer. */
+"Username" = "ก้_Username_________________ษฺ";
+
+/* No comment provided by engineer. */
+"Value" = "ก้_Value___________ษฺ";
+
+/* A label explaining that credentials are required to authenticate with specified host.
+The host is indicated in the variable. */
+"You must sign in to access '%@'" = "ก้_You must sign in to access '%@'_________________ษฺ";
+
+/* A button to change the map to the extent of the selected trace. */
+"Zoom To" = "ก้_Zoom To_______________ษฺ";
+
+/* A user option specifying that a map should automatically change to show completed trace results. */
+"Zoom to result" = "ก้_Zoom to result_______________ษฺ";
+

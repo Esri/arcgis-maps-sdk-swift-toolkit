@@ -1,2 +1,281 @@
+/* A label declaring the number of starting points selected for a utility network trace. */
+"%lld selected" = "ã_%lld selected______________Ç";
+
+/* An alert message indicating that a certificate is required to access
+content on a remote host. The variable is the host that prompted the challenge. */
+"A certificate is required to access content on %@." = "ã_A certificate is required to access content on %@__________________________Ç.";
+
+/* A button to add new utility trace starting points. */
+"Add new" = "ã_Add new_______________Ç";
+
+/* A section header for advanced options. */
+"Advanced Options" = "ã_Advanced Options_________________Ç";
+
+/* A button allowing users to view a list of all sites defined in a floor aware map. */
+"All sites" = "ã_All sites___________________Ç";
+
 /* No comment provided by engineer. */
-"Delete" = "Eliminar";
+"All Sites" = "ã_All Sites___________________Ç";
+
+/* A message describing the outcome of clearing all utility network trace results. */
+"All the trace inputs and results will be lost." = "ã_All the trace inputs and results will be lost________________________Ç.";
+
+/* A button indicating the user accepts a potentially dangerous action. */
+"Allow" = "ã_Allow___________Ç";
+
+/* No comment provided by engineer. */
+"An error occurred loading the image: %@." = "ã_An error occurred loading the image: %@_____________________Ç.";
+
+/* No comment provided by engineer. */
+"Attachments" = "ã_Attachments____________Ç";
+
+/* No comment provided by engineer. */
+"Attributes" = "ã_Attributes_____________________Ç";
+
+/* No comment provided by engineer. */
+"Authentication Required" = "ã_Authentication Required________________________Ç";
+
+/* No comment provided by engineer. */
+"Bookmarks" = "ã_Bookmarks___________________Ç";
+
+/* No comment provided by engineer. */
+"Browse For Certificate" = "ã_Browse For Certificate_______________________Ç";
+
+/* No comment provided by engineer. */
+"Cancel" = "ã_Cancel_____________Ç";
+
+/* No comment provided by engineer. */
+"Cancel starting point selection" = "ã_Cancel starting point selection_________________Ç";
+
+/* No comment provided by engineer. */
+"Certificate Required" = "ã_Certificate Required_____________________Ç";
+
+/* A label indicating that the remote host's certificate is not trusted. */
+"Certificate Trust Warning" = "ã_Certificate Trust Warning__________________________Ç";
+
+/* No comment provided by engineer. */
+"Clear All Results" = "ã_Clear All Results__________________Ç";
+
+/* No comment provided by engineer. */
+"Clear all results?" = "ã_Clear all results___________________Ç?";
+
+/* No comment provided by engineer. */
+"Color" = "ã_Color___________Ç";
+
+/* An compass description to be read by a screen reader describing the
+current heading. The first variable being a degree value and the
+second being a corresponding cardinal direction (north, northeast,
+east, etc.). */
+"Compass, heading %lld degrees %@" = "ã_Compass, heading %lld degrees %@_________________Ç";
+
+/* No comment provided by engineer. */
+"Continue" = "ã_Continue_________________Ç";
+
+/* No comment provided by engineer. */
+"Could not access the certificate file." = "ã_Could not access the certificate file____________________Ç.";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "ã_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________Ç.";
+
+/* No comment provided by engineer. */
+"Delete" = "ã_Delete_____________Ç";
+
+/* A button to close the bookmark selection menu. */
+"Done" = "ã_Done_________Ç";
+
+/* No comment provided by engineer. */
+"Duplicate starting points cannot be added." = "ã_Duplicate starting points cannot be added______________________Ç.";
+
+/* No comment provided by engineer. */
+"Element could not be identified." = "ã_Element could not be identified_________________Ç.";
+
+/* No comment provided by engineer. */
+"Error" = "ã_Error___________Ç";
+
+/* No comment provided by engineer. */
+"Error importing certificate" = "ã_Error importing certificate____________________________Ç";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
+"Error loading basemap." = "ã_Error loading basemap_______________________Ç.";
+
+/* No comment provided by engineer. */
+"Evaluating popup expressionsâ€¦" = "ã_Evaluating popup expressionsâ€¦_________________Ç";
+
+/* No comment provided by engineer. */
+"Failed to set starting point" = "ã_Failed to set starting point_____________________________Ç";
+
+/* No comment provided by engineer. */
+"Feature Results" = "ã_Feature Results________________Ç";
+
+/* No comment provided by engineer. */
+"Field" = "ã_Field___________Ç";
+
+/* No comment provided by engineer. */
+"Fields" = "ã_Fields_____________Ç";
+
+/* A search field allowing user to filter a list of facilities by name. */
+"Filter facilities" = "ã_Filter facilities__________________Ç";
+
+/* A search field allowing user to filter a list of sites by name. */
+"Filter sites" = "ã_Filter sites_____________Ç";
+
+/* No comment provided by engineer. */
+"Find a place or address" = "ã_Find a place or address________________________Ç";
+
+/* No comment provided by engineer. */
+"Fraction Along Edge" = "ã_Fraction Along Edge____________________Ç";
+
+/* No comment provided by engineer. */
+"Function Results" = "ã_Function Results_________________Ç";
+
+/* No comment provided by engineer. */
+"Media" = "ã_Media___________Ç";
+
+/* No comment provided by engineer. */
+"Mode" = "ã_Mode_________Ç";
+
+/* No comment provided by engineer. */
+"Name" = "ã_Name_________Ç";
+
+/* No comment provided by engineer. */
+"Network" = "ã_Network_______________Ç";
+
+/* No comment provided by engineer. */
+"New trace" = "ã_New trace___________________Ç";
+
+/* No comment provided by engineer. */
+"No bookmarks" = "ã_No bookmarks_____________Ç";
+
+/* No comment provided by engineer. */
+"No configurations available" = "ã_No configurations available____________________________Ç";
+
+/* No comment provided by engineer. */
+"No matches found" = "ã_No matches found_________________Ç";
+
+/* A message to show when there are no results or suggestions. */
+"No results found" = "ã_No results found_________________Ç";
+
+/* No comment provided by engineer. */
+"No trace types found." = "ã_No trace types found______________________Ç.";
+
+/* No comment provided by engineer. */
+"No utility networks found." = "ã_No utility networks found___________________________Ç.";
+
+/* No comment provided by engineer. */
+"None selected" = "ã_None selected______________Ç";
+
+/* A trace function output result is not available. */
+"Not Available" = "ã_Not Available______________Ç";
+
+/* A string identifying a utility network object. */
+"Object ID: %@" = "ã_Object ID: %@______________Ç";
+
+/* No comment provided by engineer. */
+"OK" = "ã_OK_____Ç";
+
+/* No comment provided by engineer. */
+"Password" = "ã_Password_________________Ç";
+
+/* No comment provided by engineer. */
+"Password Required" = "ã_Password Required__________________Ç";
+
+/* No comment provided by engineer. */
+"Please enter a password for the chosen certificate." = "ã_Please enter a password for the chosen certificate___________________________Ç.";
+
+/* No comment provided by engineer. */
+"Please set at least 1 starting location." = "ã_Please set at least 1 starting location_____________________Ç.";
+
+/* No comment provided by engineer. */
+"Please set at least 2 starting locations." = "ã_Please set at least 2 starting locations______________________Ç.";
+
+/* An error message shown when a popup cannot be displayed. The
+variable provides additional data. */
+"Popup evaluation failed: %@" = "ã_Popup evaluation failed: %@____________________________Ç";
+
+/* A button to show when a user has panned the map away from the
+original search location. */
+"Repeat Search Here" = "ã_Repeat Search Here___________________Ç";
+
+/* No comment provided by engineer. */
+"Results" = "ã_Results_______________Ç";
+
+/* No comment provided by engineer. */
+"Search Query" = "ã_Search Query_____________Ç";
+
+/* No comment provided by engineer. */
+"Select a bookmark" = "ã_Select a bookmark__________________Ç";
+
+/* No comment provided by engineer. */
+"Select a facility" = "ã_Select a facility__________________Ç";
+
+/* No comment provided by engineer. */
+"Sites" = "ã_Sites___________Ç";
+
+/* No comment provided by engineer. */
+"Spatial reference mismatch." = "ã_Spatial reference mismatch____________________________Ç.";
+
+/* No comment provided by engineer. */
+"Starting Points" = "ã_Starting Points________________Ç";
+
+/* No comment provided by engineer. */
+"Tap on the image for more information." = "ã_Tap on the image for more information____________________Ç.";
+
+/* No comment provided by engineer. */
+"Terminal Configuration" = "ã_Terminal Configuration_______________________Ç";
+
+/* No comment provided by engineer. */
+"The basemap does not have a spatial reference." = "ã_The basemap does not have a spatial reference________________________Ç.";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to
+load for an unknown reason. */
+"The basemap failed to load for an unknown reason." = "ã_The basemap failed to load for an unknown reason__________________________Ç.";
+
+/* No comment provided by engineer. */
+"The basemap has a spatial reference that is incompatible with the map." = "ã_The basemap has a spatial reference that is incompatible with the map____________________________________Ç.";
+
+/* No comment provided by engineer. */
+"The certificate file or password was invalid." = "ã_The certificate file or password was invalid________________________Ç.";
+
+/* No comment provided by engineer. */
+"The certificate file was invalid." = "ã_The certificate file was invalid__________________Ç.";
+
+/* No comment provided by engineer. */
+"The map does not have a spatial reference." = "ã_The map does not have a spatial reference______________________Ç.";
+
+/* No comment provided by engineer. */
+"The password was invalid." = "ã_The password was invalid__________________________Ç.";
+
+/* Description of error thrown when a remote image could not be loaded. */
+"The URL could not be reached or did not contain image data" = "ã_The URL could not be reached or did not contain image data______________________________Ç";
+
+/* No comment provided by engineer. */
+"Trace" = "ã_Trace___________Ç";
+
+/* A label indicating the index of the trace being viewed out of the total number of traces completed. */
+"Trace %lld of %lld" = "ã_Trace %lld of %lld___________________Ç";
+
+/* No comment provided by engineer. */
+"Trace Configuration" = "ã_Trace Configuration____________________Ç";
+
+/* No comment provided by engineer. */
+"Try Again" = "ã_Try Again___________________Ç";
+
+/* A label to use in place of a utility element asset type name. */
+"Unnamed Asset Type" = "ã_Unnamed Asset Type___________________Ç";
+
+/* No comment provided by engineer. */
+"Username" = "ã_Username_________________Ç";
+
+/* No comment provided by engineer. */
+"Value" = "ã_Value___________Ç";
+
+/* A label explaining that credentials are required to authenticate with specified host.
+The host is indicated in the variable. */
+"You must sign in to access '%@'" = "ã_You must sign in to access '%@'_________________Ç";
+
+/* A button to change the map to the extent of the selected trace. */
+"Zoom To" = "ã_Zoom To_______________Ç";
+
+/* A user option specifying that a map should automatically change to show completed trace results. */
+"Zoom to result" = "ã_Zoom to result_______________Ç";
+
