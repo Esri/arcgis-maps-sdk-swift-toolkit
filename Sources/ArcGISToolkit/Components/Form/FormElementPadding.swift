@@ -11,17 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
 import SwiftUI
 
-/// A view shown at the bottom of each field element in a form.
-struct FormElementFooter: View {
-    /// The form element the header is for.
-    let element: FieldFeatureFormElement
-    
-    var body: some View {
-        Text(element.description)
-            .font(.footnote)
-            .foregroundColor(.secondary)
+private struct FormElementPaddingKey: EnvironmentKey {
+    static let defaultValue: CGFloat = 10
+}
+
+extension EnvironmentValues {
+    /// A vertical amount of padding to use between form elements.
+    var formElementPadding: CGFloat {
+        get { self[FormElementPaddingKey.self] }
+        set { self[FormElementPaddingKey.self] = newValue }
     }
 }
