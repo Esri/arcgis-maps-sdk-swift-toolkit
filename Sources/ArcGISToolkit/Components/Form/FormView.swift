@@ -18,6 +18,8 @@ import FormsPlugin
 ***REMOVED***/ Forms allow users to edit information about GIS features.
 ***REMOVED***/ - Since: 200.2
 public struct FormView: View {
+***REMOVED***@Environment(\.formElementPadding) var elementPadding
+***REMOVED***
 ***REMOVED******REMOVED***/ Info obtained from the map's JSON which contains the underlying form definition.
 ***REMOVED***@State private var mapInfo: MapInfo?
 ***REMOVED***
@@ -30,16 +32,19 @@ public struct FormView: View {
 ***REMOVED******REMOVED***/ Creates a `FormView` with the given map and feature.
 ***REMOVED******REMOVED***/ - Parameter map: The map containing the underlying form definition.
 ***REMOVED******REMOVED***/ - Parameter feature: The feature to be edited.
-***REMOVED***public init(map: Map, feature: ArcGISFeature) {
+***REMOVED***public init(
+***REMOVED******REMOVED***map: Map,
+***REMOVED******REMOVED***feature: ArcGISFeature
+***REMOVED***) {
 ***REMOVED******REMOVED***self.map = map
 ***REMOVED******REMOVED***self.attributes = feature.attributes
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ScrollView {
+***REMOVED******REMOVED******REMOVED***FormHeader(title: formDefinition?.title)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: formDefinition?.title)
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = container.element {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)

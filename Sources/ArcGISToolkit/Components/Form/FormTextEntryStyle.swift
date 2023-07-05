@@ -13,17 +13,20 @@
 
 ***REMOVED***
 
-***REMOVED***/ Displays the number of characters entered in a text field out of the maximum.
-struct TextEntryProgress: View {
-***REMOVED******REMOVED***/ The number of characters entered.
-***REMOVED***let current: Int
+***REMOVED***/ SwiftUI `TextEditor` and `TextField` views have different styling. `TextField`s have
+***REMOVED***/ `textFieldStyle` and `TextEditor`s do not. This modifier allows for common styling.
+struct FormTextEntryStyle: ViewModifier {
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED***.padding(4)
+***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .tertiarySystemFill))
+***REMOVED******REMOVED******REMOVED***.cornerRadius(10)
 ***REMOVED***
-***REMOVED******REMOVED***/ The maximum number of characters.
-***REMOVED***let max: Int
 ***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(current, format: .number)
-***REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+
+extension View {
+***REMOVED******REMOVED***/ Adds a common padding and background around form field text elements.
+***REMOVED***func formTextEntryStyle() -> some View {
+***REMOVED******REMOVED***modifier(FormTextEntryStyle())
 ***REMOVED***
 ***REMOVED***

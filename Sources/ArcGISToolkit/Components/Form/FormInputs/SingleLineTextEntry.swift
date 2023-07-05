@@ -16,14 +16,19 @@ import FormsPlugin
 
 ***REMOVED***/ A view for single line text entry.
 struct SingleLineTextEntry: View {
+***REMOVED***@Environment(\.formElementPadding) var elementPadding
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
+***REMOVED***@FocusState private var isFocused: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The form element that corresponds to this text field.
-***REMOVED***let element: FieldFeatureFormElement
+***REMOVED***private let element: FieldFeatureFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ A `TextBoxFeatureFormInput` which acts as a configuration.
-***REMOVED***let input: TextBoxFeatureFormInput
+***REMOVED***private let input: TextBoxFeatureFormInput
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for single line text entry.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -36,14 +41,21 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public var body: some View {
+***REMOVED******REMOVED***/ - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.
+***REMOVED******REMOVED***/ [More info](https:***REMOVED***openradar.appspot.com/FB12432084)
+***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FormElementHeader(element: element)
-***REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint))
-***REMOVED******REMOVED******REMOVED***.formTextEntryBorder()
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***FormElementFooter(element: element)
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***TextEntryProgress(current: text.count, max: input.maxLength)
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
+***REMOVED******REMOVED******REMOVED*** `MultiLineTextEntry` uses secondary foreground color so it's applied here for consistency.
+***REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
+***REMOVED******REMOVED******REMOVED***.focused($isFocused)
+***REMOVED******REMOVED******REMOVED***.formTextEntryStyle()
+***REMOVED******REMOVED***TextEntryFooter(
+***REMOVED******REMOVED******REMOVED***currentLength: text.count,
+***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
+***REMOVED******REMOVED******REMOVED***element: element,
+***REMOVED******REMOVED******REMOVED***input: input
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED***
 ***REMOVED***

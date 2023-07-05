@@ -11,17 +11,9 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import FormsPlugin
-***REMOVED***
-
-***REMOVED***/ A view shown at the top of each field element in a form.
-struct FormElementHeader: View {
-***REMOVED******REMOVED***/ The form element the header is for.
-***REMOVED***let element: FieldFeatureFormElement
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(verbatim: "\(element.label + (element.required ? " *" : ""))")
-***REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED***
+***REMOVED***/ An error that can be encountered while performing length validation.
+enum LengthError {
+***REMOVED***case emptyWhenRequired
+***REMOVED***case tooLong
+***REMOVED***case tooShort
 ***REMOVED***

@@ -11,17 +11,16 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import FormsPlugin
 ***REMOVED***
 
-***REMOVED***/ A view shown at the bottom of each field element in a form.
-struct FormElementFooter: View {
-***REMOVED******REMOVED***/ The form element the header is for.
-***REMOVED***let element: FieldFeatureFormElement
+private struct FormElementPaddingKey: EnvironmentKey {
+***REMOVED***static let defaultValue: CGFloat = 10
 ***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(element.description)
-***REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+
+extension EnvironmentValues {
+***REMOVED******REMOVED***/ A vertical amount of padding to use between form elements.
+***REMOVED***var formElementPadding: CGFloat {
+***REMOVED******REMOVED***get { self[FormElementPaddingKey.self] ***REMOVED***
+***REMOVED******REMOVED***set { self[FormElementPaddingKey.self] = newValue ***REMOVED***
 ***REMOVED***
 ***REMOVED***
