@@ -11,19 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-
-/// Displays the number of characters entered in a text field out of the maximum.
-struct TextEntryProgress: View {
-    /// The number of characters entered.
-    let current: Int
-    
-    /// The maximum number of characters.
-    let max: Int
-    
-    var body: some View {
-        Text(current, format: .number)
-            .font(.caption)
-            .foregroundColor(.secondary)
-    }
+/// An error that can be encountered while performing length validation.
+enum LengthError {
+    case emptyWhenRequired
+    case tooLong
+    case tooShort
 }

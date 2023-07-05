@@ -18,6 +18,8 @@ import SwiftUI
 /// Forms allow users to edit information about GIS features.
 /// - Since: 200.2
 public struct FormView: View {
+    @Environment(\.formElementPadding) var elementPadding
+    
     /// Info obtained from the map's JSON which contains the underlying form definition.
     @State private var mapInfo: MapInfo?
     
@@ -30,16 +32,19 @@ public struct FormView: View {
     /// Creates a `FormView` with the given map and feature.
     /// - Parameter map: The map containing the underlying form definition.
     /// - Parameter feature: The feature to be edited.
-    public init(map: Map, feature: ArcGISFeature) {
+    public init(
+        map: Map,
+        feature: ArcGISFeature
+    ) {
         self.map = map
         self.attributes = feature.attributes
     }
     
     public var body: some View {
         ScrollView {
+            FormHeader(title: formDefinition?.title)
+                .padding([.bottom], elementPadding)
             VStack(alignment: .leading) {
-                FormHeader(title: formDefinition?.title)
-                Divider()
                 ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
                     if let element = container.element {
                         makeElement(element)
