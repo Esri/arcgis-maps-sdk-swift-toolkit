@@ -75,26 +75,11 @@ struct TextEntryFooter: View {
     
     var body: some View {
         HStack(alignment: .top) {
-            if let validationError {
-                switch validationError {
-                case .emptyWhenRequired:
-                    requiredText
-                case .tooLong:
-                    maximumText
-                case .tooShort:
-                    minAndMaxText
-                }
-            } else if !description.isEmpty {
-                Text(description)
-            } else if isFocused {
-                if !hasPreviouslySatisfiedMinimum {
-                    minAndMaxText
-                } else {
-                    maximumText
-                }
+            if let primaryMessage {
+                primaryMessage
             }
             Spacer()
-            if isFocused {
+            if isFocused, description.isEmpty || validationError != nil {
                 Text(currentLength, format: .number)
             }
         }
@@ -109,23 +94,67 @@ struct TextEntryFooter: View {
                 validate(length: newLength, focused: isFocused)
             }
         }
-        .onChange(of: isFocused) { newFocus in
-            validate(length: currentLength, focused: newFocus)
+        .onChange(of: isFocused) { newIsFocused in
+            if hasPreviouslySatisfiedMinimum || !newIsFocused {
+                validate(length: currentLength, focused: newIsFocused)
+            }
         }
     }
 }
 
 extension TextEntryFooter {
+    /// The primary message to be shown in the footer, if any, dependent on the presence of a
+    /// validation error, description, and focus state.
+    var primaryMessage: Text? {
+        switch (validationError, description.isEmpty, isFocused) {
+        case (.none, true, true):
+            return validationText
+        case (.none, true, false):
+            return nil
+        case (.none, false, _):
+            return Text(description)
+        case (.some(let lengthError), _, _):
+            switch (lengthError, scheme) {
+            case (.emptyWhenRequired, .max):
+                return requiredText
+            default:
+                return validationText
+            }
+        }
+    }
+    
+    /// The length validation scheme performed on the text entry, determined by the minimum and
+    /// maximum lengths.
+    var scheme: LengthValidationScheme {
+        if minLength == 0 {
+            return .max
+        } else if minLength == maxLength {
+            return .exact
+        } else {
+            return .minAndMax
+        }
+    }
+    
+    /// The length validation text, dependent on the length validation scheme.
+    var validationText: Text {
+        switch scheme {
+        case .max:
+            return maximumText
+        case .minAndMax:
+            return minAndMaxText
+        case .exact:
+            return exactText
+        }
+    }
+    
     /// Checks for any validation errors and updates the value of `validationError`.
     /// - Parameter length: The length of text to use for validation.
     /// - Parameter focused: The focus state to use for validation.
     func validate(length: Int, focused: Bool) {
         if length == .zero && isRequired && !focused {
             validationError = .emptyWhenRequired
-        } else if length < minLength {
-            validationError = .tooShort
-        } else if length > maxLength {
-            validationError = .tooLong
+        } else if length < minLength || length > maxLength {
+            validationError = .minOrMaxUnmet
         } else {
             validationError = nil
         }
