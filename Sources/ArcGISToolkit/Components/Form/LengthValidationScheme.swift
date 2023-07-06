@@ -11,10 +11,12 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***/ An error that can be encountered while performing length validation.
-enum LengthError {
-***REMOVED******REMOVED***/ The text field was left empty but a value is required.
-***REMOVED***case emptyWhenRequired
-***REMOVED******REMOVED***/ The text field has too few or too many characters.
-***REMOVED***case minOrMaxUnmet
+***REMOVED***/ The type of length validation to be performed.
+enum LengthValidationScheme {
+***REMOVED******REMOVED***/ A non-zero identical minimum and maximum have been specified.
+***REMOVED***case exact
+***REMOVED******REMOVED***/ A zero minimum and a non-zero maximum have been specified.
+***REMOVED***case max
+***REMOVED******REMOVED***/ A non-zero non-identical minimum and maximum have been specified.
+***REMOVED***case minAndMax
 ***REMOVED***
