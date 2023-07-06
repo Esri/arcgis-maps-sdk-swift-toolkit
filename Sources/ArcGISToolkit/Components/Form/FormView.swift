@@ -23,9 +23,6 @@ public struct FormView: View {
 ***REMOVED******REMOVED***/ The structure of the form.
 ***REMOVED***@State private var formDefinition: FeatureFormDefinition?
 ***REMOVED***
-***REMOVED******REMOVED***/ Info obtained from the map's JSON which contains the underlying form definition.
-***REMOVED***@State private var mapInfo: MapInfo?
-***REMOVED***
 ***REMOVED******REMOVED***/ The feature being edited in the form.
 ***REMOVED***private let feature: ArcGISFeature
 ***REMOVED***
