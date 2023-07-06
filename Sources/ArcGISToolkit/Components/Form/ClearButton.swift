@@ -22,7 +22,7 @@ struct ClearButton: View {
         Button {
             action()
         } label: {
-            Image(systemName: "x.circle.fill")
+            Image(systemName: "xmark.circle.fill")
                 .foregroundColor(.secondary)
         }
         .buttonStyle(.plain)

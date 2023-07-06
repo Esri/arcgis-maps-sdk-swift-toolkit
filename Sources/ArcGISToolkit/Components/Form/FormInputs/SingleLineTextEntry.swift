@@ -16,7 +16,7 @@ import SwiftUI
 
 /// A view for single line text entry.
 struct SingleLineTextEntry: View {
-    @Environment(\.formElementPadding) var padding
+    @Environment(\.formElementPadding) var elementPadding
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
@@ -41,9 +41,11 @@ struct SingleLineTextEntry: View {
         self.input = input
     }
     
+    /// - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.
+    /// [More info](https://openradar.appspot.com/FB12432084)
     var body: some View {
         FormElementHeader(element: element)
-            .padding([.top], padding)
+            .padding([.top], elementPadding)
         // `MultiLineTextEntry` uses secondary foreground color so it's applied here for consistency.
         HStack {
             TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
@@ -56,11 +58,9 @@ struct SingleLineTextEntry: View {
         TextEntryFooter(
             currentLength: text.count,
             isFocused: isFocused,
-            description: element.description ?? "",
-            isRequired: element.required,
-            maxLength: input.maxLength,
-            minLength: input.minLength
+            element: element,
+            input: input
         )
-        .padding([.bottom], padding)
+        .padding([.bottom], elementPadding)
     }
 }
