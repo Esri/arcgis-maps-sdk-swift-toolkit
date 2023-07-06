@@ -131,6 +131,18 @@ extension TextEntryFooter {
         }
     }
     
+    /// Text indicating a field's exact number of allowed characters.
+    /// - Note: This is intended to be used in instances where the character minimum and maximum are
+    /// identical, such as an ID field; the implementation uses `minLength` but it could just as
+    /// well reference `maxLength`.
+    var exactText: Text {
+        Text(
+            "Enter \(minLength) characters",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field's exact number of required characters."
+        )
+    }
+    
     /// Text indicating a field's maximum number of allowed characters.
     var maximumText: Text {
         Text(
