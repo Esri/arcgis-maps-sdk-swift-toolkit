@@ -44,14 +44,13 @@ struct MultiLineTextEntry: View {
     ///   - input: A `TextAreaFeatureFormInput` which acts as a configuration.
     init(element: FieldFeatureFormElement, text: String?, input: TextAreaFeatureFormInput) {
         self.element =  element
-        self.text = text ?? ""
         self.input = input
         
         if let text, !text.isEmpty {
-            self.text = text
+            _text = State(initialValue: text)
             isPlaceholder = false
         } else {
-            self.text = element.hint ?? ""
+            _text = State(initialValue: element.hint ?? "")
             isPlaceholder = true
         }
     }
