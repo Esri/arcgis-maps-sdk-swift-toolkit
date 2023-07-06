@@ -16,7 +16,7 @@ import FormsPlugin
 
 ***REMOVED***/ A view for single line text entry.
 struct SingleLineTextEntry: View {
-***REMOVED***@Environment(\.formElementPadding) var padding
+***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
@@ -41,9 +41,11 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.
+***REMOVED******REMOVED***/ [More info](https:***REMOVED***openradar.appspot.com/FB12432084)
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FormElementHeader(element: element)
-***REMOVED******REMOVED******REMOVED***.padding([.top], padding)
+***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED*** `MultiLineTextEntry` uses secondary foreground color so it's applied here for consistency.
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
@@ -56,11 +58,9 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***TextEntryFooter(
 ***REMOVED******REMOVED******REMOVED***currentLength: text.count,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
-***REMOVED******REMOVED******REMOVED***description: element.description ?? "",
-***REMOVED******REMOVED******REMOVED***isRequired: element.required,
-***REMOVED******REMOVED******REMOVED***maxLength: input.maxLength,
-***REMOVED******REMOVED******REMOVED***minLength: input.minLength
+***REMOVED******REMOVED******REMOVED***element: element,
+***REMOVED******REMOVED******REMOVED***input: input
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.padding([.bottom], padding)
+***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED***
 ***REMOVED***
