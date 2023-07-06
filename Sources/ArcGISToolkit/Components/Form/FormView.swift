@@ -18,7 +18,7 @@ import FormsPlugin
 ***REMOVED***/ Forms allow users to edit information about GIS features.
 ***REMOVED***/ - Since: 200.2
 public struct FormView: View {
-***REMOVED***@Environment(\.formElementPadding) var padding
+***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ The structure of the form.
 ***REMOVED***@State private var formDefinition: FeatureFormDefinition?
@@ -38,7 +38,7 @@ public struct FormView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED***FormHeader(title: formDefinition?.title)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], padding)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = container.element {

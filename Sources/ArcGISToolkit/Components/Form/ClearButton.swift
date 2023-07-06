@@ -22,7 +22,7 @@ struct ClearButton: View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***action()
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "x.circle.fill")
+***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle.fill")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.plain)

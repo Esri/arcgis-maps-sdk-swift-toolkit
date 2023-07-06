@@ -20,13 +20,7 @@ struct FormElementHeader: View {
 ***REMOVED***let element: FieldFeatureFormElement
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if element.required {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(verbatim: "\(element.label) *")
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.label)
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***Text(verbatim: "\(element.label + (element.required ? " *" : ""))")
 ***REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED***

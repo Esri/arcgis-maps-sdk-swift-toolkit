@@ -16,7 +16,7 @@ import FormsPlugin
 
 ***REMOVED***/ A view for text entry spanning multiple lines.
 struct MultiLineTextEntry: View {
-***REMOVED***@Environment(\.formElementPadding) var padding
+***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
@@ -56,9 +56,11 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.
+***REMOVED******REMOVED***/ [More info](https:***REMOVED***openradar.appspot.com/FB12432084)
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FormElementHeader(element: element)
-***REMOVED******REMOVED******REMOVED***.padding([.top], padding)
+***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
 ***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
@@ -87,11 +89,9 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED***TextEntryFooter(
 ***REMOVED******REMOVED******REMOVED***currentLength: isPlaceholder ? .zero : text.count,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
-***REMOVED******REMOVED******REMOVED***description: element.description ?? "",
-***REMOVED******REMOVED******REMOVED***isRequired: element.required,
-***REMOVED******REMOVED******REMOVED***maxLength: input.maxLength,
-***REMOVED******REMOVED******REMOVED***minLength: input.minLength
+***REMOVED******REMOVED******REMOVED***element: element,
+***REMOVED******REMOVED******REMOVED***input: input
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.padding([.bottom], padding)
+***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED***
 ***REMOVED***
