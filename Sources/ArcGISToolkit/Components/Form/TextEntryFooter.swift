@@ -63,11 +63,11 @@ struct TextEntryFooter: View {
         case let input as TextBoxFeatureFormInput:
             self.maxLength = input.maxLength
             self.minLength = input.minLength
-            self.hasPreviouslySatisfiedMinimum = currentLength >= input.minLength
+            _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
         case let input as TextAreaFeatureFormInput:
             self.maxLength = input.maxLength
             self.minLength = input.minLength
-            self.hasPreviouslySatisfiedMinimum = currentLength >= input.minLength
+            _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
         default:
             fatalError("TextEntryFooter can only be used with TextAreaFeatureFormInput or TextBoxFeatureFormInput")
         }
