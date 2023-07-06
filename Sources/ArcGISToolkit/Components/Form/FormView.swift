@@ -18,7 +18,7 @@ import SwiftUI
 /// Forms allow users to edit information about GIS features.
 /// - Since: 200.2
 public struct FormView: View {
-    @Environment(\.formElementPadding) var padding
+    @Environment(\.formElementPadding) var elementPadding
     
     /// Info obtained from the map's JSON which contains the underlying form definition.
     @State private var mapInfo: MapInfo?
@@ -43,7 +43,7 @@ public struct FormView: View {
     public var body: some View {
         ScrollView {
             FormHeader(title: formDefinition?.title)
-                .padding([.bottom], padding)
+                .padding([.bottom], elementPadding)
             VStack(alignment: .leading) {
                 ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
                     if let element = container.element {

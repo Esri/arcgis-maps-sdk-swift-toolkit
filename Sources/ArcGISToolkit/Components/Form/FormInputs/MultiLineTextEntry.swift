@@ -16,7 +16,7 @@ import SwiftUI
 
 /// A view for text entry spanning multiple lines.
 struct MultiLineTextEntry: View {
-    @Environment(\.formElementPadding) var padding
+    @Environment(\.formElementPadding) var elementPadding
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
@@ -56,9 +56,11 @@ struct MultiLineTextEntry: View {
         }
     }
     
+    /// - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.
+    /// [More info](https://openradar.appspot.com/FB12432084)
     var body: some View {
         FormElementHeader(element: element)
-            .padding([.top], padding)
+            .padding([.top], elementPadding)
         HStack(alignment: .bottom) {
             if #available(iOS 16.0, *) {
                 TextEditor(text: $text)
@@ -87,11 +89,9 @@ struct MultiLineTextEntry: View {
         TextEntryFooter(
             currentLength: isPlaceholder ? .zero : text.count,
             isFocused: isFocused,
-            description: element.description ?? "",
-            isRequired: element.required,
-            maxLength: input.maxLength,
-            minLength: input.minLength
+            element: element,
+            input: input
         )
-        .padding([.bottom], padding)
+        .padding([.bottom], elementPadding)
     }
 }

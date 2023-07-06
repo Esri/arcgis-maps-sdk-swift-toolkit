@@ -16,26 +16,62 @@ import SwiftUI
 
 /// A view shown at the bottom of each text entry element in a form.
 struct TextEntryFooter: View {
-    /// <#Description#>
+    /// An error that is present when a length constraint is not met.
     @State private var validationError: LengthError? = nil
     
+    /// A Boolean value indicating whether the text entry field has previously satisfied the minimum
+    /// length at any point in time.
+    @State private var hasPreviouslySatisfiedMinimum: Bool
+    
     /// The current length of the text in the text entry field.
-    let currentLength: Int
+    private let currentLength: Int
     
     /// A Boolean value indicating whether the text entry field is focused.
-    let isFocused: Bool
+    private let isFocused: Bool
     
     /// The description of the text entry field.
-    let description: String
+    private let description: String
     
     /// A Boolean value indicating whether the text entry field is required.
-    let isRequired: Bool
+    private let isRequired: Bool
     
     /// The maximum allowable length of text in the text entry field.
-    let maxLength: Int
+    private let maxLength: Int
     
     /// The minimum allowable length of text in the text entry field.
-    let minLength: Int
+    private let minLength: Int
+    
+    /// Creates a footer shown at the bottom of each text entry element in a form.
+    /// - Parameters:
+    ///   - currentLength: The current length of the text in the text entry field.
+    ///   - isFocused: A Boolean value indicating whether the text entry field is focused.
+    ///   - element: A field element that provides a description for the text entry and whether
+    ///  or not text is required for this entry.
+    ///   - input: A form input that provides length constraints for the text entry.
+    init(
+        currentLength: Int,
+        isFocused: Bool,
+        element: FieldFeatureFormElement,
+        input: FeatureFormInput
+    ) {
+        self.currentLength = currentLength
+        self.isFocused = isFocused
+        self.description = element.description ?? ""
+        self.isRequired = element.required
+        
+        switch input {
+        case let input as TextBoxFeatureFormInput:
+            self.maxLength = input.maxLength
+            self.minLength = input.minLength
+            self.hasPreviouslySatisfiedMinimum = currentLength >= input.minLength
+        case let input as TextAreaFeatureFormInput:
+            self.maxLength = input.maxLength
+            self.minLength = input.minLength
+            self.hasPreviouslySatisfiedMinimum = currentLength >= input.minLength
+        default:
+            fatalError("TextEntryFooter can only be used with TextAreaFeatureFormInput or TextBoxFeatureFormInput")
+        }
+    }
     
     var body: some View {
         HStack(alignment: .top) {
@@ -46,12 +82,16 @@ struct TextEntryFooter: View {
                 case .tooLong:
                     maximumText
                 case .tooShort:
-                    minimumText
+                    minAndMaxText
                 }
             } else if !description.isEmpty {
                 Text(description)
-            } else if description.isEmpty && isFocused {
-                maximumText
+            } else if isFocused {
+                if !hasPreviouslySatisfiedMinimum {
+                    minAndMaxText
+                } else {
+                    maximumText
+                }
             }
             Spacer()
             if isFocused {
@@ -61,7 +101,13 @@ struct TextEntryFooter: View {
         .font(.footnote)
         .foregroundColor(validationError == nil ? .secondary : .red)
         .onChange(of: currentLength) { newLength in
-            validate(length: newLength, focused: isFocused)
+            if !hasPreviouslySatisfiedMinimum {
+                if newLength >= minLength {
+                    hasPreviouslySatisfiedMinimum = true
+                }
+            } else {
+                validate(length: newLength, focused: isFocused)
+            }
         }
         .onChange(of: isFocused) { newFocus in
             validate(length: currentLength, focused: newFocus)
@@ -95,7 +141,7 @@ extension TextEntryFooter {
     }
     
     /// Text indicating a field's minimum and maximum number of allowed characters.
-    var minimumText: Text {
+    var minAndMaxText: Text {
         Text(
             "Enter \(minLength) to \(maxLength) characters",
             bundle: .toolkitModule,
