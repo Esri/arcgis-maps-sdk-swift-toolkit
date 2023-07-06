@@ -163,7 +163,7 @@ extension TextEntryFooter {
 ***REMOVED******REMOVED***/ Text indicating a field's exact number of allowed characters.
 ***REMOVED******REMOVED***/ - Note: This is intended to be used in instances where the character minimum and maximum are
 ***REMOVED******REMOVED***/ identical, such as an ID field; the implementation uses `minLength` but it could just as
-***REMOVED******REMOVED***/ well reference `maxLength`.
+***REMOVED******REMOVED***/ well use `maxLength`.
 ***REMOVED***var exactText: Text {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Enter \(minLength) characters",
