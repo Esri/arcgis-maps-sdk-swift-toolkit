@@ -17,7 +17,7 @@ import FormsPlugin
 ***REMOVED***/ A view shown at the bottom of each text entry element in a form.
 struct TextEntryFooter: View {
 ***REMOVED******REMOVED***/ An error that is present when a length constraint is not met.
-***REMOVED***@State private var validationError: LengthError? = nil
+***REMOVED***@State private var validationError: LengthError?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the text entry field has previously satisfied the minimum
 ***REMOVED******REMOVED***/ length at any point in time.
