@@ -23,9 +23,6 @@ public struct FormView: View {
     /// The structure of the form.
     @State private var formDefinition: FeatureFormDefinition?
     
-    /// Info obtained from the map's JSON which contains the underlying form definition.
-    @State private var mapInfo: MapInfo?
-    
     /// The feature being edited in the form.
     private let feature: ArcGISFeature
     
