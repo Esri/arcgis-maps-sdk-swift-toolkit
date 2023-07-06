@@ -17,7 +17,7 @@ import SwiftUI
 /// A view shown at the bottom of each text entry element in a form.
 struct TextEntryFooter: View {
     /// An error that is present when a length constraint is not met.
-    @State private var validationError: LengthError? = nil
+    @State private var validationError: LengthError?
     
     /// A Boolean value indicating whether the text entry field has previously satisfied the minimum
     /// length at any point in time.
