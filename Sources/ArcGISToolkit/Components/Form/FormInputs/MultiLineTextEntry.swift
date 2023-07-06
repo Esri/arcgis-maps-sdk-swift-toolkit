@@ -61,18 +61,21 @@ struct MultiLineTextEntry: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FormElementHeader(element: element)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED***HStack(alignment: .bottom) {
 ***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if isFocused && !text.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.background(.clear)
 ***REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED***.foregroundColor(isPlaceholder ? .secondary : .primary)
-***REMOVED******REMOVED***.frame(minHeight: 100, maxHeight: 200)
+***REMOVED******REMOVED***.frame(minHeight: 75, maxHeight: 150)
 ***REMOVED******REMOVED***.onChange(of: isFocused) { focused in
 ***REMOVED******REMOVED******REMOVED***if focused && isPlaceholder {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
