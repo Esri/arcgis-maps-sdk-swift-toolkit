@@ -11,10 +11,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// An error that can be encountered while performing length validation.
-enum LengthError {
-    /// The text field was left empty but a value is required.
-    case emptyWhenRequired
-    /// The text field has too few or too many characters.
-    case minOrMaxUnmet
+/// The type of length validation to be performed.
+enum LengthValidationScheme {
+    /// A non-zero identical minimum and maximum have been specified.
+    case exact
+    /// A zero minimum and a non-zero maximum have been specified.
+    case max
+    /// A non-zero non-identical minimum and maximum have been specified.
+    case minAndMax
 }

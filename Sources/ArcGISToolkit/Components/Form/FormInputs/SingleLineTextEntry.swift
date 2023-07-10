@@ -37,8 +37,8 @@ struct SingleLineTextEntry: View {
     ///   - input: A `TextBoxFeatureFormInput` which acts as a configuration.
     init(element: FieldFeatureFormElement, text: String?, input: TextBoxFeatureFormInput) {
         self.element = element
-        self.text = text ?? ""
         self.input = input
+        _text = State(initialValue: text ?? "")
     }
     
     /// - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.

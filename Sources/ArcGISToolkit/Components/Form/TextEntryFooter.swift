@@ -17,7 +17,7 @@ import SwiftUI
 /// A view shown at the bottom of each text entry element in a form.
 struct TextEntryFooter: View {
     /// An error that is present when a length constraint is not met.
-    @State private var validationError: LengthError? = nil
+    @State private var validationError: LengthError?
     
     /// A Boolean value indicating whether the text entry field has previously satisfied the minimum
     /// length at any point in time.
@@ -63,11 +63,11 @@ struct TextEntryFooter: View {
         case let input as TextBoxFeatureFormInput:
             self.maxLength = input.maxLength
             self.minLength = input.minLength
-            self.hasPreviouslySatisfiedMinimum = currentLength >= input.minLength
+            _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
         case let input as TextAreaFeatureFormInput:
             self.maxLength = input.maxLength
             self.minLength = input.minLength
-            self.hasPreviouslySatisfiedMinimum = currentLength >= input.minLength
+            _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
         default:
             fatalError("TextEntryFooter can only be used with TextAreaFeatureFormInput or TextBoxFeatureFormInput")
         }
@@ -75,26 +75,11 @@ struct TextEntryFooter: View {
     
     var body: some View {
         HStack(alignment: .top) {
-            if let validationError {
-                switch validationError {
-                case .emptyWhenRequired:
-                    requiredText
-                case .tooLong:
-                    maximumText
-                case .tooShort:
-                    minAndMaxText
-                }
-            } else if !description.isEmpty {
-                Text(description)
-            } else if isFocused {
-                if !hasPreviouslySatisfiedMinimum {
-                    minAndMaxText
-                } else {
-                    maximumText
-                }
+            if let primaryMessage {
+                primaryMessage
             }
             Spacer()
-            if isFocused {
+            if isFocused, description.isEmpty || validationError != nil {
                 Text(currentLength, format: .number)
             }
         }
@@ -109,26 +94,82 @@ struct TextEntryFooter: View {
                 validate(length: newLength, focused: isFocused)
             }
         }
-        .onChange(of: isFocused) { newFocus in
-            validate(length: currentLength, focused: newFocus)
+        .onChange(of: isFocused) { newIsFocused in
+            if hasPreviouslySatisfiedMinimum || !newIsFocused {
+                validate(length: currentLength, focused: newIsFocused)
+            }
         }
     }
 }
 
 extension TextEntryFooter {
+    /// The primary message to be shown in the footer, if any, dependent on the presence of a
+    /// validation error, description, and focus state.
+    var primaryMessage: Text? {
+        switch (validationError, description.isEmpty, isFocused) {
+        case (.none, true, true):
+            return validationText
+        case (.none, true, false):
+            return nil
+        case (.none, false, _):
+            return Text(description)
+        case (.some(let lengthError), _, _):
+            switch (lengthError, scheme) {
+            case (.emptyWhenRequired, .max):
+                return requiredText
+            default:
+                return validationText
+            }
+        }
+    }
+    
+    /// The length validation scheme performed on the text entry, determined by the minimum and
+    /// maximum lengths.
+    var scheme: LengthValidationScheme {
+        if minLength == 0 {
+            return .max
+        } else if minLength == maxLength {
+            return .exact
+        } else {
+            return .minAndMax
+        }
+    }
+    
+    /// The length validation text, dependent on the length validation scheme.
+    var validationText: Text {
+        switch scheme {
+        case .max:
+            return maximumText
+        case .minAndMax:
+            return minAndMaxText
+        case .exact:
+            return exactText
+        }
+    }
+    
     /// Checks for any validation errors and updates the value of `validationError`.
     /// - Parameter length: The length of text to use for validation.
     /// - Parameter focused: The focus state to use for validation.
     func validate(length: Int, focused: Bool) {
         if length == .zero && isRequired && !focused {
             validationError = .emptyWhenRequired
-        } else if length < minLength {
-            validationError = .tooShort
-        } else if length > maxLength {
-            validationError = .tooLong
+        } else if length < minLength || length > maxLength {
+            validationError = .minOrMaxUnmet
         } else {
             validationError = nil
         }
+    }
+    
+    /// Text indicating a field's exact number of allowed characters.
+    /// - Note: This is intended to be used in instances where the character minimum and maximum are
+    /// identical, such as an ID field; the implementation uses `minLength` but it could just as
+    /// well use `maxLength`.
+    var exactText: Text {
+        Text(
+            "Enter \(minLength) characters",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field's exact number of required characters."
+        )
     }
     
     /// Text indicating a field's maximum number of allowed characters.
