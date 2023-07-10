@@ -44,14 +44,13 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED***/   - input: A `TextAreaFeatureFormInput` which acts as a configuration.
 ***REMOVED***init(element: FieldFeatureFormElement, text: String?, input: TextAreaFeatureFormInput) {
 ***REMOVED******REMOVED***self.element =  element
-***REMOVED******REMOVED***self.text = text ?? ""
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let text, !text.isEmpty {
-***REMOVED******REMOVED******REMOVED***self.text = text
+***REMOVED******REMOVED******REMOVED***_text = State(initialValue: text)
 ***REMOVED******REMOVED******REMOVED***isPlaceholder = false
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***self.text = element.hint ?? ""
+***REMOVED******REMOVED******REMOVED***_text = State(initialValue: element.hint ?? "")
 ***REMOVED******REMOVED******REMOVED***isPlaceholder = true
 ***REMOVED***
 ***REMOVED***

@@ -17,7 +17,7 @@ import FormsPlugin
 ***REMOVED***/ A view shown at the bottom of each text entry element in a form.
 struct TextEntryFooter: View {
 ***REMOVED******REMOVED***/ An error that is present when a length constraint is not met.
-***REMOVED***@State private var validationError: LengthError? = nil
+***REMOVED***@State private var validationError: LengthError?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the text entry field has previously satisfied the minimum
 ***REMOVED******REMOVED***/ length at any point in time.
@@ -63,11 +63,11 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED***case let input as TextBoxFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED***self.maxLength = input.maxLength
 ***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
-***REMOVED******REMOVED******REMOVED***self.hasPreviouslySatisfiedMinimum = currentLength >= input.minLength
+***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
 ***REMOVED******REMOVED***case let input as TextAreaFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED***self.maxLength = input.maxLength
 ***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
-***REMOVED******REMOVED******REMOVED***self.hasPreviouslySatisfiedMinimum = currentLength >= input.minLength
+***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***fatalError("TextEntryFooter can only be used with TextAreaFeatureFormInput or TextBoxFeatureFormInput")
 ***REMOVED***
@@ -75,26 +75,11 @@ struct TextEntryFooter: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .top) {
-***REMOVED******REMOVED******REMOVED***if let validationError {
-***REMOVED******REMOVED******REMOVED******REMOVED***switch validationError {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .emptyWhenRequired:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***requiredText
-***REMOVED******REMOVED******REMOVED******REMOVED***case .tooLong:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maximumText
-***REMOVED******REMOVED******REMOVED******REMOVED***case .tooShort:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minAndMaxText
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else if !description.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED*** else if isFocused {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***minAndMaxText
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maximumText
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if let primaryMessage {
+***REMOVED******REMOVED******REMOVED******REMOVED***primaryMessage
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if isFocused {
+***REMOVED******REMOVED******REMOVED***if isFocused, description.isEmpty || validationError != nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(currentLength, format: .number)
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -109,26 +94,82 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: newLength, focused: isFocused)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: isFocused) { newFocus in
-***REMOVED******REMOVED******REMOVED***validate(length: currentLength, focused: newFocus)
+***REMOVED******REMOVED***.onChange(of: isFocused) { newIsFocused in
+***REMOVED******REMOVED******REMOVED***if hasPreviouslySatisfiedMinimum || !newIsFocused {
+***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: currentLength, focused: newIsFocused)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 extension TextEntryFooter {
+***REMOVED******REMOVED***/ The primary message to be shown in the footer, if any, dependent on the presence of a
+***REMOVED******REMOVED***/ validation error, description, and focus state.
+***REMOVED***var primaryMessage: Text? {
+***REMOVED******REMOVED***switch (validationError, description.isEmpty, isFocused) {
+***REMOVED******REMOVED***case (.none, true, true):
+***REMOVED******REMOVED******REMOVED***return validationText
+***REMOVED******REMOVED***case (.none, true, false):
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***case (.none, false, _):
+***REMOVED******REMOVED******REMOVED***return Text(description)
+***REMOVED******REMOVED***case (.some(let lengthError), _, _):
+***REMOVED******REMOVED******REMOVED***switch (lengthError, scheme) {
+***REMOVED******REMOVED******REMOVED***case (.emptyWhenRequired, .max):
+***REMOVED******REMOVED******REMOVED******REMOVED***return requiredText
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***return validationText
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The length validation scheme performed on the text entry, determined by the minimum and
+***REMOVED******REMOVED***/ maximum lengths.
+***REMOVED***var scheme: LengthValidationScheme {
+***REMOVED******REMOVED***if minLength == 0 {
+***REMOVED******REMOVED******REMOVED***return .max
+***REMOVED*** else if minLength == maxLength {
+***REMOVED******REMOVED******REMOVED***return .exact
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return .minAndMax
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The length validation text, dependent on the length validation scheme.
+***REMOVED***var validationText: Text {
+***REMOVED******REMOVED***switch scheme {
+***REMOVED******REMOVED***case .max:
+***REMOVED******REMOVED******REMOVED***return maximumText
+***REMOVED******REMOVED***case .minAndMax:
+***REMOVED******REMOVED******REMOVED***return minAndMaxText
+***REMOVED******REMOVED***case .exact:
+***REMOVED******REMOVED******REMOVED***return exactText
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Checks for any validation errors and updates the value of `validationError`.
 ***REMOVED******REMOVED***/ - Parameter length: The length of text to use for validation.
 ***REMOVED******REMOVED***/ - Parameter focused: The focus state to use for validation.
 ***REMOVED***func validate(length: Int, focused: Bool) {
 ***REMOVED******REMOVED***if length == .zero && isRequired && !focused {
 ***REMOVED******REMOVED******REMOVED***validationError = .emptyWhenRequired
-***REMOVED*** else if length < minLength {
-***REMOVED******REMOVED******REMOVED***validationError = .tooShort
-***REMOVED*** else if length > maxLength {
-***REMOVED******REMOVED******REMOVED***validationError = .tooLong
+***REMOVED*** else if length < minLength || length > maxLength {
+***REMOVED******REMOVED******REMOVED***validationError = .minOrMaxUnmet
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***validationError = nil
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Text indicating a field's exact number of allowed characters.
+***REMOVED******REMOVED***/ - Note: This is intended to be used in instances where the character minimum and maximum are
+***REMOVED******REMOVED***/ identical, such as an ID field; the implementation uses `minLength` but it could just as
+***REMOVED******REMOVED***/ well use `maxLength`.
+***REMOVED***var exactText: Text {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Enter \(minLength) characters",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's exact number of required characters."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Text indicating a field's maximum number of allowed characters.

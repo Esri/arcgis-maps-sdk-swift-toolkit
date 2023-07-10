@@ -20,24 +20,16 @@ import FormsPlugin
 public struct FormView: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ Info obtained from the map's JSON which contains the underlying form definition.
-***REMOVED***@State private var mapInfo: MapInfo?
+***REMOVED******REMOVED***/ The structure of the form.
+***REMOVED***@State private var formDefinition: FeatureFormDefinition?
 ***REMOVED***
-***REMOVED******REMOVED***/ The attributes of the provided feature.
-***REMOVED***private let attributes: [String : Any]?
+***REMOVED******REMOVED***/ The feature being edited in the form.
+***REMOVED***private let feature: ArcGISFeature
 ***REMOVED***
-***REMOVED******REMOVED***/ The map containing the underlying form definition.
-***REMOVED***private let map: Map
-***REMOVED***
-***REMOVED******REMOVED***/ Creates a `FormView` with the given map and feature.
-***REMOVED******REMOVED***/ - Parameter map: The map containing the underlying form definition.
+***REMOVED******REMOVED***/ Creates a `FormView` with the given feature.
 ***REMOVED******REMOVED***/ - Parameter feature: The feature to be edited.
-***REMOVED***public init(
-***REMOVED******REMOVED***map: Map,
-***REMOVED******REMOVED***feature: ArcGISFeature
-***REMOVED***) {
-***REMOVED******REMOVED***self.map = map
-***REMOVED******REMOVED***self.attributes = feature.attributes
+***REMOVED***public init(feature: ArcGISFeature) {
+***REMOVED******REMOVED***self.feature = feature
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -53,19 +45,20 @@ public struct FormView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***let rawJSON = map.toJSON()
 ***REMOVED******REMOVED******REMOVED***let decoder = JSONDecoder()
-***REMOVED******REMOVED******REMOVED***mapInfo = try? decoder.decode(MapInfo.self, from: rawJSON.data(using: .utf8)!)
+***REMOVED******REMOVED******REMOVED***if let layer = feature.table?.layer as? FeatureLayer,
+***REMOVED******REMOVED******REMOVED***   let formInfoDictionary = layer._unsupportedJSON["formInfo"],
+***REMOVED******REMOVED******REMOVED***   let jsonData = try? JSONSerialization.data(withJSONObject: formInfoDictionary),
+***REMOVED******REMOVED******REMOVED***   let formDefinition = try? decoder.decode(FeatureFormDefinition.self, from: jsonData) {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.formDefinition = formDefinition
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("Error processing form definition")
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 extension FormView {
-***REMOVED******REMOVED***/ A shortcut to `mapInfo`s first operational layer form definition.
-***REMOVED***var formDefinition: FeatureFormDefinition? {
-***REMOVED******REMOVED***mapInfo?.operationalLayers.first?.featureFormDefinition
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Makes UI for a form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeElement(_ element: FeatureFormElement) -> some View {
@@ -86,13 +79,13 @@ extension FormView {
 ***REMOVED******REMOVED***case let `input` as TextBoxFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED***SingleLineTextEntry(
 ***REMOVED******REMOVED******REMOVED******REMOVED***element: element,
-***REMOVED******REMOVED******REMOVED******REMOVED***text: attributes?[element.fieldName] as? String,
+***REMOVED******REMOVED******REMOVED******REMOVED***text: feature.attributes[element.fieldName] as? String,
 ***REMOVED******REMOVED******REMOVED******REMOVED***input: `input`
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case let `input` as TextAreaFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED***MultiLineTextEntry(
 ***REMOVED******REMOVED******REMOVED******REMOVED***element: element,
-***REMOVED******REMOVED******REMOVED******REMOVED***text: attributes?[element.fieldName] as? String,
+***REMOVED******REMOVED******REMOVED******REMOVED***text: feature.attributes[element.fieldName] as? String,
 ***REMOVED******REMOVED******REMOVED******REMOVED***input: `input`
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***default:
