@@ -16,14 +16,6 @@
 ***REMOVED***
 
 struct FloorFilterExampleView: View {
-***REMOVED******REMOVED***/ Make a map from a portal item.
-***REMOVED***static func makeMap() -> Map {
-***REMOVED******REMOVED***Map(item: PortalItem(
-***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
-***REMOVED******REMOVED******REMOVED***id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
-***REMOVED******REMOVED***))
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Determines the arrangement of the inner `FloorFilter` UI components.
 ***REMOVED***private let floorFilterAlignment = Alignment.bottomLeading
 ***REMOVED***
@@ -36,6 +28,13 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the map is currently being navigated.
 ***REMOVED***@State private var isNavigating = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
+***REMOVED***@State private var map = Map(item: PortalItem(
+***REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
+***REMOVED******REMOVED***id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
+***REMOVED***))
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether an error was encountered while loading the map.
 ***REMOVED***@State private var mapLoadError = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The initial viewpoint of the map.
@@ -48,14 +47,9 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***scale: 100_000
 ***REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
-***REMOVED***@StateObject private var dataModel = MapDataModel(
-***REMOVED******REMOVED***map: makeMap()
-***REMOVED***)
-***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED***map: dataModel.map,
+***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.onAttributionBarHeightChanged { newHeight in
@@ -71,7 +65,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***.ignoresSafeArea(.keyboard, edges: .bottom)
 ***REMOVED******REMOVED***.overlay(alignment: floorFilterAlignment) {
 ***REMOVED******REMOVED******REMOVED***if isMapLoaded,
-***REMOVED******REMOVED******REMOVED***   let floorManager = dataModel.map.floorManager {
+***REMOVED******REMOVED******REMOVED***   let floorManager = map.floorManager {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: floorFilterAlignment,
@@ -99,7 +93,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await dataModel.map.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***isMapLoaded = true
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***mapLoadError = true
