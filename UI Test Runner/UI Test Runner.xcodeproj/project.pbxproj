@@ -11,9 +11,13 @@
 		7552A7562A573CBB0023DA5A /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7552A573CBB0023DA5A /* Tests.swift */; };
 		7552A7582A573CBD0023DA5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7552A7572A573CBD0023DA5A /* Assets.xcassets */; };
 		7552A75B2A573CBD0023DA5A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7552A75A2A573CBD0023DA5A /* Preview Assets.xcassets */; };
-		7552A7622A573D810023DA5A /* BookmarksTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7612A573D810023DA5A /* BookmarksTestsView.swift */; };
+		7552A7622A573D810023DA5A /* BookmarksTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7612A573D810023DA5A /* BookmarksTestView.swift */; };
 		7552A76C2A573DFB0023DA5A /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A76B2A573DFB0023DA5A /* BookmarksTests.swift */; };
 		7552A7762A573E900023DA5A /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = 7552A7752A573E900023DA5A /* ArcGISToolkit */; };
+		75B236692A5CB49B00AEFACE /* BasemapGalleryTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */; };
+		75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */; };
+		75B2366D2A5CC78C00AEFACE /* FloorFilterTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */; };
+		75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,10 +36,14 @@
 		7552A7552A573CBB0023DA5A /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		7552A7572A573CBD0023DA5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7552A75A2A573CBD0023DA5A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		7552A7612A573D810023DA5A /* BookmarksTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestsView.swift; sourceTree = "<group>"; };
+		7552A7612A573D810023DA5A /* BookmarksTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestView.swift; sourceTree = "<group>"; };
 		7552A7642A573DA00023DA5A /* arcgis-maps-sdk-swift-toolkit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "arcgis-maps-sdk-swift-toolkit"; path = ..; sourceTree = "<group>"; };
 		7552A7692A573DFB0023DA5A /* UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7552A76B2A573DFB0023DA5A /* BookmarksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTests.swift; sourceTree = "<group>"; };
+		75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasemapGalleryTestView.swift; sourceTree = "<group>"; };
+		75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasemapGalleryTests.swift; sourceTree = "<group>"; };
+		75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterTestView.swift; sourceTree = "<group>"; };
+		75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,9 +90,9 @@
 			children = (
 				7552A7532A573CBB0023DA5A /* UITestRunner.swift */,
 				7552A7552A573CBB0023DA5A /* Tests.swift */,
-				7552A7612A573D810023DA5A /* BookmarksTestsView.swift */,
 				7552A7572A573CBD0023DA5A /* Assets.xcassets */,
 				7552A7592A573CBD0023DA5A /* Preview Content */,
+				75B236672A5CB32700AEFACE /* TestViews */,
 			);
 			path = "UI Test Runner";
 			sourceTree = "<group>";
@@ -108,7 +116,9 @@
 		7552A76A2A573DFB0023DA5A /* UITests */ = {
 			isa = PBXGroup;
 			children = (
+				75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */,
 				7552A76B2A573DFB0023DA5A /* BookmarksTests.swift */,
+				75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */,
 			);
 			path = UITests;
 			sourceTree = "<group>";
@@ -118,6 +128,16 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		75B236672A5CB32700AEFACE /* TestViews */ = {
+			isa = PBXGroup;
+			children = (
+				75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */,
+				7552A7612A573D810023DA5A /* BookmarksTestView.swift */,
+				75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */,
+			);
+			path = TestViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -225,7 +245,9 @@
 			files = (
 				7552A7562A573CBB0023DA5A /* Tests.swift in Sources */,
 				7552A7542A573CBB0023DA5A /* UITestRunner.swift in Sources */,
-				7552A7622A573D810023DA5A /* BookmarksTestsView.swift in Sources */,
+				75B2366D2A5CC78C00AEFACE /* FloorFilterTestView.swift in Sources */,
+				7552A7622A573D810023DA5A /* BookmarksTestView.swift in Sources */,
+				75B236692A5CB49B00AEFACE /* BasemapGalleryTestView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,6 +255,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */,
+				75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */,
 				7552A76C2A573DFB0023DA5A /* BookmarksTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

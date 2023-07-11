@@ -17,7 +17,9 @@ struct Tests: View {
     var body: some View {
         NavigationView {
             List {
-                NavigationLink("Bookmarks Tests", destination: BookmarksTestsView())
+                NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
+                NavigationLink("Bookmarks Tests", destination: BookmarksTestView())
+                NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
