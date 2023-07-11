@@ -18,10 +18,24 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***continueAfterFailure = false
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testOpenBookmarks() throws {
+***REMOVED******REMOVED***/ Test general usage of the Bookmarks component.
+***REMOVED***func testBookmarks() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***let bookmarksTestButton = app.buttons["Bookmarks Tests"]
-***REMOVED******REMOVED***bookmarksTestButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test view.
+***REMOVED******REMOVED***app.buttons["Bookmarks Tests"].tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the bookmark selection view.
+***REMOVED******REMOVED***app.buttons["Bookmarks"].tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify that the directive UI label is present.
+***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["Select a bookmark"].exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify that the expected bookmarks are present.
+***REMOVED******REMOVED***XCTAssertTrue(app.buttons["Giant Sequoias of Willamette Blvd"].exists)
+***REMOVED******REMOVED***XCTAssertTrue(app.buttons["Historic Ladd's Addition"].exists)
+***REMOVED******REMOVED***XCTAssertTrue(app.buttons["Irvington neighborhood"].exists)
+***REMOVED******REMOVED***XCTAssertTrue(app.buttons["Large Douglas-fir"].exists)
 ***REMOVED***
 ***REMOVED***

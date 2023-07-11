@@ -15,20 +15,24 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-struct BookmarksTestsView: View {
+struct BookmarksTestView: View {
 ***REMOVED***@State private var map = Map(url: URL(string: "https:***REMOVED***www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 ***REMOVED***@State private var isPresented = false
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map)
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented.toggle()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.popover(isPresented: $isPresented) {
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModel: map
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Bookmarks") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -1,0 +1,45 @@
+***REMOVED*** Copyright 2023 Esri.
+
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+import XCTest
+
+final class BasemapGalleryTests: XCTestCase {
+***REMOVED***override func setUpWithError() throws {
+***REMOVED******REMOVED***continueAfterFailure = false
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test general usage of the Basemap Gallery component.
+***REMOVED***func testBasemapGallery() throws {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Basemap Gallery component test view.
+***REMOVED******REMOVED***app.buttons["Basemap Gallery Tests"].tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Select two basemaps that should open without error.
+***REMOVED******REMOVED***app.buttons["OpenStreetMap (Blueprint)"].tap()
+***REMOVED******REMOVED***app.buttons["National Geographic Style Map"].tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Select a basemap that will trigger an error.
+***REMOVED******REMOVED***app.buttons["World_Imagery (WGS 84)"].tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify that a spatial reference error was presented after a few moments.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***app.staticTexts["Spatial reference mismatch."]
+***REMOVED******REMOVED******REMOVED******REMOVED***.waitForExistence(timeout: 2)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Dismiss the error.
+***REMOVED******REMOVED***app.buttons["OK"].tap()
+***REMOVED***
+***REMOVED***
