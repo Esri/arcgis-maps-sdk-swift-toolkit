@@ -11,11 +11,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
-import ArcGISToolkit
 import SwiftUI
+import ArcGISToolkit
+import ArcGIS
 
 struct FloorFilterExampleView: View {
+    /// Make a map from a portal item.
+    static func makeMap() -> Map {
+        Map(item: PortalItem(
+            portal: .arcGISOnline(connection: .anonymous),
+            id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
+        ))
+    }
+    
     /// Determines the arrangement of the inner `FloorFilter` UI components.
     private let floorFilterAlignment = Alignment.bottomLeading
     
@@ -28,13 +36,6 @@ struct FloorFilterExampleView: View {
     /// A Boolean value indicating whether the map is currently being navigated.
     @State private var isNavigating = false
     
-    /// The `Map` displayed in the `MapView`.
-    @State private var map = Map(item: PortalItem(
-        portal: .arcGISOnline(connection: .anonymous),
-        id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
-    ))
-    
-    /// A Boolean value indicating whether an error was encountered while loading the map.
     @State private var mapLoadError = false
     
     /// The initial viewpoint of the map.
@@ -47,9 +48,14 @@ struct FloorFilterExampleView: View {
         scale: 100_000
     )
     
+    /// The data model containing the `Map` displayed in the `MapView`.
+    @StateObject private var dataModel = MapDataModel(
+        map: makeMap()
+    )
+    
     var body: some View {
         MapView(
-            map: map,
+            map: dataModel.map,
             viewpoint: viewpoint
         )
         .onAttributionBarHeightChanged { newHeight in
@@ -65,7 +71,7 @@ struct FloorFilterExampleView: View {
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .overlay(alignment: floorFilterAlignment) {
             if isMapLoaded,
-               let floorManager = map.floorManager {
+               let floorManager = dataModel.map.floorManager {
                 FloorFilter(
                     floorManager: floorManager,
                     alignment: floorFilterAlignment,
@@ -93,7 +99,7 @@ struct FloorFilterExampleView: View {
         }
         .task {
             do {
-                try await map.load()
+                try await dataModel.map.load()
                 isMapLoaded = true
             } catch {
                 mapLoadError = true
