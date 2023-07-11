@@ -15,20 +15,24 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-struct BookmarksTestsView: View {
+struct BookmarksTestView: View {
     @State private var map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
     @State private var isPresented = false
     
     var body: some View {
         MapView(map: map)
-            .onAppear {
-                isPresented.toggle()
-            }
-            .popover(isPresented: $isPresented) {
+            .sheet(isPresented: $isPresented) {
                 Bookmarks(
                     isPresented: $isPresented,
                     geoModel: map
                 )
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Bookmarks") {
+                        isPresented.toggle()
+                    }
+                }
             }
     }
 }

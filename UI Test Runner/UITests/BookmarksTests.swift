@@ -18,10 +18,24 @@ final class BookmarksTests: XCTestCase {
         continueAfterFailure = false
     }
     
-    func testOpenBookmarks() throws {
+    /// Test general usage of the Bookmarks component.
+    func testBookmarks() throws {
         let app = XCUIApplication()
         app.launch()
-        let bookmarksTestButton = app.buttons["Bookmarks Tests"]
-        bookmarksTestButton.tap()
+        
+        // Open the Bookmarks component test view.
+        app.buttons["Bookmarks Tests"].tap()
+        
+        // Open the bookmark selection view.
+        app.buttons["Bookmarks"].tap()
+        
+        // Verify that the directive UI label is present.
+        XCTAssertTrue(app.staticTexts["Select a bookmark"].exists)
+        
+        // Verify that the expected bookmarks are present.
+        XCTAssertTrue(app.buttons["Giant Sequoias of Willamette Blvd"].exists)
+        XCTAssertTrue(app.buttons["Historic Ladd's Addition"].exists)
+        XCTAssertTrue(app.buttons["Irvington neighborhood"].exists)
+        XCTAssertTrue(app.buttons["Large Douglas-fir"].exists)
     }
 }
