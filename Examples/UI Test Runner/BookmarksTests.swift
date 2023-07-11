@@ -15,6 +15,7 @@ import XCTest
 
 final class BookmarksTests: XCTestCase {
     override func setUpWithError() throws {
+        try super.setUpWithError()
         continueAfterFailure = false
     }
     
@@ -23,11 +24,14 @@ final class BookmarksTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         
-        // Open the Bookmarks component test view.
-        app.buttons["Bookmarks Tests"].tap()
+        // Open the GeoView examples category.
+        app.buttons["GeoView"].tap()
+        
+        // Open the Bookmarks component example view.
+        app.buttons["Bookmarks"].tap()
         
         // Open the bookmark selection view.
-        app.buttons["Bookmarks"].tap()
+        app.buttons["Show Bookmarks"].tap()
         
         // Verify that the directive UI label is present.
         XCTAssertTrue(app.staticTexts["Select a bookmark"].exists)

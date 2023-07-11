@@ -15,6 +15,7 @@ import XCTest
 
 final class FloorFilterTests: XCTestCase {
     override func setUpWithError() throws {
+        try super.setUpWithError()
         continueAfterFailure = false
     }
     
@@ -23,8 +24,11 @@ final class FloorFilterTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         
-        // Open the Floor Filter component test view.
-        app.buttons["Floor Filter Tests"].tap()
+        // Open the GeoView examples category.
+        app.buttons["GeoView"].tap()
+        
+        // Open the Floor Filter component example view.
+        app.buttons["Floor Filter"].tap()
         
         // Wait for floor aware data to load and then open the filter.
         let filterButton = app.buttons["Business"]

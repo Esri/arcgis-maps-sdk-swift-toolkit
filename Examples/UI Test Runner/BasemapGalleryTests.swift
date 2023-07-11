@@ -15,6 +15,7 @@ import XCTest
 
 final class BasemapGalleryTests: XCTestCase {
     override func setUpWithError() throws {
+        try super.setUpWithError()
         continueAfterFailure = false
     }
     
@@ -23,8 +24,14 @@ final class BasemapGalleryTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         
-        // Open the Basemap Gallery component test view.
-        app.buttons["Basemap Gallery Tests"].tap()
+        // Open the GeoView examples category.
+        app.buttons["GeoView"].tap()
+        
+        // Open the Basemap Gallery component example view.
+        app.buttons["Basemap Gallery"].tap()
+        
+        // Open the Basemap Gallery.
+        app.buttons["Show base map"].tap()
         
         // Select two basemaps that should open without error.
         app.buttons["OpenStreetMap (Blueprint)"].tap()

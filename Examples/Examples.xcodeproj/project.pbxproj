@@ -12,6 +12,9 @@
 		752A4FC4294D268000A49479 /* MapDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752A4FC2294D268000A49479 /* MapDataModel.swift */; };
 		752A4FC5294D268000A49479 /* SceneDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752A4FC3294D268000A49479 /* SceneDataModel.swift */; };
 		75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75657E4727ABAC8400EE865B /* CompassExampleView.swift */; };
+		75894B842A5DDA6E0077B72C /* BasemapGalleryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75894B812A5DDA6E0077B72C /* BasemapGalleryTests.swift */; };
+		75894B852A5DDA6E0077B72C /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75894B822A5DDA6E0077B72C /* BookmarksTests.swift */; };
+		75894B862A5DDA6E0077B72C /* FloorFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75894B832A5DDA6E0077B72C /* FloorFilterTests.swift */; };
 		75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */; };
 		75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */; };
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; };
@@ -29,6 +32,16 @@
 		E4E57DC6265D8EB00077A093 /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = E4E57DC5265D8EB00077A093 /* ArcGISToolkit */; };
 		E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		75894B7C2A5DDA370077B72C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E47ABE382652FE0900FD2FE3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E47ABE3F2652FE0900FD2FE3;
+			remoteInfo = Examples;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		E47ABE5E2652FF1300FD2FE3 /* Embed Frameworks */ = {
@@ -49,6 +62,10 @@
 		752A4FC2294D268000A49479 /* MapDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataModel.swift; sourceTree = "<group>"; };
 		752A4FC3294D268000A49479 /* SceneDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDataModel.swift; sourceTree = "<group>"; };
 		75657E4727ABAC8400EE865B /* CompassExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassExampleView.swift; sourceTree = "<group>"; };
+		75894B762A5DDA370077B72C /* UI Test Runner.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "UI Test Runner.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		75894B812A5DDA6E0077B72C /* BasemapGalleryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasemapGalleryTests.swift; sourceTree = "<group>"; };
+		75894B822A5DDA6E0077B72C /* BookmarksTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksTests.swift; sourceTree = "<group>"; };
+		75894B832A5DDA6E0077B72C /* FloorFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloorFilterTests.swift; sourceTree = "<group>"; };
 		75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksExampleView.swift; sourceTree = "<group>"; };
 		75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalebarExampleView.swift; sourceTree = "<group>"; };
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; };
@@ -71,6 +88,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		75894B732A5DDA370077B72C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E47ABE3D2652FE0900FD2FE3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -89,6 +113,16 @@
 				752A4FC3294D268000A49479 /* SceneDataModel.swift */,
 			);
 			path = Utility;
+			sourceTree = "<group>";
+		};
+		75894B772A5DDA370077B72C /* UI Test Runner */ = {
+			isa = PBXGroup;
+			children = (
+				75894B812A5DDA6E0077B72C /* BasemapGalleryTests.swift */,
+				75894B822A5DDA6E0077B72C /* BookmarksTests.swift */,
+				75894B832A5DDA6E0077B72C /* FloorFilterTests.swift */,
+			);
+			path = "UI Test Runner";
 			sourceTree = "<group>";
 		};
 		E40F58042656E509006F5CB9 /* Examples */ = {
@@ -115,6 +149,7 @@
 				E47ABE562652FE7F00FD2FE3 /* Examples */,
 				752A4FC7294D26DC00A49479 /* Utility */,
 				E47ABE422652FE0900FD2FE3 /* ExamplesApp */,
+				75894B772A5DDA370077B72C /* UI Test Runner */,
 				E47ABE412652FE0900FD2FE3 /* Products */,
 				E47ABE5A2652FF1200FD2FE3 /* Frameworks */,
 			);
@@ -124,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				E47ABE402652FE0900FD2FE3 /* Examples.app */,
+				75894B762A5DDA370077B72C /* UI Test Runner.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -171,6 +207,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		75894B752A5DDA370077B72C /* UI Test Runner */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75894B802A5DDA370077B72C /* Build configuration list for PBXNativeTarget "UI Test Runner" */;
+			buildPhases = (
+				75894B722A5DDA370077B72C /* Sources */,
+				75894B732A5DDA370077B72C /* Frameworks */,
+				75894B742A5DDA370077B72C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				75894B7D2A5DDA370077B72C /* PBXTargetDependency */,
+			);
+			name = "UI Test Runner";
+			productName = "UI Test Runner";
+			productReference = 75894B762A5DDA370077B72C /* UI Test Runner.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		E47ABE3F2652FE0900FD2FE3 /* Examples */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E47ABE4F2652FE0C00FD2FE3 /* Build configuration list for PBXNativeTarget "Examples" */;
@@ -199,9 +253,14 @@
 		E47ABE382652FE0900FD2FE3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1250;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1250;
 				TargetAttributes = {
+					75894B752A5DDA370077B72C = {
+						CreatedOnToolsVersion = 14.3.1;
+						LastSwiftMigration = 1430;
+						TestTargetID = E47ABE3F2652FE0900FD2FE3;
+					};
 					E47ABE3F2652FE0900FD2FE3 = {
 						CreatedOnToolsVersion = 12.5;
 					};
@@ -221,11 +280,19 @@
 			projectRoot = "";
 			targets = (
 				E47ABE3F2652FE0900FD2FE3 /* Examples */,
+				75894B752A5DDA370077B72C /* UI Test Runner */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		75894B742A5DDA370077B72C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E47ABE3E2652FE0900FD2FE3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -260,6 +327,16 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		75894B722A5DDA370077B72C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75894B862A5DDA6E0077B72C /* FloorFilterTests.swift in Sources */,
+				75894B842A5DDA6E0077B72C /* BasemapGalleryTests.swift in Sources */,
+				75894B852A5DDA6E0077B72C /* BookmarksTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E47ABE3C2652FE0900FD2FE3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -287,7 +364,54 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		75894B7D2A5DDA370077B72C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E47ABE3F2652FE0900FD2FE3 /* Examples */;
+			targetProxy = 75894B7C2A5DDA370077B72C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		75894B7E2A5DDA370077B72C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-ui-test-runner.UI-Test-Runner";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Examples;
+			};
+			name = Debug;
+		};
+		75894B7F2A5DDA370077B72C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-ui-test-runner.UI-Test-Runner";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Examples;
+			};
+			name = Release;
+		};
 		E47ABE4D2652FE0C00FD2FE3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -463,6 +587,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		75894B802A5DDA370077B72C /* Build configuration list for PBXNativeTarget "UI Test Runner" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75894B7E2A5DDA370077B72C /* Debug */,
+				75894B7F2A5DDA370077B72C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E47ABE3B2652FE0900FD2FE3 /* Build configuration list for PBXProject "Examples" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
