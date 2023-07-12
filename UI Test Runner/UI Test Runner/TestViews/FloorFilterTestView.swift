@@ -47,41 +47,38 @@ struct FloorFilterTestView: View {
     )
     
     var body: some View {
-        MapView(
-            map: map,
-            viewpoint: viewpoint
-        )
-        .onAttributionBarHeightChanged { newHeight in
-            withAnimation { attributionBarHeight = newHeight }
-        }
-        .onNavigatingChanged {
-            isNavigating = $0
-        }
-        .onViewpointChanged(kind: .centerAndScale) {
-            viewpoint = $0
-        }
-        // Preserve the current viewpoint when a keyboard is presented in landscape.
-        .ignoresSafeArea(.keyboard, edges: .bottom)
-        .overlay(alignment: floorFilterAlignment) {
-            if isMapLoaded,
-               let floorManager = map.floorManager {
-                FloorFilter(
-                    floorManager: floorManager,
-                    alignment: floorFilterAlignment,
-                    viewpoint: $viewpoint,
-                    isNavigating: $isNavigating
-                )
-                .frame(
-                    maxWidth: 400,
-                    maxHeight: 400
-                )
-                .padding([.horizontal], 10)
-                .padding([.vertical], 10 + attributionBarHeight)
+        MapView(map: map, viewpoint: viewpoint)
+            .onAttributionBarHeightChanged { newHeight in
+                withAnimation { attributionBarHeight = newHeight }
             }
-        }
-        .task {
-            try? await map.load()
-            isMapLoaded = true
-        }
+            .onNavigatingChanged {
+                isNavigating = $0
+            }
+            .onViewpointChanged(kind: .centerAndScale) {
+                viewpoint = $0
+            }
+            // Preserve the current viewpoint when a keyboard is presented in landscape.
+            .ignoresSafeArea(.keyboard, edges: .bottom)
+            .overlay(alignment: floorFilterAlignment) {
+                if isMapLoaded,
+                   let floorManager = map.floorManager {
+                    FloorFilter(
+                        floorManager: floorManager,
+                        alignment: floorFilterAlignment,
+                        viewpoint: $viewpoint,
+                        isNavigating: $isNavigating
+                    )
+                    .frame(
+                        maxWidth: 400,
+                        maxHeight: 400
+                    )
+                    .padding([.horizontal], 10)
+                    .padding([.vertical], 10 + attributionBarHeight)
+                }
+            }
+            .task {
+                try? await map.load()
+                isMapLoaded = true
+            }
     }
 }
