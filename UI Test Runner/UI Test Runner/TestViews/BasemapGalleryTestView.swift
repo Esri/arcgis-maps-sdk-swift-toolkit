@@ -18,7 +18,7 @@ import SwiftUI
 struct BasemapGalleryTestView: View {
     @State private var map = Map(basemapStyle: .arcGISImagery)
     
-    private let basemaps = initialBasemaps()
+    @State private var basemaps = initialBasemaps()
     
     var body: some View {
         MapView(map: map)
