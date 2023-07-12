@@ -17,7 +17,7 @@
 
 struct FloorFilterTestView: View {
 ***REMOVED******REMOVED***/ Determines the arrangement of the inner `FloorFilter` UI components.
-***REMOVED***private let floorFilterAlignment = Alignment.bottomLeading
+***REMOVED***private var floorFilterAlignment: Alignment { .bottomLeading ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The height of the map view's attribution bar.
 ***REMOVED***@State private var attributionBarHeight = 0.0
@@ -29,10 +29,12 @@ struct FloorFilterTestView: View {
 ***REMOVED***@State private var isNavigating = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
-***REMOVED***@State private var map = Map(item: PortalItem(
-***REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
-***REMOVED******REMOVED***id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
-***REMOVED***))
+***REMOVED***@State private var map = Map(
+***REMOVED******REMOVED***item: PortalItem(
+***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
+***REMOVED******REMOVED******REMOVED***id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
+***REMOVED******REMOVED***)
+***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether an error was encountered while loading the map.
 ***REMOVED***@State private var mapLoadError = false
