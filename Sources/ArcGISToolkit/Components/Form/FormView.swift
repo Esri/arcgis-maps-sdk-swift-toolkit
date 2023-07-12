@@ -20,24 +20,17 @@ import FormsPlugin
 public struct FormView: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ The structure of the form.
-***REMOVED***@State private var formDefinition: FeatureFormDefinition?
+***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ The feature being edited in the form.
-***REMOVED***private let feature: ArcGISFeature
-***REMOVED***
-***REMOVED******REMOVED***/ Creates a `FormView` with the given feature.
-***REMOVED******REMOVED***/ - Parameter feature: The feature to be edited.
-***REMOVED***public init(feature: ArcGISFeature) {
-***REMOVED******REMOVED***self.feature = feature
-***REMOVED***
+***REMOVED******REMOVED***/ Initializes a form view.
+***REMOVED***public init() {***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED***FormHeader(title: formDefinition?.title)
+***REMOVED******REMOVED******REMOVED***FormHeader(title: model.formDefinition?.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.formDefinition?.formElements ?? [], id: \.element?.label) { container in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = container.element {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -50,7 +43,7 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED***   let formInfoDictionary = layer._unsupportedJSON["formInfo"],
 ***REMOVED******REMOVED******REMOVED***   let jsonData = try? JSONSerialization.data(withJSONObject: formInfoDictionary),
 ***REMOVED******REMOVED******REMOVED***   let formDefinition = try? decoder.decode(FeatureFormDefinition.self, from: jsonData) {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.formDefinition = formDefinition
+***REMOVED******REMOVED******REMOVED******REMOVED***model.formDefinition = formDefinition
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("Error processing form definition")
 ***REMOVED******REMOVED***
@@ -59,6 +52,15 @@ public struct FormView: View {
 ***REMOVED***
 
 extension FormView {
+***REMOVED******REMOVED***/ The feature being edited in the form.
+***REMOVED***private var feature: ArcGISFeature {
+***REMOVED******REMOVED***if let feature = model.feature {
+***REMOVED******REMOVED******REMOVED***return feature
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***fatalError("The feature was cleared but the form is still presented.")
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Makes UI for a form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeElement(_ element: FeatureFormElement) -> some View {
