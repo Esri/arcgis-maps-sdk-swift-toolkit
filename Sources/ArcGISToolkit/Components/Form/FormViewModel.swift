@@ -31,10 +31,3 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.feature = feature
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Notifies the model that the form is no longer visible.
-***REMOVED******REMOVED***/ - Note: This should only be called once the form view has been removed from the view
-***REMOVED******REMOVED***/ hierarchy.
-***REMOVED***public func didHide() {
-***REMOVED******REMOVED***feature = nil
-***REMOVED***
-***REMOVED***
