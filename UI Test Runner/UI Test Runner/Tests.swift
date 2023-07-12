@@ -22,6 +22,6 @@ struct Tests: View {
                 NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        .navigationViewStyle(.stack)
     }
 }
