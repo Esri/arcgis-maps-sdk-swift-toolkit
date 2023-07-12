@@ -93,7 +93,7 @@ struct FormExampleView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         if isPresented {
                             Button("Submit") {
-                                print("Submit")
+                                formViewModel.submitChanges()
                             }
                         }
                     }
