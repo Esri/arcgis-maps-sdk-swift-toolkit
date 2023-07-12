@@ -31,3 +31,8 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.feature = feature
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Submit the changes made to the form.
+***REMOVED***public func submitChanges() {
+***REMOVED******REMOVED***print(#function)
+***REMOVED***
+***REMOVED***
