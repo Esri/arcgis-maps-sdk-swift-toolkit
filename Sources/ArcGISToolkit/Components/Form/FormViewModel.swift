@@ -30,4 +30,9 @@ public class FormViewModel: ObservableObject {
     public func startEditing(_ feature: ArcGISFeature) {
         self.feature = feature
     }
+    
+    /// Submit the changes made to the form.
+    public func submitChanges() {
+        print(#function)
+    }
 }
