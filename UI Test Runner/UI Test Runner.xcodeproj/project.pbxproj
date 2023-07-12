@@ -73,7 +73,6 @@
 				7552A7522A573CBB0023DA5A /* UI Test Runner */,
 				7552A76A2A573DFB0023DA5A /* UITests */,
 				7552A7512A573CBB0023DA5A /* Products */,
-				7552A7742A573E900023DA5A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -123,13 +122,6 @@
 				75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */,
 			);
 			path = UITests;
-			sourceTree = "<group>";
-		};
-		7552A7742A573E900023DA5A /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		75B236672A5CB32700AEFACE /* TestViews */ = {
