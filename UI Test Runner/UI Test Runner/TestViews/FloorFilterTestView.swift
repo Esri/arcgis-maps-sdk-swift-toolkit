@@ -78,17 +78,6 @@ struct FloorFilterTestView: View {
                 )
                 .padding([.horizontal], 10)
                 .padding([.vertical], 10 + attributionBarHeight)
-            } else if mapLoadError {
-                Label(
-                    "Map load error!",
-                    systemImage: "exclamationmark.triangle"
-                )
-                .foregroundColor(.red)
-                .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity,
-                    alignment: .center
-                )
             }
         }
         .task {
