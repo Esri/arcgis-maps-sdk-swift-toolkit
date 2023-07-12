@@ -36,6 +36,9 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***app.buttons["Giant Sequoias of Willamette Blvd"].tap()
 ***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["Giant Sequoias of Willamette Blvd"].exists)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify that the bookmarks selection view is no longer present.
+***REMOVED******REMOVED***XCTAssertFalse(app.staticTexts["Select a bookmark"].exists)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Re-open the bookmark selection view.
 ***REMOVED******REMOVED***app.buttons["Bookmarks"].tap()
 ***REMOVED******REMOVED***
