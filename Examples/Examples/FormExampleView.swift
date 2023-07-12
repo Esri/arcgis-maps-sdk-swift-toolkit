@@ -44,9 +44,6 @@ struct FormExampleView: View {
                 
                 // Present a FormView in a native SwiftUI sheet
                 .sheet(isPresented: $isPresented) {
-                    // Clear the feature on dismiss
-                    formViewModel.didHide()
-                } content: {
                     if #available(iOS 16.4, *) {
                         FormView()
                             .padding()
