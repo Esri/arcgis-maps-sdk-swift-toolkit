@@ -36,9 +36,6 @@ struct FloorFilterTestView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether an error was encountered while loading the map.
-***REMOVED***@State private var mapLoadError = false
-***REMOVED***
 ***REMOVED******REMOVED***/ The initial viewpoint of the map.
 ***REMOVED***@State private var viewpoint: Viewpoint? = Viewpoint(
 ***REMOVED******REMOVED***center: Point(
@@ -83,12 +80,8 @@ struct FloorFilterTestView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***isMapLoaded = true
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***mapLoadError = true
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***try? await map.load()
+***REMOVED******REMOVED******REMOVED***isMapLoaded = true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
