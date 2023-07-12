@@ -30,11 +30,4 @@ public class FormViewModel: ObservableObject {
     public func startEditing(_ feature: ArcGISFeature) {
         self.feature = feature
     }
-    
-    /// Notifies the model that the form is no longer visible.
-    /// - Note: This should only be called once the form view has been removed from the view
-    /// hierarchy.
-    public func didHide() {
-        feature = nil
-    }
 }
