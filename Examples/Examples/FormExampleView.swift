@@ -44,9 +44,6 @@ struct FormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present a FormView in a native SwiftUI sheet
 ***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Clear the feature on dismiss
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.didHide()
-***REMOVED******REMOVED******REMOVED*** content: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16.4, *) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
