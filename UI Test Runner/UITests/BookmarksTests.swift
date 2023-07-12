@@ -32,10 +32,15 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Verify that the directive UI label is present.
 ***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["Select a bookmark"].exists)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Verify that the expected bookmarks are present.
-***REMOVED******REMOVED***XCTAssertTrue(app.buttons["Giant Sequoias of Willamette Blvd"].exists)
-***REMOVED******REMOVED***XCTAssertTrue(app.buttons["Historic Ladd's Addition"].exists)
-***REMOVED******REMOVED***XCTAssertTrue(app.buttons["Irvington neighborhood"].exists)
-***REMOVED******REMOVED***XCTAssertTrue(app.buttons["Large Douglas-fir"].exists)
+***REMOVED******REMOVED******REMOVED*** Select a bookmark and confirm the component notified the test view of the selection.
+***REMOVED******REMOVED***app.buttons["Giant Sequoias of Willamette Blvd"].tap()
+***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["Giant Sequoias of Willamette Blvd"].exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Re-open the bookmark selection view.
+***REMOVED******REMOVED***app.buttons["Bookmarks"].tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Select a bookmark and confirm the component notified the test view of the new selection.
+***REMOVED******REMOVED***app.buttons["Historic Ladd's Addition"].tap()
+***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["Historic Ladd's Addition"].exists)
 ***REMOVED***
 ***REMOVED***
