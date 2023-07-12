@@ -40,7 +40,7 @@ final class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Select the level labeled "8".
 ***REMOVED******REMOVED***app.scrollViews.otherElements.staticTexts["8"].tap()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let levelOneButton = app.scrollViews.otherElements.staticTexts["1"]
+***REMOVED******REMOVED***let levelOneButton = app.staticTexts["1"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify that the level selector is not collapsed
 ***REMOVED******REMOVED******REMOVED*** and other levels are available for selection.
