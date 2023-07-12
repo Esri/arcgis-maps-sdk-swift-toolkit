@@ -36,9 +36,6 @@ struct FloorFilterTestView: View {
         )
     )
     
-    /// A Boolean value indicating whether an error was encountered while loading the map.
-    @State private var mapLoadError = false
-    
     /// The initial viewpoint of the map.
     @State private var viewpoint: Viewpoint? = Viewpoint(
         center: Point(
@@ -83,12 +80,8 @@ struct FloorFilterTestView: View {
             }
         }
         .task {
-            do {
-                try await map.load()
-                isMapLoaded = true
-            } catch {
-                mapLoadError = true
-            }
+            try? await map.load()
+            isMapLoaded = true
         }
     }
 }
