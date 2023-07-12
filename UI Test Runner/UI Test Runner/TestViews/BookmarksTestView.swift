@@ -27,14 +27,8 @@ struct BookmarksTestView: View {
     /// shown/hidden, whether that be in a group of options or a standalone button.
     @State private var showingBookmarks = false
     
-    /// The current viewpoint of the map view.
-    @State private var viewpoint: Viewpoint?
-    
     var body: some View {
-        MapView(map: map, viewpoint: viewpoint)
-            .onChange(of: selectedBookmark) {
-                viewpoint = $0?.viewpoint
-            }
+        MapView(map: map, viewpoint: selectedBookmark?.viewpoint)
             .sheet(isPresented: $showingBookmarks) {
                 Bookmarks(
                     isPresented: $showingBookmarks,
