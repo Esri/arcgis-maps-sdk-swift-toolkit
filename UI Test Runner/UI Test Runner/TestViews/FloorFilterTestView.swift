@@ -47,41 +47,38 @@ struct FloorFilterTestView: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.onAttributionBarHeightChanged { newHeight in
-***REMOVED******REMOVED******REMOVED***withAnimation { attributionBarHeight = newHeight ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onNavigatingChanged {
-***REMOVED******REMOVED******REMOVED***isNavigating = $0
-***REMOVED***
-***REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
-***REMOVED******REMOVED******REMOVED***viewpoint = $0
-***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Preserve the current viewpoint when a keyboard is presented in landscape.
-***REMOVED******REMOVED***.ignoresSafeArea(.keyboard, edges: .bottom)
-***REMOVED******REMOVED***.overlay(alignment: floorFilterAlignment) {
-***REMOVED******REMOVED******REMOVED***if isMapLoaded,
-***REMOVED******REMOVED******REMOVED***   let floorManager = map.floorManager {
-***REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: floorFilterAlignment,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isNavigating: $isNavigating
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: 400,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: 400
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal], 10)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 10 + attributionBarHeight)
+***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged { newHeight in
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { attributionBarHeight = newHeight ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***try? await map.load()
-***REMOVED******REMOVED******REMOVED***isMapLoaded = true
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onNavigatingChanged {
+***REMOVED******REMOVED******REMOVED******REMOVED***isNavigating = $0
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Preserve the current viewpoint when a keyboard is presented in landscape.
+***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard, edges: .bottom)
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: floorFilterAlignment) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isMapLoaded,
+***REMOVED******REMOVED******REMOVED******REMOVED***   let floorManager = map.floorManager {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: floorFilterAlignment,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isNavigating: $isNavigating
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: 400,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: 400
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal], 10)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 10 + attributionBarHeight)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await map.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***isMapLoaded = true
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
