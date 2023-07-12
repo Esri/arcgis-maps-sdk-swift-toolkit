@@ -20,15 +20,15 @@ struct BookmarksTestView: View {
     @State private var map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
     
     /// The last selected bookmark.
-    @State var selectedBookmark: Bookmark?
+    @State private var selectedBookmark: Bookmark?
     
     /// Indicates if the `Bookmarks` component is shown or not.
     /// - Remark: This allows a developer to control when the `Bookmarks` component is
     /// shown/hidden, whether that be in a group of options or a standalone button.
-    @State var showingBookmarks = false
+    @State private var showingBookmarks = false
     
     /// The current viewpoint of the map view.
-    @State var viewpoint: Viewpoint?
+    @State private var viewpoint: Viewpoint?
     
     var body: some View {
         MapView(map: map, viewpoint: viewpoint)
