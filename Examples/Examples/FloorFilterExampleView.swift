@@ -17,7 +17,7 @@
 
 struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***/ Determines the arrangement of the inner `FloorFilter` UI components.
-***REMOVED***private let floorFilterAlignment = Alignment.bottomLeading
+***REMOVED***private var floorFilterAlignment: Alignment { .bottomLeading ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The height of the map view's attribution bar.
 ***REMOVED***@State private var attributionBarHeight = 0.0
