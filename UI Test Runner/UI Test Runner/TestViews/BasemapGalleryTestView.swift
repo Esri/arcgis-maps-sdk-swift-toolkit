@@ -18,7 +18,7 @@
 struct BasemapGalleryTestView: View {
 ***REMOVED***@State private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
-***REMOVED***private let basemaps = initialBasemaps()
+***REMOVED***@State private var basemaps = initialBasemaps()
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map)
