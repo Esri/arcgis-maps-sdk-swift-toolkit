@@ -40,7 +40,7 @@ final class FloorFilterTests: XCTestCase {
         // Select the level labeled "8".
         app.scrollViews.otherElements.staticTexts["8"].tap()
         
-        let levelOneButton = app.scrollViews.otherElements.staticTexts["1"]
+        let levelOneButton = app.staticTexts["1"]
         
         // Verify that the level selector is not collapsed
         // and other levels are available for selection.
