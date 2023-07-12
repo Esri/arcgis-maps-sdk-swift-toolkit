@@ -32,10 +32,15 @@ final class BookmarksTests: XCTestCase {
         // Verify that the directive UI label is present.
         XCTAssertTrue(app.staticTexts["Select a bookmark"].exists)
         
-        // Verify that the expected bookmarks are present.
-        XCTAssertTrue(app.buttons["Giant Sequoias of Willamette Blvd"].exists)
-        XCTAssertTrue(app.buttons["Historic Ladd's Addition"].exists)
-        XCTAssertTrue(app.buttons["Irvington neighborhood"].exists)
-        XCTAssertTrue(app.buttons["Large Douglas-fir"].exists)
+        // Select a bookmark and confirm the component notified the test view of the selection.
+        app.buttons["Giant Sequoias of Willamette Blvd"].tap()
+        XCTAssertTrue(app.staticTexts["Giant Sequoias of Willamette Blvd"].exists)
+        
+        // Re-open the bookmark selection view.
+        app.buttons["Bookmarks"].tap()
+        
+        // Select a bookmark and confirm the component notified the test view of the new selection.
+        app.buttons["Historic Ladd's Addition"].tap()
+        XCTAssertTrue(app.staticTexts["Historic Ladd's Addition"].exists)
     }
 }
