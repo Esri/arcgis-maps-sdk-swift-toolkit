@@ -43,8 +43,8 @@ struct BookmarksTestView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .bottomBar) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedBookmark {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedBookmark {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .bottomBar) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedBookmark.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
