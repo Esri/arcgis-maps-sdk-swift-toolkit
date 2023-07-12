@@ -49,8 +49,8 @@ struct BookmarksTestView: View {
                     }
                 }
                 
-                ToolbarItem(placement: .bottomBar) {
-                    if let selectedBookmark {
+                if let selectedBookmark {
+                    ToolbarItem(placement: .bottomBar) {
                         Text(selectedBookmark.name)
                     }
                 }
