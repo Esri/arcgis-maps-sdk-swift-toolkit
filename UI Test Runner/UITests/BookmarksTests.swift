@@ -24,11 +24,11 @@ final class BookmarksTests: XCTestCase {
         app.launch()
         
         let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
-        let bookmarksButton = app.buttons["Bookmarks"]
+        let bookmarksButton = app.buttons["Bookmarks"].firstMatch
         let selectABookmarkText = app.staticTexts["Select a bookmark"]
-        let giantSequoiasButton = app.buttons["Giant Sequoias of Willamette Blvd"]
+        let giantSequoiasButton = app.buttons["Giant Sequoias of Willamette Blvd"].firstMatch
         let giantSequoiasLabel = app.staticTexts["Giant Sequoias of Willamette Blvd"]
-        let historicLaddsButton = app.buttons["Historic Ladd's Addition"]
+        let historicLaddsButton = app.buttons["Historic Ladd's Addition"].firstMatch
         let historicLaddsLabel = app.staticTexts["Historic Ladd's Addition"]
         
         // Open the Bookmarks component test view.
