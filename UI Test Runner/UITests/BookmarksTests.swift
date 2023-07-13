@@ -23,27 +23,53 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
+***REMOVED******REMOVED***let bookmarksButton = app.buttons["Bookmarks"]
+***REMOVED******REMOVED***let selectABookmarkText = app.staticTexts["Select a bookmark"]
+***REMOVED******REMOVED***let giantSequoiasButton = app.buttons["Giant Sequoias of Willamette Blvd"]
+***REMOVED******REMOVED***let giantSequoiasLabel = app.staticTexts["Giant Sequoias of Willamette Blvd"]
+***REMOVED******REMOVED***let historicLaddsButton = app.buttons["Historic Ladd's Addition"]
+***REMOVED******REMOVED***let historicLaddsLabel = app.staticTexts["Historic Ladd's Addition"]
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test view.
-***REMOVED******REMOVED***app.buttons["Bookmarks Tests"].tap()
+***REMOVED******REMOVED***XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
+***REMOVED******REMOVED***bookmarksTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the bookmark selection view.
-***REMOVED******REMOVED***app.buttons["Bookmarks"].tap()
+***REMOVED******REMOVED***XCTAssertTrue(bookmarksButton.exists, "The Bookmarks button wasn't found.")
+***REMOVED******REMOVED***bookmarksButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify that the directive UI label is present.
-***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["Select a bookmark"].exists)
+***REMOVED******REMOVED***XCTAssertTrue(selectABookmarkText.exists, "The Select a bookmark text wasn't found.")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select a bookmark and confirm the component notified the test view of the selection.
-***REMOVED******REMOVED***app.buttons["Giant Sequoias of Willamette Blvd"].tap()
-***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["Giant Sequoias of Willamette Blvd"].exists)
+***REMOVED******REMOVED***XCTAssertTrue(giantSequoiasButton.exists, "The Giant Sequoias button wasn't found.")
+***REMOVED******REMOVED***giantSequoiasButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Confirm the selection was made.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***giantSequoiasLabel.exists,
+***REMOVED******REMOVED******REMOVED***"The Giant Sequoias label confirming the bookmark selection wasn't found."
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify that the bookmarks selection view is no longer present.
-***REMOVED******REMOVED***XCTAssertFalse(app.staticTexts["Select a bookmark"].exists)
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***selectABookmarkText.exists,
+***REMOVED******REMOVED******REMOVED***"The Select a bookmark text was unexpectedly found."
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Re-open the bookmark selection view.
-***REMOVED******REMOVED***app.buttons["Bookmarks"].tap()
+***REMOVED******REMOVED***XCTAssertTrue(bookmarksButton.exists, "The Bookmarks button wasn't found.")
+***REMOVED******REMOVED***bookmarksButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select a bookmark and confirm the component notified the test view of the new selection.
-***REMOVED******REMOVED***app.buttons["Historic Ladd's Addition"].tap()
-***REMOVED******REMOVED***XCTAssertTrue(app.staticTexts["Historic Ladd's Addition"].exists)
+***REMOVED******REMOVED***XCTAssertTrue(historicLaddsButton.exists, "The Historic Ladd's button wasn't found.")
+***REMOVED******REMOVED***historicLaddsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Confirm the selection was made.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***historicLaddsLabel.exists,
+***REMOVED******REMOVED******REMOVED***"The Historic Ladd's label confirming the bookmark selection wasn't found."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
