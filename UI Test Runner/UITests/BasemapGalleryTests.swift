@@ -23,23 +23,53 @@ final class BasemapGalleryTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let basemapGalleryTestsButton = app.buttons["Basemap Gallery Tests"]
+***REMOVED******REMOVED***let openStreetMapBlueprintButton = app.buttons["OpenStreetMap (Blueprint)"]
+***REMOVED******REMOVED***let nationalGeographicStyleMapButton = app.buttons["National Geographic Style Map"]
+***REMOVED******REMOVED***let worldImageryButton = app.buttons["World_Imagery (WGS 84)"]
+***REMOVED******REMOVED***let spatialReferenceErrorText = app.staticTexts["Spatial reference mismatch."]
+***REMOVED******REMOVED***let okButton = app.buttons["OK"]
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the Basemap Gallery component test view.
-***REMOVED******REMOVED***app.buttons["Basemap Gallery Tests"].tap()
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***basemapGalleryTestsButton.exists,
+***REMOVED******REMOVED******REMOVED***"The Basemap Gallery Tests button wasn't found."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***basemapGalleryTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select two basemaps that should open without error.
-***REMOVED******REMOVED***app.buttons["OpenStreetMap (Blueprint)"].tap()
-***REMOVED******REMOVED***app.buttons["National Geographic Style Map"].tap()
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***openStreetMapBlueprintButton.exists,
+***REMOVED******REMOVED******REMOVED***"The OpenStreetMap (Blueprint) button wasn't found."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***openStreetMapBlueprintButton.tap()
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***nationalGeographicStyleMapButton.exists,
+***REMOVED******REMOVED******REMOVED***"The National Geographic Style Map button wasn't found."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***nationalGeographicStyleMapButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select a basemap that will trigger an error.
-***REMOVED******REMOVED***app.buttons["World_Imagery (WGS 84)"].tap()
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***worldImageryButton.exists,
+***REMOVED******REMOVED******REMOVED***"The World Imagery button wasn't found."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***worldImageryButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify that a spatial reference error was presented after a few moments.
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***app.staticTexts["Spatial reference mismatch."]
-***REMOVED******REMOVED******REMOVED******REMOVED***.waitForExistence(timeout: 2)
+***REMOVED******REMOVED******REMOVED***spatialReferenceErrorText.waitForExistence(timeout: 2),
+***REMOVED******REMOVED******REMOVED***"The spatial reference error text wasn't found after 2 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Dismiss the error.
-***REMOVED******REMOVED***app.buttons["OK"].tap()
+***REMOVED******REMOVED***XCTAssertTrue(okButton.exists, "The OK button wasn't found.")
+***REMOVED******REMOVED***okButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify that a spatial reference error was dismissed.
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***spatialReferenceErrorText.exists,
+***REMOVED******REMOVED******REMOVED***"The spatial reference error text was unexpectedly found after dismissing the error."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
