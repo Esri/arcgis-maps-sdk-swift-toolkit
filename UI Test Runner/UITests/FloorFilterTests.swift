@@ -23,33 +23,44 @@ final class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let filterButton = app.buttons["Business"]
+***REMOVED******REMOVED***let researchAnnexButton = app.buttons["Research Annex"]
+***REMOVED******REMOVED***let latticeText = app.staticTexts["Lattice"]
+***REMOVED******REMOVED***let levelEightText = app.scrollViews.otherElements.staticTexts["8"]
+***REMOVED******REMOVED***let levelOneText = app.staticTexts["1"]
+***REMOVED******REMOVED***let collapseButton = app.buttons["Go Down"]
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the Floor Filter component test view.
 ***REMOVED******REMOVED***app.buttons["Floor Filter Tests"].tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for floor aware data to load and then open the filter.
-***REMOVED******REMOVED***let filterButton = app.buttons["Business"]
-***REMOVED******REMOVED***_ = filterButton.waitForExistence(timeout: 5)
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***filterButton.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The filter button wasn't found within 5 seconds."
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***filterButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select the site named "Research Annex".
-***REMOVED******REMOVED***app.buttons["Research Annex"].tap()
+***REMOVED******REMOVED***XCTAssertTrue(researchAnnexButton.exists, "The Research Annex button wasn't found.")
+***REMOVED******REMOVED***researchAnnexButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select the facility named "Lattice".
-***REMOVED******REMOVED***app.staticTexts["Lattice"].tap()
+***REMOVED******REMOVED***XCTAssertTrue(latticeText.exists, "The Lattice text wasn't found.")
+***REMOVED******REMOVED***latticeText.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select the level labeled "8".
-***REMOVED******REMOVED***app.scrollViews.otherElements.staticTexts["8"].tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let levelOneButton = app.staticTexts["1"]
+***REMOVED******REMOVED***XCTAssertTrue(levelEightText.exists, "The level eight text wasn't found.")
+***REMOVED******REMOVED***levelEightText.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify that the level selector is not collapsed
 ***REMOVED******REMOVED******REMOVED*** and other levels are available for selection.
-***REMOVED******REMOVED***XCTAssertTrue(levelOneButton.exists)
+***REMOVED******REMOVED***XCTAssertTrue(levelOneText.exists, "The level one text wasn't found.")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Collapse the level selector.
-***REMOVED******REMOVED***app.buttons["Go Down"].tap()
+***REMOVED******REMOVED***XCTAssertTrue(collapseButton.exists, "The collapse button wasn't found.")
+***REMOVED******REMOVED***collapseButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify that the level selector is collapsed.
-***REMOVED******REMOVED***XCTAssertFalse(levelOneButton.exists)
+***REMOVED******REMOVED***XCTAssertFalse(levelOneText.exists, "The collapse button was unexpectedly still present.")
 ***REMOVED***
 ***REMOVED***
