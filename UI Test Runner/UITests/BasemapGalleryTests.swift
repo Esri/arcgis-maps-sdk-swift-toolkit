@@ -23,23 +23,53 @@ final class BasemapGalleryTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         
+        let basemapGalleryTestsButton = app.buttons["Basemap Gallery Tests"]
+        let openStreetMapBlueprintButton = app.buttons["OpenStreetMap (Blueprint)"]
+        let nationalGeographicStyleMapButton = app.buttons["National Geographic Style Map"]
+        let worldImageryButton = app.buttons["World_Imagery (WGS 84)"]
+        let spatialReferenceErrorText = app.staticTexts["Spatial reference mismatch."]
+        let okButton = app.buttons["OK"]
+        
         // Open the Basemap Gallery component test view.
-        app.buttons["Basemap Gallery Tests"].tap()
+        XCTAssertTrue(
+            basemapGalleryTestsButton.exists,
+            "The Basemap Gallery Tests button wasn't found."
+        )
+        basemapGalleryTestsButton.tap()
         
         // Select two basemaps that should open without error.
-        app.buttons["OpenStreetMap (Blueprint)"].tap()
-        app.buttons["National Geographic Style Map"].tap()
+        XCTAssertTrue(
+            openStreetMapBlueprintButton.exists,
+            "The OpenStreetMap (Blueprint) button wasn't found."
+        )
+        openStreetMapBlueprintButton.tap()
+        XCTAssertTrue(
+            nationalGeographicStyleMapButton.exists,
+            "The National Geographic Style Map button wasn't found."
+        )
+        nationalGeographicStyleMapButton.tap()
         
         // Select a basemap that will trigger an error.
-        app.buttons["World_Imagery (WGS 84)"].tap()
+        XCTAssertTrue(
+            worldImageryButton.exists,
+            "The World Imagery button wasn't found."
+        )
+        worldImageryButton.tap()
         
         // Verify that a spatial reference error was presented after a few moments.
         XCTAssertTrue(
-            app.staticTexts["Spatial reference mismatch."]
-                .waitForExistence(timeout: 2)
+            spatialReferenceErrorText.waitForExistence(timeout: 2),
+            "The spatial reference error text wasn't found after 2 seconds."
         )
         
         // Dismiss the error.
-        app.buttons["OK"].tap()
+        XCTAssertTrue(okButton.exists, "The OK button wasn't found.")
+        okButton.tap()
+        
+        // Verify that a spatial reference error was dismissed.
+        XCTAssertFalse(
+            spatialReferenceErrorText.exists,
+            "The spatial reference error text was unexpectedly found after dismissing the error."
+        )
     }
 }
