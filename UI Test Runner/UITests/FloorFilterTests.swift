@@ -23,33 +23,44 @@ final class FloorFilterTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         
+        let filterButton = app.buttons["Business"]
+        let researchAnnexButton = app.buttons["Research Annex"]
+        let latticeText = app.staticTexts["Lattice"]
+        let levelEightText = app.scrollViews.otherElements.staticTexts["8"]
+        let levelOneText = app.staticTexts["1"]
+        let collapseButton = app.buttons["Go Down"]
+        
         // Open the Floor Filter component test view.
         app.buttons["Floor Filter Tests"].tap()
         
         // Wait for floor aware data to load and then open the filter.
-        let filterButton = app.buttons["Business"]
-        _ = filterButton.waitForExistence(timeout: 5)
+        XCTAssertTrue(
+            filterButton.waitForExistence(timeout: 5),
+            "The filter button wasn't found within 5 seconds."
+        )
         filterButton.tap()
         
         // Select the site named "Research Annex".
-        app.buttons["Research Annex"].tap()
+        XCTAssertTrue(researchAnnexButton.exists, "The Research Annex button wasn't found.")
+        researchAnnexButton.tap()
         
         // Select the facility named "Lattice".
-        app.staticTexts["Lattice"].tap()
+        XCTAssertTrue(latticeText.exists, "The Lattice text wasn't found.")
+        latticeText.tap()
         
         // Select the level labeled "8".
-        app.scrollViews.otherElements.staticTexts["8"].tap()
-        
-        let levelOneButton = app.staticTexts["1"]
+        XCTAssertTrue(levelEightText.exists, "The level eight text wasn't found.")
+        levelEightText.tap()
         
         // Verify that the level selector is not collapsed
         // and other levels are available for selection.
-        XCTAssertTrue(levelOneButton.exists)
+        XCTAssertTrue(levelOneText.exists, "The level one text wasn't found.")
         
         // Collapse the level selector.
-        app.buttons["Go Down"].tap()
+        XCTAssertTrue(collapseButton.exists, "The collapse button wasn't found.")
+        collapseButton.tap()
         
         // Verify that the level selector is collapsed.
-        XCTAssertFalse(levelOneButton.exists)
+        XCTAssertFalse(levelOneText.exists, "The collapse button was unexpectedly still present.")
     }
 }
