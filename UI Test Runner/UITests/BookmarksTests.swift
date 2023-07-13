@@ -24,11 +24,11 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
-***REMOVED******REMOVED***let bookmarksButton = app.buttons["Bookmarks"]
+***REMOVED******REMOVED***let bookmarksButton = app.buttons["Bookmarks"].firstMatch
 ***REMOVED******REMOVED***let selectABookmarkText = app.staticTexts["Select a bookmark"]
-***REMOVED******REMOVED***let giantSequoiasButton = app.buttons["Giant Sequoias of Willamette Blvd"]
+***REMOVED******REMOVED***let giantSequoiasButton = app.buttons["Giant Sequoias of Willamette Blvd"].firstMatch
 ***REMOVED******REMOVED***let giantSequoiasLabel = app.staticTexts["Giant Sequoias of Willamette Blvd"]
-***REMOVED******REMOVED***let historicLaddsButton = app.buttons["Historic Ladd's Addition"]
+***REMOVED******REMOVED***let historicLaddsButton = app.buttons["Historic Ladd's Addition"].firstMatch
 ***REMOVED******REMOVED***let historicLaddsLabel = app.staticTexts["Historic Ladd's Addition"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test view.
