@@ -18,18 +18,20 @@ import FormsPlugin
 struct MultiLineTextEntry: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
+***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current text value.
-***REMOVED***@State private var text: String
+***REMOVED***@State private var text = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether placeholder text is shown, thereby indicating the
 ***REMOVED******REMOVED***/ presence of a value.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ - Note: As of Swift 5.9, SwiftUI text editors do not have built-in placeholder functionality
 ***REMOVED******REMOVED***/ so it must be implemented manually.
-***REMOVED***@State private var isPlaceholder: Bool
+***REMOVED***@State private var isPlaceholder = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The form element that corresponds to this text field.
 ***REMOVED***private let element: FieldFeatureFormElement
@@ -40,19 +42,10 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED***/ Creates a view for text entry spanning multiple lines.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The form element that corresponds to this text field.
-***REMOVED******REMOVED***/   - text: The current text value.
 ***REMOVED******REMOVED***/   - input: A `TextAreaFeatureFormInput` which acts as a configuration.
-***REMOVED***init(element: FieldFeatureFormElement, text: String?, input: TextAreaFeatureFormInput) {
+***REMOVED***init(element: FieldFeatureFormElement, input: TextAreaFeatureFormInput) {
 ***REMOVED******REMOVED***self.element =  element
 ***REMOVED******REMOVED***self.input = input
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if let text, !text.isEmpty {
-***REMOVED******REMOVED******REMOVED***_text = State(initialValue: text)
-***REMOVED******REMOVED******REMOVED***isPlaceholder = false
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***_text = State(initialValue: element.hint ?? "")
-***REMOVED******REMOVED******REMOVED***isPlaceholder = true
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.
@@ -92,5 +85,21 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED***input: input
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***let text = model.feature?.attributes[element.fieldName] as? String
+***REMOVED******REMOVED******REMOVED***if let text, !text.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
+***REMOVED******REMOVED******REMOVED******REMOVED***self.text = text
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
+***REMOVED******REMOVED******REMOVED******REMOVED***self.text = element.hint ?? ""
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: text) { newValue in
+***REMOVED******REMOVED******REMOVED***if !isPlaceholder {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
