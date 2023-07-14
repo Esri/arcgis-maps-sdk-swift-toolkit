@@ -50,6 +50,22 @@ public class FormViewModel: ObservableObject {
     
     /// Submit the changes made to the form.
     public func submitChanges() async {
-        print(#function)
+        guard let table, let feature, let database else {
+            print("A precondition to submit the changes wasn't met.")
+            return
+        }
+        
+        try? await table.update(feature)
+        
+        guard database.hasLocalEdits else {
+            print("No submittable changes found.")
+            return
+        }
+        
+        let results = try? await database.applyEdits()
+        
+        if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
+            print("An error occurred while submitting the changes.")
+        }
     }
 }
