@@ -78,7 +78,7 @@ struct FloorFilterTestView: View {
             }
             .task {
                 try? await map.load()
-                isMapLoaded = true
+                isMapLoaded = map.loadStatus == .loaded
             }
     }
 }
