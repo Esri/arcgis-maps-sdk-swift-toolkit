@@ -18,11 +18,13 @@ import FormsPlugin
 struct SingleLineTextEntry: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
+***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current text value.
-***REMOVED***@State private var text: String
+***REMOVED***@State private var text = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The form element that corresponds to this text field.
 ***REMOVED***private let element: FieldFeatureFormElement
@@ -33,12 +35,10 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***/ Creates a view for single line text entry.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The form element that corresponds to this text field.
-***REMOVED******REMOVED***/   - text: The current text value.
 ***REMOVED******REMOVED***/   - input: A `TextBoxFeatureFormInput` which acts as a configuration.
-***REMOVED***init(element: FieldFeatureFormElement, text: String?, input: TextBoxFeatureFormInput) {
+***REMOVED***init(element: FieldFeatureFormElement, input: TextBoxFeatureFormInput) {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
-***REMOVED******REMOVED***_text = State(initialValue: text ?? "")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.
@@ -62,5 +62,11 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED***input: input
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***text = model.feature?.attributes[element.fieldName] as? String ?? ""
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: text) { newValue in
+***REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
