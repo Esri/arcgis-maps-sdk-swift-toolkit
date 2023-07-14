@@ -41,7 +41,10 @@ final class FloorFilterTests: XCTestCase {
         filterButton.tap()
         
         // Select the site named "Research Annex".
-        XCTAssertTrue(researchAnnexButton.exists, "The Research Annex button wasn't found.")
+        XCTAssertTrue(
+            researchAnnexButton.waitForExistence(timeout: 2),
+            "The Research Annex button wasn't found within 2 seconds."
+        )
         researchAnnexButton.tap()
         
         // Select the facility named "Lattice".
