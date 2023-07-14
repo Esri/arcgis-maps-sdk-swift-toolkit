@@ -18,18 +18,20 @@ import SwiftUI
 struct MultiLineTextEntry: View {
     @Environment(\.formElementPadding) var elementPadding
     
+    @EnvironmentObject var model: FormViewModel
+    
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
     /// The current text value.
-    @State private var text: String
+    @State private var text = ""
     
     /// A Boolean value indicating whether placeholder text is shown, thereby indicating the
     /// presence of a value.
     ///
     /// - Note: As of Swift 5.9, SwiftUI text editors do not have built-in placeholder functionality
     /// so it must be implemented manually.
-    @State private var isPlaceholder: Bool
+    @State private var isPlaceholder = false
     
     /// The form element that corresponds to this text field.
     private let element: FieldFeatureFormElement
@@ -40,19 +42,10 @@ struct MultiLineTextEntry: View {
     /// Creates a view for text entry spanning multiple lines.
     /// - Parameters:
     ///   - element: The form element that corresponds to this text field.
-    ///   - text: The current text value.
     ///   - input: A `TextAreaFeatureFormInput` which acts as a configuration.
-    init(element: FieldFeatureFormElement, text: String?, input: TextAreaFeatureFormInput) {
+    init(element: FieldFeatureFormElement, input: TextAreaFeatureFormInput) {
         self.element =  element
         self.input = input
-        
-        if let text, !text.isEmpty {
-            _text = State(initialValue: text)
-            isPlaceholder = false
-        } else {
-            _text = State(initialValue: element.hint ?? "")
-            isPlaceholder = true
-        }
     }
     
     /// - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.
@@ -92,5 +85,21 @@ struct MultiLineTextEntry: View {
             input: input
         )
         .padding([.bottom], elementPadding)
+        .onAppear {
+            let text = model.feature?.attributes[element.fieldName] as? String
+            if let text, !text.isEmpty {
+                isPlaceholder = false
+                self.text = text
+                
+            } else {
+                isPlaceholder = true
+                self.text = element.hint ?? ""
+            }
+        }
+        .onChange(of: text) { newValue in
+            if !isPlaceholder {
+                model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+            }
+        }
     }
 }
