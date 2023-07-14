@@ -40,7 +40,7 @@ final class BasemapGalleryTests: XCTestCase {
         // Select two basemaps that should open without error.
         XCTAssertTrue(
             openStreetMapBlueprintButton.waitForExistence(timeout: 2),
-            "The OpenStreetMap (Blueprint) button wasn't found after 2 seconds."
+            "The OpenStreetMap (Blueprint) button wasn't found within 2 seconds."
         )
         openStreetMapBlueprintButton.tap()
         XCTAssertTrue(
@@ -59,7 +59,7 @@ final class BasemapGalleryTests: XCTestCase {
         // Verify that a spatial reference error was presented after a few moments.
         XCTAssertTrue(
             spatialReferenceErrorText.waitForExistence(timeout: 2),
-            "The spatial reference error text wasn't found after 2 seconds."
+            "The spatial reference error text wasn't found within 2 seconds."
         )
         
         // Dismiss the error.
