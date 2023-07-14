@@ -50,6 +50,22 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Submit the changes made to the form.
 ***REMOVED***public func submitChanges() async {
-***REMOVED******REMOVED***print(#function)
+***REMOVED******REMOVED***guard let table, let feature, let database else {
+***REMOVED******REMOVED******REMOVED***print("A precondition to submit the changes wasn't met.")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***try? await table.update(feature)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard database.hasLocalEdits else {
+***REMOVED******REMOVED******REMOVED***print("No submittable changes found.")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let results = try? await database.applyEdits()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
+***REMOVED******REMOVED******REMOVED***print("An error occurred while submitting the changes.")
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
