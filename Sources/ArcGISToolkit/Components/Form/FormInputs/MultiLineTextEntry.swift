@@ -18,6 +18,7 @@ import SwiftUI
 struct MultiLineTextEntry: View {
     @Environment(\.formElementPadding) var elementPadding
     
+    /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
     /// A Boolean value indicating whether or not the field is focused.
