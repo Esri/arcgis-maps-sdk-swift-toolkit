@@ -39,7 +39,7 @@ public struct FormView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***let decoder = JSONDecoder()
-***REMOVED******REMOVED******REMOVED***if let layer = feature.table?.layer as? FeatureLayer,
+***REMOVED******REMOVED******REMOVED***if let layer = model.feature?.table?.layer as? FeatureLayer,
 ***REMOVED******REMOVED******REMOVED***   let formInfoDictionary = layer._unsupportedJSON["formInfo"],
 ***REMOVED******REMOVED******REMOVED***   let jsonData = try? JSONSerialization.data(withJSONObject: formInfoDictionary),
 ***REMOVED******REMOVED******REMOVED***   let formDefinition = try? decoder.decode(FeatureFormDefinition.self, from: jsonData) {
@@ -52,15 +52,6 @@ public struct FormView: View {
 ***REMOVED***
 
 extension FormView {
-***REMOVED******REMOVED***/ The feature being edited in the form.
-***REMOVED***private var feature: ArcGISFeature {
-***REMOVED******REMOVED***if let feature = model.feature {
-***REMOVED******REMOVED******REMOVED***return feature
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***fatalError("The feature was cleared but the form is still presented.")
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Makes UI for a form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeElement(_ element: FeatureFormElement) -> some View {
@@ -81,13 +72,11 @@ extension FormView {
 ***REMOVED******REMOVED***case let `input` as TextBoxFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED***SingleLineTextEntry(
 ***REMOVED******REMOVED******REMOVED******REMOVED***element: element,
-***REMOVED******REMOVED******REMOVED******REMOVED***text: feature.attributes[element.fieldName] as? String,
 ***REMOVED******REMOVED******REMOVED******REMOVED***input: `input`
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case let `input` as TextAreaFeatureFormInput:
 ***REMOVED******REMOVED******REMOVED***MultiLineTextEntry(
 ***REMOVED******REMOVED******REMOVED******REMOVED***element: element,
-***REMOVED******REMOVED******REMOVED******REMOVED***text: feature.attributes[element.fieldName] as? String,
 ***REMOVED******REMOVED******REMOVED******REMOVED***input: `input`
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***default:
