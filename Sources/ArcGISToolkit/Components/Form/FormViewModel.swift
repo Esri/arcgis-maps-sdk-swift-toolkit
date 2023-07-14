@@ -16,11 +16,17 @@ import FormsPlugin
 import SwiftUI
 
 public class FormViewModel: ObservableObject {
-    /// The structure of the form.
-    @Published var formDefinition: FeatureFormDefinition?
+    /// The geodatabase which holds the table and feature being edited in the form.
+    @Published private(set) var database: ServiceGeodatabase?
     
     /// The featured being edited in the form.
     @Published private(set) var feature: ArcGISFeature?
+    
+    /// The structure of the form.
+    @Published var formDefinition: FeatureFormDefinition?
+    
+    /// The service feature table which holds the feature being edited in the form.
+    @Published private(set) var table: ServiceFeatureTable?
     
     /// Initializes a form view model.
     public init() {}
@@ -29,10 +35,21 @@ public class FormViewModel: ObservableObject {
     /// - Parameter feature: The feature to be edited in the form.
     public func startEditing(_ feature: ArcGISFeature) {
         self.feature = feature
+        if let table = feature.table as? ServiceFeatureTable {
+            self.database = table.serviceGeodatabase
+            self.table = table
+        }
+    }
+    
+    /// Undos any local edits that haven't yet been saved to service geodatabase.
+    public func undoEdits() {
+        Task {
+            try? await database?.undoLocalEdits()
+        }
     }
     
     /// Submit the changes made to the form.
-    public func submitChanges() {
+    public func submitChanges() async {
         print(#function)
     }
 }
