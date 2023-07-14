@@ -41,7 +41,7 @@ public class FormViewModel: ObservableObject {
         }
     }
     
-    /// Undos any local edits that haven't yet been saved to service geodatabase.
+    /// Reverts any local edits that haven't yet been saved to service geodatabase.
     public func undoEdits() {
         Task {
             try? await database?.undoLocalEdits()
