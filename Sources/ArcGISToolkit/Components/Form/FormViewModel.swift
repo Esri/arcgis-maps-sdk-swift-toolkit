@@ -16,11 +16,17 @@ import FormsPlugin
 ***REMOVED***
 
 public class FormViewModel: ObservableObject {
-***REMOVED******REMOVED***/ The structure of the form.
-***REMOVED***@Published var formDefinition: FeatureFormDefinition?
+***REMOVED******REMOVED***/ The geodatabase which holds the table and feature being edited in the form.
+***REMOVED***@Published private(set) var database: ServiceGeodatabase?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The featured being edited in the form.
 ***REMOVED***@Published private(set) var feature: ArcGISFeature?
+***REMOVED***
+***REMOVED******REMOVED***/ The structure of the form.
+***REMOVED***@Published var formDefinition: FeatureFormDefinition?
+***REMOVED***
+***REMOVED******REMOVED***/ The service feature table which holds the feature being edited in the form.
+***REMOVED***@Published private(set) var table: ServiceFeatureTable?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
 ***REMOVED***public init() {***REMOVED***
@@ -29,10 +35,21 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter feature: The feature to be edited in the form.
 ***REMOVED***public func startEditing(_ feature: ArcGISFeature) {
 ***REMOVED******REMOVED***self.feature = feature
+***REMOVED******REMOVED***if let table = feature.table as? ServiceFeatureTable {
+***REMOVED******REMOVED******REMOVED***self.database = table.serviceGeodatabase
+***REMOVED******REMOVED******REMOVED***self.table = table
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Undos any local edits that haven't yet been saved to service geodatabase.
+***REMOVED***public func undoEdits() {
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***try? await database?.undoLocalEdits()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Submit the changes made to the form.
-***REMOVED***public func submitChanges() {
+***REMOVED***public func submitChanges() async {
 ***REMOVED******REMOVED***print(#function)
 ***REMOVED***
 ***REMOVED***
