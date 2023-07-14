@@ -20,6 +20,7 @@ import SwiftUI
 public struct FormView: View {
     @Environment(\.formElementPadding) var elementPadding
     
+    /// The model for this form view.
     @EnvironmentObject var model: FormViewModel
     
     /// Initializes a form view.
