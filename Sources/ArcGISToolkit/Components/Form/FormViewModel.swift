@@ -17,7 +17,7 @@ import SwiftUI
 
 public class FormViewModel: ObservableObject {
     /// The geodatabase which holds the table and feature being edited in the form.
-    @Published private(set) var database: ServiceGeodatabase?
+    @Published private var database: ServiceGeodatabase?
     
     /// The featured being edited in the form.
     @Published private(set) var feature: ArcGISFeature?
@@ -26,7 +26,7 @@ public class FormViewModel: ObservableObject {
     @Published var formDefinition: FeatureFormDefinition?
     
     /// The service feature table which holds the feature being edited in the form.
-    @Published private(set) var table: ServiceFeatureTable?
+    @Published private var table: ServiceFeatureTable?
     
     /// Initializes a form view model.
     public init() {}
