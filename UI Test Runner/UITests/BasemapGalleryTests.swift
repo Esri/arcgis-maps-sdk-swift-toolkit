@@ -39,8 +39,8 @@ final class BasemapGalleryTests: XCTestCase {
         
         // Select two basemaps that should open without error.
         XCTAssertTrue(
-            openStreetMapBlueprintButton.exists,
-            "The OpenStreetMap (Blueprint) button wasn't found."
+            openStreetMapBlueprintButton.waitForExistence(timeout: 2),
+            "The OpenStreetMap (Blueprint) button wasn't found after 2 seconds."
         )
         openStreetMapBlueprintButton.tap()
         XCTAssertTrue(
