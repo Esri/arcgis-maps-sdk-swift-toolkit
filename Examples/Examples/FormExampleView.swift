@@ -85,6 +85,7 @@ struct FormExampleView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         if isPresented {
                             Button("Cancel", role: .cancel) {
+                                formViewModel.undoEdits()
                                 isPresented = false
                             }
                         }
@@ -93,7 +94,10 @@ struct FormExampleView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         if isPresented {
                             Button("Submit") {
-                                formViewModel.submitChanges()
+                                Task {
+                                    await formViewModel.submitChanges()
+                                    isPresented = false
+                                }
                             }
                         }
                     }
