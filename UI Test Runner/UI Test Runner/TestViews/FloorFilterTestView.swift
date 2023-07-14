@@ -78,7 +78,7 @@ struct FloorFilterTestView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await map.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***isMapLoaded = true
+***REMOVED******REMOVED******REMOVED******REMOVED***isMapLoaded = map.loadStatus == .loaded
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
