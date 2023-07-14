@@ -39,7 +39,7 @@ public struct FormView: View {
         }
         .task {
             let decoder = JSONDecoder()
-            if let layer = feature.table?.layer as? FeatureLayer,
+            if let layer = model.feature?.table?.layer as? FeatureLayer,
                let formInfoDictionary = layer._unsupportedJSON["formInfo"],
                let jsonData = try? JSONSerialization.data(withJSONObject: formInfoDictionary),
                let formDefinition = try? decoder.decode(FeatureFormDefinition.self, from: jsonData) {
@@ -52,15 +52,6 @@ public struct FormView: View {
 }
 
 extension FormView {
-    /// The feature being edited in the form.
-    private var feature: ArcGISFeature {
-        if let feature = model.feature {
-            return feature
-        } else {
-            fatalError("The feature was cleared but the form is still presented.")
-        }
-    }
-    
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FeatureFormElement) -> some View {
@@ -81,13 +72,11 @@ extension FormView {
         case let `input` as TextBoxFeatureFormInput:
             SingleLineTextEntry(
                 element: element,
-                text: feature.attributes[element.fieldName] as? String,
                 input: `input`
             )
         case let `input` as TextAreaFeatureFormInput:
             MultiLineTextEntry(
                 element: element,
-                text: feature.attributes[element.fieldName] as? String,
                 input: `input`
             )
         default:
