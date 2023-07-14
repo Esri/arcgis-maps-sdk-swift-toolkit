@@ -20,6 +20,7 @@ import FormsPlugin
 public struct FormView: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
+***REMOVED******REMOVED***/ The model for this form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
