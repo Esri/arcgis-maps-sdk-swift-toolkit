@@ -1,0 +1,281 @@
+/* A label declaring the number of starting points selected for a utility network trace. */
+"%lld selected" = "試_%lld selected______________驗";
+
+/* An alert message indicating that a certificate is required to access
+content on a remote host. The variable is the host that prompted the challenge. */
+"A certificate is required to access content on %@." = "試_A certificate is required to access content on %@__________________________驗.";
+
+/* A button to add new utility trace starting points. */
+"Add new" = "試_Add new_______________驗";
+
+/* A section header for advanced options. */
+"Advanced Options" = "試_Advanced Options_________________驗";
+
+/* A button allowing users to view a list of all sites defined in a floor aware map. */
+"All sites" = "試_All sites___________________驗";
+
+/* No comment provided by engineer. */
+"All Sites" = "試_All Sites___________________驗";
+
+/* A message describing the outcome of clearing all utility network trace results. */
+"All the trace inputs and results will be lost." = "試_All the trace inputs and results will be lost________________________驗.";
+
+/* A button indicating the user accepts a potentially dangerous action. */
+"Allow" = "試_Allow___________驗";
+
+/* No comment provided by engineer. */
+"An error occurred loading the image: %@." = "試_An error occurred loading the image: %@_____________________驗.";
+
+/* No comment provided by engineer. */
+"Attachments" = "試_Attachments____________驗";
+
+/* No comment provided by engineer. */
+"Attributes" = "試_Attributes_____________________驗";
+
+/* No comment provided by engineer. */
+"Authentication Required" = "試_Authentication Required________________________驗";
+
+/* No comment provided by engineer. */
+"Bookmarks" = "試_Bookmarks___________________驗";
+
+/* No comment provided by engineer. */
+"Browse For Certificate" = "試_Browse For Certificate_______________________驗";
+
+/* No comment provided by engineer. */
+"Cancel" = "試_Cancel_____________驗";
+
+/* No comment provided by engineer. */
+"Cancel starting point selection" = "試_Cancel starting point selection_________________驗";
+
+/* No comment provided by engineer. */
+"Certificate Required" = "試_Certificate Required_____________________驗";
+
+/* A label indicating that the remote host's certificate is not trusted. */
+"Certificate Trust Warning" = "試_Certificate Trust Warning__________________________驗";
+
+/* No comment provided by engineer. */
+"Clear All Results" = "試_Clear All Results__________________驗";
+
+/* No comment provided by engineer. */
+"Clear all results?" = "試_Clear all results___________________驗?";
+
+/* No comment provided by engineer. */
+"Color" = "試_Color___________驗";
+
+/* An compass description to be read by a screen reader describing the
+current heading. The first variable being a degree value and the
+second being a corresponding cardinal direction (north, northeast,
+east, etc.). */
+"Compass, heading %lld degrees %@" = "試_Compass, heading %lld degrees %@_________________驗";
+
+/* No comment provided by engineer. */
+"Continue" = "試_Continue_________________驗";
+
+/* No comment provided by engineer. */
+"Could not access the certificate file." = "試_Could not access the certificate file____________________驗.";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "試_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________驗.";
+
+/* No comment provided by engineer. */
+"Delete" = "試_Delete_____________驗";
+
+/* A button to close the bookmark selection menu. */
+"Done" = "試_Done_________驗";
+
+/* No comment provided by engineer. */
+"Duplicate starting points cannot be added." = "試_Duplicate starting points cannot be added______________________驗.";
+
+/* No comment provided by engineer. */
+"Element could not be identified." = "試_Element could not be identified_________________驗.";
+
+/* No comment provided by engineer. */
+"Error" = "試_Error___________驗";
+
+/* No comment provided by engineer. */
+"Error importing certificate" = "試_Error importing certificate____________________________驗";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
+"Error loading basemap." = "試_Error loading basemap_______________________驗.";
+
+/* No comment provided by engineer. */
+"Evaluating popup expressionsâ€¦" = "試_Evaluating popup expressionsâ€¦_________________驗";
+
+/* No comment provided by engineer. */
+"Failed to set starting point" = "試_Failed to set starting point_____________________________驗";
+
+/* No comment provided by engineer. */
+"Feature Results" = "試_Feature Results________________驗";
+
+/* No comment provided by engineer. */
+"Field" = "試_Field___________驗";
+
+/* No comment provided by engineer. */
+"Fields" = "試_Fields_____________驗";
+
+/* A search field allowing user to filter a list of facilities by name. */
+"Filter facilities" = "試_Filter facilities__________________驗";
+
+/* A search field allowing user to filter a list of sites by name. */
+"Filter sites" = "試_Filter sites_____________驗";
+
+/* No comment provided by engineer. */
+"Find a place or address" = "試_Find a place or address________________________驗";
+
+/* No comment provided by engineer. */
+"Fraction Along Edge" = "試_Fraction Along Edge____________________驗";
+
+/* No comment provided by engineer. */
+"Function Results" = "試_Function Results_________________驗";
+
+/* No comment provided by engineer. */
+"Media" = "試_Media___________驗";
+
+/* No comment provided by engineer. */
+"Mode" = "試_Mode_________驗";
+
+/* No comment provided by engineer. */
+"Name" = "試_Name_________驗";
+
+/* No comment provided by engineer. */
+"Network" = "試_Network_______________驗";
+
+/* No comment provided by engineer. */
+"New trace" = "試_New trace___________________驗";
+
+/* No comment provided by engineer. */
+"No bookmarks" = "試_No bookmarks_____________驗";
+
+/* No comment provided by engineer. */
+"No configurations available" = "試_No configurations available____________________________驗";
+
+/* No comment provided by engineer. */
+"No matches found" = "試_No matches found_________________驗";
+
+/* A message to show when there are no results or suggestions. */
+"No results found" = "試_No results found_________________驗";
+
+/* No comment provided by engineer. */
+"No trace types found." = "試_No trace types found______________________驗.";
+
+/* No comment provided by engineer. */
+"No utility networks found." = "試_No utility networks found___________________________驗.";
+
+/* No comment provided by engineer. */
+"None selected" = "試_None selected______________驗";
+
+/* A trace function output result is not available. */
+"Not Available" = "試_Not Available______________驗";
+
+/* A string identifying a utility network object. */
+"Object ID: %@" = "試_Object ID: %@______________驗";
+
+/* No comment provided by engineer. */
+"OK" = "試_OK_____驗";
+
+/* No comment provided by engineer. */
+"Password" = "試_Password_________________驗";
+
+/* No comment provided by engineer. */
+"Password Required" = "試_Password Required__________________驗";
+
+/* No comment provided by engineer. */
+"Please enter a password for the chosen certificate." = "試_Please enter a password for the chosen certificate___________________________驗.";
+
+/* No comment provided by engineer. */
+"Please set at least 1 starting location." = "試_Please set at least 1 starting location_____________________驗.";
+
+/* No comment provided by engineer. */
+"Please set at least 2 starting locations." = "試_Please set at least 2 starting locations______________________驗.";
+
+/* An error message shown when a popup cannot be displayed. The
+variable provides additional data. */
+"Popup evaluation failed: %@" = "試_Popup evaluation failed: %@____________________________驗";
+
+/* A button to show when a user has panned the map away from the
+original search location. */
+"Repeat Search Here" = "試_Repeat Search Here___________________驗";
+
+/* No comment provided by engineer. */
+"Results" = "試_Results_______________驗";
+
+/* No comment provided by engineer. */
+"Search Query" = "試_Search Query_____________驗";
+
+/* No comment provided by engineer. */
+"Select a bookmark" = "試_Select a bookmark__________________驗";
+
+/* No comment provided by engineer. */
+"Select a facility" = "試_Select a facility__________________驗";
+
+/* No comment provided by engineer. */
+"Sites" = "試_Sites___________驗";
+
+/* No comment provided by engineer. */
+"Spatial reference mismatch." = "試_Spatial reference mismatch____________________________驗.";
+
+/* No comment provided by engineer. */
+"Starting Points" = "試_Starting Points________________驗";
+
+/* No comment provided by engineer. */
+"Tap on the image for more information." = "試_Tap on the image for more information____________________驗.";
+
+/* No comment provided by engineer. */
+"Terminal Configuration" = "試_Terminal Configuration_______________________驗";
+
+/* No comment provided by engineer. */
+"The basemap does not have a spatial reference." = "試_The basemap does not have a spatial reference________________________驗.";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to
+load for an unknown reason. */
+"The basemap failed to load for an unknown reason." = "試_The basemap failed to load for an unknown reason__________________________驗.";
+
+/* No comment provided by engineer. */
+"The basemap has a spatial reference that is incompatible with the map." = "試_The basemap has a spatial reference that is incompatible with the map____________________________________驗.";
+
+/* No comment provided by engineer. */
+"The certificate file or password was invalid." = "試_The certificate file or password was invalid________________________驗.";
+
+/* No comment provided by engineer. */
+"The certificate file was invalid." = "試_The certificate file was invalid__________________驗.";
+
+/* No comment provided by engineer. */
+"The map does not have a spatial reference." = "試_The map does not have a spatial reference______________________驗.";
+
+/* No comment provided by engineer. */
+"The password was invalid." = "試_The password was invalid__________________________驗.";
+
+/* Description of error thrown when a remote image could not be loaded. */
+"The URL could not be reached or did not contain image data" = "試_The URL could not be reached or did not contain image data______________________________驗";
+
+/* No comment provided by engineer. */
+"Trace" = "試_Trace___________驗";
+
+/* A label indicating the index of the trace being viewed out of the total number of traces completed. */
+"Trace %lld of %lld" = "試_Trace %lld of %lld___________________驗";
+
+/* No comment provided by engineer. */
+"Trace Configuration" = "試_Trace Configuration____________________驗";
+
+/* No comment provided by engineer. */
+"Try Again" = "試_Try Again___________________驗";
+
+/* A label to use in place of a utility element asset type name. */
+"Unnamed Asset Type" = "試_Unnamed Asset Type___________________驗";
+
+/* No comment provided by engineer. */
+"Username" = "試_Username_________________驗";
+
+/* No comment provided by engineer. */
+"Value" = "試_Value___________驗";
+
+/* A label explaining that credentials are required to authenticate with specified host.
+The host is indicated in the variable. */
+"You must sign in to access '%@'" = "試_You must sign in to access '%@'_________________驗";
+
+/* A button to change the map to the extent of the selected trace. */
+"Zoom To" = "試_Zoom To_______________驗";
+
+/* A user option specifying that a map should automatically change to show completed trace results. */
+"Zoom to result" = "試_Zoom to result_______________驗";
+

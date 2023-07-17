@@ -1,2 +1,281 @@
+/* A label declaring the number of starting points selected for a utility network trace. */
+"%lld selected" = "ng_%lld selected______________ny";
+
+/* An alert message indicating that a certificate is required to access
+content on a remote host. The variable is the host that prompted the challenge. */
+"A certificate is required to access content on %@." = "ng_A certificate is required to access content on %@__________________________ny.";
+
+/* A button to add new utility trace starting points. */
+"Add new" = "ng_Add new_______________ny";
+
+/* A section header for advanced options. */
+"Advanced Options" = "ng_Advanced Options_________________ny";
+
+/* A button allowing users to view a list of all sites defined in a floor aware map. */
+"All sites" = "ng_All sites___________________ny";
+
 /* No comment provided by engineer. */
-"Delete" = "Hapus";
+"All Sites" = "ng_All Sites___________________ny";
+
+/* A message describing the outcome of clearing all utility network trace results. */
+"All the trace inputs and results will be lost." = "ng_All the trace inputs and results will be lost________________________ny.";
+
+/* A button indicating the user accepts a potentially dangerous action. */
+"Allow" = "ng_Allow___________ny";
+
+/* No comment provided by engineer. */
+"An error occurred loading the image: %@." = "ng_An error occurred loading the image: %@_____________________ny.";
+
+/* No comment provided by engineer. */
+"Attachments" = "ng_Attachments____________ny";
+
+/* No comment provided by engineer. */
+"Attributes" = "ng_Attributes_____________________ny";
+
+/* No comment provided by engineer. */
+"Authentication Required" = "ng_Authentication Required________________________ny";
+
+/* No comment provided by engineer. */
+"Bookmarks" = "ng_Bookmarks___________________ny";
+
+/* No comment provided by engineer. */
+"Browse For Certificate" = "ng_Browse For Certificate_______________________ny";
+
+/* No comment provided by engineer. */
+"Cancel" = "ng_Cancel_____________ny";
+
+/* No comment provided by engineer. */
+"Cancel starting point selection" = "ng_Cancel starting point selection_________________ny";
+
+/* No comment provided by engineer. */
+"Certificate Required" = "ng_Certificate Required_____________________ny";
+
+/* A label indicating that the remote host's certificate is not trusted. */
+"Certificate Trust Warning" = "ng_Certificate Trust Warning__________________________ny";
+
+/* No comment provided by engineer. */
+"Clear All Results" = "ng_Clear All Results__________________ny";
+
+/* No comment provided by engineer. */
+"Clear all results?" = "ng_Clear all results___________________ny?";
+
+/* No comment provided by engineer. */
+"Color" = "ng_Color___________ny";
+
+/* An compass description to be read by a screen reader describing the
+current heading. The first variable being a degree value and the
+second being a corresponding cardinal direction (north, northeast,
+east, etc.). */
+"Compass, heading %lld degrees %@" = "ng_Compass, heading %lld degrees %@_________________ny";
+
+/* No comment provided by engineer. */
+"Continue" = "ng_Continue_________________ny";
+
+/* No comment provided by engineer. */
+"Could not access the certificate file." = "ng_Could not access the certificate file____________________ny.";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "ng_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________ny.";
+
+/* No comment provided by engineer. */
+"Delete" = "ng_Delete_____________ny";
+
+/* A button to close the bookmark selection menu. */
+"Done" = "ng_Done_________ny";
+
+/* No comment provided by engineer. */
+"Duplicate starting points cannot be added." = "ng_Duplicate starting points cannot be added______________________ny.";
+
+/* No comment provided by engineer. */
+"Element could not be identified." = "ng_Element could not be identified_________________ny.";
+
+/* No comment provided by engineer. */
+"Error" = "ng_Error___________ny";
+
+/* No comment provided by engineer. */
+"Error importing certificate" = "ng_Error importing certificate____________________________ny";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
+"Error loading basemap." = "ng_Error loading basemap_______________________ny.";
+
+/* No comment provided by engineer. */
+"Evaluating popup expressionsâ€¦" = "ng_Evaluating popup expressionsâ€¦_________________ny";
+
+/* No comment provided by engineer. */
+"Failed to set starting point" = "ng_Failed to set starting point_____________________________ny";
+
+/* No comment provided by engineer. */
+"Feature Results" = "ng_Feature Results________________ny";
+
+/* No comment provided by engineer. */
+"Field" = "ng_Field___________ny";
+
+/* No comment provided by engineer. */
+"Fields" = "ng_Fields_____________ny";
+
+/* A search field allowing user to filter a list of facilities by name. */
+"Filter facilities" = "ng_Filter facilities__________________ny";
+
+/* A search field allowing user to filter a list of sites by name. */
+"Filter sites" = "ng_Filter sites_____________ny";
+
+/* No comment provided by engineer. */
+"Find a place or address" = "ng_Find a place or address________________________ny";
+
+/* No comment provided by engineer. */
+"Fraction Along Edge" = "ng_Fraction Along Edge____________________ny";
+
+/* No comment provided by engineer. */
+"Function Results" = "ng_Function Results_________________ny";
+
+/* No comment provided by engineer. */
+"Media" = "ng_Media___________ny";
+
+/* No comment provided by engineer. */
+"Mode" = "ng_Mode_________ny";
+
+/* No comment provided by engineer. */
+"Name" = "ng_Name_________ny";
+
+/* No comment provided by engineer. */
+"Network" = "ng_Network_______________ny";
+
+/* No comment provided by engineer. */
+"New trace" = "ng_New trace___________________ny";
+
+/* No comment provided by engineer. */
+"No bookmarks" = "ng_No bookmarks_____________ny";
+
+/* No comment provided by engineer. */
+"No configurations available" = "ng_No configurations available____________________________ny";
+
+/* No comment provided by engineer. */
+"No matches found" = "ng_No matches found_________________ny";
+
+/* A message to show when there are no results or suggestions. */
+"No results found" = "ng_No results found_________________ny";
+
+/* No comment provided by engineer. */
+"No trace types found." = "ng_No trace types found______________________ny.";
+
+/* No comment provided by engineer. */
+"No utility networks found." = "ng_No utility networks found___________________________ny.";
+
+/* No comment provided by engineer. */
+"None selected" = "ng_None selected______________ny";
+
+/* A trace function output result is not available. */
+"Not Available" = "ng_Not Available______________ny";
+
+/* A string identifying a utility network object. */
+"Object ID: %@" = "ng_Object ID: %@______________ny";
+
+/* No comment provided by engineer. */
+"OK" = "ng_OK_____ny";
+
+/* No comment provided by engineer. */
+"Password" = "ng_Password_________________ny";
+
+/* No comment provided by engineer. */
+"Password Required" = "ng_Password Required__________________ny";
+
+/* No comment provided by engineer. */
+"Please enter a password for the chosen certificate." = "ng_Please enter a password for the chosen certificate___________________________ny.";
+
+/* No comment provided by engineer. */
+"Please set at least 1 starting location." = "ng_Please set at least 1 starting location_____________________ny.";
+
+/* No comment provided by engineer. */
+"Please set at least 2 starting locations." = "ng_Please set at least 2 starting locations______________________ny.";
+
+/* An error message shown when a popup cannot be displayed. The
+variable provides additional data. */
+"Popup evaluation failed: %@" = "ng_Popup evaluation failed: %@____________________________ny";
+
+/* A button to show when a user has panned the map away from the
+original search location. */
+"Repeat Search Here" = "ng_Repeat Search Here___________________ny";
+
+/* No comment provided by engineer. */
+"Results" = "ng_Results_______________ny";
+
+/* No comment provided by engineer. */
+"Search Query" = "ng_Search Query_____________ny";
+
+/* No comment provided by engineer. */
+"Select a bookmark" = "ng_Select a bookmark__________________ny";
+
+/* No comment provided by engineer. */
+"Select a facility" = "ng_Select a facility__________________ny";
+
+/* No comment provided by engineer. */
+"Sites" = "ng_Sites___________ny";
+
+/* No comment provided by engineer. */
+"Spatial reference mismatch." = "ng_Spatial reference mismatch____________________________ny.";
+
+/* No comment provided by engineer. */
+"Starting Points" = "ng_Starting Points________________ny";
+
+/* No comment provided by engineer. */
+"Tap on the image for more information." = "ng_Tap on the image for more information____________________ny.";
+
+/* No comment provided by engineer. */
+"Terminal Configuration" = "ng_Terminal Configuration_______________________ny";
+
+/* No comment provided by engineer. */
+"The basemap does not have a spatial reference." = "ng_The basemap does not have a spatial reference________________________ny.";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to
+load for an unknown reason. */
+"The basemap failed to load for an unknown reason." = "ng_The basemap failed to load for an unknown reason__________________________ny.";
+
+/* No comment provided by engineer. */
+"The basemap has a spatial reference that is incompatible with the map." = "ng_The basemap has a spatial reference that is incompatible with the map____________________________________ny.";
+
+/* No comment provided by engineer. */
+"The certificate file or password was invalid." = "ng_The certificate file or password was invalid________________________ny.";
+
+/* No comment provided by engineer. */
+"The certificate file was invalid." = "ng_The certificate file was invalid__________________ny.";
+
+/* No comment provided by engineer. */
+"The map does not have a spatial reference." = "ng_The map does not have a spatial reference______________________ny.";
+
+/* No comment provided by engineer. */
+"The password was invalid." = "ng_The password was invalid__________________________ny.";
+
+/* Description of error thrown when a remote image could not be loaded. */
+"The URL could not be reached or did not contain image data" = "ng_The URL could not be reached or did not contain image data______________________________ny";
+
+/* No comment provided by engineer. */
+"Trace" = "ng_Trace___________ny";
+
+/* A label indicating the index of the trace being viewed out of the total number of traces completed. */
+"Trace %lld of %lld" = "ng_Trace %lld of %lld___________________ny";
+
+/* No comment provided by engineer. */
+"Trace Configuration" = "ng_Trace Configuration____________________ny";
+
+/* No comment provided by engineer. */
+"Try Again" = "ng_Try Again___________________ny";
+
+/* A label to use in place of a utility element asset type name. */
+"Unnamed Asset Type" = "ng_Unnamed Asset Type___________________ny";
+
+/* No comment provided by engineer. */
+"Username" = "ng_Username_________________ny";
+
+/* No comment provided by engineer. */
+"Value" = "ng_Value___________ny";
+
+/* A label explaining that credentials are required to authenticate with specified host.
+The host is indicated in the variable. */
+"You must sign in to access '%@'" = "ng_You must sign in to access '%@'_________________ny";
+
+/* A button to change the map to the extent of the selected trace. */
+"Zoom To" = "ng_Zoom To_______________ny";
+
+/* A user option specifying that a map should automatically change to show completed trace results. */
+"Zoom to result" = "ng_Zoom to result_______________ny";
+
