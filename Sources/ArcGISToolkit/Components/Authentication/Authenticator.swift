@@ -75,7 +75,9 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
             return .continueWithoutCredential
         }
         
-        // If smart card is connected to the device then continue with smart card network credential.
+        // If smart card is connected to the device then a personal identity verification (PIV) token
+        // is available in the `TKTokenWatcher().tokenIDs`. Create a smart card network credential
+        // with first PIV token and continue with credential.
         if challenge.kind == .clientCertificate,
            let pivToken = TKTokenWatcher().tokenIDs.filter({ $0.localizedCaseInsensitiveContains("pivtoken") }).first,
            let credential = try? NetworkCredential.smartCard(pivToken: pivToken) {
