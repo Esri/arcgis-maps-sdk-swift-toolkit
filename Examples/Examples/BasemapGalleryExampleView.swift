@@ -29,7 +29,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The initial list of basemaps.
-***REMOVED***private let basemaps = initialBasemaps()
+***REMOVED***@State private var basemaps = initialBasemaps()
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
