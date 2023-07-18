@@ -29,7 +29,7 @@ struct BasemapGalleryExampleView: View {
     )
     
     /// The initial list of basemaps.
-    private let basemaps = initialBasemaps()
+    @State private var basemaps = initialBasemaps()
     
     var body: some View {
         MapView(map: map, viewpoint: initialViewpoint)
