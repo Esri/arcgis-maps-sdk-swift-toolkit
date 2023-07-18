@@ -58,6 +58,19 @@ struct MultiLineTextEntry: View {
             if #available(iOS 16.0, *) {
                 TextEditor(text: $text)
                     .scrollContentBackground(.hidden)
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            
+                            Button { } label: { Image(systemName: "chevron.up") }
+                            
+                            Button { } label: { Image(systemName: "chevron.down") }
+                            
+                            Button("Done") {
+                                isFocused = false
+                            }
+                        }
+                    }
             } else {
                 TextEditor(text: $text)
             }
