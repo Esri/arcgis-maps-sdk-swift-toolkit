@@ -50,7 +50,7 @@ public class FormViewModel: ObservableObject {
     
     /// Submit the changes made to the form.
     public func submitChanges() async {
-        guard let table, let feature, let database else {
+        guard let table, table.isEditable, let feature, let database else {
             print("A precondition to submit the changes wasn't met.")
             return
         }
