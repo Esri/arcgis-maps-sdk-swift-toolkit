@@ -18,11 +18,14 @@ import SwiftUI
 struct SingleLineTextEntry: View {
     @Environment(\.formElementPadding) var elementPadding
     
+    /// The model for the ancestral form view.
+    @EnvironmentObject var model: FormViewModel
+    
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
     /// The current text value.
-    @State private var text: String
+    @State private var text = ""
     
     /// The form element that corresponds to this text field.
     private let element: FieldFeatureFormElement
@@ -33,12 +36,10 @@ struct SingleLineTextEntry: View {
     /// Creates a view for single line text entry.
     /// - Parameters:
     ///   - element: The form element that corresponds to this text field.
-    ///   - text: The current text value.
     ///   - input: A `TextBoxFeatureFormInput` which acts as a configuration.
-    init(element: FieldFeatureFormElement, text: String?, input: TextBoxFeatureFormInput) {
+    init(element: FieldFeatureFormElement, input: TextBoxFeatureFormInput) {
         self.element = element
         self.input = input
-        _text = State(initialValue: text ?? "")
     }
     
     /// - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.
@@ -62,5 +63,11 @@ struct SingleLineTextEntry: View {
             input: input
         )
         .padding([.bottom], elementPadding)
+        .onAppear {
+            text = model.feature?.attributes[element.fieldName] as? String ?? ""
+        }
+        .onChange(of: text) { newValue in
+            model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+        }
     }
 }

@@ -20,24 +20,18 @@ import SwiftUI
 public struct FormView: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The structure of the form.
-    @State private var formDefinition: FeatureFormDefinition?
+    /// The model for this form view.
+    @EnvironmentObject var model: FormViewModel
     
-    /// The feature being edited in the form.
-    private let feature: ArcGISFeature
-    
-    /// Creates a `FormView` with the given feature.
-    /// - Parameter feature: The feature to be edited.
-    public init(feature: ArcGISFeature) {
-        self.feature = feature
-    }
+    /// Initializes a form view.
+    public init() {}
     
     public var body: some View {
         ScrollView {
-            FormHeader(title: formDefinition?.title)
+            FormHeader(title: model.formDefinition?.title)
                 .padding([.bottom], elementPadding)
             VStack(alignment: .leading) {
-                ForEach(formDefinition?.formElements ?? [], id: \.element?.label) { container in
+                ForEach(model.formDefinition?.formElements ?? [], id: \.element?.label) { container in
                     if let element = container.element {
                         makeElement(element)
                     }
@@ -46,11 +40,11 @@ public struct FormView: View {
         }
         .task {
             let decoder = JSONDecoder()
-            if let layer = feature.table?.layer as? FeatureLayer,
+            if let layer = model.feature?.table?.layer as? FeatureLayer,
                let formInfoDictionary = layer._unsupportedJSON["formInfo"],
                let jsonData = try? JSONSerialization.data(withJSONObject: formInfoDictionary),
                let formDefinition = try? decoder.decode(FeatureFormDefinition.self, from: jsonData) {
-                self.formDefinition = formDefinition
+                model.formDefinition = formDefinition
             } else {
                 print("Error processing form definition")
             }
@@ -79,13 +73,11 @@ extension FormView {
         case let `input` as TextBoxFeatureFormInput:
             SingleLineTextEntry(
                 element: element,
-                text: feature.attributes[element.fieldName] as? String,
                 input: `input`
             )
         case let `input` as TextAreaFeatureFormInput:
             MultiLineTextEntry(
                 element: element,
-                text: feature.attributes[element.fieldName] as? String,
                 input: `input`
             )
         default:
