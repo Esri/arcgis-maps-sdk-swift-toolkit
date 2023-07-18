@@ -66,10 +66,10 @@ struct FormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: .constant(.half),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
