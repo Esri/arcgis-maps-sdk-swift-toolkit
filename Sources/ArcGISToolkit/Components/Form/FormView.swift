@@ -27,13 +27,15 @@ public struct FormView: View {
     public init() {}
     
     public var body: some View {
-        ScrollView {
-            FormHeader(title: model.formDefinition?.title)
-                .padding([.bottom], elementPadding)
-            VStack(alignment: .leading) {
-                ForEach(model.formDefinition?.formElements ?? [], id: \.element?.label) { container in
-                    if let element = container.element {
-                        makeElement(element)
+        NavigationView {
+            ScrollView {
+                FormHeader(title: model.formDefinition?.title)
+                    .padding([.bottom], elementPadding)
+                VStack(alignment: .leading) {
+                    ForEach(model.formDefinition?.formElements ?? [], id: \.element?.label) { container in
+                        if let element = container.element {
+                            makeElement(element)
+                        }
                     }
                 }
             }
