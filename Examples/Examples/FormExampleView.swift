@@ -66,10 +66,10 @@ struct FormExampleView: View {
 //                .floatingPanel(
 //                    selectedDetent: .constant(.half),
 //                    horizontalAlignment: .leading,
-//                    isPresented: isPresented
+//                    isPresented: $isPresented
 //                ) {
 //                    Group {
-//                        if let feature {
+//                        if isPresented {
 //                            FormView()
 //                                .padding()
 //                        }
