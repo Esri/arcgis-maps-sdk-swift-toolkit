@@ -45,6 +45,9 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.date = date
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: date) { newValue in
+***REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder var datePicker: some View {
