@@ -11,17 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
-import SwiftUI
-
-/// A view shown at the top of each field element in a form.
-struct FormElementHeader: View {
-    /// The form element the header is for.
-    let element: FieldFeatureFormElement
-    
-    var body: some View {
-        Text(verbatim: "\(element.label + (element.required ? " *" : ""))")
-        .font(.subheadline)
-        .foregroundColor(.secondary)
-    }
+/// An error that can be encountered while performing length validation.
+enum LengthError {
+    /// The text field was left empty but a value is required.
+    case emptyWhenRequired
+    /// The text field has too few or too many characters.
+    case minOrMaxUnmet
 }

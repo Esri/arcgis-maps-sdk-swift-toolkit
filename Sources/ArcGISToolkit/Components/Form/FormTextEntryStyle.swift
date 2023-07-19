@@ -11,17 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
 import SwiftUI
 
-/// A view shown at the top of each field element in a form.
-struct FormElementHeader: View {
-    /// The form element the header is for.
-    let element: FieldFeatureFormElement
-    
-    var body: some View {
-        Text(verbatim: "\(element.label + (element.required ? " *" : ""))")
-        .font(.subheadline)
-        .foregroundColor(.secondary)
+/// SwiftUI `TextEditor` and `TextField` views have different styling. `TextField`s have
+/// `textFieldStyle` and `TextEditor`s do not. This modifier allows for common styling.
+struct FormTextEntryStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(4)
+            .background(Color(uiColor: .tertiarySystemFill))
+            .cornerRadius(10)
+    }
+}
+
+extension View {
+    /// Adds a common padding and background around form field text elements.
+    func formTextEntryStyle() -> some View {
+        modifier(FormTextEntryStyle())
     }
 }

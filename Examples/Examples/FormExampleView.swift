@@ -16,12 +16,17 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FormExampleView: View {
+    /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
-    
-    @State private var feature: ArcGISFeature?
     
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
+    
+    /// A Boolean value indicating whether or not the form is displayed.
+    @State private var isPresented = false
+    
+    /// The form view model provides a channel of communication between the form view and its host.
+    @StateObject private var formViewModel = FormViewModel()
     
     var body: some View {
         MapViewReader { mapViewProxy in
@@ -31,38 +36,72 @@ struct FormExampleView: View {
                 }
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy) {
-                        self.feature = feature
-                    } else {
-                        feature = nil
+                        formViewModel.startEditing(feature)
+                        isPresented = true
                     }
                 }
                 .ignoresSafeArea(.keyboard)
                 
-                // Present a Form in a native SwiftUI sheet
-                .sheet(isPresented: Binding { feature != nil } set: { _ in }) {
-                    if #available(iOS 16.0, *) {
-                        Form(map: map, feature: feature!)
-                            .presentationDetents([.medium])
+                // Present a FormView in a native SwiftUI sheet
+                .sheet(isPresented: $isPresented) {
+                    if #available(iOS 16.4, *) {
+                        FormView()
                             .padding()
+                            .presentationBackground(.thinMaterial)
+                            .presentationBackgroundInteraction(.enabled(upThrough: .medium))
+                            .presentationDetents([.medium])
                     } else {
-                        Form(map: map, feature: feature!)
+                        FormView()
                             .padding()
                     }
+                    #if targetEnvironment(macCatalyst)
+                    Button("Dismiss") {
+                        isPresented = false
+                    }
+                    .padding()
+                    #endif
                 }
-            
-                // Or present a Form in a Floating Panel (provided via the Toolkit)
+                
+                // Or present a FormView in a Floating Panel (provided via the Toolkit)
 //                .floatingPanel(
 //                    selectedDetent: .constant(.half),
 //                    horizontalAlignment: .leading,
-//                    isPresented: Binding { feature != nil } set: { _ in }
+//                    isPresented: $isPresented
 //                ) {
 //                    Group {
-//                        if let feature {
-//                            Form(map: map, feature: feature)
+//                        if isPresented {
+//                            FormView()
 //                                .padding()
 //                        }
 //                    }
 //                }
+                
+                .environmentObject(formViewModel)
+                
+                .toolbar {
+                    // Once iOS 16.0 is the minimum supported, the two conditionals to show the
+                    // buttons can be merged and hoisted up as the root content of the toolbar.
+                    
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        if isPresented {
+                            Button("Cancel", role: .cancel) {
+                                formViewModel.undoEdits()
+                                isPresented = false
+                            }
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        if isPresented {
+                            Button("Submit") {
+                                Task {
+                                    await formViewModel.submitChanges()
+                                    isPresented = false
+                                }
+                            }
+                        }
+                    }
+                }
         }
     }
 }
@@ -85,9 +124,8 @@ extension FormExampleView {
             .geoElements
             .first as? ArcGISFeature {
             return feature
-        } else {
-            return nil
         }
+        return nil
     }
 }
 

@@ -157,7 +157,11 @@ public struct UtilityNetworkTrace: View {
                                     }
                                 } label: {
                                     Label {
-                                        Text("\(String.objectID) \(element.objectID, format: .number.grouping(.never))")
+                                        Text(
+                                            "Object ID: \(element.objectID, format: .number.grouping(.never))",
+                                            bundle: .toolkitModule,
+                                            comment: "A string identifying a utility network object."
+                                        )
                                     } icon: {
                                         Image(systemName: "scope")
                                     }
@@ -246,7 +250,7 @@ public struct UtilityNetworkTrace: View {
                         startingPointsList
                     } label: {
                         Text(
-                            "\(viewModel.pendingTrace.startingPoints.count, specifier: "%lld") selected",
+                            "\(viewModel.pendingTrace.startingPoints.count) selected",
                             bundle: .toolkitModule,
                             comment: "A label declaring the number of starting points selected for a utility network trace."
                         )
@@ -345,7 +349,6 @@ public struct UtilityNetworkTrace: View {
             List {
                 Section(String.featureResultsTitle) {
                     DisclosureGroup(
-                        "(\(viewModel.selectedTrace?.elementResults.count ?? 0))",
                         isExpanded: Binding {
                             isFocused(traceViewingActivity: .viewingFeatureResults)
                         } set: {
@@ -366,15 +369,17 @@ public struct UtilityNetworkTrace: View {
                                 }
                             }
                         }
+                    } label: {
+                        Text(viewModel.selectedTrace?.elementResults.count ?? 0, format: .number)
                     }
                 }
                 Section(String.functionResultsSectionTitle) {
                     DisclosureGroup(
-                        "(\(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0))",
-                        isExpanded: Binding(
-                            get: { isFocused(traceViewingActivity: .viewingFunctionResults) },
-                            set: { currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil) }
-                        )
+                        isExpanded: Binding {
+                            isFocused(traceViewingActivity: .viewingFunctionResults)
+                        } set: {
+                            currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil)
+                        }
                     ) {
                         if let selectedTrace = viewModel.selectedTrace {
                             ForEach(selectedTrace.functionOutputs, id: \.objectID) { item in
@@ -385,11 +390,21 @@ public struct UtilityNetworkTrace: View {
                                         Text(item.function.functionType.title)
                                             .font(.caption)
                                             .foregroundColor(.secondary)
-                                        Text((item.result as? Double).map { "\($0)" } ?? "N/A")
+                                        if let result = item.result as? Double {
+                                            Text(result, format: .number)
+                                        } else {
+                                            Text(
+                                                "Not Available",
+                                                bundle: .toolkitModule,
+                                                comment: "A trace function output result is not available."
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
+                    } label: {
+                        Text(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0, format: .number)
                     }
                 }
                 Section {
@@ -819,11 +834,6 @@ private extension String {
     
     static let noneSelected = String(
         localized: "None selected",
-        bundle: .toolkitModule
-    )
-    
-    static let objectID = String(
-        localized: "Object ID",
         bundle: .toolkitModule
     )
     

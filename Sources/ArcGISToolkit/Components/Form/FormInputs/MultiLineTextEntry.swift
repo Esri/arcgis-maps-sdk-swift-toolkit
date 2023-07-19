@@ -16,40 +16,105 @@ import SwiftUI
 
 /// A view for text entry spanning multiple lines.
 struct MultiLineTextEntry: View {
-    /// The current text value.
-    @State private var text: String
+    @Environment(\.formElementPadding) var elementPadding
     
-    /// A Boolean value indicating if the text editor is active.
-    @FocusState var isActive: Bool
+    /// The model for the ancestral form view.
+    @EnvironmentObject var model: FormViewModel
+    
+    /// A Boolean value indicating whether or not the field is focused.
+    @FocusState private var isFocused: Bool
+    
+    /// The current text value.
+    @State private var text = ""
+    
+    /// A Boolean value indicating whether placeholder text is shown, thereby indicating the
+    /// presence of a value.
+    ///
+    /// - Note: As of Swift 5.9, SwiftUI text editors do not have built-in placeholder functionality
+    /// so it must be implemented manually.
+    @State private var isPlaceholder = false
+    
+    /// The form element that corresponds to this text field.
+    private let element: FieldFeatureFormElement
     
     /// A `TextAreaFeatureFormInput` which acts as a configuration.
-    let input: TextAreaFeatureFormInput
+    private let input: TextAreaFeatureFormInput
     
     /// Creates a view for text entry spanning multiple lines.
     /// - Parameters:
-    ///   - text: The current text value.
+    ///   - element: The form element that corresponds to this text field.
     ///   - input: A `TextAreaFeatureFormInput` which acts as a configuration.
-    init(text: String, input: TextAreaFeatureFormInput) {
-        self.text = text
+    init(element: FieldFeatureFormElement, input: TextAreaFeatureFormInput) {
+        self.element =  element
         self.input = input
     }
     
-    public var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            TextEditor(text: $text)
-                .frame(minHeight: 100, maxHeight: 200)
-                .padding(2)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(.secondary.opacity(0.5), lineWidth: 0.5)
-                }
-                .focused($isActive)
-            if isActive {
-                Text("\(text.count) / \(input.maxLength)")
-                    .font(.caption2)
-                    .foregroundStyle(.black)
+    /// - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.
+    /// [More info](https://openradar.appspot.com/FB12432084)
+    var body: some View {
+        FormElementHeader(element: element)
+            .padding([.top], elementPadding)
+        HStack(alignment: .bottom) {
+            if #available(iOS 16.0, *) {
+                TextEditor(text: $text)
+                    .scrollContentBackground(.hidden)
+            } else {
+                TextEditor(text: $text)
+            }
+            if isFocused && !text.isEmpty {
+                ClearButton { text.removeAll() }
             }
         }
-        
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button {
+                    isFocused = false
+                } label: {
+                    Text(
+                        "Done",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to finish text entry and dismiss the keyboard."
+                    )
+                }
+            }
+        }
+        .background(.clear)
+        .focused($isFocused)
+        .foregroundColor(isPlaceholder ? .secondary : .primary)
+        .frame(minHeight: 75, maxHeight: 150)
+        .onChange(of: isFocused) { focused in
+            if focused && isPlaceholder {
+                isPlaceholder = false
+                text = ""
+            } else if !focused && text.isEmpty {
+                isPlaceholder = true
+                text = element.hint ?? ""
+            }
+        }
+        .formTextEntryStyle()
+        TextEntryFooter(
+            currentLength: isPlaceholder ? .zero : text.count,
+            isFocused: isFocused,
+            element: element,
+            input: input
+        )
+        .padding([.bottom], elementPadding)
+        .onAppear {
+            let text = model.feature?.attributes[element.fieldName] as? String
+            if let text, !text.isEmpty {
+                isPlaceholder = false
+                self.text = text
+                
+            } else {
+                isPlaceholder = true
+                self.text = element.hint ?? ""
+            }
+        }
+        .onChange(of: text) { newValue in
+            if !isPlaceholder {
+                model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+            }
+        }
     }
 }
