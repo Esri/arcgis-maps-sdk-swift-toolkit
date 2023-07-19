@@ -58,24 +58,25 @@ struct MultiLineTextEntry: View {
             if #available(iOS 16.0, *) {
                 TextEditor(text: $text)
                     .scrollContentBackground(.hidden)
-                    .toolbar {
-                        ToolbarItemGroup(placement: .keyboard) {
-                            Spacer()
-                            
-                            Button { } label: { Image(systemName: "chevron.up") }
-                            
-                            Button { } label: { Image(systemName: "chevron.down") }
-                            
-                            Button("Done") {
-                                isFocused = false
-                            }
-                        }
-                    }
             } else {
                 TextEditor(text: $text)
             }
             if isFocused && !text.isEmpty {
                 ClearButton { text.removeAll() }
+            }
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button {
+                    isFocused = false
+                } label: {
+                    Text(
+                        "Done",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to finish text entry and dismiss the keyboard."
+                    )
+                }
             }
         }
         .background(.clear)
