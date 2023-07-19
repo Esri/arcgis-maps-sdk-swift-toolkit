@@ -11,17 +11,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
-import SwiftUI
-
-/// A view shown at the top of each field element in a form.
-struct FormElementHeader: View {
-    /// The form element the header is for.
-    let element: FieldFeatureFormElement
-    
-    var body: some View {
-        Text(verbatim: "\(element.label + (element.required ? " *" : ""))")
-        .font(.subheadline)
-        .foregroundColor(.secondary)
-    }
+/// The type of length validation to be performed.
+enum LengthValidationScheme {
+    /// A non-zero identical minimum and maximum have been specified.
+    case exact
+    /// A zero minimum and a non-zero maximum have been specified.
+    case max
+    /// A non-zero non-identical minimum and maximum have been specified.
+    case minAndMax
 }

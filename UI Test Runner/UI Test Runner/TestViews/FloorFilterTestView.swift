@@ -1,4 +1,4 @@
-// Copyright 2022 Esri.
+// Copyright 2023 Esri.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,11 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-import ArcGISToolkit
 import ArcGIS
+import ArcGISToolkit
+import SwiftUI
 
-struct FloorFilterExampleView: View {
+struct FloorFilterTestView: View {
     /// Determines the arrangement of the inner `FloorFilter` UI components.
     private var floorFilterAlignment: Alignment { .bottomLeading }
     
@@ -35,9 +35,6 @@ struct FloorFilterExampleView: View {
             id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
         )
     )
-    
-    /// A Boolean value indicating whether an error was encountered while loading the map.
-    @State private var mapLoadError = false
     
     /// The initial viewpoint of the map.
     @State private var viewpoint: Viewpoint? = Viewpoint(
@@ -77,26 +74,11 @@ struct FloorFilterExampleView: View {
                     )
                     .padding([.horizontal], 10)
                     .padding([.vertical], 10 + attributionBarHeight)
-                } else if mapLoadError {
-                    Label(
-                        "Map load error!",
-                        systemImage: "exclamationmark.triangle"
-                    )
-                    .foregroundColor(.red)
-                    .frame(
-                        maxWidth: .infinity,
-                        maxHeight: .infinity,
-                        alignment: .center
-                    )
                 }
             }
             .task {
-                do {
-                    try await map.load()
-                    isMapLoaded = true
-                } catch {
-                    mapLoadError = true
-                }
+                try? await map.load()
+                isMapLoaded = map.loadStatus == .loaded
             }
     }
 }

@@ -11,17 +11,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
 import SwiftUI
 
-/// A view shown at the top of each field element in a form.
-struct FormElementHeader: View {
-    /// The form element the header is for.
-    let element: FieldFeatureFormElement
-    
+struct Tests: View {
     var body: some View {
-        Text(verbatim: "\(element.label + (element.required ? " *" : ""))")
-        .font(.subheadline)
-        .foregroundColor(.secondary)
+        NavigationView {
+            List {
+                NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
+                NavigationLink("Bookmarks Tests", destination: BookmarksTestView())
+                NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
+            }
+        }
+        .navigationViewStyle(.stack)
     }
 }
