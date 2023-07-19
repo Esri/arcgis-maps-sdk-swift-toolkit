@@ -17,6 +17,9 @@ import FormsPlugin
 struct DateTimeEntry: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
+***REMOVED******REMOVED***/ The model for the ancestral form view.
+***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***
 ***REMOVED***let element: FieldFeatureFormElement
 ***REMOVED***
 ***REMOVED***let input: DateTimePickerFeatureFormInput
@@ -24,9 +27,27 @@ struct DateTimeEntry: View {
 ***REMOVED***@State private var date = Date.now
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***FormElementHeader(element: element)
-***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***datePicker
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if let description = element.description {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.padding([.bottom], elementPadding)
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***if let date = model.feature?.attributes[element.fieldName] as? Date {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.date = date
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder var datePicker: some View {
 ***REMOVED******REMOVED***if let min = input.min, let max = input.max {
 ***REMOVED******REMOVED******REMOVED***DatePicker(selection: $date, in: min...max, displayedComponents: displayedComponents) { EmptyView() ***REMOVED***
 ***REMOVED*** else if let min = input.min {
