@@ -15,6 +15,8 @@ import FormsPlugin
 ***REMOVED***
 
 struct DateTimeEntry: View {
+***REMOVED***@Environment(\.formElementPadding) var elementPadding
+***REMOVED***
 ***REMOVED***let element: FieldFeatureFormElement
 ***REMOVED***
 ***REMOVED***let input: DateTimePickerFeatureFormInput
@@ -22,14 +24,17 @@ struct DateTimeEntry: View {
 ***REMOVED***@State private var date = Date.now
 ***REMOVED***
 ***REMOVED***var body: some View {
+***REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let min = input.min, let max = input.max {
-***REMOVED******REMOVED******REMOVED***DatePicker(element.label, selection: $date, in: min...max, displayedComponents: displayedComponents)
+***REMOVED******REMOVED******REMOVED***DatePicker(selection: $date, in: min...max, displayedComponents: displayedComponents) { EmptyView() ***REMOVED***
 ***REMOVED*** else if let min = input.min {
-***REMOVED******REMOVED******REMOVED***DatePicker(element.label, selection: $date, in: min..., displayedComponents: displayedComponents)
+***REMOVED******REMOVED******REMOVED***DatePicker(selection: $date, in: min..., displayedComponents: displayedComponents) { EmptyView() ***REMOVED***
 ***REMOVED*** else if let max = input.max {
-***REMOVED******REMOVED******REMOVED***DatePicker(element.label, selection: $date, in: ...max, displayedComponents: displayedComponents)
+***REMOVED******REMOVED******REMOVED***DatePicker(selection: $date, in: ...max, displayedComponents: displayedComponents) { EmptyView() ***REMOVED***
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***DatePicker(element.label, selection: $date, displayedComponents: displayedComponents)
+***REMOVED******REMOVED******REMOVED***DatePicker(selection: $date, displayedComponents: displayedComponents) { EmptyView() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
