@@ -15,6 +15,7 @@ import ArcGIS
 import FormsPlugin
 import SwiftUI
 
+/// - Since: 200.2
 public class FormViewModel: ObservableObject {
     /// The geodatabase which holds the table and feature being edited in the form.
     @Published private var database: ServiceGeodatabase?
