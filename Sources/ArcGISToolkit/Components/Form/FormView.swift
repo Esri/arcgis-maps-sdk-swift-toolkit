@@ -27,6 +27,9 @@ public struct FormView: View {
 ***REMOVED***public init() {***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
+***REMOVED******REMOVED******REMOVED***  When the `FormView` is hosted within a SwiftUI sheet, any `NavigationView` that may have
+***REMOVED******REMOVED******REMOVED*** been in the hierarchy is detached. A `NavigationView` is needed within the hierarchy to
+***REMOVED******REMOVED******REMOVED*** successfully present a keyboard toolbar (as is done in `MultiLineTextEntry`).
 ***REMOVED******REMOVED***NavigationView {
 ***REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: model.formDefinition?.title)
