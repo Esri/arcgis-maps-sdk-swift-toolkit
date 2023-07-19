@@ -17,6 +17,9 @@ import SwiftUI
 struct DateTimeEntry: View {
     @Environment(\.formElementPadding) var elementPadding
     
+    /// The model for the ancestral form view.
+    @EnvironmentObject var model: FormViewModel
+    
     let element: FieldFeatureFormElement
     
     let input: DateTimePickerFeatureFormInput
@@ -24,9 +27,27 @@ struct DateTimeEntry: View {
     @State private var date = Date.now
     
     var body: some View {
-        FormElementHeader(element: element)
-            .padding([.top], elementPadding)
-        
+        Group {
+            FormElementHeader(element: element)
+                .padding([.top], elementPadding)
+            
+            datePicker
+            
+            if let description = element.description {
+                Text(description)
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding([.bottom], elementPadding)
+        .onAppear {
+            if let date = model.feature?.attributes[element.fieldName] as? Date {
+                self.date = date
+            }
+        }
+    }
+    
+    @ViewBuilder var datePicker: some View {
         if let min = input.min, let max = input.max {
             DatePicker(selection: $date, in: min...max, displayedComponents: displayedComponents) { EmptyView() }
         } else if let min = input.min {
