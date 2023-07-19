@@ -27,13 +27,18 @@ public struct FormView: View {
     public init() {}
     
     public var body: some View {
-        ScrollView {
-            FormHeader(title: model.formDefinition?.title)
-                .padding([.bottom], elementPadding)
-            VStack(alignment: .leading) {
-                ForEach(model.formDefinition?.formElements ?? [], id: \.element?.label) { container in
-                    if let element = container.element {
-                        makeElement(element)
+        // When the `FormView` is hosted within a SwiftUI sheet, any `NavigationView` that may have
+        // been in the hierarchy is detached. A `NavigationView` is needed within the hierarchy to
+        // successfully present a keyboard toolbar (as is done in `MultiLineTextEntry`).
+        NavigationView {
+            ScrollView {
+                FormHeader(title: model.formDefinition?.title)
+                    .padding([.bottom], elementPadding)
+                VStack(alignment: .leading) {
+                    ForEach(model.formDefinition?.formElements ?? [], id: \.element?.label) { container in
+                        if let element = container.element {
+                            makeElement(element)
+                        }
                     }
                 }
             }
