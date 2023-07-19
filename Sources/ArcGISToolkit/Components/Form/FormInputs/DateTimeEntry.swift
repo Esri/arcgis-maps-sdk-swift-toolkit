@@ -15,6 +15,8 @@ import FormsPlugin
 import SwiftUI
 
 struct DateTimeEntry: View {
+    @Environment(\.formElementPadding) var elementPadding
+    
     let element: FieldFeatureFormElement
     
     let input: DateTimePickerFeatureFormInput
@@ -22,14 +24,17 @@ struct DateTimeEntry: View {
     @State private var date = Date.now
     
     var body: some View {
+        FormElementHeader(element: element)
+            .padding([.top], elementPadding)
+        
         if let min = input.min, let max = input.max {
-            DatePicker(element.label, selection: $date, in: min...max, displayedComponents: displayedComponents)
+            DatePicker(selection: $date, in: min...max, displayedComponents: displayedComponents) { EmptyView() }
         } else if let min = input.min {
-            DatePicker(element.label, selection: $date, in: min..., displayedComponents: displayedComponents)
+            DatePicker(selection: $date, in: min..., displayedComponents: displayedComponents) { EmptyView() }
         } else if let max = input.max {
-            DatePicker(element.label, selection: $date, in: ...max, displayedComponents: displayedComponents)
+            DatePicker(selection: $date, in: ...max, displayedComponents: displayedComponents) { EmptyView() }
         } else {
-            DatePicker(element.label, selection: $date, displayedComponents: displayedComponents)
+            DatePicker(selection: $date, displayedComponents: displayedComponents) { EmptyView() }
         }
     }
     
