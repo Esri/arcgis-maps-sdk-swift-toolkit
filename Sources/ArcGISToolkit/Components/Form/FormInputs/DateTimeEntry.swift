@@ -26,6 +26,9 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether a new date (or time is being set).
 ***REMOVED***@State private var isEditing = false
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the date selection was cleared when a value is required.
+***REMOVED***@State private var requiredValueMissing = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
 ***REMOVED***private let element: FieldFeatureFormElement
 ***REMOVED***
@@ -52,7 +55,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***dateViewer
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***description
+***REMOVED******REMOVED******REMOVED***footer
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
@@ -61,6 +64,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
+***REMOVED******REMOVED******REMOVED***requiredValueMissing = element.required && newDate == nil
 ***REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newDate, forKey: element.fieldName)
 ***REMOVED***
 ***REMOVED***
@@ -116,13 +120,17 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Elements to show below the date editor and viewer.
-***REMOVED***@ViewBuilder var description: some View {
-***REMOVED******REMOVED***if let description = element.description {
-***REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED***/ The message shown below the date editor and viewer.
+***REMOVED***@ViewBuilder var footer: some View {
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if requiredValueMissing {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text.required
+***REMOVED******REMOVED*** else if let description = element.description {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED***.foregroundColor(requiredValueMissing ? .red : .secondary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The human-readable date and time selection.
@@ -178,6 +186,15 @@ private extension Text {
 ***REMOVED******REMOVED******REMOVED***"Now",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose the current time and date for a field."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A label indicating a required field was left blank.
+***REMOVED***static var required: Self {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Required",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating a required field was left blank."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
