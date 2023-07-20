@@ -43,7 +43,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isEditing {
-***REMOVED******REMOVED******REMOVED******REMOVED***dateEditorControls
+***REMOVED******REMOVED******REMOVED******REMOVED***dateEditor
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***dateViewer
 ***REMOVED******REMOVED***
@@ -61,7 +61,7 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ViewBuilder var dateEditorControls: some View {
+***REMOVED***@ViewBuilder var dateEditor: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***todayOrNowButton
 ***REMOVED******REMOVED******REMOVED***Spacer()
@@ -71,9 +71,10 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***.datePickerStyle(.graphical)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ - Note: Secondary foreground color is used across entry views for consistency.
 ***REMOVED***@ViewBuilder var dateViewer: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across entry views for consistency.
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***TextField(
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.label,
 ***REMOVED******REMOVED******REMOVED******REMOVED***text: Binding { date == nil ? "" : formattedDate ***REMOVED*** set: { _ in ***REMOVED***,
@@ -96,14 +97,15 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder var datePicker: some View {
+***REMOVED******REMOVED***let components: DatePicker.Components = input.includeTime ? [.date, .hourAndMinute] : [.date]
 ***REMOVED******REMOVED***if let min = input.min, let max = input.max {
-***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, in: min...max, displayedComponents: displayedComponents) { ***REMOVED***
+***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, in: min...max, displayedComponents: components) { ***REMOVED***
 ***REMOVED*** else if let min = input.min {
-***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, in: min..., displayedComponents: displayedComponents) { ***REMOVED***
+***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, in: min..., displayedComponents: components) { ***REMOVED***
 ***REMOVED*** else if let max = input.max {
-***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, in: ...max, displayedComponents: displayedComponents) { ***REMOVED***
+***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, in: ...max, displayedComponents: components) { ***REMOVED***
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, displayedComponents: displayedComponents) { ***REMOVED***
+***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, displayedComponents: components) { ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -137,10 +139,6 @@ struct DateTimeEntry: View {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***input.includeTime ? Text.now : .today
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***var displayedComponents: DatePicker.Components {
-***REMOVED******REMOVED***input.includeTime ? [.date, .hourAndMinute] : [.date]
 ***REMOVED***
 ***REMOVED***
 
