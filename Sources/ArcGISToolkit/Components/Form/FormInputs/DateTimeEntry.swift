@@ -26,6 +26,9 @@ struct DateTimeEntry: View {
     /// A Boolean value indicating whether a new date (or time is being set).
     @State private var isEditing = false
     
+    /// A Boolean value indicating whether the date selection was cleared when a value is required.
+    @State private var requiredValueMissing = false
+    
     /// The field's parent element.
     private let element: FieldFeatureFormElement
     
@@ -52,7 +55,7 @@ struct DateTimeEntry: View {
                 dateViewer
             }
             
-            description
+            footer
         }
         .padding([.bottom], elementPadding)
         .onAppear {
@@ -61,6 +64,7 @@ struct DateTimeEntry: View {
             }
         }
         .onChange(of: date) { newDate in
+            requiredValueMissing = element.required && newDate == nil
             model.feature?.setAttributeValue(newDate, forKey: element.fieldName)
         }
     }
@@ -116,13 +120,17 @@ struct DateTimeEntry: View {
         }
     }
     
-    /// Elements to show below the date editor and viewer.
-    @ViewBuilder var description: some View {
-        if let description = element.description {
-            Text(description)
-                .font(.footnote)
-                .foregroundColor(.secondary)
+    /// The message shown below the date editor and viewer.
+    @ViewBuilder var footer: some View {
+        Group {
+            if requiredValueMissing {
+                Text.required
+            } else if let description = element.description {
+                Text(description)
+            }
         }
+        .font(.footnote)
+        .foregroundColor(requiredValueMissing ? .red : .secondary)
     }
     
     /// The human-readable date and time selection.
@@ -178,6 +186,15 @@ private extension Text {
             "Now",
             bundle: .toolkitModule,
             comment: "A label for a button to choose the current time and date for a field."
+        )
+    }
+    
+    /// A label indicating a required field was left blank.
+    static var required: Self {
+        Text(
+            "Required",
+            bundle: .toolkitModule,
+            comment: "A label indicating a required field was left blank."
         )
     }
     
