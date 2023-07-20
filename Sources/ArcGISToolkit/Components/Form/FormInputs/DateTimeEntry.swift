@@ -30,29 +30,33 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***TextField(element.label, text: Binding(get: { String(describing: date) ***REMOVED***, set: { _ in ***REMOVED***))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formTextEntryStyle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(true)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if let description = element.description {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isEditing.toggle()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isEditing {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***doneButton
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***datePicker
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.datePickerStyle(.graphical)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(element.label, text: Binding(get: { String(describing: date) ***REMOVED***, set: { _ in ***REMOVED***))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formTextEntryStyle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(true)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isEditing = true
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if let description = element.description {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
@@ -75,6 +79,18 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***DatePicker(selection: $date, in: ...max, displayedComponents: displayedComponents) { EmptyView() ***REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***DatePicker(selection: $date, displayedComponents: displayedComponents) { EmptyView() ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var doneButton: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***withAnimation { isEditing = false ***REMOVED***
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Done",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to save a date (and time if applicable) selection."
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
