@@ -49,10 +49,10 @@ struct DateTimeEntry: View {
             FormElementHeader(element: element)
                 .padding([.top], elementPadding)
             
+            dateViewer
+            
             if isEditing {
                 dateEditor
-            } else {
-                dateViewer
             }
             
             footer
