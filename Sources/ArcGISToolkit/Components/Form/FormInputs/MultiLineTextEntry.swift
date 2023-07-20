@@ -34,16 +34,16 @@ struct MultiLineTextEntry: View {
     /// so it must be implemented manually.
     @State private var isPlaceholder = false
     
-    /// The form element that corresponds to this text field.
+    /// The field's parent element.
     private let element: FieldFeatureFormElement
     
-    /// A `TextAreaFeatureFormInput` which acts as a configuration.
+    /// The input configuration of the field.
     private let input: TextAreaFeatureFormInput
     
     /// Creates a view for text entry spanning multiple lines.
     /// - Parameters:
-    ///   - element: The form element that corresponds to the field.
-    ///   - input: A `TextAreaFeatureFormInput` which acts as a configuration.
+    ///   - element: The field's parent element.
+    ///   - input: The input configuration of the field.
     init(element: FieldFeatureFormElement, input: TextAreaFeatureFormInput) {
         self.element =  element
         self.input = input
