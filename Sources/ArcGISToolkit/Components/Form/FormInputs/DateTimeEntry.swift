@@ -43,35 +43,12 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isEditing {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***todayOrNowButton
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***doneButton
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***datePicker
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.datePickerStyle(.graphical)
+***REMOVED******REMOVED******REMOVED******REMOVED***dateEditorControls
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across entry views for consistency.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: Binding { date == nil ? "" : formattedDate ***REMOVED*** set: { _ in ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: .noValue.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formTextEntryStyle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(true)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if date == nil { date = .now ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { isEditing = true ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***dateViewer
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let description = element.description {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***description
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
@@ -81,6 +58,33 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
 ***REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newDate, forKey: element.fieldName)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder var dateEditorControls: some View {
+***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED***todayOrNowButton
+***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***doneButton
+***REMOVED***
+***REMOVED******REMOVED***datePicker
+***REMOVED******REMOVED******REMOVED***.datePickerStyle(.graphical)
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder var dateViewer: some View {
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across entry views for consistency.
+***REMOVED******REMOVED******REMOVED***TextField(
+***REMOVED******REMOVED******REMOVED******REMOVED***element.label,
+***REMOVED******REMOVED******REMOVED******REMOVED***text: Binding { date == nil ? "" : formattedDate ***REMOVED*** set: { _ in ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***prompt: .noValue.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.formTextEntryStyle()
+***REMOVED******REMOVED******REMOVED***.disabled(true)
+***REMOVED***
+***REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED***if date == nil { date = .now ***REMOVED***
+***REMOVED******REMOVED******REMOVED***withAnimation { isEditing = true ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -96,6 +100,14 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@ViewBuilder var description: some View {
+***REMOVED******REMOVED***if let description = element.description {
+***REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***var formattedDate: String {
 ***REMOVED******REMOVED***if input.includeTime {
 ***REMOVED******REMOVED******REMOVED***return date!.formatted(.dateTime.day().month().year().hour().minute())
@@ -108,11 +120,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***withAnimation { isEditing = false ***REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED***"Done",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to save a date (and time if applicable) selection."
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***Text.done
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -120,19 +128,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***date = .now
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***if input.includeTime {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Now",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose the current time and date for a field."
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Today",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose the current date for a field."
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***input.includeTime ? Text.now : .today
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -142,11 +138,35 @@ struct DateTimeEntry: View {
 ***REMOVED***
 
 private extension Text {
+***REMOVED***static var done: Self {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Done",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to save a date (and time if applicable) selection."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED***static var noValue: Self {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"No Value",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label indicating that no date or time has been set for a date/time field."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var now: Self {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Now",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose the current time and date for a field."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var today: Self {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Today",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose the current date for a field."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
