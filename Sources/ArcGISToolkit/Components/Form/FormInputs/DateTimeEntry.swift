@@ -42,7 +42,7 @@ struct DateTimeEntry: View {
                     .datePickerStyle(.graphical)
             } else {
                 Group {
-                    TextField(element.label, text: Binding(get: { String(describing: date) }, set: { _ in }))
+                    TextField(element.label, text: Binding(get: { formattedDate }, set: { _ in }))
                         .formTextEntryStyle()
                         .disabled(true)
                 }
@@ -79,6 +79,14 @@ struct DateTimeEntry: View {
             DatePicker(selection: $date, in: ...max, displayedComponents: displayedComponents) { EmptyView() }
         } else {
             DatePicker(selection: $date, displayedComponents: displayedComponents) { EmptyView() }
+        }
+    }
+    
+    var formattedDate: String {
+        if input.includeTime {
+            return date.formatted(.dateTime.day().month().year().hour().minute())
+        } else {
+            return date.formatted(.dateTime.day().month().year())
         }
     }
     
