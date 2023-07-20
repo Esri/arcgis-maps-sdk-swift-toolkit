@@ -20,7 +20,7 @@ struct DateTimeEntry: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    @State private var date = Date.now
+    @State private var date: Date?
     
     @State private var isEditing = false
     
@@ -35,6 +35,7 @@ struct DateTimeEntry: View {
             
             if isEditing {
                 HStack {
+                    todayOrNowButton
                     Spacer()
                     doneButton
                 }
@@ -42,14 +43,18 @@ struct DateTimeEntry: View {
                     .datePickerStyle(.graphical)
             } else {
                 Group {
-                    TextField(element.label, text: Binding(get: { formattedDate }, set: { _ in }))
-                        .formTextEntryStyle()
-                        .disabled(true)
+                    // Secondary foreground color is used across entry views for consistency.
+                    TextField(
+                        element.label,
+                        text: Binding { date == nil ? "" : formattedDate } set: { _ in },
+                        prompt: Text(noValueString).foregroundColor(.secondary)
+                    )
+                    .formTextEntryStyle()
+                    .disabled(true)
                 }
                 .onTapGesture {
-                    withAnimation {
-                        isEditing = true
-                    }
+                    if date == nil { date = .now }
+                    withAnimation { isEditing = true }
                 }
             }
             
@@ -65,29 +70,37 @@ struct DateTimeEntry: View {
                 self.date = date
             }
         }
-        .onChange(of: date) { newValue in
-            model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+        .onChange(of: date) { newDate in
+            model.feature?.setAttributeValue(newDate, forKey: element.fieldName)
         }
     }
     
     @ViewBuilder var datePicker: some View {
         if let min = input.min, let max = input.max {
-            DatePicker(selection: $date, in: min...max, displayedComponents: displayedComponents) { EmptyView() }
+            DatePicker(selection: Binding($date)!, in: min...max, displayedComponents: displayedComponents) { }
         } else if let min = input.min {
-            DatePicker(selection: $date, in: min..., displayedComponents: displayedComponents) { EmptyView() }
+            DatePicker(selection: Binding($date)!, in: min..., displayedComponents: displayedComponents) { }
         } else if let max = input.max {
-            DatePicker(selection: $date, in: ...max, displayedComponents: displayedComponents) { EmptyView() }
+            DatePicker(selection: Binding($date)!, in: ...max, displayedComponents: displayedComponents) { }
         } else {
-            DatePicker(selection: $date, displayedComponents: displayedComponents) { EmptyView() }
+            DatePicker(selection: Binding($date)!, displayedComponents: displayedComponents) { }
         }
     }
     
     var formattedDate: String {
         if input.includeTime {
-            return date.formatted(.dateTime.day().month().year().hour().minute())
+            return date!.formatted(.dateTime.day().month().year().hour().minute())
         } else {
-            return date.formatted(.dateTime.day().month().year())
+            return date!.formatted(.dateTime.day().month().year())
         }
+    }
+    
+    var noValueString: String {
+        String(
+            localized: "No Value",
+            bundle: .toolkitModule,
+            comment: "A label indicating that no date or time has been set for a date/time field."
+        )
     }
     
     var doneButton: some View {
