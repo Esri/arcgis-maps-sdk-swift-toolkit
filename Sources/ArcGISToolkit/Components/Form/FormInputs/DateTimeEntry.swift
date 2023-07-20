@@ -43,35 +43,12 @@ struct DateTimeEntry: View {
                 .padding([.top], elementPadding)
             
             if isEditing {
-                HStack {
-                    todayOrNowButton
-                    Spacer()
-                    doneButton
-                }
-                datePicker
-                    .datePickerStyle(.graphical)
+                dateEditorControls
             } else {
-                Group {
-                    // Secondary foreground color is used across entry views for consistency.
-                    TextField(
-                        element.label,
-                        text: Binding { date == nil ? "" : formattedDate } set: { _ in },
-                        prompt: .noValue.foregroundColor(.secondary)
-                    )
-                    .formTextEntryStyle()
-                    .disabled(true)
-                }
-                .onTapGesture {
-                    if date == nil { date = .now }
-                    withAnimation { isEditing = true }
-                }
+                dateViewer
             }
             
-            if let description = element.description {
-                Text(description)
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-            }
+            description
         }
         .padding([.bottom], elementPadding)
         .onAppear {
@@ -81,6 +58,33 @@ struct DateTimeEntry: View {
         }
         .onChange(of: date) { newDate in
             model.feature?.setAttributeValue(newDate, forKey: element.fieldName)
+        }
+    }
+    
+    @ViewBuilder var dateEditorControls: some View {
+        HStack {
+            todayOrNowButton
+            Spacer()
+            doneButton
+        }
+        datePicker
+            .datePickerStyle(.graphical)
+    }
+    
+    @ViewBuilder var dateViewer: some View {
+        Group {
+            // Secondary foreground color is used across entry views for consistency.
+            TextField(
+                element.label,
+                text: Binding { date == nil ? "" : formattedDate } set: { _ in },
+                prompt: .noValue.foregroundColor(.secondary)
+            )
+            .formTextEntryStyle()
+            .disabled(true)
+        }
+        .onTapGesture {
+            if date == nil { date = .now }
+            withAnimation { isEditing = true }
         }
     }
     
@@ -96,6 +100,14 @@ struct DateTimeEntry: View {
         }
     }
     
+    @ViewBuilder var description: some View {
+        if let description = element.description {
+            Text(description)
+                .font(.footnote)
+                .foregroundColor(.secondary)
+        }
+    }
+    
     var formattedDate: String {
         if input.includeTime {
             return date!.formatted(.dateTime.day().month().year().hour().minute())
@@ -108,11 +120,7 @@ struct DateTimeEntry: View {
         Button {
             withAnimation { isEditing = false }
         } label: {
-            Text(
-                "Done",
-                bundle: .toolkitModule,
-                comment: "A label for a button to save a date (and time if applicable) selection."
-            )
+            Text.done
         }
     }
     
@@ -120,19 +128,7 @@ struct DateTimeEntry: View {
         Button {
             date = .now
         } label: {
-            if input.includeTime {
-                Text(
-                    "Now",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to choose the current time and date for a field."
-                )
-            } else {
-                Text(
-                    "Today",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to choose the current date for a field."
-                )
-            }
+            input.includeTime ? Text.now : .today
         }
     }
     
@@ -142,11 +138,35 @@ struct DateTimeEntry: View {
 }
 
 private extension Text {
+    static var done: Self {
+        Text(
+            "Done",
+            bundle: .toolkitModule,
+            comment: "A label for a button to save a date (and time if applicable) selection."
+        )
+    }
+    
     static var noValue: Self {
         Text(
             "No Value",
             bundle: .toolkitModule,
             comment: "A label indicating that no date or time has been set for a date/time field."
+        )
+    }
+    
+    static var now: Self {
+        Text(
+            "Now",
+            bundle: .toolkitModule,
+            comment: "A label for a button to choose the current time and date for a field."
+        )
+    }
+    
+    static var today: Self {
+        Text(
+            "Today",
+            bundle: .toolkitModule,
+            comment: "A label for a button to choose the current date for a field."
         )
     }
 }
