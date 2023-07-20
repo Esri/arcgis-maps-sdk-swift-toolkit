@@ -20,23 +20,39 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
+***REMOVED***@State private var date = Date.now
+***REMOVED***
+***REMOVED***@State private var isEditing = false
+***REMOVED***
 ***REMOVED***let element: FieldFeatureFormElement
 ***REMOVED***
 ***REMOVED***let input: DateTimePickerFeatureFormInput
 ***REMOVED***
-***REMOVED***@State private var date = Date.now
-***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
+***REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***TextField(element.label, text: Binding(get: { String(describing: date) ***REMOVED***, set: { _ in ***REMOVED***))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formTextEntryStyle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(true)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let description = element.description {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***datePicker
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isEditing.toggle()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let description = element.description {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if isEditing {
+***REMOVED******REMOVED******REMOVED******REMOVED***datePicker
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.datePickerStyle(.graphical)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
