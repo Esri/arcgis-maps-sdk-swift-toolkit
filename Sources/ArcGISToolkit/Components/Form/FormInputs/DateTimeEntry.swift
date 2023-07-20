@@ -56,7 +56,7 @@ struct DateTimeEntry: View {
                     TextField(
                         element.label,
                         text: Binding { date == nil ? "" : formattedDate } set: { _ in },
-                        prompt: Text(noValueString).foregroundColor(.secondary)
+                        prompt: .noValue.foregroundColor(.secondary)
                     )
                     .formTextEntryStyle()
                     .disabled(true)
@@ -146,5 +146,15 @@ struct DateTimeEntry: View {
     
     var displayedComponents: DatePicker.Components {
         input.includeTime ? [.date, .hourAndMinute] : [.date]
+    }
+}
+
+private extension Text {
+    static var noValue: Self {
+        Text(
+            "No Value",
+            bundle: .toolkitModule,
+            comment: "A label indicating that no date or time has been set for a date/time field."
+        )
     }
 }
