@@ -110,13 +110,13 @@ struct DateTimeEntry: View {
                 Text(
                     "Now",
                     bundle: .toolkitModule,
-                    comment: "A label for a button to save a date (and time if applicable) selection."
+                    comment: "A label for a button to choose the current time and date for a field."
                 )
             } else {
                 Text(
                     "Today",
                     bundle: .toolkitModule,
-                    comment: "A label for a button to save a date (and time if applicable) selection."
+                    comment: "A label for a button to choose the current date for a field."
                 )
             }
         }
