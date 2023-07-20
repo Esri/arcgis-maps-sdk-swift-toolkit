@@ -63,6 +63,7 @@ struct DateTimeEntry: View {
         }
     }
     
+    /// Controls for modifying the date selection.
     @ViewBuilder var dateEditor: some View {
         HStack {
             todayOrNowButton
@@ -73,6 +74,7 @@ struct DateTimeEntry: View {
             .datePickerStyle(.graphical)
     }
     
+    /// Elements for viewing the date selection.
     /// - Note: Secondary foreground color is used across entry views for consistency.
     @ViewBuilder var dateViewer: some View {
         HStack {
@@ -98,6 +100,7 @@ struct DateTimeEntry: View {
         }
     }
     
+    /// Controls for making a specific date selection.
     @ViewBuilder var datePicker: some View {
         let components: DatePicker.Components = input.includeTime ? [.date, .hourAndMinute] : [.date]
         if let min = input.min, let max = input.max {
@@ -111,6 +114,7 @@ struct DateTimeEntry: View {
         }
     }
     
+    /// Elements to show below the date editor and viewer.
     @ViewBuilder var description: some View {
         if let description = element.description {
             Text(description)
