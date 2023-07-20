@@ -56,7 +56,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: Binding { date == nil ? "" : formattedDate ***REMOVED*** set: { _ in ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(noValueString).foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: .noValue.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formTextEntryStyle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(true)
@@ -146,5 +146,15 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***var displayedComponents: DatePicker.Components {
 ***REMOVED******REMOVED***input.includeTime ? [.date, .hourAndMinute] : [.date]
+***REMOVED***
+***REMOVED***
+
+private extension Text {
+***REMOVED***static var noValue: Self {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"No Value",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating that no date or time has been set for a date/time field."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
