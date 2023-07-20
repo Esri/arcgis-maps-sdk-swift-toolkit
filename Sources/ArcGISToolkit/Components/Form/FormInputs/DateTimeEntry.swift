@@ -84,7 +84,6 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***/ - Note: Secondary foreground color is used across entry views for consistency.
 ***REMOVED***@ViewBuilder var dateViewer: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***TextField(
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.label,
 ***REMOVED******REMOVED******REMOVED******REMOVED***text: Binding { date == nil ? "" : formattedDate ***REMOVED*** set: { _ in ***REMOVED***,
