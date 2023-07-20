@@ -43,7 +43,7 @@ struct DateTimeEntry: View {
                 .padding([.top], elementPadding)
             
             if isEditing {
-                dateEditorControls
+                dateEditor
             } else {
                 dateViewer
             }
@@ -61,7 +61,7 @@ struct DateTimeEntry: View {
         }
     }
     
-    @ViewBuilder var dateEditorControls: some View {
+    @ViewBuilder var dateEditor: some View {
         HStack {
             todayOrNowButton
             Spacer()
@@ -71,9 +71,10 @@ struct DateTimeEntry: View {
             .datePickerStyle(.graphical)
     }
     
+    /// - Note: Secondary foreground color is used across entry views for consistency.
     @ViewBuilder var dateViewer: some View {
         HStack {
-            // Secondary foreground color is used across entry views for consistency.
+            
             TextField(
                 element.label,
                 text: Binding { date == nil ? "" : formattedDate } set: { _ in },
@@ -96,14 +97,15 @@ struct DateTimeEntry: View {
     }
     
     @ViewBuilder var datePicker: some View {
+        let components: DatePicker.Components = input.includeTime ? [.date, .hourAndMinute] : [.date]
         if let min = input.min, let max = input.max {
-            DatePicker(selection: Binding($date)!, in: min...max, displayedComponents: displayedComponents) { }
+            DatePicker(selection: Binding($date)!, in: min...max, displayedComponents: components) { }
         } else if let min = input.min {
-            DatePicker(selection: Binding($date)!, in: min..., displayedComponents: displayedComponents) { }
+            DatePicker(selection: Binding($date)!, in: min..., displayedComponents: components) { }
         } else if let max = input.max {
-            DatePicker(selection: Binding($date)!, in: ...max, displayedComponents: displayedComponents) { }
+            DatePicker(selection: Binding($date)!, in: ...max, displayedComponents: components) { }
         } else {
-            DatePicker(selection: Binding($date)!, displayedComponents: displayedComponents) { }
+            DatePicker(selection: Binding($date)!, displayedComponents: components) { }
         }
     }
     
@@ -137,10 +139,6 @@ struct DateTimeEntry: View {
         } label: {
             input.includeTime ? Text.now : .today
         }
-    }
-    
-    var displayedComponents: DatePicker.Components {
-        input.includeTime ? [.date, .hourAndMinute] : [.date]
     }
 }
 
