@@ -63,6 +63,7 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Controls for modifying the date selection.
 ***REMOVED***@ViewBuilder var dateEditor: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***todayOrNowButton
@@ -73,6 +74,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***.datePickerStyle(.graphical)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Elements for viewing the date selection.
 ***REMOVED******REMOVED***/ - Note: Secondary foreground color is used across entry views for consistency.
 ***REMOVED***@ViewBuilder var dateViewer: some View {
 ***REMOVED******REMOVED***HStack {
@@ -98,6 +100,7 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Controls for making a specific date selection.
 ***REMOVED***@ViewBuilder var datePicker: some View {
 ***REMOVED******REMOVED***let components: DatePicker.Components = input.includeTime ? [.date, .hourAndMinute] : [.date]
 ***REMOVED******REMOVED***if let min = input.min, let max = input.max {
@@ -111,6 +114,7 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Elements to show below the date editor and viewer.
 ***REMOVED***@ViewBuilder var description: some View {
 ***REMOVED******REMOVED***if let description = element.description {
 ***REMOVED******REMOVED******REMOVED***Text(description)
