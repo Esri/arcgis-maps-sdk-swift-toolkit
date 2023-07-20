@@ -84,6 +84,7 @@ extension FormView {
         default:
             EmptyView()
         }
+        Divider()
     }
     
     /// Makes UI for a group form element.
