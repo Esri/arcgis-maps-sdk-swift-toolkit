@@ -102,6 +102,26 @@ struct DateTimeEntry: View {
         }
     }
     
+    var todayOrNowButton: some View {
+        Button {
+            date = .now
+        } label: {
+            if input.includeTime {
+                Text(
+                    "Now",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to save a date (and time if applicable) selection."
+                )
+            } else {
+                Text(
+                    "Today",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to save a date (and time if applicable) selection."
+                )
+            }
+        }
+    }
+    
     var displayedComponents: DatePicker.Components {
         input.includeTime ? [.date, .hourAndMinute] : [.date]
     }
