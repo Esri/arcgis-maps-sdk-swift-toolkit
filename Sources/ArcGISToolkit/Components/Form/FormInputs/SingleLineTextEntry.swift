@@ -47,7 +47,7 @@ struct SingleLineTextEntry: View {
     var body: some View {
         FormElementHeader(element: element)
             .padding([.top], elementPadding)
-        // `MultiLineTextEntry` uses secondary foreground color so it's applied here for consistency.
+        // Secondary foreground color is used across entry views for consistency.
         HStack {
             TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
                 .focused($isFocused)
