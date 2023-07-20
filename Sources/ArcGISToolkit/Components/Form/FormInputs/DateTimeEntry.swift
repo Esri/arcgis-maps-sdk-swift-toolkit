@@ -49,10 +49,10 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***dateViewer
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isEditing {
 ***REMOVED******REMOVED******REMOVED******REMOVED***dateEditor
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***dateViewer
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***footer
