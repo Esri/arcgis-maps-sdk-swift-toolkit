@@ -20,7 +20,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED***@State private var date = Date.now
+***REMOVED***@State private var date: Date?
 ***REMOVED***
 ***REMOVED***@State private var isEditing = false
 ***REMOVED***
@@ -35,6 +35,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isEditing {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***todayOrNowButton
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***doneButton
 ***REMOVED******REMOVED******REMOVED***
@@ -42,14 +43,18 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.datePickerStyle(.graphical)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(element.label, text: Binding(get: { formattedDate ***REMOVED***, set: { _ in ***REMOVED***))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formTextEntryStyle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across entry views for consistency.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: Binding { date == nil ? "" : formattedDate ***REMOVED*** set: { _ in ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(noValueString).foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formTextEntryStyle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(true)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isEditing = true
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if date == nil { date = .now ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { isEditing = true ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -65,29 +70,37 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.date = date
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: date) { newValue in
-***REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED******REMOVED***.onChange(of: date) { newDate in
+***REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newDate, forKey: element.fieldName)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder var datePicker: some View {
 ***REMOVED******REMOVED***if let min = input.min, let max = input.max {
-***REMOVED******REMOVED******REMOVED***DatePicker(selection: $date, in: min...max, displayedComponents: displayedComponents) { EmptyView() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, in: min...max, displayedComponents: displayedComponents) { ***REMOVED***
 ***REMOVED*** else if let min = input.min {
-***REMOVED******REMOVED******REMOVED***DatePicker(selection: $date, in: min..., displayedComponents: displayedComponents) { EmptyView() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, in: min..., displayedComponents: displayedComponents) { ***REMOVED***
 ***REMOVED*** else if let max = input.max {
-***REMOVED******REMOVED******REMOVED***DatePicker(selection: $date, in: ...max, displayedComponents: displayedComponents) { EmptyView() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, in: ...max, displayedComponents: displayedComponents) { ***REMOVED***
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***DatePicker(selection: $date, displayedComponents: displayedComponents) { EmptyView() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, displayedComponents: displayedComponents) { ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var formattedDate: String {
 ***REMOVED******REMOVED***if input.includeTime {
-***REMOVED******REMOVED******REMOVED***return date.formatted(.dateTime.day().month().year().hour().minute())
+***REMOVED******REMOVED******REMOVED***return date!.formatted(.dateTime.day().month().year().hour().minute())
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return date.formatted(.dateTime.day().month().year())
+***REMOVED******REMOVED******REMOVED***return date!.formatted(.dateTime.day().month().year())
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var noValueString: String {
+***REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED***localized: "No Value",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating that no date or time has been set for a date/time field."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var doneButton: some View {
