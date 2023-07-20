@@ -72,16 +72,23 @@ struct DateTimeEntry: View {
     }
     
     @ViewBuilder var dateViewer: some View {
-        Group {
+        HStack {
             // Secondary foreground color is used across entry views for consistency.
             TextField(
                 element.label,
                 text: Binding { date == nil ? "" : formattedDate } set: { _ in },
                 prompt: .noValue.foregroundColor(.secondary)
             )
-            .formTextEntryStyle()
             .disabled(true)
+            
+            if date == nil {
+                Image(systemName: "calendar")
+                    .foregroundColor(.secondary)
+            } else {
+                ClearButton { date = nil }
+            }
         }
+        .formTextEntryStyle()
         .onTapGesture {
             if date == nil { date = .now }
             withAnimation { isEditing = true }
