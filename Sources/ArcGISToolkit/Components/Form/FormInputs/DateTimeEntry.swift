@@ -72,16 +72,23 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder var dateViewer: some View {
-***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across entry views for consistency.
 ***REMOVED******REMOVED******REMOVED***TextField(
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.label,
 ***REMOVED******REMOVED******REMOVED******REMOVED***text: Binding { date == nil ? "" : formattedDate ***REMOVED*** set: { _ in ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED***prompt: .noValue.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.formTextEntryStyle()
 ***REMOVED******REMOVED******REMOVED***.disabled(true)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if date == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { date = nil ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.formTextEntryStyle()
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***if date == nil { date = .now ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***withAnimation { isEditing = true ***REMOVED***
