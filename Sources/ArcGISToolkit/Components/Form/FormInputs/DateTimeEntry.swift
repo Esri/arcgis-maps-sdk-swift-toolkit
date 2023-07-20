@@ -84,7 +84,6 @@ struct DateTimeEntry: View {
     /// - Note: Secondary foreground color is used across entry views for consistency.
     @ViewBuilder var dateViewer: some View {
         HStack {
-            
             TextField(
                 element.label,
                 text: Binding { date == nil ? "" : formattedDate } set: { _ in },
