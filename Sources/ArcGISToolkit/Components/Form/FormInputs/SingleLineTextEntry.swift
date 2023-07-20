@@ -35,7 +35,7 @@ struct SingleLineTextEntry: View {
     
     /// Creates a view for single line text entry.
     /// - Parameters:
-    ///   - element: The form element that corresponds to this text field.
+    ///   - element: The form element that corresponds to the field.
     ///   - input: A `TextBoxFeatureFormInput` which acts as a configuration.
     init(element: FieldFeatureFormElement, input: TextBoxFeatureFormInput) {
         self.element = element
