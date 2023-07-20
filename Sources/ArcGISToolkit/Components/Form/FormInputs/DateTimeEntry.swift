@@ -20,8 +20,10 @@ struct DateTimeEntry: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
+    /// The current date selection.
     @State private var date: Date?
     
+    /// A Boolean value indicating whether a new date (or time is being set).
     @State private var isEditing = false
     
     /// The field's parent element.
@@ -123,6 +125,7 @@ struct DateTimeEntry: View {
         }
     }
     
+    /// The human-readable date and time selection.
     var formattedDate: String {
         if input.includeTime {
             return date!.formatted(.dateTime.day().month().year().hour().minute())
@@ -131,6 +134,7 @@ struct DateTimeEntry: View {
         }
     }
     
+    /// The button to stop editing the date.
     var doneButton: some View {
         Button {
             withAnimation { isEditing = false }
@@ -139,6 +143,7 @@ struct DateTimeEntry: View {
         }
     }
     
+    /// The button to set the date to the present time.
     var todayOrNowButton: some View {
         Button {
             date = .now
