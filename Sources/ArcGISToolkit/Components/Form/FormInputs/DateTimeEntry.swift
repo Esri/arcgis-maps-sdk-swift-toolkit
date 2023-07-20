@@ -42,7 +42,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.datePickerStyle(.graphical)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(element.label, text: Binding(get: { String(describing: date) ***REMOVED***, set: { _ in ***REMOVED***))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(element.label, text: Binding(get: { formattedDate ***REMOVED***, set: { _ in ***REMOVED***))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formTextEntryStyle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(true)
 ***REMOVED******REMOVED******REMOVED***
@@ -79,6 +79,14 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***DatePicker(selection: $date, in: ...max, displayedComponents: displayedComponents) { EmptyView() ***REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***DatePicker(selection: $date, displayedComponents: displayedComponents) { EmptyView() ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var formattedDate: String {
+***REMOVED******REMOVED***if input.includeTime {
+***REMOVED******REMOVED******REMOVED***return date.formatted(.dateTime.day().month().year().hour().minute())
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return date.formatted(.dateTime.day().month().year())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
