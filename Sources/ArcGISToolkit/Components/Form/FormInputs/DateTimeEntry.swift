@@ -102,6 +102,26 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***var todayOrNowButton: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***date = .now
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***if input.includeTime {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Now",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to save a date (and time if applicable) selection."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Today",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to save a date (and time if applicable) selection."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***var displayedComponents: DatePicker.Components {
 ***REMOVED******REMOVED***input.includeTime ? [.date, .hourAndMinute] : [.date]
 ***REMOVED***
