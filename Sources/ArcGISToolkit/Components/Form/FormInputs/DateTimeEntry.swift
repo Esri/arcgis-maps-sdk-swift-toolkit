@@ -24,9 +24,9 @@ struct DateTimeEntry: View {
     
     @State private var isEditing = false
     
-    let element: FieldFeatureFormElement
+    private let element: FieldFeatureFormElement
     
-    let input: DateTimePickerFeatureFormInput
+    private let input: DateTimePickerFeatureFormInput
     
     var body: some View {
         Group {
