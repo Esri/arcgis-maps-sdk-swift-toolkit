@@ -42,7 +42,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for text entry spanning multiple lines.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - element: The form element that corresponds to this text field.
+***REMOVED******REMOVED***/   - element: The form element that corresponds to the field.
 ***REMOVED******REMOVED***/   - input: A `TextAreaFeatureFormInput` which acts as a configuration.
 ***REMOVED***init(element: FieldFeatureFormElement, input: TextAreaFeatureFormInput) {
 ***REMOVED******REMOVED***self.element =  element

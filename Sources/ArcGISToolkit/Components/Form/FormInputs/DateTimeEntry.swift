@@ -28,6 +28,15 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***private let input: DateTimePickerFeatureFormInput
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a view for a date and time (if applicable) entry.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - element: The form element that corresponds to the field.
+***REMOVED******REMOVED***/   - input: A `DateTimePickerFeatureFormInput` which acts as a configuration.
+***REMOVED***init(element: FieldFeatureFormElement, input: DateTimePickerFeatureFormInput) {
+***REMOVED******REMOVED***self.element = element
+***REMOVED******REMOVED***self.input = input
+***REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
