@@ -30,29 +30,33 @@ struct DateTimeEntry: View {
     
     var body: some View {
         Group {
-            Group {
-                FormElementHeader(element: element)
-                    .padding([.top], elementPadding)
-                
-                TextField(element.label, text: Binding(get: { String(describing: date) }, set: { _ in }))
-                    .formTextEntryStyle()
-                    .disabled(true)
-                
-                if let description = element.description {
-                    Text(description)
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
+            FormElementHeader(element: element)
+                .padding([.top], elementPadding)
+            
+            if isEditing {
+                HStack {
+                    Spacer()
+                    doneButton
                 }
-            }
-            .onTapGesture {
-                withAnimation {
-                    isEditing.toggle()
+                datePicker
+                    .datePickerStyle(.graphical)
+            } else {
+                Group {
+                    TextField(element.label, text: Binding(get: { String(describing: date) }, set: { _ in }))
+                        .formTextEntryStyle()
+                        .disabled(true)
+                }
+                .onTapGesture {
+                    withAnimation {
+                        isEditing = true
+                    }
                 }
             }
             
-            if isEditing {
-                datePicker
-                    .datePickerStyle(.graphical)
+            if let description = element.description {
+                Text(description)
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
             }
         }
         .padding([.bottom], elementPadding)
@@ -75,6 +79,18 @@ struct DateTimeEntry: View {
             DatePicker(selection: $date, in: ...max, displayedComponents: displayedComponents) { EmptyView() }
         } else {
             DatePicker(selection: $date, displayedComponents: displayedComponents) { EmptyView() }
+        }
+    }
+    
+    var doneButton: some View {
+        Button {
+            withAnimation { isEditing = false }
+        } label: {
+            Text(
+                "Done",
+                bundle: .toolkitModule,
+                comment: "A label for a button to save a date (and time if applicable) selection."
+            )
         }
     }
     
