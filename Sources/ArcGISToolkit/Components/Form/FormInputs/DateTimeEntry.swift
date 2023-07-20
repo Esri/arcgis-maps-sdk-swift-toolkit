@@ -143,6 +143,7 @@ struct DateTimeEntry: View {
 ***REMOVED***
 
 private extension Text {
+***REMOVED******REMOVED***/ A label for a button to save a date (and time if applicable) selection.
 ***REMOVED***static var done: Self {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Done",
@@ -151,6 +152,7 @@ private extension Text {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A label indicating that no date or time has been set for a date/time field.
 ***REMOVED***static var noValue: Self {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"No Value",
@@ -159,6 +161,7 @@ private extension Text {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A label for a button to choose the current time and date for a field.
 ***REMOVED***static var now: Self {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Now",
@@ -167,6 +170,7 @@ private extension Text {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A label for a button to choose the current date for a field.
 ***REMOVED***static var today: Self {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Today",
