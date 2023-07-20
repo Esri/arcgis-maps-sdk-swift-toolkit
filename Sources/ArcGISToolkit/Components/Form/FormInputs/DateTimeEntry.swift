@@ -104,14 +104,6 @@ struct DateTimeEntry: View {
         }
     }
     
-    var noValueString: String {
-        String(
-            localized: "No Value",
-            bundle: .toolkitModule,
-            comment: "A label indicating that no date or time has been set for a date/time field."
-        )
-    }
-    
     var doneButton: some View {
         Button {
             withAnimation { isEditing = false }
