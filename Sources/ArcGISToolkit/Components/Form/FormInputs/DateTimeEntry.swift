@@ -20,23 +20,39 @@ struct DateTimeEntry: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
+    @State private var date = Date.now
+    
+    @State private var isEditing = false
+    
     let element: FieldFeatureFormElement
     
     let input: DateTimePickerFeatureFormInput
     
-    @State private var date = Date.now
-    
     var body: some View {
         Group {
-            FormElementHeader(element: element)
-                .padding([.top], elementPadding)
+            Group {
+                FormElementHeader(element: element)
+                    .padding([.top], elementPadding)
+                
+                TextField(element.label, text: Binding(get: { String(describing: date) }, set: { _ in }))
+                    .formTextEntryStyle()
+                    .disabled(true)
+                
+                if let description = element.description {
+                    Text(description)
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .onTapGesture {
+                withAnimation {
+                    isEditing.toggle()
+                }
+            }
             
-            datePicker
-            
-            if let description = element.description {
-                Text(description)
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
+            if isEditing {
+                datePicker
+                    .datePickerStyle(.graphical)
             }
         }
         .padding([.bottom], elementPadding)
