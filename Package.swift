@@ -29,13 +29,16 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.1.0"))
+        .package(name: "arcgis-maps-sdk-swift", path: "../swift/ArcGIS"),
+        .package(name: "FormsPlugin", path: "../FormsPlugin")
+//        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.1.0"))
     ],
     targets: [
         .target(
             name: "ArcGISToolkit",
             dependencies: [
-                .product(name: "ArcGIS", package: "arcgis-maps-sdk-swift")
+                .product(name: "ArcGIS", package: "arcgis-maps-sdk-swift"),
+                .product(name: "FormsPlugin", package: "FormsPlugin")
             ]
         ),
         .testTarget(

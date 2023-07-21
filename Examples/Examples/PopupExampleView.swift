@@ -19,8 +19,12 @@ struct PopupExampleView: View {
     static func makeMap() -> Map {
         let portalItem = PortalItem(
             portal: .arcGISOnline(connection: .anonymous),
-            id: Item.ID("9f3a674e998f461580006e626611f9ad")!
+            id: Item.ID("415184073d934229b4bf4389d2708683")!
         )
+//        let featureLayer = FeatureLayer(item: portalItem)
+//        let map = Map(basemapStyle: .arcGISStreets)
+//        map.addOperationalLayer(featureLayer)
+//        return map
         return Map(item: portalItem)
     }
     
@@ -65,6 +69,18 @@ struct PopupExampleView: View {
                         self.identifyScreenPoint = nil
                         self.popup = try? identifyResult.get().first?.popups.first
                         self.showPopup = self.popup != nil
+//
+//                        // You must call `evaluateExpression()` on the popup prior to accessing any properties
+//                        try? await self.popup?.evaluateExpressions()
+//
+//                        // You can then loop through the popup elements, looking for the `TextPopupElement`.
+//                        self.popup?.evaluatedElements.forEach { popupElement in
+//                            if let textElement = popupElement as? TextPopupElement {
+//                                // The `text` property of the `TextPopupElement contains the final formatted string.
+//                                // The string is formatted/populated by the call to `evaluateExpressions()`.
+//                                print("text: \(textElement.text)")
+//                            }
+//                        }
                     }
                     .floatingPanel(
                         selectedDetent: $floatingPanelDetent,
@@ -77,6 +93,10 @@ struct PopupExampleView: View {
                                 .padding()
                         }
                     }
+//                    .task {
+//                        try? await dataModel.map.load()
+//                        print("Map load status: \(dataModel.map.loadStatus); error = \(dataModel.map.loadError)")
+//                    }
             }
         }
     }

@@ -131,6 +131,6 @@ extension FormExampleView {
 
 private extension URL {
     static var sampleData: Self {
-        .init(string: <#URL#>)!
+        .init(string: "https://runtimecoretest.maps.arcgis.com/home/item.html?id=454422bdf7e24fb0ba4ffe0a22f6bf37")!
     }
 }

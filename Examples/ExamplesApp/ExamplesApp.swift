@@ -23,7 +23,7 @@ struct ExamplesApp: App {
     }
     
     init() {
-        #warning("Require user to sign in with an ArcGIS identity or set your developer API key")
+#warning("Require user to sign in with an ArcGIS identity or set your developer API key")
         /*
          Use of Esri location services, including basemaps and geocoding, requires either an ArcGIS identity or an API Key. For more information see https://links.esri.com/arcgis-maps-sdk-security-auth.
          1) ArcGIS identity: An ArcGIS named user account that is a member of an organization in ArcGIS Online or ArcGIS Enterprise.
@@ -31,6 +31,79 @@ struct ExamplesApp: App {
          Production deployment of applications built with ArcGIS Maps SDK requires you to license ArcGIS Maps SDK functionality. For more information see https://links.esri.com/arcgis-maps-sdk-license-and-deploy.
          */
         // Uncomment the following line to access Esri location services using an API key.
-//         ArcGISEnvironment.apiKey = APIKey("<#API Key#>")
+//        ArcGISEnvironment.apiKey = APIKey("AAPKbf1fd36205714fcca9405f4399021cfcQfOuwZA-ZVNJx4ur9MqpUoL-pMqoqRX_4792IYRPS0pnV-pZ9GHwTN9IUWEDl-77")
+        
+        Task {
+            //            ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try await .popupDev)
+            //            print("popupDev Done.")
+            //            ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try await .rtPublisher2)
+            //            print("rt_publisher2 Done.")
+            //            ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try await .nitro)
+            //            print("nitro Done.")
+            //            ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try await .devext)
+            //            print("devext Done.")
+                        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try await .capipublisher)
+                        print("capipublisher Done.")
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    static var popupDev: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://nitrotest.mapsqa.arcgis.com")!,
+                username: "PopDev",
+                password: "I68VGU^PopupElements930"
+            )
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    static var rtPublisher2: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://runtimecoretest.maps.arcgis.com")!,
+                username: "rt_publisher2",
+                password: "rt_password01"
+            )
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    static var nitro: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://nitrotest.mapsqa.arcgis.com")!,
+                username: "nitroadmin",
+                password: "neonmusiclittle4"
+            )
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    static var devext: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://pulsars.mapsdevext.arcgis.com")!,
+                username: "rt_publisher1",
+                password: "rt_password01"
+            )
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    static var capipublisher: ArcGISCredential {
+        get async throws {
+            try await TokenCredential.credential(
+                for: URL(string: "https://runtimecoretest.maps.arcgis.com")!,
+                username: "c_api_publisher",
+                password: "c_api_pub1"
+            )
+        }
     }
 }

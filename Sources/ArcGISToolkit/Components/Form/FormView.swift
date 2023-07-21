@@ -80,6 +80,11 @@ extension FormView {
                 element: element,
                 input: `input`
             )
+            SingleLineTextEntry(
+                element: element,
+                input: `input`,
+                updateMe: true
+            )
         case let `input` as TextAreaFeatureFormInput:
             MultiLineTextEntry(
                 element: element,
