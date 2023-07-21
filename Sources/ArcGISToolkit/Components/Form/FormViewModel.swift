@@ -28,6 +28,8 @@ public class FormViewModel: ObservableObject {
     /// The service feature table which holds the feature being edited in the form.
     @Published private var table: ServiceFeatureTable?
     
+    var inputModels = [TextFormInputModel]()
+    
     /// Initializes a form view model.
     public init() {}
     
@@ -64,6 +66,25 @@ public class FormViewModel: ObservableObject {
         
         if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
             print("An error occurred while submitting the changes.")
+        }
+    }
+    
+    func evaluateExpressions() async {
+        // Dummy function to simulate a value changing in response to an
+        // expression evalation.
+        // The actual check here may be to compare the feature attribute
+        // to the inputModel.text(maybe .value?) and if different, set
+        // the new value on the model.
+        // Update models with changed values
+        try? await Task.sleep(nanoseconds: 5 * 100_000_000)
+        if Task.isCancelled { return }
+
+        inputModels.forEach { inputModel in
+            if inputModel.updateMe {
+                DispatchQueue.main.async {
+                    inputModel.update()
+                }
+            }
         }
     }
 }
