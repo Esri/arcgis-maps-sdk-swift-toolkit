@@ -106,7 +106,6 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Controls for making a specific date selection.
-***REMOVED******REMOVED***/ Controls for making a specific date selection.
 ***REMOVED***@ViewBuilder var datePicker: some View {
 ***REMOVED******REMOVED***let components: DatePicker.Components = input.includeTime ? [.date, .hourAndMinute] : [.date]
 ***REMOVED******REMOVED***if let range = dateRange {
@@ -116,6 +115,7 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The range of dates available for selection, if applicable.
 ***REMOVED***var dateRange: ClosedRange<Date>? {
 ***REMOVED******REMOVED***if let min = input.min, let max = input.max {
 ***REMOVED******REMOVED******REMOVED***return min...max
