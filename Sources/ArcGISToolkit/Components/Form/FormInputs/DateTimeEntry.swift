@@ -78,12 +78,10 @@ struct DateTimeEntry: View {
     /// - Note: Secondary foreground color is used across entry views for consistency.
     @ViewBuilder var dateDisplay: some View {
         HStack {
-            TextField(
-                element.label,
-                text: Binding { date == nil ? "" : formattedDate } set: { _ in },
-                prompt: .noValue.foregroundColor(.secondary)
-            )
-            .disabled(true)
+            Text(formattedDate ?? .noValue)
+                .foregroundColor(displayColor)
+            
+            Spacer()
             
             if isEditing {
                 todayOrNowButton
@@ -94,7 +92,9 @@ struct DateTimeEntry: View {
                 ClearButton { date = nil }
             }
         }
+        .padding([.vertical], 1.5)
         .formTextEntryStyle()
+        .frame(maxWidth: .infinity)
         .onTapGesture {
             if date == nil { date = .now }
             withAnimation { isEditing.toggle() }
@@ -124,6 +124,17 @@ struct DateTimeEntry: View {
         }
     }
     
+    /// The color in which to display the selected date.
+    var displayColor: Color {
+        if date == nil {
+            return .secondary
+        } else if isEditing {
+            return .accentColor
+        } else {
+            return .primary
+        }
+    }
+    
     /// The message shown below the date editor and viewer.
     @ViewBuilder var footer: some View {
         Group {
@@ -138,11 +149,11 @@ struct DateTimeEntry: View {
     }
     
     /// The human-readable date and time selection.
-    var formattedDate: String {
+    var formattedDate: String? {
         if input.includeTime {
-            return date!.formatted(.dateTime.day().month().year().hour().minute())
+            return date?.formatted(.dateTime.day().month().year().hour().minute())
         } else {
-            return date!.formatted(.dateTime.day().month().year())
+            return date?.formatted(.dateTime.day().month().year())
         }
     }
     
@@ -156,19 +167,22 @@ struct DateTimeEntry: View {
     }
 }
 
-private extension Text {
-    /// A label indicating that no date or time has been set for a date/time field.
+
+private extension String {
+    /// A string indicating that no date or time has been set for a date/time field.
     static var noValue: Self {
-        Text(
-            "No Value",
+        .init(
+            localized: "No Value",
             bundle: .toolkitModule,
-            comment: "A label indicating that no date or time has been set for a date/time field."
+            comment: "A string indicating that no date or time has been set for a date/time field."
         )
     }
-    
+}
+
+private extension Text {
     /// A label for a button to choose the current time and date for a field.
     static var now: Self {
-        Text(
+        .init(
             "Now",
             bundle: .toolkitModule,
             comment: "A label for a button to choose the current time and date for a field."
@@ -177,7 +191,7 @@ private extension Text {
     
     /// A label indicating a required field was left blank.
     static var required: Self {
-        Text(
+        .init(
             "Required",
             bundle: .toolkitModule,
             comment: "A label indicating a required field was left blank."
@@ -186,7 +200,7 @@ private extension Text {
     
     /// A label for a button to choose the current date for a field.
     static var today: Self {
-        Text(
+        .init(
             "Today",
             bundle: .toolkitModule,
             comment: "A label for a button to choose the current date for a field."
