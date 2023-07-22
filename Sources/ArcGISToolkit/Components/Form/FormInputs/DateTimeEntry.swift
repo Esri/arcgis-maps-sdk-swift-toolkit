@@ -49,11 +49,7 @@ struct DateTimeEntry: View {
             FormElementHeader(element: element)
                 .padding([.top], elementPadding)
             
-            dateViewer
-            
-            if isEditing {
-                dateEditor
-            }
+            dateEditor
             
             footer
         }
@@ -71,18 +67,16 @@ struct DateTimeEntry: View {
     
     /// Controls for modifying the date selection.
     @ViewBuilder var dateEditor: some View {
-        HStack {
-            todayOrNowButton
-            Spacer()
-            doneButton
+        dateDisplay
+        if isEditing {
+            datePicker
+                .datePickerStyle(.graphical)
         }
-        datePicker
-            .datePickerStyle(.graphical)
     }
     
-    /// Elements for viewing the date selection.
+    /// Elements for display the date selection.
     /// - Note: Secondary foreground color is used across entry views for consistency.
-    @ViewBuilder var dateViewer: some View {
+    @ViewBuilder var dateDisplay: some View {
         HStack {
             TextField(
                 element.label,
@@ -91,7 +85,9 @@ struct DateTimeEntry: View {
             )
             .disabled(true)
             
-            if date == nil {
+            if isEditing {
+                todayOrNowButton
+            } else if date == nil {
                 Image(systemName: "calendar")
                     .foregroundColor(.secondary)
             } else {
@@ -150,15 +146,6 @@ struct DateTimeEntry: View {
         }
     }
     
-    /// The button to stop editing the date.
-    var doneButton: some View {
-        Button {
-            withAnimation { isEditing = false }
-        } label: {
-            Text.done
-        }
-    }
-    
     /// The button to set the date to the present time.
     var todayOrNowButton: some View {
         Button {
@@ -170,15 +157,6 @@ struct DateTimeEntry: View {
 }
 
 private extension Text {
-    /// A label for a button to save a date (and time if applicable) selection.
-    static var done: Self {
-        Text(
-            "Done",
-            bundle: .toolkitModule,
-            comment: "A label for a button to save a date (and time if applicable) selection."
-        )
-    }
-    
     /// A label indicating that no date or time has been set for a date/time field.
     static var noValue: Self {
         Text(
