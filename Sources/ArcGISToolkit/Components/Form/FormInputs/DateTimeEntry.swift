@@ -49,11 +49,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***dateViewer
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if isEditing {
-***REMOVED******REMOVED******REMOVED******REMOVED***dateEditor
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***dateEditor
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***footer
 ***REMOVED***
@@ -71,18 +67,16 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Controls for modifying the date selection.
 ***REMOVED***@ViewBuilder var dateEditor: some View {
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***todayOrNowButton
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***doneButton
-***REMOVED***
-***REMOVED******REMOVED***datePicker
-***REMOVED******REMOVED******REMOVED***.datePickerStyle(.graphical)
+***REMOVED******REMOVED***dateDisplay
+***REMOVED******REMOVED***if isEditing {
+***REMOVED******REMOVED******REMOVED***datePicker
+***REMOVED******REMOVED******REMOVED******REMOVED***.datePickerStyle(.graphical)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Elements for viewing the date selection.
+***REMOVED***
+***REMOVED******REMOVED***/ Elements for display the date selection.
 ***REMOVED******REMOVED***/ - Note: Secondary foreground color is used across entry views for consistency.
-***REMOVED***@ViewBuilder var dateViewer: some View {
+***REMOVED***@ViewBuilder var dateDisplay: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***TextField(
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.label,
@@ -91,7 +85,9 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.disabled(true)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if date == nil {
+***REMOVED******REMOVED******REMOVED***if isEditing {
+***REMOVED******REMOVED******REMOVED******REMOVED***todayOrNowButton
+***REMOVED******REMOVED*** else if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED*** else {
@@ -150,15 +146,6 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The button to stop editing the date.
-***REMOVED***var doneButton: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***withAnimation { isEditing = false ***REMOVED***
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text.done
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The button to set the date to the present time.
 ***REMOVED***var todayOrNowButton: some View {
 ***REMOVED******REMOVED***Button {
@@ -170,15 +157,6 @@ struct DateTimeEntry: View {
 ***REMOVED***
 
 private extension Text {
-***REMOVED******REMOVED***/ A label for a button to save a date (and time if applicable) selection.
-***REMOVED***static var done: Self {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Done",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label for a button to save a date (and time if applicable) selection."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ A label indicating that no date or time has been set for a date/time field.
 ***REMOVED***static var noValue: Self {
 ***REMOVED******REMOVED***Text(
