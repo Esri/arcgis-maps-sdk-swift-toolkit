@@ -78,12 +78,10 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***/ - Note: Secondary foreground color is used across entry views for consistency.
 ***REMOVED***@ViewBuilder var dateDisplay: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED***element.label,
-***REMOVED******REMOVED******REMOVED******REMOVED***text: Binding { date == nil ? "" : formattedDate ***REMOVED*** set: { _ in ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED***prompt: .noValue.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.disabled(true)
+***REMOVED******REMOVED******REMOVED***Text(formattedDate ?? .noValue)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(displayColor)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isEditing {
 ***REMOVED******REMOVED******REMOVED******REMOVED***todayOrNowButton
@@ -94,7 +92,9 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { date = nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.padding([.vertical], 1.5)
 ***REMOVED******REMOVED***.formTextEntryStyle()
+***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***if date == nil { date = .now ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***withAnimation { isEditing.toggle() ***REMOVED***
@@ -124,6 +124,17 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The color in which to display the selected date.
+***REMOVED***var displayColor: Color {
+***REMOVED******REMOVED***if date == nil {
+***REMOVED******REMOVED******REMOVED***return .secondary
+***REMOVED*** else if isEditing {
+***REMOVED******REMOVED******REMOVED***return .accentColor
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return .primary
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The message shown below the date editor and viewer.
 ***REMOVED***@ViewBuilder var footer: some View {
 ***REMOVED******REMOVED***Group {
@@ -138,11 +149,11 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The human-readable date and time selection.
-***REMOVED***var formattedDate: String {
+***REMOVED***var formattedDate: String? {
 ***REMOVED******REMOVED***if input.includeTime {
-***REMOVED******REMOVED******REMOVED***return date!.formatted(.dateTime.day().month().year().hour().minute())
+***REMOVED******REMOVED******REMOVED***return date?.formatted(.dateTime.day().month().year().hour().minute())
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return date!.formatted(.dateTime.day().month().year())
+***REMOVED******REMOVED******REMOVED***return date?.formatted(.dateTime.day().month().year())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -156,19 +167,22 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 
-private extension Text {
-***REMOVED******REMOVED***/ A label indicating that no date or time has been set for a date/time field.
+
+private extension String {
+***REMOVED******REMOVED***/ A string indicating that no date or time has been set for a date/time field.
 ***REMOVED***static var noValue: Self {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"No Value",
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "No Value",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label indicating that no date or time has been set for a date/time field."
+***REMOVED******REMOVED******REMOVED***comment: "A string indicating that no date or time has been set for a date/time field."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+
+private extension Text {
 ***REMOVED******REMOVED***/ A label for a button to choose the current time and date for a field.
 ***REMOVED***static var now: Self {
-***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***"Now",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose the current time and date for a field."
@@ -177,7 +191,7 @@ private extension Text {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A label indicating a required field was left blank.
 ***REMOVED***static var required: Self {
-***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***"Required",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label indicating a required field was left blank."
@@ -186,7 +200,7 @@ private extension Text {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A label for a button to choose the current date for a field.
 ***REMOVED***static var today: Self {
-***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***"Today",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose the current date for a field."
