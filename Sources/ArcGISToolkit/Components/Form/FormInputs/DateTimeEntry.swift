@@ -101,7 +101,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***.formTextEntryStyle()
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***if date == nil { date = .now ***REMOVED***
-***REMOVED******REMOVED******REMOVED***withAnimation { isEditing = true ***REMOVED***
+***REMOVED******REMOVED******REMOVED***withAnimation { isEditing.toggle() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
