@@ -150,6 +150,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***uiAlertController.addAction(cancelUIAlertAction)
 ***REMOVED******REMOVED***uiAlertController.addAction(continueUIAlertAction)
+***REMOVED******REMOVED***uiAlertController.preferredAction = continueUIAlertAction
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return uiAlertController
 ***REMOVED***
