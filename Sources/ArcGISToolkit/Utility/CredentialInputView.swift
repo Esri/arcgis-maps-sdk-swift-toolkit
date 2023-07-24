@@ -150,6 +150,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
         
         uiAlertController.addAction(cancelUIAlertAction)
         uiAlertController.addAction(continueUIAlertAction)
+        uiAlertController.preferredAction = continueUIAlertAction
         
         return uiAlertController
     }
