@@ -14,19 +14,12 @@
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor final class LoginViewModelTests: XCTestCase {
-    func testViewModel() {
+final class LoginViewModifierTests: XCTestCase {
+    func testMemberwiseInit() {
         var signInCalled = false
-        func signIn(username: String, password: String) {
-            signInCalled = true
-        }
-        
         var cancelCalled = false
-        func cancel() {
-            cancelCalled = true
-        }
         
-        let model = LoginViewModel(
+        let modifier = LoginViewModifier(
             challengingHost: "host.com",
             onSignIn: { _ in
                 signInCalled = true
@@ -36,19 +29,17 @@ import XCTest
             }
         )
         
-        XCTAssertEqual(model.challengingHost, "host.com")
-        XCTAssertNotNil(model.signInAction)
-        XCTAssertNotNil(model.cancelAction)
-        XCTAssertTrue(model.username.isEmpty)
-        XCTAssertTrue(model.password.isEmpty)
+        XCTAssertEqual(modifier.challengingHost, "host.com")
+        XCTAssertNotNil(modifier.onSignIn)
+        XCTAssertNotNil(modifier.onCancel)
         XCTAssertFalse(signInCalled)
         XCTAssertFalse(cancelCalled)
         
-        model.signIn()
+        modifier.onSignIn(LoginCredential(username: "", password: ""))
         XCTAssertTrue(signInCalled)
         XCTAssertFalse(cancelCalled)
         
-        model.cancel()
+        modifier.onCancel()
         XCTAssertTrue(cancelCalled)
     }
 }
