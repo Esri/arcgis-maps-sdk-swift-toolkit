@@ -23,11 +23,14 @@ public class FormViewModel: ObservableObject {
     /// The featured being edited in the form.
     @Published private(set) var feature: ArcGISFeature?
     
+    /// The service feature table which holds the feature being edited in the form.
+    @Published private var table: ServiceFeatureTable?
+    
     /// The structure of the form.
     @Published var formDefinition: FeatureFormDefinition?
     
-    /// The service feature table which holds the feature being edited in the form.
-    @Published private var table: ServiceFeatureTable?
+    /// The name of the current focused field, if one exists.
+    @Published var focusedFieldName: String?
     
     /// Initializes a form view model.
     public init() {}
