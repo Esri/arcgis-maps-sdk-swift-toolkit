@@ -63,6 +63,9 @@ struct DateTimeEntry: View {
             requiredValueMissing = element.required && newDate == nil
             model.feature?.setAttributeValue(newDate, forKey: element.fieldName)
         }
+        .onChange(of: model.focusedFieldName) { newFocusedFieldName in
+            isEditing = newFocusedFieldName == element.fieldName
+        }
     }
     
     /// Controls for modifying the date selection.
@@ -96,8 +99,11 @@ struct DateTimeEntry: View {
         .formTextEntryStyle()
         .frame(maxWidth: .infinity)
         .onTapGesture {
-            if date == nil { date = .now }
-            withAnimation { isEditing.toggle() }
+            withAnimation {
+                if date == nil { date = .now }
+                isEditing.toggle()
+                model.focusedFieldName = isEditing ? element.fieldName : nil
+            }
         }
     }
     
