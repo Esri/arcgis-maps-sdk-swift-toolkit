@@ -67,15 +67,17 @@ struct MultiLineTextEntry: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button {
-                    isFocused = false
-                } label: {
-                    Text(
-                        "Done",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to finish text entry and dismiss the keyboard."
-                    )
+                if isFocused {
+                    Spacer()
+                    Button {
+                        isFocused = false
+                    } label: {
+                        Text(
+                            "Done",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button to finish text entry and dismiss the keyboard."
+                        )
+                    }
                 }
             }
         }
