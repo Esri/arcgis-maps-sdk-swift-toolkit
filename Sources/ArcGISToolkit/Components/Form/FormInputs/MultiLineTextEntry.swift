@@ -93,6 +93,9 @@ struct MultiLineTextEntry: View {
                 isPlaceholder = true
                 text = element.hint ?? ""
             }
+            if focused {
+                model.focusedFieldName = element.fieldName
+            }
         }
         .formTextEntryStyle()
         TextEntryFooter(
