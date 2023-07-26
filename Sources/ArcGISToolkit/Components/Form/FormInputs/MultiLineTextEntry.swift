@@ -93,6 +93,9 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint ?? ""
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if focused {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = element.fieldName
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formTextEntryStyle()
 ***REMOVED******REMOVED***TextEntryFooter(
