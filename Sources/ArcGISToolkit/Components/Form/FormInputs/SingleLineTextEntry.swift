@@ -66,6 +66,11 @@ struct SingleLineTextEntry: View {
         .onAppear {
             text = model.feature?.attributes[element.fieldName] as? String ?? ""
         }
+        .onChange(of: isFocused) { newFocus in
+            if newFocus {
+                model.focusedFieldName = element.fieldName
+            }
+        }
         .onChange(of: text) { newValue in
             model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
         }
