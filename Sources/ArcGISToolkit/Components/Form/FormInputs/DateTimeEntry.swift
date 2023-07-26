@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
 import SwiftUI
+import ArcGIS
 
 struct DateTimeEntry: View {
     @Environment(\.formElementPadding) var elementPadding
@@ -30,16 +30,16 @@ struct DateTimeEntry: View {
     @State private var requiredValueMissing = false
     
     /// The field's parent element.
-    private let element: FieldFeatureFormElement
+    private let element: FieldFormElement
     
     /// The input configuration of the field.
-    private let input: DateTimePickerFeatureFormInput
+    private let input: DateTimePickerFormInput
     
     /// Creates a view for a date and time (if applicable) entry.
     /// - Parameters:
     ///   - element: The field's parent element.
     ///   - input: The input configuration of the field.
-    init(element: FieldFeatureFormElement, input: DateTimePickerFeatureFormInput) {
+    init(element: FieldFormElement, input: DateTimePickerFormInput) {
         self.element = element
         self.input = input
     }
@@ -60,7 +60,8 @@ struct DateTimeEntry: View {
             }
         }
         .onChange(of: date) { newDate in
-            requiredValueMissing = element.required && newDate == nil
+            //TODO: add `required` property to API
+            requiredValueMissing = /*element.required && */newDate == nil
             model.feature?.setAttributeValue(newDate, forKey: element.fieldName)
         }
         .onChange(of: model.focusedFieldName) { newFocusedFieldName in
@@ -146,8 +147,8 @@ struct DateTimeEntry: View {
         Group {
             if requiredValueMissing {
                 Text.required
-            } else if let description = element.description {
-                Text(description)
+            } else {
+                Text(element.description)
             }
         }
         .font(.footnote)

@@ -27,7 +27,8 @@ struct FormExampleView: View {
     
     /// The form view model provides a channel of communication between the form view and its host.
     @StateObject private var formViewModel = FormViewModel()
-    
+    @State private var featureForm: FeatureForm?
+
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
@@ -35,9 +36,11 @@ struct FormExampleView: View {
                     identifyScreenPoint = screenPoint
                 }
                 .task(id: identifyScreenPoint) {
-                    if let feature = await identifyFeature(with: mapViewProxy) {
-                        formViewModel.startEditing(feature)
-                        isPresented = true
+                    if let feature = await identifyFeature(with: mapViewProxy),
+                       let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
+                        featureForm = FeatureForm(feature: feature, definition: formDefinition)
+//                        formViewModel.startEditing(feature)
+                        isPresented = featureForm != nil // true
                     }
                 }
                 .ignoresSafeArea(.keyboard)
@@ -45,13 +48,13 @@ struct FormExampleView: View {
                 // Present a FormView in a native SwiftUI sheet
                 .sheet(isPresented: $isPresented) {
                     if #available(iOS 16.4, *) {
-                        FormView()
+                        FormView(featureForm: featureForm)
                             .padding()
                             .presentationBackground(.thinMaterial)
                             .presentationBackgroundInteraction(.enabled(upThrough: .medium))
                             .presentationDetents([.medium])
                     } else {
-                        FormView()
+                        FormView(featureForm: featureForm)
                             .padding()
                     }
                     #if targetEnvironment(macCatalyst)

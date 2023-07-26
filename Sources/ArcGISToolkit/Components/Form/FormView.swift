@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import ArcGIS
-import FormsPlugin
 import SwiftUI
 
 /// Forms allow users to edit information about GIS features.
@@ -22,9 +21,12 @@ public struct FormView: View {
     
     /// The model for this form view.
     @EnvironmentObject var model: FormViewModel
+    private var featureForm: FeatureForm?
     
     /// Initializes a form view.
-    public init() {}
+    public init(featureForm: FeatureForm?) {
+        self.featureForm = featureForm
+    }
     
     public var body: some View {
         // When the `FormView` is hosted within a SwiftUI sheet, any `NavigationView` that may have
@@ -35,23 +37,10 @@ public struct FormView: View {
                 FormHeader(title: model.formDefinition?.title)
                     .padding([.bottom], elementPadding)
                 VStack(alignment: .leading) {
-                    ForEach(model.formDefinition?.formElements ?? [], id: \.element?.label) { container in
-                        if let element = container.element {
-                            makeElement(element)
-                        }
+                    ForEach(featureForm?.elements ?? [], id: \.label) { element in
+                        makeElement(element)
                     }
                 }
-            }
-        }
-        .task {
-            let decoder = JSONDecoder()
-            if let layer = model.feature?.table?.layer as? FeatureLayer,
-               let formInfoDictionary = layer._unsupportedJSON["formInfo"],
-               let jsonData = try? JSONSerialization.data(withJSONObject: formInfoDictionary),
-               let formDefinition = try? decoder.decode(FeatureFormDefinition.self, from: jsonData) {
-                model.formDefinition = formDefinition
-            } else {
-                print("Error processing form definition")
             }
         }
     }
@@ -60,11 +49,11 @@ public struct FormView: View {
 extension FormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeElement(_ element: FeatureFormElement) -> some View {
+    @ViewBuilder func makeElement(_ element: FormElement) -> some View {
         switch element {
-        case let element as FieldFeatureFormElement:
+        case let element as FieldFormElement:
             makeFieldElement(element)
-        case let element as GroupFeatureFormElement:
+        case let element as GroupFormElement:
             makeGroupElement(element)
         default:
             EmptyView()
@@ -73,13 +62,13 @@ extension FormView {
     
     /// Makes UI for a field form element.
     /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeFieldElement(_ element: FieldFeatureFormElement) -> some View {
-        switch element.inputType.input {
-        case let `input` as DateTimePickerFeatureFormInput:
+    @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
+        switch element.input {
+        case let `input` as DateTimePickerFormInput:
             DateTimeEntry(element: element, input: `input`)
-        case let `input` as TextAreaFeatureFormInput:
+        case let `input` as TextAreaFormInput:
             MultiLineTextEntry(element: element, input: `input`)
-        case let `input` as TextBoxFeatureFormInput:
+        case let `input` as TextBoxFormInput:
             SingleLineTextEntry(element: element, input: `input`)
         default:
             EmptyView()
@@ -89,10 +78,10 @@ extension FormView {
     
     /// Makes UI for a group form element.
     /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeGroupElement(_ element: GroupFeatureFormElement) -> some View {
+    @ViewBuilder func makeGroupElement(_ element: GroupFormElement) -> some View {
         DisclosureGroup(element.label) {
-            ForEach(element.formElements, id: \.element?.label) { container in
-                if let element = container.element as? FieldFeatureFormElement {
+            ForEach(element.formElements, id: \.label) { formElement in
+                if let element = formElement as? FieldFormElement {
                     makeFieldElement(element)
                 }
             }
