@@ -11,7 +11,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import FormsPlugin
+***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ A view for single line text entry.
@@ -28,16 +28,16 @@ struct SingleLineTextEntry: View {
 ***REMOVED***@State private var text = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
-***REMOVED***private let element: FieldFeatureFormElement
+***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the field.
-***REMOVED***private let input: TextBoxFeatureFormInput
+***REMOVED***private let input: TextBoxFormInput
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for single line text entry.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The field's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
-***REMOVED***init(element: FieldFeatureFormElement, input: TextBoxFeatureFormInput) {
+***REMOVED***init(element: FieldFormElement, input: TextBoxFormInput) {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***

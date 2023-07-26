@@ -11,16 +11,18 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import FormsPlugin
+***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ A view shown at the top of each field element in a form.
 struct FormElementHeader: View {
 ***REMOVED******REMOVED***/ The form element the header is for.
-***REMOVED***let element: FieldFeatureFormElement
+***REMOVED***let element: FieldFormElement
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(verbatim: "\(element.label + (element.required ? " *" : ""))")
+***REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
+***REMOVED******REMOVED******REMOVED***Text(verbatim: "\(element.label + (element.required ? " *" : ""))")
+***REMOVED******REMOVED***Text(verbatim: "\(element.label)")
 ***REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED***

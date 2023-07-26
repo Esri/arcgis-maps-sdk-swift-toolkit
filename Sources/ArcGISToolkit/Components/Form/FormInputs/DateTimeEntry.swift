@@ -11,7 +11,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import FormsPlugin
+***REMOVED***
 ***REMOVED***
 
 struct DateTimeEntry: View {
@@ -30,16 +30,16 @@ struct DateTimeEntry: View {
 ***REMOVED***@State private var requiredValueMissing = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
-***REMOVED***private let element: FieldFeatureFormElement
+***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the field.
-***REMOVED***private let input: DateTimePickerFeatureFormInput
+***REMOVED***private let input: DateTimePickerFormInput
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a date and time (if applicable) entry.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The field's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
-***REMOVED***init(element: FieldFeatureFormElement, input: DateTimePickerFeatureFormInput) {
+***REMOVED***init(element: FieldFormElement, input: DateTimePickerFormInput) {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
@@ -60,7 +60,8 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
-***REMOVED******REMOVED******REMOVED***requiredValueMissing = element.required && newDate == nil
+***REMOVED******REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
+***REMOVED******REMOVED******REMOVED***requiredValueMissing = /*element.required && */newDate == nil
 ***REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newDate, forKey: element.fieldName)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.focusedFieldName) { newFocusedFieldName in
@@ -146,8 +147,8 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if requiredValueMissing {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text.required
-***REMOVED******REMOVED*** else if let description = element.description {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.footnote)

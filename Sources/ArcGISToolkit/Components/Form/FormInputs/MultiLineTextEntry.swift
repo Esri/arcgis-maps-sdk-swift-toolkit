@@ -11,7 +11,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import FormsPlugin
+***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ A view for text entry spanning multiple lines.
@@ -35,16 +35,16 @@ struct MultiLineTextEntry: View {
 ***REMOVED***@State private var isPlaceholder = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
-***REMOVED***private let element: FieldFeatureFormElement
+***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the field.
-***REMOVED***private let input: TextAreaFeatureFormInput
+***REMOVED***private let input: TextAreaFormInput
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for text entry spanning multiple lines.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The field's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
-***REMOVED***init(element: FieldFeatureFormElement, input: TextAreaFeatureFormInput) {
+***REMOVED***init(element: FieldFormElement, input: TextAreaFormInput) {
 ***REMOVED******REMOVED***self.element =  element
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
@@ -91,7 +91,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = ""
 ***REMOVED******REMOVED*** else if !focused && text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
-***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint ?? ""
+***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if focused {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = element.fieldName
@@ -113,7 +113,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
-***REMOVED******REMOVED******REMOVED******REMOVED***self.text = element.hint ?? ""
+***REMOVED******REMOVED******REMOVED******REMOVED***self.text = element.hint
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { newValue in
