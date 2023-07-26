@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
 import SwiftUI
+import ArcGIS
 
 /// A view for single line text entry.
 struct SingleLineTextEntry: View {
@@ -28,16 +28,16 @@ struct SingleLineTextEntry: View {
     @State private var text = ""
     
     /// The field's parent element.
-    private let element: FieldFeatureFormElement
+    private let element: FieldFormElement
     
     /// The input configuration of the field.
-    private let input: TextBoxFeatureFormInput
+    private let input: TextBoxFormInput
     
     /// Creates a view for single line text entry.
     /// - Parameters:
     ///   - element: The field's parent element.
     ///   - input: The input configuration of the field.
-    init(element: FieldFeatureFormElement, input: TextBoxFeatureFormInput) {
+    init(element: FieldFormElement, input: TextBoxFormInput) {
         self.element = element
         self.input = input
     }

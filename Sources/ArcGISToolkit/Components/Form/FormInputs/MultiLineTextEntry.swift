@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
 import SwiftUI
+import ArcGIS
 
 /// A view for text entry spanning multiple lines.
 struct MultiLineTextEntry: View {
@@ -35,16 +35,16 @@ struct MultiLineTextEntry: View {
     @State private var isPlaceholder = false
     
     /// The field's parent element.
-    private let element: FieldFeatureFormElement
+    private let element: FieldFormElement
     
     /// The input configuration of the field.
-    private let input: TextAreaFeatureFormInput
+    private let input: TextAreaFormInput
     
     /// Creates a view for text entry spanning multiple lines.
     /// - Parameters:
     ///   - element: The field's parent element.
     ///   - input: The input configuration of the field.
-    init(element: FieldFeatureFormElement, input: TextAreaFeatureFormInput) {
+    init(element: FieldFormElement, input: TextAreaFormInput) {
         self.element =  element
         self.input = input
     }
@@ -91,7 +91,7 @@ struct MultiLineTextEntry: View {
                 text = ""
             } else if !focused && text.isEmpty {
                 isPlaceholder = true
-                text = element.hint ?? ""
+                text = element.hint
             }
             if focused {
                 model.focusedFieldName = element.fieldName
@@ -113,7 +113,7 @@ struct MultiLineTextEntry: View {
                 
             } else {
                 isPlaceholder = true
-                self.text = element.hint ?? ""
+                self.text = element.hint
             }
         }
         .onChange(of: text) { newValue in

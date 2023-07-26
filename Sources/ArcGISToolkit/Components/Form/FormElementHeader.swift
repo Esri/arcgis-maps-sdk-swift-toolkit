@@ -11,16 +11,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
 import SwiftUI
+import ArcGIS
 
 /// A view shown at the top of each field element in a form.
 struct FormElementHeader: View {
     /// The form element the header is for.
-    let element: FieldFeatureFormElement
+    let element: FieldFormElement
     
     var body: some View {
-        Text(verbatim: "\(element.label + (element.required ? " *" : ""))")
+        //TODO: add `required` property to API
+//        Text(verbatim: "\(element.label + (element.required ? " *" : ""))")
+        Text(verbatim: "\(element.label)")
         .font(.subheadline)
         .foregroundColor(.secondary)
     }
