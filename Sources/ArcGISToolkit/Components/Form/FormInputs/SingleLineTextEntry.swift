@@ -27,16 +27,16 @@ struct SingleLineTextEntry: View {
     /// The current text value.
     @State private var text = ""
     
-    /// The form element that corresponds to this text field.
+    /// The field's parent element.
     private let element: FieldFeatureFormElement
     
-    /// A `TextBoxFeatureFormInput` which acts as a configuration.
+    /// The input configuration of the field.
     private let input: TextBoxFeatureFormInput
     
     /// Creates a view for single line text entry.
     /// - Parameters:
-    ///   - element: The form element that corresponds to this text field.
-    ///   - input: A `TextBoxFeatureFormInput` which acts as a configuration.
+    ///   - element: The field's parent element.
+    ///   - input: The input configuration of the field.
     init(element: FieldFeatureFormElement, input: TextBoxFeatureFormInput) {
         self.element = element
         self.input = input
@@ -47,7 +47,7 @@ struct SingleLineTextEntry: View {
     var body: some View {
         FormElementHeader(element: element)
             .padding([.top], elementPadding)
-        // `MultiLineTextEntry` uses secondary foreground color so it's applied here for consistency.
+        // Secondary foreground color is used across entry views for consistency.
         HStack {
             TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
                 .focused($isFocused)
@@ -65,6 +65,11 @@ struct SingleLineTextEntry: View {
         .padding([.bottom], elementPadding)
         .onAppear {
             text = model.feature?.attributes[element.fieldName] as? String ?? ""
+        }
+        .onChange(of: isFocused) { newFocus in
+            if newFocus {
+                model.focusedFieldName = element.fieldName
+            }
         }
         .onChange(of: text) { newValue in
             model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
