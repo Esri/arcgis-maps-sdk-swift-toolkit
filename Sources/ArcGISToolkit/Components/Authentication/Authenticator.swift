@@ -53,6 +53,9 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
             do {
                 return .continueWithCredential(try await OAuthUserCredential.credential(for: configuration))
             } catch is CancellationError {
+                // If user cancels the creation of OAuth user credential then catch the
+                // cancellation error and cancel the challenge. This will make the request which
+                // issued the challenge fail with `ArcGISChallengeCancellationError`.
                 return .cancel
             }
         } else {
