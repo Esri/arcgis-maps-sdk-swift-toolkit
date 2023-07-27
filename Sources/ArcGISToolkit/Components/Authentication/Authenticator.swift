@@ -50,7 +50,11 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create the correct challenge type.
 ***REMOVED******REMOVED***if let configuration = oAuthUserConfigurations.first(where: { $0.canBeUsed(for: challenge.requestURL) ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED***return .continueWithCredential(try await OAuthUserCredential.credential(for: configuration))
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***return .continueWithCredential(try await OAuthUserCredential.credential(for: configuration))
+***REMOVED******REMOVED*** catch is CancellationError {
+***REMOVED******REMOVED******REMOVED******REMOVED***return .cancel
+***REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***let tokenChallengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
 ***REMOVED******REMOVED******REMOVED***
