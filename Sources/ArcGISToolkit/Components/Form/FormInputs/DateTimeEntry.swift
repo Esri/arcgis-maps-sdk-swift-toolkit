@@ -89,11 +89,13 @@ struct DateTimeEntry: View {
             
             if isEditing {
                 todayOrNowButton
-            } else if date == nil {
-                Image(systemName: "calendar")
-                    .foregroundColor(.secondary)
-            } else {
-                ClearButton { date = nil }
+            } else if element.editable {
+                if date == nil {
+                    Image(systemName: "calendar")
+                        .foregroundColor(.secondary)
+                } else {
+                    ClearButton { date = nil }
+                }
             }
         }
         .padding([.vertical], 1.5)
@@ -101,7 +103,16 @@ struct DateTimeEntry: View {
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {
-                if date == nil { date = .now }
+                guard element.editable else { return }
+                if date == nil {
+                    if dateRange.contains(.now) {
+                        date = .now
+                    } else if let min = input.min {
+                        date = min
+                    } else if let max = input.max {
+                        date = max
+                    }
+                }
                 isEditing.toggle()
                 model.focusedFieldName = isEditing ? element.fieldName : nil
             }
@@ -110,16 +121,15 @@ struct DateTimeEntry: View {
     
     /// Controls for making a specific date selection.
     @ViewBuilder var datePicker: some View {
-        let components: DatePicker.Components = input.includeTime ? [.date, .hourAndMinute] : [.date]
-        if let range = dateRange {
-            DatePicker(selection: Binding($date)!, in: range, displayedComponents: components) { }
-        } else {
-            DatePicker(selection: Binding($date)!, displayedComponents: components) { }
-        }
+        DatePicker(
+            selection: Binding($date)!,
+            in: dateRange,
+            displayedComponents: input.includeTime ? [.date, .hourAndMinute] : [.date]
+        ) { }
     }
     
     /// The range of dates available for selection, if applicable.
-    var dateRange: ClosedRange<Date>? {
+    var dateRange: ClosedRange<Date> {
         if let min = input.min, let max = input.max {
             return min...max
         } else if let min = input.min {
@@ -127,7 +137,7 @@ struct DateTimeEntry: View {
         } else if let max = input.max {
             return Date.distantPast...max
         } else {
-            return nil
+            return Date.distantPast...Date.distantFuture
         }
     }
     
