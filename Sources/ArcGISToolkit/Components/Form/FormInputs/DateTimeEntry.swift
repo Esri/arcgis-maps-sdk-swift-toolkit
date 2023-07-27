@@ -89,7 +89,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isEditing {
 ***REMOVED******REMOVED******REMOVED******REMOVED***todayOrNowButton
-***REMOVED******REMOVED*** else if element.editable {
+***REMOVED******REMOVED*** else if true/*element.editable*/ {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
@@ -103,7 +103,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED***guard element.editable else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard element.editable else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if dateRange.contains(.now) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = .now
