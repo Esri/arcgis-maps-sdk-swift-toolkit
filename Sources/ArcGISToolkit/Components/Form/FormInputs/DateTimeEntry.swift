@@ -89,7 +89,7 @@ struct DateTimeEntry: View {
             
             if isEditing {
                 todayOrNowButton
-            } else if element.editable {
+            } else if true/*element.editable*/ {
                 if date == nil {
                     Image(systemName: "calendar")
                         .foregroundColor(.secondary)
@@ -103,7 +103,7 @@ struct DateTimeEntry: View {
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {
-                guard element.editable else { return }
+//                guard element.editable else { return }
                 if date == nil {
                     if dateRange.contains(.now) {
                         date = .now
