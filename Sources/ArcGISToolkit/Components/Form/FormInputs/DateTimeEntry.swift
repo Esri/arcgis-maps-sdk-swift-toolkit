@@ -100,7 +100,15 @@ struct DateTimeEntry: View {
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {
-                if date == nil { date = .now }
+                if date == nil {
+                    if dateRange.contains(.now) {
+                        date = .now
+                    } else if let min = input.min {
+                        date = min
+                    } else if let max = input.max {
+                        date = max
+                    }
+                }
                 isEditing.toggle()
                 model.focusedFieldName = isEditing ? element.fieldName : nil
             }
