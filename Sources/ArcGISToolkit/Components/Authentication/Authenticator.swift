@@ -53,6 +53,9 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return .continueWithCredential(try await OAuthUserCredential.credential(for: configuration))
 ***REMOVED******REMOVED*** catch is CancellationError {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If user cancels the creation of OAuth user credential then catch the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** cancellation error and cancel the challenge. This will make the request which
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** issued the challenge fail with `ArcGISChallengeCancellationError`.
 ***REMOVED******REMOVED******REMOVED******REMOVED***return .cancel
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
