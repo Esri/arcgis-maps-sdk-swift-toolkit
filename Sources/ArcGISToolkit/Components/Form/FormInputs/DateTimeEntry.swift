@@ -100,7 +100,15 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil { date = .now ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if dateRange.contains(.now) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = .now
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let min = input.min {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = min
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let max = input.max {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = max
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***isEditing.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = isEditing ? element.fieldName : nil
 ***REMOVED******REMOVED***
