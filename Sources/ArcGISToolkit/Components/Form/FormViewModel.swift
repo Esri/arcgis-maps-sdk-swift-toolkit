@@ -15,6 +15,7 @@ import ArcGIS
 import FormsPlugin
 import SwiftUI
 
+/// - Since: 200.2
 public class FormViewModel: ObservableObject {
     /// The geodatabase which holds the table and feature being edited in the form.
     @Published private var database: ServiceGeodatabase?
@@ -22,11 +23,14 @@ public class FormViewModel: ObservableObject {
     /// The featured being edited in the form.
     @Published private(set) var feature: ArcGISFeature?
     
+    /// The service feature table which holds the feature being edited in the form.
+    @Published private var table: ServiceFeatureTable?
+    
     /// The structure of the form.
     @Published var formDefinition: FeatureFormDefinition?
     
-    /// The service feature table which holds the feature being edited in the form.
-    @Published private var table: ServiceFeatureTable?
+    /// The name of the current focused field, if one exists.
+    @Published var focusedFieldName: String?
     
     /// Initializes a form view model.
     public init() {}

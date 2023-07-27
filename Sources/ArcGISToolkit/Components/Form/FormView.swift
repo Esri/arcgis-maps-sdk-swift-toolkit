@@ -75,19 +75,16 @@ extension FormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFeatureFormElement) -> some View {
         switch element.inputType.input {
-        case let `input` as TextBoxFeatureFormInput:
-            SingleLineTextEntry(
-                element: element,
-                input: `input`
-            )
+        case let `input` as DateTimePickerFeatureFormInput:
+            DateTimeEntry(element: element, input: `input`)
         case let `input` as TextAreaFeatureFormInput:
-            MultiLineTextEntry(
-                element: element,
-                input: `input`
-            )
+            MultiLineTextEntry(element: element, input: `input`)
+        case let `input` as TextBoxFeatureFormInput:
+            SingleLineTextEntry(element: element, input: `input`)
         default:
             EmptyView()
         }
+        Divider()
     }
     
     /// Makes UI for a group form element.
