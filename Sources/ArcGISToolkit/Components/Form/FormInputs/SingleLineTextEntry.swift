@@ -27,16 +27,16 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ The form element that corresponds to this text field.
+***REMOVED******REMOVED***/ The field's parent element.
 ***REMOVED***private let element: FieldFeatureFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/ A `TextBoxFeatureFormInput` which acts as a configuration.
+***REMOVED******REMOVED***/ The input configuration of the field.
 ***REMOVED***private let input: TextBoxFeatureFormInput
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for single line text entry.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - element: The form element that corresponds to this text field.
-***REMOVED******REMOVED***/   - input: A `TextBoxFeatureFormInput` which acts as a configuration.
+***REMOVED******REMOVED***/   - element: The field's parent element.
+***REMOVED******REMOVED***/   - input: The input configuration of the field.
 ***REMOVED***init(element: FieldFeatureFormElement, input: TextBoxFeatureFormInput) {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
@@ -47,7 +47,7 @@ struct SingleLineTextEntry: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FormElementHeader(element: element)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED******REMOVED*** `MultiLineTextEntry` uses secondary foreground color so it's applied here for consistency.
+***REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across entry views for consistency.
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isFocused)
@@ -65,6 +65,11 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***text = model.feature?.attributes[element.fieldName] as? String ?? ""
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: isFocused) { newFocus in
+***REMOVED******REMOVED******REMOVED***if newFocus {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = element.fieldName
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { newValue in
 ***REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newValue, forKey: element.fieldName)

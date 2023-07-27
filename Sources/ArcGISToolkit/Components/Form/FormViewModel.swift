@@ -15,6 +15,7 @@
 import FormsPlugin
 ***REMOVED***
 
+***REMOVED***/ - Since: 200.2
 public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The geodatabase which holds the table and feature being edited in the form.
 ***REMOVED***@Published private var database: ServiceGeodatabase?
@@ -22,11 +23,14 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The featured being edited in the form.
 ***REMOVED***@Published private(set) var feature: ArcGISFeature?
 ***REMOVED***
+***REMOVED******REMOVED***/ The service feature table which holds the feature being edited in the form.
+***REMOVED***@Published private var table: ServiceFeatureTable?
+***REMOVED***
 ***REMOVED******REMOVED***/ The structure of the form.
 ***REMOVED***@Published var formDefinition: FeatureFormDefinition?
 ***REMOVED***
-***REMOVED******REMOVED***/ The service feature table which holds the feature being edited in the form.
-***REMOVED***@Published private var table: ServiceFeatureTable?
+***REMOVED******REMOVED***/ The name of the current focused field, if one exists.
+***REMOVED***@Published var focusedFieldName: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
 ***REMOVED***public init() {***REMOVED***
