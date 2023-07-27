@@ -89,11 +89,13 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isEditing {
 ***REMOVED******REMOVED******REMOVED******REMOVED***todayOrNowButton
-***REMOVED******REMOVED*** else if date == nil {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { date = nil ***REMOVED***
+***REMOVED******REMOVED*** else if element.editable {
+***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { date = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.vertical], 1.5)
@@ -101,7 +103,16 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil { date = .now ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***guard element.editable else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if dateRange.contains(.now) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = .now
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let min = input.min {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = min
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let max = input.max {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = max
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***isEditing.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = isEditing ? element.fieldName : nil
 ***REMOVED******REMOVED***
@@ -110,16 +121,15 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Controls for making a specific date selection.
 ***REMOVED***@ViewBuilder var datePicker: some View {
-***REMOVED******REMOVED***let components: DatePicker.Components = input.includeTime ? [.date, .hourAndMinute] : [.date]
-***REMOVED******REMOVED***if let range = dateRange {
-***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, in: range, displayedComponents: components) { ***REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***DatePicker(selection: Binding($date)!, displayedComponents: components) { ***REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***DatePicker(
+***REMOVED******REMOVED******REMOVED***selection: Binding($date)!,
+***REMOVED******REMOVED******REMOVED***in: dateRange,
+***REMOVED******REMOVED******REMOVED***displayedComponents: input.includeTime ? [.date, .hourAndMinute] : [.date]
+***REMOVED******REMOVED***) { ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The range of dates available for selection, if applicable.
-***REMOVED***var dateRange: ClosedRange<Date>? {
+***REMOVED***var dateRange: ClosedRange<Date> {
 ***REMOVED******REMOVED***if let min = input.min, let max = input.max {
 ***REMOVED******REMOVED******REMOVED***return min...max
 ***REMOVED*** else if let min = input.min {
@@ -127,7 +137,7 @@ struct DateTimeEntry: View {
 ***REMOVED*** else if let max = input.max {
 ***REMOVED******REMOVED******REMOVED***return Date.distantPast...max
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED******REMOVED***return Date.distantPast...Date.distantFuture
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
