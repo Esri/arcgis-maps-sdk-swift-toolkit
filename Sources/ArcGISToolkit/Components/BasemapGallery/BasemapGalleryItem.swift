@@ -172,6 +172,6 @@ private extension UIImage {
     /// A default thumbnail image.
     /// - Returns: The default thumbnail.
     static func defaultThumbnail() -> UIImage {
-        return UIImage(named: "defaultthumbnail", in: .module, with: nil)!
+        return UIImage(named: "defaultthumbnail", in: .toolkitModule, with: nil)!
     }
 }

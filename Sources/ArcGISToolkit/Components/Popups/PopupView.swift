@@ -38,7 +38,7 @@ public struct PopupView: View {
 
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>?
-
+    
     public var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -56,6 +56,7 @@ public struct PopupView: View {
                             .foregroundColor(.secondary)
                             .padding([.top, .bottom, .trailing], 4)
                     })
+                    .buttonStyle(.plain)
                 }
             }
             Divider()
@@ -63,13 +64,20 @@ public struct PopupView: View {
                 if let evaluateExpressionsResult {
                     switch evaluateExpressionsResult {
                     case .success(_):
-                        PopupElementScrollView(popupElements: popup.evaluatedElements)
+                        PopupElementList(popupElements: popup.evaluatedElements)
                     case .failure(let error):
-                        Text("Popup evaluation failed: \(error.localizedDescription)")
+                        Text(
+                            "Popup evaluation failed: \(error.localizedDescription)",
+                            bundle: .toolkitModule,
+                            comment: """
+                                     An error message shown when a popup cannot be displayed. The
+                                     variable provides additional data.
+                                     """
+                        )
                     }
                 } else {
                     VStack(alignment: .center) {
-                        Text("Evaluating popup expressions...")
+                        Text("Evaluating popup expressions…", bundle: .toolkitModule)
                         ProgressView()
                     }
                     .frame(maxWidth: .infinity)
@@ -84,28 +92,28 @@ public struct PopupView: View {
         }
     }
     
-    struct PopupElementScrollView: View {
+    private struct PopupElementList: View {
         let popupElements: [PopupElement]
         
         var body: some View {
-            ScrollView {
-                VStack(alignment: .leading) {
-                    ForEach(popupElements) { popupElement in
-                        switch popupElement {
-                        case let popupElement as AttachmentsPopupElement:
-                            AttachmentsPopupElementView(popupElement: popupElement)
-                        case let popupElement as FieldsPopupElement:
-                            FieldsPopupElementView(popupElement: popupElement)
-                        case let popupElement as MediaPopupElement:
-                            MediaPopupElementView(popupElement: popupElement)
-                        case let popupElement as TextPopupElement:
-                            TextPopupElementView(popupElement: popupElement)
-                        default:
-                            EmptyView()
-                        }
+            List(popupElements) { popupElement in
+                Group {
+                    switch popupElement {
+                    case let popupElement as AttachmentsPopupElement:
+                        AttachmentsPopupElementView(popupElement: popupElement)
+                    case let popupElement as FieldsPopupElement:
+                        FieldsPopupElementView(popupElement: popupElement)
+                    case let popupElement as MediaPopupElement:
+                        MediaPopupElementView(popupElement: popupElement)
+                    case let popupElement as TextPopupElement:
+                        TextPopupElementView(popupElement: popupElement)
+                    default:
+                        EmptyView()
                     }
                 }
+                .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
             }
+            .listStyle(.plain)
         }
     }
 }

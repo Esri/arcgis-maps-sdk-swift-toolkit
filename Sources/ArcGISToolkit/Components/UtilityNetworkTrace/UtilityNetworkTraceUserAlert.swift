@@ -16,11 +16,71 @@ import SwiftUI
 /// A user presentable alert.
 struct UtilityNetworkTraceUserAlert {
     /// Title of the alert.
-    var title: String = "Error"
+    var title: String = String(localized: "Error", bundle: .toolkitModule)
     
     /// Description of the alert.
     var description: String
     
     /// An additional action to be taken on the alert.
     var button: Button<Text>?
+}
+
+extension UtilityNetworkTraceUserAlert {
+    static var startingLocationNotDefined: Self {
+        .init(
+            description: String(
+                localized: "Please set at least 1 starting location.",
+                bundle: .toolkitModule
+            )
+        )
+    }
+    
+    static var startingLocationsNotDefined: Self {
+        .init(
+            description: String(
+                localized: "Please set at least 2 starting locations.",
+                bundle: .toolkitModule
+            )
+        )
+    }
+    
+    static var duplicateStartingPoint: Self {
+        .init(
+            title: String(
+                localized: "Failed to set starting point",
+                bundle: .toolkitModule
+            ),
+            description: String(
+                localized: "Duplicate starting points cannot be added.",
+                bundle: .toolkitModule
+            )
+        )
+    }
+    
+    static var noTraceTypesFound: Self {
+        .init(
+            description: String(
+                localized: "No trace types found.",
+                bundle: .toolkitModule
+            )
+        )
+    }
+    
+    static var noUtilityNetworksFound: Self {
+        .init(
+            description: String(
+                localized: "No utility networks found.",
+                bundle: .toolkitModule
+            )
+        )
+    }
+    
+    static var unableToIdentifyElement: Self {
+        .init(
+            description: String(
+                localized: "Element could not be identified.",
+                bundle: .toolkitModule
+            )
+        )
+    }
 }

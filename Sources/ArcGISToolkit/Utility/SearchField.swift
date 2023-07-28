@@ -20,16 +20,19 @@ public struct SearchField: View {
     /// - Parameters:
     ///   - query: The current search query.
     ///   - prompt: The default placeholder displayed when `currentQuery` is empty.
+    ///   - isFocused: A Boolean value indicating whether the text field is focused or not.
     ///   - isResultsButtonHidden: The visibility of the button used to toggle visibility of the results list.
     ///   - isResultListHidden: Binding allowing the user to toggle the visibility of the results list.
     public init(
         query: Binding<String>,
         prompt: String = "",
+        isFocused: FocusState<Bool>.Binding,
         isResultsButtonHidden: Bool = false,
         isResultListHidden: Binding<Bool>? = nil
     ) {
         self.query = query
         self.prompt = prompt
+        self.isFocused = isFocused
         self.isResultsButtonHidden = isResultsButtonHidden
         self.isResultListHidden = isResultListHidden
     }
@@ -39,6 +42,9 @@ public struct SearchField: View {
     
     /// The default placeholder displayed when `currentQuery` is empty.
     private let prompt: String
+    
+    /// A Boolean value indicating whether the text field is focused or not.
+    private var isFocused: FocusState<Bool>.Binding
     
     /// The visibility of the button used to toggle visibility of the results list.
     private let isResultsButtonHidden: Bool
@@ -58,6 +64,7 @@ public struct SearchField: View {
                 text: query,
                 prompt: Text(prompt)
             )
+            .focused(isFocused)
             
             // Delete text button
             if !query.wrappedValue.isEmpty {

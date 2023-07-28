@@ -35,33 +35,14 @@ struct FieldsPopupElementView: View {
     
     var body: some View {
         DisclosureGroup(isExpanded: $isExpanded) {
-            Divider()
-                .padding(.bottom, 4)
-            FieldsList(fields: displayFields)
+            ForEach(displayFields) { field in
+                FieldRow(field: field)
+            }
         } label: {
-            VStack(alignment: .leading) {
-                PopupElementHeader(
-                    title: popupElement.displayTitle,
-                    description: popupElement.description
-                )
-            }
-        }
-        Divider()
-    }
-    
-    /// A view displaying the labels and values.
-    private struct FieldsList: View {
-        let fields: [DisplayField]
-        
-        var body: some View {
-            VStack {
-                ForEach(fields) { field in
-                    FieldRow(field: field)
-                    if field != fields.last {
-                        Divider()
-                    }
-                }
-            }
+            PopupElementHeader(
+                title: popupElement.displayTitle,
+                description: popupElement.description
+            )
         }
     }
     
@@ -107,6 +88,6 @@ private struct DisplayField: Hashable, Identifiable {
 private extension FieldsPopupElement {
     /// Provides a default title to display if `title` is empty.
     var displayTitle: String {
-        title.isEmpty ? "Fields" : title
+        title.isEmpty ? String(localized: "Fields", bundle: .toolkitModule) : title
     }
 }
