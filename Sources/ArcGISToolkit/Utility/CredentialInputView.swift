@@ -238,12 +238,12 @@ extension View {
     ///   - cancelAction: The cancel action.
     ///   - continueAction: The continue action.
     @ViewBuilder func credentialInput(
-        fields: CredentialInputView.Fields,
+        fields: CredentialInputSheetView.Fields,
         isPresented: Binding<Bool>,
         message: String,
         title: String,
-        cancelAction: CredentialInputView.Action,
-        continueAction: CredentialInputView.Action
+        cancelAction: CredentialInputSheetView.Action,
+        continueAction: CredentialInputSheetView.Action
     ) -> some View {
         modifier(
             CredentialInputModifier(
@@ -258,11 +258,34 @@ extension View {
     }
 }
 
+struct CredentialInputSheetView_Previews: PreviewProvider {
+    static var previews: some View {
+        Text("foo")
+        .credentialInput(
+            fields: .usernamePassword,
+            isPresented: .constant(true),
+            message: "You must sign in to access 'arcgis.com'",
+            title: "Authentication Required",
+            cancelAction: .init(
+                title: "Cancel",
+                handler: { _, _ in
+                    
+                }
+            ),
+            continueAction: .init(
+                title: "Continue",
+                handler: { username, password in
+                }
+            )
+        )
+    }
+}
+
 /// A view modifier that prompts for credentials.
 struct CredentialInputModifier: ViewModifier {
     
     /// The fields shown in the view.
-    let fields: CredentialInputView.Fields
+    let fields: CredentialInputSheetView.Fields
     
     /// A Boolean value indicating whether or not the view is displayed.
     @Binding var isPresented: Bool
@@ -274,22 +297,206 @@ struct CredentialInputModifier: ViewModifier {
     let title: String
     
     /// The cancel action.
-    let cancelAction: CredentialInputView.Action
+    let cancelAction: CredentialInputSheetView.Action
     
     /// The continue action.
-    let continueAction: CredentialInputView.Action
+    let continueAction: CredentialInputSheetView.Action
     
     @ViewBuilder func body(content: Content) -> some View {
-        ZStack {
+        if #available(iOS 16.0, *) {
             content
-            CredentialInputView(
-                fields: fields,
-                isPresented: $isPresented,
-                message: message,
-                title: title,
-                cancelAction: cancelAction,
-                continueAction: continueAction
-            )
+                .sheet(isPresented: .constant(true)) {
+                    //                Text("hello!")
+                    CredentialInputSheetView(
+                        fields: fields,
+                        isPresented: $isPresented,
+                        message: message,
+                        title: title,
+                        cancelAction: cancelAction,
+                        continueAction: continueAction
+                    )
+                    .presentationDetents([.medium])
+                }
+        } else {
+            // Fallback on earlier versions
+            content
+                .sheet(isPresented: .constant(true)) {
+                    //                Text("hello!")
+                    CredentialInputSheetView(
+                        fields: fields,
+                        isPresented: $isPresented,
+                        message: message,
+                        title: title,
+                        cancelAction: cancelAction,
+                        continueAction: continueAction
+                    )
+                }
         }
+    }
+}
+
+struct CredentialInputSheetView: View {
+    
+    /// The fields shown in the alert.
+    private let fields: Fields
+    
+    /// A Boolean value indicating whether or not the view is displayed.
+    @Binding private var isPresented: Bool
+    
+    /// Descriptive text that provides more details about the reason for the alert.
+    private let message: String
+    
+    /// The title of the alert.
+    private let title: String
+    
+    /// The cancel action.
+    private let cancelAction: Action
+    
+    /// The continue action.
+    private let continueAction: Action
+    
+    /// The value in the username field.
+    ///
+    /// This member is unused when usage is set to `Usage.passwordOnly`.
+    @State private var username = ""
+
+    /// The value in the password field.
+    @State private var password = ""
+    
+    /// Creates the view.
+    /// - Parameters:
+    ///   - fields: The fields shown in the alert.
+    ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
+    ///   - message: Descriptive text that provides more details about the reason for the alert.
+    ///   - title: The title of the alert.
+    ///   - cancelAction: The cancel action.
+    ///   - continueAction: The continue action.
+    init(
+        fields: Fields,
+        isPresented: Binding<Bool>,
+        message: String,
+        title: String,
+        cancelAction: Action,
+        continueAction: Action
+    ) {
+        self.cancelAction = cancelAction
+        self.continueAction = continueAction
+        
+        _isPresented = isPresented
+        
+        self.fields = fields
+        self.message = message
+        self.title = title
+    }
+    
+    /// A Boolean value indicating whether the alert should allow the continue action to proceed.
+    private var isContinueEnabled: Bool {
+        switch fields {
+        case .usernamePassword:
+            return !username.isEmpty && !password.isEmpty
+        case .password:
+            return !password.isEmpty
+        }
+    }
+    
+    var usernameTextField: some View {
+        TextField(
+            String(
+                localized: "Username",
+                bundle: .toolkitModule
+            ),
+            text: $username
+        )
+        .textInputAutocapitalization(.never)
+        .autocorrectionDisabled(true)
+        .textContentType(.username)
+    }
+    
+    var passwordTextField: some View {
+        SecureField(
+            String(
+                localized: "Password",
+                bundle: .toolkitModule
+            ),
+            text: $password
+        )
+        .textInputAutocapitalization(.never)
+        .autocorrectionDisabled(true)
+        .textContentType(.password)
+        .onSubmit {
+            continueAction.handler(username, password)
+        }
+    }
+    
+    var body: some View {
+        VStack {
+            VStack(alignment: .center, spacing: 2) {
+                Text(title)
+                    .font(.title)
+                Text(message)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom)
+            }
+            .padding([.top, .horizontal])
+            VStack {
+                switch fields {
+                case .password:
+                    passwordTextField
+                case .usernamePassword:
+                    usernameTextField
+                    Divider()
+                    passwordTextField
+                }
+                Divider()
+                    .padding(.bottom)
+                HStack {
+                    Spacer()
+                    Button(role: .cancel) {
+                        cancelAction.handler(username, password)
+                    } label: {
+                        Text(cancelAction.title)
+                    }
+                    .buttonStyle(.bordered)
+                    Spacer()
+                    Divider()
+                    Spacer()
+                    Button(continueAction.title) {
+                        continueAction.handler(username, password)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(!isContinueEnabled)
+                    Spacer()
+                }
+                .padding(.top)
+                .frame(maxHeight: 36)
+                Spacer()
+            }
+            .padding()
+            Spacer()
+        }
+        .padding()
+    }
+}
+extension CredentialInputSheetView {
+    /// The fields shown in the alert. This determines if the view is intended to require either a username
+    /// and password, or a password only.
+    enum Fields {
+        /// Indicates the view is intended to collect a password only.
+        case password
+        
+        /// Indicates the view is intended to collect a username and password.
+        case usernamePassword
+    }
+}
+
+extension CredentialInputSheetView {
+    /// A configuration for an alert action.
+    struct Action {
+        /// The title of the action.
+        let title: String
+        
+        /// The block to execute when the action is triggered.
+        let handler: (String, String) -> Void
     }
 }
