@@ -93,7 +93,7 @@ struct FormExampleView: View {
 //                }
                 
                 .environmentObject(formViewModel)
-                
+                .navigationBarBackButtonHidden(isPresented)
                 .toolbar {
                     // Once iOS 16.0 is the minimum supported, the two conditionals to show the
                     // buttons can be merged and hoisted up as the root content of the toolbar.
