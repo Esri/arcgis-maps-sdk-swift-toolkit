@@ -29,7 +29,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The initial list of basemaps.
-***REMOVED***private let basemaps = initialBasemaps()
+***REMOVED***@State private var basemaps = initialBasemaps()
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
@@ -38,7 +38,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***doneButton
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(items: basemaps, geoModel: map)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.grid(maxItemWidth: 100))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***

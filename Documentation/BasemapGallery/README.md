@@ -81,9 +81,9 @@ Selecting a basemap with a spatial reference that does not match that of the geo
 
 var body: some View {
 ***REMOVED***MapView(map: map)
-***REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED***.sheet(isPresented: .constant(true)) {
 ***REMOVED******REMOVED******REMOVED***BasemapGallery(geoModel: map)
-***REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic())
+***REMOVED******REMOVED******REMOVED******REMOVED***.style(.grid(maxItemWidth: 100))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***

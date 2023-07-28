@@ -89,7 +89,12 @@
 ***REMOVED***@Published private(set) var currentItem: BasemapGalleryItem? = nil {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***guard let item = currentItem else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***geoModel?.basemap = item.basemap
+***REMOVED******REMOVED******REMOVED******REMOVED*** If the portal is nil, the user passed in their own array
+***REMOVED******REMOVED******REMOVED******REMOVED*** of basemaps, so clone the selected one prior to setting. This
+***REMOVED******REMOVED******REMOVED******REMOVED*** prevents the "Object already owned" error.
+***REMOVED******REMOVED******REMOVED******REMOVED*** If portal is non-nil, there's no need to clone the basemap
+***REMOVED******REMOVED******REMOVED******REMOVED*** as the list of basemaps is reloaded from the portal each time.
+***REMOVED******REMOVED******REMOVED***geoModel?.basemap = portal == nil ? item.basemap.clone() : item.basemap
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

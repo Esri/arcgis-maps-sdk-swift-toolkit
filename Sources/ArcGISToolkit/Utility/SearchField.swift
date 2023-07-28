@@ -20,16 +20,19 @@ public struct SearchField: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - query: The current search query.
 ***REMOVED******REMOVED***/   - prompt: The default placeholder displayed when `currentQuery` is empty.
+***REMOVED******REMOVED***/   - isFocused: A Boolean value indicating whether the text field is focused or not.
 ***REMOVED******REMOVED***/   - isResultsButtonHidden: The visibility of the button used to toggle visibility of the results list.
 ***REMOVED******REMOVED***/   - isResultListHidden: Binding allowing the user to toggle the visibility of the results list.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***query: Binding<String>,
 ***REMOVED******REMOVED***prompt: String = "",
+***REMOVED******REMOVED***isFocused: FocusState<Bool>.Binding,
 ***REMOVED******REMOVED***isResultsButtonHidden: Bool = false,
 ***REMOVED******REMOVED***isResultListHidden: Binding<Bool>? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.query = query
 ***REMOVED******REMOVED***self.prompt = prompt
+***REMOVED******REMOVED***self.isFocused = isFocused
 ***REMOVED******REMOVED***self.isResultsButtonHidden = isResultsButtonHidden
 ***REMOVED******REMOVED***self.isResultListHidden = isResultListHidden
 ***REMOVED***
@@ -39,6 +42,9 @@ public struct SearchField: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The default placeholder displayed when `currentQuery` is empty.
 ***REMOVED***private let prompt: String
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the text field is focused or not.
+***REMOVED***private var isFocused: FocusState<Bool>.Binding
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visibility of the button used to toggle visibility of the results list.
 ***REMOVED***private let isResultsButtonHidden: Bool
@@ -58,6 +64,7 @@ public struct SearchField: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***text: query,
 ***REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(prompt)
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.focused(isFocused)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Delete text button
 ***REMOVED******REMOVED******REMOVED***if !query.wrappedValue.isEmpty {

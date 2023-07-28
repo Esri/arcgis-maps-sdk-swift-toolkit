@@ -14,19 +14,12 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor final class LoginViewModelTests: XCTestCase {
-***REMOVED***func testViewModel() {
+final class LoginViewModifierTests: XCTestCase {
+***REMOVED***func testMemberwiseInit() {
 ***REMOVED******REMOVED***var signInCalled = false
-***REMOVED******REMOVED***func signIn(username: String, password: String) {
-***REMOVED******REMOVED******REMOVED***signInCalled = true
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var cancelCalled = false
-***REMOVED******REMOVED***func cancel() {
-***REMOVED******REMOVED******REMOVED***cancelCalled = true
-***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let model = LoginViewModel(
+***REMOVED******REMOVED***let modifier = LoginViewModifier(
 ***REMOVED******REMOVED******REMOVED***challengingHost: "host.com",
 ***REMOVED******REMOVED******REMOVED***onSignIn: { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***signInCalled = true
@@ -36,19 +29,17 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertEqual(model.challengingHost, "host.com")
-***REMOVED******REMOVED***XCTAssertNotNil(model.signInAction)
-***REMOVED******REMOVED***XCTAssertNotNil(model.cancelAction)
-***REMOVED******REMOVED***XCTAssertTrue(model.username.isEmpty)
-***REMOVED******REMOVED***XCTAssertTrue(model.password.isEmpty)
+***REMOVED******REMOVED***XCTAssertEqual(modifier.challengingHost, "host.com")
+***REMOVED******REMOVED***XCTAssertNotNil(modifier.onSignIn)
+***REMOVED******REMOVED***XCTAssertNotNil(modifier.onCancel)
 ***REMOVED******REMOVED***XCTAssertFalse(signInCalled)
 ***REMOVED******REMOVED***XCTAssertFalse(cancelCalled)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.signIn()
+***REMOVED******REMOVED***modifier.onSignIn(LoginCredential(username: "", password: ""))
 ***REMOVED******REMOVED***XCTAssertTrue(signInCalled)
 ***REMOVED******REMOVED***XCTAssertFalse(cancelCalled)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.cancel()
+***REMOVED******REMOVED***modifier.onCancel()
 ***REMOVED******REMOVED***XCTAssertTrue(cancelCalled)
 ***REMOVED***
 ***REMOVED***
