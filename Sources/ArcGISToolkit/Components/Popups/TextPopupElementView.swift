@@ -32,7 +32,6 @@ struct TextPopupElementView: View {
                     ProgressView()
                 }
             }
-            Divider()
         }
     }
 }

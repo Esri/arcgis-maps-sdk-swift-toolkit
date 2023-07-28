@@ -118,7 +118,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
                 )
                 textField.autocapitalizationType = .none
                 textField.autocorrectionType = .no
-                textField.placeholder = "Username"
+                textField.placeholder = String(localized: "Username", bundle: .toolkitModule)
                 textField.returnKeyType = .next
                 textField.textContentType = .username
             }
@@ -140,7 +140,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
             textField.delegate = context.coordinator
             
             textField.isSecureTextEntry = true
-            textField.placeholder = "Password"
+            textField.placeholder = String(localized: "Password", bundle: .toolkitModule)
             textField.returnKeyType = .go
             textField.textContentType = .password
         }
@@ -150,6 +150,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
         
         uiAlertController.addAction(cancelUIAlertAction)
         uiAlertController.addAction(continueUIAlertAction)
+        uiAlertController.preferredAction = continueUIAlertAction
         
         return uiAlertController
     }

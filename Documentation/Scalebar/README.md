@@ -36,12 +36,12 @@ Scalebar:
         maxWidth: Double,
         minScale: Double = .zero,
         settings: ScalebarSettings = ScalebarSettings(),
-        spatialReference: Binding<SpatialReference?>,
+        spatialReference: SpatialReference?,
         style: ScalebarStyle = .alternatingBar,
         units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
-        unitsPerPoint: Binding<Double?>,
+        unitsPerPoint: Double?,
         useGeodeticCalculations: Bool = true,
-        viewpoint: Binding<Viewpoint?>
+        viewpoint: Viewpoint?
     )
 ```
 
@@ -91,9 +91,9 @@ MapView(map: map)
     .overlay(alignment: alignment) {
         Scalebar(
             maxWidth: maxWidth,
-            spatialReference: $spatialReference,
-            unitsPerPoint: $unitsPerPoint,
-            viewpoint: $viewpoint
+            spatialReference: spatialReference,
+            unitsPerPoint: unitsPerPoint,
+            viewpoint: viewpoint
         )
     }
 ```

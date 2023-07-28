@@ -20,9 +20,6 @@ struct AttachmentsPopupElementView: View {
     /// The `PopupElement` to display.
     var popupElement: AttachmentsPopupElement
     
-    /// The model for the view.
-    @StateObject private var viewModel: AttachmentsPopupElementModel
-    
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
@@ -31,60 +28,66 @@ struct AttachmentsPopupElementView: View {
         !(horizontalSizeClass == .compact && verticalSizeClass == .regular)
     }
     
-    /// A Boolean value specifying whether the attachments are currently being loaded.
-    @State var isLoadingAttachments = true
+    /// The states of loading attachments.
+    private enum AttachmentLoadingState {
+        /// Attachments have not been loaded.
+        case notLoaded
+        /// Attachments are being loaded.
+        case loading
+        /// Attachments have been loaded.
+        case loaded([AttachmentModel])
+    }
+    
+    @State private var attachmentLoadingState: AttachmentLoadingState = .notLoaded
     
     /// Creates a new `AttachmentsPopupElementView`.
     /// - Parameter popupElement: The `AttachmentsPopupElement`.
     init(popupElement: AttachmentsPopupElement) {
         self.popupElement = popupElement
-        _viewModel = StateObject(
-            wrappedValue: AttachmentsPopupElementModel()
-        )
     }
     
-    @State var isExpanded: Bool = true
+    @State private var isExpanded: Bool = true
     
     var body: some View {
         Group {
-            if isLoadingAttachments {
+            switch attachmentLoadingState {
+            case .notLoaded, .loading:
                 ProgressView()
                     .padding()
-            } else if viewModel.attachmentModels.count > 0 {
-                DisclosureGroup(isExpanded: $isExpanded) {
-                    Divider()
-                        .padding(.bottom, 4)
-                    switch popupElement.displayType {
-                    case .list:
-                        AttachmentList(attachmentModels: viewModel.attachmentModels)
-                    case .preview:
-                        AttachmentPreview(attachmentModels: viewModel.attachmentModels)
-                    case .auto:
-                        if isRegularWidth {
-                            AttachmentPreview(attachmentModels: viewModel.attachmentModels)
-                        } else {
-                            AttachmentList(attachmentModels: viewModel.attachmentModels)
+            case .loaded(let attachmentModels):
+                if !attachmentModels.isEmpty {
+                    DisclosureGroup(isExpanded: $isExpanded) {
+                        switch popupElement.displayType {
+                        case .list:
+                            AttachmentList(attachmentModels: attachmentModels)
+                        case .preview:
+                            AttachmentPreview(attachmentModels: attachmentModels)
+                        case .auto:
+                            if isRegularWidth {
+                                AttachmentPreview(attachmentModels: attachmentModels)
+                            } else {
+                                AttachmentList(attachmentModels: attachmentModels)
+                            }
+                        @unknown default:
+                            EmptyView()
                         }
-                    @unknown default:
-                        EmptyView()
-                    }
-                } label: {
-                    VStack(alignment: .leading) {
+                    } label: {
                         PopupElementHeader(
                             title: popupElement.displayTitle,
                             description: popupElement.description
                         )
                     }
                 }
-                Divider()
             }
         }
         .task {
-            let attachmentModels = try? await popupElement.attachments.reversed().map { attachment in
-                AttachmentModel(attachment: attachment)
-            }
-            viewModel.attachmentModels.append(contentsOf: attachmentModels ?? [])
-            isLoadingAttachments = false
+            guard case .notLoaded = attachmentLoadingState else { return }
+            attachmentLoadingState = .loading
+            let attachments = (try? await popupElement.attachments) ?? []
+            let attachmentModels = attachments
+                .reversed()
+                .map { AttachmentModel(attachment: $0) }
+            attachmentLoadingState = .loaded(attachmentModels)
         }
     }
 }
@@ -92,6 +95,6 @@ struct AttachmentsPopupElementView: View {
 private extension AttachmentsPopupElement {
     /// Provides a default title to display if `title` is empty.
     var displayTitle: String {
-        title.isEmpty ? "Attachments" : title
+        title.isEmpty ? String(localized: "Attachments", bundle: .toolkitModule) : title
     }
 }

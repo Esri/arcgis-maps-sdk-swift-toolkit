@@ -58,7 +58,7 @@ struct AttachmentPreview: View {
                         .lineLimit(1)
                         .truncationMode(.middle)
                         .padding([.leading, .trailing], 4)
-                    Text("\(attachmentModel.attachment.size.formatted(.byteCount(style: .file)))")
+                    Text(Int64(attachmentModel.attachment.size), format: .byteCount(style: .file))
                         .foregroundColor(.secondary)
                         .padding([.leading, .trailing], 4)
                 }
