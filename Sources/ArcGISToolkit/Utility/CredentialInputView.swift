@@ -89,31 +89,17 @@ struct CredentialInputModifier: ViewModifier {
 ***REMOVED***let continueAction: CredentialInputSheetView.Action
 ***REMOVED***
 ***REMOVED***@ViewBuilder func body(content: Content) -> some View {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: .constant(true)) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CredentialInputSheetView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fields: fields,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message: message,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: cancelAction,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction: continueAction
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
-***REMOVED******REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Fallback on earlier versions
-***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: .constant(true)) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CredentialInputSheetView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fields: fields,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message: message,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: cancelAction,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction: continueAction
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***CredentialInputSheetView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fields: fields,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message: message,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: cancelAction,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction: continueAction
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.mediumPresentationDetents()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 

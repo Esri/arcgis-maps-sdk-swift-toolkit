@@ -36,7 +36,9 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present the alert right away. This makes it animated.
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
