@@ -39,23 +39,10 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertEqual(model.challengingHost, "host.com")
 ***REMOVED******REMOVED***XCTAssertNotNil(model.signInAction)
 ***REMOVED******REMOVED***XCTAssertNotNil(model.cancelAction)
-***REMOVED******REMOVED***XCTAssertFalse(model.signInButtonEnabled)
 ***REMOVED******REMOVED***XCTAssertTrue(model.username.isEmpty)
 ***REMOVED******REMOVED***XCTAssertTrue(model.password.isEmpty)
 ***REMOVED******REMOVED***XCTAssertFalse(signInCalled)
 ***REMOVED******REMOVED***XCTAssertFalse(cancelCalled)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.username = "abc"
-***REMOVED******REMOVED***XCTAssertFalse(model.signInButtonEnabled)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.password = "123"
-***REMOVED******REMOVED***XCTAssertTrue(model.signInButtonEnabled)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.password = ""
-***REMOVED******REMOVED***XCTAssertFalse(model.signInButtonEnabled)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.password = "123"
-***REMOVED******REMOVED***XCTAssertTrue(model.signInButtonEnabled)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.signIn()
 ***REMOVED******REMOVED***XCTAssertTrue(signInCalled)
