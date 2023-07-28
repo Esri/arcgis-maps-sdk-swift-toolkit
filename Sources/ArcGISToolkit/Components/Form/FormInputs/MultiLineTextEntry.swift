@@ -20,7 +20,8 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
-***REMOVED***
+***REMOVED***private var featureForm: FeatureForm?
+
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
@@ -44,7 +45,8 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The field's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
-***REMOVED***init(element: FieldFormElement, input: TextAreaFormInput) {
+***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: TextAreaFormInput) {
+***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element =  element
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
@@ -106,7 +108,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***let text = model.feature?.attributes[element.fieldName] as? String
+***REMOVED******REMOVED******REMOVED***let text = featureForm?.feature.attributes[element.fieldName] as? String
 ***REMOVED******REMOVED******REMOVED***if let text, !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.text = text
@@ -118,7 +120,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { newValue in
 ***REMOVED******REMOVED******REMOVED***if !isPlaceholder {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -17,7 +17,8 @@
 ***REMOVED***/ A view for single line text entry.
 struct SingleLineTextEntry: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
-***REMOVED***
+***REMOVED***private var featureForm: FeatureForm?
+
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
@@ -37,7 +38,8 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The field's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
-***REMOVED***init(element: FieldFormElement, input: TextBoxFormInput) {
+***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: TextBoxFormInput) {
+***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
@@ -64,7 +66,7 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***text = model.feature?.attributes[element.fieldName] as? String ?? ""
+***REMOVED******REMOVED******REMOVED***text = featureForm?.feature.attributes[element.fieldName] as? String ?? ""
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { newFocus in
 ***REMOVED******REMOVED******REMOVED***if newFocus {
@@ -72,7 +74,7 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { newValue in
-***REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

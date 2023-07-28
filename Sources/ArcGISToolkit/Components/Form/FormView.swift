@@ -34,7 +34,7 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED*** successfully present a keyboard toolbar (as is done in `MultiLineTextEntry`).
 ***REMOVED******REMOVED***NavigationView {
 ***REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: model.formDefinition?.title)
+***REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: featureForm?.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(featureForm?.elements ?? [], id: \.label) { element in
@@ -65,11 +65,11 @@ extension FormView {
 ***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
 ***REMOVED******REMOVED***switch element.input {
 ***REMOVED******REMOVED***case let `input` as DateTimePickerFormInput:
-***REMOVED******REMOVED******REMOVED***DateTimeEntry(element: element, input: `input`)
+***REMOVED******REMOVED******REMOVED***DateTimeEntry(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***case let `input` as TextAreaFormInput:
-***REMOVED******REMOVED******REMOVED***MultiLineTextEntry(element: element, input: `input`)
+***REMOVED******REMOVED******REMOVED***MultiLineTextEntry(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***case let `input` as TextBoxFormInput:
-***REMOVED******REMOVED******REMOVED***SingleLineTextEntry(element: element, input: `input`)
+***REMOVED******REMOVED******REMOVED***SingleLineTextEntry(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***

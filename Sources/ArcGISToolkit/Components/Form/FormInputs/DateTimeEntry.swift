@@ -19,7 +19,8 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
-***REMOVED***
+***REMOVED***private var featureForm: FeatureForm?
+
 ***REMOVED******REMOVED***/ The current date selection.
 ***REMOVED***@State private var date: Date?
 ***REMOVED***
@@ -39,7 +40,8 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The field's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
-***REMOVED***init(element: FieldFormElement, input: DateTimePickerFormInput) {
+***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: DateTimePickerFormInput) {
+***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
@@ -55,14 +57,14 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***if let date = model.feature?.attributes[element.fieldName] as? Date {
+***REMOVED******REMOVED******REMOVED***if let date = featureForm?.feature.attributes[element.fieldName] as? Date {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.date = date
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
 ***REMOVED******REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
 ***REMOVED******REMOVED******REMOVED***requiredValueMissing = /*element.required && */newDate == nil
-***REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newDate, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.focusedFieldName) { newFocusedFieldName in
 ***REMOVED******REMOVED******REMOVED***isEditing = newFocusedFieldName == element.fieldName
