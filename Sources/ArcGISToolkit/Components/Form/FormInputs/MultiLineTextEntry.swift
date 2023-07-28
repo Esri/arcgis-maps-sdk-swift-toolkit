@@ -20,7 +20,8 @@ struct MultiLineTextEntry: View {
     
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
-    
+    private var featureForm: FeatureForm?
+
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
@@ -44,7 +45,8 @@ struct MultiLineTextEntry: View {
     /// - Parameters:
     ///   - element: The field's parent element.
     ///   - input: The input configuration of the field.
-    init(element: FieldFormElement, input: TextAreaFormInput) {
+    init(featureForm: FeatureForm?, element: FieldFormElement, input: TextAreaFormInput) {
+        self.featureForm = featureForm
         self.element =  element
         self.input = input
     }
@@ -106,7 +108,7 @@ struct MultiLineTextEntry: View {
         )
         .padding([.bottom], elementPadding)
         .onAppear {
-            let text = model.feature?.attributes[element.fieldName] as? String
+            let text = featureForm?.feature.attributes[element.fieldName] as? String
             if let text, !text.isEmpty {
                 isPlaceholder = false
                 self.text = text
@@ -118,7 +120,7 @@ struct MultiLineTextEntry: View {
         }
         .onChange(of: text) { newValue in
             if !isPlaceholder {
-                model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+                featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
             }
         }
     }

@@ -19,7 +19,8 @@ struct DateTimeEntry: View {
     
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
-    
+    private var featureForm: FeatureForm?
+
     /// The current date selection.
     @State private var date: Date?
     
@@ -39,7 +40,8 @@ struct DateTimeEntry: View {
     /// - Parameters:
     ///   - element: The field's parent element.
     ///   - input: The input configuration of the field.
-    init(element: FieldFormElement, input: DateTimePickerFormInput) {
+    init(featureForm: FeatureForm?, element: FieldFormElement, input: DateTimePickerFormInput) {
+        self.featureForm = featureForm
         self.element = element
         self.input = input
     }
@@ -55,14 +57,14 @@ struct DateTimeEntry: View {
         }
         .padding([.bottom], elementPadding)
         .onAppear {
-            if let date = model.feature?.attributes[element.fieldName] as? Date {
+            if let date = featureForm?.feature.attributes[element.fieldName] as? Date {
                 self.date = date
             }
         }
         .onChange(of: date) { newDate in
             //TODO: add `required` property to API
             requiredValueMissing = /*element.required && */newDate == nil
-            model.feature?.setAttributeValue(newDate, forKey: element.fieldName)
+            featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
         }
         .onChange(of: model.focusedFieldName) { newFocusedFieldName in
             isEditing = newFocusedFieldName == element.fieldName
