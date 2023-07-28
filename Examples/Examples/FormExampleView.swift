@@ -16,6 +16,8 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FormExampleView: View {
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
     
@@ -44,6 +46,26 @@ struct FormExampleView: View {
                 
                 // Present a FormView in a native SwiftUI sheet
                 .sheet(isPresented: $isPresented) {
+                    if useControlsInForm {
+                        HStack {
+                            Button("Cancel", role: .cancel) {
+                                formViewModel.undoEdits()
+                                isPresented = false
+                            }
+                            .padding()
+                            .buttonStyle(.bordered)
+                            Spacer()
+                            Button("Submit") {
+                                Task {
+                                    await formViewModel.submitChanges()
+                                    isPresented = false
+                                }
+                            }
+                            .padding()
+                            .buttonStyle(.borderedProminent)
+                        }
+                    }
+                    
                     if #available(iOS 16.4, *) {
                         FormView()
                             .padding()
@@ -54,12 +76,6 @@ struct FormExampleView: View {
                         FormView()
                             .padding()
                     }
-                    #if targetEnvironment(macCatalyst)
-                    Button("Dismiss") {
-                        isPresented = false
-                    }
-                    .padding()
-                    #endif
                 }
                 
                 // Or present a FormView in a Floating Panel (provided via the Toolkit)
@@ -83,7 +99,7 @@ struct FormExampleView: View {
                     // buttons can be merged and hoisted up as the root content of the toolbar.
                     
                     ToolbarItem(placement: .navigationBarLeading) {
-                        if isPresented {
+                        if isPresented && !useControlsInForm {
                             Button("Cancel", role: .cancel) {
                                 formViewModel.undoEdits()
                                 isPresented = false
@@ -92,7 +108,7 @@ struct FormExampleView: View {
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        if isPresented {
+                        if isPresented && !useControlsInForm {
                             Button("Submit") {
                                 Task {
                                     await formViewModel.submitChanges()
@@ -126,6 +142,15 @@ extension FormExampleView {
             return feature
         }
         return nil
+    }
+}
+
+private extension FormExampleView {
+    /// A Boolean value indicating whether the form controls should be shown directly in the form's presenting container.
+    var useControlsInForm: Bool {
+        verticalSizeClass == .compact ||
+        UIDevice.current.userInterfaceIdiom == .mac ||
+        UIDevice.current.userInterfaceIdiom == .pad
     }
 }
 
