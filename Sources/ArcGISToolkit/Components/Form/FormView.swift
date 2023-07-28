@@ -34,7 +34,7 @@ public struct FormView: View {
         // successfully present a keyboard toolbar (as is done in `MultiLineTextEntry`).
         NavigationView {
             ScrollView {
-                FormHeader(title: model.formDefinition?.title)
+                FormHeader(title: featureForm?.title)
                     .padding([.bottom], elementPadding)
                 VStack(alignment: .leading) {
                     ForEach(featureForm?.elements ?? [], id: \.label) { element in
@@ -65,11 +65,11 @@ extension FormView {
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
         switch element.input {
         case let `input` as DateTimePickerFormInput:
-            DateTimeEntry(element: element, input: `input`)
+            DateTimeEntry(featureForm: featureForm, element: element, input: `input`)
         case let `input` as TextAreaFormInput:
-            MultiLineTextEntry(element: element, input: `input`)
+            MultiLineTextEntry(featureForm: featureForm, element: element, input: `input`)
         case let `input` as TextBoxFormInput:
-            SingleLineTextEntry(element: element, input: `input`)
+            SingleLineTextEntry(featureForm: featureForm, element: element, input: `input`)
         default:
             EmptyView()
         }

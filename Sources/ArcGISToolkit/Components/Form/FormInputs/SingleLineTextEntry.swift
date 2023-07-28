@@ -17,7 +17,8 @@ import ArcGIS
 /// A view for single line text entry.
 struct SingleLineTextEntry: View {
     @Environment(\.formElementPadding) var elementPadding
-    
+    private var featureForm: FeatureForm?
+
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
@@ -37,7 +38,8 @@ struct SingleLineTextEntry: View {
     /// - Parameters:
     ///   - element: The field's parent element.
     ///   - input: The input configuration of the field.
-    init(element: FieldFormElement, input: TextBoxFormInput) {
+    init(featureForm: FeatureForm?, element: FieldFormElement, input: TextBoxFormInput) {
+        self.featureForm = featureForm
         self.element = element
         self.input = input
     }
@@ -64,7 +66,7 @@ struct SingleLineTextEntry: View {
         )
         .padding([.bottom], elementPadding)
         .onAppear {
-            text = model.feature?.attributes[element.fieldName] as? String ?? ""
+            text = featureForm?.feature.attributes[element.fieldName] as? String ?? ""
         }
         .onChange(of: isFocused) { newFocus in
             if newFocus {
@@ -72,7 +74,7 @@ struct SingleLineTextEntry: View {
             }
         }
         .onChange(of: text) { newValue in
-            model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+            featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
         }
     }
 }
