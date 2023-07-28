@@ -32,6 +32,26 @@ struct TrustHostViewModifier: ViewModifier {
     // error.
     @State var isPresented: Bool = false
     
+    var title: some View {
+        Text(
+            "Certificate Trust Warning",
+            bundle: .toolkitModule,
+            comment: "A label indicating that the remote host's certificate is not trusted."
+        )
+        .font(.title)
+    }
+    
+    var message: some View {
+        Text(
+            "Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
+            bundle: .toolkitModule,
+            comment: "A warning that the host service (challenge.host) is providing a potentially unsafe certificate."
+        )
+        .font(.subheadline)
+        .foregroundColor(.secondary)
+        .padding(.bottom)
+    }
+    
     func body(content: Content) -> some View {
         content
             .onAppear {
@@ -40,35 +60,78 @@ struct TrustHostViewModifier: ViewModifier {
                     isPresented = true
                 }
             }
-            .alert(
-                Text(
-                    "Certificate Trust Warning",
-                    bundle: .toolkitModule,
-                    comment: "A label indicating that the remote host's certificate is not trusted."
-                ),
-                isPresented: $isPresented,
-                presenting: challenge
-            ) { _ in
-                Button(role: .destructive) {
-                    challenge.resume(with: .continueWithCredential(.serverTrust))
-                } label: {
-                    Text(
-                        "Allow",
-                        bundle: .toolkitModule,
-                        comment: "A button indicating the user accepts a potentially dangerous action."
-                    )
+            .sheet(isPresented: $isPresented) {
+                VStack {
+                    VStack(alignment: .center, spacing: 2) {
+                        title
+                        message
+                    }
+                    .padding([.top, .horizontal])
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Button(role: .cancel) {
+                                challenge.resume(with: .cancel)
+                            } label: {
+                                Text("Cancel", bundle: .toolkitModule)
+                            }
+                            .buttonStyle(.bordered)
+                            Spacer()
+                            Divider()
+                            Spacer()
+                            Button(role: .destructive) {
+                                challenge.resume(with: .continueWithCredential(.serverTrust))
+                            } label: {
+                                Text(
+                                    "Allow",
+                                    bundle: .toolkitModule,
+                                    comment: "A button indicating the user accepts a potentially dangerous action."
+                                )
+                            }
+                            .buttonStyle(.borderedProminent)
+                            Spacer()
+                        }
+                        .padding(.top)
+                        .frame(maxHeight: 36)
+                        Spacer()
+                    }
+                    .padding()
+                    Spacer()
                 }
-                Button(role: .cancel) {
-                    challenge.resume(with: .cancel)
-                } label: {
-                    Text("Cancel", bundle: .toolkitModule)
-                }
-            } message: { _ in
-                Text(
-                    "Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
-                    bundle: .toolkitModule,
-                    comment: "A warning that the host service (challenge.host) is providing a potentially unsafe certificate."
-                )
+                .padding()
+                .mediumPresentationDetents()
             }
+        
+        
+//            .alert(
+//                Text(
+//                    "Certificate Trust Warning",
+//                    bundle: .toolkitModule,
+//                    comment: "A label indicating that the remote host's certificate is not trusted."
+//                ),
+//                isPresented: $isPresented,
+//                presenting: challenge
+//            ) { _ in
+//                Button(role: .destructive) {
+//                    challenge.resume(with: .continueWithCredential(.serverTrust))
+//                } label: {
+//                    Text(
+//                        "Allow",
+//                        bundle: .toolkitModule,
+//                        comment: "A button indicating the user accepts a potentially dangerous action."
+//                    )
+//                }
+//                Button(role: .cancel) {
+//                    challenge.resume(with: .cancel)
+//                } label: {
+//                    Text("Cancel", bundle: .toolkitModule)
+//                }
+//            } message: { _ in
+//                Text(
+//                    "Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
+//                    bundle: .toolkitModule,
+//                    comment: "A warning that the host service (challenge.host) is providing a potentially unsafe certificate."
+//                )
+//            }
     }
 }
