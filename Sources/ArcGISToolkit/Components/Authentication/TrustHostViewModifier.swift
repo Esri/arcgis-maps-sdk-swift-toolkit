@@ -36,7 +36,9 @@ struct TrustHostViewModifier: ViewModifier {
         content
             .onAppear {
                 // Present the alert right away. This makes it animated.
-                isPresented = true
+                DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
+                    isPresented = true
+                }
             }
             .alert(
                 Text(
