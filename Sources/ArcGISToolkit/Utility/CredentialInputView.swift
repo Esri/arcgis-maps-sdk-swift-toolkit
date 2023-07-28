@@ -89,31 +89,17 @@ struct CredentialInputModifier: ViewModifier {
     let continueAction: CredentialInputSheetView.Action
     
     @ViewBuilder func body(content: Content) -> some View {
-        if #available(iOS 16.0, *) {
-            content
-                .sheet(isPresented: .constant(true)) {
-                    CredentialInputSheetView(
-                        fields: fields,
-                        message: message,
-                        title: title,
-                        cancelAction: cancelAction,
-                        continueAction: continueAction
-                    )
-                    .presentationDetents([.medium])
-                }
-        } else {
-            // Fallback on earlier versions
-            content
-                .sheet(isPresented: .constant(true)) {
-                    CredentialInputSheetView(
-                        fields: fields,
-                        message: message,
-                        title: title,
-                        cancelAction: cancelAction,
-                        continueAction: continueAction
-                    )
-                }
-        }
+        content
+            .sheet(isPresented: $isPresented) {
+                CredentialInputSheetView(
+                    fields: fields,
+                    message: message,
+                    title: title,
+                    cancelAction: cancelAction,
+                    continueAction: continueAction
+                )
+                .mediumPresentationDetents()
+            }
     }
 }
 

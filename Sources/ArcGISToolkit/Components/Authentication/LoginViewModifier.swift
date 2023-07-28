@@ -29,7 +29,11 @@ struct LoginViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .onAppear { isPresented = true }
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
+                    isPresented = true
+                }
+            }
             .credentialInput(
                 fields: .usernamePassword,
                 isPresented: $isPresented,
