@@ -39,6 +39,7 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***comment: "A label indicating that the remote host's certificate is not trusted."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var message: some View {
@@ -89,9 +90,9 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: 36)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.mediumPresentationDetents()
 ***REMOVED******REMOVED***
 ***REMOVED***

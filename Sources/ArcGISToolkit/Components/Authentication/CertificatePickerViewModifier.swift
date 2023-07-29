@@ -35,7 +35,7 @@ import UniformTypeIdentifiers
 ***REMOVED***var certificateURL: URL?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the prompt.
-***REMOVED***@Published var showPrompt = true
+***REMOVED***@Published var showPrompt = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the certificate file picker.
 ***REMOVED***@Published var showPicker = false
@@ -63,7 +63,10 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED***/ Proceeds to show the file picker. This should be called after the prompt that notifies the
 ***REMOVED******REMOVED***/ user that a certificate must be selected.
 ***REMOVED***func proceedFromPrompt() {
-***REMOVED******REMOVED***showPicker = true
+***REMOVED******REMOVED***showPrompt = false
+***REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
+***REMOVED******REMOVED******REMOVED***self.showPicker = true
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Proceeds to show the user the password form. This should be called after the user selects
@@ -189,6 +192,11 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showCertificateError,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.showPrompt = true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -206,30 +214,47 @@ private extension View {
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***alert(
-***REMOVED******REMOVED******REMOVED***Text("Certificate Required", bundle: .toolkitModule),
-***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***presenting: viewModel.challengingHost
-***REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Browse For Certificate", bundle: .toolkitModule)
+***REMOVED******REMOVED***sheet(isPresented: isPresented) {
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Certificate Required", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"A certificate is required to access content on arcgis.foo.com.",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** An alert message indicating that a certificate is required to access
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** content on a remote host. The variable is the host that prompted the challenge.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Browse", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .toolkitModule)
-***REMOVED******REMOVED***
-***REMOVED*** message: { _ in
-***REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED***"A certificate is required to access content on \(viewModel.challengingHost).",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** An alert message indicating that a certificate is required to access
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** content on a remote host. The variable is the host that prompted the challenge.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.mediumPresentationDetents()
+***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
