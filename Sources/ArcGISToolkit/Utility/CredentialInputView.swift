@@ -191,53 +191,57 @@ struct CredentialInputSheetView: View {
     }
     
     var body: some View {
-        VStack {
-            VStack(alignment: .center, spacing: 2) {
-                Text(title)
-                    .font(.title)
-                Text(message)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .padding(.bottom)
-            }
-            .padding([.top, .horizontal])
+        GeometryReader { proxy in
             VStack {
-                switch fields {
-                case .password:
-                    passwordTextField
-                case .usernamePassword:
-                    usernameTextField
-                    Divider()
-                    passwordTextField
-                }
-                Divider()
-                    .padding(.bottom)
-                HStack {
-                    Spacer()
-                    Button(role: .cancel) {
-                        cancelAction.handler(username, password)
-                    } label: {
-                        Text(cancelAction.title)
+                VStack(alignment: .center) {
+                    VStack(spacing: 8) {
+                        Text(title)
+                            .font(.title)
+                            .multilineTextAlignment(.center)
+                        Text(message)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
                     }
-                    .buttonStyle(.bordered)
-                    Spacer()
-                    Divider()
-                    Spacer()
-                    Button(continueAction.title) {
-                        continueAction.handler(username, password)
+                    .padding(.vertical)
+                    VStack {
+                        switch fields {
+                        case .password:
+                            passwordTextField
+                        case .usernamePassword:
+                            usernameTextField
+                            Divider()
+                            passwordTextField
+                        }
+                        Divider()
                     }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(!isContinueEnabled)
+                    .padding([.bottom, .horizontal])
+                    HStack {
+                        Spacer()
+                        Button(role: .cancel) {
+                            cancelAction.handler(username, password)
+                        } label: {
+                            Text(cancelAction.title)
+                                .padding(.horizontal)
+                        }
+                        .buttonStyle(.bordered)
+                        Spacer()
+                        Button {
+                            continueAction.handler(username, password)
+                        } label: {
+                            Text(continueAction.title)
+                                .padding(.horizontal)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(!isContinueEnabled)
+                        Spacer()
+                    }
                     Spacer()
                 }
-                .padding(.top)
-                .frame(maxHeight: 36)
+                .padding()
                 Spacer()
             }
-            .padding()
-            Spacer()
         }
-        .padding()
     }
 }
 extension CredentialInputSheetView {
