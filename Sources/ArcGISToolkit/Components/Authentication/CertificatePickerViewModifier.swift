@@ -35,7 +35,7 @@ import ArcGIS
     var certificateURL: URL?
     
     /// A Boolean value indicating whether to show the prompt.
-    @Published var showPrompt = true
+    @Published var showPrompt = false
     
     /// A Boolean value indicating whether to show the certificate file picker.
     @Published var showPicker = false
@@ -63,7 +63,10 @@ import ArcGIS
     /// Proceeds to show the file picker. This should be called after the prompt that notifies the
     /// user that a certificate must be selected.
     func proceedFromPrompt() {
-        showPicker = true
+        showPrompt = false
+        DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
+            self.showPicker = true
+        }
     }
     
     /// Proceeds to show the user the password form. This should be called after the user selects
@@ -189,6 +192,11 @@ struct CertificatePickerViewModifier: ViewModifier {
                 isPresented: $viewModel.showCertificateError,
                 viewModel: viewModel
             )
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
+                    viewModel.showPrompt = true
+                }
+            }
     }
 }
 
@@ -206,30 +214,47 @@ private extension View {
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
-        alert(
-            Text("Certificate Required", bundle: .toolkitModule),
-            isPresented: isPresented,
-            presenting: viewModel.challengingHost
-        ) { _ in
-            Button {
-                viewModel.proceedFromPrompt()
-            } label: {
-                Text("Browse For Certificate", bundle: .toolkitModule)
+        sheet(isPresented: isPresented) {
+            VStack(alignment: .center) {
+                Text("Certificate Required", bundle: .toolkitModule)
+                    .font(.title)
+                    .multilineTextAlignment(.center)
+                    .padding(.vertical)
+                Text(
+                    "A certificate is required to access content on arcgis.foo.com.",
+                    bundle: .toolkitModule,
+                    comment: """
+                             An alert message indicating that a certificate is required to access
+                             content on a remote host. The variable is the host that prompted the challenge.
+                    """
+                )
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.bottom)
+                HStack {
+                    Spacer()
+                    Button(role: .cancel) {
+                        viewModel.cancel()
+                    } label: {
+                        Text("Cancel", bundle: .toolkitModule)
+                            .padding(.horizontal)
+                    }
+                    .buttonStyle(.bordered)
+                    Spacer()
+                    Button(role: .cancel) {
+                        viewModel.proceedFromPrompt()
+                    } label: {
+                        Text("Browse", bundle: .toolkitModule)
+                            .padding(.horizontal)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    Spacer()
+                }
+                Spacer()
             }
-            Button(role: .cancel) {
-                viewModel.cancel()
-            } label: {
-                Text("Cancel", bundle: .toolkitModule)
-            }
-        } message: { _ in
-            Text(
-                "A certificate is required to access content on \(viewModel.challengingHost).",
-                bundle: .toolkitModule,
-                comment: """
-                         An alert message indicating that a certificate is required to access
-                         content on a remote host. The variable is the host that prompted the challenge.
-                         """
-            )
+            .mediumPresentationDetents()
+            .padding()
         }
     }
 }
