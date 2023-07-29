@@ -47,9 +47,9 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A warning that the host service (challenge.host) is providing a potentially unsafe certificate."
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
@@ -61,77 +61,38 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center, spacing: 2) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .horizontal])
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .cancel)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .toolkitModule)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .continueWithCredential(.serverTrust))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Allow",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A button indicating the user accepts a potentially dangerous action."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .cancel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: 36)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .continueWithCredential(.serverTrust))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Allow",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A button indicating the user accepts a potentially dangerous action."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: 36)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.mediumPresentationDetents()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.alert(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Certificate Trust Warning",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating that the remote host's certificate is not trusted."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presenting: challenge
-***REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .continueWithCredential(.serverTrust))
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Allow",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A button indicating the user accepts a potentially dangerous action."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .cancel)
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .toolkitModule)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** message: { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Dangerous: The certificate provided by '\(challenge.host)' is not signed by a trusted authority.",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A warning that the host service (challenge.host) is providing a potentially unsafe certificate."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

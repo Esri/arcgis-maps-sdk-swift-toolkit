@@ -191,53 +191,57 @@ struct CredentialInputSheetView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***VStack(alignment: .center, spacing: 2) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(message)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding([.top, .horizontal])
+***REMOVED******REMOVED***GeometryReader { proxy in
 ***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***switch fields {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .password:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***passwordTextField
-***REMOVED******REMOVED******REMOVED******REMOVED***case .usernamePassword:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usernameTextField
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***passwordTextField
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelAction.handler(username, password)
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(cancelAction.title)
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(spacing: 8) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(message)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(continueAction.title) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction.handler(username, password)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch fields {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .password:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***passwordTextField
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .usernamePassword:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usernameTextField
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***passwordTextField
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!isContinueEnabled)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom, .horizontal])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelAction.handler(username, password)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(cancelAction.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction.handler(username, password)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(continueAction.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!isContinueEnabled)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: 36)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
-***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
 extension CredentialInputSheetView {
