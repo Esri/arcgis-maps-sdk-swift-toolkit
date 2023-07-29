@@ -39,6 +39,7 @@ struct TrustHostViewModifier: ViewModifier {
             comment: "A label indicating that the remote host's certificate is not trusted."
         )
         .font(.title)
+        .multilineTextAlignment(.center)
     }
     
     var message: some View {
@@ -89,9 +90,9 @@ struct TrustHostViewModifier: ViewModifier {
                         .buttonStyle(.borderedProminent)
                         Spacer()
                     }
-                    .frame(maxHeight: 36)
                     Spacer()
                 }
+                .padding()
                 .mediumPresentationDetents()
             }
     }
