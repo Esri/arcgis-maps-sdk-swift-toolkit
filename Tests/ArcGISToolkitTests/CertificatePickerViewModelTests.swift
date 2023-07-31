@@ -21,13 +21,15 @@ import ArcGIS
         let model = CertificatePickerViewModel(challenge: challenge)
         
         XCTAssertNil(model.certificateURL)
-        XCTAssertTrue(model.showPrompt)
+        XCTAssertFalse(model.showPrompt)
         XCTAssertFalse(model.showPicker)
         XCTAssertFalse(model.showPassword)
         XCTAssertFalse(model.showCertificateError)
         XCTAssertEqual(model.challengingHost, "host.com")
         
-        model.proceedFromPrompt()
+        model.proceedToPicker()
+        // Have to wait here because the proceed function waits to avoid a bug.
+        try? await Task.sleep(nanoseconds: 300_000_000)
         XCTAssertTrue(model.showPicker)
         
         let url = URL(fileURLWithPath: "/does-not-exist.pfx")
