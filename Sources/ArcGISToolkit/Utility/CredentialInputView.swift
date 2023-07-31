@@ -131,6 +131,10 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the view is displayed.
 ***REMOVED***private var isPresented: Binding<Bool>
 ***REMOVED***
+***REMOVED***@FocusState private var usernameFieldIsFocused: Bool
+***REMOVED***
+***REMOVED***@FocusState private var passwordFieldIsFocused: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates the view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating whether or not the view is displayed.
@@ -177,6 +181,7 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED***.textInputAutocapitalization(.never)
 ***REMOVED******REMOVED***.autocorrectionDisabled(true)
 ***REMOVED******REMOVED***.textContentType(.username)
+***REMOVED******REMOVED***.focused($usernameFieldIsFocused)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var passwordTextField: some View {
@@ -196,6 +201,7 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***continueAction.handler(username, password)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.focused($passwordFieldIsFocused)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -249,6 +255,15 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set initial focus of text field.
+***REMOVED******REMOVED******REMOVED***switch fields {
+***REMOVED******REMOVED******REMOVED***case .usernamePassword:
+***REMOVED******REMOVED******REMOVED******REMOVED***usernameFieldIsFocused = true
+***REMOVED******REMOVED******REMOVED***case .password:
+***REMOVED******REMOVED******REMOVED******REMOVED***passwordFieldIsFocused = true
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
