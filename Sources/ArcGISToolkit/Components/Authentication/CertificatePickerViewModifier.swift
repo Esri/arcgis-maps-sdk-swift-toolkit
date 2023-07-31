@@ -107,10 +107,8 @@ import ArcGIS
     func cancel() {
         challenge.resume(with: .cancel)
     }
-
-    private func showCertificateError(_ error: CertificateError) async {
-        // This is required to prevent an "already presenting" error.
-        try? await Task.sleep(nanoseconds: 100_000)
+    
+    private func showCertificateError(_ error: CertificateError) {
         certificateError = error
         showCertificateError = true
     }
