@@ -84,6 +84,8 @@ import ArcGIS
             preconditionFailure()
         }
         
+        showPassword = false
+        
         Task.detached {
             do {
                 if certificateURL.startAccessingSecurityScopedResource() {
@@ -188,7 +190,7 @@ struct CertificatePickerViewModifier: ViewModifier {
                     }
                 )
             )
-            .alertCertificateError(
+            .certificateErrorSheet(
                 isPresented: $viewModel.showCertificateError,
                 viewModel: viewModel
             )
@@ -221,7 +223,7 @@ private extension View {
                     .multilineTextAlignment(.center)
                     .padding(.vertical)
                 Text(
-                    "A certificate is required to access content on arcgis.foo.com.",
+                    "A certificate is required to access content on \(viewModel.challengingHost).",
                     bundle: .toolkitModule,
                     comment: """
                              An alert message indicating that a certificate is required to access
@@ -281,35 +283,54 @@ private extension View {
 }
 
 private extension View {
-    /// Displays an alert to notify that there was an error importing the certificate.
+    /// Displays a sheet to notify that there was an error importing the certificate.
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating if the view is presented.
     ///   - viewModel: The view model associated with the view.
-    @MainActor @ViewBuilder func alertCertificateError(
+    @MainActor @ViewBuilder func certificateErrorSheet(
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
-        alert(
-            Text("Error importing certificate", bundle: .toolkitModule),
-            isPresented: isPresented
-        ) {
-            Button {
-                viewModel.proceedFromPrompt()
-            } label: {
-                Text("Try Again", bundle: .toolkitModule)
+            sheet(isPresented: isPresented) {
+                VStack(alignment: .center) {
+                    Text("Error importing certificate", bundle: .toolkitModule)
+                        .font(.title)
+                        .multilineTextAlignment(.center)
+                        .padding(.vertical)
+                    
+                    Text(
+                        viewModel.certificateError?.localizedDescription ?? String(
+                            localized: "The certificate file or password was invalid.",
+                            bundle: .toolkitModule
+                        )
+                    )
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom)
+                    HStack {
+                        Spacer()
+                        Button(role: .cancel) {
+                            viewModel.cancel()
+                        } label: {
+                            Text("Cancel", bundle: .toolkitModule)
+                            .padding(.horizontal)
+                        }
+                        .buttonStyle(.bordered)
+                        Spacer()
+                        Button(role: .cancel) {
+                            viewModel.proceedFromPrompt()
+                        } label: {
+                            Text("Try Again", bundle: .toolkitModule)
+                                .padding(.horizontal)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                .mediumPresentationDetents()
+                .padding()
             }
-            Button(role: .cancel) {
-                viewModel.cancel()
-            } label: {
-                Text("Cancel", bundle: .toolkitModule)
-            }
-        } message: {
-            Text(
-                viewModel.certificateError?.localizedDescription ?? String(
-                    localized: "The certificate file or password was invalid.",
-                    bundle: .toolkitModule
-                 )
-            )
-        }
     }
 }
