@@ -165,8 +165,8 @@ struct CertificatePickerViewModifier: ViewModifier {
                 viewModel: viewModel
             )
             .credentialInput(
-                fields: .password,
                 isPresented: $viewModel.showPassword,
+                fields: .password,
                 message: String(
                     localized: "Please enter a password for the chosen certificate.",
                     bundle: .toolkitModule
