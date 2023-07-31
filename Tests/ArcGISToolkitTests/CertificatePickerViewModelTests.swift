@@ -21,13 +21,15 @@ import XCTest
 ***REMOVED******REMOVED***let model = CertificatePickerViewModel(challenge: challenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertNil(model.certificateURL)
-***REMOVED******REMOVED***XCTAssertTrue(model.showPrompt)
+***REMOVED******REMOVED***XCTAssertFalse(model.showPrompt)
 ***REMOVED******REMOVED***XCTAssertFalse(model.showPicker)
 ***REMOVED******REMOVED***XCTAssertFalse(model.showPassword)
 ***REMOVED******REMOVED***XCTAssertFalse(model.showCertificateError)
 ***REMOVED******REMOVED***XCTAssertEqual(model.challengingHost, "host.com")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.proceedFromPrompt()
+***REMOVED******REMOVED***model.proceedToPicker()
+***REMOVED******REMOVED******REMOVED*** Have to wait here because the proceed function waits to avoid a bug.
+***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 300_000_000)
 ***REMOVED******REMOVED***XCTAssertTrue(model.showPicker)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let url = URL(fileURLWithPath: "/does-not-exist.pfx")
