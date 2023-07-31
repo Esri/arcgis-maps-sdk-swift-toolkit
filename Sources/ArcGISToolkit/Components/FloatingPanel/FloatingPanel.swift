@@ -124,6 +124,16 @@ struct FloatingPanel<Content>: View where Content: View {
                     height = heightFor(detent: selectedDetent)
                 }
             }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
+                withAnimation {
+                    height = heightFor(detent: .full)
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
+                withAnimation {
+                    height = heightFor(detent: selectedDetent.wrappedValue)
+                }
+            }
         }
         .padding([.leading, .top, .trailing], isCompact ? 0 : 10)
         .padding([.bottom], isCompact ? 0 : 50)
