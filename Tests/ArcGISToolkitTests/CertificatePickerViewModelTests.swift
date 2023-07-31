@@ -28,8 +28,8 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertEqual(model.challengingHost, "host.com")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.proceedToPicker()
-***REMOVED******REMOVED******REMOVED*** Have to wait here because the proceed function waits to avoid a bug.
-***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 300_000_000)
+***REMOVED******REMOVED******REMOVED*** Have to wait here because the proceed function is delayed to avoid a bug.
+***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 100_000)
 ***REMOVED******REMOVED***XCTAssertTrue(model.showPicker)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let url = URL(fileURLWithPath: "/does-not-exist.pfx")
@@ -41,7 +41,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED*** Have to yield here because the proceed function kicks off a task.
 ***REMOVED******REMOVED***await Task.yield()
 ***REMOVED******REMOVED******REMOVED*** Have to wait here because the proceed function waits to avoid a bug.
-***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 300_000)
+***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 300_000_000)
 ***REMOVED******REMOVED******REMOVED*** Another yield seems to be required to deal with timing when running the test
 ***REMOVED******REMOVED******REMOVED*** repeatedly.
 ***REMOVED******REMOVED***await Task.yield()

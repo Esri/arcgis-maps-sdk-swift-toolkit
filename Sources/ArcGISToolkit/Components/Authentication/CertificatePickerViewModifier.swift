@@ -63,7 +63,10 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED***/ Proceeds to show the file picker. This should be called after the prompt that notifies the
 ***REMOVED******REMOVED***/ user that a certificate must be selected.
 ***REMOVED***func proceedToPicker() {
-***REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED*** If we don't delay this, then the picker does not animate in.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Delay for 0.25 seconds.
+***REMOVED******REMOVED******REMOVED***try await Task.sleep(nanoseconds: 250_000_000)
 ***REMOVED******REMOVED******REMOVED***self.showPicker = true
 ***REMOVED***
 ***REMOVED***
@@ -189,10 +192,12 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showCertificateError,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.showPrompt = true
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present the prompt right away.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting it after initialization allows it to animate.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** However, we use .task because this needs to happen after a slight delay or
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** it doesn't show.
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.showPrompt = true
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
