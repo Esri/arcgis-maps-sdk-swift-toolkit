@@ -107,10 +107,8 @@ import UniformTypeIdentifiers
 ***REMOVED***func cancel() {
 ***REMOVED******REMOVED***challenge.resume(with: .cancel)
 ***REMOVED***
-
-***REMOVED***private func showCertificateError(_ error: CertificateError) async {
-***REMOVED******REMOVED******REMOVED*** This is required to prevent an "already presenting" error.
-***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 100_000)
+***REMOVED***
+***REMOVED***private func showCertificateError(_ error: CertificateError) {
 ***REMOVED******REMOVED***certificateError = error
 ***REMOVED******REMOVED***showCertificateError = true
 ***REMOVED***
