@@ -29,7 +29,7 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.proceedToPicker()
 ***REMOVED******REMOVED******REMOVED*** Have to wait here because the proceed function is delayed to avoid a bug.
-***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 100_000)
+***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 300_000_000)
 ***REMOVED******REMOVED***XCTAssertTrue(model.showPicker)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let url = URL(fileURLWithPath: "/does-not-exist.pfx")
