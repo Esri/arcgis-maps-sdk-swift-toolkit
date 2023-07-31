@@ -17,15 +17,15 @@ import SwiftUI
 extension View {
     /// Presents user experiences for collecting credentials from the user.
     /// - Parameters:
-    ///   - fields: The fields shown in the view.
     ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
+    ///   - fields: The fields shown in the view.
     ///   - message: Descriptive text that provides more details about the reason for the alert.
     ///   - title: The title of the alert.
     ///   - cancelAction: The cancel action.
     ///   - continueAction: The continue action.
     @ViewBuilder func credentialInput(
-        fields: CredentialInputSheetView.Fields,
         isPresented: Binding<Bool>,
+        fields: CredentialInputSheetView.Fields,
         message: String,
         title: String,
         cancelAction: CredentialInputSheetView.Action,
@@ -33,8 +33,8 @@ extension View {
     ) -> some View {
         modifier(
             CredentialInputModifier(
-                fields: fields,
                 isPresented: isPresented,
+                fields: fields,
                 message: message,
                 title: title,
                 cancelAction: cancelAction,
@@ -48,8 +48,8 @@ struct CredentialInputSheetView_Previews: PreviewProvider {
     static var previews: some View {
         Text("foo")
         .credentialInput(
-            fields: .usernamePassword,
             isPresented: .constant(true),
+            fields: .usernamePassword,
             message: "You must sign in to access 'arcgis.com'",
             title: "Authentication Required",
             cancelAction: .init(
@@ -70,11 +70,11 @@ struct CredentialInputSheetView_Previews: PreviewProvider {
 /// A view modifier that prompts for credentials.
 struct CredentialInputModifier: ViewModifier {
     
+    /// A Boolean value indicating whether or not the view is displayed.
+    var isPresented: Binding<Bool>
+    
     /// The fields shown in the view.
     let fields: CredentialInputSheetView.Fields
-    
-    /// A Boolean value indicating whether or not the view is displayed.
-    @Binding var isPresented: Bool
     
     /// Descriptive text that provides more details about the reason for the alert.
     let message: String
@@ -90,8 +90,9 @@ struct CredentialInputModifier: ViewModifier {
     
     @ViewBuilder func body(content: Content) -> some View {
         content
-            .sheet(isPresented: $isPresented) {
+            .sheet(isPresented: isPresented) {
                 CredentialInputSheetView(
+                    isPresented: isPresented,
                     fields: fields,
                     message: message,
                     title: title,
@@ -127,20 +128,26 @@ struct CredentialInputSheetView: View {
     /// The value in the password field.
     @State private var password = ""
     
+    /// A Boolean value indicating whether or not the view is displayed.
+    private var isPresented: Binding<Bool>
+    
     /// Creates the view.
     /// - Parameters:
+    ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
     ///   - fields: The fields shown in the alert.
     ///   - message: Descriptive text that provides more details about the reason for the alert.
     ///   - title: The title of the alert.
     ///   - cancelAction: The cancel action.
     ///   - continueAction: The continue action.
     init(
+        isPresented: Binding<Bool>,
         fields: Fields,
         message: String,
         title: String,
         cancelAction: Action,
         continueAction: Action
     ) {
+        self.isPresented = isPresented
         self.cancelAction = cancelAction
         self.continueAction = continueAction
         
@@ -185,6 +192,7 @@ struct CredentialInputSheetView: View {
         .textContentType(.password)
         .onSubmit {
             if isContinueEnabled {
+                isPresented.wrappedValue = false
                 continueAction.handler(username, password)
             }
         }
@@ -227,6 +235,7 @@ struct CredentialInputSheetView: View {
                         .buttonStyle(.bordered)
                         Spacer()
                         Button {
+                            isPresented.wrappedValue = false
                             continueAction.handler(username, password)
                         } label: {
                             Text(continueAction.title)

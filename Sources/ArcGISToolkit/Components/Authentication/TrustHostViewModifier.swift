@@ -70,6 +70,7 @@ struct TrustHostViewModifier: ViewModifier {
                     HStack {
                         Spacer()
                         Button(role: .cancel) {
+                            isPresented = false
                             challenge.resume(with: .cancel)
                         } label: {
                             Text("Cancel", bundle: .toolkitModule)
@@ -78,6 +79,7 @@ struct TrustHostViewModifier: ViewModifier {
                         .buttonStyle(.bordered)
                         Spacer()
                         Button(role: .destructive) {
+                            isPresented = false
                             challenge.resume(with: .continueWithCredential(.serverTrust))
                         } label: {
                             Text(

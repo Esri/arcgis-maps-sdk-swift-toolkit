@@ -35,8 +35,8 @@ struct LoginViewModifier: ViewModifier {
                 }
             }
             .credentialInput(
-                fields: .usernamePassword,
                 isPresented: $isPresented,
+                fields: .usernamePassword,
                 message: String(
                     localized: "You must sign in to access '\(challengingHost)'",
                     bundle: .toolkitModule,
