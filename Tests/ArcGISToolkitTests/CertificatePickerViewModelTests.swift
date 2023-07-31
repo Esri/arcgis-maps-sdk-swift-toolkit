@@ -31,11 +31,11 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertTrue(model.showPicker)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let url = URL(fileURLWithPath: "/does-not-exist.pfx")
-***REMOVED******REMOVED***model.proceed(withCertificateURL: url)
+***REMOVED******REMOVED***model.proceedToPasswordEntry(forCertificateWithURL: url)
 ***REMOVED******REMOVED***XCTAssertEqual(model.certificateURL, url)
 ***REMOVED******REMOVED***XCTAssertTrue(model.showPassword)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.proceed(withPassword: "1234")
+***REMOVED******REMOVED***model.proceedToUseCertificate(withPassword: "1234")
 ***REMOVED******REMOVED******REMOVED*** Have to yield here because the proceed function kicks off a task.
 ***REMOVED******REMOVED***await Task.yield()
 ***REMOVED******REMOVED******REMOVED*** Have to wait here because the proceed function waits to avoid a bug.

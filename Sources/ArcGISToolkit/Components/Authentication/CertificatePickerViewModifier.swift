@@ -62,8 +62,7 @@ import UniformTypeIdentifiers
 ***REMOVED***
 ***REMOVED******REMOVED***/ Proceeds to show the file picker. This should be called after the prompt that notifies the
 ***REMOVED******REMOVED***/ user that a certificate must be selected.
-***REMOVED***func proceedFromPrompt() {
-***REMOVED******REMOVED***showPrompt = false
+***REMOVED***func proceedToPicker() {
 ***REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
 ***REMOVED******REMOVED******REMOVED***self.showPicker = true
 ***REMOVED***
@@ -72,19 +71,17 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED***/ Proceeds to show the user the password form. This should be called after the user selects
 ***REMOVED******REMOVED***/ a certificate.
 ***REMOVED******REMOVED***/ - Parameter url: The URL of the certificate that the user chose.
-***REMOVED***func proceed(withCertificateURL url: URL) {
+***REMOVED***func proceedToPasswordEntry(forCertificateWithURL url: URL) {
 ***REMOVED******REMOVED***certificateURL = url
 ***REMOVED******REMOVED***showPassword = true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Attempts to use the certificate and password to respond to the challenge.
 ***REMOVED******REMOVED***/ - Parameter password: The password for the certificate.
-***REMOVED***func proceed(withPassword password: String) {
+***REMOVED***func proceedToUseCertificate(withPassword password: String) {
 ***REMOVED******REMOVED***guard let certificateURL = certificateURL else {
 ***REMOVED******REMOVED******REMOVED***preconditionFailure()
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***showPassword = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task.detached {
 ***REMOVED******REMOVED******REMOVED***do {
@@ -184,7 +181,7 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(localized: "OK", bundle: .toolkitModule),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, password in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withPassword: password)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedToUseCertificate(withPassword: password)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
@@ -235,6 +232,7 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .toolkitModule)
@@ -243,7 +241,8 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedToPicker()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Browse", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
@@ -270,8 +269,10 @@ private extension View {
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***sheet(isPresented: isPresented) {
 ***REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withCertificateURL: $0)
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedToPasswordEntry(forCertificateWithURL: $0)
 ***REMOVED******REMOVED*** onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
@@ -309,6 +310,7 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .toolkitModule)
@@ -317,7 +319,8 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedToPicker()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Try Again", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
