@@ -70,6 +70,7 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .cancel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .toolkitModule)
@@ -78,6 +79,7 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .continueWithCredential(.serverTrust))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(

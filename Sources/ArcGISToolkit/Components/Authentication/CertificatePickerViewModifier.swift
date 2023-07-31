@@ -165,8 +165,8 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.credentialInput(
-***REMOVED******REMOVED******REMOVED******REMOVED***fields: .password,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showPassword,
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: .password,
 ***REMOVED******REMOVED******REMOVED******REMOVED***message: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Please enter a password for the chosen certificate.",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule

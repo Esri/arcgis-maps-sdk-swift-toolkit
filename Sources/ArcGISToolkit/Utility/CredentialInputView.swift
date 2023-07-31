@@ -17,15 +17,15 @@ import Foundation
 extension View {
 ***REMOVED******REMOVED***/ Presents user experiences for collecting credentials from the user.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - fields: The fields shown in the view.
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating whether or not the view is displayed.
+***REMOVED******REMOVED***/   - fields: The fields shown in the view.
 ***REMOVED******REMOVED***/   - message: Descriptive text that provides more details about the reason for the alert.
 ***REMOVED******REMOVED***/   - title: The title of the alert.
 ***REMOVED******REMOVED***/   - cancelAction: The cancel action.
 ***REMOVED******REMOVED***/   - continueAction: The continue action.
 ***REMOVED***@ViewBuilder func credentialInput(
-***REMOVED******REMOVED***fields: CredentialInputSheetView.Fields,
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***fields: CredentialInputSheetView.Fields,
 ***REMOVED******REMOVED***message: String,
 ***REMOVED******REMOVED***title: String,
 ***REMOVED******REMOVED***cancelAction: CredentialInputSheetView.Action,
@@ -33,8 +33,8 @@ extension View {
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***modifier(
 ***REMOVED******REMOVED******REMOVED***CredentialInputModifier(
-***REMOVED******REMOVED******REMOVED******REMOVED***fields: fields,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: fields,
 ***REMOVED******REMOVED******REMOVED******REMOVED***message: message,
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: title,
 ***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: cancelAction,
@@ -48,8 +48,8 @@ struct CredentialInputSheetView_Previews: PreviewProvider {
 ***REMOVED***static var previews: some View {
 ***REMOVED******REMOVED***Text("foo")
 ***REMOVED******REMOVED***.credentialInput(
-***REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
 ***REMOVED******REMOVED******REMOVED***isPresented: .constant(true),
+***REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
 ***REMOVED******REMOVED******REMOVED***message: "You must sign in to access 'arcgis.com'",
 ***REMOVED******REMOVED******REMOVED***title: "Authentication Required",
 ***REMOVED******REMOVED******REMOVED***cancelAction: .init(
@@ -70,11 +70,11 @@ struct CredentialInputSheetView_Previews: PreviewProvider {
 ***REMOVED***/ A view modifier that prompts for credentials.
 struct CredentialInputModifier: ViewModifier {
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether or not the view is displayed.
+***REMOVED***var isPresented: Binding<Bool>
+***REMOVED***
 ***REMOVED******REMOVED***/ The fields shown in the view.
 ***REMOVED***let fields: CredentialInputSheetView.Fields
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether or not the view is displayed.
-***REMOVED***@Binding var isPresented: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ Descriptive text that provides more details about the reason for the alert.
 ***REMOVED***let message: String
@@ -90,8 +90,9 @@ struct CredentialInputModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***@ViewBuilder func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: isPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***CredentialInputSheetView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fields: fields,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message: message,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
@@ -127,20 +128,26 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED***/ The value in the password field.
 ***REMOVED***@State private var password = ""
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether or not the view is displayed.
+***REMOVED***private var isPresented: Binding<Bool>
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates the view.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating whether or not the view is displayed.
 ***REMOVED******REMOVED***/   - fields: The fields shown in the alert.
 ***REMOVED******REMOVED***/   - message: Descriptive text that provides more details about the reason for the alert.
 ***REMOVED******REMOVED***/   - title: The title of the alert.
 ***REMOVED******REMOVED***/   - cancelAction: The cancel action.
 ***REMOVED******REMOVED***/   - continueAction: The continue action.
 ***REMOVED***init(
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***fields: Fields,
 ***REMOVED******REMOVED***message: String,
 ***REMOVED******REMOVED***title: String,
 ***REMOVED******REMOVED***cancelAction: Action,
 ***REMOVED******REMOVED***continueAction: Action
 ***REMOVED***) {
+***REMOVED******REMOVED***self.isPresented = isPresented
 ***REMOVED******REMOVED***self.cancelAction = cancelAction
 ***REMOVED******REMOVED***self.continueAction = continueAction
 ***REMOVED******REMOVED***
@@ -185,6 +192,7 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED***.textContentType(.password)
 ***REMOVED******REMOVED***.onSubmit {
 ***REMOVED******REMOVED******REMOVED***if isContinueEnabled {
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***continueAction.handler(username, password)
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -227,6 +235,7 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction.handler(username, password)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(continueAction.title)

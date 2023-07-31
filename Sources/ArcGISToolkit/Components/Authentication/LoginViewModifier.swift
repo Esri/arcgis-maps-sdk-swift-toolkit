@@ -35,8 +35,8 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.credentialInput(
-***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
 ***REMOVED******REMOVED******REMOVED******REMOVED***message: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "You must sign in to access '\(challengingHost)'",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
