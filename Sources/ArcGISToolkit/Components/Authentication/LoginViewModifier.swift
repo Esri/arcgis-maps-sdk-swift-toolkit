@@ -29,10 +29,12 @@ struct LoginViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
-                    isPresented = true
-                }
+            .task {
+                // Present the sheet right away.
+                // Setting it after initialization allows it to animate.
+                // However, we use .task because this needs to happen after a slight delay or
+                // it doesn't show.
+                isPresented = true
             }
             .credentialInput(
                 isPresented: $isPresented,
