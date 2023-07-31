@@ -131,6 +131,10 @@ struct CredentialInputSheetView: View {
     /// A Boolean value indicating whether or not the view is displayed.
     private var isPresented: Binding<Bool>
     
+    @FocusState private var usernameFieldIsFocused: Bool
+    
+    @FocusState private var passwordFieldIsFocused: Bool
+    
     /// Creates the view.
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
@@ -177,6 +181,7 @@ struct CredentialInputSheetView: View {
         .textInputAutocapitalization(.never)
         .autocorrectionDisabled(true)
         .textContentType(.username)
+        .focused($usernameFieldIsFocused)
     }
     
     var passwordTextField: some View {
@@ -196,6 +201,7 @@ struct CredentialInputSheetView: View {
                 continueAction.handler(username, password)
             }
         }
+        .focused($passwordFieldIsFocused)
     }
     
     var body: some View {
@@ -249,6 +255,15 @@ struct CredentialInputSheetView: View {
                 }
                 .padding()
                 Spacer()
+            }
+        }
+        .onAppear {
+            // Set initial focus of text field.
+            switch fields {
+            case .usernamePassword:
+                usernameFieldIsFocused = true
+            case .password:
+                passwordFieldIsFocused = true
             }
         }
     }
