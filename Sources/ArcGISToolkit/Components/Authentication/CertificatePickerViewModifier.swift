@@ -63,7 +63,10 @@ import ArcGIS
     /// Proceeds to show the file picker. This should be called after the prompt that notifies the
     /// user that a certificate must be selected.
     func proceedToPicker() {
-        DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
+        Task {
+            // If we don't delay this, then the picker does not animate in.
+            // Delay for 0.25 seconds.
+            try await Task.sleep(nanoseconds: 250_000_000)
             self.showPicker = true
         }
     }
@@ -189,10 +192,12 @@ struct CertificatePickerViewModifier: ViewModifier {
                 isPresented: $viewModel.showCertificateError,
                 viewModel: viewModel
             )
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
-                    viewModel.showPrompt = true
-                }
+            .task {
+                // Present the prompt right away.
+                // Setting it after initialization allows it to animate.
+                // However, we use .task because this needs to happen after a slight delay or
+                // it doesn't show.
+                viewModel.showPrompt = true
             }
     }
 }

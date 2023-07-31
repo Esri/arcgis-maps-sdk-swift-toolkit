@@ -55,11 +55,12 @@ struct TrustHostViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .onAppear {
-                // Present the alert right away. This makes it animated.
-                DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
-                    isPresented = true
-                }
+            .task {
+                // Present the sheet right away.
+                // Setting it after initialization allows it to animate.
+                // However, we use .task because this needs to happen after a slight delay or
+                // it doesn't show.
+                isPresented = true
             }
             .sheet(isPresented: $isPresented) {
                 VStack(alignment: .center) {
