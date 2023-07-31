@@ -62,8 +62,7 @@ import ArcGIS
     
     /// Proceeds to show the file picker. This should be called after the prompt that notifies the
     /// user that a certificate must be selected.
-    func proceedFromPrompt() {
-        showPrompt = false
+    func proceedToPicker() {
         DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .milliseconds(250))) {
             self.showPicker = true
         }
@@ -72,19 +71,17 @@ import ArcGIS
     /// Proceeds to show the user the password form. This should be called after the user selects
     /// a certificate.
     /// - Parameter url: The URL of the certificate that the user chose.
-    func proceed(withCertificateURL url: URL) {
+    func proceedToPasswordEntry(forCertificateWithURL url: URL) {
         certificateURL = url
         showPassword = true
     }
     
     /// Attempts to use the certificate and password to respond to the challenge.
     /// - Parameter password: The password for the certificate.
-    func proceed(withPassword password: String) {
+    func proceedToUseCertificate(withPassword password: String) {
         guard let certificateURL = certificateURL else {
             preconditionFailure()
         }
-        
-        showPassword = false
         
         Task.detached {
             do {
@@ -184,7 +181,7 @@ struct CertificatePickerViewModifier: ViewModifier {
                 continueAction: .init(
                     title: String(localized: "OK", bundle: .toolkitModule),
                     handler: { _, password in
-                        viewModel.proceed(withPassword: password)
+                        viewModel.proceedToUseCertificate(withPassword: password)
                     }
                 )
             )
@@ -235,6 +232,7 @@ private extension View {
                 HStack {
                     Spacer()
                     Button(role: .cancel) {
+                        isPresented.wrappedValue = false
                         viewModel.cancel()
                     } label: {
                         Text("Cancel", bundle: .toolkitModule)
@@ -243,7 +241,8 @@ private extension View {
                     .buttonStyle(.bordered)
                     Spacer()
                     Button(role: .cancel) {
-                        viewModel.proceedFromPrompt()
+                        isPresented.wrappedValue = false
+                        viewModel.proceedToPicker()
                     } label: {
                         Text("Browse", bundle: .toolkitModule)
                             .padding(.horizontal)
@@ -270,8 +269,10 @@ private extension View {
     ) -> some View {
         sheet(isPresented: isPresented) {
             DocumentPickerView(contentTypes: [.pfx]) {
-                viewModel.proceed(withCertificateURL: $0)
+                isPresented.wrappedValue = false
+                viewModel.proceedToPasswordEntry(forCertificateWithURL: $0)
             } onCancel: {
+                isPresented.wrappedValue = false
                 viewModel.cancel()
             }
             .edgesIgnoringSafeArea(.bottom)
@@ -309,6 +310,7 @@ private extension View {
                     HStack {
                         Spacer()
                         Button(role: .cancel) {
+                            isPresented.wrappedValue = false
                             viewModel.cancel()
                         } label: {
                             Text("Cancel", bundle: .toolkitModule)
@@ -317,7 +319,8 @@ private extension View {
                         .buttonStyle(.bordered)
                         Spacer()
                         Button(role: .cancel) {
-                            viewModel.proceedFromPrompt()
+                            isPresented.wrappedValue = false
+                            viewModel.proceedToPicker()
                         } label: {
                             Text("Try Again", bundle: .toolkitModule)
                                 .padding(.horizontal)

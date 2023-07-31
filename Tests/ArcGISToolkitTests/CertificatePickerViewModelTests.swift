@@ -31,11 +31,11 @@ import ArcGIS
         XCTAssertTrue(model.showPicker)
         
         let url = URL(fileURLWithPath: "/does-not-exist.pfx")
-        model.proceed(withCertificateURL: url)
+        model.proceedToPasswordEntry(forCertificateWithURL: url)
         XCTAssertEqual(model.certificateURL, url)
         XCTAssertTrue(model.showPassword)
         
-        model.proceed(withPassword: "1234")
+        model.proceedToUseCertificate(withPassword: "1234")
         // Have to yield here because the proceed function kicks off a task.
         await Task.yield()
         // Have to wait here because the proceed function waits to avoid a bug.
