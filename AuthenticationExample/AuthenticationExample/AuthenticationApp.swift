@@ -23,7 +23,6 @@ struct AuthenticationApp: App {
 ***REMOVED***init() {
 ***REMOVED******REMOVED******REMOVED*** Create an authenticator.
 ***REMOVED******REMOVED***authenticator = Authenticator(
-***REMOVED******REMOVED******REMOVED***promptForUntrustedHosts: true
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If you want to use OAuth, uncomment this code:
 ***REMOVED******REMOVED******REMOVED******REMOVED***oAuthUserConfigurations: [.arcgisDotCom]
 ***REMOVED******REMOVED***)

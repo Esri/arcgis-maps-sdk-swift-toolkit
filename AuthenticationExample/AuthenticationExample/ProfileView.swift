@@ -26,8 +26,6 @@ struct ProfileView: View {
 ***REMOVED******REMOVED***/ The closure to call once the user has signed out.
 ***REMOVED***var signOutAction: () -> Void
 ***REMOVED***
-***REMOVED***@EnvironmentObject var authenticator: Authenticator
-***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if let user = portal.user {
@@ -35,9 +33,7 @@ struct ProfileView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***signOutButton
-***REMOVED******REMOVED******REMOVED***testButton
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.authenticator(authenticator)
 ***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
@@ -52,21 +48,6 @@ struct ProfileView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Sign Out")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED***.controlSize(.large)
-***REMOVED******REMOVED***.disabled(isSigningOut)
-***REMOVED***
-***REMOVED***
-***REMOVED***var testButton: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***dev0004327.esri.com/portal")!, connection: .authenticated)
-***REMOVED******REMOVED******REMOVED******REMOVED***try await portal.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***print("-- loaded dev portal")
-***REMOVED******REMOVED***
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text("Test")
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED***.controlSize(.large)
