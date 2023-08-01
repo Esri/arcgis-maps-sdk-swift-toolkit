@@ -182,6 +182,10 @@ struct CredentialInputSheetView: View {
         .autocorrectionDisabled(true)
         .textContentType(.username)
         .focused($usernameFieldIsFocused)
+        .submitLabel(.next)
+        .onSubmit {
+            passwordFieldIsFocused = true
+        }
     }
     
     var passwordTextField: some View {
