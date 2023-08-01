@@ -23,7 +23,6 @@ struct AuthenticationApp: App {
     init() {
         // Create an authenticator.
         authenticator = Authenticator(
-            promptForUntrustedHosts: true
             // If you want to use OAuth, uncomment this code:
             //oAuthUserConfigurations: [.arcgisDotCom]
         )

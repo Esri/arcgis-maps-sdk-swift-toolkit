@@ -38,7 +38,6 @@ struct FeaturedMapsView: View {
                     }
                 }
             }
-            testButton
         }
         .task {
             guard featuredItems.isEmpty else { return }
@@ -50,20 +49,6 @@ struct FeaturedMapsView: View {
             isLoading = false
         }
         .navigationTitle("Featured Maps")
-    }
-    
-    var testButton: some View {
-        Button {
-            Task {
-                let portal = Portal(url: URL(string: "https://dev0004327.esri.com/portal")!, connection: .authenticated)
-                try await portal.load()
-                print("-- loaded dev portal")
-            }
-        } label: {
-            Text("Test")
-        }
-        .buttonStyle(.bordered)
-        .controlSize(.large)
     }
 }
 
