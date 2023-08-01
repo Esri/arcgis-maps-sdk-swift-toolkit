@@ -182,6 +182,10 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED***.autocorrectionDisabled(true)
 ***REMOVED******REMOVED***.textContentType(.username)
 ***REMOVED******REMOVED***.focused($usernameFieldIsFocused)
+***REMOVED******REMOVED***.submitLabel(.next)
+***REMOVED******REMOVED***.onSubmit {
+***REMOVED******REMOVED******REMOVED***passwordFieldIsFocused = true
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var passwordTextField: some View {
