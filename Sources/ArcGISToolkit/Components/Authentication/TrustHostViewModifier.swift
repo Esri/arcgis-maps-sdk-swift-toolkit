@@ -58,8 +58,9 @@ struct TrustHostViewModifier: ViewModifier {
             .task {
                 // Present the sheet right away.
                 // Setting it after initialization allows it to animate.
-                // However, we use .task because this needs to happen after a slight delay or
+                // However, this needs to happen after a slight delay or
                 // it doesn't show.
+                try? await Task.sleep(nanoseconds: 250_000_000)
                 isPresented = true
             }
             .sheet(isPresented: $isPresented) {
