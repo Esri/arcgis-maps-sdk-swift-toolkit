@@ -32,8 +32,9 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present the sheet right away.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting it after initialization allows it to animate.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** However, we use .task because this needs to happen after a slight delay or
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** However, this needs to happen after a slight delay or
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** it doesn't show.
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 250_000_000)
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.credentialInput(
