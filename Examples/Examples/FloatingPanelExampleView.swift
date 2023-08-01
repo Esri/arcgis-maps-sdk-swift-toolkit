@@ -21,10 +21,13 @@ struct FloatingPanelExampleView: View {
         map: Map(basemapStyle: .arcGISImagery)
     )
     
-    @State var isPresented = true
+    /// The Floating Panel's current content.
+    @State private var demoContent: FloatingPanelDemoContent?
     
-    @State var selectedDetent: FloatingPanelDetent = .half
+    /// The Floating Panel's current detent.
+    @State private var selectedDetent: FloatingPanelDetent = .half
     
+    /// The initial viewpoint shown in the map.
     private let initialViewpoint = Viewpoint(
         center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
         scale: 1_000_000
@@ -35,46 +38,105 @@ struct FloatingPanelExampleView: View {
             map: dataModel.map,
             viewpoint: initialViewpoint
         )
-        .floatingPanel(selectedDetent: $selectedDetent, isPresented: $isPresented) {
-            List {
-                Section("Preset Heights") {
-                    Button("Summary") {
-                        selectedDetent = .summary
-                    }
-                    Button("Half") {
-                        selectedDetent = .half
-                    }
-                    Button("Full") {
-                        selectedDetent = .full
-                    }
-                }
-                Section("Fractional Heights") {
-                    Button("1/4") {
-                        selectedDetent = .fraction(1 / 4)
-                    }
-                    Button("1/2") {
-                        selectedDetent = .fraction(1 / 2)
-                    }
-                    Button("3/4") {
-                        selectedDetent = .fraction(3 / 4)
-                    }
-                }
-                Section("Value Heights") {
-                    Button("200") {
-                        selectedDetent = .height(200)
-                    }
-                    Button("600") {
-                        selectedDetent = .height(600)
-                    }
-                }
+        .floatingPanel(selectedDetent: $selectedDetent, isPresented: isPresented) {
+            switch demoContent {
+            case .list:
+                FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
+            case .textField:
+                FloatingPanelTextFieldDemoContent()
+            case .none:
+                EmptyView()
             }
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(isPresented ? "Close" : "Open") {
-                    isPresented.toggle()
+                Menu {
+                    Button("List") {
+                        demoContent = .list
+                    }
+                    Button("Text Field") {
+                        demoContent = .textField
+                    }
+                } label: {
+                    Text("Present")
                 }
             }
+        }
+    }
+    
+    /// A Boolean value indicating whether the Floating Panel is displayed or not.
+    var isPresented: Binding<Bool> {
+        .init {
+            demoContent != nil
+        } set: { _ in
+        }
+    }
+}
+
+/// The types of content available for demo in the Floating Panel.
+private enum FloatingPanelDemoContent {
+    case textField
+    case list
+}
+
+/// Demo content consisting of a list with inner sections each containing a set of buttons This
+/// content also demonstrates the ability to control the Floating Panel's detent.
+private struct FloatingPanelListDemoContent: View {
+    @Binding var selectedDetent: FloatingPanelDetent
+    
+    var body: some View {
+        List {
+            Section("Preset Heights") {
+                Button("Summary") {
+                    selectedDetent = .summary
+                }
+                Button("Half") {
+                    selectedDetent = .half
+                }
+                Button("Full") {
+                    selectedDetent = .full
+                }
+            }
+            Section("Fractional Heights") {
+                Button("1/4") {
+                    selectedDetent = .fraction(1 / 4)
+                }
+                Button("1/2") {
+                    selectedDetent = .fraction(1 / 2)
+                }
+                Button("3/4") {
+                    selectedDetent = .fraction(3 / 4)
+                }
+            }
+            Section("Value Heights") {
+                Button("200") {
+                    selectedDetent = .height(200)
+                }
+                Button("600") {
+                    selectedDetent = .height(600)
+                }
+            }
+        }
+    }
+}
+
+/// Demo content consisting of a vertical stack of items, including a text field which demonstrates
+/// the Floating Panel's keyboard avoidance capability.
+private struct FloatingPanelTextFieldDemoContent: View {
+    @State private var sampleText = ""
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Text Field")
+                .font(.title)
+            Text("The Floating Panel has built-in keyboard avoidance.")
+                .font(.caption)
+            TextField(
+                "Text Field",
+                text: $sampleText,
+                prompt: Text("Enter sample text.")
+            )
+            .textFieldStyle(.roundedBorder)
         }
     }
 }
