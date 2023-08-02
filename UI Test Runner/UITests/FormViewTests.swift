@@ -24,8 +24,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let singleLineNoValueNoPlaceholderNoDescriptionTitle = app.staticTexts[
 ***REMOVED******REMOVED******REMOVED***"Single Line No Value, Placeholder or Description"
 ***REMOVED******REMOVED***]
-***REMOVED******REMOVED***let singleLineNoValueNoPlaceholderNoDescriptionTextField =
-***REMOVED******REMOVED******REMOVED***app.scrollViews.otherElements.containing(.staticText, identifier:"InputValidation")
+***REMOVED******REMOVED***let singleLineNoValueNoPlaceholderNoDescriptionTextField = app
+***REMOVED******REMOVED******REMOVED***.scrollViews.otherElements.containing(.staticText, identifier: "InputValidation")
 ***REMOVED******REMOVED******REMOVED***.children(matching: .textField).element(boundBy: 1)
 ***REMOVED******REMOVED***let helperText = app.staticTexts["Maximum 256 characters"]
 ***REMOVED******REMOVED***let characterCount = app.staticTexts["0"]
