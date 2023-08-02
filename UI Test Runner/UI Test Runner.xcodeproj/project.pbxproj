@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		75022F942A7AC289000ED7B7 /* FormViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75022F932A7AC289000ED7B7 /* FormViewTestView.swift */; ***REMOVED***;
+		75022F962A7AC9A0000ED7B7 /* FormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */; ***REMOVED***;
 		7552A7542A573CBB0023DA5A /* UITestRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7532A573CBB0023DA5A /* UITestRunner.swift */; ***REMOVED***;
 		7552A7562A573CBB0023DA5A /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7552A573CBB0023DA5A /* Tests.swift */; ***REMOVED***;
 		7552A7582A573CBD0023DA5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7552A7572A573CBD0023DA5A /* Assets.xcassets */; ***REMOVED***;
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		75022F932A7AC289000ED7B7 /* FormViewTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewTestView.swift; sourceTree = "<group>"; ***REMOVED***;
+		75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewTests.swift; sourceTree = "<group>"; ***REMOVED***;
 		7552A7502A573CBB0023DA5A /* UI Test Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "UI Test Runner.app"; sourceTree = BUILT_PRODUCTS_DIR; ***REMOVED***;
 		7552A7532A573CBB0023DA5A /* UITestRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestRunner.swift; sourceTree = "<group>"; ***REMOVED***;
 		7552A7552A573CBB0023DA5A /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; ***REMOVED***;
@@ -122,6 +124,7 @@
 				75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */,
 				7552A76B2A573DFB0023DA5A /* BookmarksTests.swift */,
 				75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */,
+				75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */,
 			);
 			path = UITests;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75022F962A7AC9A0000ED7B7 /* FormViewTests.swift in Sources */,
 				75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */,
 				75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */,
 				7552A76C2A573DFB0023DA5A /* BookmarksTests.swift in Sources */,
