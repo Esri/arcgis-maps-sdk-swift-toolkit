@@ -34,36 +34,41 @@ struct FormViewTestView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identifyScreenPoint = screenPoint
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.task(id: identifyScreenPoint) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await identifyFeature(with: mapViewProxy) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.startEditing(feature)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await map.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let featureLayer = map.operationalLayers.first as? FeatureLayer
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let parameters = QueryParameters()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***parameters.addObjectID(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let res = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let feature = res?.features().makeIterator().next() as? ArcGISFeature else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await feature.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.startEditing(feature)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present a FormView in a native SwiftUI sheet
-***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16.4, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationBackground(.thinMaterial)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationBackgroundInteraction(.enabled(upThrough: .medium))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#if targetEnvironment(macCatalyst)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Dismiss") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#endif
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Present a FormView in a native SwiftUI sheet
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16.4, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationBackground(.thinMaterial)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationBackgroundInteraction(.enabled(upThrough: .medium))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#if targetEnvironment(macCatalyst)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Dismiss") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#endif
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented {
@@ -86,29 +91,6 @@ struct FormViewTestView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension FormViewTestView {
-***REMOVED******REMOVED***/ Identifies features, if any, at the current screen point.
-***REMOVED******REMOVED***/ - Parameter proxy: The proxy to use for identification.
-***REMOVED******REMOVED***/ - Returns: The first identified feature.
-***REMOVED***func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
-***REMOVED******REMOVED***if let screenPoint = identifyScreenPoint,
-***REMOVED******REMOVED***   let feature = try? await Result(awaiting: {
-***REMOVED******REMOVED******REMOVED***   try await proxy.identify(
-***REMOVED******REMOVED******REMOVED******REMOVED***on: map.operationalLayers.first!,
-***REMOVED******REMOVED******REMOVED******REMOVED***screenPoint: screenPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***tolerance: 10
-***REMOVED******REMOVED******REMOVED***   )
-   ***REMOVED***)
-***REMOVED******REMOVED******REMOVED***.cancellationToNil()?
-***REMOVED******REMOVED******REMOVED***.get()
-***REMOVED******REMOVED******REMOVED***.geoElements
-***REMOVED******REMOVED******REMOVED***.first as? ArcGISFeature {
-***REMOVED******REMOVED******REMOVED***return feature
-***REMOVED***
-***REMOVED******REMOVED***return nil
 ***REMOVED***
 ***REMOVED***
 
