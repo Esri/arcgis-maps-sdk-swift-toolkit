@@ -44,22 +44,25 @@ struct FormExampleView: View {
                 
                 // Present a FormView in a native SwiftUI sheet
                 .sheet(isPresented: $isPresented) {
-                    if #available(iOS 16.4, *) {
-                        FormView()
-                            .padding()
-                            .presentationBackground(.thinMaterial)
-                            .presentationBackgroundInteraction(.enabled(upThrough: .medium))
-                            .presentationDetents([.medium])
-                    } else {
-                        FormView()
-                            .padding()
+                    Group {
+                        if #available(iOS 16.4, *) {
+                            FormView()
+                                .padding()
+                                .presentationBackground(.thinMaterial)
+                                .presentationBackgroundInteraction(.enabled(upThrough: .medium))
+                                .presentationDetents([.medium])
+                        } else {
+                            FormView()
+                                .padding()
+                        }
+                        #if targetEnvironment(macCatalyst)
+                        Button("Dismiss") {
+                            isPresented = false
+                        }
+                        .padding()
+                        #endif
                     }
-                    #if targetEnvironment(macCatalyst)
-                    Button("Dismiss") {
-                        isPresented = false
-                    }
-                    .padding()
-                    #endif
+                    .environmentObject(formViewModel)
                 }
                 
                 // Or present a FormView in a Floating Panel (provided via the Toolkit)
@@ -72,11 +75,10 @@ struct FormExampleView: View {
 //                        if isPresented {
 //                            FormView()
 //                                .padding()
+//                                .environmentObject(formViewModel)
 //                        }
 //                    }
 //                }
-                
-                .environmentObject(formViewModel)
                 
                 .toolbar {
                     // Once iOS 16.0 is the minimum supported, the two conditionals to show the
