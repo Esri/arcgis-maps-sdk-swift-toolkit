@@ -24,8 +24,8 @@ final class FormViewTests: XCTestCase {
         let singleLineNoValueNoPlaceholderNoDescriptionTitle = app.staticTexts[
             "Single Line No Value, Placeholder or Description"
         ]
-        let singleLineNoValueNoPlaceholderNoDescriptionTextField =
-            app.scrollViews.otherElements.containing(.staticText, identifier:"InputValidation")
+        let singleLineNoValueNoPlaceholderNoDescriptionTextField = app
+            .scrollViews.otherElements.containing(.staticText, identifier: "InputValidation")
             .children(matching: .textField).element(boundBy: 1)
         let helperText = app.staticTexts["Maximum 256 characters"]
         let characterCount = app.staticTexts["0"]
