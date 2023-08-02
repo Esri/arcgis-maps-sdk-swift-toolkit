@@ -34,36 +34,41 @@ struct FormViewTestView: View {
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
                 }
-                .task(id: identifyScreenPoint) {
-                    if let feature = await identifyFeature(with: mapViewProxy) {
-                        formViewModel.startEditing(feature)
-                        isPresented = true
-                    }
+                .task {
+                    try? await map.load()
+                    let featureLayer = map.operationalLayers.first as? FeatureLayer
+                    let parameters = QueryParameters()
+                    parameters.addObjectID(1)
+                    let res = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
+                    guard let feature = res?.features().makeIterator().next() as? ArcGISFeature else { return }
+                    try? await feature.load()
+                    formViewModel.startEditing(feature)
+                    isPresented = true
                 }
                 .ignoresSafeArea(.keyboard)
-                
-                // Present a FormView in a native SwiftUI sheet
+            
+            // Present a FormView in a native SwiftUI sheet
                 .sheet(isPresented: $isPresented) {
-                    if #available(iOS 16.4, *) {
-                        FormView()
-                            .padding()
-                            .presentationBackground(.thinMaterial)
-                            .presentationBackgroundInteraction(.enabled(upThrough: .medium))
-                            .presentationDetents([.medium])
-                    } else {
-                        FormView()
-                            .padding()
+                    Group {
+                        if #available(iOS 16.4, *) {
+                            FormView()
+                                .padding()
+                                .presentationBackground(.thinMaterial)
+                                .presentationBackgroundInteraction(.enabled(upThrough: .medium))
+                                .presentationDetents([.medium])
+                        } else {
+                            FormView()
+                                .padding()
+                        }
+                        #if targetEnvironment(macCatalyst)
+                        Button("Dismiss") {
+                            isPresented = false
+                        }
+                        .padding()
+                        #endif
                     }
-                    #if targetEnvironment(macCatalyst)
-                    Button("Dismiss") {
-                        isPresented = false
-                    }
-                    .padding()
-                    #endif
+                    .environmentObject(formViewModel)
                 }
-                
-                .environmentObject(formViewModel)
-                
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         if isPresented {
@@ -86,29 +91,6 @@ struct FormViewTestView: View {
                     }
                 }
         }
-    }
-}
-
-extension FormViewTestView {
-    /// Identifies features, if any, at the current screen point.
-    /// - Parameter proxy: The proxy to use for identification.
-    /// - Returns: The first identified feature.
-    func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
-        if let screenPoint = identifyScreenPoint,
-           let feature = try? await Result(awaiting: {
-               try await proxy.identify(
-                on: map.operationalLayers.first!,
-                screenPoint: screenPoint,
-                tolerance: 10
-               )
-           })
-            .cancellationToNil()?
-            .get()
-            .geoElements
-            .first as? ArcGISFeature {
-            return feature
-        }
-        return nil
     }
 }
 
