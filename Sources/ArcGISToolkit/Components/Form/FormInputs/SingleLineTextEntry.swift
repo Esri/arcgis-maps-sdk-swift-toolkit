@@ -51,8 +51,10 @@ struct SingleLineTextEntry: View {
         HStack {
             TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
                 .focused($isFocused)
+                .accessibilityIdentifier("\(element.label) Text Field")
             if !text.isEmpty {
                 ClearButton { text.removeAll() }
+                    .accessibilityIdentifier("\(element.label) Clear Button")
             }
         }
         .formTextEntryStyle()
