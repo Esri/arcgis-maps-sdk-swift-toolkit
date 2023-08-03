@@ -134,10 +134,12 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? .zero
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: .full) - keyboardHeight
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight -= keyboardHeight
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight += keyboardHeight
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***keyboardHeight = .zero
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: selectedDetent.wrappedValue)
 ***REMOVED******REMOVED******REMOVED***
