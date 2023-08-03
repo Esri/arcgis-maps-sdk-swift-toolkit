@@ -83,8 +83,8 @@ final class FormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 30),
-            "The form failed to open after 30 seconds."
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
         )
         
         // Scroll to the target form element.
