@@ -139,7 +139,7 @@ struct FloatingPanel<Content>: View where Content: View {
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
                 withAnimation {
                     keyboardHeight = .zero
-                    height = heightFor(detent: selectedDetent.wrappedValue) - keyboardHeight
+                    height = heightFor(detent: selectedDetent.wrappedValue)
                 }
             }
         }
