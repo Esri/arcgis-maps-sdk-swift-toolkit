@@ -12,7 +12,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Combine
 import Foundation
 ***REMOVED***
 
@@ -28,7 +27,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Public vars
 ***REMOVED***
-***REMOVED******REMOVED***/ A screen length and displayable string for the equivalent length in the alternate unit.
+***REMOVED******REMOVED***/ A screen length and displayable localized string for the equivalent length in the alternate unit.
 ***REMOVED***var alternateUnit: (screenLength: CGFloat, label: String) {
 ***REMOVED******REMOVED***guard let displayUnit = displayUnit else {
 ***REMOVED******REMOVED******REMOVED***return (.zero, "")
@@ -54,16 +53,12 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***value: displayFactor
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let altScreenLength = altMapLength / convertedDisplayFactor
-***REMOVED******REMOVED***let numberString = numberFormatter.string(
-***REMOVED******REMOVED******REMOVED***from: NSNumber(value: altMapLength)
-***REMOVED******REMOVED***) ?? ""
-***REMOVED******REMOVED***let bottomUnitsText = " \(altDisplayUnits.abbreviation)"
-***REMOVED******REMOVED***let label = "\(numberString)\(bottomUnitsText)"
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let measurement = Measurement(value: altMapLength, linearUnit: altDisplayUnits)
+***REMOVED******REMOVED***let label = measurement.formatted(.scaleMeasurement)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return (altScreenLength, label)
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A subject to which viewpoint updates can be submitted.
-***REMOVED***var viewpointSubject = PassthroughSubject<Viewpoint?, Never>()
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Public methods
 ***REMOVED***
@@ -71,49 +66,25 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - maxWidth: The maximum screen width allotted to the scalebar.
 ***REMOVED******REMOVED***/   - minScale: A value of 0 indicates the scalebar segments should always recalculate.
-***REMOVED******REMOVED***/   - spatialReference: The map's spatial reference.
 ***REMOVED******REMOVED***/   - style: The visual appearance of the scalebar.
 ***REMOVED******REMOVED***/   - units: The units to be displayed in the scalebar.
-***REMOVED******REMOVED***/   - unitsPerPoint: The current number of device independent pixels to map display units.
 ***REMOVED******REMOVED***/   - useGeodeticCalculations: Determines if a geodesic curve should be used to compute
 ***REMOVED******REMOVED***/***REMOVED*** the scale.
-***REMOVED******REMOVED***/   - viewpoint: The map's current viewpoint.
 ***REMOVED***init(
 ***REMOVED******REMOVED***_ maxWidth: Double,
 ***REMOVED******REMOVED***_ minScale: Double,
-***REMOVED******REMOVED***_ spatialReference: Binding<SpatialReference?>,
 ***REMOVED******REMOVED***_ style: ScalebarStyle,
 ***REMOVED******REMOVED***_ units: ScalebarUnits,
-***REMOVED******REMOVED***_ unitsPerPoint: Binding<Double?>,
-***REMOVED******REMOVED***_ useGeodeticCalculations: Bool,
-***REMOVED******REMOVED***_ viewpoint: Viewpoint?
+***REMOVED******REMOVED***_ useGeodeticCalculations: Bool
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.maxWidth = maxWidth
 ***REMOVED******REMOVED***self.minScale = minScale
-***REMOVED******REMOVED***self.spatialReference = spatialReference
 ***REMOVED******REMOVED***self.style = style
 ***REMOVED******REMOVED***self.units = units
-***REMOVED******REMOVED***self.unitsPerPoint = unitsPerPoint
 ***REMOVED******REMOVED***self.useGeodeticCalculations = useGeodeticCalculations
-***REMOVED******REMOVED***self.viewpoint = viewpoint
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***viewpointSubscription = viewpointSubject
-***REMOVED******REMOVED******REMOVED***.debounce(for: delay, scheduler: DispatchQueue.main)
-***REMOVED******REMOVED******REMOVED***.sink(receiveValue: { [weak self] in
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***self.viewpoint = $0
-***REMOVED******REMOVED******REMOVED******REMOVED***self.updateScaleDisplay()
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***updateScaleDisplay()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Private constants
-***REMOVED***
-***REMOVED******REMOVED***/ The amount of time to wait between value calculations.
-***REMOVED***private let delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.05)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The curve type to use when performing scale calculations.
 ***REMOVED***private let geodeticCurveType: GeometryEngine.GeodeticCurveType = .geodesic
@@ -121,20 +92,10 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ A `minScale` of 0 means the scalebar segments will always recalculate.
 ***REMOVED***private let minScale: Double
 ***REMOVED***
-***REMOVED******REMOVED***/ Converts numbers into a readable format.
-***REMOVED***private let numberFormatter: NumberFormatter = {
-***REMOVED******REMOVED***let numberFormatter = NumberFormatter()
-***REMOVED******REMOVED***numberFormatter.numberStyle = .decimal
-***REMOVED******REMOVED***numberFormatter.formatterBehavior = .behavior10_4
-***REMOVED******REMOVED***numberFormatter.maximumFractionDigits = 2
-***REMOVED******REMOVED***numberFormatter.minimumFractionDigits = 0
-***REMOVED******REMOVED***return numberFormatter
-***REMOVED***()
-***REMOVED***
 ***REMOVED******REMOVED***/ The visual appearance of the scalebar.
 ***REMOVED***private let style: ScalebarStyle
 ***REMOVED***
-***REMOVED******REMOVED*** - MARK: Private vars
+***REMOVED******REMOVED*** - MARK: Private variables
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines the amount of display space to use based on the scalebar style.
 ***REMOVED***private var availableLineDisplayLength: CGFloat {
@@ -151,31 +112,35 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The units to be displayed in the scalebar.
 ***REMOVED***private var displayUnit: LinearUnit? = nil
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether an initial scale has been calculated.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ The scale requires 3 values (spatial reference, units per point and a viewpoint) to be
+***REMOVED******REMOVED***/ calculated. As these values are initially received in a non-deterministic order, this allows
+***REMOVED******REMOVED***/ a calculation to be attempted upon initial receipt of each of the 3 values.
+***REMOVED***private var initialScaleWasCalculated = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The length of the line to display in map units.
 ***REMOVED***private var lineMapLength: Double = .zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum screen width allotted to the scalebar.
 ***REMOVED***private var maxWidth: Double
 ***REMOVED***
-***REMOVED******REMOVED***/ The map's spatial reference.
-***REMOVED***private var spatialReference: Binding<SpatialReference?>
+***REMOVED******REMOVED***/ The spatial reference to calculate the scale with.
+***REMOVED***private var spatialReference: SpatialReference?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Unit of measure in use.
 ***REMOVED***private var units: ScalebarUnits
 ***REMOVED***
-***REMOVED******REMOVED***/ The current number of device independent pixels to map display units.
-***REMOVED***private var unitsPerPoint: Binding<Double?>
+***REMOVED******REMOVED***/ The units per point to calculate the scale with.
+***REMOVED***private var unitsPerPoint: Double?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows a user to toggle geodetic calculations.
 ***REMOVED***private var useGeodeticCalculations: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
+***REMOVED******REMOVED***/ The viewpoint to calculate the scale with.
 ***REMOVED***private var viewpoint: Viewpoint?
 ***REMOVED***
-***REMOVED******REMOVED***/ A subscription to handle listening for viewpoint changes.
-***REMOVED***private var viewpointSubscription: AnyCancellable?
-***REMOVED***
-***REMOVED******REMOVED*** - MARK: Private methods
+***REMOVED******REMOVED*** - MARK: Methods
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the labels to be displayed by the scalebar.
 ***REMOVED***private func updateLabels() {
@@ -183,7 +148,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Use a string with at least a few characters in case the number string
 ***REMOVED******REMOVED******REMOVED*** only has 1. The dividers will be decimal values and we want to make
-***REMOVED******REMOVED******REMOVED*** sure they all fit very basic hueristics.
+***REMOVED******REMOVED******REMOVED*** sure they all fit very basic heuristics.
 ***REMOVED******REMOVED***let minSegmentTestString: String
 ***REMOVED******REMOVED***if lineMapLength >= 100 {
 ***REMOVED******REMOVED******REMOVED***minSegmentTestString = String(Int(lineMapLength))
@@ -215,7 +180,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***ScalebarLabel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***index: -1,
 ***REMOVED******REMOVED******REMOVED******REMOVED***xOffset: .zero,
-***REMOVED******REMOVED******REMOVED******REMOVED***text: "0"
+***REMOVED******REMOVED******REMOVED******REMOVED***text: NumberFormatter.localizedString(from: 0, number: .decimal)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -223,9 +188,15 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***currSegmentX += segmentScreenLength
 ***REMOVED******REMOVED******REMOVED***let segmentMapLength = Double((segmentScreenLength * CGFloat(index + 1)) / lineDisplayLength) * lineMapLength
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***var segmentText = numberFormatter.string(from: NSNumber(value: segmentMapLength)) ?? ""
-***REMOVED******REMOVED******REMOVED***if index == numSegments - 1, let displayUnit = displayUnit?.abbreviation {
-***REMOVED******REMOVED******REMOVED******REMOVED***segmentText += " \(displayUnit)"
+***REMOVED******REMOVED******REMOVED***let segmentText: String
+***REMOVED******REMOVED******REMOVED***if index == numSegments - 1, let displayUnit {
+***REMOVED******REMOVED******REMOVED******REMOVED***let measurement = Measurement(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: segmentMapLength,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***linearUnit: displayUnit
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***segmentText = measurement.formatted(.scaleMeasurement)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***segmentText = segmentMapLength.formatted(.number)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let label = ScalebarLabel(
@@ -243,12 +214,31 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Updates the information necessary to render a scalebar based off the latest viewpoint and units per
-***REMOVED******REMOVED***/ point information.
-***REMOVED***private func updateScaleDisplay() {
-***REMOVED******REMOVED***guard let spatialReference = spatialReference.wrappedValue,
-***REMOVED******REMOVED******REMOVED***  let unitsPerPoint = unitsPerPoint.wrappedValue,
-***REMOVED******REMOVED******REMOVED***  let viewpoint = viewpoint,
+***REMOVED******REMOVED***/ Update the stored spatial reference value for use in the next scale calculation.
+***REMOVED******REMOVED***/ - Parameter spatialReference: The spatial reference to calculate the scale with.
+***REMOVED***func update(_ spatialReference: SpatialReference?) {
+***REMOVED******REMOVED***self.spatialReference = spatialReference
+***REMOVED******REMOVED***if !initialScaleWasCalculated { updateScale() ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Updates the stored units per point value for use in the next scale calculation.
+***REMOVED******REMOVED***/ - Parameter unitsPerPoint: The units per point to calculate the scale with.
+***REMOVED***func update(_ unitsPerPoint: Double?) {
+***REMOVED******REMOVED***self.unitsPerPoint = unitsPerPoint
+***REMOVED******REMOVED***if !initialScaleWasCalculated { updateScale() ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Updates the stored units viewpoint value for use in the next scale calculation.
+***REMOVED******REMOVED***/ - Parameter viewpoint: The viewpoint to calculate the scale with.
+***REMOVED***func update(_ viewpoint: Viewpoint?) {
+***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED******REMOVED***if !initialScaleWasCalculated { updateScale() ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Update the information necessary to render a scalebar based off the stored viewpoint, units
+***REMOVED******REMOVED***/ per point and spatial reference values.
+***REMOVED***func updateScale() {
+***REMOVED******REMOVED***guard let spatialReference, let unitsPerPoint, let viewpoint,
 ***REMOVED******REMOVED******REMOVED***  minScale <= 0 || viewpoint.targetScale < minScale else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
@@ -326,6 +316,20 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.displayUnit = displayUnit
 ***REMOVED******REMOVED***self.lineMapLength = lineMapLength
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***initialScaleWasCalculated = true
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***updateLabels()
+***REMOVED***
+***REMOVED***
+
+private extension Measurement where UnitType == UnitLength {
+***REMOVED***init(value: Double, linearUnit: LinearUnit) {
+***REMOVED******REMOVED***self.init(value: value, unit: .fromLinearUnit(linearUnit))
+***REMOVED***
+***REMOVED***
+
+private extension FormatStyle where Self == Measurement<UnitLength>.FormatStyle {
+***REMOVED***static var scaleMeasurement: Self {
+***REMOVED******REMOVED***.measurement(width: .abbreviated, usage: .asProvided)
 ***REMOVED***
 ***REMOVED***

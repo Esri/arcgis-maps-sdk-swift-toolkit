@@ -42,7 +42,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.facilities,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
@@ -100,11 +100,15 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***.searchable(
 ***REMOVED******REMOVED******REMOVED******REMOVED***text: $query,
 ***REMOVED******REMOVED******REMOVED******REMOVED***placement: .navigationBarDrawer(displayMode: .always),
-***REMOVED******REMOVED******REMOVED******REMOVED***prompt: "Filter sites"
+***REMOVED******REMOVED******REMOVED******REMOVED***prompt: String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Filter sites",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A search field allowing user to filter a list of sites by name."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
-***REMOVED******REMOVED******REMOVED***.navigationTitle("Sites")
+***REMOVED******REMOVED******REMOVED***.navigationTitle(String(localized: "Sites", bundle: .toolkitModule))
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The "All sites" button.
@@ -112,7 +116,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ This button presents the facilities list in a special format where the facilities list
 ***REMOVED******REMOVED******REMOVED***/ shows every facility in every site within the floor manager.
 ***REMOVED******REMOVED***var allSitesButton: some View {
-***REMOVED******REMOVED******REMOVED***NavigationLink("All sites") {
+***REMOVED******REMOVED******REMOVED***NavigationLink {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: true,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.flatMap(\.facilities),
@@ -123,6 +127,12 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"All sites",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A button allowing users to view a list of all sites defined in a floor aware map."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
@@ -220,12 +230,18 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***.searchable(
 ***REMOVED******REMOVED******REMOVED******REMOVED***text: $query,
 ***REMOVED******REMOVED******REMOVED******REMOVED***placement: .navigationBarDrawer(displayMode: .always),
-***REMOVED******REMOVED******REMOVED******REMOVED***prompt: "Filter facilities"
+***REMOVED******REMOVED******REMOVED******REMOVED***prompt: String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Filter facilities",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A search field allowing user to filter a list of facilities by name."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED***.navigationTitle(
-***REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling ? "All Sites" : viewModel.selection?.site?.name ?? "Select a facility"
+***REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling ?
+***REMOVED******REMOVED******REMOVED******REMOVED***String(localized: "All Sites", bundle: .toolkitModule) :
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection?.site?.name ?? String(localized: "Select a facility", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -282,7 +298,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***/ Displays text "No matches found".
 private struct NoMatchesView: View {
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text("No matches found")
+***REMOVED******REMOVED***Text("No matches found", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED***.frame(maxHeight: .infinity)
 ***REMOVED***
 ***REMOVED***

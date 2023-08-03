@@ -43,8 +43,14 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***return "".size(withAttributes: [.font: Scalebar.font.uiFont]).height
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
-***REMOVED***private var viewpoint: Binding<Viewpoint?>
+***REMOVED******REMOVED***/ The spatial reference to calculate the scale with.
+***REMOVED***private var spatialReference: SpatialReference?
+***REMOVED***
+***REMOVED******REMOVED***/ The units per point to calculate the scale with.
+***REMOVED***private var unitsPerPoint: Double?
+***REMOVED***
+***REMOVED******REMOVED***/ The viewpoint to calculate the scale with.
+***REMOVED***private var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Internal/Private constants
 ***REMOVED***
@@ -89,28 +95,27 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***maxWidth: Double,
 ***REMOVED******REMOVED***minScale: Double = .zero,
 ***REMOVED******REMOVED***settings: ScalebarSettings = ScalebarSettings(),
-***REMOVED******REMOVED***spatialReference: Binding<SpatialReference?>,
+***REMOVED******REMOVED***spatialReference: SpatialReference?,
 ***REMOVED******REMOVED***style: ScalebarStyle = .alternatingBar,
 ***REMOVED******REMOVED***units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
-***REMOVED******REMOVED***unitsPerPoint: Binding<Double?>,
+***REMOVED******REMOVED***unitsPerPoint: Double?,
 ***REMOVED******REMOVED***useGeodeticCalculations: Bool = true,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
+***REMOVED******REMOVED***viewpoint: Viewpoint?
 ***REMOVED***) {
 ***REMOVED******REMOVED***_opacity = State(initialValue: settings.autoHide ? .zero : 1)
 ***REMOVED******REMOVED***self.settings = settings
+***REMOVED******REMOVED***self.spatialReference = spatialReference
 ***REMOVED******REMOVED***self.style = style
+***REMOVED******REMOVED***self.unitsPerPoint = unitsPerPoint
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_viewModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: ScalebarViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED***minScale,
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference,
 ***REMOVED******REMOVED******REMOVED******REMOVED***style,
 ***REMOVED******REMOVED******REMOVED******REMOVED***units,
-***REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***useGeodeticCalculations,
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue
+***REMOVED******REMOVED******REMOVED******REMOVED***useGeodeticCalculations
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -131,8 +136,11 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.opacity(opacity)
-***REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
-***REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send($0)
+***REMOVED******REMOVED***.onChange(of: spatialReference) { viewModel.update($0) ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: unitsPerPoint) { viewModel.update($0) ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewpoint) {
+***REMOVED******REMOVED******REMOVED***viewModel.update($0)
+***REMOVED******REMOVED******REMOVED***viewModel.updateScale()
 ***REMOVED******REMOVED******REMOVED***if settings.autoHide {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = 1

@@ -20,13 +20,8 @@ struct AttachmentList: View {
 ***REMOVED***var attachmentModels: [AttachmentModel]
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack(alignment: .leading, spacing: 6) {
-***REMOVED******REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
-***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentRow(attachmentModel: attachmentModel)
-***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel != attachmentModels.last {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
+***REMOVED******REMOVED******REMOVED***AttachmentRow(attachmentModel: attachmentModel)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -48,7 +43,7 @@ struct AttachmentRow: View  {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.attachment.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.middle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("\(attachmentModel.attachment.size.formatted(.byteCount(style: .file)))")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(Int64(attachmentModel.attachment.size), format: .byteCount(style: .file))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
@@ -85,6 +80,7 @@ struct AttachmentLoadButton: View  {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "square.and.arrow.down")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .loading:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .loaded:

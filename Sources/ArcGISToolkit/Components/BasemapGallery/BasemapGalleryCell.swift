@@ -57,7 +57,9 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(item.hasError ? .secondary : .primary)
 ***REMOVED******REMOVED***
-***REMOVED***).disabled(item.isBasemapLoading)
+***REMOVED***)
+***REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED***.disabled(item.isBasemapLoading)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an overlay which is either a selection outline or an error icon.

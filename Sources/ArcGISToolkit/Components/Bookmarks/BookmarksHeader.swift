@@ -34,9 +34,9 @@ struct BookmarksHeader: View {
 ***REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "bookmark")
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Bookmarks")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Bookmarks", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Select a bookmark")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Select a bookmark", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED***
@@ -49,8 +49,12 @@ struct BookmarksHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.toggle()
 ***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Done")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Done",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A button to close the bookmark selection menu."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

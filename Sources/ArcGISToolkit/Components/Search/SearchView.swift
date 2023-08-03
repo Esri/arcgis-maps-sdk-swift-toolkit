@@ -88,7 +88,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/ Defaults to "Find a place or address". Note: this is set using the
 ***REMOVED******REMOVED***/ `prompt` modifier.
-***REMOVED***private var prompt = "Find a place or address"
+***REMOVED***private var prompt = String(localized: "Find a place or address", bundle: .toolkitModule)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. Defaults to `true`.
 ***REMOVED******REMOVED***/ If `false`, the result display/selection list is not shown. Set to false if you want to hide the results
@@ -99,7 +99,11 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Message to show when there are no results or suggestions. Defaults to "No results found".
 ***REMOVED******REMOVED***/ Note: this is set using the `noResultsMessage` modifier.
-***REMOVED***private var noResultsMessage = "No results found"
+***REMOVED***private var noResultsMessage = String(
+***REMOVED******REMOVED***localized: "No results found",
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A message to show when there are no results or suggestions."
+***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The width of the search bar, taking into account the horizontal and vertical size classes
 ***REMOVED******REMOVED***/ of the device. This will cause the search field to display full-width on an iPhone in portrait
@@ -118,6 +122,9 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
 ***REMOVED***@State private var isResultListHidden = false
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the search field is focused or not.
+***REMOVED***@FocusState private var searchFieldIsFocused: Bool
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
@@ -127,6 +134,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchField(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $viewModel.currentQuery,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: prompt,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused: $searchFieldIsFocused,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isResultsButtonHidden: !enableResultListView,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isResultListHidden: $isResultListHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -164,8 +172,17 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if viewModel.isEligibleForRequery {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Repeat Search Here") {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.repeatSearch()
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Repeat Search Here",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  A button to show when a user has panned the map away from the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  original search location.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***
@@ -174,6 +191,12 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***.onReceive(viewModel.$currentQuery) { _ in
 ***REMOVED******REMOVED******REMOVED***onQueryChangedAction?(viewModel.currentQuery)
 ***REMOVED******REMOVED******REMOVED***viewModel.updateSuggestions()
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewModel.selectedResult) { _ in
+***REMOVED******REMOVED******REMOVED***searchFieldIsFocused = false
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewModel.currentSuggestion) { _ in
+***REMOVED******REMOVED******REMOVED***searchFieldIsFocused = false
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: geoViewExtent) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.geoViewExtent = geoViewExtent
@@ -416,7 +439,8 @@ extension ResultRow {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***uiImage: UIImage(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***named: "pin",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***in: Bundle.module, with: nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***in: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: nil
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)

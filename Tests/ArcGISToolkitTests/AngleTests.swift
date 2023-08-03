@@ -16,7 +16,7 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 class AngleTests: XCTestCase {
-***REMOVED******REMOVED***/ Tests the behvaior of `Angle`'s normalized member.
+***REMOVED******REMOVED***/ Tests the behavior of `Angle`'s normalized member.
 ***REMOVED***func testNormalizedAngle() {
 ***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: -361.0).normalizedDegrees, 359)
 ***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: -360.0).normalizedDegrees, 0)
