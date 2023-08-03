@@ -17,18 +17,14 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***/ Text Box with no hint, no description, value not required.
 ***REMOVED***func testCase_1_1() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
 ***REMOVED******REMOVED***let inputValidationLabel = app.staticTexts["InputValidation"]
-***REMOVED******REMOVED***let singleLineNoValueNoPlaceholderNoDescriptionTitle = app.staticTexts[
-***REMOVED******REMOVED******REMOVED***"Single Line No Value, Placeholder or Description"
-***REMOVED******REMOVED***]
-***REMOVED******REMOVED***let singleLineNoValueNoPlaceholderNoDescriptionTextField = app
-***REMOVED******REMOVED******REMOVED***.scrollViews.otherElements.containing(.staticText, identifier: "InputValidation")
-***REMOVED******REMOVED******REMOVED***.children(matching: .textField).element(boundBy: 1)
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
+***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
 ***REMOVED******REMOVED***let helperText = app.staticTexts["Maximum 256 characters"]
 ***REMOVED******REMOVED***let characterCount = app.staticTexts["0"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the Form View component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
@@ -40,13 +36,13 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
-***REMOVED******REMOVED***while !(singleLineNoValueNoPlaceholderNoDescriptionTitle.isHittable) {
+***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
 ***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 750)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***singleLineNoValueNoPlaceholderNoDescriptionTextField.isHittable,
-***REMOVED******REMOVED******REMOVED***"The target text field wasn't found within 30 seconds."
+***REMOVED******REMOVED******REMOVED***textField.isHittable,
+***REMOVED******REMOVED******REMOVED***"The text field wasn't found within 30 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(
@@ -60,7 +56,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Give focus to the target text field.
-***REMOVED******REMOVED***singleLineNoValueNoPlaceholderNoDescriptionTextField.tap()
+***REMOVED******REMOVED***textField.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***characterCount.exists,
