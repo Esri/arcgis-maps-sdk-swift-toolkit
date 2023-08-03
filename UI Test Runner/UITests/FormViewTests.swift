@@ -18,7 +18,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***func testCase_1_1() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
-***REMOVED******REMOVED***let inputValidationLabel = app.staticTexts["InputValidation"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
 ***REMOVED******REMOVED***let helperText = app.staticTexts["Maximum 256 characters"]
@@ -31,7 +31,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***inputValidationLabel.waitForExistence(timeout: 30),
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 30),
 ***REMOVED******REMOVED******REMOVED***"The form failed to open after 30 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -68,7 +68,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***func testCase_1_2() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
-***REMOVED******REMOVED***let inputValidationLabel = app.staticTexts["InputValidation"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
 ***REMOVED******REMOVED***let helperText = app.staticTexts["Maximum 256 characters"]
@@ -83,7 +83,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***inputValidationLabel.waitForExistence(timeout: 30),
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 30),
 ***REMOVED******REMOVED******REMOVED***"The form failed to open after 30 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
