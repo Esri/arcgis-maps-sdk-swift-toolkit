@@ -17,18 +17,14 @@ final class FormViewTests: XCTestCase {
     /// Text Box with no hint, no description, value not required.
     func testCase_1_1() throws {
         let app = XCUIApplication()
-        app.launch()
-        
         let formViewTestsButton = app.buttons["Form View Tests"]
         let inputValidationLabel = app.staticTexts["InputValidation"]
-        let singleLineNoValueNoPlaceholderNoDescriptionTitle = app.staticTexts[
-            "Single Line No Value, Placeholder or Description"
-        ]
-        let singleLineNoValueNoPlaceholderNoDescriptionTextField = app
-            .scrollViews.otherElements.containing(.staticText, identifier: "InputValidation")
-            .children(matching: .textField).element(boundBy: 1)
+        let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
+        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
         let helperText = app.staticTexts["Maximum 256 characters"]
         let characterCount = app.staticTexts["0"]
+        
+        app.launch()
         
         // Open the Form View component test view.
         formViewTestsButton.tap()
@@ -40,13 +36,13 @@ final class FormViewTests: XCTestCase {
         )
         
         // Scroll to the target form element.
-        while !(singleLineNoValueNoPlaceholderNoDescriptionTitle.isHittable) {
+        while !(fieldTitle.isHittable) {
             app.scrollViews.firstMatch.swipeUp(velocity: 750)
         }
         
         XCTAssertTrue(
-            singleLineNoValueNoPlaceholderNoDescriptionTextField.isHittable,
-            "The target text field wasn't found within 30 seconds."
+            textField.isHittable,
+            "The text field wasn't found within 30 seconds."
         )
         
         XCTAssertFalse(
@@ -60,7 +56,7 @@ final class FormViewTests: XCTestCase {
         )
         
         // Give focus to the target text field.
-        singleLineNoValueNoPlaceholderNoDescriptionTextField.tap()
+        textField.tap()
         
         XCTAssertTrue(
             characterCount.exists,
