@@ -18,11 +18,10 @@ import Combine
 /// A configurable object that handles authentication challenges.
 @MainActor
 public final class Authenticator: ObservableObject {
+    /// A value indicating whether we should prompt the user when encountering an untrusted host.
+    let promptForUntrustedHosts: Bool
     /// The OAuth configurations that this authenticator can work with.
     let oAuthUserConfigurations: [OAuthUserConfiguration]
-    
-    /// A value indicating whether we should prompt the user when encountering an untrusted host.
-    var promptForUntrustedHosts: Bool
     
     /// Creates an authenticator.
     /// - Parameters:
@@ -51,7 +50,14 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
         
         // Create the correct challenge type.
         if let configuration = oAuthUserConfigurations.first(where: { $0.canBeUsed(for: challenge.requestURL) }) {
-            return .continueWithCredential(try await OAuthUserCredential.credential(for: configuration))
+            do {
+                return .continueWithCredential(try await OAuthUserCredential.credential(for: configuration))
+            } catch is CancellationError {
+                // If user cancels the creation of OAuth user credential then catch the
+                // cancellation error and cancel the challenge. This will make the request which
+                // issued the challenge fail with `ArcGISChallengeCancellationError`.
+                return .cancel
+            }
         } else {
             let tokenChallengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
             

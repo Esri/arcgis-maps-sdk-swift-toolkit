@@ -15,17 +15,11 @@ import SwiftUI
 import ArcGIS
 import QuickLook
 
-/// The view model for an `AttachmentPopupElement`.
-@MainActor class AttachmentsPopupElementModel: ObservableObject {
-    /// The array of `AttachmentModels`, one for each popup attachment.
-    @Published var attachmentModels = [AttachmentModel]()
-}
-
 /// A view model representing the combination of a `PopupAttachment` and
 /// an associated `UIImage` used as a thumbnail.
 @MainActor class AttachmentModel: ObservableObject {
     /// The `PopupAttachment`.
-    @Published var attachment: PopupAttachment
+    let attachment: PopupAttachment
     
     /// The thumbnail representing the attachment.
     @Published var thumbnail: UIImage? {
@@ -69,9 +63,14 @@ import QuickLook
         Task {
             loadStatus = .loading
             try await self.attachment.load()
+            loadStatus = attachment.loadStatus
+            if attachment.loadStatus == .failed || attachment.fileURL == nil {
+                defaultSystemName = "exclamationmark.circle.fill"
+                return
+            }
             
             let request = QLThumbnailGenerator.Request(
-                fileAt: attachment.fileURL,
+                fileAt: attachment.fileURL!,
                 size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
                 scale: displayScale,
                 representationTypes: .thumbnail)
@@ -83,11 +82,6 @@ import QuickLook
                     if let thumbnail = thumbnail {
                         self.thumbnail = thumbnail.uiImage
                     }
-                    else if self.attachment.loadStatus == .failed {
-                        self.defaultSystemName = "exclamationmark.circle.fill"
-                    }
-                    
-                    self.loadStatus = self.attachment.loadStatus
                 }
             }
         }

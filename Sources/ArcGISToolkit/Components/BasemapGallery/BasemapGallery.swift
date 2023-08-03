@@ -214,8 +214,8 @@ extension AlertItem {
     /// - Parameter loadBasemapError: The load basemap error.
     init(loadBasemapError: Error) {
         self.init(
-            title: "Error loading basemap.",
-            message: "\((loadBasemapError as? ArcGISError)?.details ?? "The basemap failed to load for an unknown reason.")"
+            title: String.basemapFailedToLoadTitle,
+            message: (loadBasemapError as? ArcGISError)?.details ?? String.basemapFailedToLoadFallbackError
         )
     }
     
@@ -226,16 +226,33 @@ extension AlertItem {
         
         switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
         case (.some(_), .some(_)):
-            message = "The basemap has a spatial reference that is incompatible with the map."
+            message = String(localized: "The basemap has a spatial reference that is incompatible with the map.", bundle: .toolkitModule)
         case (_, .none):
-            message = "The map does not have a spatial reference."
+            message = String(localized: "The map does not have a spatial reference.", bundle: .toolkitModule)
         case (.none, _):
-            message = "The basemap does not have a spatial reference."
+            message = String(localized: "The basemap does not have a spatial reference.", bundle: .toolkitModule)
         }
         
         self.init(
-            title: "Spatial reference mismatch.",
+            title: String(localized: "Spatial reference mismatch.", bundle: .toolkitModule),
             message: message
         )
     }
+}
+
+private extension String {
+    static let basemapFailedToLoadFallbackError = String(
+        localized: "The basemap failed to load for an unknown reason.",
+        bundle: .toolkitModule,
+        comment: """
+                 An error to be displayed when a basemap chosen from the basemap gallery fails to
+                 load for an unknown reason.
+                 """
+    )
+    
+    static let basemapFailedToLoadTitle = String(
+        localized: "Error loading basemap.",
+        bundle: .toolkitModule,
+        comment: "An error to be displayed when a basemap chosen from the basemap gallery fails to load."
+    )
 }
