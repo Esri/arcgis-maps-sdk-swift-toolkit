@@ -89,7 +89,7 @@ struct FloatingPanel<Content>: View where Content: View {
                     .clipped()
                     .padding(
                         .bottom,
-                        keyboardHeight.isZero ? (isPresented.wrappedValue ? (isCompact ? 25 : 10) : .zero) : keyboardHeight
+                        (isPresented.wrappedValue ? (isCompact ? 25 : 10) : .zero) + keyboardHeight
                     )
                 if !isCompact && isPresented.wrappedValue {
                         Divider()
