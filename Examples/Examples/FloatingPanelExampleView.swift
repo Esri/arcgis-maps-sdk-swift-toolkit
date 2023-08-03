@@ -146,5 +146,6 @@ private struct FloatingPanelTextFieldDemoContent: View {
             )
             .textFieldStyle(.roundedBorder)
         }
+        .padding()
     }
 }
