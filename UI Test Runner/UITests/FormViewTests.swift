@@ -18,7 +18,7 @@ final class FormViewTests: XCTestCase {
     func testCase_1_1() throws {
         let app = XCUIApplication()
         let formViewTestsButton = app.buttons["Form View Tests"]
-        let inputValidationLabel = app.staticTexts["InputValidation"]
+        let formTitle = app.staticTexts["InputValidation"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
         let helperText = app.staticTexts["Maximum 256 characters"]
@@ -31,7 +31,7 @@ final class FormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            inputValidationLabel.waitForExistence(timeout: 30),
+            formTitle.waitForExistence(timeout: 30),
             "The form failed to open after 30 seconds."
         )
         
@@ -68,7 +68,7 @@ final class FormViewTests: XCTestCase {
     func testCase_1_2() throws {
         let app = XCUIApplication()
         let formViewTestsButton = app.buttons["Form View Tests"]
-        let inputValidationLabel = app.staticTexts["InputValidation"]
+        let formTitle = app.staticTexts["InputValidation"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
         let helperText = app.staticTexts["Maximum 256 characters"]
@@ -83,7 +83,7 @@ final class FormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            inputValidationLabel.waitForExistence(timeout: 30),
+            formTitle.waitForExistence(timeout: 30),
             "The form failed to open after 30 seconds."
         )
         
