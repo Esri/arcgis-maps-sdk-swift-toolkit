@@ -42,7 +42,7 @@ struct SiteAndFacilitySelector: View {
                         facilities: viewModel.facilities,
                         isHidden: isHidden
                     )
-                    .navigationBarBackButtonHidden()
+                    .navigationBarBackButtonHidden(true)
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -100,11 +100,15 @@ struct SiteAndFacilitySelector: View {
             .searchable(
                 text: $query,
                 placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "Filter sites"
+                prompt: String(
+                    localized: "Filter sites",
+                    bundle: .toolkitModule,
+                    comment: "A search field allowing user to filter a list of sites by name."
+                )
             )
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
-            .navigationTitle("Sites")
+            .navigationTitle(String(localized: "Sites", bundle: .toolkitModule))
         }
         
         /// The "All sites" button.
@@ -112,7 +116,7 @@ struct SiteAndFacilitySelector: View {
         /// This button presents the facilities list in a special format where the facilities list
         /// shows every facility in every site within the floor manager.
         var allSitesButton: some View {
-            NavigationLink("All sites") {
+            NavigationLink {
                 FacilitiesList(
                     usesAllSitesStyling: true,
                     facilities: viewModel.sites.flatMap(\.facilities),
@@ -123,6 +127,12 @@ struct SiteAndFacilitySelector: View {
                         CloseButton { isHidden.wrappedValue.toggle() }
                     }
                 }
+            } label: {
+                Text(
+                    "All sites",
+                    bundle: .toolkitModule,
+                    comment: "A button allowing users to view a list of all sites defined in a floor aware map."
+                )
             }
             .buttonStyle(.bordered)
             .padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
@@ -220,12 +230,18 @@ struct SiteAndFacilitySelector: View {
             .searchable(
                 text: $query,
                 placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "Filter facilities"
+                prompt: String(
+                    localized: "Filter facilities",
+                    bundle: .toolkitModule,
+                    comment: "A search field allowing user to filter a list of facilities by name."
+                )
             )
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
             .navigationTitle(
-                usesAllSitesStyling ? "All Sites" : viewModel.selection?.site?.name ?? "Select a facility"
+                usesAllSitesStyling ?
+                String(localized: "All Sites", bundle: .toolkitModule) :
+                    viewModel.selection?.site?.name ?? String(localized: "Select a facility", bundle: .toolkitModule)
             )
         }
         
@@ -282,7 +298,7 @@ struct SiteAndFacilitySelector: View {
 /// Displays text "No matches found".
 private struct NoMatchesView: View {
     var body: some View {
-        Text("No matches found")
+        Text("No matches found", bundle: .toolkitModule)
             .frame(maxHeight: .infinity)
     }
 }

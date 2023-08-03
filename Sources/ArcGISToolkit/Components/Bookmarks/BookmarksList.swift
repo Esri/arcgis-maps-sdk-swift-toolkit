@@ -39,7 +39,7 @@ struct BookmarksList: View {
         Group {
             if bookmarks.isEmpty {
                 Label {
-                    Text("No bookmarks")
+                    Text("No bookmarks", bundle: .toolkitModule)
                 } icon: {
                     Image(systemName: "bookmark.slash")
                 }

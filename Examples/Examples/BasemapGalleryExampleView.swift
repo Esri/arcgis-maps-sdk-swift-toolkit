@@ -29,7 +29,7 @@ struct BasemapGalleryExampleView: View {
     )
     
     /// The initial list of basemaps.
-    private let basemaps = initialBasemaps()
+    @State private var basemaps = initialBasemaps()
     
     var body: some View {
         MapView(map: map, viewpoint: initialViewpoint)
@@ -38,7 +38,7 @@ struct BasemapGalleryExampleView: View {
                     doneButton
                         .padding()
                     BasemapGallery(items: basemaps, geoModel: map)
-                        .style(.automatic())
+                        .style(.grid(maxItemWidth: 100))
                         .padding()
                 }
             }

@@ -37,6 +37,8 @@ struct PopupElementHeader: View {
                     .foregroundColor(.secondary)
             }
         }
-        .padding([.bottom], 4)
+        #if targetEnvironment(macCatalyst)
+        .padding(.leading, 4)
+        #endif
     }
 }
