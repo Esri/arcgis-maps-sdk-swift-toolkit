@@ -146,5 +146,6 @@ private struct FloatingPanelTextFieldDemoContent: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.textFieldStyle(.roundedBorder)
 ***REMOVED***
+***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
