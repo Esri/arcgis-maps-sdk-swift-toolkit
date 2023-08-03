@@ -51,7 +51,7 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isFocused)
-***REMOVED******REMOVED******REMOVED***if isFocused && !text.isEmpty {
+***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
