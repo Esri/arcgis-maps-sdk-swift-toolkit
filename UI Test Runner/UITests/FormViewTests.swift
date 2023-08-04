@@ -139,3 +139,62 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***func testCase_1_3() throws {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
+***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
+***REMOVED******REMOVED***let helperText = app.staticTexts["Maximum 256 characters"]
+***REMOVED******REMOVED***let characterCount = app.staticTexts["257"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Form View component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
+***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
+***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 750)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***textField.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.typeText(.loremIpsum257)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
+***REMOVED******REMOVED******REMOVED***"The title wasn't found within 30 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***helperText.exists,
+***REMOVED******REMOVED******REMOVED***"The helper text was visible when it should've been hidden."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***characterCount.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The character count wasn't visible when it should've been."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+private extension String {
+***REMOVED******REMOVED***/ 257 characters of Lorem ipsum text
+***REMOVED***static var loremIpsum257: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED******REMOVED***Lorem ipsum dolor sit amet, consecteur adipiscing elit, sed do eiusmod tempor \
+***REMOVED******REMOVED******REMOVED***incididunt ut labore et dolore magna aliqua. Semper eget at tellus. Sed cras ornare \
+***REMOVED******REMOVED******REMOVED***arcu dui vivamus arcu. In a metus dictum at. Cras at vivamus at adipiscing \
+***REMOVED******REMOVED******REMOVED***tellus et ut dolore.
+***REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
