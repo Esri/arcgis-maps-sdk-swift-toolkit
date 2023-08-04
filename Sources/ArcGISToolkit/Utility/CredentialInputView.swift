@@ -121,10 +121,8 @@ struct CredentialInputSheetView: View {
 ***REMOVED***private let continueAction: Action
 ***REMOVED***
 ***REMOVED******REMOVED***/ The value in the username field.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ This member is unused when usage is set to `Usage.passwordOnly`.
 ***REMOVED***@State private var username = ""
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The value in the password field.
 ***REMOVED***@State private var password = ""
 ***REMOVED***
@@ -196,6 +194,7 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***text: $password
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.submitLabel(.done)
 ***REMOVED******REMOVED***.textInputAutocapitalization(.never)
 ***REMOVED******REMOVED***.autocorrectionDisabled(true)
 ***REMOVED******REMOVED***.textContentType(.password)
