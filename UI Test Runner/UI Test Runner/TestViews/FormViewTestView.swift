@@ -28,6 +28,9 @@ struct FormViewTestView: View {
 ***REMOVED******REMOVED***/ The form view model provides a channel of communication between the form view and its host.
 ***REMOVED***@StateObject private var formViewModel = FormViewModel()
 ***REMOVED***
+***REMOVED******REMOVED***/ The form being edited in the form view.
+***REMOVED***@State private var featureForm: FeatureForm?
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in
 ***REMOVED******REMOVED******REMOVED***MapView(map: map)
@@ -39,9 +42,11 @@ struct FormViewTestView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let featureLayer = map.operationalLayers.first as? FeatureLayer
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let parameters = QueryParameters()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***parameters.addObjectID(1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let res = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let feature = res?.features().makeIterator().next() as? ArcGISFeature else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let result = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await feature.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature, definition: formDefinition)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.startEditing(feature)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED******REMOVED******REMOVED***
@@ -51,13 +56,13 @@ struct FormViewTestView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16.4, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView(featureForm: featureForm)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationBackground(.thinMaterial)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationBackgroundInteraction(.enabled(upThrough: .medium))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView(featureForm: featureForm)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***#if targetEnvironment(macCatalyst)
