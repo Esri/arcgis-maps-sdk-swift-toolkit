@@ -138,4 +138,63 @@ final class FormViewTests: XCTestCase {
             "The text field wasn't found within 30 seconds."
         )
     }
+    
+    func testCase_1_3() throws {
+        let app = XCUIApplication()
+        let formViewTestsButton = app.buttons["Form View Tests"]
+        let formTitle = app.staticTexts["InputValidation"]
+        let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
+        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
+        let helperText = app.staticTexts["Maximum 256 characters"]
+        let characterCount = app.staticTexts["257"]
+        
+        app.launch()
+        
+        // Open the Form View component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        // Scroll to the target form element.
+        while !(fieldTitle.isHittable) {
+            app.scrollViews.firstMatch.swipeUp(velocity: 750)
+        }
+        
+        textField.tap()
+        
+        app.typeText(.loremIpsum257)
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The title wasn't found within 30 seconds."
+        )
+        
+        XCTAssertTrue(
+            helperText.exists,
+            "The helper text was visible when it should've been hidden."
+        )
+        
+        XCTAssertTrue(
+            characterCount.waitForExistence(timeout: 5),
+            "The character count wasn't visible when it should've been."
+        )
+    }
+}
+
+private extension String {
+    /// 257 characters of Lorem ipsum text
+    static var loremIpsum257: Self {
+        .init(
+            """
+            Lorem ipsum dolor sit amet, consecteur adipiscing elit, sed do eiusmod tempor \
+            incididunt ut labore et dolore magna aliqua. Semper eget at tellus. Sed cras ornare \
+            arcu dui vivamus arcu. In a metus dictum at. Cras at vivamus at adipiscing \
+            tellus et ut dolore.
+            """
+        )
+    }
 }
