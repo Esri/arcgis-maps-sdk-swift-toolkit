@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
 import SwiftUI
+import ArcGIS
 
 struct DateTimeEntry: View {
     @Environment(\.formElementPadding) var elementPadding
@@ -20,6 +20,9 @@ struct DateTimeEntry: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
+    private var featureForm: FeatureForm?
+    
+
     /// The current date selection.
     @State private var date: Date?
     
@@ -30,16 +33,18 @@ struct DateTimeEntry: View {
     @State private var requiredValueMissing = false
     
     /// The field's parent element.
-    private let element: FieldFeatureFormElement
+    private let element: FieldFormElement
     
     /// The input configuration of the field.
-    private let input: DateTimePickerFeatureFormInput
+    private let input: DateTimePickerFormInput
     
     /// Creates a view for a date and time (if applicable) entry.
     /// - Parameters:
+    ///   - featureForm: <#featureForm description#>
     ///   - element: The field's parent element.
     ///   - input: The input configuration of the field.
-    init(element: FieldFeatureFormElement, input: DateTimePickerFeatureFormInput) {
+    init(featureForm: FeatureForm?, element: FieldFormElement, input: DateTimePickerFormInput) {
+        self.featureForm = featureForm
         self.element = element
         self.input = input
     }
@@ -55,13 +60,14 @@ struct DateTimeEntry: View {
         }
         .padding([.bottom], elementPadding)
         .onAppear {
-            if let date = model.feature?.attributes[element.fieldName] as? Date {
+            if let date = featureForm?.feature.attributes[element.fieldName] as? Date {
                 self.date = date
             }
         }
         .onChange(of: date) { newDate in
-            requiredValueMissing = element.required && newDate == nil
-            model.feature?.setAttributeValue(newDate, forKey: element.fieldName)
+            //TODO: add `required` property to API
+            requiredValueMissing = /*element.required && */newDate == nil
+            featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
         }
         .onChange(of: model.focusedFieldName) { newFocusedFieldName in
             isEditing = newFocusedFieldName == element.fieldName
@@ -88,7 +94,7 @@ struct DateTimeEntry: View {
             
             if isEditing {
                 todayOrNowButton
-            } else if element.editable {
+            } else if true/*element.editable*/ {
                 if date == nil {
                     Image(systemName: "calendar")
                         .foregroundColor(.secondary)
@@ -102,7 +108,7 @@ struct DateTimeEntry: View {
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {
-                guard element.editable else { return }
+//                guard element.editable else { return }
                 if date == nil {
                     if dateRange.contains(.now) {
                         date = .now
@@ -156,8 +162,8 @@ struct DateTimeEntry: View {
         Group {
             if requiredValueMissing {
                 Text.required
-            } else if let description = element.description {
-                Text(description)
+            } else {
+                Text(element.description)
             }
         }
         .font(.footnote)

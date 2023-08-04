@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
 import SwiftUI
+import ArcGIS
 
 /// A view for text entry spanning multiple lines.
 struct MultiLineTextEntry: View {
@@ -20,6 +20,9 @@ struct MultiLineTextEntry: View {
     
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
+    
+    /// <#Description#>
+    private var featureForm: FeatureForm?
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
@@ -35,16 +38,18 @@ struct MultiLineTextEntry: View {
     @State private var isPlaceholder = false
     
     /// The field's parent element.
-    private let element: FieldFeatureFormElement
+    private let element: FieldFormElement
     
     /// The input configuration of the field.
-    private let input: TextAreaFeatureFormInput
+    private let input: TextAreaFormInput
     
     /// Creates a view for text entry spanning multiple lines.
     /// - Parameters:
+    ///   - featureForm: <#featureForm description#>
     ///   - element: The field's parent element.
     ///   - input: The input configuration of the field.
-    init(element: FieldFeatureFormElement, input: TextAreaFeatureFormInput) {
+    init(featureForm: FeatureForm?, element: FieldFormElement, input: TextAreaFormInput) {
+        self.featureForm = featureForm
         self.element =  element
         self.input = input
     }
@@ -91,7 +96,7 @@ struct MultiLineTextEntry: View {
                 text = ""
             } else if !focused && text.isEmpty {
                 isPlaceholder = true
-                text = element.hint ?? ""
+                text = element.hint
             }
             if focused {
                 model.focusedFieldName = element.fieldName
@@ -106,19 +111,19 @@ struct MultiLineTextEntry: View {
         )
         .padding([.bottom], elementPadding)
         .onAppear {
-            let text = model.feature?.attributes[element.fieldName] as? String
+            let text = featureForm?.feature.attributes[element.fieldName] as? String
             if let text, !text.isEmpty {
                 isPlaceholder = false
                 self.text = text
                 
             } else {
                 isPlaceholder = true
-                self.text = element.hint ?? ""
+                self.text = element.hint
             }
         }
         .onChange(of: text) { newValue in
             if !isPlaceholder {
-                model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+                featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
             }
         }
     }
