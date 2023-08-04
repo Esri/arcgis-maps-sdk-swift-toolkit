@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import ArcGIS
-import FormsPlugin
 import SwiftUI
 
 /// - Since: 200.2

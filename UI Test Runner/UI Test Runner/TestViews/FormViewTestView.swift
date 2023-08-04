@@ -28,6 +28,9 @@ struct FormViewTestView: View {
     /// The form view model provides a channel of communication between the form view and its host.
     @StateObject private var formViewModel = FormViewModel()
     
+    /// The form being edited in the form view.
+    @State private var featureForm: FeatureForm?
+    
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
@@ -39,9 +42,11 @@ struct FormViewTestView: View {
                     let featureLayer = map.operationalLayers.first as? FeatureLayer
                     let parameters = QueryParameters()
                     parameters.addObjectID(1)
-                    let res = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
-                    guard let feature = res?.features().makeIterator().next() as? ArcGISFeature else { return }
+                    let result = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
+                    guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else { return }
                     try? await feature.load()
+                    guard let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition else { return }
+                    featureForm = FeatureForm(feature: feature, definition: formDefinition)
                     formViewModel.startEditing(feature)
                     isPresented = true
                 }
@@ -51,13 +56,13 @@ struct FormViewTestView: View {
                 .sheet(isPresented: $isPresented) {
                     Group {
                         if #available(iOS 16.4, *) {
-                            FormView()
+                            FormView(featureForm: featureForm)
                                 .padding()
                                 .presentationBackground(.thinMaterial)
                                 .presentationBackgroundInteraction(.enabled(upThrough: .medium))
                                 .presentationDetents([.medium])
                         } else {
-                            FormView()
+                            FormView(featureForm: featureForm)
                                 .padding()
                         }
                         #if targetEnvironment(macCatalyst)

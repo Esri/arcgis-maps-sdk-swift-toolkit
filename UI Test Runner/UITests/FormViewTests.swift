@@ -31,8 +31,8 @@ final class FormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 30),
-            "The form failed to open after 30 seconds."
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
         )
         
         // Scroll to the target form element.
@@ -42,7 +42,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertTrue(
             textField.isHittable,
-            "The text field wasn't found within 30 seconds."
+            "The target text field wasn't found."
         )
         
         XCTAssertFalse(
