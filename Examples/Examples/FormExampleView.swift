@@ -29,8 +29,10 @@ struct FormExampleView: View {
     
     /// The form view model provides a channel of communication between the form view and its host.
     @StateObject private var formViewModel = FormViewModel()
+    
+    /// The form being edited in the form view.
     @State private var featureForm: FeatureForm?
-
+    
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
@@ -41,8 +43,8 @@ struct FormExampleView: View {
                     if let feature = await identifyFeature(with: mapViewProxy),
                        let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
                         featureForm = FeatureForm(feature: feature, definition: formDefinition)
-//                        formViewModel.startEditing(feature)
-                        isPresented = featureForm != nil // true
+                        formViewModel.startEditing(feature)
+                        isPresented = featureForm != nil
                     }
                 }
                 .ignoresSafeArea(.keyboard)

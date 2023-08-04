@@ -17,8 +17,10 @@ import ArcGIS
 /// A view for single line text entry.
 struct SingleLineTextEntry: View {
     @Environment(\.formElementPadding) var elementPadding
+    
+    /// <#Description#>
     private var featureForm: FeatureForm?
-
+    
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
@@ -36,6 +38,7 @@ struct SingleLineTextEntry: View {
     
     /// Creates a view for single line text entry.
     /// - Parameters:
+    ///   - featureForm: <#featureForm description#>
     ///   - element: The field's parent element.
     ///   - input: The input configuration of the field.
     init(featureForm: FeatureForm?, element: FieldFormElement, input: TextBoxFormInput) {

@@ -19,7 +19,9 @@ struct DateTimeEntry: View {
     
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
+    
     private var featureForm: FeatureForm?
+    
 
     /// The current date selection.
     @State private var date: Date?
@@ -38,6 +40,7 @@ struct DateTimeEntry: View {
     
     /// Creates a view for a date and time (if applicable) entry.
     /// - Parameters:
+    ///   - featureForm: <#featureForm description#>
     ///   - element: The field's parent element.
     ///   - input: The input configuration of the field.
     init(featureForm: FeatureForm?, element: FieldFormElement, input: DateTimePickerFormInput) {

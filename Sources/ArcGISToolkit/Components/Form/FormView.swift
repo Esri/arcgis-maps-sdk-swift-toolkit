@@ -21,9 +21,12 @@ public struct FormView: View {
     
     /// The model for this form view.
     @EnvironmentObject var model: FormViewModel
+    
+    /// <#Description#>
     private var featureForm: FeatureForm?
     
     /// Initializes a form view.
+    /// - Parameter featureForm: <#featureForm description#>
     public init(featureForm: FeatureForm?) {
         self.featureForm = featureForm
     }
