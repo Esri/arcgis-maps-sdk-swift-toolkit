@@ -46,7 +46,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertTrue(
             singleLineNoValueNoPlaceholderNoDescriptionTextField.isHittable,
-            "The target text field wasn't found within 30 seconds."
+            "The target text field wasn't found within the expected time."
         )
         
         XCTAssertFalse(
