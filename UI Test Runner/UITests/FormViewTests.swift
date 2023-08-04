@@ -42,25 +42,25 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertTrue(
             textField.isHittable,
-            "The target text field wasn't found."
+            "The target text field wasn't visible."
         )
         
         XCTAssertFalse(
-            helperText.exists,
-            "The helper text was visible before it should've been."
+            helperText.isHittable,
+            "The helper text wasn't hidden."
         )
         
         XCTAssertFalse(
-            characterCount.exists,
-            "The character count was visible before it should've been."
+            characterCount.isHittable,
+            "The character count wasn't hidden."
         )
         
         // Give focus to the target text field.
         textField.tap()
         
         XCTAssertTrue(
-            characterCount.exists,
-            "The character count wasn't visible when it should've been."
+            characterCount.isHittable,
+            "The character count wasn't visible."
         )
     }
     
@@ -94,7 +94,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertTrue(
             textField.isHittable,
-            "The text field wasn't found within 30 seconds."
+            "The text field wasn't visible."
         )
         
         textField.tap()
@@ -102,40 +102,40 @@ final class FormViewTests: XCTestCase {
         app.typeText("Sample text")
         
         XCTAssertTrue(
-            helperText.exists,
-            "The helper text wasn't visible when it should've been."
+            helperText.isHittable,
+            "The helper text wasn't visible."
         )
         
         XCTAssertTrue(
-            characterCount.exists,
-            "The character count wasn't visible when it should've been."
+            characterCount.isHittable,
+            "The character count wasn't visible."
         )
         
         XCTAssertTrue(
             clearButton.isHittable,
-            "The clear button wasn't present when it should've been."
+            "The clear button wasn't visible."
         )
         
         returnButton.tap()
         
         XCTAssertTrue(
             fieldTitle.isHittable,
-            "The title wasn't found within 30 seconds."
+            "The title wasn't visible."
         )
         
         XCTAssertFalse(
-            helperText.exists,
-            "The helper text was visible when it should've been hidden."
+            helperText.isHittable,
+            "The helper text wasn't hidden."
         )
         
         XCTAssertTrue(
             clearButton.isHittable,
-            "The clear button wasn't present when it should've been."
+            "The clear button wasn't visible."
         )
         
         XCTAssertTrue(
             textField.isHittable,
-            "The text field wasn't found within 30 seconds."
+            "The text field wasn't visible."
         )
     }
     
@@ -170,17 +170,17 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertTrue(
             fieldTitle.isHittable,
-            "The title wasn't found within 30 seconds."
+            "The title wasn't visible."
         )
         
         XCTAssertTrue(
-            helperText.exists,
-            "The helper text was visible when it should've been hidden."
+            helperText.isHittable,
+            "The helper text wasn't visible."
         )
         
         XCTAssertTrue(
-            characterCount.waitForExistence(timeout: 5),
-            "The character count wasn't visible when it should've been."
+            characterCount.isHittable,
+            "The character count wasn't visible."
         )
     }
 }
