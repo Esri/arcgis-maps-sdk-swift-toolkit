@@ -42,25 +42,25 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***textField.isHittable,
-***REMOVED******REMOVED******REMOVED***"The target text field wasn't found."
+***REMOVED******REMOVED******REMOVED***"The target text field wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(
-***REMOVED******REMOVED******REMOVED***helperText.exists,
-***REMOVED******REMOVED******REMOVED***"The helper text was visible before it should've been."
+***REMOVED******REMOVED******REMOVED***helperText.isHittable,
+***REMOVED******REMOVED******REMOVED***"The helper text wasn't hidden."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(
-***REMOVED******REMOVED******REMOVED***characterCount.exists,
-***REMOVED******REMOVED******REMOVED***"The character count was visible before it should've been."
+***REMOVED******REMOVED******REMOVED***characterCount.isHittable,
+***REMOVED******REMOVED******REMOVED***"The character count wasn't hidden."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Give focus to the target text field.
 ***REMOVED******REMOVED***textField.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***characterCount.exists,
-***REMOVED******REMOVED******REMOVED***"The character count wasn't visible when it should've been."
+***REMOVED******REMOVED******REMOVED***characterCount.isHittable,
+***REMOVED******REMOVED******REMOVED***"The character count wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -94,7 +94,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***textField.isHittable,
-***REMOVED******REMOVED******REMOVED***"The text field wasn't found within 30 seconds."
+***REMOVED******REMOVED******REMOVED***"The text field wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***textField.tap()
@@ -102,40 +102,40 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***app.typeText("Sample text")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***helperText.exists,
-***REMOVED******REMOVED******REMOVED***"The helper text wasn't visible when it should've been."
+***REMOVED******REMOVED******REMOVED***helperText.isHittable,
+***REMOVED******REMOVED******REMOVED***"The helper text wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***characterCount.exists,
-***REMOVED******REMOVED******REMOVED***"The character count wasn't visible when it should've been."
+***REMOVED******REMOVED******REMOVED***characterCount.isHittable,
+***REMOVED******REMOVED******REMOVED***"The character count wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***clearButton.isHittable,
-***REMOVED******REMOVED******REMOVED***"The clear button wasn't present when it should've been."
+***REMOVED******REMOVED******REMOVED***"The clear button wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***returnButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
-***REMOVED******REMOVED******REMOVED***"The title wasn't found within 30 seconds."
+***REMOVED******REMOVED******REMOVED***"The title wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(
-***REMOVED******REMOVED******REMOVED***helperText.exists,
-***REMOVED******REMOVED******REMOVED***"The helper text was visible when it should've been hidden."
+***REMOVED******REMOVED******REMOVED***helperText.isHittable,
+***REMOVED******REMOVED******REMOVED***"The helper text wasn't hidden."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***clearButton.isHittable,
-***REMOVED******REMOVED******REMOVED***"The clear button wasn't present when it should've been."
+***REMOVED******REMOVED******REMOVED***"The clear button wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***textField.isHittable,
-***REMOVED******REMOVED******REMOVED***"The text field wasn't found within 30 seconds."
+***REMOVED******REMOVED******REMOVED***"The text field wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -170,17 +170,17 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
-***REMOVED******REMOVED******REMOVED***"The title wasn't found within 30 seconds."
+***REMOVED******REMOVED******REMOVED***"The title wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***helperText.exists,
-***REMOVED******REMOVED******REMOVED***"The helper text was visible when it should've been hidden."
+***REMOVED******REMOVED******REMOVED***helperText.isHittable,
+***REMOVED******REMOVED******REMOVED***"The helper text wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***characterCount.waitForExistence(timeout: 5),
-***REMOVED******REMOVED******REMOVED***"The character count wasn't visible when it should've been."
+***REMOVED******REMOVED******REMOVED***characterCount.isHittable,
+***REMOVED******REMOVED******REMOVED***"The character count wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
