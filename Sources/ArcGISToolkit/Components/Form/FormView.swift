@@ -21,9 +21,12 @@ public struct FormView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for this form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
+***REMOVED******REMOVED***/ - Parameter featureForm: <#featureForm description#>
 ***REMOVED***public init(featureForm: FeatureForm?) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED***

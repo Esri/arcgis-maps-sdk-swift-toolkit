@@ -17,8 +17,10 @@
 ***REMOVED***/ A view for single line text entry.
 struct SingleLineTextEntry: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***private var featureForm: FeatureForm?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
@@ -36,6 +38,7 @@ struct SingleLineTextEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for single line text entry.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - featureForm: <#featureForm description#>
 ***REMOVED******REMOVED***/   - element: The field's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
 ***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: TextBoxFormInput) {

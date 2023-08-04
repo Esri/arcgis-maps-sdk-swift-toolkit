@@ -20,8 +20,10 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***private var featureForm: FeatureForm?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
@@ -43,6 +45,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for text entry spanning multiple lines.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - featureForm: <#featureForm description#>
 ***REMOVED******REMOVED***/   - element: The field's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
 ***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: TextAreaFormInput) {
