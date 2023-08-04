@@ -11,7 +11,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import FormsPlugin
+***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ A view shown at the bottom of each text entry element in a form.
@@ -51,25 +51,26 @@ struct TextEntryFooter: View {
 ***REMOVED***init(
 ***REMOVED******REMOVED***currentLength: Int,
 ***REMOVED******REMOVED***isFocused: Bool,
-***REMOVED******REMOVED***element: FieldFeatureFormElement,
-***REMOVED******REMOVED***input: FeatureFormInput
+***REMOVED******REMOVED***element: FieldFormElement,
+***REMOVED******REMOVED***input: FormInput
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.currentLength = currentLength
 ***REMOVED******REMOVED***self.isFocused = isFocused
-***REMOVED******REMOVED***self.description = element.description ?? ""
-***REMOVED******REMOVED***self.isRequired = element.required
+***REMOVED******REMOVED***self.description = element.description
+***REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
+***REMOVED******REMOVED***self.isRequired = false***REMOVED***element.required
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch input {
-***REMOVED******REMOVED***case let input as TextBoxFeatureFormInput:
+***REMOVED******REMOVED***case let input as TextBoxFormInput:
 ***REMOVED******REMOVED******REMOVED***self.maxLength = input.maxLength
 ***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
 ***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
-***REMOVED******REMOVED***case let input as TextAreaFeatureFormInput:
+***REMOVED******REMOVED***case let input as TextAreaFormInput:
 ***REMOVED******REMOVED******REMOVED***self.maxLength = input.maxLength
 ***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
 ***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
 ***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***fatalError("TextEntryFooter can only be used with TextAreaFeatureFormInput or TextBoxFeatureFormInput")
+***REMOVED******REMOVED******REMOVED***fatalError("TextEntryFooter can only be used with TextAreaFormInput or TextBoxFormInput")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

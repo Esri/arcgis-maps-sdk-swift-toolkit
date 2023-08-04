@@ -31,8 +31,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 30),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 30 seconds."
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
@@ -42,7 +42,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***textField.isHittable,
-***REMOVED******REMOVED******REMOVED***"The text field wasn't found within 30 seconds."
+***REMOVED******REMOVED******REMOVED***"The target text field wasn't found."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(

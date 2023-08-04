@@ -11,7 +11,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import FormsPlugin
+***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ A view for text entry spanning multiple lines.
@@ -20,6 +20,9 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
@@ -35,16 +38,18 @@ struct MultiLineTextEntry: View {
 ***REMOVED***@State private var isPlaceholder = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
-***REMOVED***private let element: FieldFeatureFormElement
+***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the field.
-***REMOVED***private let input: TextAreaFeatureFormInput
+***REMOVED***private let input: TextAreaFormInput
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for text entry spanning multiple lines.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - featureForm: <#featureForm description#>
 ***REMOVED******REMOVED***/   - element: The field's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
-***REMOVED***init(element: FieldFeatureFormElement, input: TextAreaFeatureFormInput) {
+***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: TextAreaFormInput) {
+***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element =  element
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
@@ -91,7 +96,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = ""
 ***REMOVED******REMOVED*** else if !focused && text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
-***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint ?? ""
+***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if focused {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = element.fieldName
@@ -106,19 +111,19 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***let text = model.feature?.attributes[element.fieldName] as? String
+***REMOVED******REMOVED******REMOVED***let text = featureForm?.feature.attributes[element.fieldName] as? String
 ***REMOVED******REMOVED******REMOVED***if let text, !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.text = text
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
-***REMOVED******REMOVED******REMOVED******REMOVED***self.text = element.hint ?? ""
+***REMOVED******REMOVED******REMOVED******REMOVED***self.text = element.hint
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { newValue in
 ***REMOVED******REMOVED******REMOVED***if !isPlaceholder {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
