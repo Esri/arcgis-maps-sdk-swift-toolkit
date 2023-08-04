@@ -46,7 +46,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***singleLineNoValueNoPlaceholderNoDescriptionTextField.isHittable,
-***REMOVED******REMOVED******REMOVED***"The target text field wasn't found within 30 seconds."
+***REMOVED******REMOVED******REMOVED***"The target text field wasn't found within the expected time."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(
