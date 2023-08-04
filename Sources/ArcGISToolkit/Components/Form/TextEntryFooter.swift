@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
 import SwiftUI
+import ArcGIS
 
 /// A view shown at the bottom of each text entry element in a form.
 struct TextEntryFooter: View {
@@ -51,25 +51,26 @@ struct TextEntryFooter: View {
     init(
         currentLength: Int,
         isFocused: Bool,
-        element: FieldFeatureFormElement,
-        input: FeatureFormInput
+        element: FieldFormElement,
+        input: FormInput
     ) {
         self.currentLength = currentLength
         self.isFocused = isFocused
-        self.description = element.description ?? ""
-        self.isRequired = element.required
+        self.description = element.description
+        //TODO: add `required` property to API
+        self.isRequired = false//element.required
         
         switch input {
-        case let input as TextBoxFeatureFormInput:
+        case let input as TextBoxFormInput:
             self.maxLength = input.maxLength
             self.minLength = input.minLength
             _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
-        case let input as TextAreaFeatureFormInput:
+        case let input as TextAreaFormInput:
             self.maxLength = input.maxLength
             self.minLength = input.minLength
             _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
         default:
-            fatalError("TextEntryFooter can only be used with TextAreaFeatureFormInput or TextBoxFeatureFormInput")
+            fatalError("TextEntryFooter can only be used with TextAreaFormInput or TextBoxFormInput")
         }
     }
     
