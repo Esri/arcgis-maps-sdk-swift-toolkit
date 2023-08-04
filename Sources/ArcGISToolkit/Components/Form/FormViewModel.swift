@@ -12,7 +12,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import FormsPlugin
 ***REMOVED***
 
 ***REMOVED***/ - Since: 200.2
