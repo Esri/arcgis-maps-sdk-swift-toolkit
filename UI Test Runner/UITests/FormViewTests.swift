@@ -145,6 +145,7 @@ final class FormViewTests: XCTestCase {
         let formTitle = app.staticTexts["InputValidation"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
+        let helperText = app.staticTexts["Maximum 256 characters"]
         let characterCount = app.staticTexts["257"]
         
         app.launch()
@@ -191,7 +192,8 @@ private extension String {
             """
             Lorem ipsum dolor sit amet, consecteur adipiscing elit, sed do eiusmod tempor \
             incididunt ut labore et dolore magna aliqua. Semper eget at tellus. Sed cras ornare \
-            arcu dui vivamus arcu. In a metus dictum at. Semper eget duis at adipiscing tellus.
+            arcu dui vivamus arcu. In a metus dictum at. Cras at vivamus at adipiscing \
+            tellus et ut dolore.
             """
         )
     }
