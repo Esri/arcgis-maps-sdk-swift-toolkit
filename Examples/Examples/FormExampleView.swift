@@ -16,6 +16,8 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FormExampleView: View {
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
     
@@ -28,6 +30,9 @@ struct FormExampleView: View {
     /// The form view model provides a channel of communication between the form view and its host.
     @StateObject private var formViewModel = FormViewModel()
     
+    /// The form being edited in the form view.
+    @State private var featureForm: FeatureForm?
+    
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
@@ -35,34 +40,47 @@ struct FormExampleView: View {
                     identifyScreenPoint = screenPoint
                 }
                 .task(id: identifyScreenPoint) {
-                    if let feature = await identifyFeature(with: mapViewProxy) {
+                    if let feature = await identifyFeature(with: mapViewProxy),
+                       let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
+                        featureForm = FeatureForm(feature: feature, definition: formDefinition)
                         formViewModel.startEditing(feature)
-                        isPresented = true
+                        isPresented = featureForm != nil
                     }
                 }
                 .ignoresSafeArea(.keyboard)
                 
                 // Present a FormView in a native SwiftUI sheet
                 .sheet(isPresented: $isPresented) {
-                    Group {
-                        if #available(iOS 16.4, *) {
-                            FormView()
-                                .padding()
-                                .presentationBackground(.thinMaterial)
-                                .presentationBackgroundInteraction(.enabled(upThrough: .medium))
-                                .presentationDetents([.medium])
-                        } else {
-                            FormView()
-                                .padding()
+                    if useControlsInForm {
+                        HStack {
+                            Button("Cancel", role: .cancel) {
+                                formViewModel.undoEdits()
+                                isPresented = false
+                            }
+                            .padding()
+                            .buttonStyle(.bordered)
+                            Spacer()
+                            Button("Submit") {
+                                Task {
+                                    await formViewModel.submitChanges()
+                                    isPresented = false
+                                }
+                            }
+                            .padding()
+                            .buttonStyle(.borderedProminent)
                         }
-                        #if targetEnvironment(macCatalyst)
-                        Button("Dismiss") {
-                            isPresented = false
-                        }
-                        .padding()
-                        #endif
                     }
-                    .environmentObject(formViewModel)
+                    
+                    if #available(iOS 16.4, *) {
+                        FormView(featureForm: featureForm)
+                            .padding()
+                            .presentationBackground(.thinMaterial)
+                            .presentationBackgroundInteraction(.enabled(upThrough: .medium))
+                            .presentationDetents([.medium])
+                    } else {
+                        FormView(featureForm: featureForm)
+                            .padding()
+                    }
                 }
                 
                 // Or present a FormView in a Floating Panel (provided via the Toolkit)
@@ -75,17 +93,18 @@ struct FormExampleView: View {
 //                        if isPresented {
 //                            FormView()
 //                                .padding()
-//                                .environmentObject(formViewModel)
 //                        }
 //                    }
 //                }
                 
+                .environmentObject(formViewModel)
+                .navigationBarBackButtonHidden(isPresented)
                 .toolbar {
                     // Once iOS 16.0 is the minimum supported, the two conditionals to show the
                     // buttons can be merged and hoisted up as the root content of the toolbar.
                     
                     ToolbarItem(placement: .navigationBarLeading) {
-                        if isPresented {
+                        if isPresented && !useControlsInForm {
                             Button("Cancel", role: .cancel) {
                                 formViewModel.undoEdits()
                                 isPresented = false
@@ -94,7 +113,7 @@ struct FormExampleView: View {
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        if isPresented {
+                        if isPresented && !useControlsInForm {
                             Button("Submit") {
                                 Task {
                                     await formViewModel.submitChanges()
@@ -128,6 +147,15 @@ extension FormExampleView {
             return feature
         }
         return nil
+    }
+}
+
+private extension FormExampleView {
+    /// A Boolean value indicating whether the form controls should be shown directly in the form's presenting container.
+    var useControlsInForm: Bool {
+        verticalSizeClass == .compact ||
+        UIDevice.current.userInterfaceIdiom == .mac ||
+        UIDevice.current.userInterfaceIdiom == .pad
     }
 }
 

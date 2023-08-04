@@ -11,12 +11,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import FormsPlugin
 import SwiftUI
+import ArcGIS
 
 /// A view for single line text entry.
 struct SingleLineTextEntry: View {
     @Environment(\.formElementPadding) var elementPadding
+    
+    /// <#Description#>
+    private var featureForm: FeatureForm?
     
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
@@ -28,16 +31,18 @@ struct SingleLineTextEntry: View {
     @State private var text = ""
     
     /// The field's parent element.
-    private let element: FieldFeatureFormElement
+    private let element: FieldFormElement
     
     /// The input configuration of the field.
-    private let input: TextBoxFeatureFormInput
+    private let input: TextBoxFormInput
     
     /// Creates a view for single line text entry.
     /// - Parameters:
+    ///   - featureForm: <#featureForm description#>
     ///   - element: The field's parent element.
     ///   - input: The input configuration of the field.
-    init(element: FieldFeatureFormElement, input: TextBoxFeatureFormInput) {
+    init(featureForm: FeatureForm?, element: FieldFormElement, input: TextBoxFormInput) {
+        self.featureForm = featureForm
         self.element = element
         self.input = input
     }
@@ -66,7 +71,7 @@ struct SingleLineTextEntry: View {
         )
         .padding([.bottom], elementPadding)
         .onAppear {
-            text = model.feature?.attributes[element.fieldName] as? String ?? ""
+            text = featureForm?.feature.attributes[element.fieldName] as? String ?? ""
         }
         .onChange(of: isFocused) { newFocus in
             if newFocus {
@@ -74,7 +79,7 @@ struct SingleLineTextEntry: View {
             }
         }
         .onChange(of: text) { newValue in
-            model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+            featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
         }
     }
 }
