@@ -11,7 +11,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import FormsPlugin
+***REMOVED***
 ***REMOVED***
 
 struct DateTimeEntry: View {
@@ -20,6 +20,9 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
+***REMOVED***private var featureForm: FeatureForm?
+***REMOVED***
+
 ***REMOVED******REMOVED***/ The current date selection.
 ***REMOVED***@State private var date: Date?
 ***REMOVED***
@@ -30,16 +33,18 @@ struct DateTimeEntry: View {
 ***REMOVED***@State private var requiredValueMissing = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
-***REMOVED***private let element: FieldFeatureFormElement
+***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the field.
-***REMOVED***private let input: DateTimePickerFeatureFormInput
+***REMOVED***private let input: DateTimePickerFormInput
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a date and time (if applicable) entry.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - featureForm: <#featureForm description#>
 ***REMOVED******REMOVED***/   - element: The field's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
-***REMOVED***init(element: FieldFeatureFormElement, input: DateTimePickerFeatureFormInput) {
+***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: DateTimePickerFormInput) {
+***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
@@ -55,13 +60,14 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***if let date = model.feature?.attributes[element.fieldName] as? Date {
+***REMOVED******REMOVED******REMOVED***if let date = featureForm?.feature.attributes[element.fieldName] as? Date {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.date = date
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
-***REMOVED******REMOVED******REMOVED***requiredValueMissing = element.required && newDate == nil
-***REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newDate, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
+***REMOVED******REMOVED******REMOVED***requiredValueMissing = /*element.required && */newDate == nil
+***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.focusedFieldName) { newFocusedFieldName in
 ***REMOVED******REMOVED******REMOVED***isEditing = newFocusedFieldName == element.fieldName
@@ -88,7 +94,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isEditing {
 ***REMOVED******REMOVED******REMOVED******REMOVED***todayOrNowButton
-***REMOVED******REMOVED*** else if element.editable {
+***REMOVED******REMOVED*** else if true/*element.editable*/ {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
@@ -102,7 +108,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED***guard element.editable else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard element.editable else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if dateRange.contains(.now) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = .now
@@ -156,8 +162,8 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if requiredValueMissing {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text.required
-***REMOVED******REMOVED*** else if let description = element.description {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.footnote)

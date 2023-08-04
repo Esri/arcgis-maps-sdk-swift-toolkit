@@ -11,12 +11,15 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import FormsPlugin
+***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ A view for single line text entry.
 struct SingleLineTextEntry: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
@@ -28,16 +31,18 @@ struct SingleLineTextEntry: View {
 ***REMOVED***@State private var text = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
-***REMOVED***private let element: FieldFeatureFormElement
+***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the field.
-***REMOVED***private let input: TextBoxFeatureFormInput
+***REMOVED***private let input: TextBoxFormInput
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for single line text entry.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - featureForm: <#featureForm description#>
 ***REMOVED******REMOVED***/   - element: The field's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
-***REMOVED***init(element: FieldFeatureFormElement, input: TextBoxFeatureFormInput) {
+***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: TextBoxFormInput) {
+***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
@@ -64,7 +69,7 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***text = model.feature?.attributes[element.fieldName] as? String ?? ""
+***REMOVED******REMOVED******REMOVED***text = featureForm?.feature.attributes[element.fieldName] as? String ?? ""
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { newFocus in
 ***REMOVED******REMOVED******REMOVED***if newFocus {
@@ -72,7 +77,7 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { newValue in
-***REMOVED******REMOVED******REMOVED***model.feature?.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

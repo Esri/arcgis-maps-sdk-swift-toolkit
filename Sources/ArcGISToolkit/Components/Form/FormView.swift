@@ -12,7 +12,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import FormsPlugin
 ***REMOVED***
 
 ***REMOVED***/ Forms allow users to edit information about GIS features.
@@ -23,8 +22,14 @@ public struct FormView: View {
 ***REMOVED******REMOVED***/ The model for this form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***private var featureForm: FeatureForm?
+***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
-***REMOVED***public init() {***REMOVED***
+***REMOVED******REMOVED***/ - Parameter featureForm: <#featureForm description#>
+***REMOVED***public init(featureForm: FeatureForm?) {
+***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED******REMOVED*** When the `FormView` is hosted within a SwiftUI sheet, any `NavigationView` that may have
@@ -32,26 +37,13 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED*** successfully present a keyboard toolbar (as is done in `MultiLineTextEntry`).
 ***REMOVED******REMOVED***NavigationView {
 ***REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: model.formDefinition?.title)
+***REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: featureForm?.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.formDefinition?.formElements ?? [], id: \.element?.label) { container in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = container.element {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(featureForm?.elements ?? [], id: \.label) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***let decoder = JSONDecoder()
-***REMOVED******REMOVED******REMOVED***if let layer = model.feature?.table?.layer as? FeatureLayer,
-***REMOVED******REMOVED******REMOVED***   let formInfoDictionary = layer._unsupportedJSON["formInfo"],
-***REMOVED******REMOVED******REMOVED***   let jsonData = try? JSONSerialization.data(withJSONObject: formInfoDictionary),
-***REMOVED******REMOVED******REMOVED***   let formDefinition = try? decoder.decode(FeatureFormDefinition.self, from: jsonData) {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.formDefinition = formDefinition
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("Error processing form definition")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -60,11 +52,11 @@ public struct FormView: View {
 extension FormView {
 ***REMOVED******REMOVED***/ Makes UI for a form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
-***REMOVED***@ViewBuilder func makeElement(_ element: FeatureFormElement) -> some View {
+***REMOVED***@ViewBuilder func makeElement(_ element: FormElement) -> some View {
 ***REMOVED******REMOVED***switch element {
-***REMOVED******REMOVED***case let element as FieldFeatureFormElement:
+***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
-***REMOVED******REMOVED***case let element as GroupFeatureFormElement:
+***REMOVED******REMOVED***case let element as GroupFormElement:
 ***REMOVED******REMOVED******REMOVED***makeGroupElement(element)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
@@ -73,14 +65,14 @@ extension FormView {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Makes UI for a field form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
-***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFeatureFormElement) -> some View {
-***REMOVED******REMOVED***switch element.inputType.input {
-***REMOVED******REMOVED***case let `input` as DateTimePickerFeatureFormInput:
-***REMOVED******REMOVED******REMOVED***DateTimeEntry(element: element, input: `input`)
-***REMOVED******REMOVED***case let `input` as TextAreaFeatureFormInput:
-***REMOVED******REMOVED******REMOVED***MultiLineTextEntry(element: element, input: `input`)
-***REMOVED******REMOVED***case let `input` as TextBoxFeatureFormInput:
-***REMOVED******REMOVED******REMOVED***SingleLineTextEntry(element: element, input: `input`)
+***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
+***REMOVED******REMOVED***switch element.input {
+***REMOVED******REMOVED***case let `input` as DateTimePickerFormInput:
+***REMOVED******REMOVED******REMOVED***DateTimeEntry(featureForm: featureForm, element: element, input: `input`)
+***REMOVED******REMOVED***case let `input` as TextAreaFormInput:
+***REMOVED******REMOVED******REMOVED***MultiLineTextEntry(featureForm: featureForm, element: element, input: `input`)
+***REMOVED******REMOVED***case let `input` as TextBoxFormInput:
+***REMOVED******REMOVED******REMOVED***SingleLineTextEntry(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
@@ -89,10 +81,10 @@ extension FormView {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Makes UI for a group form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
-***REMOVED***@ViewBuilder func makeGroupElement(_ element: GroupFeatureFormElement) -> some View {
+***REMOVED***@ViewBuilder func makeGroupElement(_ element: GroupFormElement) -> some View {
 ***REMOVED******REMOVED***DisclosureGroup(element.label) {
-***REMOVED******REMOVED******REMOVED***ForEach(element.formElements, id: \.element?.label) { container in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let element = container.element as? FieldFeatureFormElement {
+***REMOVED******REMOVED******REMOVED***ForEach(element.formElements, id: \.label) { formElement in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let element = formElement as? FieldFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
