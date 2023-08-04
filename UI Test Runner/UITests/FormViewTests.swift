@@ -145,6 +145,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
+***REMOVED******REMOVED***let helperText = app.staticTexts["Maximum 256 characters"]
 ***REMOVED******REMOVED***let characterCount = app.staticTexts["257"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -191,7 +192,8 @@ private extension String {
 ***REMOVED******REMOVED******REMOVED***"""
 ***REMOVED******REMOVED******REMOVED***Lorem ipsum dolor sit amet, consecteur adipiscing elit, sed do eiusmod tempor \
 ***REMOVED******REMOVED******REMOVED***incididunt ut labore et dolore magna aliqua. Semper eget at tellus. Sed cras ornare \
-***REMOVED******REMOVED******REMOVED***arcu dui vivamus arcu. In a metus dictum at. Semper eget duis at adipiscing tellus.
+***REMOVED******REMOVED******REMOVED***arcu dui vivamus arcu. In a metus dictum at. Cras at vivamus at adipiscing \
+***REMOVED******REMOVED******REMOVED***tellus et ut dolore.
 ***REMOVED******REMOVED******REMOVED***"""
 ***REMOVED******REMOVED***)
 ***REMOVED***
