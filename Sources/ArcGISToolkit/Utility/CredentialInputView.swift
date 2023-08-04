@@ -121,10 +121,8 @@ struct CredentialInputSheetView: View {
     private let continueAction: Action
     
     /// The value in the username field.
-    ///
-    /// This member is unused when usage is set to `Usage.passwordOnly`.
     @State private var username = ""
-
+    
     /// The value in the password field.
     @State private var password = ""
     
@@ -196,6 +194,7 @@ struct CredentialInputSheetView: View {
             ),
             text: $password
         )
+        .submitLabel(.done)
         .textInputAutocapitalization(.never)
         .autocorrectionDisabled(true)
         .textContentType(.password)
