@@ -37,7 +37,7 @@ final class FormViewTests: XCTestCase {
         
         // Scroll to the target form element.
         while !(fieldTitle.isHittable) {
-            app.scrollViews.firstMatch.swipeUp(velocity: 750)
+            app.scrollViews.firstMatch.swipeUp(velocity: 500)
         }
         
         XCTAssertTrue(
@@ -89,7 +89,7 @@ final class FormViewTests: XCTestCase {
         
         // Scroll to the target form element.
         while !(fieldTitle.isHittable) {
-            app.scrollViews.firstMatch.swipeUp(velocity: 750)
+            app.scrollViews.firstMatch.swipeUp(velocity: 500)
         }
         
         XCTAssertTrue(
@@ -116,7 +116,11 @@ final class FormViewTests: XCTestCase {
             "The clear button wasn't visible."
         )
         
-        returnButton.tap()
+        #if targetEnvironment(macCatalyst)
+            app.typeText("\r")
+        #else
+            returnButton.tap()
+        #endif
         
         XCTAssertTrue(
             fieldTitle.isHittable,
@@ -161,7 +165,7 @@ final class FormViewTests: XCTestCase {
         
         // Scroll to the target form element.
         while !(fieldTitle.isHittable) {
-            app.scrollViews.firstMatch.swipeUp(velocity: 750)
+            app.scrollViews.firstMatch.swipeUp(velocity: 500)
         }
         
         textField.tap()
