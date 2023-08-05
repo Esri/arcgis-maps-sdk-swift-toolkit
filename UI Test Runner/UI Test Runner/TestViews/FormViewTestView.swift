@@ -16,6 +16,8 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FormViewTestView: View {
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
     
@@ -51,32 +53,49 @@ struct FormViewTestView: View {
                     isPresented = true
                 }
                 .ignoresSafeArea(.keyboard)
-            
+                
                 // Present a FormView in a native SwiftUI sheet
                 .sheet(isPresented: $isPresented) {
-                    Group {
-                        if #available(iOS 16.4, *) {
-                            FormView(featureForm: featureForm)
-                                .padding()
-                                .presentationBackground(.thinMaterial)
-                                .presentationBackgroundInteraction(.enabled(upThrough: .medium))
-                                .presentationDetents([.medium])
-                        } else {
-                            FormView(featureForm: featureForm)
-                                .padding()
+                    if useControlsInForm {
+                        HStack {
+                            Button("Cancel", role: .cancel) {
+                                formViewModel.undoEdits()
+                                isPresented = false
+                            }
+                            .padding()
+                            .buttonStyle(.bordered)
+                            Spacer()
+                            Button("Submit") {
+                                Task {
+                                    await formViewModel.submitChanges()
+                                    isPresented = false
+                                }
+                            }
+                            .padding()
+                            .buttonStyle(.borderedProminent)
                         }
-                        #if targetEnvironment(macCatalyst)
-                        Button("Dismiss") {
-                            isPresented = false
-                        }
-                        .padding()
-                        #endif
                     }
-                    .environmentObject(formViewModel)
+                    
+                    if #available(iOS 16.4, *) {
+                        FormView(featureForm: featureForm)
+                            .padding()
+                            .presentationBackground(.thinMaterial)
+                            .presentationBackgroundInteraction(.enabled(upThrough: .medium))
+                            .presentationDetents([.medium])
+                    } else {
+                        FormView(featureForm: featureForm)
+                            .padding()
+                    }
                 }
+                
+                .environmentObject(formViewModel)
+                .navigationBarBackButtonHidden(isPresented)
                 .toolbar {
+                    // Once iOS 16.0 is the minimum supported, the two conditionals to show the
+                    // buttons can be merged and hoisted up as the root content of the toolbar.
+                    
                     ToolbarItem(placement: .navigationBarLeading) {
-                        if isPresented {
+                        if isPresented && !useControlsInForm {
                             Button("Cancel", role: .cancel) {
                                 formViewModel.undoEdits()
                                 isPresented = false
@@ -85,7 +104,7 @@ struct FormViewTestView: View {
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        if isPresented {
+                        if isPresented && !useControlsInForm {
                             Button("Submit") {
                                 Task {
                                     await formViewModel.submitChanges()
@@ -96,6 +115,15 @@ struct FormViewTestView: View {
                     }
                 }
         }
+    }
+}
+
+private extension FormViewTestView {
+    /// A Boolean value indicating whether the form controls should be shown directly in the form's presenting container.
+    var useControlsInForm: Bool {
+        verticalSizeClass == .compact ||
+        UIDevice.current.userInterfaceIdiom == .mac ||
+        UIDevice.current.userInterfaceIdiom == .pad
     }
 }
 
