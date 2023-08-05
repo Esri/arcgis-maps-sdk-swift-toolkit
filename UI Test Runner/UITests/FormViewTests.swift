@@ -37,7 +37,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
 ***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
-***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 750)
+***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -89,7 +89,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
 ***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
-***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 750)
+***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -116,7 +116,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The clear button wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***returnButton.tap()
+***REMOVED******REMOVED***#if targetEnvironment(macCatalyst)
+***REMOVED******REMOVED******REMOVED***app.typeText("\r")
+***REMOVED******REMOVED***#else
+***REMOVED******REMOVED******REMOVED***returnButton.tap()
+***REMOVED******REMOVED***#endif
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
@@ -161,7 +165,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
 ***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
-***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 750)
+***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***textField.tap()
