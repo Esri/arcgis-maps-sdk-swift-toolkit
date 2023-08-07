@@ -150,6 +150,7 @@ private struct FloatingPanelTextFieldDemoContent: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED***.textFieldStyle(.roundedBorder)
+***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
 ***REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***.onChange(of: selectedDetent) { newDetent in
