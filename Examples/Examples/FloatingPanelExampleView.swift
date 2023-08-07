@@ -135,6 +135,8 @@ private struct FloatingPanelTextFieldDemoContent: View {
 ***REMOVED***
 ***REMOVED***@State private var sampleText = ""
 ***REMOVED***
+***REMOVED***@FocusState private var isFocused
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED***Text("Text Field")
@@ -146,8 +148,14 @@ private struct FloatingPanelTextFieldDemoContent: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***text: $sampleText,
 ***REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text("Enter sample text.")
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED***.textFieldStyle(.roundedBorder)
 ***REMOVED***
 ***REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***.onChange(of: selectedDetent) { newDetent in
+***REMOVED******REMOVED******REMOVED***if newDetent != .full {
+***REMOVED******REMOVED******REMOVED******REMOVED***isFocused = false
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
