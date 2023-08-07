@@ -43,7 +43,7 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
 ***REMOVED******REMOVED******REMOVED***case .textField:
-***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelTextFieldDemoContent()
+***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
 ***REMOVED******REMOVED******REMOVED***case .none:
 ***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***
@@ -131,6 +131,8 @@ private struct FloatingPanelListDemoContent: View {
 ***REMOVED***/ Demo content consisting of a vertical stack of items, including a text field which demonstrates
 ***REMOVED***/ the Floating Panel's keyboard avoidance capability.
 private struct FloatingPanelTextFieldDemoContent: View {
+***REMOVED***@Binding var selectedDetent: FloatingPanelDetent
+***REMOVED***
 ***REMOVED***@State private var sampleText = ""
 ***REMOVED***
 ***REMOVED***var body: some View {
