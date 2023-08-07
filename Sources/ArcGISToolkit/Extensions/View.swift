@@ -70,13 +70,13 @@ extension View {
         }
     }
     
-    /// Performs the provided action after a slight delay.
+    /// Performs the provided action when the view appears after a slight delay.
     /// - Tip: Occasionally delaying allows a sheet's presentation animation to work correctly.
     /// - Parameters:
     ///   - delay: The delay to wait before allow the task to proceed, in nanoseconds. Defaults to 1/4 second.
     ///   - action: The action to perform after the delay.
-    func delayedTask(nanoseconds: UInt64 = 250_000_000, action: @escaping () -> Void) -> some View {
-        task {
+    func delayedOnAppear(nanoseconds: UInt64 = 250_000_000, action: @MainActor @escaping () -> Void) -> some View {
+        task { @MainActor in
             try? await Task.sleep(nanoseconds: nanoseconds)
             action()
         }
