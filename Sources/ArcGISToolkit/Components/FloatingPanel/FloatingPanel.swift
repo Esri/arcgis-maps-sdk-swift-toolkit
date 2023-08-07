@@ -57,9 +57,6 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The height of the content.
 ***REMOVED***@State private var height: CGFloat = .minHeight
 ***REMOVED***
-***REMOVED******REMOVED***/ The height of the keyboard, if present, otherwise zero.
-***REMOVED***@State private var keyboardHeight: CGFloat = 0.0
-***REMOVED***
 ***REMOVED******REMOVED***/ The latest recorded drag gesture value.
 ***REMOVED***@State private var latestDragGesture: DragGesture.Value?
 ***REMOVED***
@@ -126,15 +123,13 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: selectedDetent)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { notification in
+***REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? .zero
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: .full)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***keyboardHeight = .zero
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: selectedDetent.wrappedValue)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
