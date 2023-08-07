@@ -192,12 +192,11 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showCertificateError,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***.delayedTask {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present the prompt right away.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting it after initialization allows it to animate.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** However, this needs to happen after a slight delay or
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** it doesn't show.
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 250_000_000)
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.showPrompt = true
 ***REMOVED******REMOVED***
 ***REMOVED***

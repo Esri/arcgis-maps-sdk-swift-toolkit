@@ -70,3 +70,15 @@ extension View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Performs the provided action after a slight delay.
+***REMOVED******REMOVED***/ - Tip: Occasionally delaying allows a sheet's presentation animation to work correctly.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - delay: The delay to wait before allow the task to proceed, in nanoseconds. Defaults to 1/4 second.
+***REMOVED******REMOVED***/   - action: The action to perform after the delay.
+***REMOVED***func delayedTask(nanoseconds: UInt64 = 250_000_000, action: @escaping () -> Void) -> some View {
+***REMOVED******REMOVED***task {
+***REMOVED******REMOVED******REMOVED***try? await Task.sleep(nanoseconds: nanoseconds)
+***REMOVED******REMOVED******REMOVED***action()
+***REMOVED***
+***REMOVED***
+***REMOVED***
