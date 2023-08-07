@@ -135,6 +135,8 @@ private struct FloatingPanelTextFieldDemoContent: View {
     
     @State private var sampleText = ""
     
+    @FocusState private var isFocused
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text("Text Field")
@@ -146,8 +148,14 @@ private struct FloatingPanelTextFieldDemoContent: View {
                 text: $sampleText,
                 prompt: Text("Enter sample text.")
             )
+            .focused($isFocused)
             .textFieldStyle(.roundedBorder)
         }
         .padding()
+        .onChange(of: selectedDetent) { newDetent in
+            if newDetent != .full {
+                isFocused = false
+            }
+        }
     }
 }
