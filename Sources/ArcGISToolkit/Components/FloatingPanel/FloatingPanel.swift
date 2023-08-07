@@ -129,7 +129,7 @@ struct FloatingPanel<Content>: View where Content: View {
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { notification in
                 withAnimation {
                     keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? .zero
-                    height = heightFor(detent: .full) - keyboardHeight
+                    height = heightFor(detent: .full)
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
