@@ -26,10 +26,7 @@ struct TrustHostViewModifier: ViewModifier {
     /// The network authentication challenge for the untrusted host.
     let challenge: NetworkChallengeContinuation
     
-    // Even though we will present it right away we need to use a state variable for this.
-    // Using a constant has 2 issues. One, it won't animate. Two, when challenging for multiple
-    // endpoints at a time, and the challenges stack up, you can end up with a "already presenting"
-    // error.
+    /// A Boolean value indicating whether or not the prompt is displayed.
     @State var isPresented: Bool = false
     
     var title: some View {
@@ -55,7 +52,7 @@ struct TrustHostViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .delayedTask {
+            .delayedOnAppear {
                 // Present the sheet right away.
                 // Setting it after initialization allows it to animate.
                 // However, this needs to happen after a slight delay or

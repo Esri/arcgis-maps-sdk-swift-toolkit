@@ -29,7 +29,7 @@ struct LoginViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .delayedTask {
+            .delayedOnAppear {
                 // Present the sheet right away.
                 // Setting it after initialization allows it to animate.
                 // However, this needs to happen after a slight delay or

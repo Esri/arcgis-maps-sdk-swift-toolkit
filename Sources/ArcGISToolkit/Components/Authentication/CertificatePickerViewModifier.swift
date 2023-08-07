@@ -156,6 +156,13 @@ struct CertificatePickerViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
+            .delayedOnAppear {
+                // Present the prompt right away.
+                // Setting it after initialization allows it to animate.
+                // However, this needs to happen after a slight delay or
+                // it doesn't show.
+                viewModel.showPrompt = true
+            }
             .promptBrowseCertificate(
                 isPresented: $viewModel.showPrompt,
                 viewModel: viewModel
@@ -192,13 +199,6 @@ struct CertificatePickerViewModifier: ViewModifier {
                 isPresented: $viewModel.showCertificateError,
                 viewModel: viewModel
             )
-            .delayedTask {
-                // Present the prompt right away.
-                // Setting it after initialization allows it to animate.
-                // However, this needs to happen after a slight delay or
-                // it doesn't show.
-                viewModel.showPrompt = true
-            }
     }
 }
 
