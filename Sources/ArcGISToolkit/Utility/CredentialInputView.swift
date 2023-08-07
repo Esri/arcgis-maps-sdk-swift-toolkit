@@ -46,24 +46,24 @@ extension View {
 
 struct CredentialInputSheetView_Previews: PreviewProvider {
     static var previews: some View {
-        Text("foo")
-        .credentialInput(
-            isPresented: .constant(true),
-            fields: .usernamePassword,
-            message: "You must sign in to access 'arcgis.com'",
-            title: "Authentication Required",
-            cancelAction: .init(
-                title: "Cancel",
-                handler: { _, _ in
-                    
-                }
-            ),
-            continueAction: .init(
-                title: "Continue",
-                handler: { username, password in
-                }
+        Text("test")
+            .credentialInput(
+                isPresented: .constant(true),
+                fields: .usernamePassword,
+                message: "You must sign in to access 'arcgis.com'",
+                title: "Authentication Required",
+                cancelAction: .init(
+                    title: "Cancel",
+                    handler: { _, _ in
+                        
+                    }
+                ),
+                continueAction: .init(
+                    title: "Continue",
+                    handler: { username, password in
+                    }
+                )
             )
-        )
     }
 }
 
@@ -100,6 +100,7 @@ struct CredentialInputModifier: ViewModifier {
                     continueAction: continueAction
                 )
                 .mediumPresentationDetents()
+                .interactiveDismissDisabled()
             }
     }
 }
@@ -236,7 +237,7 @@ struct CredentialInputSheetView: View {
                     HStack {
                         Spacer()
                         Button(role: .cancel) {
-                            cancelAction.handler(username, password)
+                            cancelAction.handler("", "")
                         } label: {
                             Text(cancelAction.title)
                                 .padding(.horizontal)
