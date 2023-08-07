@@ -87,42 +87,42 @@ private struct FloatingPanelListDemoContent: View {
     var body: some View {
         List {
             Section("Preset Heights") {
-                Button("Summary") {
-                    selectedDetent = .summary
-                }
-                .disabled(selectedDetent == .summary)
-                Button("Half") {
-                    selectedDetent = .half
-                }
-                .disabled(selectedDetent == .half)
                 Button("Full") {
                     selectedDetent = .full
                 }
                 .disabled(selectedDetent == .full)
+                Button("Half") {
+                    selectedDetent = .half
+                }
+                .disabled(selectedDetent == .half)
+                Button("Summary") {
+                    selectedDetent = .summary
+                }
+                .disabled(selectedDetent == .summary)
             }
             Section("Fractional Heights") {
-                Button("1/4") {
-                    selectedDetent = .fraction(1 / 4)
-                }
-                .disabled(selectedDetent == .fraction(1 / 4))
-                Button("1/2") {
-                    selectedDetent = .fraction(1 / 2)
-                }
-                .disabled(selectedDetent == .fraction(1 / 2))
                 Button("3/4") {
                     selectedDetent = .fraction(3 / 4)
                 }
                 .disabled(selectedDetent == .fraction(3 / 4))
+                Button("1/2") {
+                    selectedDetent = .fraction(1 / 2)
+                }
+                .disabled(selectedDetent == .fraction(1 / 2))
+                Button("1/4") {
+                    selectedDetent = .fraction(1 / 4)
+                }
+                .disabled(selectedDetent == .fraction(1 / 4))
             }
             Section("Value Heights") {
-                Button("200") {
-                    selectedDetent = .height(200)
-                }
-                .disabled(selectedDetent == .height(200))
                 Button("600") {
                     selectedDetent = .height(600)
                 }
                 .disabled(selectedDetent == .height(600))
+                Button("200") {
+                    selectedDetent = .height(200)
+                }
+                .disabled(selectedDetent == .height(200))
             }
         }
     }
