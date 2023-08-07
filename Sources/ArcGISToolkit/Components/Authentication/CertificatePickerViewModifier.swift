@@ -257,6 +257,7 @@ private extension View {
                 }
                 Spacer()
             }
+            .interactiveDismissDisabled()
             .mediumPresentationDetents()
             .padding()
         }
@@ -280,8 +281,8 @@ private extension View {
                 isPresented.wrappedValue = false
                 viewModel.cancel()
             }
-            .edgesIgnoringSafeArea(.bottom)
             .interactiveDismissDisabled()
+            .edgesIgnoringSafeArea(.bottom)
         }
     }
 }
@@ -295,48 +296,49 @@ private extension View {
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
-            sheet(isPresented: isPresented) {
-                VStack(alignment: .center) {
-                    Text("Error importing certificate", bundle: .toolkitModule)
-                        .font(.title)
-                        .multilineTextAlignment(.center)
-                        .padding(.vertical)
-                    
-                    Text(
-                        viewModel.certificateError?.localizedDescription ?? String(
-                            localized: "The certificate file or password was invalid.",
-                            bundle: .toolkitModule
-                        )
-                    )
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+        sheet(isPresented: isPresented) {
+            VStack(alignment: .center) {
+                Text("Error importing certificate", bundle: .toolkitModule)
+                    .font(.title)
                     .multilineTextAlignment(.center)
-                    .padding(.bottom)
-                    HStack {
-                        Spacer()
-                        Button(role: .cancel) {
-                            isPresented.wrappedValue = false
-                            viewModel.cancel()
-                        } label: {
-                            Text("Cancel", bundle: .toolkitModule)
+                    .padding(.vertical)
+                
+                Text(
+                    viewModel.certificateError?.localizedDescription ?? String(
+                        localized: "The certificate file or password was invalid.",
+                        bundle: .toolkitModule
+                    )
+                )
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.bottom)
+                HStack {
+                    Spacer()
+                    Button(role: .cancel) {
+                        isPresented.wrappedValue = false
+                        viewModel.cancel()
+                    } label: {
+                        Text("Cancel", bundle: .toolkitModule)
                             .padding(.horizontal)
-                        }
-                        .buttonStyle(.bordered)
-                        Spacer()
-                        Button(role: .cancel) {
-                            isPresented.wrappedValue = false
-                            viewModel.proceedToPicker()
-                        } label: {
-                            Text("Try Again", bundle: .toolkitModule)
-                                .padding(.horizontal)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        Spacer()
                     }
+                    .buttonStyle(.bordered)
+                    Spacer()
+                    Button(role: .cancel) {
+                        isPresented.wrappedValue = false
+                        viewModel.proceedToPicker()
+                    } label: {
+                        Text("Try Again", bundle: .toolkitModule)
+                            .padding(.horizontal)
+                    }
+                    .buttonStyle(.borderedProminent)
                     Spacer()
                 }
-                .mediumPresentationDetents()
-                .padding()
+                Spacer()
             }
+            .interactiveDismissDisabled()
+            .mediumPresentationDetents()
+            .padding()
+        }
     }
 }

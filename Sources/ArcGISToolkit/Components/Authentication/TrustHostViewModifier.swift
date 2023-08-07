@@ -94,6 +94,7 @@ struct TrustHostViewModifier: ViewModifier {
                 }
                 .padding()
                 .mediumPresentationDetents()
+                .interactiveDismissDisabled()
             }
     }
 }
