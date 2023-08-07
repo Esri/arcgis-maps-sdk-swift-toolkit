@@ -57,9 +57,6 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The height of the content.
     @State private var height: CGFloat = .minHeight
     
-    /// The height of the keyboard, if present, otherwise zero.
-    @State private var keyboardHeight: CGFloat = 0.0
-    
     /// The latest recorded drag gesture value.
     @State private var latestDragGesture: DragGesture.Value?
     
@@ -126,15 +123,13 @@ struct FloatingPanel<Content>: View where Content: View {
                     height = heightFor(detent: selectedDetent)
                 }
             }
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { notification in
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
                 withAnimation {
-                    keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? .zero
                     height = heightFor(detent: .full)
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
                 withAnimation {
-                    keyboardHeight = .zero
                     height = heightFor(detent: selectedDetent.wrappedValue)
                 }
             }
