@@ -88,8 +88,8 @@ struct FloatingPanel<Content>: View where Content: View {
                     .frame(height: height)
                     .clipped()
                 if !isCompact && isPresented.wrappedValue {
-                        Divider()
-                        makeHandleView()
+                    Divider()
+                    makeHandleView()
                 }
             }
             .background(backgroundColor)
