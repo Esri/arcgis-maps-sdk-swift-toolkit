@@ -87,10 +87,6 @@ struct FloatingPanel<Content>: View where Content: View {
                 content
                     .frame(height: height)
                     .clipped()
-                    .padding(
-                        .bottom,
-                        (isPresented.wrappedValue ? (isCompact ? 25 : 10) : .zero) + keyboardHeight
-                    )
                 if !isCompact && isPresented.wrappedValue {
                         Divider()
                         makeHandleView()
