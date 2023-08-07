@@ -290,6 +290,7 @@ extension CredentialInputSheetView {
         let title: String
         
         /// The block to execute when the action is triggered.
+        /// The parameters are the username and the password.
         let handler: (String, String) -> Void
     }
 }
