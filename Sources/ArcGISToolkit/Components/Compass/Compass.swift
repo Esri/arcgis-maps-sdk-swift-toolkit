@@ -15,6 +15,20 @@
 ***REMOVED***
 
 ***REMOVED***/ A `Compass` (alias North arrow) shows where north is in a `MapView`.
+***REMOVED***/
+***REMOVED***/ ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202810369-a0b82778-77d4-404e-bebf-1a84841fbb1b.png)
+***REMOVED***/ - Automatically hides when the rotation is zero.
+***REMOVED***/ - Can be configured to be always visible.
+***REMOVED***/ - Will reset the map/scene rotation to North when tapped on.
+***REMOVED***/
+***REMOVED***/ Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to
+***REMOVED***/ north, it disappears. The `automaticallyHides` view modifier allows you to disable the auto-hide
+***REMOVED***/ feature so that it is always displayed.
+***REMOVED***/ When the compass is tapped, the map orients back to north (zero bearing).
+***REMOVED***/
+***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+***REMOVED***/ and refer to [CompassExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/CompassExampleView.swift)
+***REMOVED***/ in the project.
 public struct Compass: View {
 ***REMOVED******REMOVED***/ The opacity of the compass.
 ***REMOVED***@State private var opacity: Double = .zero

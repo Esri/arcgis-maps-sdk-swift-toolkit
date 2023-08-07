@@ -1,0 +1,12 @@
+@Tutorials(name: "Using the ArcGIS Maps SDK for Swift Toolkit") {
+***REMOVED***@Intro(title: "Toolkit Tutorials") {
+***REMOVED******REMOVED***The ArcGIS Maps SDK for Swift Toolkit contains components that will simplify your Swift app
+***REMOVED******REMOVED***development. It is built off of the new ArcGIS Maps SDK for Swift.
+***REMOVED***
+***REMOVED***
+***REMOVED***@Chapter(name: "Compass") {
+***REMOVED******REMOVED***A Compass (alias North arrow) shows where north is in a MapView.
+***REMOVED******REMOVED***@Image(source: Compass, alt: "An image of the compass component.")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:CompassTutorial")
+***REMOVED***
+***REMOVED***
