@@ -290,6 +290,7 @@ extension CredentialInputSheetView {
 ***REMOVED******REMOVED***let title: String
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The block to execute when the action is triggered.
+***REMOVED******REMOVED******REMOVED***/ The parameters are the username and the password.
 ***REMOVED******REMOVED***let handler: (String, String) -> Void
 ***REMOVED***
 ***REMOVED***
