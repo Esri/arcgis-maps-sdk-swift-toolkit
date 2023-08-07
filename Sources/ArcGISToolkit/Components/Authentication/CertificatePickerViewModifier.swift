@@ -192,12 +192,11 @@ struct CertificatePickerViewModifier: ViewModifier {
                 isPresented: $viewModel.showCertificateError,
                 viewModel: viewModel
             )
-            .task {
+            .delayedTask {
                 // Present the prompt right away.
                 // Setting it after initialization allows it to animate.
                 // However, this needs to happen after a slight delay or
                 // it doesn't show.
-                try? await Task.sleep(nanoseconds: 250_000_000)
                 viewModel.showPrompt = true
             }
     }

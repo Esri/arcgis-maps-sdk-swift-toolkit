@@ -55,12 +55,11 @@ struct TrustHostViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .task {
+            .delayedTask {
                 // Present the sheet right away.
                 // Setting it after initialization allows it to animate.
                 // However, this needs to happen after a slight delay or
                 // it doesn't show.
-                try? await Task.sleep(nanoseconds: 250_000_000)
                 isPresented = true
             }
             .sheet(isPresented: $isPresented) {
