@@ -43,7 +43,7 @@ struct FloatingPanelExampleView: View {
             case .list:
                 FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
             case .textField:
-                FloatingPanelTextFieldDemoContent()
+                FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
             case .none:
                 EmptyView()
             }
@@ -131,6 +131,8 @@ private struct FloatingPanelListDemoContent: View {
 /// Demo content consisting of a vertical stack of items, including a text field which demonstrates
 /// the Floating Panel's keyboard avoidance capability.
 private struct FloatingPanelTextFieldDemoContent: View {
+    @Binding var selectedDetent: FloatingPanelDetent
+    
     @State private var sampleText = ""
     
     var body: some View {
