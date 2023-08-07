@@ -87,42 +87,42 @@ private struct FloatingPanelListDemoContent: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***Section("Preset Heights") {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Summary") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .summary
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .summary)
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Half") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .half
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .half)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Full") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .full
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .full)
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Half") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .half
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .half)
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Summary") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .summary
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .summary)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section("Fractional Heights") {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("1/4") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(1 / 4)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .fraction(1 / 4))
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("1/2") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(1 / 2)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .fraction(1 / 2))
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("3/4") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(3 / 4)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .fraction(3 / 4))
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("1/2") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(1 / 2)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .fraction(1 / 2))
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("1/4") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(1 / 4)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .fraction(1 / 4))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section("Value Heights") {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("200") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .height(200)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .height(200))
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("600") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .height(600)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .height(600))
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("200") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .height(200)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .height(200))
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
