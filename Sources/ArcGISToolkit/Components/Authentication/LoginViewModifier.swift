@@ -29,7 +29,7 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.delayedTask {
+***REMOVED******REMOVED******REMOVED***.delayedOnAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present the sheet right away.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting it after initialization allows it to animate.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** However, this needs to happen after a slight delay or

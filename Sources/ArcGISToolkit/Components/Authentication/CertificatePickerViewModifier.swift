@@ -156,6 +156,13 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED***.delayedOnAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present the prompt right away.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting it after initialization allows it to animate.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** However, this needs to happen after a slight delay or
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** it doesn't show.
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.showPrompt = true
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.promptBrowseCertificate(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showPrompt,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
@@ -192,13 +199,6 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showCertificateError,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.delayedTask {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present the prompt right away.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting it after initialization allows it to animate.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** However, this needs to happen after a slight delay or
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** it doesn't show.
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.showPrompt = true
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 

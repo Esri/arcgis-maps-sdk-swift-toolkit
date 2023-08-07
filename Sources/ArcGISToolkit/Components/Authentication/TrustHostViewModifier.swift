@@ -26,10 +26,7 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED***/ The network authentication challenge for the untrusted host.
 ***REMOVED***let challenge: NetworkChallengeContinuation
 ***REMOVED***
-***REMOVED******REMOVED*** Even though we will present it right away we need to use a state variable for this.
-***REMOVED******REMOVED*** Using a constant has 2 issues. One, it won't animate. Two, when challenging for multiple
-***REMOVED******REMOVED*** endpoints at a time, and the challenges stack up, you can end up with a "already presenting"
-***REMOVED******REMOVED*** error.
+***REMOVED******REMOVED***/ A Boolean value indicating whether or not the prompt is displayed.
 ***REMOVED***@State var isPresented: Bool = false
 ***REMOVED***
 ***REMOVED***var title: some View {
@@ -55,7 +52,7 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.delayedTask {
+***REMOVED******REMOVED******REMOVED***.delayedOnAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present the sheet right away.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting it after initialization allows it to animate.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** However, this needs to happen after a slight delay or
