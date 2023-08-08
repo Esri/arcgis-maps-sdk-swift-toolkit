@@ -25,7 +25,7 @@ struct Examples: View {
 ***REMOVED******REMOVED******REMOVED***List(lists) { (list) in
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(list.name, destination: list)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationBarTitle(Text("Examples"), displayMode: .inline)
+***REMOVED******REMOVED******REMOVED***.navigationBarTitle(Text("Toolkit Examples"), displayMode: .inline)
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationViewStyle(StackNavigationViewStyle())
 ***REMOVED***
