@@ -91,7 +91,7 @@ struct FormExampleView: View {
 //                ) {
 //                    Group {
 //                        if isPresented {
-//                            FormView()
+//                            FormView(featureForm: featureForm)
 //                                .padding()
 //                        }
 //                    }
