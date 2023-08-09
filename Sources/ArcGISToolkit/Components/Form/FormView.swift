@@ -37,9 +37,9 @@ public struct FormView: View {
         // successfully present a keyboard toolbar (as is done in `MultiLineTextEntry`).
         NavigationView {
             ScrollView {
-                FormHeader(title: featureForm?.title)
-                    .padding([.bottom], elementPadding)
                 VStack(alignment: .leading) {
+                    FormHeader(title: featureForm?.title)
+                        .padding([.bottom], elementPadding)
                     ForEach(featureForm?.elements ?? [], id: \.label) { element in
                         makeElement(element)
                     }
