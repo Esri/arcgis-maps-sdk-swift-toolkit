@@ -66,24 +66,10 @@ struct MultiLineTextEntry: View {
             } else {
                 TextEditor(text: $text)
             }
-            if isFocused && !text.isEmpty {
+            if isFocused {
+                DoneButton { isFocused = false }
+            } else if !text.isEmpty {
                 ClearButton { text.removeAll() }
-            }
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                if isFocused {
-                    Spacer()
-                    Button {
-                        isFocused = false
-                    } label: {
-                        Text(
-                            "Done",
-                            bundle: .toolkitModule,
-                            comment: "A label for a button to finish text entry and dismiss the keyboard."
-                        )
-                    }
-                }
             }
         }
         .background(.clear)
