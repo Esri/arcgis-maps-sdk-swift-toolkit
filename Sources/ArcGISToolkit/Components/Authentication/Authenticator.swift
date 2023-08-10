@@ -15,7 +15,93 @@
 ***REMOVED***
 import Combine
 
-***REMOVED***/ A configurable object that handles authentication challenges.
+***REMOVED***/ The `Authenticator` is a configurable object that handles authentication challenges. It will
+***REMOVED***/ display a user interface when network and ArcGIS authentication challenges occur.
+***REMOVED***/
+***REMOVED***/ ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/203615041-c887d5e3-bb64-469a-a76b-126059329e92.png)
+***REMOVED***/
+***REMOVED***/ The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is
+***REMOVED***/ asked to handle an authentication challenge. This will handle many different types of
+***REMOVED***/ authentication, for example:
+***REMOVED***/   - ArcGIS authentication (token and OAuth)
+***REMOVED***/   - Integrated Windows Authentication (IWA)
+***REMOVED***/   - Client Certificate (PKI)
+***REMOVED***/
+***REMOVED***/ The `Authenticator` can be configured to support securely persisting credentials to the keychain.
+***REMOVED***/
+***REMOVED***/ `Authenticator` has the following view modifier:
+***REMOVED***/
+***REMOVED***/ ```swift
+***REMOVED***/ ***REMOVED***/ Presents user experiences for collecting network authentication credentials from the user.
+***REMOVED***/ ***REMOVED***/ - Parameter authenticator: The authenticator for which credentials will be prompted.
+***REMOVED***/ @ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View
+***REMOVED***/ ```
+***REMOVED***/ To securely store credentials in the keychain, use the following extension method of `AuthenticationManager`:
+***REMOVED***/
+***REMOVED***/ ```swift
+***REMOVED***/  ***REMOVED***/ Sets up new credential stores that will be persisted to the keychain.
+***REMOVED***/ ***REMOVED***/ - Remark: The credentials will be stored in the default access group of the keychain.
+***REMOVED***/ ***REMOVED***/ You can find more information about what the default group would be here:
+***REMOVED***/ https:***REMOVED***developer.a.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
+***REMOVED***/ ***REMOVED***/ - Parameters:
+***REMOVED***/ ***REMOVED***/   - access: When the credentials stored in the keychain can be accessed.
+***REMOVED***/ ***REMOVED***/   - synchronizesWithiCloud: A Boolean value indicating whether the credentials are synchronized with iCloud.
+***REMOVED***/ public func setupPersistentCredentialStorage(
+***REMOVED***/***REMOVED*** access: ArcGIS.KeychainAccess,
+***REMOVED***/***REMOVED*** synchronizesWithiCloud: Bool = false
+***REMOVED***/ ) async throws
+***REMOVED***/ ```
+***REMOVED***/
+***REMOVED***/ During sign-out, use the following extension methods of `AuthenticationManager`:
+***REMOVED***/
+***REMOVED***/ ```swift
+***REMOVED***/ ***REMOVED***/ Revokes tokens of OAuth user credentials.
+***REMOVED***/ func revokeOAuthTokens() async
+***REMOVED***/
+***REMOVED***/ ***REMOVED***/ Clears all ArcGIS and network credentials from the respective stores.
+***REMOVED***/ ***REMOVED***/ Note: This sets up new `URLSessions` so that removed network credentials are respected
+***REMOVED***/ ***REMOVED***/ right away.
+***REMOVED***/ func clearCredentialStores() async
+***REMOVED***/ ```
+***REMOVED***/
+***REMOVED***/ The Authenticator view modifier will display an alert prompting the user for credentials. If
+***REMOVED***/ credentials were persisted to the keychain, the Authenticator will use those instead of
+***REMOVED***/ requiring the user to reenter credentials.
+***REMOVED***/
+***REMOVED***/ Basic usage for displaying the `Authenticator`.
+***REMOVED***/
+***REMOVED***/ This would typically go in your application's `App` struct.
+***REMOVED***/
+***REMOVED***/ ```swift
+***REMOVED***/ init() {
+***REMOVED***/***REMOVED*** ***REMOVED*** Create an authenticator.
+***REMOVED***/***REMOVED*** authenticator = Authenticator(
+***REMOVED***/***REMOVED******REMOVED*** ***REMOVED*** If you want to use OAuth, uncomment this code:
+***REMOVED***/***REMOVED******REMOVED*** ***REMOVED***oAuthConfigurations: [.arcgisDotCom]
+***REMOVED***/***REMOVED*** )
+***REMOVED***/***REMOVED*** ***REMOVED*** Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
+***REMOVED***/***REMOVED*** ***REMOVED*** challenges.
+***REMOVED***/***REMOVED*** ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
+***REMOVED***/ ***REMOVED***
+***REMOVED***/
+***REMOVED***/ var body: some SwiftUI.Scene {
+***REMOVED***/***REMOVED*** WindowGroup {
+***REMOVED***/***REMOVED******REMOVED*** HomeView()
+***REMOVED***/***REMOVED******REMOVED******REMOVED*** .authenticator(authenticator)
+***REMOVED***/***REMOVED******REMOVED******REMOVED*** .task {
+***REMOVED***/***REMOVED******REMOVED******REMOVED******REMOVED*** ***REMOVED*** Here we setup credential stores to be persistent, which means that it will
+***REMOVED***/***REMOVED******REMOVED******REMOVED******REMOVED*** ***REMOVED*** synchronize with the keychain for storing credentials.
+***REMOVED***/***REMOVED******REMOVED******REMOVED******REMOVED*** ***REMOVED*** It also means that a user can sign in without having to be prompted for
+***REMOVED***/***REMOVED******REMOVED******REMOVED******REMOVED*** ***REMOVED*** credentials. Once credentials are cleared from the stores ("sign-out"),
+***REMOVED***/***REMOVED******REMOVED******REMOVED******REMOVED*** ***REMOVED*** then the user will need to be prompted once again.
+***REMOVED***/***REMOVED******REMOVED******REMOVED******REMOVED*** try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+***REMOVED***/***REMOVED*** ***REMOVED***
+***REMOVED***/ ***REMOVED***
+***REMOVED***/ ***REMOVED***
+***REMOVED***/ ```
+***REMOVED***/ To see the `Authenticator` in action, check out the [Authentication Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/AuthenticationExample)
+***REMOVED***/ and refer to [AuthenticationApp.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/AuthenticationExample/AuthenticationExample/AuthenticationApp.swift)
+***REMOVED***/ in the project.
 @MainActor
 public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ A value indicating whether we should prompt the user when encountering an untrusted host.
