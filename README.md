@@ -10,7 +10,7 @@ To use Toolkit in your project:
 
 ## Toolkit Components
 
-* **[Authenticator](Documentation/Authenticator)** - Displays a user interface when network and ArcGIS authentication challenges occur.
+* **[Authenticator](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/authenticator) ** - Displays a user interface when network and ArcGIS authentication challenges occur.
 * **[BasemapGallery](Documentation/BasemapGallery)** - Displays a collection of basemaps.
 * **[Bookmarks](Documentation/Bookmarks)** - Shows bookmarks, from a map, scene, or a list.
 * **[Compass](Documentation/Compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map points north.
