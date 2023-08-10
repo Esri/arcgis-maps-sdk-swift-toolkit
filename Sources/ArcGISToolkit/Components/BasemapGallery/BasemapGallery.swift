@@ -27,7 +27,8 @@ import ArcGIS
 /// an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys)
 /// for more information.
 ///
-/// `BasemapGallery`:
+/// **Features**
+///
 /// - Can be configured to use a list, grid, or automatic layout. When using an
 /// automatic layout, list or grid presentation is chosen based on the horizontal size class of the
 /// display.
@@ -40,7 +41,9 @@ import ArcGIS
 ///
 /// `BasemapGallery` has the following helper class: ``BasemapGalleryItem``
 ///
-/// - Note: Selecting a basemap with a spatial reference that does not match that of the geo model
+/// **Behavior**
+///
+/// Selecting a basemap with a spatial reference that does not match that of the geo model
 /// will display an error. It will also display an error if a provided base map cannot be loaded. If
 /// a `GeoModel` is provided to the `BasemapGallery`, selecting an item in the gallery will set that
 /// basemap on the geo model.
