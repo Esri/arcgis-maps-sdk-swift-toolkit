@@ -27,7 +27,8 @@
 ***REMOVED***/ an API key. See [Security and authentication documentation](https:***REMOVED***developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys)
 ***REMOVED***/ for more information.
 ***REMOVED***/
-***REMOVED***/ - `BasemapGallery` can be configured to use a list, grid, or automatic layout. When using an
+***REMOVED***/ `BasemapGallery`:
+***REMOVED***/ - Can be configured to use a list, grid, or automatic layout. When using an
 ***REMOVED***/ automatic layout, list or grid presentation is chosen based on the horizontal size class of the
 ***REMOVED***/ display.
 ***REMOVED***/ - Displays basemaps from a portal or a custom collection. If neither a custom portal or array of
