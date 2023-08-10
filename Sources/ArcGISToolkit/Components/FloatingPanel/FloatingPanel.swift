@@ -23,7 +23,7 @@
 ***REMOVED***/ or persistent, where the information is always displayed, for example a
 ***REMOVED***/ dedicated search panel. They will also be primarily simple containers
 ***REMOVED***/ that clients will fill with their own content.
-struct FloatingPanel<Content>: View where Content: View {
+public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
