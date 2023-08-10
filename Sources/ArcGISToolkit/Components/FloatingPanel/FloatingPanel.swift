@@ -23,6 +23,41 @@
 ***REMOVED***/ or persistent, where the information is always displayed, for example a
 ***REMOVED***/ dedicated search panel. They will also be primarily simple containers
 ***REMOVED***/ that clients will fill with their own content.
+***REMOVED***/
+***REMOVED***/ The floating panel allows for interaction with background content by default, unlike native
+***REMOVED***/ sheets or popovers.
+***REMOVED***/
+***REMOVED***/ The following images are of a simple list of numbers in a floating panel.
+***REMOVED***/
+***REMOVED***/ | iPhone | iPad |
+***REMOVED***/ | ------ | ---- |
+***REMOVED***/ | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202795901-b86d6d26-3572-4c88-8f6e-84473ce57002.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202796009-92e3b5c3-d88b-4124-8d9f-bad6df445f02.png) |
+***REMOVED***/
+***REMOVED***/ - Note: The Floating Panel is exposed as a view modifier.
+***REMOVED***/
+***REMOVED***/ **Capabilities**
+***REMOVED***/ - Can display any custom content.
+***REMOVED***/ - Can be resized by dragging the panel's handle.
+***REMOVED***/ - Has three predefined height settings, called "detents", that the panel will snap to when the
+***REMOVED***/ user drags and releases the handle.
+***REMOVED***/ - Can be configured with a custom detent, specifying either a fraction of the maximum height or
+***REMOVED***/ a fixed value.
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/ - Content in a floating panel can be resized using a “handle” on the bottom (for regular-width
+***REMOVED***/ environments) or on the top (compact-width environments).
+***REMOVED***/ - The height of the floating panel is determined by a selected “detent”. There are pre-defined
+***REMOVED***/ detents for full screen height, half screen height, and a “summary” height, along with the
+***REMOVED***/ ability to set custom detent heights. Dragging and releasing the handle will snap the floating
+***REMOVED***/ panel height to the nearest detent.
+***REMOVED***/ - The floating panel view modifier allows you to set the content along with a number of other
+***REMOVED***/ properties, including:
+***REMOVED***/   - `backgroundColor`: The background color of the floating panel.
+***REMOVED***/   - `selectedDetent`: A binding to the currently selected detent.
+***REMOVED***/   - `horizontalAlignment`: The horizontal alignment of the floating panel.
+***REMOVED***/   - `maxWidth`: The maximum width of the floating panel.
+***REMOVED***/
+***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples) and refer to [FloatingPanelExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloatingPanelExampleView.swift) in the project.
 public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
