@@ -14,7 +14,33 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ `Bookmarks` allows a user to view and select from a set of bookmarks.
+***REMOVED***/ The `Bookmarks` component will display a list of bookmarks and allow the user to select a
+***REMOVED***/ bookmark and perform some action. You can create the component with either an array of
+***REMOVED***/ `Bookmarks`, or with a `Map` or `Scene` containing the bookmarks to display.
+***REMOVED***/
+***REMOVED***/ `Bookmarks` can be configured to handle automated bookmark selection (zooming the map/scene to
+***REMOVED***/ the bookmark’s viewpoint) by passing in a `Viewpoint` binding or the client can handle bookmark
+***REMOVED***/ selection changes manually using ``onSelectionChanged(perform:)``.
+***REMOVED***/
+***REMOVED***/ If a `Viewpoint` binding is provided to the `Bookmarks` view, selecting a bookmark will set that
+***REMOVED***/ viewpoint binding to the viewpoint of the bookmark. Selecting a bookmark will dismiss the
+***REMOVED***/ `Bookmarks` view. If a `GeoModel` is provided, that geo model's bookmarks will be displayed to
+***REMOVED***/ the user.
+***REMOVED***/
+***REMOVED***/ | iPhone | iPad |
+***REMOVED***/ | ------ | ---- |
+***REMOVED***/ | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202765630-894bee44-a0c2-4435-86f4-c80c4cc4a0b9.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202765729-91c52555-4677-4c2b-b62b-215e6c3790a6.png) |
+***REMOVED***/
+***REMOVED***/ `Bookmarks`:
+***REMOVED***/ - Can be configured to display bookmarks from a map or scene, or from an array of user-defined
+***REMOVED***/ bookmarks.
+***REMOVED***/ - Can be configured to automatically zoom the map or scene to a bookmark selection.
+***REMOVED***/ - Can be configured to perform a user-defined action when a bookmark is selected.
+***REMOVED***/ - Will automatically hide the `Bookmark` view when a bookmark is selected.
+***REMOVED***/
+***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+***REMOVED***/ and refer to [BookmarksExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
+***REMOVED***/ in the project.
 public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ A list of selectable bookmarks.
 ***REMOVED***@State private var bookmarks: [Bookmark] = []
