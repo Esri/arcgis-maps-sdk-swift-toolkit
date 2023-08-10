@@ -48,6 +48,7 @@ Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS
 
 ## Additional Resources
 
+* [Toolkit API Documentation](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/)
 * [Developers guide documentation](https:***REMOVED***developers.arcgis.com/swift)
 * [Maps SDK API Reference](https:***REMOVED***developers.arcgis.com/swift/api-reference/documentation/arcgis)
 * [Samples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-samples)
