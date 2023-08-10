@@ -36,6 +36,7 @@ import SwiftUI
 /// - Note: The Floating Panel is exposed as a view modifier.
 ///
 /// **Capabilities**
+///
 /// - Can display any custom content.
 /// - Can be resized by dragging the panel's handle.
 /// - Has three predefined height settings, called "detents", that the panel will snap to when the
@@ -44,6 +45,7 @@ import SwiftUI
 /// a fixed value.
 ///
 /// **Behavior**
+/// 
 /// - Content in a floating panel can be resized using a “handle” on the bottom (for regular-width
 /// environments) or on the top (compact-width environments).
 /// - The height of the floating panel is determined by a selected “detent”. There are pre-defined
