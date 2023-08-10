@@ -23,7 +23,7 @@ import SwiftUI
 /// or persistent, where the information is always displayed, for example a
 /// dedicated search panel. They will also be primarily simple containers
 /// that clients will fill with their own content.
-struct FloatingPanel<Content>: View where Content: View {
+public struct FloatingPanel<Content>: View where Content: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
