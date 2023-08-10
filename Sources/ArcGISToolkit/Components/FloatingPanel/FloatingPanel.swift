@@ -57,7 +57,9 @@
 ***REMOVED***/   - `horizontalAlignment`: The horizontal alignment of the floating panel.
 ***REMOVED***/   - `maxWidth`: The maximum width of the floating panel.
 ***REMOVED***/
-***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples) and refer to [FloatingPanelExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloatingPanelExampleView.swift) in the project.
+***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+***REMOVED***/ and refer to [FloatingPanelExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloatingPanelExampleView.swift)
+***REMOVED***/ in the project.
 public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
