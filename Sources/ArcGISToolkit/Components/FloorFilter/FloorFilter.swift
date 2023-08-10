@@ -17,6 +17,29 @@
 ***REMOVED***/ The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a
 ***REMOVED***/ building in your application. It allows you to filter the floor plan data displayed in your map
 ***REMOVED***/ or scene view to a site, a facility (building) in the site, or a floor in the facility.
+***REMOVED***/
+***REMOVED***/ The ArcGIS Maps SDK currently supports filtering a 2D floor aware map based on the sites,
+***REMOVED***/ buildings, or levels in the map.
+***REMOVED***/
+***REMOVED***/ | iPhone | iPad |
+***REMOVED***/ | ------ | ---- |
+***REMOVED***/ | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202811733-dcd640e9-3b27-43a8-8bec-fd9aeb6798c7.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202811772-bf6009e7-82ec-459f-86ae-6651f519b2ef.png) |
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ - Automatically hides the floor browsing view when the associated map or scene is not floor-aware.
+***REMOVED***/ - Selects the facility in view automatically (can be configured through the
+***REMOVED***/ `AutomaticSelectionMode`).
+***REMOVED***/ - Shows the selected facility's levels in proper vertical order.
+***REMOVED***/ - Filters the map/scene content to show the selected level.
+***REMOVED***/ - Allows browsing the full floor-aware hierarchy of sites, facilities, and levels.
+***REMOVED***/ - Shows the ground floor of all facilities when there is no active selection.
+***REMOVED***/ - Updates the visibility of floor levels across all facilities (e.g. if you are looking at floor
+***REMOVED***/  3 in building A, floor 3 will be shown in neighboring buildings).
+***REMOVED***/ - Adjusts layout and presentation to work well regardless of positioning - left/right and
+***REMOVED***/ top/bottom.
+***REMOVED***/ - Keeps the selected facility visible in the list while the selection is changing in response to
+***REMOVED***/ map navigation.
 public struct FloorFilter: View {
 ***REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
