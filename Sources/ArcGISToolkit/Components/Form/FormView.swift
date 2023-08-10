@@ -31,17 +31,34 @@ public struct FormView: View {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED***
 ***REMOVED***
+***REMOVED***private let scrollViewCoordinateSpace = UUID()
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: featureForm?.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeometryReader { geometryProxy in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Color.clear.preference(key: ScrollPreferenceKey.self, value: geometryProxy.frame(in: .named(scrollViewCoordinateSpace)).origin)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onPreferenceChange(ScrollPreferenceKey.self) { position in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   print("scroll changed", position)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(featureForm?.elements ?? [], id: \.label) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.coordinateSpace(name: scrollViewCoordinateSpace)
 ***REMOVED***
+***REMOVED***
+
+struct ScrollPreferenceKey: SwiftUI.PreferenceKey {
+***REMOVED***static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) { ***REMOVED***
+***REMOVED***
+***REMOVED***static var defaultValue: CGPoint { .zero ***REMOVED***
 ***REMOVED***
 
 extension FormView {
