@@ -40,6 +40,26 @@
 ***REMOVED***/ top/bottom.
 ***REMOVED***/ - Keeps the selected facility visible in the list while the selection is changing in response to
 ***REMOVED***/ map navigation.
+***REMOVED***/
+***REMOVED***/ **Associated Types**
+***REMOVED***/
+***REMOVED***/ Floor Filter has two associated enum type:
+***REMOVED***/ - ``FloorFilterAutomaticSelectionMode``
+***REMOVED***/ - ``FloorFilterSelection``
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ | Site Button |
+***REMOVED***/ | ----------- |
+***REMOVED***/ |![image](https:***REMOVED***user-images.githubusercontent.com/3998072/203417956-5161103d-5d29-42fa-8564-de254159efe2.png)|
+***REMOVED***/
+***REMOVED***/ When the Site button is tapped, a prompt opens so the user can select a site and then a
+***REMOVED***/ facility. After selecting a site and facility, a list of levels is displayed. The list of sites
+***REMOVED***/ and facilities can be dynamically filtered using the search bar.
+***REMOVED***/
+***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+***REMOVED***/ and refer to [FloorFilterExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloorFilterExampleView.swift)
+***REMOVED***/ in the project.
 public struct FloorFilter: View {
 ***REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
