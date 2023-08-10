@@ -27,7 +27,8 @@ import ArcGIS
 /// an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys)
 /// for more information.
 ///
-/// - `BasemapGallery` can be configured to use a list, grid, or automatic layout. When using an
+/// `BasemapGallery`:
+/// - Can be configured to use a list, grid, or automatic layout. When using an
 /// automatic layout, list or grid presentation is chosen based on the horizontal size class of the
 /// display.
 /// - Displays basemaps from a portal or a custom collection. If neither a custom portal or array of
