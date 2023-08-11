@@ -1,0 +1,30 @@
+@Tutorial(time: 5) {
+    @Intro(title: "Scalebar Tutorial") {
+        A scalebar displays the representation of an accurate linear measurement on the map. It 
+        provides a visual indication through which users can determine the size of features or the 
+        distance between features on a map.
+        @Image(source: Scalebar, alt: "An image of the Scalebar component.")
+    }
+    
+    @Section(title: "<#text#>") {
+        @ContentAndMedia {
+            <#text#>
+            
+            @Image(source: <#file#>, alt: "<#accessible description#>")
+        }
+        
+        @Steps {
+            @Step {
+                <#text#>
+                
+                @Image(source: <#file#>, alt: "<#accessible description#>")
+            }
+            
+            @Step {
+                <#text#>
+                
+                @Code(name: "<#display name#>", file: <#filename.swift#>)
+            }
+        }
+    }
+}

@@ -1,0 +1,29 @@
+@Tutorial(time: 10) {
+    @Intro(title: "Utility Network Trace Tutorial") {
+        `UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace 
+        configurations.
+        @Image(source: UtilityNetworkTrace, alt: "An image of the Utility Network Trace component.")
+    }
+    
+    @Section(title: "<#text#>") {
+        @ContentAndMedia {
+            <#text#>
+            
+            @Image(source: <#file#>, alt: "<#accessible description#>")
+        }
+        
+        @Steps {
+            @Step {
+                <#text#>
+                
+                @Image(source: <#file#>, alt: "<#accessible description#>")
+            }
+            
+            @Step {
+                <#text#>
+                
+                @Code(name: "<#display name#>", file: <#filename.swift#>)
+            }
+        }
+    }
+}
