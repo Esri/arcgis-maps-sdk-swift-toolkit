@@ -14,7 +14,44 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view displaying the elements of a single Popup.
+***REMOVED***/ The `PopupView` component will display a popup for an individual feature. This includes showing
+***REMOVED***/ the feature's title, attributes, custom description, media, and attachments. The new online Map
+***REMOVED***/ Viewer allows users to create a popup definition by assembling a list of “popup elements”.
+***REMOVED***/ `PopupView` will support the display of popup elements created by the Map Viewer, including:
+***REMOVED***/ Text, Fields, Attachments, Media (Images and Charts).
+***REMOVED***/
+***REMOVED***/ Thanks to the backwards compatibility support in the API, it will also work with the legacy
+***REMOVED***/ popup definitions created by the classic Map Viewer. It does not support editing.
+***REMOVED***/
+***REMOVED***/ | iPhone | iPad |
+***REMOVED***/ | ------ | ---- |
+***REMOVED***/ | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/203422507-66b6c6dc-a6c3-4040-b996-9c0da8d4e580.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/203422665-c4759c1f-5863-4251-94df-ed7a06ac7a8f.png) |
+***REMOVED***/
+***REMOVED***/ - Note: Displaying charts in a popup requires running on a device with iOS 16.0 or greater.
+***REMOVED***/ Displaying charts in MacCatalyst requires building your application with Xcode 14.1 or greater
+***REMOVED***/ and running on a Mac with macOS 13.0 (Ventura) or greater.  Also, Attachment previews are not
+***REMOVED***/ available when running on MacCatalyst (regardless of Xcode version).
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ - Display a popup for a feature based on the popup definition defined in a web map.
+***REMOVED***/ - Supports image refresh intervals on image popup media, refreshing the image at a given
+***REMOVED***/ interval defined in the popup element.
+***REMOVED***/ - Supports elements containing Arcade expression and automatically evaluates expressions.
+***REMOVED***/ - Displays media (images and charts) full-screen.
+***REMOVED***/ - Supports hyperlinks in text, media, and fields elements.
+***REMOVED***/ - Fully supports dark mode, as do all Toolkit components.
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ The popup view can display an optional "close" button, allowing the user to dismiss the view.
+***REMOVED***/ The popup view can be embedded in any type of container view including, as demonstrated in the
+***REMOVED***/ example, the Toolkit's `FloatingPanel`.
+***REMOVED***/
+***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+***REMOVED***/ and refer to
+***REMOVED***/ [PopupExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
+***REMOVED***/ in the project.
 public struct PopupView: View {
 ***REMOVED******REMOVED***/ Creates a `PopupView` with the given popup.
 ***REMOVED******REMOVED***/ - Parameters
