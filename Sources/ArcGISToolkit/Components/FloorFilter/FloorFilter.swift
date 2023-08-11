@@ -41,12 +41,6 @@ import ArcGIS
 /// - Keeps the selected facility visible in the list while the selection is changing in response to
 /// map navigation.
 ///
-/// **Associated Types**
-///
-/// Floor Filter has two associated enum type:
-/// - ``FloorFilterAutomaticSelectionMode``
-/// - ``FloorFilterSelection``
-///
 /// **Behavior**
 ///
 /// | Site Button |
@@ -56,6 +50,12 @@ import ArcGIS
 /// When the Site button is tapped, a prompt opens so the user can select a site and then a
 /// facility. After selecting a site and facility, a list of levels is displayed. The list of sites
 /// and facilities can be dynamically filtered using the search bar.
+///
+/// **Associated Types**
+///
+/// Floor Filter has two associated enum type:
+/// - ``FloorFilterAutomaticSelectionMode``
+/// - ``FloorFilterSelection``
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [FloorFilterExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloorFilterExampleView.swift)
