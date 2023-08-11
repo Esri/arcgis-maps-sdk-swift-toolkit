@@ -29,13 +29,6 @@
 ***REMOVED***/ - Can be configured to automatically hide after a pan or zoom operation.
 ***REMOVED***/ - Displays both metric and imperial units.
 ***REMOVED***/
-***REMOVED***/ **Associated Types**
-***REMOVED***/
-***REMOVED***/ Scalebar has the following associated types:
-***REMOVED***/ - ``ScalebarSettings``
-***REMOVED***/ - ``ScalebarStyle``
-***REMOVED***/ - ``ScalebarUnits``
-***REMOVED***/
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
 ***REMOVED***/ The scalebar uses geodetic calculations to provide accurate measurements for maps of any
@@ -43,6 +36,13 @@
 ***REMOVED***/ This means at smaller scales (zoomed way out) you might find it somewhat inaccurate at the
 ***REMOVED***/ extremes of the visible extent. As the map is panned and zoomed, the scalebar automatically
 ***REMOVED***/ grows and shrinks and updates its measurement based on the new map extent.
+***REMOVED***/
+***REMOVED***/ **Associated Types**
+***REMOVED***/
+***REMOVED***/ Scalebar has the following associated types:
+***REMOVED***/ - ``ScalebarSettings``
+***REMOVED***/ - ``ScalebarStyle``
+***REMOVED***/ - ``ScalebarUnits``
 ***REMOVED***/
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [ScalebarExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/ScalebarExampleView.swift) in the project.
