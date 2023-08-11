@@ -14,15 +14,21 @@
 import ArcGIS
 import SwiftUI
 import Combine
-import CryptoTokenKit
 
 /// A configurable object that handles authentication challenges.
 @MainActor
 public final class Authenticator: ObservableObject {
     /// A value indicating whether we should prompt the user when encountering an untrusted host.
-    let promptForUntrustedHosts: Bool
+    public let promptForUntrustedHosts: Bool
+    
     /// The OAuth configurations that this authenticator can work with.
-    let oAuthUserConfigurations: [OAuthUserConfiguration]
+    public var oAuthUserConfigurations: [OAuthUserConfiguration]
+    
+    /// The closure to call once the user has signed out.
+    public var signOutAction: (() async -> Void) = {}
+    
+    /// The smart card manager.
+    @ObservedObject public var smartCardManager: SmartCardManager
     
     /// Creates an authenticator.
     /// - Parameters:
@@ -35,6 +41,7 @@ public final class Authenticator: ObservableObject {
     ) {
         self.promptForUntrustedHosts = promptForUntrustedHosts
         self.oAuthUserConfigurations = oAuthUserConfigurations
+        self.smartCardManager = SmartCardManager()
     }
     
     /// The current challenge.
@@ -83,11 +90,13 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
         }
         
         // If smart card is connected to the device then a personal identity verification (PIV) token
-        // is available in the `TKTokenWatcher().tokenIDs`. Create a smart card network credential
-        // with first PIV token and continue with credential.
+        // is available then create a smart card network credential and continue.
         if challenge.kind == .clientCertificate,
-           let pivToken = TKTokenWatcher().tokenIDs.filter({ $0.localizedCaseInsensitiveContains("pivtoken") }).first,
+           let pivToken = smartCardManager.pivToken,
            let credential = try? NetworkCredential.smartCard(pivToken: pivToken) {
+            // Set last used PIV token on the manager.
+            smartCardManager.setLastUsedPIVToken(pivToken)
+            
             return .continueWithCredential(credential)
         }
         
@@ -102,5 +111,14 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
         
         // Wait for it to complete and return the resulting disposition.
         return await challengeContinuation.value
+    }
+}
+
+public extension Authenticator {
+    /// Signs out by revoking tokens and clearing the credential stores.
+    func signOut() async {
+        await ArcGISEnvironment.authenticationManager.revokeOAuthTokens()
+        await ArcGISEnvironment.authenticationManager.clearCredentialStores()
+        smartCardManager.setLastUsedPIVToken(nil)
     }
 }

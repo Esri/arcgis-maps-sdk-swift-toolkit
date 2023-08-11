@@ -46,22 +46,26 @@ private struct AuthenticatorModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
     @ViewBuilder func body(content: Content) -> some View {
-        switch authenticator.currentChallenge {
-        case let challenge as TokenChallengeContinuation:
-            content.modifier(LoginViewModifier(challenge: challenge))
-        case let challenge as NetworkChallengeContinuation:
-            switch challenge.kind {
-            case .serverTrust:
-                content.modifier(TrustHostViewModifier(challenge: challenge))
-            case .certificate:
-                content.modifier(CertificatePickerViewModifier(challenge: challenge))
-            case .login:
+        if let currentChallenge = authenticator.currentChallenge {
+            switch currentChallenge {
+            case let challenge as TokenChallengeContinuation:
                 content.modifier(LoginViewModifier(challenge: challenge))
+            case let challenge as NetworkChallengeContinuation:
+                switch challenge.kind {
+                case .serverTrust:
+                    content.modifier(TrustHostViewModifier(challenge: challenge))
+                case .certificate:
+                    content.modifier(CertificatePickerViewModifier(challenge: challenge))
+                case .login:
+                    content.modifier(LoginViewModifier(challenge: challenge))
+                }
+            default:
+                fatalError("unknown challenge type")
             }
-        case .none:
-            content
-        default:
-            fatalError("unknown challenge type")
+        } else {
+            content.modifier(
+                SmartCardViewModifier(authenticator: authenticator)
+            )
         }
     }
 }
