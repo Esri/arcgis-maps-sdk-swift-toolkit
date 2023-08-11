@@ -1,0 +1,28 @@
+@Tutorial(time: <#number#>) {
+    @Intro(title: "Floating Panel Tutorial") {
+        A `FloatingPanel` is a view that overlays a view and supplies view-related content.
+        @Image(source: FloatingPanel, alt: "An image of the Floating Panel component.")
+    }
+    
+    @Section(title: "<#text#>") {
+        @ContentAndMedia {
+            <#text#>
+            
+            @Image(source: <#file#>, alt: "<#accessible description#>")
+        }
+        
+        @Steps {
+            @Step {
+                <#text#>
+                
+                @Image(source: <#file#>, alt: "<#accessible description#>")
+            }
+            
+            @Step {
+                <#text#>
+                
+                @Code(name: "<#display name#>", file: <#filename.swift#>)
+            }
+        }
+    }
+}

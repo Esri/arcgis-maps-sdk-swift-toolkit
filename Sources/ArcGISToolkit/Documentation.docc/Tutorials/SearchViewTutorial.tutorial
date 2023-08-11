@@ -1,0 +1,29 @@
+@Tutorial(time: 5) {
+    @Intro(title: "Search View Tutorial") {
+        `SearchView` enables searching using one or more locators, with support for suggestions,
+        automatic zooming, and custom search sources.
+        @Image(source: SearchView, alt: "An image of the Search View component.")
+    }
+    
+    @Section(title: "<#text#>") {
+        @ContentAndMedia {
+            <#text#>
+            
+            @Image(source: <#file#>, alt: "<#accessible description#>")
+        }
+        
+        @Steps {
+            @Step {
+                <#text#>
+                
+                @Image(source: <#file#>, alt: "<#accessible description#>")
+            }
+            
+            @Step {
+                <#text#>
+                
+                @Code(name: "<#display name#>", file: <#filename.swift#>)
+            }
+        }
+    }
+}

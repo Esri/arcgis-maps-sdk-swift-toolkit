@@ -1,0 +1,29 @@
+@Tutorial(time: 10) {
+    @Intro(title: "Authenticator Tutorial") {
+        The `Authenticator` is a configurable object that handles authentication challenges. It will
+        display a user interface when network and ArcGIS authentication challenges occur.
+        @Image(source: Authenticator, alt: "An image of the Authenticator component.")
+    }
+    
+    @Section(title: "<#text#>") {
+        @ContentAndMedia {
+            <#text#>
+            
+            @Image(source: <#file#>, alt: "<#accessible description#>")
+        }
+        
+        @Steps {
+            @Step {
+                <#text#>
+                
+                @Image(source: <#file#>, alt: "<#accessible description#>")
+            }
+            
+            @Step {
+                <#text#>
+                
+                @Code(name: "<#display name#>", file: <#filename.swift#>)
+            }
+        }
+    }
+}

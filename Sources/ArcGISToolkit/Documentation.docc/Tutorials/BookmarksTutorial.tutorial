@@ -1,0 +1,29 @@
+@Tutorial(time: 5) {
+    @Intro(title: "Bookmarks Tutorial") {
+        The `Bookmarks` component will display a list of bookmarks and allow the user to select a
+        bookmark and perform some action.
+        @Image(source: Bookmarks, alt: "An image of the Bookmarks component.")
+    }
+    
+    @Section(title: "<#text#>") {
+        @ContentAndMedia {
+            <#text#>
+            
+            @Image(source: <#file#>, alt: "<#accessible description#>")
+        }
+        
+        @Steps {
+            @Step {
+                <#text#>
+                
+                @Image(source: <#file#>, alt: "<#accessible description#>")
+            }
+            
+            @Step {
+                <#text#>
+                
+                @Code(name: "<#display name#>", file: <#filename.swift#>)
+            }
+        }
+    }
+}

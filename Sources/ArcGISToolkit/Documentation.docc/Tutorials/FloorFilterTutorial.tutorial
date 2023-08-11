@@ -1,0 +1,29 @@
+@Tutorial(time: <#number#>) {
+    @Intro(title: "Floor Filter Tutorial") {
+        The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a
+        building in your application.
+        @Image(source: FloorFilter, alt: "An image of the Floor Filter component.")
+    }
+    
+    @Section(title: "<#text#>") {
+        @ContentAndMedia {
+            <#text#>
+            
+            @Image(source: <#file#>, alt: "<#accessible description#>")
+        }
+        
+        @Steps {
+            @Step {
+                <#text#>
+                
+                @Image(source: <#file#>, alt: "<#accessible description#>")
+            }
+            
+            @Step {
+                <#text#>
+                
+                @Code(name: "<#display name#>", file: <#filename.swift#>)
+            }
+        }
+    }
+}
