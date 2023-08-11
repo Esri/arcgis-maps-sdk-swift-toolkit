@@ -14,7 +14,50 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ `SearchView` presents a search experience, powered by an underlying `SearchViewModel`.
+***REMOVED***/ `SearchView` enables searching using one or more locators, with support for suggestions,
+***REMOVED***/ automatic zooming, and custom search sources.
+***REMOVED***/
+***REMOVED***/ | iPhone | iPad |
+***REMOVED***/ | ------ | ---- |
+***REMOVED***/ | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/203608897-5f3bf34a-0931-4d11-b3fc-18a5dd07131a.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/203608708-45a0096c-a8d6-457c-9ee1-8cdb9e5bb15a.png) |
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ - Updates search suggestions as you type.
+***REMOVED***/ - Supports using the Esri world geocoder or any other ArcGIS locators.
+***REMOVED***/ - Supports searching using custom search sources.
+***REMOVED***/ - Allows for customization of the display of search results.
+***REMOVED***/ - Allows you to repeat a search within a defined area, and displays a button to enable that
+***REMOVED***/ search when the view's viewpoint changes.
+***REMOVED***/
+***REMOVED***/ `SearchView` uses search sources which implement the ``SearchSource`` protocol.
+***REMOVED***/
+***REMOVED***/ `SearchView` provides the following search sources:
+***REMOVED***/ - ``LocatorSearchSource``
+***REMOVED***/ - ``SmartLocatorSearchSource``
+***REMOVED***/
+***REMOVED***/ `SearchView` provides several instance methods, allowing customization and additional search
+***REMOVED***/ behaviors (such as displaying a "Repeat search here" button). See "Instance Methods" below.
+***REMOVED***/
+***REMOVED***/ **Associated Types**
+***REMOVED***/
+***REMOVED***/ `SearchView` has the following associated types:
+***REMOVED***/ - ``SearchField``
+***REMOVED***/ - ``SearchResult``
+***REMOVED***/ - ``SearchSuggestion``
+***REMOVED***/ - ``SearchOutcome``
+***REMOVED***/ - ``SearchResultMode``
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ The `SearchView` will display the results list view at half height, exposing a portion of the
+***REMOVED***/ underlying map below the list, on an iPhone in portrait orientation (and certain iPad
+***REMOVED***/ multitasking configurations).  The user can hide or show the result list after searching by
+***REMOVED***/ clicking on the up/down chevron symbol on the right of the search bar.
+***REMOVED***/
+***REMOVED***/ To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Example)
+***REMOVED***/ and refer to [SearchExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
+***REMOVED***/ in the project.
 public struct SearchView: View {
 ***REMOVED******REMOVED***/ Creates a `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
