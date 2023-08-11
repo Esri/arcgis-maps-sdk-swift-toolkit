@@ -1,0 +1,29 @@
+@Tutorial(time: 10) {
+***REMOVED***@Intro(title: "Authenticator Tutorial") {
+***REMOVED******REMOVED***The `Authenticator` is a configurable object that handles authentication challenges. It will
+***REMOVED******REMOVED***display a user interface when network and ArcGIS authentication challenges occur.
+***REMOVED******REMOVED***@Image(source: Authenticator, alt: "An image of the Authenticator component.")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Section(title: "<#text#>") {
+***REMOVED******REMOVED***@ContentAndMedia {
+***REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Steps {
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "<#display name#>", file: <#filename.swift#>)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***

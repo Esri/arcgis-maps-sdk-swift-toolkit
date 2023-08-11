@@ -1,0 +1,29 @@
+@Tutorial(time: 5) {
+***REMOVED***@Intro(title: "Search View Tutorial") {
+***REMOVED******REMOVED***`SearchView` enables searching using one or more locators, with support for suggestions,
+***REMOVED******REMOVED***automatic zooming, and custom search sources.
+***REMOVED******REMOVED***@Image(source: SearchView, alt: "An image of the Search View component.")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Section(title: "<#text#>") {
+***REMOVED******REMOVED***@ContentAndMedia {
+***REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Steps {
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "<#display name#>", file: <#filename.swift#>)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***

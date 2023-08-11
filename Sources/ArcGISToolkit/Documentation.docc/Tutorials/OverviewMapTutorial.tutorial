@@ -1,0 +1,30 @@
+@Tutorial(time: 5) {
+***REMOVED***@Intro(title: "Overview Map Tutorial") {
+***REMOVED******REMOVED***`OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), 
+***REMOVED******REMOVED***superimposed on an existing `GeoView`, which shows a representation of the current 
+***REMOVED******REMOVED***`visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`).
+***REMOVED******REMOVED***@Image(source: OverviewMap, alt: "An image of the Overview Map component.")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Section(title: "<#text#>") {
+***REMOVED******REMOVED***@ContentAndMedia {
+***REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Steps {
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "<#display name#>", file: <#filename.swift#>)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***

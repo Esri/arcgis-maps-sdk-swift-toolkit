@@ -1,0 +1,29 @@
+@Tutorial(time: 5) {
+***REMOVED***@Intro(title: "Basemap Gallery Tutorial") {
+***REMOVED******REMOVED***The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
+***REMOVED******REMOVED***portal, or an array of `BasemapGalleryItem`s.
+***REMOVED******REMOVED***@Image(source: BasemapGallery, alt: "An image of the Basemap Gallery component.")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Section(title: "<#text#>") {
+***REMOVED******REMOVED***@ContentAndMedia {
+***REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Steps {
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "<#display name#>", file: <#filename.swift#>)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
