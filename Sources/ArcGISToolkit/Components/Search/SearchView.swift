@@ -14,7 +14,50 @@
 import SwiftUI
 import ArcGIS
 
-/// `SearchView` presents a search experience, powered by an underlying `SearchViewModel`.
+/// `SearchView` enables searching using one or more locators, with support for suggestions,
+/// automatic zooming, and custom search sources.
+///
+/// | iPhone | iPad |
+/// | ------ | ---- |
+/// | ![image](https://user-images.githubusercontent.com/3998072/203608897-5f3bf34a-0931-4d11-b3fc-18a5dd07131a.png) | ![image](https://user-images.githubusercontent.com/3998072/203608708-45a0096c-a8d6-457c-9ee1-8cdb9e5bb15a.png) |
+///
+/// **Features**
+///
+/// - Updates search suggestions as you type.
+/// - Supports using the Esri world geocoder or any other ArcGIS locators.
+/// - Supports searching using custom search sources.
+/// - Allows for customization of the display of search results.
+/// - Allows you to repeat a search within a defined area, and displays a button to enable that
+/// search when the view's viewpoint changes.
+///
+/// `SearchView` uses search sources which implement the ``SearchSource`` protocol.
+///
+/// `SearchView` provides the following search sources:
+/// - ``LocatorSearchSource``
+/// - ``SmartLocatorSearchSource``
+///
+/// `SearchView` provides several instance methods, allowing customization and additional search
+/// behaviors (such as displaying a "Repeat search here" button). See "Instance Methods" below.
+///
+/// **Associated Types**
+///
+/// `SearchView` has the following associated types:
+/// - ``SearchField``
+/// - ``SearchResult``
+/// - ``SearchSuggestion``
+/// - ``SearchOutcome``
+/// - ``SearchResultMode``
+///
+/// **Behavior**
+///
+/// The `SearchView` will display the results list view at half height, exposing a portion of the
+/// underlying map below the list, on an iPhone in portrait orientation (and certain iPad
+/// multitasking configurations).  The user can hide or show the result list after searching by
+/// clicking on the up/down chevron symbol on the right of the search bar.
+///
+/// To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Example)
+/// and refer to [SearchExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
+/// in the project.
 public struct SearchView: View {
     /// Creates a `SearchView`.
     /// - Parameters:
