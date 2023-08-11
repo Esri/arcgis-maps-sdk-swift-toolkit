@@ -39,6 +39,13 @@ import ArcGIS
 /// `SearchView` provides several instance methods, allowing customization and additional search
 /// behaviors (such as displaying a "Repeat search here" button). See "Instance Methods" below.
 ///
+/// **Behavior**
+///
+/// The `SearchView` will display the results list view at half height, exposing a portion of the
+/// underlying map below the list, on an iPhone in portrait orientation (and certain iPad
+/// multitasking configurations).  The user can hide or show the result list after searching by
+/// clicking on the up/down chevron symbol on the right of the search bar.
+///
 /// **Associated Types**
 ///
 /// `SearchView` has the following associated types:
@@ -47,13 +54,6 @@ import ArcGIS
 /// - ``SearchSuggestion``
 /// - ``SearchOutcome``
 /// - ``SearchResultMode``
-///
-/// **Behavior**
-///
-/// The `SearchView` will display the results list view at half height, exposing a portion of the
-/// underlying map below the list, on an iPhone in portrait orientation (and certain iPad
-/// multitasking configurations).  The user can hide or show the result list after searching by
-/// clicking on the up/down chevron symbol on the right of the search bar.
 ///
 /// To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Example)
 /// and refer to [SearchExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
