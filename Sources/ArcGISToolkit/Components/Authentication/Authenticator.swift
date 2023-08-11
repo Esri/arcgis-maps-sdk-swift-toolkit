@@ -14,15 +14,21 @@
 ***REMOVED***
 ***REMOVED***
 import Combine
-import CryptoTokenKit
 
 ***REMOVED***/ A configurable object that handles authentication challenges.
 @MainActor
 public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ A value indicating whether we should prompt the user when encountering an untrusted host.
-***REMOVED***let promptForUntrustedHosts: Bool
+***REMOVED***public let promptForUntrustedHosts: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ The OAuth configurations that this authenticator can work with.
-***REMOVED***let oAuthUserConfigurations: [OAuthUserConfiguration]
+***REMOVED***public var oAuthUserConfigurations: [OAuthUserConfiguration]
+***REMOVED***
+***REMOVED******REMOVED***/ The closure to call once the user has signed out.
+***REMOVED***public var signOutAction: (() async -> Void) = {***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The smart card manager.
+***REMOVED***@ObservedObject public var smartCardManager: SmartCardManager
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an authenticator.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -35,6 +41,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.promptForUntrustedHosts = promptForUntrustedHosts
 ***REMOVED******REMOVED***self.oAuthUserConfigurations = oAuthUserConfigurations
+***REMOVED******REMOVED***self.smartCardManager = SmartCardManager()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current challenge.
@@ -83,11 +90,13 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If smart card is connected to the device then a personal identity verification (PIV) token
-***REMOVED******REMOVED******REMOVED*** is available in the `TKTokenWatcher().tokenIDs`. Create a smart card network credential
-***REMOVED******REMOVED******REMOVED*** with first PIV token and continue with credential.
+***REMOVED******REMOVED******REMOVED*** is available then create a smart card network credential and continue.
 ***REMOVED******REMOVED***if challenge.kind == .clientCertificate,
-***REMOVED******REMOVED***   let pivToken = TKTokenWatcher().tokenIDs.filter({ $0.localizedCaseInsensitiveContains("pivtoken") ***REMOVED***).first,
+***REMOVED******REMOVED***   let pivToken = smartCardManager.pivToken,
 ***REMOVED******REMOVED***   let credential = try? NetworkCredential.smartCard(pivToken: pivToken) {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set last used PIV token on the manager.
+***REMOVED******REMOVED******REMOVED***smartCardManager.setLastUsedPIVToken(pivToken)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return .continueWithCredential(credential)
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -102,5 +111,14 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
 ***REMOVED******REMOVED***return await challengeContinuation.value
+***REMOVED***
+***REMOVED***
+
+public extension Authenticator {
+***REMOVED******REMOVED***/ Signs out by revoking tokens and clearing the credential stores.
+***REMOVED***func signOut() async {
+***REMOVED******REMOVED***await ArcGISEnvironment.authenticationManager.revokeOAuthTokens()
+***REMOVED******REMOVED***await ArcGISEnvironment.authenticationManager.clearCredentialStores()
+***REMOVED******REMOVED***smartCardManager.setLastUsedPIVToken(nil)
 ***REMOVED***
 ***REMOVED***

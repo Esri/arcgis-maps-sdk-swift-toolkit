@@ -46,22 +46,26 @@ private struct AuthenticatorModifier: ViewModifier {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
 ***REMOVED***
 ***REMOVED***@ViewBuilder func body(content: Content) -> some View {
-***REMOVED******REMOVED***switch authenticator.currentChallenge {
-***REMOVED******REMOVED***case let challenge as TokenChallengeContinuation:
-***REMOVED******REMOVED******REMOVED***content.modifier(LoginViewModifier(challenge: challenge))
-***REMOVED******REMOVED***case let challenge as NetworkChallengeContinuation:
-***REMOVED******REMOVED******REMOVED***switch challenge.kind {
-***REMOVED******REMOVED******REMOVED***case .serverTrust:
-***REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(TrustHostViewModifier(challenge: challenge))
-***REMOVED******REMOVED******REMOVED***case .certificate:
-***REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(CertificatePickerViewModifier(challenge: challenge))
-***REMOVED******REMOVED******REMOVED***case .login:
+***REMOVED******REMOVED***if let currentChallenge = authenticator.currentChallenge {
+***REMOVED******REMOVED******REMOVED***switch currentChallenge {
+***REMOVED******REMOVED******REMOVED***case let challenge as TokenChallengeContinuation:
 ***REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(LoginViewModifier(challenge: challenge))
+***REMOVED******REMOVED******REMOVED***case let challenge as NetworkChallengeContinuation:
+***REMOVED******REMOVED******REMOVED******REMOVED***switch challenge.kind {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .serverTrust:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(TrustHostViewModifier(challenge: challenge))
+***REMOVED******REMOVED******REMOVED******REMOVED***case .certificate:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(CertificatePickerViewModifier(challenge: challenge))
+***REMOVED******REMOVED******REMOVED******REMOVED***case .login:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(LoginViewModifier(challenge: challenge))
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***fatalError("unknown challenge type")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***fatalError("unknown challenge type")
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***content.modifier(
+***REMOVED******REMOVED******REMOVED******REMOVED***SmartCardViewModifier(authenticator: authenticator)
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
