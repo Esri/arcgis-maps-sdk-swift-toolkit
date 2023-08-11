@@ -29,6 +29,11 @@ import SwiftUI
 /// A named trace configuration defined for a utility network in a webmap comprises the parameters
 /// used for a utility network trace.
 ///
+/// **Associated Types**
+///
+/// `UtilityNetworkTrace` has the following associated type:
+/// - ``UtilityNetworkTraceStartingPoint``
+///
 /// **Behavior**
 ///
 /// The tool allows users to:
@@ -47,7 +52,7 @@ import SwiftUI
 /// ![image](https://user-images.githubusercontent.com/3998072/204346039-038ba4fa-201a-428c-ae84-be8f10c91cf7.png)
 ///
 ///  - See user-friendly warnings to help avoid common mistakes, including specifying too many
-///  starting points or running the same trace configuration multiple times.
+/// starting points or running the same trace configuration multiple times.
 ///
 /// To see the `UtilityNetworkTrace` in action, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [UtilityNetworkTraceExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/UtilityNetworkTraceExampleView.swift)
