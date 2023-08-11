@@ -40,7 +40,8 @@ import SwiftUI
 ///  - Choose between multiple networks (if more than one is defined in a webmap).
 ///  - Choose between named trace configurations:
 /// ![image](https://user-images.githubusercontent.com/3998072/204346359-419b0056-3a30-4120-9b47-c68513abde42.png)
-///  - Add trace starting points either programmatically or by tapping on a map view, then use the inspection view to narrow the selection:
+///  - Add trace starting points either programmatically or by tapping on a map view, then use the
+///  inspection view to narrow the selection:
 /// ![image](https://user-images.githubusercontent.com/3998072/204346273-38374067-a0b8-4db4-8e40-62b38e1603c8.png)
 ///  - View trace results:
 ///
