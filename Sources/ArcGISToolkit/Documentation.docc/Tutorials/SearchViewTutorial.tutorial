@@ -1,28 +1,68 @@
-@Tutorial(time: 5) {
+@Tutorial(time: 10) {
 ***REMOVED***@Intro(title: "Search View Tutorial") {
 ***REMOVED******REMOVED***`SearchView` enables searching using one or more locators, with support for suggestions,
 ***REMOVED******REMOVED***automatic zooming, and custom search sources.
 ***REMOVED******REMOVED***@Image(source: SearchView, alt: "An image of the Search View component.")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Section(title: "<#text#>") {
+***REMOVED***@Section(title: "Add search functionality to a map") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED******REMOVED***@Image(source: SearchView, alt: "An image of the Search View component.")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a data model containing the `Map` displayed in the `MapView`.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Also create a map viewpoint used by the `SearchView` to pan/zoom the map to the 
+***REMOVED******REMOVED******REMOVED******REMOVED***extent of the search results.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Provide a search source which also allows search behavior customization.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a `GraphicsOverlay` to display search results on the map.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep3)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a property to detect when the viewpoint is changing. This will help to implement repeat search behavior.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep4)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add properties to track the extent and center of the visible region.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep5)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep6)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "<#display name#>", file: <#filename.swift#>)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep7)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep8)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep9)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
