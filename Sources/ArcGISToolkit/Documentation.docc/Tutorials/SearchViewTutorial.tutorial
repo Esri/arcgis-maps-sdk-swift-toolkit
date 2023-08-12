@@ -1,28 +1,68 @@
-@Tutorial(time: 5) {
+@Tutorial(time: 10) {
     @Intro(title: "Search View Tutorial") {
         `SearchView` enables searching using one or more locators, with support for suggestions,
         automatic zooming, and custom search sources.
         @Image(source: SearchView, alt: "An image of the Search View component.")
     }
     
-    @Section(title: "<#text#>") {
+    @Section(title: "Add search functionality to a map") {
         @ContentAndMedia {
-            <#text#>
-            
-            @Image(source: <#file#>, alt: "<#accessible description#>")
+            @Image(source: SearchView, alt: "An image of the Search View component.")
         }
         
         @Steps {
             @Step {
+                Add a data model containing the `Map` displayed in the `MapView`.
+                
+                Also create a map viewpoint used by the `SearchView` to pan/zoom the map to the 
+                extent of the search results.
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep1)
+            }
+            
+            @Step {
+                Provide a search source which also allows search behavior customization.
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep2)
+            }
+            
+            @Step {
+                Add a `GraphicsOverlay` to display search results on the map.
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep3)
+            }
+            
+            @Step {
+                Add a property to detect when the viewpoint is changing. This will help to implement repeat search behavior.
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep4)
+            }
+            
+            @Step {
+                Add properties to track the extent and center of the visible region.
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep5)
+            }
+            
+            
+            @Step {
                 <#text#>
                 
-                @Image(source: <#file#>, alt: "<#accessible description#>")
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep6)
             }
             
             @Step {
                 <#text#>
                 
-                @Code(name: "<#display name#>", file: <#filename.swift#>)
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep7)
+            }
+            
+            @Step {
+                <#text#>
+                
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep8)
+            }
+            
+            
+            @Step {
+                <#text#>
+                
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep9)
             }
         }
     }
