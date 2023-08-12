@@ -2,27 +2,41 @@
     @Intro(title: "Utility Network Trace Tutorial") {
         `UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace 
         configurations.
-        @Image(source: UtilityNetworkTrace, alt: "An image of the Utility Network Trace component.")
     }
     
-    @Section(title: "<#text#>") {
+    @Section(title: "Add utility network trace functionality") {
         @ContentAndMedia {
-            <#text#>
-            
-            @Image(source: <#file#>, alt: "<#accessible description#>")
+            @Image(source: UtilityNetworkTrace, alt: "An image of the Utility Network Trace component.")
         }
         
         @Steps {
             @Step {
-                <#text#>
-                
-                @Image(source: <#file#>, alt: "<#accessible description#>")
+                Add important stateful properties. A map containing at least one utility network is
+                required. A `Point` and `CGPoint` will help allow the component to create trace
+                starting points at tap locations. A `GraphicsOverlay` will allow the component to
+                visually display trace results.
+                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep1)
             }
             
             @Step {
-                <#text#>
-                
-                @Code(name: "<#display name#>", file: <#filename.swift#>)
+                Add a `MapView`, optionally setting credentials if needed within a task.
+                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep2)
+            }
+            
+            @Step {
+                Track viewpoint changes.
+                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep3)
+            }
+            
+            @Step {
+                Track any tap gestures on the map view. When the user is adding starting points,
+                the trace tool needs to know the tap locations to detect the desired network element.
+                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep4)
+            }
+            
+            @Step {
+                Overlay the `UtilityNetworkTrace` on the `MapView` with a `FloatingPanel`.
+                @Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep5)
             }
         }
     }

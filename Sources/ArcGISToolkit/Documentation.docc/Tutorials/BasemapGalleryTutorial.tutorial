@@ -1,28 +1,41 @@
-@Tutorial(time: 5) {
+@Tutorial(time: 10) {
     @Intro(title: "Basemap Gallery Tutorial") {
         The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
         portal, or an array of `BasemapGalleryItem`s.
         @Image(source: BasemapGallery, alt: "An image of the Basemap Gallery component.")
     }
     
-    @Section(title: "<#text#>") {
+    @Section(title: "Allow users to change the basemap") {
         @ContentAndMedia {
-            <#text#>
-            
-            @Image(source: <#file#>, alt: "<#accessible description#>")
+            @Image(source: BasemapGallery, alt: "An image of the Basemap Gallery component.")
         }
         
         @Steps {
             @Step {
-                <#text#>
-                
-                @Image(source: <#file#>, alt: "<#accessible description#>")
+                To begin, setup the parent view.
+                Initialize a map with a basemap style, create member variable to control when the gallery is shown or hidden and pick an initial viewpoint.
+                Finally, add a `MapView` to the body of view, passing in the map and initial viewpoint.
+                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep1)
             }
             
             @Step {
-                <#text#>
-                
-                @Code(name: "<#display name#>", file: <#filename.swift#>)
+                Create a list of `BasemapGalleryItem`s to be shown in the gallery.
+                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep2)
+            }
+            
+            @Step {
+                Host the BasemapGallery on top of the `MapView` in a sheet, passing in the list of basemap gallery items and the map.
+                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep3)
+            }
+            
+            @Step {
+                Place a button in the navigation bar to open the gallery.
+                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep4)
+            }
+            
+            @Step {
+                Place a done button in the sheet to close the gallery.
+                @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep5)
             }
         }
     }

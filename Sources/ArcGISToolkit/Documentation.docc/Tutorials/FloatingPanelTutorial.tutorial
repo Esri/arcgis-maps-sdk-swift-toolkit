@@ -1,27 +1,37 @@
-@Tutorial(time: <#number#>) {
+@Tutorial(time: 10) {
     @Intro(title: "Floating Panel Tutorial") {
         A `FloatingPanel` is a view that overlays a view and supplies view-related content.
         @Image(source: FloatingPanel, alt: "An image of the Floating Panel component.")
     }
     
-    @Section(title: "<#text#>") {
+    @Section(title: "Host content in a Floating Panel") {
         @ContentAndMedia {
-            <#text#>
-            
-            @Image(source: <#file#>, alt: "<#accessible description#>")
+            @Image(source: FloatingPanel, alt: "An image of the Floating Panel component.")
         }
         
         @Steps {
             @Step {
-                <#text#>
-                
-                @Image(source: <#file#>, alt: "<#accessible description#>")
+                To begin, setup the parent view.
+                A floating panel can host content over a `MapView`, `SceneView` or some other view.
+                Add a simple gradient to the body of the view.
+                @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep1)
             }
             
             @Step {
-                <#text#>
-                
-                @Code(name: "<#display name#>", file: <#filename.swift#>)
+                Add a `FloatingPanelDetent` property to control the height of the panel. 
+                In this case we'll use a named value (`.half`) but a custom value can also be used.
+                Add a Boolean property to control when the panel is shown or hidden.
+                @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep2)
+            }
+            
+            @Step {
+                Add the Floating Panel into the hierarchy, passing in `selectedDetent` and `isPresented`.
+                @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep3)
+            }
+            
+            @Step {
+                Add the desired content to the body of the Floating Panel.
+                @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep4)
             }
         }
     }

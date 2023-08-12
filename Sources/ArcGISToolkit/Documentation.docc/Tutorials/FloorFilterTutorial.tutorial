@@ -1,28 +1,42 @@
-@Tutorial(time: <#number#>) {
+@Tutorial(time: 10) {
     @Intro(title: "Floor Filter Tutorial") {
         The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a
         building in your application.
         @Image(source: FloorFilter, alt: "An image of the Floor Filter component.")
     }
     
-    @Section(title: "<#text#>") {
+    @Section(title: "Control visible data in a floor aware map") {
         @ContentAndMedia {
-            <#text#>
-            
-            @Image(source: <#file#>, alt: "<#accessible description#>")
+            @Image(source: FloorFilter, alt: "An image of the Floor Filter component.")
         }
         
         @Steps {
             @Step {
-                <#text#>
-                
-                @Image(source: <#file#>, alt: "<#accessible description#>")
+                To begin, setup the parent view.
+                Add a map with floor aware data, a property to track the current viewpoint and place
+                a `MapView` into the body using these properties.
+                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep1)
             }
             
             @Step {
-                <#text#>
-                
-                @Code(name: "<#display name#>", file: <#filename.swift#>)
+                Add an alignment property so that the Floor Filter can properly display its internal views.
+                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep2)
+            }
+            
+            @Step {
+                Add logic to load the map and handle any resulting errors when the view loads.
+                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep3)
+            }
+            
+            @Step {
+                Track when the user is navigating the map with `.onNavigatingChanged` and also keep
+                track of the latest viewpoint with `onViewpointChanged`.
+                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep4)
+            }
+            
+            @Step {
+                Overlay the map with the Floor Filter, optionally adding UI to handle any loading errors.
+                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep5)
             }
         }
     }
