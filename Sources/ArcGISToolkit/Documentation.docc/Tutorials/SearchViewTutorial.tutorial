@@ -1,5 +1,5 @@
 @Tutorial(time: 10) {
-***REMOVED***@Intro(title: "Search View Tutorial") {
+***REMOVED***@Intro(title: "SearchView Tutorial") {
 ***REMOVED******REMOVED***`SearchView` enables searching using one or more locators, with support for suggestions,
 ***REMOVED******REMOVED***automatic zooming, and custom search sources.
 ***REMOVED******REMOVED***@Image(source: SearchView, alt: "An image of the Search View component.")

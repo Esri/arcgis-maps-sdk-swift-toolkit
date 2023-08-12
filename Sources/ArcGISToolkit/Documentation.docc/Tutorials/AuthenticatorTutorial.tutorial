@@ -7,9 +7,6 @@
 ***REMOVED***
 ***REMOVED***@Section(title: "Add Authenticator to your app") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***The Authenticator will handle many different types of authentication, including ArcGIS
-***REMOVED******REMOVED******REMOVED***authentication (token and OAuth), Integrated Windows Authentication (IWA), and Client 
-***REMOVED******REMOVED******REMOVED***Certificate (PKI).
 ***REMOVED******REMOVED******REMOVED***@Image(source: Authenticator, alt: "An image of the Authenticator component.")
 ***REMOVED***
 ***REMOVED******REMOVED***

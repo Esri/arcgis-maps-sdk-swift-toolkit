@@ -1,28 +1,46 @@
-@Tutorial(time: 5) {
-***REMOVED***@Intro(title: "Popup View Tutorial") {
+@Tutorial(time: 10) {
+***REMOVED***@Intro(title: "PopupView Tutorial") {
 ***REMOVED******REMOVED***The `PopupView` component will display a popup for an individual feature. This includes 
 ***REMOVED******REMOVED***showing the feature's title, attributes, custom description, media, and attachments.
 ***REMOVED******REMOVED***@Image(source: PopupView, alt: "An image of the Popup View component.")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Section(title: "<#text#>") {
+***REMOVED***@Section(title: "Display feature information in a PopupView") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED******REMOVED***@Image(source: PopupView, alt: "An image of the Popup View component.")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED******REMOVED******REMOVED***Initialize data containing popups.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "PopupExampleView.swift", file: PopupViewStep1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "<#display name#>", file: <#filename.swift#>)
+***REMOVED******REMOVED******REMOVED******REMOVED***Track important information like the last selected screen point, and the current
+***REMOVED******REMOVED******REMOVED******REMOVED***`Popup`.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "PopupExampleView.swift", file: PopupViewStep2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add the `MapView` and with the `Popup` data.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "PopupExampleView.swift", file: PopupViewStep3)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Track any tap gestures on the `MapView`.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "PopupExampleView.swift", file: PopupViewStep4)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Perform an identify operation whenever the map is tapped, a grab the `Popup` data
+***REMOVED******REMOVED******REMOVED******REMOVED***if present.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "PopupExampleView.swift", file: PopupViewStep5)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Show the `PopupView` in a `FloatingPanel`.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "PopupExampleView.swift", file: PopupViewStep6)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

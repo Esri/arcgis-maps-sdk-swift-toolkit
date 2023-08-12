@@ -2,27 +2,41 @@
 ***REMOVED***@Intro(title: "Utility Network Trace Tutorial") {
 ***REMOVED******REMOVED***`UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace 
 ***REMOVED******REMOVED***configurations.
-***REMOVED******REMOVED***@Image(source: UtilityNetworkTrace, alt: "An image of the Utility Network Trace component.")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Section(title: "<#text#>") {
+***REMOVED***@Section(title: "Add utility network trace functionality") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED******REMOVED***@Image(source: UtilityNetworkTrace, alt: "An image of the Utility Network Trace component.")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED******REMOVED******REMOVED***Add important stateful properties. A map containing at least one utility network is
+***REMOVED******REMOVED******REMOVED******REMOVED***required. A `Point` and `CGPoint` will help allow the component to create trace
+***REMOVED******REMOVED******REMOVED******REMOVED***starting points at tap locations. A `GraphicsOverlay` will allow the component to
+***REMOVED******REMOVED******REMOVED******REMOVED***visually display trace results.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "<#display name#>", file: <#filename.swift#>)
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a `MapView`, optionally setting credentials if needed within a task.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Track viewpoint changes.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep3)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Track any tap gestures on the map view. When the user is adding starting points,
+***REMOVED******REMOVED******REMOVED******REMOVED***the trace tool needs to know the tap locations to detect the desired network element.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep4)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Overlay the `UtilityNetworkTrace` on the `MapView` with a `FloatingPanel`.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "UtilityNetworkTraceExampleView.swift", file: UtilityNetworkTraceStep5)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

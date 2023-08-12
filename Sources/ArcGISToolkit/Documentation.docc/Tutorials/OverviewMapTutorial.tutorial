@@ -1,4 +1,4 @@
-@Tutorial(time: 5) {
+@Tutorial(time: 10) {
 ***REMOVED***@Intro(title: "Overview Map Tutorial") {
 ***REMOVED******REMOVED***`OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), 
 ***REMOVED******REMOVED***superimposed on an existing `GeoView`, which shows a representation of the current 
@@ -6,24 +6,50 @@
 ***REMOVED******REMOVED***@Image(source: OverviewMap, alt: "An image of the Overview Map component.")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Section(title: "<#text#>") {
+***REMOVED***@Section(title: "Add an Overview Map to a map") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED******REMOVED***@Image(source: OverviewMap, alt: "An image of the Overview Map component.")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED******REMOVED******REMOVED***To begin, setup the parent view.
+***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a map and pass it to a `MapView` in the view's body.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OverviewMapForMapView.swift", file: OverviewMapForMapStep1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "<#display name#>", file: <#filename.swift#>)
+***REMOVED******REMOVED******REMOVED******REMOVED***When using an overview map with a map we need to track the current viewpoint and visible area.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OverviewMapForMapView.swift", file: OverviewMapForMapStep2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Overlay the `OverviewMap` using `.forMapView(with:visibleArea:map:)`.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OverviewMapForMapView.swift", file: OverviewMapForMapStep3)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@Section(title: "Add an Overview Map to a scene") {
+***REMOVED******REMOVED***@ContentAndMedia {
+***REMOVED******REMOVED******REMOVED***@Image(source: OverviewMap, alt: "An image of the Overview Map component.")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Steps {
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***To begin, setup the parent view.
+***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a scene and pass it to a `SceneView` in the view's body.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OverviewMapForSceneView.swift", file: OverviewMapForSceneStep1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***When using an overview map with a scene we need to track the current viewpoint.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OverviewMapForSceneView.swift", file: OverviewMapForSceneStep2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Overlay the `OverviewMap` using `.forSceneView(with:map:)`.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "OverviewMapForSceneView.swift", file: OverviewMapForSceneStep3)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

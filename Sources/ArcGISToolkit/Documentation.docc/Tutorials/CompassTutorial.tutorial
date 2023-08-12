@@ -1,12 +1,11 @@
-@Tutorial(time: 5) {
+@Tutorial(time: 10) {
 ***REMOVED***@Intro(title: "Compass Tutorial") {
-***REMOVED******REMOVED***A `Compass` (alias North arrow) shows where north is in a MapView.
+***REMOVED******REMOVED***A `Compass` (alias North arrow) shows where north is in a `MapView` or `SceneView`.
 ***REMOVED******REMOVED***@Image(source: Compass, alt: "The Compass component")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Section(title: "Add a compass to a map view") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***A Compass can be added as an overlay to a MapView.
 ***REMOVED******REMOVED******REMOVED***@Image(source: Compass, alt: "An image of the compass component.")
 ***REMOVED***
 ***REMOVED******REMOVED***

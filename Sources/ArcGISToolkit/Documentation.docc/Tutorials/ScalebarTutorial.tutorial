@@ -1,4 +1,4 @@
-@Tutorial(time: 5) {
+@Tutorial(time: 10) {
 ***REMOVED***@Intro(title: "Scalebar Tutorial") {
 ***REMOVED******REMOVED***A scalebar displays the representation of an accurate linear measurement on the map. It 
 ***REMOVED******REMOVED***provides a visual indication through which users can determine the size of features or the 
@@ -6,24 +6,32 @@
 ***REMOVED******REMOVED***@Image(source: Scalebar, alt: "An image of the Scalebar component.")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Section(title: "<#text#>") {
+***REMOVED***@Section(title: "Add a scalebar to a map") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED******REMOVED***@Image(source: Scalebar, alt: "An image of the Scalebar component.")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED******REMOVED******REMOVED***To begin, setup the parent view.
+***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a map property and pass it to a `MapView` in the view's body.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ScalebarExampleView.swift", file: ScalebarStep1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "<#display name#>", file: <#filename.swift#>)
+***REMOVED******REMOVED******REMOVED******REMOVED***The Scalebar needs three pieces of information to determine scale: a spatial reference, units per point and the viewpoint. Add these properties and track their changes with the their respective modifiers.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ScalebarExampleView.swift", file: ScalebarStep2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Choose an alignment for the Scalebar such as `.bottomLeading` and determine
+***REMOVED******REMOVED******REMOVED******REMOVED***the maximum amount of screen width the Scalebar should consume.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ScalebarExampleView.swift", file: ScalebarStep3)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Overlay the `Scalebar` on the `MapView`, passing in all of the previously created properties.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ScalebarExampleView.swift", file: ScalebarStep4)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
