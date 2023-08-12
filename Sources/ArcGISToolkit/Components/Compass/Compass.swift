@@ -14,7 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A `Compass` (alias North arrow) shows where north is in a `MapView`.
+***REMOVED***/ A `Compass` (alias North arrow) shows where north is in a `MapView` or `SceneView`.
 ***REMOVED***/
 ***REMOVED***/ ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202810369-a0b82778-77d4-404e-bebf-1a84841fbb1b.png)
 ***REMOVED***/ - Automatically hides when the rotation is zero.
