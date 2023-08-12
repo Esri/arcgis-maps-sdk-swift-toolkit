@@ -1,4 +1,4 @@
-@Tutorial(time: 5) {
+@Tutorial(time: 10) {
     @Intro(title: "Scalebar Tutorial") {
         A scalebar displays the representation of an accurate linear measurement on the map. It 
         provides a visual indication through which users can determine the size of features or the 
@@ -6,24 +6,32 @@
         @Image(source: Scalebar, alt: "An image of the Scalebar component.")
     }
     
-    @Section(title: "<#text#>") {
+    @Section(title: "Add a scalebar to a map") {
         @ContentAndMedia {
-            <#text#>
-            
-            @Image(source: <#file#>, alt: "<#accessible description#>")
+            @Image(source: Scalebar, alt: "An image of the Scalebar component.")
         }
         
         @Steps {
             @Step {
-                <#text#>
-                
-                @Image(source: <#file#>, alt: "<#accessible description#>")
+                To begin, setup the parent view.
+                Initialize a map property and pass it to a `MapView` in the view's body.
+                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep1)
             }
             
             @Step {
-                <#text#>
-                
-                @Code(name: "<#display name#>", file: <#filename.swift#>)
+                The Scalebar needs three pieces of information to determine scale: a spatial reference, units per point and the viewpoint. Add these properties and track their changes with the their respective modifiers.
+                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep2)
+            }
+            
+            @Step {
+                Choose an alignment for the Scalebar such as `.bottomLeading` and determine
+                the maximum amount of screen width the Scalebar should consume.
+                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep3)
+            }
+            
+            @Step {
+                Overlay the `Scalebar` on the `MapView`, passing in all of the previously created properties.
+                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep4)
             }
         }
     }

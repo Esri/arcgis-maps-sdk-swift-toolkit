@@ -1,5 +1,5 @@
 @Tutorial(time: 10) {
-    @Intro(title: "Search View Tutorial") {
+    @Intro(title: "SearchView Tutorial") {
         `SearchView` enables searching using one or more locators, with support for suggestions,
         automatic zooming, and custom search sources.
         @Image(source: SearchView, alt: "An image of the Search View component.")
