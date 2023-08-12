@@ -14,7 +14,7 @@
 import ArcGIS
 import SwiftUI
 
-/// A `Compass` (alias North arrow) shows where north is in a `MapView`.
+/// A `Compass` (alias North arrow) shows where north is in a `MapView` or `SceneView`.
 ///
 /// ![image](https://user-images.githubusercontent.com/3998072/202810369-a0b82778-77d4-404e-bebf-1a84841fbb1b.png)
 /// - Automatically hides when the rotation is zero.
