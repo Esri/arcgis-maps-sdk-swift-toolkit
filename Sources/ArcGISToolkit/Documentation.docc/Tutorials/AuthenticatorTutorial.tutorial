@@ -5,24 +5,38 @@
         @Image(source: Authenticator, alt: "An image of the Authenticator component.")
     }
     
-    @Section(title: "<#text#>") {
+    @Section(title: "Add Authenticator to your app") {
         @ContentAndMedia {
-            <#text#>
-            
-            @Image(source: <#file#>, alt: "<#accessible description#>")
+            The Authenticator will handle many different types of authentication, including ArcGIS
+            authentication (token and OAuth), Integrated Windows Authentication (IWA), and Client 
+            Certificate (PKI).
+            @Image(source: Authenticator, alt: "An image of the Authenticator component.")
         }
         
         @Steps {
             @Step {
-                <#text#>
-                
-                @Image(source: <#file#>, alt: "<#accessible description#>")
+                Declare and initialize an `Authenticator` member in your app.
+                @Code(name: "ExampleApp.swift", file: Authenticator0)
             }
             
             @Step {
-                <#text#>
-                
-                @Code(name: "<#display name#>", file: <#filename.swift#>)
+                Set the `Authenticator` to handle challenges.
+                @Code(name: "ExampleApp.swift", file: Authenticator1)
+            }
+            
+            @Step {
+                Declare the app's body, placing the `Authenticator` into the hierarchy.
+                @Code(name: "ExampleApp.swift", file: Authenticator2)
+            }
+            
+            @Step {
+                Setup credential persistence.
+                @Code(name: "ExampleApp.swift", file: Authenticator3)
+            }
+            
+            @Step {
+                During sign-out, use the following extension methods of AuthenticationManager.
+                @Code(name: "SignOutView.swift", file: Authenticator4)
             }
         }
     }
