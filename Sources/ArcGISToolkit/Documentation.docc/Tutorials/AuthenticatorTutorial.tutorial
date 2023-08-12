@@ -5,24 +5,38 @@
 ***REMOVED******REMOVED***@Image(source: Authenticator, alt: "An image of the Authenticator component.")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Section(title: "<#text#>") {
+***REMOVED***@Section(title: "Add Authenticator to your app") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED******REMOVED***The Authenticator will handle many different types of authentication, including ArcGIS
+***REMOVED******REMOVED******REMOVED***authentication (token and OAuth), Integrated Windows Authentication (IWA), and Client 
+***REMOVED******REMOVED******REMOVED***Certificate (PKI).
+***REMOVED******REMOVED******REMOVED***@Image(source: Authenticator, alt: "An image of the Authenticator component.")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: <#file#>, alt: "<#accessible description#>")
+***REMOVED******REMOVED******REMOVED******REMOVED***Declare and initialize an `Authenticator` member in your app.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: Authenticator0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "<#display name#>", file: <#filename.swift#>)
+***REMOVED******REMOVED******REMOVED******REMOVED***Set the `Authenticator` to handle challenges.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: Authenticator1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Declare the app's body, placing the `Authenticator` into the hierarchy.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: Authenticator2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Setup credential persistence.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: Authenticator3)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***During sign-out, use the following extension methods of AuthenticationManager.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SignOutView.swift", file: Authenticator4)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
