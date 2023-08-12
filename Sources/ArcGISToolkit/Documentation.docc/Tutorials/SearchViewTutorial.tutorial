@@ -30,7 +30,8 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Add a property to detect when the viewpoint is changing. This will help to implement repeat search behavior.
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a property to detect when the viewpoint is changing. This will help to implement
+***REMOVED******REMOVED******REMOVED******REMOVED***repeat search behavior.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep4)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -41,28 +42,18 @@
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a `MapView` and overlay the `SearchView`.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep6)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Add additional modifiers, further interconnecting the `SearchView` and `MapView`.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep7)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Use `MapView` modifiers to track stateful information important to the `SearchView`.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep8)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***<#text#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SearchExampleView.swift", file: SearchViewStep9)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
