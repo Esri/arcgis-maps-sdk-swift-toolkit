@@ -39,6 +39,9 @@ struct SearchExampleView: View {
             .onViewpointChanged(kind: .centerAndScale) {
                 queryCenter = $0.targetGeometry as? Point
             }
+            .onVisibleAreaChanged { newValue in
+                geoViewExtent = newValue.extent
+            }
             .overlay {
                 SearchView(
                     sources: [locatorDataSource],
