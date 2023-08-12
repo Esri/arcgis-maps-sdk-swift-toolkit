@@ -39,6 +39,9 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***queryCenter = $0.targetGeometry as? Point
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***geoViewExtent = newValue.extent
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorDataSource],
