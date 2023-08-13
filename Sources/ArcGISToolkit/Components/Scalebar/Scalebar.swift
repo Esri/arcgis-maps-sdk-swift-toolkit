@@ -45,7 +45,7 @@
 ***REMOVED***/ - ``ScalebarUnits``
 ***REMOVED***/
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
-***REMOVED***/ and refer to [ScalebarExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/ScalebarExampleView.swift) in the project.
+***REMOVED***/ and refer to [ScalebarExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/ScalebarExampleView.swift) in the project. To learn more about using the `Scalebar` see the <doc:/tutorials/ScalebarTutorial>.
 public struct Scalebar: View {
 ***REMOVED******REMOVED*** - MARK: Internal/Private vars
 ***REMOVED***
