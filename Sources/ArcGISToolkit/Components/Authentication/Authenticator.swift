@@ -46,8 +46,7 @@ import Combine
 /// requiring the user to reenter credentials.
 ///
 /// To see the `Authenticator` in action, check out the [Authentication Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/AuthenticationExample)
-/// and refer to [AuthenticationApp.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/AuthenticationExample/AuthenticationExample/AuthenticationApp.swift)
-/// in the project.
+/// and refer to [AuthenticationApp.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/AuthenticationExample/AuthenticationExample/AuthenticationApp.swift). To learn more about using the `Authenticator` see the <doc:/tutorials/AuthenticatorTutorial>.
 @MainActor
 public final class Authenticator: ObservableObject {
     /// A value indicating whether we should prompt the user when encountering an untrusted host.

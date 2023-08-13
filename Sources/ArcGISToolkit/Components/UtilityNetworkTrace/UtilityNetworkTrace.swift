@@ -57,7 +57,7 @@ import SwiftUI
 ///
 /// To see the `UtilityNetworkTrace` in action, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [UtilityNetworkTraceExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/UtilityNetworkTraceExampleView.swift)
-/// in the project.
+/// in the project. To learn more about using the `UtilityNetworkTrace` see the <doc:/tutorials/UtilityNetworkTraceTutorial>.
 public struct UtilityNetworkTrace: View {
     /// The proxy to provide access to map view operations.
     private var mapViewProxy: MapViewProxy?
