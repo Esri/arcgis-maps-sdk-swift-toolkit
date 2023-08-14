@@ -50,7 +50,7 @@
 ***REMOVED***/
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [BasemapGalleryExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BasemapGalleryExampleView.swift)
-***REMOVED***/ in the project.
+***REMOVED***/ in the project. To learn more about using the `BasemapGallery` see the [BasemapGallery Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/BasemapGalleryTutorial).
 public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ The view style of the gallery.
 ***REMOVED***public enum Style {
@@ -221,7 +221,7 @@ private extension BasemapGallery {
 ***REMOVED*** MARK: Modifiers
 
 public extension BasemapGallery {
-***REMOVED******REMOVED***/ The style of the basemap gallery. Defaults to ``Style/automatic(listWidth:gridWidth:)``.
+***REMOVED******REMOVED***/ The style of the basemap gallery. Defaults to ``Style/automatic(maxGridItemWidth:)``.
 ***REMOVED******REMOVED***/ - Parameter style: The `Style` to use.
 ***REMOVED******REMOVED***/ - Returns: The `BasemapGallery`.
 ***REMOVED***func style(

@@ -38,33 +38,6 @@ import Combine
 ***REMOVED***/ ***REMOVED***/ - Parameter authenticator: The authenticator for which credentials will be prompted.
 ***REMOVED***/ @ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View
 ***REMOVED***/ ```
-***REMOVED***/ To securely store credentials in the keychain, use the following extension method of `AuthenticationManager`:
-***REMOVED***/
-***REMOVED***/ ```swift
-***REMOVED***/  ***REMOVED***/ Sets up new credential stores that will be persisted to the keychain.
-***REMOVED***/ ***REMOVED***/ - Remark: The credentials will be stored in the default access group of the keychain.
-***REMOVED***/ ***REMOVED***/ You can find more information about what the default group would be here:
-***REMOVED***/ https:***REMOVED***developer.a.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
-***REMOVED***/ ***REMOVED***/ - Parameters:
-***REMOVED***/ ***REMOVED***/   - access: When the credentials stored in the keychain can be accessed.
-***REMOVED***/ ***REMOVED***/   - synchronizesWithiCloud: A Boolean value indicating whether the credentials are synchronized with iCloud.
-***REMOVED***/ public func setupPersistentCredentialStorage(
-***REMOVED***/***REMOVED*** access: ArcGIS.KeychainAccess,
-***REMOVED***/***REMOVED*** synchronizesWithiCloud: Bool = false
-***REMOVED***/ ) async throws
-***REMOVED***/ ```
-***REMOVED***/
-***REMOVED***/ During sign-out, use the following extension methods of `AuthenticationManager`:
-***REMOVED***/
-***REMOVED***/ ```swift
-***REMOVED***/ ***REMOVED***/ Revokes tokens of OAuth user credentials.
-***REMOVED***/ func revokeOAuthTokens() async
-***REMOVED***/
-***REMOVED***/ ***REMOVED***/ Clears all ArcGIS and network credentials from the respective stores.
-***REMOVED***/ ***REMOVED***/ Note: This sets up new `URLSessions` so that removed network credentials are respected
-***REMOVED***/ ***REMOVED***/ right away.
-***REMOVED***/ func clearCredentialStores() async
-***REMOVED***/ ```
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
@@ -73,8 +46,8 @@ import Combine
 ***REMOVED***/ requiring the user to reenter credentials.
 ***REMOVED***/
 ***REMOVED***/ To see the `Authenticator` in action, check out the [Authentication Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/AuthenticationExample)
-***REMOVED***/ and refer to [AuthenticationApp.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/AuthenticationExample/AuthenticationExample/AuthenticationApp.swift)
-***REMOVED***/ in the project.
+***REMOVED***/ and refer to [AuthenticationApp.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/AuthenticationExample/AuthenticationExample/AuthenticationApp.swift).
+***REMOVED***/ To learn more about using the `Authenticator` see the [Authenticator Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/AuthenticatorTutorial).
 @MainActor
 public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ A value indicating whether we should prompt the user when encountering an untrusted host.

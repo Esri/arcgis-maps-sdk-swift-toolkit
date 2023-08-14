@@ -4,9 +4,80 @@
 ***REMOVED******REMOVED***development. It is built off of the new ArcGIS Maps SDK for Swift.
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@Chapter(name: "Authenticator") {
+***REMOVED******REMOVED***The `Authenticator` is a configurable object that handles authentication challenges. It will
+***REMOVED******REMOVED***display a user interface when network and ArcGIS authentication challenges occur.
+***REMOVED******REMOVED***@Image(source: Authenticator, alt: "An image of the Authenticator component.")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:AuthenticatorTutorial")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Chapter(name: "BasemapGallery") {
+***REMOVED******REMOVED***The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
+***REMOVED******REMOVED***portal, or an array of `BasemapGalleryItem`s.
+***REMOVED******REMOVED***@Image(source: BasemapGallery, alt: "An image of the BasemapGallery component.")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:BasemapGalleryTutorial")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Chapter(name: "Bookmarks") {
+***REMOVED******REMOVED***The `Bookmarks` component will display a list of bookmarks and allow the user to select a
+***REMOVED******REMOVED***bookmark and perform some action.
+***REMOVED******REMOVED***@Image(source: Bookmarks, alt: "An image of the Bookmarks component.")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:BookmarksTutorial")
+***REMOVED***
+***REMOVED***
 ***REMOVED***@Chapter(name: "Compass") {
-***REMOVED******REMOVED***A Compass (alias North arrow) shows where north is in a MapView.
-***REMOVED******REMOVED***@Image(source: Compass, alt: "An image of the compass component.")
+***REMOVED******REMOVED***A `Compass` (alias North arrow) shows where north is in a MapView.
+***REMOVED******REMOVED***@Image(source: Compass, alt: "An image of the Compass component.")
 ***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:CompassTutorial")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Chapter(name: "FloatingPanel") {
+***REMOVED******REMOVED***A `FloatingPanel` is a view that overlays a view and supplies view-related content.
+***REMOVED******REMOVED***@Image(source: FloatingPanel, alt: "An image of the FloatingPanel component.")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:FloatingPanelTutorial")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Chapter(name: "FloorFilter") {
+***REMOVED******REMOVED***The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a
+***REMOVED******REMOVED***building in your application.
+***REMOVED******REMOVED***@Image(source: FloorFilter, alt: "An image of the FloorFilter component.")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:FloorFilterTutorial")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Chapter(name: "OverviewMap") {
+***REMOVED******REMOVED***`OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), 
+***REMOVED******REMOVED***superimposed on an existing `GeoView`, which shows a representation of the current 
+***REMOVED******REMOVED***`visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`).
+***REMOVED******REMOVED***@Image(source: OverviewMap, alt: "An image of the OverviewMap component.")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:OverviewMapTutorial")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Chapter(name: "PopupView") {
+***REMOVED******REMOVED***The `PopupView` component will display a popup for an individual feature. This includes 
+***REMOVED******REMOVED***showing the feature's title, attributes, custom description, media, and attachments.
+***REMOVED******REMOVED***@Image(source: PopupView, alt: "An image of the PopupView component.")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:PopupViewTutorial")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Chapter(name: "Scalebar") {
+***REMOVED******REMOVED***A scalebar displays the representation of an accurate linear measurement on the map. It 
+***REMOVED******REMOVED***provides a visual indication through which users can determine the size of features or the 
+***REMOVED******REMOVED***distance between features on a map.
+***REMOVED******REMOVED***@Image(source: Scalebar, alt: "An image of the Scalebar component.")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:ScalebarTutorial")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Chapter(name: "SearchView") {
+***REMOVED******REMOVED***`SearchView` enables searching using one or more locators, with support for suggestions,
+***REMOVED******REMOVED***automatic zooming, and custom search sources.
+***REMOVED******REMOVED***@Image(source: SearchView, alt: "An image of the SearchView component.")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:SearchViewTutorial")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Chapter(name: "UtilityNetworkTrace") {
+***REMOVED******REMOVED***`UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace 
+***REMOVED******REMOVED***configurations.
+***REMOVED******REMOVED***@Image(source: UtilityNetworkTrace, alt: "An image of the UtilityNetworkTrace component.")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:UtilityNetworkTraceTutorial")
 ***REMOVED***
 ***REMOVED***

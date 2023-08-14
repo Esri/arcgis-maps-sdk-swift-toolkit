@@ -1,0 +1,38 @@
+@Tutorial(time: 10) {
+***REMOVED***@Intro(title: "FloatingPanel Tutorial") {
+***REMOVED******REMOVED***A `FloatingPanel` is a view that overlays a view and supplies view-related content.
+***REMOVED******REMOVED***@Image(source: FloatingPanel, alt: "An image of the FloatingPanel component.")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Section(title: "Using the FloatingPanel") {
+***REMOVED******REMOVED***@ContentAndMedia {
+***REMOVED******REMOVED******REMOVED***@Image(source: FloatingPanel, alt: "An image of the FloatingPanel component.")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Steps {
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***To begin, setup the parent view.
+***REMOVED******REMOVED******REMOVED******REMOVED***A floating panel can host content over a `MapView`, `SceneView` or some other view.
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a simple gradient to the body of the view.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a `FloatingPanelDetent` property to control the height of the panel. 
+***REMOVED******REMOVED******REMOVED******REMOVED***In this case we'll use a named value (`.half`) but a custom value can also be used.
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a Boolean property to control when the panel is shown or hidden.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add the Floating Panel into the hierarchy, passing in `selectedDetent` and `isPresented`.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep3)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add the desired content to the body of the Floating Panel.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep4)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
