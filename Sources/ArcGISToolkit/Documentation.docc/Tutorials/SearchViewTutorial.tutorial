@@ -1,0 +1,60 @@
+@Tutorial(time: 10) {
+    @Intro(title: "SearchView Tutorial") {
+        `SearchView` enables searching using one or more locators, with support for suggestions,
+        automatic zooming, and custom search sources.
+        @Image(source: SearchView, alt: "An image of the SearchView component.")
+    }
+    
+    @Section(title: "Using the SearchView") {
+        @ContentAndMedia {
+            @Image(source: SearchView, alt: "An image of the SearchView component.")
+        }
+        
+        @Steps {
+            @Step {
+                Add a data model containing the `Map` displayed in the `MapView`.
+                
+                Also create a map viewpoint used by the `SearchView` to pan/zoom the map to the 
+                extent of the search results.
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep1)
+            }
+            
+            @Step {
+                Provide a search source which also allows search behavior customization.
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep2)
+            }
+            
+            @Step {
+                Add a `GraphicsOverlay` to display search results on the map.
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep3)
+            }
+            
+            @Step {
+                Add a property to detect when the viewpoint is changing. This will help to implement
+                repeat search behavior.
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep4)
+            }
+            
+            @Step {
+                Add properties to track the extent and center of the visible region.
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep5)
+            }
+            
+            
+            @Step {
+                Add a `MapView` and overlay the `SearchView`.
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep6)
+            }
+            
+            @Step {
+                Add additional modifiers, further interconnecting the `SearchView` and `MapView`.
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep7)
+            }
+            
+            @Step {
+                Use `MapView` modifiers to track stateful information important to the `SearchView`.
+                @Code(name: "SearchExampleView.swift", file: SearchViewStep8)
+            }
+        }
+    }
+}

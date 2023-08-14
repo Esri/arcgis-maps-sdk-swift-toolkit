@@ -38,33 +38,6 @@ import Combine
 /// /// - Parameter authenticator: The authenticator for which credentials will be prompted.
 /// @ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View
 /// ```
-/// To securely store credentials in the keychain, use the following extension method of `AuthenticationManager`:
-///
-/// ```swift
-///  /// Sets up new credential stores that will be persisted to the keychain.
-/// /// - Remark: The credentials will be stored in the default access group of the keychain.
-/// /// You can find more information about what the default group would be here:
-/// https://developer.a.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
-/// /// - Parameters:
-/// ///   - access: When the credentials stored in the keychain can be accessed.
-/// ///   - synchronizesWithiCloud: A Boolean value indicating whether the credentials are synchronized with iCloud.
-/// public func setupPersistentCredentialStorage(
-///     access: ArcGIS.KeychainAccess,
-///     synchronizesWithiCloud: Bool = false
-/// ) async throws
-/// ```
-///
-/// During sign-out, use the following extension methods of `AuthenticationManager`:
-///
-/// ```swift
-/// /// Revokes tokens of OAuth user credentials.
-/// func revokeOAuthTokens() async
-///
-/// /// Clears all ArcGIS and network credentials from the respective stores.
-/// /// Note: This sets up new `URLSessions` so that removed network credentials are respected
-/// /// right away.
-/// func clearCredentialStores() async
-/// ```
 ///
 /// **Behavior**
 ///
@@ -73,8 +46,8 @@ import Combine
 /// requiring the user to reenter credentials.
 ///
 /// To see the `Authenticator` in action, check out the [Authentication Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/AuthenticationExample)
-/// and refer to [AuthenticationApp.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/AuthenticationExample/AuthenticationExample/AuthenticationApp.swift)
-/// in the project.
+/// and refer to [AuthenticationApp.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/AuthenticationExample/AuthenticationExample/AuthenticationApp.swift).
+/// To learn more about using the `Authenticator` see the [Authenticator Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/AuthenticatorTutorial).
 @MainActor
 public final class Authenticator: ObservableObject {
     /// A value indicating whether we should prompt the user when encountering an untrusted host.

@@ -1,0 +1,40 @@
+@Tutorial(time: 10) {
+    @Intro(title: "Authenticator Tutorial") {
+        The `Authenticator` is a configurable object that handles authentication challenges. It will
+        display a user interface when network and ArcGIS authentication challenges occur.
+        @Image(source: Authenticator, alt: "An image of the Authenticator component.")
+    }
+    
+    @Section(title: "Using the Authenticator") {
+        @ContentAndMedia {
+            @Image(source: Authenticator, alt: "An image of the Authenticator component.")
+        }
+        
+        @Steps {
+            @Step {
+                Declare and initialize an `Authenticator` member in your app.
+                @Code(name: "ExampleApp.swift", file: AuthenticatorStep1)
+            }
+            
+            @Step {
+                Set the `Authenticator` to handle challenges.
+                @Code(name: "ExampleApp.swift", file: AuthenticatorStep2)
+            }
+            
+            @Step {
+                Declare the app's body, placing the `Authenticator` into the hierarchy.
+                @Code(name: "ExampleApp.swift", file: AuthenticatorStep3)
+            }
+            
+            @Step {
+                Setup credential persistence.
+                @Code(name: "ExampleApp.swift", file: AuthenticatorStep4)
+            }
+            
+            @Step {
+                During sign-out, use the following extension methods of AuthenticationManager.
+                @Code(name: "SignOutView.swift", file: AuthenticatorStep5)
+            }
+        }
+    }
+}
