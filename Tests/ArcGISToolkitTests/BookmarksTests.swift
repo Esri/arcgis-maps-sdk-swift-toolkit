@@ -45,9 +45,6 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a modifier and web map.
 ***REMOVED***func testSelectBookmarkWithModifierAndMap() async throws {
-***REMOVED******REMOVED***let expectation = XCTestExpectation(
-***REMOVED******REMOVED******REMOVED***description: "Modifier action was performed"
-***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let map = Map.portlandTreeSurvey
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await map.load()
@@ -59,9 +56,10 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var actionBookmark: Bookmark?
 ***REMOVED******REMOVED***let action: ((Bookmark) -> Void) = {
-***REMOVED******REMOVED******REMOVED***expectation.fulfill()
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual($0.viewpoint, map.bookmarks.first?.viewpoint)
+***REMOVED******REMOVED******REMOVED***actionBookmark = $0
 ***REMOVED***
 ***REMOVED******REMOVED***var bookmarks = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
@@ -72,7 +70,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***let firstBookmark = try XCTUnwrap(map.bookmarks.first)
 ***REMOVED******REMOVED***bookmarks.selectBookmark(firstBookmark)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
-***REMOVED******REMOVED***await fulfillment(of: [expectation], timeout: 1.0)
+***REMOVED******REMOVED***XCTAssertEqual(actionBookmark?.viewpoint, map.bookmarks.first?.viewpoint)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a viewpoint.
