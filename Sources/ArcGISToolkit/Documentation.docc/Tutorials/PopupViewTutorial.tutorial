@@ -2,12 +2,12 @@
 ***REMOVED***@Intro(title: "PopupView Tutorial") {
 ***REMOVED******REMOVED***The `PopupView` component will display a popup for an individual feature. This includes 
 ***REMOVED******REMOVED***showing the feature's title, attributes, custom description, media, and attachments.
-***REMOVED******REMOVED***@Image(source: PopupView, alt: "An image of the Popup View component.")
+***REMOVED******REMOVED***@Image(source: PopupView, alt: "An image of the PopupView component.")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Section(title: "Display feature information in a PopupView") {
+***REMOVED***@Section(title: "Using the PopupView") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***@Image(source: PopupView, alt: "An image of the Popup View component.")
+***REMOVED******REMOVED******REMOVED***@Image(source: PopupView, alt: "An image of the PopupView component.")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {

@@ -1,13 +1,13 @@
 @Tutorial(time: 10) {
-***REMOVED***@Intro(title: "Basemap Gallery Tutorial") {
+***REMOVED***@Intro(title: "BasemapGallery Tutorial") {
 ***REMOVED******REMOVED***The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
 ***REMOVED******REMOVED***portal, or an array of `BasemapGalleryItem`s.
-***REMOVED******REMOVED***@Image(source: BasemapGallery, alt: "An image of the Basemap Gallery component.")
+***REMOVED******REMOVED***@Image(source: BasemapGallery, alt: "An image of the BasemapGallery component.")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Section(title: "Allow users to change the basemap") {
+***REMOVED***@Section(title: "Using the BasemapGallery") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***@Image(source: BasemapGallery, alt: "An image of the Basemap Gallery component.")
+***REMOVED******REMOVED******REMOVED***@Image(source: BasemapGallery, alt: "An image of the BasemapGallery component.")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {

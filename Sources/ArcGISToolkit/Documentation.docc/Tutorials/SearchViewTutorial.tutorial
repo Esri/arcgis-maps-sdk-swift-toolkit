@@ -2,12 +2,12 @@
 ***REMOVED***@Intro(title: "SearchView Tutorial") {
 ***REMOVED******REMOVED***`SearchView` enables searching using one or more locators, with support for suggestions,
 ***REMOVED******REMOVED***automatic zooming, and custom search sources.
-***REMOVED******REMOVED***@Image(source: SearchView, alt: "An image of the Search View component.")
+***REMOVED******REMOVED***@Image(source: SearchView, alt: "An image of the SearchView component.")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Section(title: "Add search functionality to a map") {
+***REMOVED***@Section(title: "Using the SearchView") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***@Image(source: SearchView, alt: "An image of the Search View component.")
+***REMOVED******REMOVED******REMOVED***@Image(source: SearchView, alt: "An image of the SearchView component.")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {

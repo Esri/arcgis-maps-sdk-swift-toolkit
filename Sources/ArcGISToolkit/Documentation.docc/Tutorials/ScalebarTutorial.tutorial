@@ -1,12 +1,12 @@
 @Tutorial(time: 10) {
 ***REMOVED***@Intro(title: "Scalebar Tutorial") {
-***REMOVED******REMOVED***A scalebar displays the representation of an accurate linear measurement on the map. It 
+***REMOVED******REMOVED***A `Scalebar` displays the representation of an accurate linear measurement on the map. It 
 ***REMOVED******REMOVED***provides a visual indication through which users can determine the size of features or the 
 ***REMOVED******REMOVED***distance between features on a map.
 ***REMOVED******REMOVED***@Image(source: Scalebar, alt: "An image of the Scalebar component.")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Section(title: "Add a scalebar to a map") {
+***REMOVED***@Section(title: "Using the Scalebar") {
 ***REMOVED******REMOVED***@ContentAndMedia {
 ***REMOVED******REMOVED******REMOVED***@Image(source: Scalebar, alt: "An image of the Scalebar component.")
 ***REMOVED***

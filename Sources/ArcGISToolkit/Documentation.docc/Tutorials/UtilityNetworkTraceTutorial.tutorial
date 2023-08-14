@@ -1,12 +1,12 @@
 @Tutorial(time: 10) {
-***REMOVED***@Intro(title: "Utility Network Trace Tutorial") {
+***REMOVED***@Intro(title: "UtilityNetworkTrace Tutorial") {
 ***REMOVED******REMOVED***`UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace 
 ***REMOVED******REMOVED***configurations.
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Section(title: "Add utility network trace functionality") {
+***REMOVED***@Section(title: "Using the UtilityNetworkTrace component") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***@Image(source: UtilityNetworkTrace, alt: "An image of the Utility Network Trace component.")
+***REMOVED******REMOVED******REMOVED***@Image(source: UtilityNetworkTrace, alt: "An image of the UtilityNetworkTrace component.")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {

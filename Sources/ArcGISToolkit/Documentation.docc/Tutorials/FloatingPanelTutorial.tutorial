@@ -1,12 +1,12 @@
 @Tutorial(time: 10) {
-***REMOVED***@Intro(title: "Floating Panel Tutorial") {
+***REMOVED***@Intro(title: "FloatingPanel Tutorial") {
 ***REMOVED******REMOVED***A `FloatingPanel` is a view that overlays a view and supplies view-related content.
-***REMOVED******REMOVED***@Image(source: FloatingPanel, alt: "An image of the Floating Panel component.")
+***REMOVED******REMOVED***@Image(source: FloatingPanel, alt: "An image of the FloatingPanel component.")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Section(title: "Host content in a Floating Panel") {
+***REMOVED***@Section(title: "Using the FloatingPanel") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***@Image(source: FloatingPanel, alt: "An image of the Floating Panel component.")
+***REMOVED******REMOVED******REMOVED***@Image(source: FloatingPanel, alt: "An image of the FloatingPanel component.")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {

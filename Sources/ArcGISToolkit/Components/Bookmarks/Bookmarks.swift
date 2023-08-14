@@ -43,7 +43,7 @@
 ***REMOVED***/
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [BookmarksExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
-***REMOVED***/ in the project. To learn more about using the `Bookmarks` component see the <doc:/tutorials/BookmarksTutorial>.
+***REMOVED***/ in the project. To learn more about using the `Bookmarks` component see the [Bookmarks Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/BookmarksTutorial).
 public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ A list of selectable bookmarks.
 ***REMOVED***@State private var bookmarks: [Bookmark] = []

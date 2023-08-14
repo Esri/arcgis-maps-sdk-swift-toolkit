@@ -4,9 +4,9 @@
 ***REMOVED******REMOVED***@Image(source: Compass, alt: "The Compass component")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Section(title: "Add a compass to a map view") {
+***REMOVED***@Section(title: "Using the Compass") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***@Image(source: Compass, alt: "An image of the compass component.")
+***REMOVED******REMOVED******REMOVED***@Image(source: Compass, alt: "An image of the Compass component.")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {
