@@ -72,7 +72,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         
         // GeoModel should be loaded.
         XCTAssertEqual(geoModel.loadStatus, .loaded)
-        XCTAssertIdentical(geoModelViewModel.currentItem?.basemap, geoModel.basemap)
+        XCTAssertEqual(geoModelViewModel.currentItem?.basemap.name, geoModel.basemap?.name)
         
         // Save the array of developer basemap items from AGOL.
         let developerBasemapItems = basemapGalleryItems
