@@ -70,22 +70,6 @@ struct MultiLineTextEntry: View {
                 ClearButton { text.removeAll() }
             }
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                if isFocused {
-                    Spacer()
-                    Button {
-                        isFocused = false
-                    } label: {
-                        Text(
-                            "Done",
-                            bundle: .toolkitModule,
-                            comment: "A label for a button to finish text entry and dismiss the keyboard."
-                        )
-                    }
-                }
-            }
-        }
         .background(.clear)
         .focused($isFocused)
         .foregroundColor(isPlaceholder ? .secondary : .primary)
