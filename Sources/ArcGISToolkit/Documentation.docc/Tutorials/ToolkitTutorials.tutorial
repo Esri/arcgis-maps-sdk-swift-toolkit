@@ -11,10 +11,10 @@
         @TutorialReference(tutorial: "doc:AuthenticatorTutorial")
     }
     
-    @Chapter(name: "Basemap Gallery") {
+    @Chapter(name: "BasemapGallery") {
         The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
         portal, or an array of `BasemapGalleryItem`s.
-        @Image(source: BasemapGallery, alt: "An image of the Basemap Gallery component.")
+        @Image(source: BasemapGallery, alt: "An image of the BasemapGallery component.")
         @TutorialReference(tutorial: "doc:BasemapGalleryTutorial")
     }
     
@@ -31,31 +31,31 @@
         @TutorialReference(tutorial: "doc:CompassTutorial")
     }
     
-    @Chapter(name: "Floating Panel") {
+    @Chapter(name: "FloatingPanel") {
         A `FloatingPanel` is a view that overlays a view and supplies view-related content.
-        @Image(source: FloatingPanel, alt: "An image of the Floating Panel component.")
+        @Image(source: FloatingPanel, alt: "An image of the FloatingPanel component.")
         @TutorialReference(tutorial: "doc:FloatingPanelTutorial")
     }
     
-    @Chapter(name: "Floor Filter") {
+    @Chapter(name: "FloorFilter") {
         The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a
         building in your application.
-        @Image(source: FloorFilter, alt: "An image of the Floor Filter component.")
+        @Image(source: FloorFilter, alt: "An image of the FloorFilter component.")
         @TutorialReference(tutorial: "doc:FloorFilterTutorial")
     }
     
-    @Chapter(name: "Overview Map") {
+    @Chapter(name: "OverviewMap") {
         `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), 
         superimposed on an existing `GeoView`, which shows a representation of the current 
         `visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`).
-        @Image(source: OverviewMap, alt: "An image of the Overview Map component.")
+        @Image(source: OverviewMap, alt: "An image of the OverviewMap component.")
         @TutorialReference(tutorial: "doc:OverviewMapTutorial")
     }
     
-    @Chapter(name: "Popup View") {
+    @Chapter(name: "PopupView") {
         The `PopupView` component will display a popup for an individual feature. This includes 
         showing the feature's title, attributes, custom description, media, and attachments.
-        @Image(source: PopupView, alt: "An image of the Popup View component.")
+        @Image(source: PopupView, alt: "An image of the PopupView component.")
         @TutorialReference(tutorial: "doc:PopupViewTutorial")
     }
     
@@ -67,17 +67,17 @@
         @TutorialReference(tutorial: "doc:ScalebarTutorial")
     }
     
-    @Chapter(name: "Search View") {
+    @Chapter(name: "SearchView") {
         `SearchView` enables searching using one or more locators, with support for suggestions,
         automatic zooming, and custom search sources.
-        @Image(source: SearchView, alt: "An image of the Search View component.")
+        @Image(source: SearchView, alt: "An image of the SearchView component.")
         @TutorialReference(tutorial: "doc:SearchViewTutorial")
     }
     
-    @Chapter(name: "Utility Network Trace") {
+    @Chapter(name: "UtilityNetworkTrace") {
         `UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace 
         configurations.
-        @Image(source: UtilityNetworkTrace, alt: "An image of the Utility Network Trace component.")
+        @Image(source: UtilityNetworkTrace, alt: "An image of the UtilityNetworkTrace component.")
         @TutorialReference(tutorial: "doc:UtilityNetworkTraceTutorial")
     }
 }

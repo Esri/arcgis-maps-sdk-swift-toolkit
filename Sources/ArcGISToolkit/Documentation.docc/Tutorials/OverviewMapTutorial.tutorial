@@ -1,12 +1,12 @@
 @Tutorial(time: 10) {
-    @Intro(title: "Overview Map Tutorial") {
+    @Intro(title: "OverviewMap Tutorial") {
         `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), 
         superimposed on an existing `GeoView`, which shows a representation of the current 
         `visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`).
-        @Image(source: OverviewMap, alt: "An image of the Overview Map component.")
+        @Image(source: OverviewMap, alt: "An image of the OverviewMap component.")
     }
     
-    @Section(title: "Add an Overview Map to a map") {
+    @Section(title: "Using the OverviewMap") {
         @ContentAndMedia {
             @Image(source: OverviewMap, alt: "An image of the Overview Map component.")
         }

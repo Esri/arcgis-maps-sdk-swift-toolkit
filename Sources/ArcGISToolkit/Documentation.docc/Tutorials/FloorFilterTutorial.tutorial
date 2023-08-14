@@ -1,13 +1,13 @@
 @Tutorial(time: 10) {
-    @Intro(title: "Floor Filter Tutorial") {
+    @Intro(title: "FloorFilter Tutorial") {
         The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a
         building in your application.
-        @Image(source: FloorFilter, alt: "An image of the Floor Filter component.")
+        @Image(source: FloorFilter, alt: "An image of the FloorFilter component.")
     }
     
-    @Section(title: "Control visible data in a floor aware map") {
+    @Section(title: "Using the FloorFilter") {
         @ContentAndMedia {
-            @Image(source: FloorFilter, alt: "An image of the Floor Filter component.")
+            @Image(source: FloorFilter, alt: "An image of the FloorFilter component.")
         }
         
         @Steps {

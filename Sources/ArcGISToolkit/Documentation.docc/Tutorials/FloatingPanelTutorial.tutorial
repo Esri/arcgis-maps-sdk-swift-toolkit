@@ -1,12 +1,12 @@
 @Tutorial(time: 10) {
-    @Intro(title: "Floating Panel Tutorial") {
+    @Intro(title: "FloatingPanel Tutorial") {
         A `FloatingPanel` is a view that overlays a view and supplies view-related content.
-        @Image(source: FloatingPanel, alt: "An image of the Floating Panel component.")
+        @Image(source: FloatingPanel, alt: "An image of the FloatingPanel component.")
     }
     
-    @Section(title: "Host content in a Floating Panel") {
+    @Section(title: "Using the FloatingPanel") {
         @ContentAndMedia {
-            @Image(source: FloatingPanel, alt: "An image of the Floating Panel component.")
+            @Image(source: FloatingPanel, alt: "An image of the FloatingPanel component.")
         }
         
         @Steps {
