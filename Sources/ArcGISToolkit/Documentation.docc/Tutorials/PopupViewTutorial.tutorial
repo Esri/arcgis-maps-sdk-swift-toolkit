@@ -2,12 +2,12 @@
     @Intro(title: "PopupView Tutorial") {
         The `PopupView` component will display a popup for an individual feature. This includes 
         showing the feature's title, attributes, custom description, media, and attachments.
-        @Image(source: PopupView, alt: "An image of the Popup View component.")
+        @Image(source: PopupView, alt: "An image of the PopupView component.")
     }
     
-    @Section(title: "Display feature information in a PopupView") {
+    @Section(title: "Using the PopupView") {
         @ContentAndMedia {
-            @Image(source: PopupView, alt: "An image of the Popup View component.")
+            @Image(source: PopupView, alt: "An image of the PopupView component.")
         }
         
         @Steps {

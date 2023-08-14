@@ -1,12 +1,12 @@
 @Tutorial(time: 10) {
-    @Intro(title: "Utility Network Trace Tutorial") {
+    @Intro(title: "UtilityNetworkTrace Tutorial") {
         `UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace 
         configurations.
     }
     
-    @Section(title: "Add utility network trace functionality") {
+    @Section(title: "Using the UtilityNetworkTrace component") {
         @ContentAndMedia {
-            @Image(source: UtilityNetworkTrace, alt: "An image of the Utility Network Trace component.")
+            @Image(source: UtilityNetworkTrace, alt: "An image of the UtilityNetworkTrace component.")
         }
         
         @Steps {

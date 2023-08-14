@@ -4,9 +4,9 @@
         @Image(source: Compass, alt: "The Compass component")
     }
     
-    @Section(title: "Add a compass to a map view") {
+    @Section(title: "Using the Compass") {
         @ContentAndMedia {
-            @Image(source: Compass, alt: "An image of the compass component.")
+            @Image(source: Compass, alt: "An image of the Compass component.")
         }
         
         @Steps {

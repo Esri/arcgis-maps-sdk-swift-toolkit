@@ -1,13 +1,13 @@
 @Tutorial(time: 10) {
-    @Intro(title: "Basemap Gallery Tutorial") {
+    @Intro(title: "BasemapGallery Tutorial") {
         The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
         portal, or an array of `BasemapGalleryItem`s.
-        @Image(source: BasemapGallery, alt: "An image of the Basemap Gallery component.")
+        @Image(source: BasemapGallery, alt: "An image of the BasemapGallery component.")
     }
     
-    @Section(title: "Allow users to change the basemap") {
+    @Section(title: "Using the BasemapGallery") {
         @ContentAndMedia {
-            @Image(source: BasemapGallery, alt: "An image of the Basemap Gallery component.")
+            @Image(source: BasemapGallery, alt: "An image of the BasemapGallery component.")
         }
         
         @Steps {
