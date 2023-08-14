@@ -66,9 +66,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if isFocused {
-***REMOVED******REMOVED******REMOVED******REMOVED***DoneButton { isFocused = false ***REMOVED***
-***REMOVED******REMOVED*** else if !text.isEmpty {
+***REMOVED******REMOVED******REMOVED***if isFocused && !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
