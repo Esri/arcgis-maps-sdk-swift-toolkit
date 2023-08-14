@@ -72,7 +72,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***let firstBookmark = try XCTUnwrap(map.bookmarks.first)
 ***REMOVED******REMOVED***bookmarks.selectBookmark(firstBookmark)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
-***REMOVED******REMOVED***wait(for: [expectation], timeout: 1.0)
+***REMOVED******REMOVED***await fulfillment(of: [expectation], timeout: 1.0)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a viewpoint.
