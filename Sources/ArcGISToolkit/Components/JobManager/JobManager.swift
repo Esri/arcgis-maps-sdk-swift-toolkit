@@ -14,6 +14,8 @@
 import SwiftUI
 import ArcGIS
 
+public typealias JobID = UUID
+
 public actor JobManager {
     public struct ID: RawRepresentable {
         public var rawValue: String
@@ -43,7 +45,46 @@ public actor JobManager {
         return try body(self)
     }
     
-    private var jobs: [any JobProtocol] = []
+    private var _jobs: [JobID: any JobProtocol] = [:]
+    
+    public var jobs: [any JobProtocol] {
+        Array(_jobs.values)
+    }
+    
+    
+    /// Registers a job with the job manager.
+    ///
+    /// - Parameter job: The job to register.
+    /// - Returns: A unique ID for the job's registration which can be used to unregister the job.
+    @discardableResult
+    public func register(job: any JobProtocol) -> JobID {
+        let id = UUID()
+        _jobs[id] = job
+        return id
+    }
+    
+    /// Unregisters a job from the job manager.
+    ///
+    /// - Parameter id: The job's ID, returned from calling `register()`.
+    /// - Returns: `true` if the Job was found, `false` otherwise.
+    @discardableResult
+    public func unregister(id: JobID) -> Bool {
+        let removed = _jobs.removeValue(forKey: id) != nil
+        return removed
+    }
+
+    /// Unregisters a job from the job manager.
+    ///
+    /// - Parameter job: The job to unregister.
+    /// - Returns: `true` if the Job was found, `false` otherwise.
+    @discardableResult
+    public func unregister(job: any JobProtocol) -> Bool {
+        guard let keyValue = _jobs.first(where: { $0.value === job }) else {
+            return false
+        }
+        
+        return unregister(id: keyValue.key)
+    }
     
     /// Saves all managed jobs to User Defaults.
     ///
