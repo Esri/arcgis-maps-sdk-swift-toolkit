@@ -14,6 +14,8 @@
 ***REMOVED***
 ***REMOVED***
 
+public typealias JobID = UUID
+
 public actor JobManager {
 ***REMOVED***public struct ID: RawRepresentable {
 ***REMOVED******REMOVED***public var rawValue: String
@@ -43,7 +45,46 @@ public actor JobManager {
 ***REMOVED******REMOVED***return try body(self)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private var jobs: [any JobProtocol] = []
+***REMOVED***private var _jobs: [JobID: any JobProtocol] = [:]
+***REMOVED***
+***REMOVED***public var jobs: [any JobProtocol] {
+***REMOVED******REMOVED***Array(_jobs.values)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Registers a job with the job manager.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Parameter job: The job to register.
+***REMOVED******REMOVED***/ - Returns: A unique ID for the job's registration which can be used to unregister the job.
+***REMOVED***@discardableResult
+***REMOVED***public func register(job: any JobProtocol) -> JobID {
+***REMOVED******REMOVED***let id = UUID()
+***REMOVED******REMOVED***_jobs[id] = job
+***REMOVED******REMOVED***return id
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Unregisters a job from the job manager.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Parameter id: The job's ID, returned from calling `register()`.
+***REMOVED******REMOVED***/ - Returns: `true` if the Job was found, `false` otherwise.
+***REMOVED***@discardableResult
+***REMOVED***public func unregister(id: JobID) -> Bool {
+***REMOVED******REMOVED***let removed = _jobs.removeValue(forKey: id) != nil
+***REMOVED******REMOVED***return removed
+***REMOVED***
+
+***REMOVED******REMOVED***/ Unregisters a job from the job manager.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Parameter job: The job to unregister.
+***REMOVED******REMOVED***/ - Returns: `true` if the Job was found, `false` otherwise.
+***REMOVED***@discardableResult
+***REMOVED***public func unregister(job: any JobProtocol) -> Bool {
+***REMOVED******REMOVED***guard let keyValue = _jobs.first(where: { $0.value === job ***REMOVED***) else {
+***REMOVED******REMOVED******REMOVED***return false
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return unregister(id: keyValue.key)
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Saves all managed jobs to User Defaults.
 ***REMOVED******REMOVED***/
