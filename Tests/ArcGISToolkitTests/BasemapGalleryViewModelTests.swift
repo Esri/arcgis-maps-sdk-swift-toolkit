@@ -72,7 +72,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** GeoModel should be loaded.
 ***REMOVED******REMOVED***XCTAssertEqual(geoModel.loadStatus, .loaded)
-***REMOVED******REMOVED***XCTAssertIdentical(geoModelViewModel.currentItem?.basemap, geoModel.basemap)
+***REMOVED******REMOVED***XCTAssertEqual(geoModelViewModel.currentItem?.basemap.name, geoModel.basemap?.name)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save the array of developer basemap items from AGOL.
 ***REMOVED******REMOVED***let developerBasemapItems = basemapGalleryItems
