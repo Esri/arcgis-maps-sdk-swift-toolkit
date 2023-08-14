@@ -72,7 +72,7 @@ final class BookmarksTests: XCTestCase {
         let firstBookmark = try XCTUnwrap(map.bookmarks.first)
         bookmarks.selectBookmark(firstBookmark)
         XCTAssertFalse(_isPresented)
-        wait(for: [expectation], timeout: 1.0)
+        await fulfillment(of: [expectation], timeout: 1.0)
     }
     
     /// Asserts that the list properly handles a selection when provided a viewpoint.
