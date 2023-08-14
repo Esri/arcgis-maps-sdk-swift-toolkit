@@ -66,9 +66,7 @@ struct MultiLineTextEntry: View {
             } else {
                 TextEditor(text: $text)
             }
-            if isFocused {
-                DoneButton { isFocused = false }
-            } else if !text.isEmpty {
+            if isFocused && !text.isEmpty {
                 ClearButton { text.removeAll() }
             }
         }
