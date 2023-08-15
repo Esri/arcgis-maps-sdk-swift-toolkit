@@ -41,9 +41,9 @@ import Combine
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
-***REMOVED***/ The Authenticator view modifier will display an alert prompting the user for credentials. If
-***REMOVED***/ credentials were persisted to the keychain, the Authenticator will use those instead of
-***REMOVED***/ requiring the user to reenter credentials.
+***REMOVED***/ The `authenticator(_:)` view modifier will display an alert prompting the user for credentials. If
+***REMOVED***/ credentials were persisted to the keychain, the authenticator will use those instead of
+***REMOVED***/ requiring the user to re-enter credentials.
 ***REMOVED***/
 ***REMOVED***/ To see the `Authenticator` in action, check out the [Authentication Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/AuthenticationExample)
 ***REMOVED***/ and refer to [AuthenticationApp.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/AuthenticationExample/AuthenticationExample/AuthenticationApp.swift).
