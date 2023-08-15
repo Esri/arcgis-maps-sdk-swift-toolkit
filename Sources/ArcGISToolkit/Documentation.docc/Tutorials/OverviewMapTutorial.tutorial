@@ -24,7 +24,7 @@
             }
             
             @Step {
-                Overlay the `OverviewMap` using `.forMapView(with:visibleArea:map:)`.
+                Overlay the `OverviewMap` using ``OverviewMap/forMapView(with:visibleArea:map:)``.
                 @Code(name: "OverviewMapForMapView.swift", file: OverviewMapForMapStep3)
             }
         }
@@ -48,7 +48,7 @@
             }
             
             @Step {
-                Overlay the `OverviewMap` using `.forSceneView(with:map:)`.
+                Overlay the `OverviewMap` using ``OverviewMap/forSceneView(with:map:)``.
                 @Code(name: "OverviewMapForSceneView.swift", file: OverviewMapForSceneStep3)
             }
         }
