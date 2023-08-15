@@ -19,7 +19,7 @@
             
             @Step {
                 Add a `FloatingPanelDetent` property to control the height of the panel. 
-                In this case we'll use a named value (`.half`) but a custom value can also be used.
+                In this case we will use a named value (`.half`), but a custom value can also be used.
                 Add a Boolean property to control when the panel is shown or hidden.
                 @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep2)
             }
