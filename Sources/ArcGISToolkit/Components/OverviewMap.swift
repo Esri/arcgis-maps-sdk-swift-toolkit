@@ -22,7 +22,7 @@ import ArcGIS
 /// | ------- | --------- |
 /// | ![OverviewMap - MapView](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/assets/16397058/61415dd8-cdbc-4048-a439-92cf13729e3e) | ![OverviewMap - SceneView](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/assets/16397058/5a201035-c303-48a5-bc95-1324796385ea) |
 ///
-/// - Note: OverviewMap uses metered ArcGIS basemaps by default, so you will need to configure an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys) for more information.
+/// > Note: OverviewMap uses metered ArcGIS basemaps by default, so you will need to configure an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys) for more information.
 ///
 /// **Features**
 ///
