@@ -19,7 +19,7 @@
             }
             
             @Step {
-                The Scalebar needs three pieces of information to determine scale: a spatial reference, units per point and the viewpoint. Add these properties and track their changes with the their respective modifiers.
+                The Scalebar needs three pieces of information to determine scale: a spatial reference, the number of units per point, and the viewpoint. Set these values and track their changes with their respective modifiers.
                 @Code(name: "ScalebarExampleView.swift", file: ScalebarStep2)
             }
             
