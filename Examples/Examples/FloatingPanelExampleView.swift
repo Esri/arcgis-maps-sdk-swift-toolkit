@@ -42,6 +42,8 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***switch demoContent! {
 ***REMOVED******REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
+***REMOVED******REMOVED******REMOVED***case .text:
+***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelTextContent()
 ***REMOVED******REMOVED******REMOVED***case .textField:
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
 ***REMOVED******REMOVED***
@@ -56,6 +58,9 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Menu {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("List") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = .list
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Text") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = .text
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Text Field") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = .textField
@@ -79,8 +84,9 @@ struct FloatingPanelExampleView: View {
 
 ***REMOVED***/ The types of content available for demo in the Floating Panel.
 private enum FloatingPanelDemoContent {
-***REMOVED***case textField
 ***REMOVED***case list
+***REMOVED***case text
+***REMOVED***case textField
 ***REMOVED***
 
 ***REMOVED***/ Demo content consisting of a list with inner sections each containing a set of buttons This
@@ -129,6 +135,14 @@ private struct FloatingPanelListDemoContent: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(selectedDetent == .height(200))
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ Demo content consisting of a single instance of short text which demonstrates the Floating
+***REMOVED***/ Panel has a stable width, despite the width of its content.
+private struct FloatingPanelTextContent: View {
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Text("Hello, world!")
 ***REMOVED***
 ***REMOVED***
 
