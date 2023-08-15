@@ -32,7 +32,7 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***During sign-out, use the following extension methods of AuthenticationManager.
+***REMOVED******REMOVED******REMOVED******REMOVED***During sign-out, use these `AuthenticationManager` methods.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SignOutView.swift", file: AuthenticatorStep5)
 ***REMOVED******REMOVED***
 ***REMOVED***
