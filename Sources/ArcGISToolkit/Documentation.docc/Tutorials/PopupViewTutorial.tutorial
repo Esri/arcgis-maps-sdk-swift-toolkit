@@ -33,7 +33,7 @@
             }
             
             @Step {
-                Perform an identify operation whenever the map is tapped, a grab the `Popup` data
+                Perform an identify operation whenever the map is tapped and grab the `Popup` data
                 if present.
                 @Code(name: "PopupExampleView.swift", file: PopupViewStep5)
             }
