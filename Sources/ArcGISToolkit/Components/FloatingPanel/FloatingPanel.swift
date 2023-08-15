@@ -31,7 +31,7 @@ struct FloatingPanel<Content>: View where Content: View {
     let backgroundColor: Color
     
     /// The content shown in the floating panel.
-    let content: Content
+    let content: () -> Content
     
     /// Creates a `FloatingPanel`.
     /// - Parameters:
@@ -43,16 +43,13 @@ struct FloatingPanel<Content>: View where Content: View {
         backgroundColor: Color,
         selectedDetent: Binding<FloatingPanelDetent>,
         isPresented: Binding<Bool>,
-        @ViewBuilder content: () -> Content
+        @ViewBuilder content: @escaping () -> Content
     ) {
         self.backgroundColor = backgroundColor
         self.selectedDetent = selectedDetent
         self.isPresented = isPresented
-        self.content = content()
+        self.content = content
     }
-    
-    /// A binding to the currently selected detent.
-    private var selectedDetent: Binding<FloatingPanelDetent>
     
     /// The color of the handle.
     @State private var handleColor: Color = .defaultHandleColor
@@ -60,11 +57,8 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The height of the content.
     @State private var height: CGFloat = .minHeight
     
-    /// A binding to a Boolean value that determines whether the view is presented.
-    private var isPresented: Binding<Bool>
-    
     /// The latest recorded drag gesture value.
-    @State var latestDragGesture: DragGesture.Value?
+    @State private var latestDragGesture: DragGesture.Value?
     
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .infinity
@@ -74,22 +68,31 @@ struct FloatingPanel<Content>: View where Content: View {
         horizontalSizeClass == .compact && verticalSizeClass == .regular
     }
     
+    /// A binding to a Boolean value that determines whether the view is presented.
+    private var isPresented: Binding<Bool>
+    
+    /// A binding to the currently selected detent.
+    private var selectedDetent: Binding<FloatingPanelDetent>
+    
     public var body: some View {
         GeometryReader { geometryProxy in
             VStack(spacing: 0) {
-                if isCompact && isPresented.wrappedValue {
-                    makeHandleView()
-                    Divider()
-                }
-                content
-                    .frame(height: height)
-                    .clipped()
-                    .padding(.bottom, isPresented.wrappedValue ? (isCompact ? 25 : 10) : .zero)
-                if !isCompact && isPresented.wrappedValue {
+                if isPresented.wrappedValue {
+                    if isCompact {
+                        makeHandleView()
+                        Divider()
+                    }
+                    content()
+                        .frame(height: height)
+                        .clipped()
+                        .padding(.bottom, isCompact ? 25 : 10)
+                    if !isCompact {
                         Divider()
                         makeHandleView()
+                    }
                 }
             }
+            .frame(maxWidth: .infinity)
             .background(backgroundColor)
             .clipShape(
                 RoundedCorners(
@@ -103,6 +106,7 @@ struct FloatingPanel<Content>: View where Content: View {
                 height: geometryProxy.size.height,
                 alignment: isCompact ? .bottom : .top
             )
+            .animation(.easeInOut, value: isPresented.wrappedValue)
             .onSizeChange {
                 maximumHeight = $0.height
                 if height > maximumHeight {
@@ -122,6 +126,16 @@ struct FloatingPanel<Content>: View where Content: View {
             .onChange(of: selectedDetent.wrappedValue) { selectedDetent in
                 withAnimation {
                     height = heightFor(detent: selectedDetent)
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
+                withAnimation {
+                    height = heightFor(detent: .full)
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
+                withAnimation {
+                    height = heightFor(detent: selectedDetent.wrappedValue)
                 }
             }
         }

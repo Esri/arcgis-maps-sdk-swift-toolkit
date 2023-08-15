@@ -25,7 +25,7 @@ struct Examples: View {
             List(lists) { (list) in
                 NavigationLink(list.name, destination: list)
             }
-            .navigationBarTitle(Text("Examples"), displayMode: .inline)
+            .navigationBarTitle(Text("Toolkit Examples"), displayMode: .inline)
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
