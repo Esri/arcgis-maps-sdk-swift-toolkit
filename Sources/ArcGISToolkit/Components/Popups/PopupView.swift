@@ -18,7 +18,7 @@ import ArcGIS
 /// the feature's title, attributes, custom description, media, and attachments. The new online Map
 /// Viewer allows users to create a popup definition by assembling a list of “popup elements”.
 /// `PopupView` will support the display of popup elements created by the Map Viewer, including:
-/// Text, Fields, Attachments, Media (Images and Charts).
+/// Text, Fields, Attachments, and Media (Images and Charts).
 ///
 /// Thanks to the backwards compatibility support in the API, it will also work with the legacy
 /// popup definitions created by the classic Map Viewer. It does not support editing.
