@@ -47,7 +47,7 @@
     @Chapter(name: "OverviewMap") {
         `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map")
         superimposed on an existing `GeoView`, which shows a representation of the current 
-        `visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`).
+        visible area (for a `MapView`) or viewpoint (for a `SceneView`).
         @Image(source: OverviewMap, alt: "An image of the OverviewMap component.")
         @TutorialReference(tutorial: "doc:OverviewMapTutorial")
     }
