@@ -39,26 +39,30 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: initialViewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.floatingPanel(selectedDetent: $selectedDetent, isPresented: isPresented) {
-***REMOVED******REMOVED******REMOVED***switch demoContent {
+***REMOVED******REMOVED******REMOVED***switch demoContent! {
 ***REMOVED******REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
 ***REMOVED******REMOVED******REMOVED***case .textField:
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
-***REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Menu {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("List") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = .list
+***REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .navigationBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if demoContent != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Dismiss") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Text Field") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = .textField
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Menu {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("List") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = .list
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Text Field") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***demoContent = .textField
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Present")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Present")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
