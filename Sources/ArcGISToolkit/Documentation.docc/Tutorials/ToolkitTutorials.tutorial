@@ -13,7 +13,7 @@
     
     @Chapter(name: "BasemapGallery") {
         The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
-        portal, or an array of `BasemapGalleryItem`s.
+        portal, or an array of `BasemapGalleryItem` objects.
         @Image(source: BasemapGallery, alt: "An image of the BasemapGallery component.")
         @TutorialReference(tutorial: "doc:BasemapGalleryTutorial")
     }
