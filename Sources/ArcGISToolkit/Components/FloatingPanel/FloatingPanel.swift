@@ -31,7 +31,7 @@ struct FloatingPanel<Content>: View where Content: View {
     let backgroundColor: Color
     
     /// The content shown in the floating panel.
-    let content: Content
+    let content: () -> Content
     
     /// Creates a `FloatingPanel`.
     /// - Parameters:
@@ -43,12 +43,12 @@ struct FloatingPanel<Content>: View where Content: View {
         backgroundColor: Color,
         selectedDetent: Binding<FloatingPanelDetent>,
         isPresented: Binding<Bool>,
-        @ViewBuilder content: () -> Content
+        @ViewBuilder content: @escaping () -> Content
     ) {
         self.backgroundColor = backgroundColor
         self.selectedDetent = selectedDetent
         self.isPresented = isPresented
-        self.content = content()
+        self.content = content
     }
     
     /// The color of the handle.
@@ -77,19 +77,22 @@ struct FloatingPanel<Content>: View where Content: View {
     public var body: some View {
         GeometryReader { geometryProxy in
             VStack(spacing: 0) {
-                if isCompact && isPresented.wrappedValue {
-                    makeHandleView()
-                    Divider()
-                }
-                content
-                    .frame(height: height)
-                    .clipped()
-                    .padding(.bottom, isCompact ? 25 : 10)
-                if !isCompact && isPresented.wrappedValue {
-                    Divider()
-                    makeHandleView()
+                if isPresented.wrappedValue {
+                    if isCompact {
+                        makeHandleView()
+                        Divider()
+                    }
+                    content()
+                        .frame(height: height)
+                        .clipped()
+                        .padding(.bottom, isCompact ? 25 : 10)
+                    if !isCompact {
+                        Divider()
+                        makeHandleView()
+                    }
                 }
             }
+            .frame(maxWidth: .infinity)
             .background(backgroundColor)
             .clipShape(
                 RoundedCorners(
@@ -103,6 +106,8 @@ struct FloatingPanel<Content>: View where Content: View {
                 height: geometryProxy.size.height,
                 alignment: isCompact ? .bottom : .top
             )
+            .transition(.move(edge: isCompact ? .bottom : .top))
+            .animation(.easeInOut, value: isPresented.wrappedValue)
             .onSizeChange {
                 maximumHeight = $0.height
                 if height > maximumHeight {
@@ -111,12 +116,7 @@ struct FloatingPanel<Content>: View where Content: View {
             }
             .onAppear {
                 withAnimation {
-                    height = isPresented.wrappedValue ? heightFor(detent: selectedDetent.wrappedValue) : .zero
-                }
-            }
-            .onChange(of: isPresented.wrappedValue) { isPresented in
-                withAnimation {
-                    height = isPresented ? heightFor(detent: selectedDetent.wrappedValue) : .zero
+                    height = heightFor(detent: selectedDetent.wrappedValue)
                 }
             }
             .onChange(of: selectedDetent.wrappedValue) { selectedDetent in
