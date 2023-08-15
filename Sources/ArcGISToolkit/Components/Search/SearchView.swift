@@ -33,6 +33,7 @@
 ***REMOVED***/ `SearchView` uses search sources which implement the ``SearchSource`` protocol.
 ***REMOVED***/
 ***REMOVED***/ `SearchView` provides the following search sources:
+***REMOVED***/
 ***REMOVED***/ - ``LocatorSearchSource``
 ***REMOVED***/ - ``SmartLocatorSearchSource``
 ***REMOVED***/
