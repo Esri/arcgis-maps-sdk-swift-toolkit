@@ -57,20 +57,14 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var actionBookmark: Bookmark?
-***REMOVED******REMOVED***let action: ((Bookmark) -> Void) = {
-***REMOVED******REMOVED******REMOVED***actionBookmark = $0
-***REMOVED***
-***REMOVED******REMOVED***var bookmarks = Bookmarks(
-***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***geoModel: map
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***bookmarks.selectionChangedAction = action
+***REMOVED******REMOVED***var selectedBookmark: Bookmark?
+***REMOVED******REMOVED***let bookmarks = Bookmarks(isPresented: isPresented,geoModel: map)
+***REMOVED******REMOVED******REMOVED***.onSelectionChanged { selectedBookmark = $0 ***REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
 ***REMOVED******REMOVED***let firstBookmark = try XCTUnwrap(map.bookmarks.first)
 ***REMOVED******REMOVED***bookmarks.selectBookmark(firstBookmark)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
-***REMOVED******REMOVED***XCTAssertEqual(actionBookmark?.viewpoint, map.bookmarks.first?.viewpoint)
+***REMOVED******REMOVED***XCTAssertEqual(selectedBookmark, map.bookmarks.first)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a viewpoint.
