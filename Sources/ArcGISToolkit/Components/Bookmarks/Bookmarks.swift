@@ -16,7 +16,7 @@
 
 ***REMOVED***/ The `Bookmarks` component will display a list of bookmarks and allow the user to select a
 ***REMOVED***/ bookmark and perform some action. You can create the component with either an array of
-***REMOVED***/ `Bookmarks`, or with a `Map` or `Scene` containing the bookmarks to display.
+***REMOVED***/ `Bookmark` values, or with a `Map` or `Scene` containing the bookmarks to display.
 ***REMOVED***/
 ***REMOVED***/ `Bookmarks` can be configured to handle automated bookmark selection (zooming the map/scene to
 ***REMOVED***/ the bookmark’s viewpoint) by passing in a `Viewpoint` binding or the client can handle bookmark
