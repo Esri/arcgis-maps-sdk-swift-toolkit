@@ -32,7 +32,7 @@
             }
             
             @Step {
-                During sign-out, use the following extension methods of AuthenticationManager.
+                During sign-out, use these `AuthenticationManager` methods.
                 @Code(name: "SignOutView.swift", file: AuthenticatorStep5)
             }
         }
