@@ -32,7 +32,7 @@ import Combine
 ***REMOVED***/
 ***REMOVED***/ The `Authenticator` can be configured to support securely persisting credentials to the keychain.
 ***REMOVED***/
-***REMOVED***/ `Authenticator` has the following view modifier:
+***REMOVED***/ `Authenticator` is accessible via a modifier on `View`:
 ***REMOVED***/
 ***REMOVED***/ ```swift
 ***REMOVED***/ ***REMOVED***/ Presents user experiences for collecting network authentication credentials from the user.
