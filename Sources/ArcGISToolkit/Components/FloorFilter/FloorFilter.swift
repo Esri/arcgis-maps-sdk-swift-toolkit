@@ -43,7 +43,7 @@
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
-***REMOVED***/ | Site Button |
+***REMOVED***/ | Sites Button |
 ***REMOVED***/ | ----------- |
 ***REMOVED***/ | ![Image of button that displays the list of sites when tapped](https:***REMOVED***user-images.githubusercontent.com/3998072/203417956-5161103d-5d29-42fa-8564-de254159efe2.png) |
 ***REMOVED***/
