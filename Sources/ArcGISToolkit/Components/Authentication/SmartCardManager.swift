@@ -20,8 +20,8 @@ public final class SmartCardManager: ObservableObject {
 ***REMOVED******REMOVED***/ The smart card connection watcher.
 ***REMOVED***private let watcher = TKTokenWatcher()
 ***REMOVED***
-***REMOVED******REMOVED***/ The last used smart card personal identity verification (PIV) token.
-***REMOVED***public private(set) var lastUsedPIVToken: String? = nil
+***REMOVED******REMOVED***/ The last connected smart card.
+***REMOVED***public private(set) var lastConnectedCard: String? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the smart card is disconnected.
 ***REMOVED***@Published public internal(set) var isCardDisconnected: Bool = false
@@ -31,20 +31,22 @@ public final class SmartCardManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates smart card manager.
 ***REMOVED***init() {
-***REMOVED******REMOVED******REMOVED*** Monitor the smart card connection for PIV tokens.
+***REMOVED******REMOVED******REMOVED*** Monitor the smart card connection.
 ***REMOVED******REMOVED***watcher.setInsertionHandler { [weak self] tokenID in
 ***REMOVED******REMOVED******REMOVED***guard let self = self, tokenID.localizedCaseInsensitiveContains("pivtoken") else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let lastUsedPIVToken, tokenID != lastUsedPIVToken {
+***REMOVED******REMOVED******REMOVED***if let lastConnectedCard, tokenID != lastConnectedCard {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isDifferentCardConnected = true
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***lastConnectedCard = tokenID
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***watcher.addRemovalHandler( { [weak self] tokenID in
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else { return ***REMOVED***
 
-***REMOVED******REMOVED******REMOVED******REMOVED***if tokenID == lastUsedPIVToken {
+***REMOVED******REMOVED******REMOVED******REMOVED***if tokenID == lastConnectedCard {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isCardDisconnected = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -53,14 +55,16 @@ public final class SmartCardManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The first PIV token found the the token watcher.
+***REMOVED******REMOVED***/ The first PIV token found in the token watcher.
 ***REMOVED******REMOVED***/ - Note: The PIV token will be available only if smart card is connected to the device.
 ***REMOVED***var pivToken: String? {
 ***REMOVED******REMOVED***watcher.tokenIDs.filter({ $0.localizedCaseInsensitiveContains("pivtoken") ***REMOVED***).first
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the last used PIV token with given value.
-***REMOVED***func setLastUsedPIVToken(_ token: String?) {
-***REMOVED******REMOVED***lastUsedPIVToken = token
+***REMOVED******REMOVED***/ Resets the smart card manager.
+***REMOVED***func reset() {
+***REMOVED******REMOVED***lastConnectedCard = nil
+***REMOVED******REMOVED***isCardDisconnected = false
+***REMOVED******REMOVED***isDifferentCardConnected = false
 ***REMOVED***
 ***REMOVED***
