@@ -40,7 +40,6 @@
                 @Code(name: "SearchExampleView.swift", file: SearchViewStep5)
             }
             
-            
             @Step {
                 Add a `MapView` and overlay the `SearchView`.
                 @Code(name: "SearchExampleView.swift", file: SearchViewStep6)
