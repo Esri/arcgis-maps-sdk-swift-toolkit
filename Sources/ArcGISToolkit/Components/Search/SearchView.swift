@@ -50,6 +50,7 @@ import ArcGIS
 /// **Associated Types**
 ///
 /// `SearchView` has the following associated types:
+///
 /// - ``SearchField``
 /// - ``SearchResult``
 /// - ``SearchSuggestion``
