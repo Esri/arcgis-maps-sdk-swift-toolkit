@@ -106,7 +106,6 @@ struct FloatingPanel<Content>: View where Content: View {
                 height: geometryProxy.size.height,
                 alignment: isCompact ? .bottom : .top
             )
-            .transition(.move(edge: isCompact ? .bottom : .top))
             .animation(.easeInOut, value: isPresented.wrappedValue)
             .onSizeChange {
                 maximumHeight = $0.height
@@ -116,7 +115,12 @@ struct FloatingPanel<Content>: View where Content: View {
             }
             .onAppear {
                 withAnimation {
-                    height = heightFor(detent: selectedDetent.wrappedValue)
+                    height = isPresented.wrappedValue ? heightFor(detent: selectedDetent.wrappedValue) : .zero
+                }
+            }
+            .onChange(of: isPresented.wrappedValue) { isPresented in
+                withAnimation {
+                    height = isPresented ? heightFor(detent: selectedDetent.wrappedValue) : .zero
                 }
             }
             .onChange(of: selectedDetent.wrappedValue) { selectedDetent in
