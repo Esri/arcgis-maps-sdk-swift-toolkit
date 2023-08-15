@@ -54,6 +54,7 @@ import ArcGIS
 /// **Associated Types**
 ///
 /// Floor Filter has two associated enum type:
+///
 /// - ``FloorFilterAutomaticSelectionMode``
 /// - ``FloorFilterSelection``
 ///
