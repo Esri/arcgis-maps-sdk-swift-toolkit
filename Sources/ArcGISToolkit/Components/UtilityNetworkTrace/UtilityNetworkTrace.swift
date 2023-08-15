@@ -32,6 +32,7 @@
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
 ***REMOVED***/ The tool allows users to:
+***REMOVED***/
 ***REMOVED***/  - Choose between multiple networks (if more than one is defined in a webmap).
 ***REMOVED***/  - Choose between named trace configurations:
 ***REMOVED***/ ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204346359-419b0056-3a30-4120-9b47-c68513abde42.png)
