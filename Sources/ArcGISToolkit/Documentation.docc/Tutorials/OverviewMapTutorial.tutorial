@@ -13,7 +13,7 @@
         
         @Steps {
             @Step {
-                To begin, setup the parent view.
+                To begin, set up the parent view.
                 Initialize a map and pass it to a `MapView` in the view's body.
                 @Code(name: "OverviewMapForMapView.swift", file: OverviewMapForMapStep1)
             }
@@ -37,7 +37,7 @@
         
         @Steps {
             @Step {
-                To begin, setup the parent view.
+                To begin, set up the parent view.
                 Initialize a scene and pass it to a `SceneView` in the view's body.
                 @Code(name: "OverviewMapForSceneView.swift", file: OverviewMapForSceneStep1)
             }

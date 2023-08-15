@@ -12,7 +12,7 @@
         
         @Steps {
             @Step {
-                To begin, setup the parent view.
+                To begin, set up the parent view.
                 Add a map with floor aware data, a property to track the current viewpoint and place
                 a `MapView` into the body using these properties.
                 @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep1)
