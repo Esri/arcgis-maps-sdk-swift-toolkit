@@ -29,7 +29,7 @@ import ArcGIS
 ///
 /// - Automatically hides the floor browsing view when the associated map or scene is not floor-aware.
 /// - Selects the facility in view automatically (can be configured through the
-/// `AutomaticSelectionMode`).
+/// ``FloorFilterAutomaticSelectionMode ``).
 /// - Shows the selected facility's levels in proper vertical order.
 /// - Filters the map/scene content to show the selected level.
 /// - Allows browsing the full floor-aware hierarchy of sites, facilities, and levels.
