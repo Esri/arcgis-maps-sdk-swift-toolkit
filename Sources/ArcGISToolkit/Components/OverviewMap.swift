@@ -29,7 +29,7 @@ import Combine
 ***REMOVED***/ - Displays a representation of the current visible area or viewpoint for a connected `GeoView`.
 ***REMOVED***/ - Supports a configurable scaling factor for setting the overview map's zoom level relative to
 ***REMOVED***/ the connected view.
-***REMOVED***/ - Supports a configurable symbol for visualizing the current `VisibleArea`/`Viewpoint`
+***REMOVED***/ - Supports a configurable symbol for visualizing the current visible area or viewpoint
 ***REMOVED***/ representation (a `FillSymbol` for a connected `MapView`; a `MarkerSymbol` for a connected
 ***REMOVED***/ `SceneView`).
 ***REMOVED***/ - Supports using a custom map in the overview map display.
