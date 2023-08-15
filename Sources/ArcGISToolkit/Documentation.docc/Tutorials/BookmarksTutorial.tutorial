@@ -19,7 +19,7 @@
             }
             
             @Step {
-                Add a toolbar button to open the bookmark selector. `showingBookmarks` will control when the gallery is shown or hidden.
+                Add a toolbar button to open the bookmark selector. The property `showingBookmarks` will control when the gallery is shown or hidden.
                 @Code(name: "BookmarksExampleView.swift", file: BookmarksStep2)
             }
             
