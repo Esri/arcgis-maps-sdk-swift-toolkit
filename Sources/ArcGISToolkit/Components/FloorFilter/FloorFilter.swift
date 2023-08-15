@@ -54,6 +54,7 @@
 ***REMOVED***/ **Associated Types**
 ***REMOVED***/
 ***REMOVED***/ Floor Filter has two associated enum type:
+***REMOVED***/
 ***REMOVED***/ - ``FloorFilterAutomaticSelectionMode``
 ***REMOVED***/ - ``FloorFilterSelection``
 ***REMOVED***/
