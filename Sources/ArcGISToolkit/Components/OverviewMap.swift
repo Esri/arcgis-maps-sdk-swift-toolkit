@@ -29,7 +29,7 @@ import ArcGIS
 /// - Displays a representation of the current visible area or viewpoint for a connected `GeoView`.
 /// - Supports a configurable scaling factor for setting the overview map's zoom level relative to
 /// the connected view.
-/// - Supports a configurable symbol for visualizing the current `VisibleArea`/`Viewpoint`
+/// - Supports a configurable symbol for visualizing the current visible area or viewpoint
 /// representation (a `FillSymbol` for a connected `MapView`; a `MarkerSymbol` for a connected
 /// `SceneView`).
 /// - Supports using a custom map in the overview map display.
