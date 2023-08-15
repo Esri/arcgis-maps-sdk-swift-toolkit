@@ -12,7 +12,7 @@
         @Steps {
             @Step {
                 To begin, setup the parent view.
-                A floating panel can host content over a `MapView`, `SceneView` or some other view.
+                A floating panel can host content over a `MapView`, `SceneView`, or some other view.
                 Add a simple gradient to the body of the view.
                 @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep1)
             }
