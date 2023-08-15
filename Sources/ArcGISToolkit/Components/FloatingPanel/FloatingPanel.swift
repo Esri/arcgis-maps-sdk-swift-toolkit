@@ -106,7 +106,6 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***height: geometryProxy.size.height,
 ***REMOVED******REMOVED******REMOVED******REMOVED***alignment: isCompact ? .bottom : .top
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.transition(.move(edge: isCompact ? .bottom : .top))
 ***REMOVED******REMOVED******REMOVED***.animation(.easeInOut, value: isPresented.wrappedValue)
 ***REMOVED******REMOVED******REMOVED***.onSizeChange {
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = $0.height
@@ -116,7 +115,12 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: selectedDetent.wrappedValue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = isPresented.wrappedValue ? heightFor(detent: selectedDetent.wrappedValue) : .zero
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: isPresented.wrappedValue) { isPresented in
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = isPresented ? heightFor(detent: selectedDetent.wrappedValue) : .zero
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: selectedDetent.wrappedValue) { selectedDetent in
