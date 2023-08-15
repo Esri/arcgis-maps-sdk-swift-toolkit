@@ -2,7 +2,7 @@
 ***REMOVED***@Intro(title: "OverviewMap Tutorial") {
 ***REMOVED******REMOVED***`OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), 
 ***REMOVED******REMOVED***superimposed on an existing `GeoView`, which shows a representation of the current 
-***REMOVED******REMOVED***`visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`).
+***REMOVED******REMOVED***visible area (for a `MapView`) or viewpoint (for a `SceneView`).
 ***REMOVED******REMOVED***@Image(source: OverviewMap, alt: "An image of the OverviewMap component.")
 ***REMOVED***
 ***REMOVED***
