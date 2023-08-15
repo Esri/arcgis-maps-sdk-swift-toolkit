@@ -45,7 +45,7 @@
 ***REMOVED***/
 ***REMOVED***/ | Site Button |
 ***REMOVED***/ | ----------- |
-***REMOVED***/ |![image](https:***REMOVED***user-images.githubusercontent.com/3998072/203417956-5161103d-5d29-42fa-8564-de254159efe2.png)|
+***REMOVED***/ | ![Image of button that displays the list of sites when tapped](https:***REMOVED***user-images.githubusercontent.com/3998072/203417956-5161103d-5d29-42fa-8564-de254159efe2.png) |
 ***REMOVED***/
 ***REMOVED***/ When the Site button is tapped, a prompt opens so the user can select a site and then a
 ***REMOVED***/ facility. After selecting a site and facility, a list of levels is displayed. The list of sites
