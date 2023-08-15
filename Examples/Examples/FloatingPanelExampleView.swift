@@ -39,13 +39,15 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: initialViewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.floatingPanel(selectedDetent: $selectedDetent, isPresented: isPresented) {
-***REMOVED******REMOVED******REMOVED***switch demoContent! {
+***REMOVED******REMOVED******REMOVED***switch demoContent {
 ***REMOVED******REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
 ***REMOVED******REMOVED******REMOVED***case .text:
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelTextContent()
 ***REMOVED******REMOVED******REMOVED***case .textField:
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
+***REMOVED******REMOVED******REMOVED***case .none:
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.toolbar {
