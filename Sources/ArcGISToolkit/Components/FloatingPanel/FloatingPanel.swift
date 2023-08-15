@@ -31,7 +31,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***let backgroundColor: Color
 ***REMOVED***
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
-***REMOVED***let content: Content
+***REMOVED***let content: () -> Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -43,12 +43,12 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***backgroundColor: Color,
 ***REMOVED******REMOVED***selectedDetent: Binding<FloatingPanelDetent>,
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***@ViewBuilder content: () -> Content
+***REMOVED******REMOVED***@ViewBuilder content: @escaping () -> Content
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.backgroundColor = backgroundColor
 ***REMOVED******REMOVED***self.selectedDetent = selectedDetent
 ***REMOVED******REMOVED***self.isPresented = isPresented
-***REMOVED******REMOVED***self.content = content()
+***REMOVED******REMOVED***self.content = content
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The color of the handle.
@@ -77,19 +77,22 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact && isPresented.wrappedValue {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipped()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 25 : 10)
-***REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact && isPresented.wrappedValue {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
+***REMOVED******REMOVED******REMOVED******REMOVED***if isPresented.wrappedValue {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipped()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 25 : 10)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
 ***REMOVED******REMOVED******REMOVED***.clipShape(
 ***REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorners(
@@ -103,6 +106,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***height: geometryProxy.size.height,
 ***REMOVED******REMOVED******REMOVED******REMOVED***alignment: isCompact ? .bottom : .top
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.animation(.easeInOut, value: isPresented.wrappedValue)
 ***REMOVED******REMOVED******REMOVED***.onSizeChange {
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = $0.height
 ***REMOVED******REMOVED******REMOVED******REMOVED***if height > maximumHeight {
