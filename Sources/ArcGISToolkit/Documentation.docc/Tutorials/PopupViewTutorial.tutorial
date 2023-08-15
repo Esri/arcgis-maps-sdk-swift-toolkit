@@ -33,7 +33,7 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Perform an identify operation whenever the map is tapped, a grab the `Popup` data
+***REMOVED******REMOVED******REMOVED******REMOVED***Perform an identify operation whenever the map is tapped and grab the `Popup` data
 ***REMOVED******REMOVED******REMOVED******REMOVED***if present.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "PopupExampleView.swift", file: PopupViewStep5)
 ***REMOVED******REMOVED***
