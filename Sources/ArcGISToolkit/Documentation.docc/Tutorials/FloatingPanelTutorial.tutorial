@@ -25,7 +25,7 @@
             }
             
             @Step {
-                Add the Floating Panel into the hierarchy, passing in `selectedDetent` and `isPresented`.
+                Add the Floating Panel into the hierarchy, passing in values for `selectedDetent` and `isPresented`.
                 @Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep3)
             }
             
