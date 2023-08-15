@@ -12,7 +12,7 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***To begin, setup the parent view.
+***REMOVED******REMOVED******REMOVED******REMOVED***To begin, set up the parent view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a map that contains preset bookmarks and add a member to track viewpoint changes.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a `MapView` to the body of the view, passing in the map and viewpoint. Track viewpoint changes with the `onViewpointChanged` modifier. Wrap the `MapView` in a `MapViewReader` to allow for programatic animated viewpoint changes.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BookmarksExampleView.swift", file: BookmarksStep1)
