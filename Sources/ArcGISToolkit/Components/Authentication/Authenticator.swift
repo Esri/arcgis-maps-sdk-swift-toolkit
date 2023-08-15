@@ -24,7 +24,8 @@ import Combine
 ***REMOVED***/ 
 ***REMOVED***/ The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is
 ***REMOVED***/ asked to handle an authentication challenge. This will handle many different types of
-***REMOVED***/ authentication, for example:
+***REMOVED***/ authentication, for example:
+***REMOVED***/
 ***REMOVED***/   - ArcGIS authentication (token and OAuth)
 ***REMOVED***/   - Integrated Windows Authentication (IWA)
 ***REMOVED***/   - Client Certificate (PKI)
