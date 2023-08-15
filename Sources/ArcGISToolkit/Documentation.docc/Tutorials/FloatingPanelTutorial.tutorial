@@ -12,7 +12,7 @@
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***To begin, setup the parent view.
-***REMOVED******REMOVED******REMOVED******REMOVED***A floating panel can host content over a `MapView`, `SceneView` or some other view.
+***REMOVED******REMOVED******REMOVED******REMOVED***A floating panel can host content over a `MapView`, `SceneView`, or some other view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a simple gradient to the body of the view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloatingPanelExampleView.swift", file: FloatingPanelStep1)
 ***REMOVED******REMOVED***
