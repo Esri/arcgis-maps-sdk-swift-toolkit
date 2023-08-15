@@ -13,15 +13,15 @@
 
 import Foundation
 import CryptoTokenKit
-import SwiftUI
+import ArcGIS
 
 @MainActor
 public final class SmartCardManager: ObservableObject {
     /// The smart card connection watcher.
     private let watcher = TKTokenWatcher()
     
-    /// The last used smart card personal identity verification (PIV) token.
-    public private(set) var lastUsedPIVToken: String? = nil
+    /// The last connected smart card.
+    public private(set) var lastConnectedCard: String? = nil
     
     /// A Boolean value indicating whether the smart card is disconnected.
     @Published public internal(set) var isCardDisconnected: Bool = false
@@ -31,20 +31,22 @@ public final class SmartCardManager: ObservableObject {
     
     /// Creates smart card manager.
     init() {
-        // Monitor the smart card connection for PIV tokens.
+        // Monitor the smart card connection.
         watcher.setInsertionHandler { [weak self] tokenID in
             guard let self = self, tokenID.localizedCaseInsensitiveContains("pivtoken") else { return }
             
-            if let lastUsedPIVToken, tokenID != lastUsedPIVToken {
+            if let lastConnectedCard, tokenID != lastConnectedCard {
                 DispatchQueue.main.async {
                     self.isDifferentCardConnected = true
                 }
+            } else {
+                lastConnectedCard = tokenID
             }
                     
             watcher.addRemovalHandler( { [weak self] tokenID in
                 guard let self = self else { return }
 
-                if tokenID == lastUsedPIVToken {
+                if tokenID == lastConnectedCard {
                     DispatchQueue.main.async {
                         self.isCardDisconnected = true
                     }
@@ -53,14 +55,16 @@ public final class SmartCardManager: ObservableObject {
         }
     }
     
-    /// The first PIV token found the the token watcher.
+    /// The first PIV token found in the token watcher.
     /// - Note: The PIV token will be available only if smart card is connected to the device.
     var pivToken: String? {
         watcher.tokenIDs.filter({ $0.localizedCaseInsensitiveContains("pivtoken") }).first
     }
     
-    /// Sets the last used PIV token with given value.
-    func setLastUsedPIVToken(_ token: String?) {
-        lastUsedPIVToken = token
+    /// Resets the smart card manager.
+    func reset() {
+        lastConnectedCard = nil
+        isCardDisconnected = false
+        isDifferentCardConnected = false
     }
 }

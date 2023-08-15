@@ -67,12 +67,12 @@ struct SignInView: View {
                         switch credential {
                         case .password(let passwordCredential):
                             return passwordCredential.username
-                        case .certificate:
-                            return ""
+                        case .certificate(let certificateCredential):
+                            return certificateCredential.identityName
                         case .serverTrust:
                             return nil
-                        case .smartCard:
-                            return ""
+                        case .smartCard(let smartCardCredential):
+                            return smartCardCredential.identityName
                         @unknown default:
                             fatalError("Unknown NetworkCredential")
                         }

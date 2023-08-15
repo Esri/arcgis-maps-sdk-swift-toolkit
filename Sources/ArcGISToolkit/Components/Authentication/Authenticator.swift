@@ -94,9 +94,6 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
         if challenge.kind == .clientCertificate,
            let pivToken = smartCardManager.pivToken,
            let credential = try? NetworkCredential.smartCard(pivToken: pivToken) {
-            // Set last used PIV token on the manager.
-            smartCardManager.setLastUsedPIVToken(pivToken)
-            
             return .continueWithCredential(credential)
         }
         
@@ -119,6 +116,6 @@ public extension Authenticator {
     func signOut() async {
         await ArcGISEnvironment.authenticationManager.revokeOAuthTokens()
         await ArcGISEnvironment.authenticationManager.clearCredentialStores()
-        smartCardManager.setLastUsedPIVToken(nil)
+        smartCardManager.reset()
     }
 }
