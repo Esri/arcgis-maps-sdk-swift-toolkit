@@ -32,6 +32,7 @@ import SwiftUI
 /// **Behavior**
 ///
 /// The tool allows users to:
+///
 ///  - Choose between multiple networks (if more than one is defined in a webmap).
 ///  - Choose between named trace configurations:
 /// ![image](https://user-images.githubusercontent.com/3998072/204346359-419b0056-3a30-4120-9b47-c68513abde42.png)
