@@ -14,7 +14,40 @@
 import ArcGIS
 import SwiftUI
 
-/// Displays the current scale on-screen
+/// A scalebar displays the representation of an accurate linear measurement on the map. It provides
+/// a visual indication through which users can determine the size of features or the distance
+/// between features on a map. A scale bar is a line or bar divided into parts. It is labeled with
+/// its ground length, usually in multiples of map units, such as tens of kilometers or hundreds of
+/// miles.
+///
+/// ![An image of a map with a Scalebar overlaid](https://user-images.githubusercontent.com/3998072/203605457-df6f845c-9245-4608-a61e-6d1e2e63a81b.png)
+///
+/// **Features**
+///
+/// - Can be configured to display as either a bar or line, with different styles for each.
+/// - Can be configured with custom colors for fills, lines, shadows, and text.
+/// - Can be configured to automatically hide after a pan or zoom operation.
+/// - Displays both metric and imperial units.
+///
+/// **Behavior**
+///
+/// The scalebar uses geodetic calculations to provide accurate measurements for maps of any
+/// spatial reference. The measurement is accurate for the center of the map extent being displayed.
+/// This means at smaller scales (zoomed way out) you might find it somewhat inaccurate at the
+/// extremes of the visible extent. As the map is panned and zoomed, the scalebar automatically
+/// grows and shrinks and updates its measurement based on the new map extent.
+///
+/// **Associated Types**
+///
+/// Scalebar has the following associated types:
+///
+/// - ``ScalebarSettings``
+/// - ``ScalebarStyle``
+/// - ``ScalebarUnits``
+///
+/// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+/// and refer to [ScalebarExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/ScalebarExampleView.swift) 
+/// in the project. To learn more about using the `Scalebar` see the [Scalebar Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/ScalebarTutorial).
 public struct Scalebar: View {
     // - MARK: Internal/Private vars
     
