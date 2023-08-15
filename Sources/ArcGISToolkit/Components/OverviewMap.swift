@@ -26,7 +26,7 @@ import Combine
 ***REMOVED***/
 ***REMOVED***/ **Features**
 ***REMOVED***/
-***REMOVED***/ - Displays a representation of the current `VisibleArea`/`Viewpoint` for a connected `GeoView`.
+***REMOVED***/ - Displays a representation of the current visible area or viewpoint for a connected `GeoView`.
 ***REMOVED***/ - Supports a configurable scaling factor for setting the overview map's zoom level relative to
 ***REMOVED***/ the connected view.
 ***REMOVED***/ - Supports a configurable symbol for visualizing the current `VisibleArea`/`Viewpoint`
