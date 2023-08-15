@@ -13,7 +13,7 @@
         
         @Steps {
             @Step {
-                To begin, setup the parent view.
+                To begin, set up the parent view.
                 Initialize a map property and pass it to a `MapView` in the view's body.
                 @Code(name: "ScalebarExampleView.swift", file: ScalebarStep1)
             }
