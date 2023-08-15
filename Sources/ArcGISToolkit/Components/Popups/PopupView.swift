@@ -18,7 +18,7 @@
 ***REMOVED***/ the feature's title, attributes, custom description, media, and attachments. The new online Map
 ***REMOVED***/ Viewer allows users to create a popup definition by assembling a list of “popup elements”.
 ***REMOVED***/ `PopupView` will support the display of popup elements created by the Map Viewer, including:
-***REMOVED***/ Text, Fields, Attachments, Media (Images and Charts).
+***REMOVED***/ Text, Fields, Attachments, and Media (Images and Charts).
 ***REMOVED***/
 ***REMOVED***/ Thanks to the backwards compatibility support in the API, it will also work with the legacy
 ***REMOVED***/ popup definitions created by the classic Map Viewer. It does not support editing.
