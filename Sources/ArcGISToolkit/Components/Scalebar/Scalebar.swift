@@ -20,7 +20,7 @@ import SwiftUI
 /// its ground length, usually in multiples of map units, such as tens of kilometers or hundreds of
 /// miles.
 ///
-/// ![image](https://user-images.githubusercontent.com/3998072/203605457-df6f845c-9245-4608-a61e-6d1e2e63a81b.png)
+/// ![An image of a map with a Scalebar overlaid](https://user-images.githubusercontent.com/3998072/203605457-df6f845c-9245-4608-a61e-6d1e2e63a81b.png)
 ///
 /// **Features**
 ///
