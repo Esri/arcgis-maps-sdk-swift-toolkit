@@ -57,20 +57,14 @@ final class BookmarksTests: XCTestCase {
             set: {_isPresented = $0 }
         )
         
-        var actionBookmark: Bookmark?
-        let action: ((Bookmark) -> Void) = {
-            actionBookmark = $0
-        }
-        var bookmarks = Bookmarks(
-            isPresented: isPresented,
-            geoModel: map
-        )
-        bookmarks.selectionChangedAction = action
+        var selectedBookmark: Bookmark?
+        let bookmarks = Bookmarks(isPresented: isPresented,geoModel: map)
+            .onSelectionChanged { selectedBookmark = $0 }
         XCTAssertTrue(_isPresented)
         let firstBookmark = try XCTUnwrap(map.bookmarks.first)
         bookmarks.selectBookmark(firstBookmark)
         XCTAssertFalse(_isPresented)
-        XCTAssertEqual(actionBookmark?.viewpoint, map.bookmarks.first?.viewpoint)
+        XCTAssertEqual(selectedBookmark, map.bookmarks.first)
     }
     
     /// Asserts that the list properly handles a selection when provided a viewpoint.
