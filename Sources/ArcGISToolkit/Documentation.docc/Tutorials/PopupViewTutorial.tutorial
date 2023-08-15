@@ -17,7 +17,7 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Track important information like the last selected screen point, and the current
+***REMOVED******REMOVED******REMOVED******REMOVED***Track important information like the last selected screen point and the current
 ***REMOVED******REMOVED******REMOVED******REMOVED***`Popup`.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "PopupExampleView.swift", file: PopupViewStep2)
 ***REMOVED******REMOVED***
