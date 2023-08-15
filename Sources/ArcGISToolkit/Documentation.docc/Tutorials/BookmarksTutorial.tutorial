@@ -19,7 +19,7 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Add a toolbar button to open the bookmark selector. `showingBookmarks` will control when the gallery is shown or hidden.
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a toolbar button to open the bookmark selector. The property `showingBookmarks` will control when the gallery is shown or hidden.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BookmarksExampleView.swift", file: BookmarksStep2)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
