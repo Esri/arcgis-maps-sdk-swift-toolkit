@@ -40,6 +40,7 @@ import SwiftUI
 /// **Associated Types**
 ///
 /// Scalebar has the following associated types:
+///
 /// - ``ScalebarSettings``
 /// - ``ScalebarStyle``
 /// - ``ScalebarUnits``
