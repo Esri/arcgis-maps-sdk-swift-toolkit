@@ -40,6 +40,7 @@
 ***REMOVED***/ **Associated Types**
 ***REMOVED***/
 ***REMOVED***/ Scalebar has the following associated types:
+***REMOVED***/
 ***REMOVED***/ - ``ScalebarSettings``
 ***REMOVED***/ - ``ScalebarStyle``
 ***REMOVED***/ - ``ScalebarUnits``
