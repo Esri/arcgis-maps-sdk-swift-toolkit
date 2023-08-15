@@ -24,7 +24,7 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Choose an alignment for the Scalebar such as `.bottomLeading` and determine
+***REMOVED******REMOVED******REMOVED******REMOVED***Choose an alignment for the Scalebar, such as `bottomLeading`, and determine
 ***REMOVED******REMOVED******REMOVED******REMOVED***the maximum amount of screen width the Scalebar should consume.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ScalebarExampleView.swift", file: ScalebarStep3)
 ***REMOVED******REMOVED***
