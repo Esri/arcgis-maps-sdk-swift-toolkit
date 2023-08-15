@@ -26,7 +26,7 @@ import ArcGIS
 ///
 /// **Features**
 ///
-/// - Displays a representation of the current `VisibleArea`/`Viewpoint` for a connected `GeoView`.
+/// - Displays a representation of the current visible area or viewpoint for a connected `GeoView`.
 /// - Supports a configurable scaling factor for setting the overview map's zoom level relative to
 /// the connected view.
 /// - Supports a configurable symbol for visualizing the current `VisibleArea`/`Viewpoint`
