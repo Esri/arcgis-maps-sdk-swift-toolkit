@@ -17,7 +17,7 @@
             }
             
             @Step {
-                Track important information like the last selected screen point, and the current
+                Track important information like the last selected screen point and the current
                 `Popup`.
                 @Code(name: "PopupExampleView.swift", file: PopupViewStep2)
             }
