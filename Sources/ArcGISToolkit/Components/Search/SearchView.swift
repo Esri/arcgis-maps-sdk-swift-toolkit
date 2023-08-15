@@ -43,9 +43,8 @@ import ArcGIS
 /// **Behavior**
 ///
 /// The `SearchView` will display the results list view at half height, exposing a portion of the
-/// underlying map below the list, on an iPhone in portrait orientation (and certain iPad
-/// multitasking configurations).  The user can hide or show the result list after searching by
-/// clicking on the up/down chevron symbol on the right of the search bar.
+/// underlying map below the list, in compact environments. The user can hide or show the result
+/// list after searching by clicking on the up/down chevron symbol on the right of the search bar.
 ///
 /// **Associated Types**
 ///
