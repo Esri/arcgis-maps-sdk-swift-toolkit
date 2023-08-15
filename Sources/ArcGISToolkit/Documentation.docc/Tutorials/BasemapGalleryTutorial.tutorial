@@ -19,7 +19,7 @@
             }
             
             @Step {
-                Create a list of `BasemapGalleryItem`s to be shown in the gallery.
+                Create a list of items to be shown in the gallery.
                 @Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep2)
             }
             
