@@ -39,13 +39,15 @@ struct FloatingPanelExampleView: View {
             viewpoint: initialViewpoint
         )
         .floatingPanel(selectedDetent: $selectedDetent, isPresented: isPresented) {
-            switch demoContent! {
+            switch demoContent {
             case .list:
                 FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
             case .text:
                 FloatingPanelTextContent()
             case .textField:
                 FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
+            case .none:
+                EmptyView()
             }
         }
         .toolbar {
