@@ -19,7 +19,7 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Create a list of `BasemapGalleryItem`s to be shown in the gallery.
+***REMOVED******REMOVED******REMOVED******REMOVED***Create a list of items to be shown in the gallery.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep2)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
