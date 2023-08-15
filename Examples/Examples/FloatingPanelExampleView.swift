@@ -39,26 +39,30 @@ struct FloatingPanelExampleView: View {
             viewpoint: initialViewpoint
         )
         .floatingPanel(selectedDetent: $selectedDetent, isPresented: isPresented) {
-            switch demoContent {
+            switch demoContent! {
             case .list:
                 FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
             case .textField:
                 FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
-            case .none:
-                EmptyView()
             }
         }
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Menu {
-                    Button("List") {
-                        demoContent = .list
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                if demoContent != nil {
+                    Button("Dismiss") {
+                        demoContent = nil
                     }
-                    Button("Text Field") {
-                        demoContent = .textField
+                } else {
+                    Menu {
+                        Button("List") {
+                            demoContent = .list
+                        }
+                        Button("Text Field") {
+                            demoContent = .textField
+                        }
+                    } label: {
+                        Text("Present")
                     }
-                } label: {
-                    Text("Present")
                 }
             }
         }
