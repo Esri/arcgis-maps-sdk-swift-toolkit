@@ -1,0 +1,38 @@
+@Tutorial(time: 10) {
+    @Intro(title: "Scalebar Tutorial") {
+        A `Scalebar` displays the representation of an accurate linear measurement on the map. It 
+        provides a visual indication through which users can determine the size of features or the 
+        distance between features on a map.
+        @Image(source: Scalebar, alt: "An image of the Scalebar component.")
+    }
+    
+    @Section(title: "Using the Scalebar") {
+        @ContentAndMedia {
+            @Image(source: Scalebar, alt: "An image of the Scalebar component.")
+        }
+        
+        @Steps {
+            @Step {
+                To begin, set up the parent view.
+                Initialize a map property and pass it to a `MapView` in the view's body.
+                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep1)
+            }
+            
+            @Step {
+                The Scalebar needs three pieces of information to determine scale: a spatial reference, the number of units per point, and the viewpoint. Set these values and track their changes with their respective modifiers.
+                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep2)
+            }
+            
+            @Step {
+                Choose an alignment for the Scalebar, such as `bottomLeading`, and determine
+                the maximum amount of screen width the Scalebar should consume.
+                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep3)
+            }
+            
+            @Step {
+                Overlay the `Scalebar` on the `MapView`, passing in all of the previously created properties.
+                @Code(name: "ScalebarExampleView.swift", file: ScalebarStep4)
+            }
+        }
+    }
+}

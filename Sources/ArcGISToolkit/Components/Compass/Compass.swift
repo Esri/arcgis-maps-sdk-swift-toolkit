@@ -14,7 +14,7 @@
 import ArcGIS
 import SwiftUI
 
-/// A `Compass` (alias North arrow) shows where north is in a `MapView`.
+/// A `Compass` (alias North arrow) shows where north is in a `MapView` or `SceneView`.
 ///
 /// ![image](https://user-images.githubusercontent.com/3998072/202810369-a0b82778-77d4-404e-bebf-1a84841fbb1b.png)
 /// - Automatically hides when the rotation is zero.
@@ -28,7 +28,7 @@ import SwiftUI
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [CompassExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/CompassExampleView.swift)
-/// in the project.
+/// in the project. To learn more about using the `Compass` see the [Compass Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/CompassTutorial).
 public struct Compass: View {
     /// The opacity of the compass.
     @State private var opacity: Double = .zero

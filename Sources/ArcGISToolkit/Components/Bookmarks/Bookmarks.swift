@@ -14,7 +14,36 @@
 import ArcGIS
 import SwiftUI
 
-/// `Bookmarks` allows a user to view and select from a set of bookmarks.
+/// The `Bookmarks` component will display a list of bookmarks and allow the user to select a
+/// bookmark and perform some action. You can create the component with either an array of
+/// `Bookmark` values, or with a `Map` or `Scene` containing the bookmarks to display.
+///
+/// `Bookmarks` can be configured to handle automated bookmark selection (zooming the map/scene to
+/// the bookmark’s viewpoint) by passing in a `Viewpoint` binding or the client can handle bookmark
+/// selection changes manually using ``onSelectionChanged(perform:)``.
+///
+/// | iPhone | iPad |
+/// | ------ | ---- |
+/// | ![image](https://user-images.githubusercontent.com/3998072/202765630-894bee44-a0c2-4435-86f4-c80c4cc4a0b9.png) | ![image](https://user-images.githubusercontent.com/3998072/202765729-91c52555-4677-4c2b-b62b-215e6c3790a6.png) |
+///
+/// **Features**
+///
+/// - Can be configured to display bookmarks from a map or scene, or from an array of user-defined
+/// bookmarks.
+/// - Can be configured to automatically zoom the map or scene to a bookmark selection.
+/// - Can be configured to perform a user-defined action when a bookmark is selected.
+/// - Will automatically hide when a bookmark is selected.
+///
+/// **Behavior**
+/// 
+/// If a `Viewpoint` binding is provided to the `Bookmarks` view, selecting a bookmark will set that
+/// viewpoint binding to the viewpoint of the bookmark. Selecting a bookmark will dismiss the
+/// `Bookmarks` view. If a `GeoModel` is provided, that geo model's bookmarks will be displayed to
+/// the user.
+///
+/// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+/// and refer to [BookmarksExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
+/// in the project. To learn more about using the `Bookmarks` component see the [Bookmarks Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/BookmarksTutorial).
 public struct Bookmarks: View {
     /// A list of selectable bookmarks.
     @State private var bookmarks: [Bookmark] = []
