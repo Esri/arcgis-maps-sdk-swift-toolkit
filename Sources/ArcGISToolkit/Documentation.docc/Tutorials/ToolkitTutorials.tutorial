@@ -13,7 +13,7 @@
 ***REMOVED***
 ***REMOVED***@Chapter(name: "BasemapGallery") {
 ***REMOVED******REMOVED***The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
-***REMOVED******REMOVED***portal, or an array of `BasemapGalleryItem`s.
+***REMOVED******REMOVED***portal, or an array of `BasemapGalleryItem` objects.
 ***REMOVED******REMOVED***@Image(source: BasemapGallery, alt: "An image of the BasemapGallery component.")
 ***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:BasemapGalleryTutorial")
 ***REMOVED***
