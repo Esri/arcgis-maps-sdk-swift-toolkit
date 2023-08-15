@@ -32,7 +32,7 @@ import SwiftUI
 /// bookmarks.
 /// - Can be configured to automatically zoom the map or scene to a bookmark selection.
 /// - Can be configured to perform a user-defined action when a bookmark is selected.
-/// - Will automatically hide the `Bookmark` view when a bookmark is selected.
+/// - Will automatically hide when a bookmark is selected.
 ///
 /// **Behavior**
 /// 
