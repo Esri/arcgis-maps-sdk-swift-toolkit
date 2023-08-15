@@ -15,7 +15,40 @@
 ***REMOVED***
 import Combine
 
-***REMOVED***/ A configurable object that handles authentication challenges.
+***REMOVED***/ The `Authenticator` is a configurable object that handles authentication challenges. It will
+***REMOVED***/ display a user interface when network and ArcGIS authentication challenges occur.
+***REMOVED***/
+***REMOVED***/ ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/203615041-c887d5e3-bb64-469a-a76b-126059329e92.png)
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/ 
+***REMOVED***/ The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is
+***REMOVED***/ asked to handle an authentication challenge. This will handle many different types of
+***REMOVED***/ authentication, for example:
+***REMOVED***/
+***REMOVED***/   - ArcGIS authentication (token and OAuth)
+***REMOVED***/   - Integrated Windows Authentication (IWA)
+***REMOVED***/   - Client Certificate (PKI)
+***REMOVED***/
+***REMOVED***/ The `Authenticator` can be configured to support securely persisting credentials to the keychain.
+***REMOVED***/
+***REMOVED***/ `Authenticator` is accessible via a modifier on `View`:
+***REMOVED***/
+***REMOVED***/ ```swift
+***REMOVED***/ ***REMOVED***/ Presents user experiences for collecting network authentication credentials from the user.
+***REMOVED***/ ***REMOVED***/ - Parameter authenticator: The authenticator for which credentials will be prompted.
+***REMOVED***/ @ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View
+***REMOVED***/ ```
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ The `authenticator(_:)` view modifier will display an alert prompting the user for credentials. If
+***REMOVED***/ credentials were persisted to the keychain, the authenticator will use those instead of
+***REMOVED***/ requiring the user to re-enter credentials.
+***REMOVED***/
+***REMOVED***/ To see the `Authenticator` in action, check out the [Authentication Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/AuthenticationExample)
+***REMOVED***/ and refer to [AuthenticationApp.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/AuthenticationExample/AuthenticationExample/AuthenticationApp.swift).
+***REMOVED***/ To learn more about using the `Authenticator`, see the [Authenticator Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/AuthenticatorTutorial).
 @MainActor
 public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ A value indicating whether we should prompt the user when encountering an untrusted host.

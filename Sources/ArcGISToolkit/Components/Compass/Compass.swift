@@ -14,7 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A `Compass` (alias North arrow) shows where north is in a `MapView`.
+***REMOVED***/ A `Compass` (alias North arrow) shows where north is in a `MapView` or `SceneView`.
 ***REMOVED***/
 ***REMOVED***/ ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202810369-a0b82778-77d4-404e-bebf-1a84841fbb1b.png)
 ***REMOVED***/ - Automatically hides when the rotation is zero.
@@ -28,7 +28,7 @@
 ***REMOVED***/
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [CompassExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/CompassExampleView.swift)
-***REMOVED***/ in the project.
+***REMOVED***/ in the project. To learn more about using the `Compass` see the [Compass Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/CompassTutorial).
 public struct Compass: View {
 ***REMOVED******REMOVED***/ The opacity of the compass.
 ***REMOVED***@State private var opacity: Double = .zero

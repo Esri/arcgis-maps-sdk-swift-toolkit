@@ -14,11 +14,43 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ The `BasemapGallery` tool displays a collection of basemaps from either
-***REMOVED***/ ArcGIS Online, a user-defined portal, or an array of `BasemapGalleryItem`s.
-***REMOVED***/ When a new basemap is selected from the `BasemapGallery` and the optional
-***REMOVED***/ `BasemapGalleryViewModel.geoModel` property is set, then the basemap of the
-***REMOVED***/ `geoModel` is replaced with the basemap in the gallery.
+***REMOVED***/ The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
+***REMOVED***/ portal, or an array of ``BasemapGalleryItem`` objects. When a new basemap is selected from the
+***REMOVED***/ `BasemapGallery` and a geo model was provided when the basemap gallery was created, the
+***REMOVED***/ basemap of the `geoModel` is replaced with the basemap in the gallery.
+***REMOVED***/
+***REMOVED***/ | iPhone | iPad |
+***REMOVED***/ | ------ | ---- |
+***REMOVED***/ | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/205385086-cb9bc0a0-3c46-484d-aefa-8878c7112a3e.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/205384854-79f25efe-25f4-4330-a487-b64b528a9daf.png) |
+***REMOVED***/
+***REMOVED***/ > Note: `BasemapGallery` uses metered ArcGIS basemaps by default, so you will need to configure
+***REMOVED***/ an API key. See [Security and authentication documentation](https:***REMOVED***developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys)
+***REMOVED***/ for more information.
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ - Can be configured to use a list, grid, or automatic layout. When using an
+***REMOVED***/ automatic layout, list or grid presentation is chosen based on the horizontal size class of the
+***REMOVED***/ environment.
+***REMOVED***/ - Displays basemaps from a portal or a custom collection. If neither a custom portal or array of
+***REMOVED***/ basemaps is provided, the list of basemaps will be loaded from ArcGIS Online.
+***REMOVED***/ - Displays a representation of the map or scene's current basemap if that basemap exists in the
+***REMOVED***/ gallery.
+***REMOVED***/ - Displays a name and thumbnail for each basemap.
+***REMOVED***/ - Can be configured to automatically change the basemap of a geo model based on user selection.
+***REMOVED***/
+***REMOVED***/ `BasemapGallery` has the following helper class: ``BasemapGalleryItem``
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ Selecting a basemap with a spatial reference that does not match that of the geo model
+***REMOVED***/ will display an error. It will also display an error if a provided base map cannot be loaded. If
+***REMOVED***/ a `GeoModel` is provided to the `BasemapGallery`, selecting an item in the gallery will set that
+***REMOVED***/ basemap on the geo model.
+***REMOVED***/
+***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+***REMOVED***/ and refer to [BasemapGalleryExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BasemapGalleryExampleView.swift)
+***REMOVED***/ in the project. To learn more about using the `BasemapGallery` see the [BasemapGallery Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/BasemapGalleryTutorial).
 public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ The view style of the gallery.
 ***REMOVED***public enum Style {
@@ -189,7 +221,7 @@ private extension BasemapGallery {
 ***REMOVED*** MARK: Modifiers
 
 public extension BasemapGallery {
-***REMOVED******REMOVED***/ The style of the basemap gallery. Defaults to ``Style/automatic(listWidth:gridWidth:)``.
+***REMOVED******REMOVED***/ The style of the basemap gallery. Defaults to ``Style/automatic(maxGridItemWidth:)``.
 ***REMOVED******REMOVED***/ - Parameter style: The `Style` to use.
 ***REMOVED******REMOVED***/ - Returns: The `BasemapGallery`.
 ***REMOVED***func style(

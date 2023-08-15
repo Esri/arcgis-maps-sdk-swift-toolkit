@@ -14,6 +14,52 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ `UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace configurations.
+***REMOVED***/
+***REMOVED***/ | iPhone | iPad |
+***REMOVED***/ | ------ | ---- |
+***REMOVED***/ | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204343568-a236ae0d-6b70-4175-a70c-41c902123ea1.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204344567-c86b3a49-6109-4333-8993-7fdc74f2b35d.png) |
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ The utility network trace tool displays a list of named trace configurations defined for utility
+***REMOVED***/ networks in a web map. It enables users to add starting points and perform trace analysis from
+***REMOVED***/ the selected named trace configuration.
+***REMOVED***/
+***REMOVED***/ A named trace configuration defined for a utility network in a webmap comprises the parameters
+***REMOVED***/ used for a utility network trace.
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ The tool allows users to:
+***REMOVED***/
+***REMOVED***/  - Choose between multiple networks (if more than one is defined in a webmap).
+***REMOVED***/  - Choose between named trace configurations:
+***REMOVED***/ ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204346359-419b0056-3a30-4120-9b47-c68513abde42.png)
+***REMOVED***/  - Add trace starting points either programmatically or by tapping on a map view, then use the
+***REMOVED***/  inspection view to narrow the selection:
+***REMOVED***/ ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204346273-38374067-a0b8-4db4-8e40-62b38e1603c8.png)
+***REMOVED***/  - View trace results:
+***REMOVED***/
+***REMOVED***/ | iPhone | iPad |
+***REMOVED***/ | ------ | ---- |
+***REMOVED***/ | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204343941-91775a25-8dc0-4866-8273-0d4bfaa91aeb.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204344435-173fbf34-59d6-4a0f-84bf-30ed5de3572e.png) |
+***REMOVED***/
+***REMOVED***/  - Run multiple trace scenarios, then use color and name to compare results:
+***REMOVED***/ ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204346039-038ba4fa-201a-428c-ae84-be8f10c91cf7.png)
+***REMOVED***/
+***REMOVED***/  - See user-friendly warnings to help avoid common mistakes, including specifying too many
+***REMOVED***/ starting points or running the same trace configuration multiple times.
+***REMOVED***/
+***REMOVED***/ **Associated Types**
+***REMOVED***/
+***REMOVED***/ `UtilityNetworkTrace` has the following associated type:
+***REMOVED***/
+***REMOVED***/ - ``UtilityNetworkTraceStartingPoint``
+***REMOVED***/
+***REMOVED***/ To see the `UtilityNetworkTrace` in action, check out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+***REMOVED***/ and refer to [UtilityNetworkTraceExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/UtilityNetworkTraceExampleView.swift)
+***REMOVED***/ in the project. To learn more about using the `UtilityNetworkTrace` see the [UtilityNetworkTrace Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/UtilityNetworkTraceTutorial).
 public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The proxy to provide access to map view operations.
 ***REMOVED***private var mapViewProxy: MapViewProxy?
