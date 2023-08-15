@@ -33,6 +33,7 @@ import ArcGIS
 /// `SearchView` uses search sources which implement the ``SearchSource`` protocol.
 ///
 /// `SearchView` provides the following search sources:
+///
 /// - ``LocatorSearchSource``
 /// - ``SmartLocatorSearchSource``
 ///
