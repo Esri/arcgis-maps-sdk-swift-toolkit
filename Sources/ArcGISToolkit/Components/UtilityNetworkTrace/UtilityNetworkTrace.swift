@@ -54,6 +54,7 @@ import SwiftUI
 /// **Associated Types**
 ///
 /// `UtilityNetworkTrace` has the following associated type:
+///
 /// - ``UtilityNetworkTraceStartingPoint``
 ///
 /// To see the `UtilityNetworkTrace` in action, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
