@@ -50,6 +50,7 @@
 ***REMOVED***/ **Associated Types**
 ***REMOVED***/
 ***REMOVED***/ `SearchView` has the following associated types:
+***REMOVED***/
 ***REMOVED***/ - ``SearchField``
 ***REMOVED***/ - ``SearchResult``
 ***REMOVED***/ - ``SearchSuggestion``
