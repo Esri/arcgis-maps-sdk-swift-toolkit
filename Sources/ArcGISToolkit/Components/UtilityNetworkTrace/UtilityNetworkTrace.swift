@@ -54,6 +54,7 @@
 ***REMOVED***/ **Associated Types**
 ***REMOVED***/
 ***REMOVED***/ `UtilityNetworkTrace` has the following associated type:
+***REMOVED***/
 ***REMOVED***/ - ``UtilityNetworkTraceStartingPoint``
 ***REMOVED***/
 ***REMOVED***/ To see the `UtilityNetworkTrace` in action, check out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
