@@ -31,7 +31,7 @@ import ArcGIS
 ///
 /// - Can be configured to use a list, grid, or automatic layout. When using an
 /// automatic layout, list or grid presentation is chosen based on the horizontal size class of the
-/// display.
+/// environment.
 /// - Displays basemaps from a portal or a custom collection. If neither a custom portal or array of
 /// basemaps is provided, the list of basemaps will be loaded from ArcGIS Online.
 /// - Displays a representation of the map or scene's current basemap if that basemap exists in the
