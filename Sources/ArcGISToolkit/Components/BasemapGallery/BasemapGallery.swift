@@ -16,7 +16,7 @@ import ArcGIS
 
 /// The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
 /// portal, or an array of ``BasemapGalleryItem`` objects. When a new basemap is selected from the
-/// `BasemapGallery` and the optional `BasemapGalleryViewModel.geoModel` property is set, the
+/// `BasemapGallery` and a geo model was provided when the basemap gallery was created, the
 /// basemap of the `geoModel` is replaced with the basemap in the gallery.
 ///
 /// | iPhone | iPad |
