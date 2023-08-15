@@ -32,7 +32,7 @@ import Combine
 ///
 /// The `Authenticator` can be configured to support securely persisting credentials to the keychain.
 ///
-/// `Authenticator` has the following view modifier:
+/// `Authenticator` is accessible via a modifier on `View`:
 ///
 /// ```swift
 /// /// Presents user experiences for collecting network authentication credentials from the user.
