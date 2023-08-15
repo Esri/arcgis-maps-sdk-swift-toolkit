@@ -23,7 +23,7 @@
 ***REMOVED***/ | ------ | ---- |
 ***REMOVED***/ | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/205385086-cb9bc0a0-3c46-484d-aefa-8878c7112a3e.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/205384854-79f25efe-25f4-4330-a487-b64b528a9daf.png) |
 ***REMOVED***/
-***REMOVED***/ - Note: `BasemapGallery` uses metered ArcGIS basemaps by default, so you will need to configure
+***REMOVED***/ > Note: `BasemapGallery` uses metered ArcGIS basemaps by default, so you will need to configure
 ***REMOVED***/ an API key. See [Security and authentication documentation](https:***REMOVED***developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys)
 ***REMOVED***/ for more information.
 ***REMOVED***/
