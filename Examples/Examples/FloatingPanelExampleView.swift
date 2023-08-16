@@ -42,6 +42,8 @@ struct FloatingPanelExampleView: View {
             switch demoContent {
             case .list:
                 FloatingPanelListDemoContent(selectedDetent: $selectedDetent)
+            case .text:
+                FloatingPanelTextContent()
             case .textField:
                 FloatingPanelTextFieldDemoContent(selectedDetent: $selectedDetent)
             case .none:
@@ -49,16 +51,25 @@ struct FloatingPanelExampleView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Menu {
-                    Button("List") {
-                        demoContent = .list
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                if demoContent != nil {
+                    Button("Dismiss") {
+                        demoContent = nil
                     }
-                    Button("Text Field") {
-                        demoContent = .textField
+                } else {
+                    Menu {
+                        Button("List") {
+                            demoContent = .list
+                        }
+                        Button("Text") {
+                            demoContent = .text
+                        }
+                        Button("Text Field") {
+                            demoContent = .textField
+                        }
+                    } label: {
+                        Text("Present")
                     }
-                } label: {
-                    Text("Present")
                 }
             }
         }
@@ -75,8 +86,9 @@ struct FloatingPanelExampleView: View {
 
 /// The types of content available for demo in the Floating Panel.
 private enum FloatingPanelDemoContent {
-    case textField
     case list
+    case text
+    case textField
 }
 
 /// Demo content consisting of a list with inner sections each containing a set of buttons This
@@ -125,6 +137,14 @@ private struct FloatingPanelListDemoContent: View {
                 .disabled(selectedDetent == .height(200))
             }
         }
+    }
+}
+
+/// Demo content consisting of a single instance of short text which demonstrates the Floating
+/// Panel has a stable width, despite the width of its content.
+private struct FloatingPanelTextContent: View {
+    var body: some View {
+        Text("Hello, world!")
     }
 }
 
