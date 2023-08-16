@@ -17,17 +17,10 @@
 ***REMOVED***/ A view modifier that prompts the alerts for smart card.
 struct SmartCardViewModifier: ViewModifier {
 ***REMOVED******REMOVED***/ The authenticator.
-***REMOVED***let authenticator: Authenticator
+***REMOVED***@EnvironmentObject var authenticator: Authenticator
 ***REMOVED***
 ***REMOVED******REMOVED***/ The smart card manager.
-***REMOVED***@ObservedObject var smartCardManager: SmartCardManager
-***REMOVED***
-***REMOVED******REMOVED***/ Creates smart card view modifier with given authenticator.
-***REMOVED******REMOVED***/ - Parameter authenticator: The authenticator.
-***REMOVED***init(authenticator: Authenticator) {
-***REMOVED******REMOVED***self.authenticator = authenticator
-***REMOVED******REMOVED***self.smartCardManager = authenticator.smartCardManager
-***REMOVED***
+***REMOVED***@EnvironmentObject var smartCardManager: SmartCardManager
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content

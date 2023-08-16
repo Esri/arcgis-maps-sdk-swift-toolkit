@@ -63,9 +63,7 @@ private struct AuthenticatorModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***fatalError("unknown challenge type")
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***content.modifier(
-***REMOVED******REMOVED******REMOVED******REMOVED***SmartCardViewModifier(authenticator: authenticator)
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***content.modifier(SmartCardViewModifier())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

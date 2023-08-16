@@ -56,6 +56,9 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED*** Alleviates an error with "already presenting".
 ***REMOVED******REMOVED***await Task.yield()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set last connected smart card.
+***REMOVED******REMOVED***smartCardManager.setLastConnectedCard()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create the correct challenge type.
 ***REMOVED******REMOVED***if let configuration = oAuthUserConfigurations.first(where: { $0.canBeUsed(for: challenge.requestURL) ***REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***do {
@@ -83,6 +86,9 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
 ***REMOVED***public func handleNetworkAuthenticationChallenge(
 ***REMOVED******REMOVED***_ challenge: NetworkAuthenticationChallenge
 ***REMOVED***) async -> NetworkAuthenticationChallenge.Disposition {
+***REMOVED******REMOVED******REMOVED*** Set last connected smart card.
+***REMOVED******REMOVED***smartCardManager.setLastConnectedCard()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If `promptForUntrustedHosts` is `false` then perform default handling
 ***REMOVED******REMOVED******REMOVED*** for server trust challenges.
 ***REMOVED******REMOVED***guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
