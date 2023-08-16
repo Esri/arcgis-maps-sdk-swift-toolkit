@@ -25,7 +25,7 @@ public actor JobManager {
         }
     }
     
-    public static let shared = JobManager(id: .init(rawValue: "shared"))
+    public static let `default` = JobManager(id: .init(rawValue: "default"))
     
     private let id: ID
     
@@ -39,6 +39,7 @@ public actor JobManager {
     
     private var isSavingSuppressed = false
     
+    // TODO: is this needed?
     private func withSavingSuppressed<T>(body: @Sendable (isolated JobManager) throws -> T) rethrows -> T {
         isSavingSuppressed = true
         defer { isSavingSuppressed = false }
@@ -50,7 +51,6 @@ public actor JobManager {
     public var jobs: [any JobProtocol] {
         Array(_jobs.values)
     }
-    
     
     /// Registers a job with the job manager.
     ///
@@ -87,21 +87,32 @@ public actor JobManager {
     }
     
     /// Saves all managed jobs to User Defaults.
-    ///
-    /// This happens automatically when the jobs are registered/unregistered.
-    /// It also happens when a job's status changes.
     private func saveJobsToUserDefaults() {
-//        guard !suppressSaveToUserDefaults else { return }
-//
-//        UserDefaults.standard.set(self.toJSON(), forKey: jobsDefaultsKey)
+        guard !isSavingSuppressed else { return }
+        let dictionary = _jobs.mapValues { $0.toJSON() }
+        UserDefaults.standard.setValue(dictionary, forKey: defaultsKey)
     }
     
     /// Load any jobs that have been saved to User Defaults.
     private func loadJobsFromUserDefaults() {
-//        if let storedJobsJSON = UserDefaults.standard.dictionary(forKey: jobsDefaultsKey) {
-//            suppressSaveToUserDefaults = true
-//            keyedJobs = storedJobsJSON.compactMapValues { $0 is JSONDictionary ? (try? AGSJob.fromJSON($0)) as? AGSJob : nil }
-//            suppressSaveToUserDefaults = false
-//        }
+        guard let dictionary = UserDefaults.standard.dictionary(forKey: defaultsKey) as? [JobID: String] else {
+            return
+        }
+        
+        withSavingSuppressed { manager in
+            manager._jobs = dictionary.compactMapValues {
+                try? Job.fromJSON($0) as? any JobProtocol
+            }
+        }
+    }
+    
+    public func performStatusChecks() async {
+        await withTaskGroup(of: Void.self) { group in
+            for job in jobs {
+                group.addTask {
+                    try? await job.checkStatus()
+                }
+            }
+        }
     }
 }
