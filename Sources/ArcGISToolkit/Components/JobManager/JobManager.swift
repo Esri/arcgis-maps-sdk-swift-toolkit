@@ -14,9 +14,10 @@
 import SwiftUI
 import ArcGIS
 
-public typealias JobID = UUID
+public typealias JobID = String
 
-public actor JobManager {
+@MainActor
+public class JobManager: ObservableObject {
     public struct ID: RawRepresentable {
         public var rawValue: String
         
@@ -33,20 +34,34 @@ public actor JobManager {
         return "com.esri.ArcGISToolkit.jobManager.\(id.rawValue).jobs"
     }
     
+    @objc func appMovedToBackground() {
+        print("App moved to background!")
+        saveJobsToUserDefaults()
+    }
+    
     public init(id: ID) {
         self.id = id
+        
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
+        
+        loadJobsFromUserDefaults()
     }
     
     private var isSavingSuppressed = false
     
     // TODO: is this needed?
-    private func withSavingSuppressed<T>(body: @Sendable (isolated JobManager) throws -> T) rethrows -> T {
+    private func withSavingSuppressed<T>(body: @Sendable @MainActor () throws -> T) rethrows -> T {
         isSavingSuppressed = true
         defer { isSavingSuppressed = false }
-        return try body(self)
+        return try body()
     }
     
-    private var _jobs: [JobID: any JobProtocol] = [:]
+    private var _jobs: [JobID: any JobProtocol] = [:] {
+        willSet {
+            objectWillChange.send()
+        }
+    }
     
     public var jobs: [any JobProtocol] {
         Array(_jobs.values)
@@ -58,7 +73,7 @@ public actor JobManager {
     /// - Returns: A unique ID for the job's registration which can be used to unregister the job.
     @discardableResult
     public func register(job: any JobProtocol) -> JobID {
-        let id = UUID()
+        let id = UUID().uuidString
         _jobs[id] = job
         return id
     }
@@ -99,8 +114,8 @@ public actor JobManager {
             return
         }
         
-        withSavingSuppressed { manager in
-            manager._jobs = dictionary.compactMapValues {
+        withSavingSuppressed {
+            _jobs = dictionary.compactMapValues {
                 try? Job.fromJSON($0) as? any JobProtocol
             }
         }
