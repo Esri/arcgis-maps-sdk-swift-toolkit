@@ -46,6 +46,7 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***loadJobs()
+***REMOVED******REMOVED******REMOVED***removeAllJobs()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private var isSavingSuppressed = false
@@ -72,7 +73,7 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter job: The job to register.
 ***REMOVED******REMOVED***/ - Returns: A unique ID for the job's registration which can be used to unregister the job.
 ***REMOVED***@discardableResult
-***REMOVED***public func register(job: any JobProtocol) -> JobID {
+***REMOVED***public func add(job: any JobProtocol) -> JobID {
 ***REMOVED******REMOVED***let id = UUID().uuidString
 ***REMOVED******REMOVED***_jobs[id] = job
 ***REMOVED******REMOVED***return id
@@ -83,7 +84,7 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter id: The job's ID, returned from calling `register()`.
 ***REMOVED******REMOVED***/ - Returns: `true` if the Job was found, `false` otherwise.
 ***REMOVED***@discardableResult
-***REMOVED***public func unregister(id: JobID) -> Bool {
+***REMOVED***public func remove(jobWithID id: JobID) -> Bool {
 ***REMOVED******REMOVED***let removed = _jobs.removeValue(forKey: id) != nil
 ***REMOVED******REMOVED***return removed
 ***REMOVED***
@@ -93,12 +94,16 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter job: The job to unregister.
 ***REMOVED******REMOVED***/ - Returns: `true` if the Job was found, `false` otherwise.
 ***REMOVED***@discardableResult
-***REMOVED***public func unregister(job: any JobProtocol) -> Bool {
+***REMOVED***public func remove(job: any JobProtocol) -> Bool {
 ***REMOVED******REMOVED***guard let keyValue = _jobs.first(where: { $0.value === job ***REMOVED***) else {
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***return unregister(id: keyValue.key)
+***REMOVED******REMOVED***return remove(jobWithID: keyValue.key)
+***REMOVED***
+***REMOVED***
+***REMOVED***public func removeAllJobs() {
+***REMOVED******REMOVED***_jobs.removeAll()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Saves all managed jobs to User Defaults.
