@@ -46,6 +46,7 @@ public class JobManager: ObservableObject {
         notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
         
         loadJobs()
+//        removeAllJobs()
     }
     
     private var isSavingSuppressed = false
@@ -72,7 +73,7 @@ public class JobManager: ObservableObject {
     /// - Parameter job: The job to register.
     /// - Returns: A unique ID for the job's registration which can be used to unregister the job.
     @discardableResult
-    public func register(job: any JobProtocol) -> JobID {
+    public func add(job: any JobProtocol) -> JobID {
         let id = UUID().uuidString
         _jobs[id] = job
         return id
@@ -83,7 +84,7 @@ public class JobManager: ObservableObject {
     /// - Parameter id: The job's ID, returned from calling `register()`.
     /// - Returns: `true` if the Job was found, `false` otherwise.
     @discardableResult
-    public func unregister(id: JobID) -> Bool {
+    public func remove(jobWithID id: JobID) -> Bool {
         let removed = _jobs.removeValue(forKey: id) != nil
         return removed
     }
@@ -93,12 +94,16 @@ public class JobManager: ObservableObject {
     /// - Parameter job: The job to unregister.
     /// - Returns: `true` if the Job was found, `false` otherwise.
     @discardableResult
-    public func unregister(job: any JobProtocol) -> Bool {
+    public func remove(job: any JobProtocol) -> Bool {
         guard let keyValue = _jobs.first(where: { $0.value === job }) else {
             return false
         }
         
-        return unregister(id: keyValue.key)
+        return remove(jobWithID: keyValue.key)
+    }
+    
+    public func removeAllJobs() {
+        _jobs.removeAll()
     }
     
     /// Saves all managed jobs to User Defaults.
