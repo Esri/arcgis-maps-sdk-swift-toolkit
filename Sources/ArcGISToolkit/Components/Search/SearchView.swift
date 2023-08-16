@@ -14,7 +14,51 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ `SearchView` presents a search experience, powered by an underlying `SearchViewModel`.
+***REMOVED***/ `SearchView` enables searching using one or more locators, with support for suggestions,
+***REMOVED***/ automatic zooming, and custom search sources.
+***REMOVED***/
+***REMOVED***/ | iPhone | iPad |
+***REMOVED***/ | ------ | ---- |
+***REMOVED***/ | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/203608897-5f3bf34a-0931-4d11-b3fc-18a5dd07131a.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/203608708-45a0096c-a8d6-457c-9ee1-8cdb9e5bb15a.png) |
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ - Updates search suggestions as you type.
+***REMOVED***/ - Supports using the Esri world geocoder or any other ArcGIS locators.
+***REMOVED***/ - Supports searching using custom search sources.
+***REMOVED***/ - Allows for customization of the display of search results.
+***REMOVED***/ - Allows you to repeat a search within a defined area, and displays a button to enable that
+***REMOVED***/ search when the view's viewpoint changes.
+***REMOVED***/
+***REMOVED***/ `SearchView` uses search sources which implement the ``SearchSource`` protocol.
+***REMOVED***/
+***REMOVED***/ `SearchView` provides the following search sources:
+***REMOVED***/
+***REMOVED***/ - ``LocatorSearchSource``
+***REMOVED***/ - ``SmartLocatorSearchSource``
+***REMOVED***/
+***REMOVED***/ `SearchView` provides several instance methods, allowing customization and additional search
+***REMOVED***/ behaviors (such as displaying a "Repeat search here" button). See "Instance Methods" below.
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ The `SearchView` will display the results list view at half height, exposing a portion of the
+***REMOVED***/ underlying map below the list, in compact environments. The user can hide or show the result
+***REMOVED***/ list after searching by clicking on the up/down chevron symbol on the right of the search bar.
+***REMOVED***/
+***REMOVED***/ **Associated Types**
+***REMOVED***/
+***REMOVED***/ `SearchView` has the following associated types:
+***REMOVED***/
+***REMOVED***/ - ``SearchField``
+***REMOVED***/ - ``SearchResult``
+***REMOVED***/ - ``SearchSuggestion``
+***REMOVED***/ - ``SearchOutcome``
+***REMOVED***/ - ``SearchResultMode``
+***REMOVED***/
+***REMOVED***/ To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+***REMOVED***/ and refer to [SearchExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
+***REMOVED***/ in the project. To learn more about using the `SearchView` see the [SearchView Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/searchviewtutorial).
 public struct SearchView: View {
 ***REMOVED******REMOVED***/ Creates a `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -88,7 +132,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/ Defaults to "Find a place or address". Note: this is set using the
 ***REMOVED******REMOVED***/ `prompt` modifier.
-***REMOVED***private var prompt = "Find a place or address"
+***REMOVED***private var prompt = String(localized: "Find a place or address", bundle: .toolkitModule)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. Defaults to `true`.
 ***REMOVED******REMOVED***/ If `false`, the result display/selection list is not shown. Set to false if you want to hide the results
@@ -99,7 +143,11 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Message to show when there are no results or suggestions. Defaults to "No results found".
 ***REMOVED******REMOVED***/ Note: this is set using the `noResultsMessage` modifier.
-***REMOVED***private var noResultsMessage = "No results found"
+***REMOVED***private var noResultsMessage = String(
+***REMOVED******REMOVED***localized: "No results found",
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A message to show when there are no results or suggestions."
+***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The width of the search bar, taking into account the horizontal and vertical size classes
 ***REMOVED******REMOVED***/ of the device. This will cause the search field to display full-width on an iPhone in portrait
@@ -118,6 +166,9 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
 ***REMOVED***@State private var isResultListHidden = false
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the search field is focused or not.
+***REMOVED***@FocusState private var searchFieldIsFocused: Bool
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
@@ -127,6 +178,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchField(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $viewModel.currentQuery,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: prompt,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused: $searchFieldIsFocused,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isResultsButtonHidden: !enableResultListView,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isResultListHidden: $isResultListHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -164,8 +216,17 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if viewModel.isEligibleForRequery {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Repeat Search Here") {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.repeatSearch()
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Repeat Search Here",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  A button to show when a user has panned the map away from the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  original search location.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***
@@ -174,6 +235,12 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***.onReceive(viewModel.$currentQuery) { _ in
 ***REMOVED******REMOVED******REMOVED***onQueryChangedAction?(viewModel.currentQuery)
 ***REMOVED******REMOVED******REMOVED***viewModel.updateSuggestions()
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewModel.selectedResult) { _ in
+***REMOVED******REMOVED******REMOVED***searchFieldIsFocused = false
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewModel.currentSuggestion) { _ in
+***REMOVED******REMOVED******REMOVED***searchFieldIsFocused = false
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: geoViewExtent) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.geoViewExtent = geoViewExtent
@@ -416,7 +483,8 @@ extension ResultRow {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***uiImage: UIImage(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***named: "pin",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***in: Bundle.module, with: nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***in: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: nil
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)

@@ -31,7 +31,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***let backgroundColor: Color
 ***REMOVED***
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
-***REMOVED***let content: Content
+***REMOVED***let content: () -> Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -43,16 +43,13 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***backgroundColor: Color,
 ***REMOVED******REMOVED***selectedDetent: Binding<FloatingPanelDetent>,
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***@ViewBuilder content: () -> Content
+***REMOVED******REMOVED***@ViewBuilder content: @escaping () -> Content
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.backgroundColor = backgroundColor
 ***REMOVED******REMOVED***self.selectedDetent = selectedDetent
 ***REMOVED******REMOVED***self.isPresented = isPresented
-***REMOVED******REMOVED***self.content = content()
+***REMOVED******REMOVED***self.content = content
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A binding to the currently selected detent.
-***REMOVED***private var selectedDetent: Binding<FloatingPanelDetent>
 ***REMOVED***
 ***REMOVED******REMOVED***/ The color of the handle.
 ***REMOVED***@State private var handleColor: Color = .defaultHandleColor
@@ -60,11 +57,8 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The height of the content.
 ***REMOVED***@State private var height: CGFloat = .minHeight
 ***REMOVED***
-***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
-***REMOVED***private var isPresented: Binding<Bool>
-***REMOVED***
 ***REMOVED******REMOVED***/ The latest recorded drag gesture value.
-***REMOVED***@State var latestDragGesture: DragGesture.Value?
+***REMOVED***@State private var latestDragGesture: DragGesture.Value?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .infinity
@@ -74,22 +68,31 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
+***REMOVED***private var isPresented: Binding<Bool>
+***REMOVED***
+***REMOVED******REMOVED***/ A binding to the currently selected detent.
+***REMOVED***private var selectedDetent: Binding<FloatingPanelDetent>
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact && isPresented.wrappedValue {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipped()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isPresented.wrappedValue ? (isCompact ? 25 : 10) : .zero)
-***REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact && isPresented.wrappedValue {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isPresented.wrappedValue {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipped()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 25 : 10)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
 ***REMOVED******REMOVED******REMOVED***.clipShape(
 ***REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorners(
@@ -103,6 +106,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***height: geometryProxy.size.height,
 ***REMOVED******REMOVED******REMOVED******REMOVED***alignment: isCompact ? .bottom : .top
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.animation(.easeInOut, value: isPresented.wrappedValue)
 ***REMOVED******REMOVED******REMOVED***.onSizeChange {
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = $0.height
 ***REMOVED******REMOVED******REMOVED******REMOVED***if height > maximumHeight {
@@ -122,6 +126,16 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.onChange(of: selectedDetent.wrappedValue) { selectedDetent in
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: selectedDetent)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: .full)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: selectedDetent.wrappedValue)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

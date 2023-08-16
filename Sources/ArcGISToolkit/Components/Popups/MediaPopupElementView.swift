@@ -24,21 +24,16 @@ struct MediaPopupElementView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if displayableMediaCount > 0 {
 ***REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, 4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***PopupMediaView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupElement.media,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayableMediaCount: displayableMediaCount
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.displayTitle,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.displayTitle,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -123,6 +118,6 @@ extension PopupMedia: Identifiable {***REMOVED***
 private extension MediaPopupElement {
 ***REMOVED******REMOVED***/ Provides a default title to display if `title` is empty.
 ***REMOVED***var displayTitle: String {
-***REMOVED******REMOVED***title.isEmpty ? "Media" : title
+***REMOVED******REMOVED***title.isEmpty ? String(localized: "Media", bundle: .toolkitModule) : title
 ***REMOVED***
 ***REMOVED***

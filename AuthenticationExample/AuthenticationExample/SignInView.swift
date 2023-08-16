@@ -132,7 +132,7 @@ private extension Error {
 ***REMOVED******REMOVED***/ authentication challenge.
 ***REMOVED***var isChallengeCancellationError: Bool {
 ***REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED***case is CancellationError:
+***REMOVED******REMOVED***case is ArcGISChallengeCancellationError:
 ***REMOVED******REMOVED******REMOVED***return true
 ***REMOVED******REMOVED***case let error as NSError:
 ***REMOVED******REMOVED******REMOVED***return error.domain == NSURLErrorDomain && error.code == -999

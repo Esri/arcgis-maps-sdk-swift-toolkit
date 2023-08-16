@@ -42,7 +42,7 @@ public extension View {
 ***REMOVED******REMOVED***horizontalAlignment: HorizontalAlignment = .trailing,
 ***REMOVED******REMOVED***isPresented: Binding<Bool> = .constant(true),
 ***REMOVED******REMOVED***maxWidth: CGFloat = 400,
-***REMOVED******REMOVED***_ content: @escaping () -> Content
+***REMOVED******REMOVED***@ViewBuilder _ content: @escaping () -> Content
 ***REMOVED***) -> some View where Content: View {
 ***REMOVED******REMOVED***modifier(
 ***REMOVED******REMOVED******REMOVED***FloatingPanelModifier(
@@ -51,7 +51,7 @@ public extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: horizontalAlignment,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: maxWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED***panelContent: content()
+***REMOVED******REMOVED******REMOVED******REMOVED***panelContent: content
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -83,7 +83,7 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
 ***REMOVED***let maxWidth: CGFloat
 ***REMOVED***
 ***REMOVED******REMOVED***/ The content to be displayed within the floating panel.
-***REMOVED***let panelContent: PanelContent
+***REMOVED***let panelContent: () -> PanelContent
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
@@ -91,10 +91,9 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: backgroundColor,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: selectedDetent,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented
-***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***panelContent
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content: panelContent
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.all, edges: .bottom)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: isCompact ? .infinity : maxWidth)
 ***REMOVED******REMOVED***

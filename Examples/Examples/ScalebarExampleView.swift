@@ -16,6 +16,9 @@
 ***REMOVED***
 
 struct ScalebarExampleView: View {
+***REMOVED******REMOVED***/ The height of the map view's attribution bar.
+***REMOVED***@State private var attributionBarHeight = 0.0
+***REMOVED***
 ***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView`.
 ***REMOVED***@State private var spatialReference: SpatialReference?
 ***REMOVED***
@@ -28,28 +31,29 @@ struct ScalebarExampleView: View {
 ***REMOVED******REMOVED***/ The location of the scalebar on screen.
 ***REMOVED***private let alignment: Alignment = .bottomLeading
 ***REMOVED***
-***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
-***REMOVED***@StateObject private var dataModel = MapDataModel(
-***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISTopographic)
-***REMOVED***)
+***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
+***REMOVED***@State private var map = Map(basemapStyle: .arcGISTopographic)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum screen width allotted to the scalebar.
 ***REMOVED***private let maxWidth: Double = 175.0
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: dataModel.map)
+***REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged { newHeight in
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { attributionBarHeight = newHeight ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onSpatialReferenceChanged { spatialReference = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onUnitsPerPointChanged { unitsPerPoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: alignment) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: maxWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: $spatialReference,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint: $unitsPerPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: spatialReference,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint: unitsPerPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 50)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 10 + attributionBarHeight)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
