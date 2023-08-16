@@ -47,7 +47,6 @@ public final class SmartCardManager: ObservableObject {
         // Monitor the smart card connection.
         watcher.setInsertionHandler { [weak self] tokenID in
             guard let self = self, tokenID.localizedCaseInsensitiveContains("pivtoken") else { return }
-            print("tokenID added: \(tokenID)")
             
             if let lastConnectedCard, tokenID != lastConnectedCard {
                 DispatchQueue.main.async {
@@ -62,12 +61,10 @@ public final class SmartCardManager: ObservableObject {
                     self.connectionStatus = .connected
                 }
             }
-                    
+            
             watcher.addRemovalHandler( { [weak self] tokenID in
                 guard let self = self else { return }
-
-                print("tokenID removed: \(tokenID)")
-
+                
                 if tokenID == lastConnectedCard {
                     DispatchQueue.main.async {
                         self.connectionStatus = .disconnected
