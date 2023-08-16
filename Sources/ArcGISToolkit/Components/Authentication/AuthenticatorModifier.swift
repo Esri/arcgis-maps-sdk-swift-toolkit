@@ -63,9 +63,7 @@ private struct AuthenticatorModifier: ViewModifier {
                 fatalError("unknown challenge type")
             }
         } else {
-            content.modifier(
-                SmartCardViewModifier(authenticator: authenticator)
-            )
+            content.modifier(SmartCardViewModifier())
         }
     }
 }

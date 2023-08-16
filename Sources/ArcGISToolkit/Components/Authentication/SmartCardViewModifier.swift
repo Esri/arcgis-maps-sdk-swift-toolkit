@@ -17,17 +17,10 @@ import ArcGIS
 /// A view modifier that prompts the alerts for smart card.
 struct SmartCardViewModifier: ViewModifier {
     /// The authenticator.
-    let authenticator: Authenticator
+    @EnvironmentObject var authenticator: Authenticator
     
     /// The smart card manager.
-    @ObservedObject var smartCardManager: SmartCardManager
-    
-    /// Creates smart card view modifier with given authenticator.
-    /// - Parameter authenticator: The authenticator.
-    init(authenticator: Authenticator) {
-        self.authenticator = authenticator
-        self.smartCardManager = authenticator.smartCardManager
-    }
+    @EnvironmentObject var smartCardManager: SmartCardManager
     
     func body(content: Content) -> some View {
         content

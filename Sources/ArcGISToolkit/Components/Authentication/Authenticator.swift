@@ -56,6 +56,9 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
         // Alleviates an error with "already presenting".
         await Task.yield()
         
+        // Set last connected smart card.
+        smartCardManager.setLastConnectedCard()
+        
         // Create the correct challenge type.
         if let configuration = oAuthUserConfigurations.first(where: { $0.canBeUsed(for: challenge.requestURL) }) {
             do {
@@ -83,6 +86,9 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
     public func handleNetworkAuthenticationChallenge(
         _ challenge: NetworkAuthenticationChallenge
     ) async -> NetworkAuthenticationChallenge.Disposition {
+        // Set last connected smart card.
+        smartCardManager.setLastConnectedCard()
+        
         // If `promptForUntrustedHosts` is `false` then perform default handling
         // for server trust challenges.
         guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
