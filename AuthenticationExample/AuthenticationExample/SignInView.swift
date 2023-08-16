@@ -132,7 +132,7 @@ private extension Error {
     /// authentication challenge.
     var isChallengeCancellationError: Bool {
         switch self {
-        case is CancellationError:
+        case is ArcGISChallengeCancellationError:
             return true
         case let error as NSError:
             return error.domain == NSURLErrorDomain && error.code == -999

@@ -1,0 +1,83 @@
+@Tutorials(name: "Using the ArcGIS Maps SDK for Swift Toolkit") {
+    @Intro(title: "Toolkit Tutorials") {
+        The ArcGIS Maps SDK for Swift Toolkit contains components that will simplify your Swift app
+        development. It is built off of the new ArcGIS Maps SDK for Swift.
+    }
+    
+    @Chapter(name: "Authenticator") {
+        The `Authenticator` is a configurable object that handles authentication challenges. It will
+        display a user interface when network and ArcGIS authentication challenges occur.
+        @Image(source: Authenticator, alt: "An image of the Authenticator component.")
+        @TutorialReference(tutorial: "doc:AuthenticatorTutorial")
+    }
+    
+    @Chapter(name: "BasemapGallery") {
+        The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
+        portal, or an array of `BasemapGalleryItem` objects.
+        @Image(source: BasemapGallery, alt: "An image of the BasemapGallery component.")
+        @TutorialReference(tutorial: "doc:BasemapGalleryTutorial")
+    }
+    
+    @Chapter(name: "Bookmarks") {
+        The `Bookmarks` component will display a list of bookmarks and allow the user to select a
+        bookmark and perform some action.
+        @Image(source: Bookmarks, alt: "An image of the Bookmarks component.")
+        @TutorialReference(tutorial: "doc:BookmarksTutorial")
+    }
+    
+    @Chapter(name: "Compass") {
+        A `Compass` (alias North arrow) shows where north is in a MapView.
+        @Image(source: Compass, alt: "An image of the Compass component.")
+        @TutorialReference(tutorial: "doc:CompassTutorial")
+    }
+    
+    @Chapter(name: "FloatingPanel") {
+        A `FloatingPanel` is a view that overlays a view and supplies view-related content.
+        @Image(source: FloatingPanel, alt: "An image of the FloatingPanel component.")
+        @TutorialReference(tutorial: "doc:FloatingPanelTutorial")
+    }
+    
+    @Chapter(name: "FloorFilter") {
+        The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a
+        building in your application.
+        @Image(source: FloorFilter, alt: "An image of the FloorFilter component.")
+        @TutorialReference(tutorial: "doc:FloorFilterTutorial")
+    }
+    
+    @Chapter(name: "OverviewMap") {
+        `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map")
+        superimposed on an existing `GeoView`, which shows a representation of the current 
+        visible area (for a `MapView`) or viewpoint (for a `SceneView`).
+        @Image(source: OverviewMap, alt: "An image of the OverviewMap component.")
+        @TutorialReference(tutorial: "doc:OverviewMapTutorial")
+    }
+    
+    @Chapter(name: "PopupView") {
+        The `PopupView` component will display a popup for an individual feature. This includes 
+        showing the feature's title, attributes, custom description, media, and attachments.
+        @Image(source: PopupView, alt: "An image of the PopupView component.")
+        @TutorialReference(tutorial: "doc:PopupViewTutorial")
+    }
+    
+    @Chapter(name: "Scalebar") {
+        A scalebar displays the representation of an accurate linear measurement on the map. It 
+        provides a visual indication through which users can determine the size of features or the 
+        distance between features on a map.
+        @Image(source: Scalebar, alt: "An image of the Scalebar component.")
+        @TutorialReference(tutorial: "doc:ScalebarTutorial")
+    }
+    
+    @Chapter(name: "SearchView") {
+        `SearchView` enables searching using one or more locators, with support for suggestions,
+        automatic zooming, and custom search sources.
+        @Image(source: SearchView, alt: "An image of the SearchView component.")
+        @TutorialReference(tutorial: "doc:SearchViewTutorial")
+    }
+    
+    @Chapter(name: "UtilityNetworkTrace") {
+        `UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace 
+        configurations.
+        @Image(source: UtilityNetworkTrace, alt: "An image of the UtilityNetworkTrace component.")
+        @TutorialReference(tutorial: "doc:UtilityNetworkTraceTutorial")
+    }
+}

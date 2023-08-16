@@ -42,7 +42,7 @@ public extension View {
         horizontalAlignment: HorizontalAlignment = .trailing,
         isPresented: Binding<Bool> = .constant(true),
         maxWidth: CGFloat = 400,
-        _ content: @escaping () -> Content
+        @ViewBuilder _ content: @escaping () -> Content
     ) -> some View where Content: View {
         modifier(
             FloatingPanelModifier(
@@ -51,7 +51,7 @@ public extension View {
                 horizontalAlignment: horizontalAlignment,
                 isPresented: isPresented,
                 maxWidth: maxWidth,
-                panelContent: content()
+                panelContent: content
             )
         )
     }
@@ -83,7 +83,7 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
     let maxWidth: CGFloat
     
     /// The content to be displayed within the floating panel.
-    let panelContent: PanelContent
+    let panelContent: () -> PanelContent
     
     func body(content: Content) -> some View {
         content
@@ -91,10 +91,9 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
                 FloatingPanel(
                     backgroundColor: backgroundColor,
                     selectedDetent: selectedDetent,
-                    isPresented: isPresented
-                ) {
-                    panelContent
-                }
+                    isPresented: isPresented,
+                    content: panelContent
+                )
                 .ignoresSafeArea(.all, edges: .bottom)
                 .frame(maxWidth: isCompact ? .infinity : maxWidth)
             }
