@@ -16,7 +16,36 @@ import Combine
 import ArcGIS
 
 /// `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
-/// on an existing `GeoView`, which shows the visible extent of that `GeoView`.
+/// on an existing `GeoView`, which shows a representation of the current `visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`).
+///
+/// | MapView | SceneView |
+/// | ------- | --------- |
+/// | ![OverviewMap - MapView](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/assets/16397058/61415dd8-cdbc-4048-a439-92cf13729e3e) | ![OverviewMap - SceneView](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/assets/16397058/5a201035-c303-48a5-bc95-1324796385ea) |
+///
+/// > Note: OverviewMap uses metered ArcGIS basemaps by default, so you will need to configure an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys) for more information.
+///
+/// **Features**
+///
+/// - Displays a representation of the current visible area or viewpoint for a connected `GeoView`.
+/// - Supports a configurable scaling factor for setting the overview map's zoom level relative to
+/// the connected view.
+/// - Supports a configurable symbol for visualizing the current visible area or viewpoint
+/// representation (a `FillSymbol` for a connected `MapView`; a `MarkerSymbol` for a connected
+/// `SceneView`).
+/// - Supports using a custom map in the overview map display.
+///
+/// **Behavior**
+///
+/// For an `OverviewMap` on a `MapView`, the `MapView`'s `visibleArea` property will be represented in the `OverviewMap` as a polygon, which will rotate as the `MapView` rotates.
+///
+/// For an `OverviewMap` on a `SceneView`, the center point of the `SceneView`'s `currentViewpoint` property will be represented in the `OverviewMap` by a point.
+///
+/// To use a custom map in the `OverviewMap`, use the `map` argument in either ``OverviewMap/forMapView(with:visibleArea:map:)`` or ``OverviewMap/forSceneView(with:map:)``.
+///
+/// To see the `OverviewMap` in action, and for examples of `OverviewMap` customization, check out
+/// the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+/// and refer to [OverviewMapExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/OverviewMapExampleView.swift)
+/// in the project. To learn more about using the `OverviewMap` see the [OverviewMap Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/overviewmaptutorial).
 public struct OverviewMap: View {
     /// The `Viewpoint` of the main `GeoView`.
     let viewpoint: Viewpoint?
@@ -40,7 +69,7 @@ public struct OverviewMap: View {
     /// The user-defined map used in the overview map. Defaults to `nil`.
     private let userProvidedMap: Map?
     
-    /// The actual map used in the overaview map.
+    /// The actual map used in the overview map.
     private var effectiveMap: Map {
         userProvidedMap ?? dataModel.defaultMap
     }

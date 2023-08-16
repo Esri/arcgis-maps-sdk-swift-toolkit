@@ -45,9 +45,6 @@ final class BookmarksTests: XCTestCase {
     
     /// Asserts that the list properly handles a selection when provided a modifier and web map.
     func testSelectBookmarkWithModifierAndMap() async throws {
-        let expectation = XCTestExpectation(
-            description: "Modifier action was performed"
-        )
         let map = Map.portlandTreeSurvey
         do {
             try await map.load()
@@ -59,20 +56,15 @@ final class BookmarksTests: XCTestCase {
             get: { _isPresented },
             set: {_isPresented = $0 }
         )
-        let action: ((Bookmark) -> Void) = {
-            expectation.fulfill()
-            XCTAssertEqual($0.viewpoint, map.bookmarks.first?.viewpoint)
-        }
-        var bookmarks = Bookmarks(
-            isPresented: isPresented,
-            geoModel: map
-        )
-        bookmarks.selectionChangedAction = action
+        
+        var selectedBookmark: Bookmark?
+        let bookmarks = Bookmarks(isPresented: isPresented,geoModel: map)
+            .onSelectionChanged { selectedBookmark = $0 }
         XCTAssertTrue(_isPresented)
         let firstBookmark = try XCTUnwrap(map.bookmarks.first)
         bookmarks.selectBookmark(firstBookmark)
         XCTAssertFalse(_isPresented)
-        wait(for: [expectation], timeout: 1.0)
+        XCTAssertEqual(selectedBookmark, map.bookmarks.first)
     }
     
     /// Asserts that the list properly handles a selection when provided a viewpoint.

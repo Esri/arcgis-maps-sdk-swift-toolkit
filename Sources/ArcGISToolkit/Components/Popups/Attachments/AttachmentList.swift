@@ -20,13 +20,8 @@ struct AttachmentList: View {
     var attachmentModels: [AttachmentModel]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            ForEach(attachmentModels) { attachmentModel in
-                AttachmentRow(attachmentModel: attachmentModel)
-                if attachmentModel != attachmentModels.last {
-                    Divider()
-                }
-            }
+        ForEach(attachmentModels) { attachmentModel in
+            AttachmentRow(attachmentModel: attachmentModel)
         }
     }
 }
@@ -48,7 +43,7 @@ struct AttachmentRow: View  {
                     Text(attachmentModel.attachment.name)
                         .lineLimit(1)
                         .truncationMode(.middle)
-                    Text("\(attachmentModel.attachment.size.formatted(.byteCount(style: .file)))")
+                    Text(Int64(attachmentModel.attachment.size), format: .byteCount(style: .file))
                         .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -85,6 +80,7 @@ struct AttachmentLoadButton: View  {
                     Image(systemName: "square.and.arrow.down")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
+                        .foregroundColor(.accentColor)
                 case .loading:
                     ProgressView()
                 case .loaded:

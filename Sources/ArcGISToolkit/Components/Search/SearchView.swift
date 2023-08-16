@@ -14,7 +14,51 @@
 import SwiftUI
 import ArcGIS
 
-/// `SearchView` presents a search experience, powered by an underlying `SearchViewModel`.
+/// `SearchView` enables searching using one or more locators, with support for suggestions,
+/// automatic zooming, and custom search sources.
+///
+/// | iPhone | iPad |
+/// | ------ | ---- |
+/// | ![image](https://user-images.githubusercontent.com/3998072/203608897-5f3bf34a-0931-4d11-b3fc-18a5dd07131a.png) | ![image](https://user-images.githubusercontent.com/3998072/203608708-45a0096c-a8d6-457c-9ee1-8cdb9e5bb15a.png) |
+///
+/// **Features**
+///
+/// - Updates search suggestions as you type.
+/// - Supports using the Esri world geocoder or any other ArcGIS locators.
+/// - Supports searching using custom search sources.
+/// - Allows for customization of the display of search results.
+/// - Allows you to repeat a search within a defined area, and displays a button to enable that
+/// search when the view's viewpoint changes.
+///
+/// `SearchView` uses search sources which implement the ``SearchSource`` protocol.
+///
+/// `SearchView` provides the following search sources:
+///
+/// - ``LocatorSearchSource``
+/// - ``SmartLocatorSearchSource``
+///
+/// `SearchView` provides several instance methods, allowing customization and additional search
+/// behaviors (such as displaying a "Repeat search here" button). See "Instance Methods" below.
+///
+/// **Behavior**
+///
+/// The `SearchView` will display the results list view at half height, exposing a portion of the
+/// underlying map below the list, in compact environments. The user can hide or show the result
+/// list after searching by clicking on the up/down chevron symbol on the right of the search bar.
+///
+/// **Associated Types**
+///
+/// `SearchView` has the following associated types:
+///
+/// - ``SearchField``
+/// - ``SearchResult``
+/// - ``SearchSuggestion``
+/// - ``SearchOutcome``
+/// - ``SearchResultMode``
+///
+/// To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+/// and refer to [SearchExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
+/// in the project. To learn more about using the `SearchView` see the [SearchView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/searchviewtutorial).
 public struct SearchView: View {
     /// Creates a `SearchView`.
     /// - Parameters:
@@ -88,7 +132,7 @@ public struct SearchView: View {
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
     /// `prompt` modifier.
-    private var prompt = "Find a place or address"
+    private var prompt = String(localized: "Find a place or address", bundle: .toolkitModule)
     
     /// Determines whether a built-in result view will be shown. Defaults to `true`.
     /// If `false`, the result display/selection list is not shown. Set to false if you want to hide the results
@@ -99,7 +143,11 @@ public struct SearchView: View {
     
     /// Message to show when there are no results or suggestions. Defaults to "No results found".
     /// Note: this is set using the `noResultsMessage` modifier.
-    private var noResultsMessage = "No results found"
+    private var noResultsMessage = String(
+        localized: "No results found",
+        bundle: .toolkitModule,
+        comment: "A message to show when there are no results or suggestions."
+    )
     
     /// The width of the search bar, taking into account the horizontal and vertical size classes
     /// of the device. This will cause the search field to display full-width on an iPhone in portrait
@@ -118,6 +166,9 @@ public struct SearchView: View {
     /// Determines whether the results lists are displayed.
     @State private var isResultListHidden = false
     
+    /// A Boolean value indicating whether the search field is focused or not.
+    @FocusState private var searchFieldIsFocused: Bool
+    
     public var body: some View {
         VStack {
             GeometryReader { geometry in
@@ -127,6 +178,7 @@ public struct SearchView: View {
                         SearchField(
                             query: $viewModel.currentQuery,
                             prompt: prompt,
+                            isFocused: $searchFieldIsFocused,
                             isResultsButtonHidden: !enableResultListView,
                             isResultListHidden: $isResultListHidden
                         )
@@ -164,8 +216,17 @@ public struct SearchView: View {
             }
             Spacer()
             if viewModel.isEligibleForRequery {
-                Button("Repeat Search Here") {
+                Button {
                     viewModel.repeatSearch()
+                } label: {
+                    Text(
+                        "Repeat Search Here",
+                        bundle: .toolkitModule,
+                        comment: """
+                                  A button to show when a user has panned the map away from the
+                                  original search location.
+                                  """
+                    )
                 }
                 .esriBorder()
             }
@@ -174,6 +235,12 @@ public struct SearchView: View {
         .onReceive(viewModel.$currentQuery) { _ in
             onQueryChangedAction?(viewModel.currentQuery)
             viewModel.updateSuggestions()
+        }
+        .onChange(of: viewModel.selectedResult) { _ in
+            searchFieldIsFocused = false
+        }
+        .onChange(of: viewModel.currentSuggestion) { _ in
+            searchFieldIsFocused = false
         }
         .onChange(of: geoViewExtent) { _ in
             viewModel.geoViewExtent = geoViewExtent
@@ -416,7 +483,8 @@ extension ResultRow {
                     Image(
                         uiImage: UIImage(
                             named: "pin",
-                            in: Bundle.module, with: nil
+                            in: .toolkitModule,
+                            with: nil
                         )!
                     )
                 )

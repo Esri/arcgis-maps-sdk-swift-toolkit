@@ -107,9 +107,10 @@ struct LoadImageError: Error {
 
 extension LoadImageError: LocalizedError {
     public var errorDescription: String? {
-        return NSLocalizedString(
-            "The URL could not be reached or did not contain image data",
-            comment: "No Data"
+        return String(
+            localized: "The URL could not be reached or did not contain image data",
+            bundle: .toolkitModule,
+            comment: "Description of error thrown when a remote image could not be loaded."
         )
     }
 }

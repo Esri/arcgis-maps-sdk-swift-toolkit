@@ -14,7 +14,44 @@
 import SwiftUI
 import ArcGIS
 
-/// A view displaying the elements of a single Popup.
+/// The `PopupView` component will display a popup for an individual feature. This includes showing
+/// the feature's title, attributes, custom description, media, and attachments. The new online Map
+/// Viewer allows users to create a popup definition by assembling a list of “popup elements”.
+/// `PopupView` will support the display of popup elements created by the Map Viewer, including:
+/// Text, Fields, Attachments, and Media (Images and Charts).
+///
+/// Thanks to the backwards compatibility support in the API, it will also work with the legacy
+/// popup definitions created by the classic Map Viewer. It does not support editing.
+///
+/// | iPhone | iPad |
+/// | ------ | ---- |
+/// | ![image](https://user-images.githubusercontent.com/3998072/203422507-66b6c6dc-a6c3-4040-b996-9c0da8d4e580.png) | ![image](https://user-images.githubusercontent.com/3998072/203422665-c4759c1f-5863-4251-94df-ed7a06ac7a8f.png) |
+///
+/// > Note: Displaying charts in a popup requires running on a device with iOS 16.0 or greater.
+/// Displaying charts on Mac requires building your application with Xcode 14.1 or greater
+/// and running on a Mac with macOS 13.0 (Ventura) or greater.  Also, attachment previews are not
+/// available when running on Mac (regardless of Xcode version).
+///
+/// **Features**
+///
+/// - Display a popup for a feature based on the popup definition defined in a web map.
+/// - Supports image refresh intervals on image popup media, refreshing the image at a given
+/// interval defined in the popup element.
+/// - Supports elements containing Arcade expression and automatically evaluates expressions.
+/// - Displays media (images and charts) full-screen.
+/// - Supports hyperlinks in text, media, and fields elements.
+/// - Fully supports dark mode, as do all Toolkit components.
+///
+/// **Behavior**
+///
+/// The popup view can display an optional "close" button, allowing the user to dismiss the view.
+/// The popup view can be embedded in any type of container view including, as demonstrated in the
+/// example, the Toolkit's `FloatingPanel`.
+///
+/// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+/// and refer to
+/// [PopupExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
+/// in the project. To learn more about using the `PopupView` see the [PopupView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/popupviewtutorial).
 public struct PopupView: View {
     /// Creates a `PopupView` with the given popup.
     /// - Parameters
@@ -38,7 +75,7 @@ public struct PopupView: View {
 
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>?
-
+    
     public var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -56,6 +93,7 @@ public struct PopupView: View {
                             .foregroundColor(.secondary)
                             .padding([.top, .bottom, .trailing], 4)
                     })
+                    .buttonStyle(.plain)
                 }
             }
             Divider()
@@ -63,13 +101,20 @@ public struct PopupView: View {
                 if let evaluateExpressionsResult {
                     switch evaluateExpressionsResult {
                     case .success(_):
-                        PopupElementScrollView(popupElements: popup.evaluatedElements)
+                        PopupElementList(popupElements: popup.evaluatedElements)
                     case .failure(let error):
-                        Text("Popup evaluation failed: \(error.localizedDescription)")
+                        Text(
+                            "Popup evaluation failed: \(error.localizedDescription)",
+                            bundle: .toolkitModule,
+                            comment: """
+                                     An error message shown when a popup cannot be displayed. The
+                                     variable provides additional data.
+                                     """
+                        )
                     }
                 } else {
                     VStack(alignment: .center) {
-                        Text("Evaluating popup expressions...")
+                        Text("Evaluating popup expressions…", bundle: .toolkitModule)
                         ProgressView()
                     }
                     .frame(maxWidth: .infinity)
@@ -84,28 +129,28 @@ public struct PopupView: View {
         }
     }
     
-    struct PopupElementScrollView: View {
+    private struct PopupElementList: View {
         let popupElements: [PopupElement]
         
         var body: some View {
-            ScrollView {
-                VStack(alignment: .leading) {
-                    ForEach(popupElements) { popupElement in
-                        switch popupElement {
-                        case let popupElement as AttachmentsPopupElement:
-                            AttachmentsPopupElementView(popupElement: popupElement)
-                        case let popupElement as FieldsPopupElement:
-                            FieldsPopupElementView(popupElement: popupElement)
-                        case let popupElement as MediaPopupElement:
-                            MediaPopupElementView(popupElement: popupElement)
-                        case let popupElement as TextPopupElement:
-                            TextPopupElementView(popupElement: popupElement)
-                        default:
-                            EmptyView()
-                        }
+            List(popupElements) { popupElement in
+                Group {
+                    switch popupElement {
+                    case let popupElement as AttachmentsPopupElement:
+                        AttachmentsPopupElementView(popupElement: popupElement)
+                    case let popupElement as FieldsPopupElement:
+                        FieldsPopupElementView(popupElement: popupElement)
+                    case let popupElement as MediaPopupElement:
+                        MediaPopupElementView(popupElement: popupElement)
+                    case let popupElement as TextPopupElement:
+                        TextPopupElementView(popupElement: popupElement)
+                    default:
+                        EmptyView()
                     }
                 }
+                .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
             }
+            .listStyle(.plain)
         }
     }
 }
