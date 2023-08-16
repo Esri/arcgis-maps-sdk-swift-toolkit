@@ -56,7 +56,7 @@ import ArcGIS
 /// - ``SearchOutcome``
 /// - ``SearchResultMode``
 ///
-/// To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Example)
+/// To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [SearchExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
 /// in the project. To learn more about using the `SearchView` see the [SearchView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/searchviewtutorial).
 public struct SearchView: View {
