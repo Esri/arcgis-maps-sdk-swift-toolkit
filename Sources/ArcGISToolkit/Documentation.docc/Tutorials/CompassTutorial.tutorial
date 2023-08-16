@@ -1,29 +1,28 @@
-@Tutorial(time: 5) {
-    @Intro(title: "Add a compass to a map view") {
-        A Compass (alias North arrow) shows where north is in a MapView.
-        @Image(source: Compass, alt: "The compass component")
+@Tutorial(time: 10) {
+    @Intro(title: "Compass Tutorial") {
+        A `Compass` (alias North arrow) shows where north is in a `MapView` or `SceneView`.
+        @Image(source: Compass, alt: "The Compass component")
     }
     
-    @Section(title: "Add a compass to a map view") {
+    @Section(title: "Using the Compass") {
         @ContentAndMedia {
-            A Compass can be added as an overlay to a MapView.
-            @Image(source: Compass, alt: "An image of the compass component.")
+            @Image(source: Compass, alt: "An image of the Compass component.")
         }
         
         @Steps {
             @Step {
                 Create a new view with a `MapViewReader` and `MapView`.
-                @Code(name: "CompassExampleView.swift", file: Compass0)
+                @Code(name: "CompassExampleView.swift", file: CompassStep1)
             }
             
             @Step {
                 Add a property to track viewpoint changes with `.onViewpointChanged(kind:)`
-                @Code(name: "CompassExampleView.swift", file: Compass1)
+                @Code(name: "CompassExampleView.swift", file: CompassStep2)
             }
             
             @Step {
                 Add an overlay to the `MapView` with `Compass` as the content.
-                @Code(name: "CompassExampleView.swift", file: Compass2) {
+                @Code(name: "CompassExampleView.swift", file: CompassStep3) {
                     @Image(
                         source: CompassComplete, 
                         alt: "An image of the compass component overlaid on a map view."
@@ -33,12 +32,12 @@
             
             @Step {
                 Optionally specify a size and padding.
-                @Code(name: "CompassExampleView.swift", file: Compass3)
+                @Code(name: "CompassExampleView.swift", file: CompassStep4)
             }
             
             @Step {
                 Optionally prevent the compass from hiding.
-                @Code(name: "CompassExampleView.swift", file: Compass4)
+                @Code(name: "CompassExampleView.swift", file: CompassStep5)
             }
         }
     }
