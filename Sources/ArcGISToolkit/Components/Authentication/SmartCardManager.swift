@@ -47,7 +47,6 @@ public final class SmartCardManager: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** Monitor the smart card connection.
 ***REMOVED******REMOVED***watcher.setInsertionHandler { [weak self] tokenID in
 ***REMOVED******REMOVED******REMOVED***guard let self = self, tokenID.localizedCaseInsensitiveContains("pivtoken") else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***print("tokenID added: \(tokenID)")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if let lastConnectedCard, tokenID != lastConnectedCard {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
@@ -62,12 +61,10 @@ public final class SmartCardManager: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.connectionStatus = .connected
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***watcher.addRemovalHandler( { [weak self] tokenID in
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else { return ***REMOVED***
-
-***REMOVED******REMOVED******REMOVED******REMOVED***print("tokenID removed: \(tokenID)")
-
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if tokenID == lastConnectedCard {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.connectionStatus = .disconnected
