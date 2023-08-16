@@ -14,9 +14,10 @@
 ***REMOVED***
 ***REMOVED***
 
-public typealias JobID = UUID
+public typealias JobID = String
 
-public actor JobManager {
+@MainActor
+public class JobManager: ObservableObject {
 ***REMOVED***public struct ID: RawRepresentable {
 ***REMOVED******REMOVED***public var rawValue: String
 ***REMOVED******REMOVED***
@@ -33,20 +34,34 @@ public actor JobManager {
 ***REMOVED******REMOVED***return "com.esri.ArcGISToolkit.jobManager.\(id.rawValue).jobs"
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@objc func appMovedToBackground() {
+***REMOVED******REMOVED***print("App moved to background!")
+***REMOVED******REMOVED***saveJobsToUserDefaults()
+***REMOVED***
+***REMOVED***
 ***REMOVED***public init(id: ID) {
 ***REMOVED******REMOVED***self.id = id
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let notificationCenter = NotificationCenter.default
+***REMOVED******REMOVED***notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***loadJobsFromUserDefaults()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private var isSavingSuppressed = false
 ***REMOVED***
 ***REMOVED******REMOVED*** TODO: is this needed?
-***REMOVED***private func withSavingSuppressed<T>(body: @Sendable (isolated JobManager) throws -> T) rethrows -> T {
+***REMOVED***private func withSavingSuppressed<T>(body: @Sendable @MainActor () throws -> T) rethrows -> T {
 ***REMOVED******REMOVED***isSavingSuppressed = true
 ***REMOVED******REMOVED***defer { isSavingSuppressed = false ***REMOVED***
-***REMOVED******REMOVED***return try body(self)
+***REMOVED******REMOVED***return try body()
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private var _jobs: [JobID: any JobProtocol] = [:]
+***REMOVED***private var _jobs: [JobID: any JobProtocol] = [:] {
+***REMOVED******REMOVED***willSet {
+***REMOVED******REMOVED******REMOVED***objectWillChange.send()
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***public var jobs: [any JobProtocol] {
 ***REMOVED******REMOVED***Array(_jobs.values)
@@ -58,7 +73,7 @@ public actor JobManager {
 ***REMOVED******REMOVED***/ - Returns: A unique ID for the job's registration which can be used to unregister the job.
 ***REMOVED***@discardableResult
 ***REMOVED***public func register(job: any JobProtocol) -> JobID {
-***REMOVED******REMOVED***let id = UUID()
+***REMOVED******REMOVED***let id = UUID().uuidString
 ***REMOVED******REMOVED***_jobs[id] = job
 ***REMOVED******REMOVED***return id
 ***REMOVED***
@@ -99,8 +114,8 @@ public actor JobManager {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***withSavingSuppressed { manager in
-***REMOVED******REMOVED******REMOVED***manager._jobs = dictionary.compactMapValues {
+***REMOVED******REMOVED***withSavingSuppressed {
+***REMOVED******REMOVED******REMOVED***_jobs = dictionary.compactMapValues {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? Job.fromJSON($0) as? any JobProtocol
 ***REMOVED******REMOVED***
 ***REMOVED***
