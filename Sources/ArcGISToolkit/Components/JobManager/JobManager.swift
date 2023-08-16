@@ -36,7 +36,7 @@ public class JobManager: ObservableObject {
     
     @objc func appMovedToBackground() {
         print("App moved to background!")
-        saveJobsToUserDefaults()
+        saveJobs()
     }
     
     public init(id: ID) {
@@ -45,7 +45,7 @@ public class JobManager: ObservableObject {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
         
-        loadJobsFromUserDefaults()
+        loadJobs()
     }
     
     private var isSavingSuppressed = false
@@ -102,14 +102,14 @@ public class JobManager: ObservableObject {
     }
     
     /// Saves all managed jobs to User Defaults.
-    private func saveJobsToUserDefaults() {
+    private func saveJobs() {
         guard !isSavingSuppressed else { return }
         let dictionary = _jobs.mapValues { $0.toJSON() }
         UserDefaults.standard.setValue(dictionary, forKey: defaultsKey)
     }
     
     /// Load any jobs that have been saved to User Defaults.
-    private func loadJobsFromUserDefaults() {
+    private func loadJobs() {
         guard let dictionary = UserDefaults.standard.dictionary(forKey: defaultsKey) as? [JobID: String] else {
             return
         }
