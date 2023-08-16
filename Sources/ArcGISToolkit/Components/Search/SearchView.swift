@@ -58,7 +58,7 @@
 ***REMOVED***/
 ***REMOVED***/ To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Example)
 ***REMOVED***/ and refer to [SearchExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
-***REMOVED***/ in the project. To learn more about using the `SearchView` see the [SearchView Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/SearchViewTutorial).
+***REMOVED***/ in the project. To learn more about using the `SearchView` see the [SearchView Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/searchviewtutorial).
 public struct SearchView: View {
 ***REMOVED******REMOVED***/ Creates a `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
