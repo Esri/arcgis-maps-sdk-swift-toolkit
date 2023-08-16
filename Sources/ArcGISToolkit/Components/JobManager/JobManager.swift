@@ -25,7 +25,7 @@ public actor JobManager {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public static let shared = JobManager(id: .init(rawValue: "shared"))
+***REMOVED***public static let `default` = JobManager(id: .init(rawValue: "default"))
 ***REMOVED***
 ***REMOVED***private let id: ID
 ***REMOVED***
@@ -39,6 +39,7 @@ public actor JobManager {
 ***REMOVED***
 ***REMOVED***private var isSavingSuppressed = false
 ***REMOVED***
+***REMOVED******REMOVED*** TODO: is this needed?
 ***REMOVED***private func withSavingSuppressed<T>(body: @Sendable (isolated JobManager) throws -> T) rethrows -> T {
 ***REMOVED******REMOVED***isSavingSuppressed = true
 ***REMOVED******REMOVED***defer { isSavingSuppressed = false ***REMOVED***
@@ -49,7 +50,6 @@ public actor JobManager {
 ***REMOVED***
 ***REMOVED***public var jobs: [any JobProtocol] {
 ***REMOVED******REMOVED***Array(_jobs.values)
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Registers a job with the job manager.
@@ -87,21 +87,32 @@ public actor JobManager {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Saves all managed jobs to User Defaults.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ This happens automatically when the jobs are registered/unregistered.
-***REMOVED******REMOVED***/ It also happens when a job's status changes.
 ***REMOVED***private func saveJobsToUserDefaults() {
-***REMOVED******REMOVED******REMOVED***guard !suppressSaveToUserDefaults else { return ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***UserDefaults.standard.set(self.toJSON(), forKey: jobsDefaultsKey)
+***REMOVED******REMOVED***guard !isSavingSuppressed else { return ***REMOVED***
+***REMOVED******REMOVED***let dictionary = _jobs.mapValues { $0.toJSON() ***REMOVED***
+***REMOVED******REMOVED***UserDefaults.standard.setValue(dictionary, forKey: defaultsKey)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Load any jobs that have been saved to User Defaults.
 ***REMOVED***private func loadJobsFromUserDefaults() {
-***REMOVED******REMOVED******REMOVED***if let storedJobsJSON = UserDefaults.standard.dictionary(forKey: jobsDefaultsKey) {
-***REMOVED******REMOVED******REMOVED******REMOVED***suppressSaveToUserDefaults = true
-***REMOVED******REMOVED******REMOVED******REMOVED***keyedJobs = storedJobsJSON.compactMapValues { $0 is JSONDictionary ? (try? AGSJob.fromJSON($0)) as? AGSJob : nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***suppressSaveToUserDefaults = false
+***REMOVED******REMOVED***guard let dictionary = UserDefaults.standard.dictionary(forKey: defaultsKey) as? [JobID: String] else {
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***withSavingSuppressed { manager in
+***REMOVED******REMOVED******REMOVED***manager._jobs = dictionary.compactMapValues {
+***REMOVED******REMOVED******REMOVED******REMOVED***try? Job.fromJSON($0) as? any JobProtocol
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***public func performStatusChecks() async {
+***REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
+***REMOVED******REMOVED******REMOVED***for job in jobs {
+***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await job.checkStatus()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
