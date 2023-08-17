@@ -24,32 +24,17 @@
 ***REMOVED***/ dedicated search panel. They will also be primarily simple containers
 ***REMOVED***/ that clients will fill with their own content.
 struct FloatingPanel<Content>: View where Content: View {
-***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
-***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
-***REMOVED***
 ***REMOVED******REMOVED***/ The background color of the floating panel.
 ***REMOVED***let backgroundColor: Color
-***REMOVED***
+***REMOVED******REMOVED***/ A binding to the currently selected detent.
+***REMOVED***@Binding var selectedDetent: FloatingPanelDetent
+***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
+***REMOVED***@Binding var isPresented: Bool
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
 ***REMOVED***let content: () -> Content
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `FloatingPanel`.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - backgroundColor: The background color of the floating panel.
-***REMOVED******REMOVED***/   - selectedDetent: Controls the height of the panel.
-***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
-***REMOVED******REMOVED***/   - content: The view shown in the floating panel.
-***REMOVED***init(
-***REMOVED******REMOVED***backgroundColor: Color,
-***REMOVED******REMOVED***selectedDetent: Binding<FloatingPanelDetent>,
-***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***@ViewBuilder content: @escaping () -> Content
-***REMOVED***) {
-***REMOVED******REMOVED***self.backgroundColor = backgroundColor
-***REMOVED******REMOVED***self.selectedDetent = selectedDetent
-***REMOVED******REMOVED***self.isPresented = isPresented
-***REMOVED******REMOVED***self.content = content
-***REMOVED***
+***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
+***REMOVED***@Environment(\.verticalSizeClass) private var verticalSizeClass
 ***REMOVED***
 ***REMOVED******REMOVED***/ The color of the handle.
 ***REMOVED***@State private var handleColor: Color = .defaultHandleColor
@@ -68,16 +53,10 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
-***REMOVED***private var isPresented: Binding<Bool>
-***REMOVED***
-***REMOVED******REMOVED***/ A binding to the currently selected detent.
-***REMOVED***private var selectedDetent: Binding<FloatingPanelDetent>
-***REMOVED***
-***REMOVED***public var body: some View {
+***REMOVED***var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isPresented.wrappedValue {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
@@ -106,7 +85,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***height: geometryProxy.size.height,
 ***REMOVED******REMOVED******REMOVED******REMOVED***alignment: isCompact ? .bottom : .top
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.animation(.easeInOut, value: isPresented.wrappedValue)
+***REMOVED******REMOVED******REMOVED***.animation(.easeInOut, value: isPresented)
 ***REMOVED******REMOVED******REMOVED***.onSizeChange {
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = $0.height
 ***REMOVED******REMOVED******REMOVED******REMOVED***if height > maximumHeight {
@@ -115,15 +94,15 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = isPresented.wrappedValue ? heightFor(detent: selectedDetent.wrappedValue) : .zero
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = isPresented ? heightFor(detent: selectedDetent) : .zero
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: isPresented.wrappedValue) { isPresented in
+***REMOVED******REMOVED******REMOVED***.onChange(of: isPresented) { isPresented in
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = isPresented ? heightFor(detent: selectedDetent.wrappedValue) : .zero
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = isPresented ? heightFor(detent: selectedDetent) : .zero
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: selectedDetent.wrappedValue) { selectedDetent in
+***REMOVED******REMOVED******REMOVED***.onChange(of: selectedDetent) { selectedDetent in
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: selectedDetent)
 ***REMOVED******REMOVED******REMOVED***
@@ -135,7 +114,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: selectedDetent.wrappedValue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: selectedDetent)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -165,7 +144,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let travelTime = min(0.35, distanceAhead / speed)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.easeOut(duration: travelTime)) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent.wrappedValue = newDetent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = newDetent
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = targetHeight
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .defaultHandleColor
@@ -189,7 +168,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***guard speed > lowSpeedThreshold else {
 ***REMOVED******REMOVED******REMOVED***return allDetents.min {
 ***REMOVED******REMOVED******REMOVED******REMOVED***abs(currentHeight - $0.height) < abs(currentHeight - $1.height)
-***REMOVED******REMOVED***?.detent ?? selectedDetent.wrappedValue
+***REMOVED******REMOVED***?.detent ?? selectedDetent
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Generate a new set of detents, filtering out those that would produce a height in the
 ***REMOVED******REMOVED******REMOVED*** opposite direction of the gesture, and sorting them in order of closest to furthest from
@@ -215,9 +194,9 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED*** first candidate detent (the one that would produce the least size difference from the
 ***REMOVED******REMOVED******REMOVED*** current height).
 ***REMOVED******REMOVED***if speed >= highSpeedThreshold {
-***REMOVED******REMOVED******REMOVED***return candidateDetents.last?.0 ?? selectedDetent.wrappedValue
+***REMOVED******REMOVED******REMOVED***return candidateDetents.last?.0 ?? selectedDetent
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return candidateDetents.first?.0 ?? selectedDetent.wrappedValue
+***REMOVED******REMOVED******REMOVED***return candidateDetents.first?.0 ?? selectedDetent
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
