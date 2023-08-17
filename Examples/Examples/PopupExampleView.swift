@@ -60,8 +60,11 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.identifyScreenPoint = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `identifyScreenPoint` (a `CGPoint`) doesn't conform to Equatable.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Manually reset the task identifier to prevent undefined behavior.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.identifyScreenPoint = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.popup = try? identifyResult.get().first?.popups.first
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.showPopup = self.popup != nil
 ***REMOVED******REMOVED******REMOVED***
