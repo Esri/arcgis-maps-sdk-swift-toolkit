@@ -60,8 +60,11 @@ struct PopupExampleView: View {
                     else {
                         return
                     }
-                    
-                    self.identifyScreenPoint = nil
+                    defer {
+                        // `identifyScreenPoint` (a `CGPoint`) doesn't conform to Equatable.
+                        // Manually reset the task identifier to prevent undefined behavior.
+                        self.identifyScreenPoint = nil
+                    }
                     self.popup = try? identifyResult.get().first?.popups.first
                     self.showPopup = self.popup != nil
                 }
