@@ -35,7 +35,6 @@ public class JobManager: ObservableObject {
     }
     
     @objc func appMovedToBackground() {
-        print("App moved to background!")
         saveJobs()
     }
     
@@ -46,7 +45,6 @@ public class JobManager: ObservableObject {
         notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
         
         loadJobs()
-//        removeAllJobs()
     }
     
     private var isSavingSuppressed = false
@@ -71,12 +69,8 @@ public class JobManager: ObservableObject {
     /// Registers a job with the job manager.
     ///
     /// - Parameter job: The job to register.
-    /// - Returns: A unique ID for the job's registration which can be used to unregister the job.
-    @discardableResult
-    public func add(job: any JobProtocol) -> JobID {
-        let id = UUID().uuidString
-        _jobs[id] = job
-        return id
+    public func add(job: any JobProtocol) {
+        _jobs[UUID().uuidString] = job
     }
     
     /// Unregisters a job from the job manager.
