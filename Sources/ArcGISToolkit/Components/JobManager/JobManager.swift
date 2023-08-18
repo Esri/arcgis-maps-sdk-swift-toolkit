@@ -14,8 +14,6 @@
 import SwiftUI
 import ArcGIS
 
-public typealias JobID = String
-
 @MainActor
 public class JobManager: ObservableObject {
     public struct ID: RawRepresentable {
@@ -47,76 +45,42 @@ public class JobManager: ObservableObject {
         loadJobs()
     }
     
-    private var isSavingSuppressed = false
+    @Published
+    public var jobs: [any JobProtocol] = []
     
-    // TODO: is this needed?
-    private func withSavingSuppressed<T>(body: @Sendable @MainActor () throws -> T) rethrows -> T {
-        isSavingSuppressed = true
-        defer { isSavingSuppressed = false }
-        return try body()
-    }
-    
-    private var _jobs: [JobID: any JobProtocol] = [:] {
-        willSet {
-            objectWillChange.send()
-        }
-    }
-    
-    public var jobs: [any JobProtocol] {
-        Array(_jobs.values)
-    }
-    
-    /// Registers a job with the job manager.
+    /// Adds a job to the job manager.
     ///
     /// - Parameter job: The job to register.
     public func add(job: any JobProtocol) {
-        _jobs[UUID().uuidString] = job
+        jobs.append(job)
     }
     
-    /// Unregisters a job from the job manager.
-    ///
-    /// - Parameter id: The job's ID, returned from calling `register()`.
-    /// - Returns: `true` if the Job was found, `false` otherwise.
-    @discardableResult
-    public func remove(jobWithID id: JobID) -> Bool {
-        let removed = _jobs.removeValue(forKey: id) != nil
-        return removed
-    }
-
-    /// Unregisters a job from the job manager.
+    /// Removes a job from the job manager.
     ///
     /// - Parameter job: The job to unregister.
-    /// - Returns: `true` if the Job was found, `false` otherwise.
-    @discardableResult
-    public func remove(job: any JobProtocol) -> Bool {
-        guard let keyValue = _jobs.first(where: { $0.value === job }) else {
-            return false
-        }
-        
-        return remove(jobWithID: keyValue.key)
+    public func remove(job: any JobProtocol) {
+        guard let index = jobs.firstIndex(where: { $0 === job }) else { return }
+        jobs.remove(at: index)
     }
     
     public func removeAllJobs() {
-        _jobs.removeAll()
+        jobs.removeAll()
     }
     
     /// Saves all managed jobs to User Defaults.
     private func saveJobs() {
-        guard !isSavingSuppressed else { return }
-        let dictionary = _jobs.mapValues { $0.toJSON() }
-        UserDefaults.standard.setValue(dictionary, forKey: defaultsKey)
+        let array = jobs.map { $0.toJSON() }
+        UserDefaults.standard.setValue(array, forKey: defaultsKey)
     }
     
     /// Load any jobs that have been saved to User Defaults.
     private func loadJobs() {
-        guard let dictionary = UserDefaults.standard.dictionary(forKey: defaultsKey) as? [JobID: String] else {
+        guard let strings = UserDefaults.standard.array(forKey: defaultsKey) as? [String] else {
             return
         }
         
-        withSavingSuppressed {
-            _jobs = dictionary.compactMapValues {
-                try? Job.fromJSON($0) as? any JobProtocol
-            }
+        jobs = strings.compactMap {
+            try? Job.fromJSON($0) as? any JobProtocol
         }
     }
     
