@@ -43,7 +43,6 @@ struct PopupExampleView: View {
                         return
                     }
                     
-                    defer { self.identifyScreenPoint = nil }
                     self.popup = try? identifyResult.get().first?.popups.first
                     self.showPopup = self.popup != nil
                 }
@@ -51,12 +50,10 @@ struct PopupExampleView: View {
                     selectedDetent: $floatingPanelDetent,
                     horizontalAlignment: .leading,
                     isPresented: $showPopup
-                ) {
-                    if let popup = popup {
-                        PopupView(popup: popup, isPresented: $showPopup)
-                            .showCloseButton(true)
-                            .padding()
-                    }
+                ) { [popup] in
+                    PopupView(popup: popup, isPresented: $showPopup)
+                        .showCloseButton(true)
+                        .padding()
                 }
         }
     }
