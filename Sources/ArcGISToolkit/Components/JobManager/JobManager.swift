@@ -14,8 +14,10 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ An object that manages saving jobs when the app is backgrounded and can reload them later.
 @MainActor
 public class JobManager: ObservableObject {
+***REMOVED******REMOVED***/ An identifier for the job manager.
 ***REMOVED***public struct ID: RawRepresentable {
 ***REMOVED******REMOVED***public var rawValue: String
 ***REMOVED******REMOVED***
@@ -24,18 +26,23 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The default job manager.
 ***REMOVED***public static let `default` = JobManager(id: .init(rawValue: "default"))
 ***REMOVED***
+***REMOVED******REMOVED***/ The unique id of the job manager.
 ***REMOVED***private let id: ID
 ***REMOVED***
+***REMOVED******REMOVED***/ The jobs being managed by the job manager.
+***REMOVED***@Published
+***REMOVED***public var jobs: [any JobProtocol] = []
+***REMOVED***
+***REMOVED******REMOVED***/ The key for which state will be serialized under the user defaults.
 ***REMOVED***private var defaultsKey: String {
 ***REMOVED******REMOVED***return "com.esri.ArcGISToolkit.jobManager.\(id.rawValue).jobs"
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@objc func appMovedToBackground() {
-***REMOVED******REMOVED***saveJobs()
-***REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***/ An initializer that takes an ID for the job manager.
+***REMOVED******REMOVED***/ It is the callers responsibility to make sure the ID is unique.
 ***REMOVED***public init(id: ID) {
 ***REMOVED******REMOVED***self.id = id
 ***REMOVED******REMOVED***
@@ -45,32 +52,52 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***loadJobs()
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Published
-***REMOVED***public var jobs: [any JobProtocol] = []
-***REMOVED***
-***REMOVED******REMOVED***/ Adds a job to the job manager.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ - Parameter job: The job to register.
-***REMOVED***public func add(job: any JobProtocol) {
-***REMOVED******REMOVED***jobs.append(job)
+***REMOVED******REMOVED***/ Called when the app moves to the background.
+***REMOVED***@objc func appMovedToBackground() {
+***REMOVED******REMOVED******REMOVED*** Save the jobs to the user defaults when the app moves to the background.
+***REMOVED******REMOVED***saveJobs()
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Removes a job from the job manager.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ - Parameter job: The job to unregister.
-***REMOVED***public func remove(job: any JobProtocol) {
-***REMOVED******REMOVED***guard let index = jobs.firstIndex(where: { $0 === job ***REMOVED***) else { return ***REMOVED***
-***REMOVED******REMOVED***jobs.remove(at: index)
-***REMOVED***
-***REMOVED***
-***REMOVED***public func removeAllJobs() {
-***REMOVED******REMOVED***jobs.removeAll()
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Adds a job to the job manager.
+***REMOVED******REMOVED******REMOVED***/ - Parameter job: The job to add.
+***REMOVED******REMOVED***public func add(job: any JobProtocol) {
+***REMOVED******REMOVED******REMOVED***jobs.append(job)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Removes a job from the job manager.
+***REMOVED******REMOVED******REMOVED***/ - Parameter job: The job to remove.
+***REMOVED******REMOVED***public func remove(job: any JobProtocol) {
+***REMOVED******REMOVED******REMOVED***guard let index = jobs.firstIndex(where: { $0 === job ***REMOVED***) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***jobs.remove(at: index)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Removes all jobs from the job manager.
+***REMOVED******REMOVED***public func removeAllJobs() {
+***REMOVED******REMOVED******REMOVED***jobs.removeAll()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Removes all completed jobs.
+***REMOVED******REMOVED***public func removeAllCompletedJobs() {
+***REMOVED******REMOVED******REMOVED***jobs.removeAll {
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.status == .failed || $0.status == .succeeded
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Saves all managed jobs to User Defaults.
 ***REMOVED***private func saveJobs() {
 ***REMOVED******REMOVED***let array = jobs.map { $0.toJSON() ***REMOVED***
 ***REMOVED******REMOVED***UserDefaults.standard.setValue(array, forKey: defaultsKey)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Check the status of all managed jobs.
+***REMOVED***public func performStatusChecks() async {
+***REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
+***REMOVED******REMOVED******REMOVED***for job in jobs {
+***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await job.checkStatus()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Load any jobs that have been saved to User Defaults.
@@ -81,16 +108,6 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***jobs = strings.compactMap {
 ***REMOVED******REMOVED******REMOVED***try? Job.fromJSON($0) as? any JobProtocol
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***public func performStatusChecks() async {
-***REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
-***REMOVED******REMOVED******REMOVED***for job in jobs {
-***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await job.checkStatus()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
