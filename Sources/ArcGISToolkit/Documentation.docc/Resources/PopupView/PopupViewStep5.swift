@@ -41,7 +41,6 @@ struct PopupExampleView: View {
                         return
                     }
                     
-                    defer { self.identifyScreenPoint = nil }
                     self.popup = try? identifyResult.get().first?.popups.first
                     self.showPopup = self.popup != nil
                 }
