@@ -49,44 +49,14 @@ public class JobManager: ObservableObject {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
         
-        loadJobs()
+        // Load jobs from the saved state.
+        loadState()
     }
     
     /// Called when the app moves to the background.
-    @objc func appMovedToBackground() {
+    @objc private func appMovedToBackground() {
         // Save the jobs to the user defaults when the app moves to the background.
-        saveJobs()
-    }
-    
-//    /// Adds a job to the job manager.
-//    /// - Parameter job: The job to add.
-//    public func add(job: any JobProtocol) {
-//        jobs.append(job)
-//    }
-//    
-//    /// Removes a job from the job manager.
-//    /// - Parameter job: The job to remove.
-//    public func remove(job: any JobProtocol) {
-//        guard let index = jobs.firstIndex(where: { $0 === job }) else { return }
-//        jobs.remove(at: index)
-//    }
-//    
-//    /// Removes all jobs from the job manager.
-//    public func removeAllJobs() {
-//        jobs.removeAll()
-//    }
-//    
-//    /// Removes all completed jobs.
-//    public func removeAllCompletedJobs() {
-//        jobs.removeAll {
-//            $0.status == .failed || $0.status == .succeeded
-//        }
-//    }
-    
-    /// Saves all managed jobs to User Defaults.
-    private func saveJobs() {
-        let array = jobs.map { $0.toJSON() }
-        UserDefaults.standard.setValue(array, forKey: defaultsKey)
+        saveState()
     }
     
     /// Check the status of all managed jobs.
@@ -100,8 +70,15 @@ public class JobManager: ObservableObject {
         }
     }
     
+    /// Saves all managed jobs to User Defaults.
+    private func saveState() {
+        let array = jobs.map { $0.toJSON() }
+        UserDefaults.standard.setValue(array, forKey: defaultsKey)
+    }
+    
+    
     /// Load any jobs that have been saved to User Defaults.
-    private func loadJobs() {
+    private func loadState() {
         guard let strings = UserDefaults.standard.array(forKey: defaultsKey) as? [String] else {
             return
         }
