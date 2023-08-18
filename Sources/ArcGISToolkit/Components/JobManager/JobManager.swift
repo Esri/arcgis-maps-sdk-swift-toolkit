@@ -49,44 +49,14 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***let notificationCenter = NotificationCenter.default
 ***REMOVED******REMOVED***notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***loadJobs()
+***REMOVED******REMOVED******REMOVED*** Load jobs from the saved state.
+***REMOVED******REMOVED***loadState()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Called when the app moves to the background.
-***REMOVED***@objc func appMovedToBackground() {
+***REMOVED***@objc private func appMovedToBackground() {
 ***REMOVED******REMOVED******REMOVED*** Save the jobs to the user defaults when the app moves to the background.
-***REMOVED******REMOVED***saveJobs()
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Adds a job to the job manager.
-***REMOVED******REMOVED******REMOVED***/ - Parameter job: The job to add.
-***REMOVED******REMOVED***public func add(job: any JobProtocol) {
-***REMOVED******REMOVED******REMOVED***jobs.append(job)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Removes a job from the job manager.
-***REMOVED******REMOVED******REMOVED***/ - Parameter job: The job to remove.
-***REMOVED******REMOVED***public func remove(job: any JobProtocol) {
-***REMOVED******REMOVED******REMOVED***guard let index = jobs.firstIndex(where: { $0 === job ***REMOVED***) else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***jobs.remove(at: index)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Removes all jobs from the job manager.
-***REMOVED******REMOVED***public func removeAllJobs() {
-***REMOVED******REMOVED******REMOVED***jobs.removeAll()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Removes all completed jobs.
-***REMOVED******REMOVED***public func removeAllCompletedJobs() {
-***REMOVED******REMOVED******REMOVED***jobs.removeAll {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.status == .failed || $0.status == .succeeded
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Saves all managed jobs to User Defaults.
-***REMOVED***private func saveJobs() {
-***REMOVED******REMOVED***let array = jobs.map { $0.toJSON() ***REMOVED***
-***REMOVED******REMOVED***UserDefaults.standard.setValue(array, forKey: defaultsKey)
+***REMOVED******REMOVED***saveState()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Check the status of all managed jobs.
@@ -100,8 +70,15 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Saves all managed jobs to User Defaults.
+***REMOVED***private func saveState() {
+***REMOVED******REMOVED***let array = jobs.map { $0.toJSON() ***REMOVED***
+***REMOVED******REMOVED***UserDefaults.standard.setValue(array, forKey: defaultsKey)
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Load any jobs that have been saved to User Defaults.
-***REMOVED***private func loadJobs() {
+***REMOVED***private func loadState() {
 ***REMOVED******REMOVED***guard let strings = UserDefaults.standard.array(forKey: defaultsKey) as? [String] else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
