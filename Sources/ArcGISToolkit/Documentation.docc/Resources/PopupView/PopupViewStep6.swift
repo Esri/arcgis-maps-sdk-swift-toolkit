@@ -51,7 +51,7 @@ struct PopupExampleView: View {
                     horizontalAlignment: .leading,
                     isPresented: $showPopup
                 ) { [popup] in
-                    PopupView(popup: popup, isPresented: $showPopup)
+                    PopupView(popup: popup!, isPresented: $showPopup)
                         .showCloseButton(true)
                         .padding()
                 }
