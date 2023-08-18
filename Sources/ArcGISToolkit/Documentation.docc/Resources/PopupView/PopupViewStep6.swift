@@ -43,7 +43,6 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { self.identifyScreenPoint = nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.popup = try? identifyResult.get().first?.popups.first
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.showPopup = self.popup != nil
 ***REMOVED******REMOVED******REMOVED***
@@ -51,12 +50,10 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $floatingPanelDetent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showPopup
-***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let popup = popup {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupView(popup: popup, isPresented: $showPopup)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.showCloseButton(true)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***) { [popup] in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupView(popup: popup, isPresented: $showPopup)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.showCloseButton(true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

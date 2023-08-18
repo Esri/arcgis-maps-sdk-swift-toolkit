@@ -41,7 +41,6 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { self.identifyScreenPoint = nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.popup = try? identifyResult.get().first?.popups.first
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.showPopup = self.popup != nil
 ***REMOVED******REMOVED******REMOVED***
