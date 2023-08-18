@@ -60,11 +60,6 @@ struct PopupExampleView: View {
                     else {
                         return
                     }
-                    defer {
-                        // `identifyScreenPoint` (a `CGPoint`) doesn't conform to Equatable.
-                        // Manually reset the task identifier to prevent undefined behavior.
-                        self.identifyScreenPoint = nil
-                    }
                     self.popup = try? identifyResult.get().first?.popups.first
                     self.showPopup = self.popup != nil
                 }
@@ -72,7 +67,7 @@ struct PopupExampleView: View {
                     selectedDetent: $floatingPanelDetent,
                     horizontalAlignment: .leading,
                     isPresented: $showPopup
-                ) {
+                ) { [popup] in
                     PopupView(popup: popup!, isPresented: $showPopup)
                         .showCloseButton(true)
                         .padding()
