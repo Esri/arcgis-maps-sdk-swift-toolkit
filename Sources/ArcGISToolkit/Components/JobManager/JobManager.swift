@@ -18,16 +18,7 @@ import BackgroundTasks
 ***REMOVED***/ An object that manages saving jobs when the app is backgrounded and can reload them later.
 @MainActor
 public class JobManager: ObservableObject {
-***REMOVED******REMOVED***/ An identifier for the job manager.
-***REMOVED***public struct ID: RawRepresentable {
-***REMOVED******REMOVED***public var rawValue: String
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***public init(rawValue: String) {
-***REMOVED******REMOVED******REMOVED***self.rawValue = rawValue
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The default job manager.
+***REMOVED******REMOVED***/ The shared job manager.
 ***REMOVED***public static let `shared` = JobManager()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The jobs being managed by the job manager.
@@ -51,10 +42,13 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***notificationCenter.addObserver(self, selector: #selector(appMovingToBackground), name: UIApplication.willResignActiveNotification, object: nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***BGTaskScheduler.shared.register(forTaskWithIdentifier: statusChecksTaskIdentifier, using: nil) { task in
+***REMOVED******REMOVED******REMOVED******REMOVED*** Reset flag because once the task is launched, we need to reschedule if we want to do
+***REMOVED******REMOVED******REMOVED******REMOVED*** another background task.
 ***REMOVED******REMOVED******REMOVED***self.isBackgroundStatusChecksScheduled = false
 ***REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("-- performing status checks")
 ***REMOVED******REMOVED******REMOVED******REMOVED***await self.performStatusChecks()
+***REMOVED******REMOVED******REMOVED******REMOVED***print("-- completed")
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.scheduleBackgroundStatusCheck()
 ***REMOVED******REMOVED******REMOVED******REMOVED***task.setTaskCompleted(success: true)
 ***REMOVED******REMOVED***
@@ -65,14 +59,14 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Schedules a status check in the background if one is not already scheduled.
-***REMOVED***func scheduleBackgroundStatusCheck() {
+***REMOVED***private func scheduleBackgroundStatusCheck() {
 ***REMOVED******REMOVED******REMOVED*** Return if already scheduled.
 ***REMOVED******REMOVED***guard !isBackgroundStatusChecksScheduled else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Do not schedule if there are no running jobs.
-***REMOVED******REMOVED***guard !jobs.filter({ $0.status == .started ***REMOVED***).isEmpty else {
+***REMOVED******REMOVED***guard hasRunningJobs else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -82,10 +76,15 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: 30, to: .now)
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try BGTaskScheduler.shared.submit(request)
-***REMOVED******REMOVED******REMOVED***print("-- Background Task Scheduled!")
+***REMOVED******REMOVED******REMOVED***print("Background task scheduled.")
 ***REMOVED*** catch(let error) {
-***REMOVED******REMOVED******REMOVED***print("-- Scheduling Error \(error.localizedDescription)")
+***REMOVED******REMOVED******REMOVED***print("Background task scheduling error \(error.localizedDescription)")
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if there are jobs running.
+***REMOVED***private var hasRunningJobs: Bool {
+***REMOVED******REMOVED***!jobs.filter({ $0.status == .started ***REMOVED***).isEmpty
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Called when the app moves to the background.
