@@ -28,10 +28,7 @@ public class JobManager: ObservableObject {
     }
     
     /// The default job manager.
-    public static let `default` = JobManager(id: .init(rawValue: "default"))
-    
-    /// The unique id of the job manager.
-    private let id: ID
+    public static let `shared` = JobManager()
     
     /// The jobs being managed by the job manager.
     @Published
@@ -39,20 +36,21 @@ public class JobManager: ObservableObject {
     
     /// The key for which state will be serialized under the user defaults.
     private var defaultsKey: String {
-        return "com.esri.ArcGISToolkit.jobManager.\(id.rawValue).jobs"
+        return "com.esri.ArcGISToolkit.jobManager.jobs"
     }
     
-    private let backgroundTaskIdentifier = "com.esri.ArcGISToolkit.jobManager.statusCheck"
+    /// The background task identifier for status checks.
+    private let statusChecksTaskIdentifier = "com.esri.ArcGISToolkit.jobManager.statusCheck"
     
-    /// An initializer that takes an ID for the job manager.
-    /// It is the callers responsibility to make sure the ID is unique.
-    public init(id: ID) {
-        self.id = id
-        
+    // A Boolean value indicating whether a background status check is scheduled.
+    private var isBackgroundStatusChecksScheduled = false
+    
+    /// An initializer for the job manager.
+    private init() {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(appMovingToBackground), name: UIApplication.willResignActiveNotification, object: nil)
         
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: backgroundTaskIdentifier, using: nil) { task in
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: statusChecksTaskIdentifier, using: nil) { task in
             self.isBackgroundStatusChecksScheduled = false
             Task {
                 print("-- performing status checks")
@@ -66,9 +64,7 @@ public class JobManager: ObservableObject {
         loadState()
     }
     
-    
-    var isBackgroundStatusChecksScheduled = false
-    
+    /// Schedules a status check in the background if one is not already scheduled.
     func scheduleBackgroundStatusCheck() {
         // Return if already scheduled.
         guard !isBackgroundStatusChecksScheduled else {
@@ -76,13 +72,13 @@ public class JobManager: ObservableObject {
         }
         
         // Do not schedule if there are no running jobs.
-        guard !JobManager.default.jobs.filter({ $0.status == .started }).isEmpty else {
+        guard !jobs.filter({ $0.status == .started }).isEmpty else {
             return
         }
         
         isBackgroundStatusChecksScheduled = true
         
-        let request = BGAppRefreshTaskRequest(identifier: backgroundTaskIdentifier)
+        let request = BGAppRefreshTaskRequest(identifier: statusChecksTaskIdentifier)
         request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: 30, to: .now)
         do {
             try BGTaskScheduler.shared.submit(request)
@@ -94,7 +90,7 @@ public class JobManager: ObservableObject {
     
     /// Called when the app moves to the background.
     @objc private func appMovingToBackground() {
-        // schedule background status checks
+        // Schedule background status checks.
         scheduleBackgroundStatusCheck()
         
         // Save the jobs to the user defaults when the app moves to the background.
