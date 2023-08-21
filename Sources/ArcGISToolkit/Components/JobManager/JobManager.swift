@@ -28,10 +28,7 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The default job manager.
-***REMOVED***public static let `default` = JobManager(id: .init(rawValue: "default"))
-***REMOVED***
-***REMOVED******REMOVED***/ The unique id of the job manager.
-***REMOVED***private let id: ID
+***REMOVED***public static let `shared` = JobManager()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The jobs being managed by the job manager.
 ***REMOVED***@Published
@@ -39,20 +36,21 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The key for which state will be serialized under the user defaults.
 ***REMOVED***private var defaultsKey: String {
-***REMOVED******REMOVED***return "com.esri.ArcGISToolkit.jobManager.\(id.rawValue).jobs"
+***REMOVED******REMOVED***return "com.esri.ArcGISToolkit.jobManager.jobs"
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private let backgroundTaskIdentifier = "com.esri.ArcGISToolkit.jobManager.statusCheck"
+***REMOVED******REMOVED***/ The background task identifier for status checks.
+***REMOVED***private let statusChecksTaskIdentifier = "com.esri.ArcGISToolkit.jobManager.statusCheck"
 ***REMOVED***
-***REMOVED******REMOVED***/ An initializer that takes an ID for the job manager.
-***REMOVED******REMOVED***/ It is the callers responsibility to make sure the ID is unique.
-***REMOVED***public init(id: ID) {
-***REMOVED******REMOVED***self.id = id
-***REMOVED******REMOVED***
+***REMOVED******REMOVED*** A Boolean value indicating whether a background status check is scheduled.
+***REMOVED***private var isBackgroundStatusChecksScheduled = false
+***REMOVED***
+***REMOVED******REMOVED***/ An initializer for the job manager.
+***REMOVED***private init() {
 ***REMOVED******REMOVED***let notificationCenter = NotificationCenter.default
 ***REMOVED******REMOVED***notificationCenter.addObserver(self, selector: #selector(appMovingToBackground), name: UIApplication.willResignActiveNotification, object: nil)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***BGTaskScheduler.shared.register(forTaskWithIdentifier: backgroundTaskIdentifier, using: nil) { task in
+***REMOVED******REMOVED***BGTaskScheduler.shared.register(forTaskWithIdentifier: statusChecksTaskIdentifier, using: nil) { task in
 ***REMOVED******REMOVED******REMOVED***self.isBackgroundStatusChecksScheduled = false
 ***REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("-- performing status checks")
@@ -66,9 +64,7 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***loadState()
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***var isBackgroundStatusChecksScheduled = false
-***REMOVED***
+***REMOVED******REMOVED***/ Schedules a status check in the background if one is not already scheduled.
 ***REMOVED***func scheduleBackgroundStatusCheck() {
 ***REMOVED******REMOVED******REMOVED*** Return if already scheduled.
 ***REMOVED******REMOVED***guard !isBackgroundStatusChecksScheduled else {
@@ -76,13 +72,13 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Do not schedule if there are no running jobs.
-***REMOVED******REMOVED***guard !JobManager.default.jobs.filter({ $0.status == .started ***REMOVED***).isEmpty else {
+***REMOVED******REMOVED***guard !jobs.filter({ $0.status == .started ***REMOVED***).isEmpty else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***isBackgroundStatusChecksScheduled = true
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let request = BGAppRefreshTaskRequest(identifier: backgroundTaskIdentifier)
+***REMOVED******REMOVED***let request = BGAppRefreshTaskRequest(identifier: statusChecksTaskIdentifier)
 ***REMOVED******REMOVED***request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: 30, to: .now)
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try BGTaskScheduler.shared.submit(request)
@@ -94,7 +90,7 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Called when the app moves to the background.
 ***REMOVED***@objc private func appMovingToBackground() {
-***REMOVED******REMOVED******REMOVED*** schedule background status checks
+***REMOVED******REMOVED******REMOVED*** Schedule background status checks.
 ***REMOVED******REMOVED***scheduleBackgroundStatusCheck()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save the jobs to the user defaults when the app moves to the background.
