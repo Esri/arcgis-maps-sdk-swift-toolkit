@@ -13,6 +13,7 @@
 
 import SwiftUI
 import ArcGIS
+import BackgroundTasks
 
 /// An object that manages saving jobs when the app is backgrounded and can reload them later.
 @MainActor
@@ -41,20 +42,61 @@ public class JobManager: ObservableObject {
         return "com.esri.ArcGISToolkit.jobManager.\(id.rawValue).jobs"
     }
     
+    private let backgroundTaskIdentifier = "com.esri.ArcGISToolkit.jobManager.statusCheck"
+    
     /// An initializer that takes an ID for the job manager.
     /// It is the callers responsibility to make sure the ID is unique.
     public init(id: ID) {
         self.id = id
         
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(appMovingToBackground), name: UIApplication.willResignActiveNotification, object: nil)
+        
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: backgroundTaskIdentifier, using: nil) { task in
+            self.isBackgroundStatusChecksScheduled = false
+            Task {
+                print("-- performing status checks")
+                await self.performStatusChecks()
+                self.scheduleBackgroundStatusCheck()
+                task.setTaskCompleted(success: true)
+            }
+        }
         
         // Load jobs from the saved state.
         loadState()
     }
     
+    
+    var isBackgroundStatusChecksScheduled = false
+    
+    func scheduleBackgroundStatusCheck() {
+        // Return if already scheduled.
+        guard !isBackgroundStatusChecksScheduled else {
+            return
+        }
+        
+        // Do not schedule if there are no running jobs.
+        guard !JobManager.default.jobs.filter({ $0.status == .started }).isEmpty else {
+            return
+        }
+        
+        isBackgroundStatusChecksScheduled = true
+        
+        let request = BGAppRefreshTaskRequest(identifier: backgroundTaskIdentifier)
+        request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: 30, to: .now)
+        do {
+            try BGTaskScheduler.shared.submit(request)
+            print("-- Background Task Scheduled!")
+        } catch(let error) {
+            print("-- Scheduling Error \(error.localizedDescription)")
+        }
+    }
+    
     /// Called when the app moves to the background.
-    @objc private func appMovedToBackground() {
+    @objc private func appMovingToBackground() {
+        // schedule background status checks
+        scheduleBackgroundStatusCheck()
+        
         // Save the jobs to the user defaults when the app moves to the background.
         saveState()
     }
