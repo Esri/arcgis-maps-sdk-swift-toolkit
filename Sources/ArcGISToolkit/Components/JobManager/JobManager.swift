@@ -18,16 +18,7 @@ import BackgroundTasks
 /// An object that manages saving jobs when the app is backgrounded and can reload them later.
 @MainActor
 public class JobManager: ObservableObject {
-    /// An identifier for the job manager.
-    public struct ID: RawRepresentable {
-        public var rawValue: String
-        
-        public init(rawValue: String) {
-            self.rawValue = rawValue
-        }
-    }
-    
-    /// The default job manager.
+    /// The shared job manager.
     public static let `shared` = JobManager()
     
     /// The jobs being managed by the job manager.
@@ -51,10 +42,13 @@ public class JobManager: ObservableObject {
         notificationCenter.addObserver(self, selector: #selector(appMovingToBackground), name: UIApplication.willResignActiveNotification, object: nil)
         
         BGTaskScheduler.shared.register(forTaskWithIdentifier: statusChecksTaskIdentifier, using: nil) { task in
+            // Reset flag because once the task is launched, we need to reschedule if we want to do
+            // another background task.
             self.isBackgroundStatusChecksScheduled = false
             Task {
                 print("-- performing status checks")
                 await self.performStatusChecks()
+                print("-- completed")
                 self.scheduleBackgroundStatusCheck()
                 task.setTaskCompleted(success: true)
             }
@@ -65,14 +59,14 @@ public class JobManager: ObservableObject {
     }
     
     /// Schedules a status check in the background if one is not already scheduled.
-    func scheduleBackgroundStatusCheck() {
+    private func scheduleBackgroundStatusCheck() {
         // Return if already scheduled.
         guard !isBackgroundStatusChecksScheduled else {
             return
         }
         
         // Do not schedule if there are no running jobs.
-        guard !jobs.filter({ $0.status == .started }).isEmpty else {
+        guard hasRunningJobs else {
             return
         }
         
@@ -82,10 +76,15 @@ public class JobManager: ObservableObject {
         request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: 30, to: .now)
         do {
             try BGTaskScheduler.shared.submit(request)
-            print("-- Background Task Scheduled!")
+            print("Background task scheduled.")
         } catch(let error) {
-            print("-- Scheduling Error \(error.localizedDescription)")
+            print("Background task scheduling error \(error.localizedDescription)")
         }
+    }
+    
+    /// A Boolean value indicating if there are jobs running.
+    private var hasRunningJobs: Bool {
+        !jobs.filter({ $0.status == .started }).isEmpty
     }
     
     /// Called when the app moves to the background.
