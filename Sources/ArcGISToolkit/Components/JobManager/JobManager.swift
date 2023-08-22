@@ -11,9 +11,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import Foundation
 import SwiftUI
 import ArcGIS
 import BackgroundTasks
+
+public enum BackgroundStatusCheckSchedule {
+    case disabled
+    case regularInterval(interval: TimeInterval)
+}
 
 /// An object that manages saving jobs when the app is backgrounded and can reload them later.
 @MainActor
@@ -29,6 +35,18 @@ public class JobManager: ObservableObject {
     private var defaultsKey: String {
         return "com.esri.ArcGISToolkit.jobManager.jobs"
     }
+    
+    /// The preferred schedule for performing status checks while the application is in the
+    /// background. This allows an application to check to see if jobs have completed and optionally
+    /// post a local notification to update the user. The default value is `disabled`.
+    /// When the value of this property is not `disabled`, this setting is just a preference.
+    /// The operating system ultimately decides when to allow a background task to run.
+    /// If you enable background status checks then you must also make sure to have enabled
+    /// "Background Fetch" and "Background Processing" background modes in your application settings.
+    /// You must also add "com.esri.ArcGISToolkit.jobManager.statusCheck" to the "Permitted background task scheduler identifiers"
+    /// in your application's plist file.
+    /// More information can be found here: https://developer.apple.com/documentation/backgroundtasks/refreshing_and_maintaining_your_app_using_background_tasks
+    public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
     
     /// The background task identifier for status checks.
     private let statusChecksTaskIdentifier = "com.esri.ArcGISToolkit.jobManager.statusCheck"
@@ -70,10 +88,15 @@ public class JobManager: ObservableObject {
             return
         }
         
+        // Make sure the preferred background status check schedule
+        guard case .regularInterval(let timeInterval) = preferredBackgroundStatusCheckSchedule else {
+            return
+        }
+        
         isBackgroundStatusChecksScheduled = true
         
         let request = BGAppRefreshTaskRequest(identifier: statusChecksTaskIdentifier)
-        request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: 30, to: .now)
+        request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: Int(timeInterval), to: .now)
         do {
             try BGTaskScheduler.shared.submit(request)
             print("Background task scheduled.")
