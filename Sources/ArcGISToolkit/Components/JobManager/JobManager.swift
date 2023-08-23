@@ -22,13 +22,15 @@ public enum BackgroundStatusCheckSchedule {
     case regularInterval(interval: TimeInterval)
 }
 
+extension Logger {
+    public static let jobManager = Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
+}
+
 /// An object that manages saving jobs when the app is backgrounded and can reload them later.
 @MainActor
 public class JobManager: ObservableObject {
     /// The shared job manager.
     public static let `shared` = JobManager()
-    
-    private let logger = Logger()
     
     /// The jobs being managed by the job manager.
     @Published
@@ -67,9 +69,9 @@ public class JobManager: ObservableObject {
             // another background task.
             self.isBackgroundStatusChecksScheduled = false
             Task {
-                self.logger.info("-- performing status checks")
+                Logger.jobManager.debug("Performing status checks.")
                 await self.performStatusChecks()
-                self.logger.info("-- status checks completed")
+                Logger.jobManager.debug("Status checks completed.")
                 self.scheduleBackgroundStatusCheck()
                 task.setTaskCompleted(success: true)
             }
@@ -102,9 +104,9 @@ public class JobManager: ObservableObject {
         request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: Int(timeInterval), to: .now)
         do {
             try BGTaskScheduler.shared.submit(request)
-            logger.info("Background task scheduled.")
+            Logger.jobManager.debug("Background task scheduled.")
         } catch(let error) {
-            logger.error("Background task scheduling error \(error.localizedDescription)")
+            Logger.jobManager.error("Background task scheduling error \(error.localizedDescription)")
         }
     }
     
@@ -124,7 +126,7 @@ public class JobManager: ObservableObject {
     
     /// Called when the app will be terminated.
     @objc private func appWillTerminate() {
-        logger.info("-- app will terminate called")
+        Logger.jobManager.debug("App will terminate.")
         // Save the jobs to the user defaults when the app will be terminated to save the latest state.
         saveState()
     }
@@ -146,7 +148,8 @@ public class JobManager: ObservableObject {
     }
 
     /// Saves all managed jobs to User Defaults.
-    private func saveState() {
+    public func saveState() {
+        Logger.jobManager.debug("Saving state.")
         let array = jobs.map { $0.toJSON() }
         UserDefaults.standard.setValue(array, forKey: defaultsKey)
     }
@@ -154,6 +157,7 @@ public class JobManager: ObservableObject {
     
     /// Load any jobs that have been saved to User Defaults.
     private func loadState() {
+        Logger.jobManager.debug("Loading state.")
         guard let strings = UserDefaults.standard.array(forKey: defaultsKey) as? [String] else {
             return
         }
