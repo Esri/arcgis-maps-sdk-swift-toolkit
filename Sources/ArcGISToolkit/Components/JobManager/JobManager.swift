@@ -15,6 +15,7 @@ import Foundation
 import SwiftUI
 import ArcGIS
 import BackgroundTasks
+import OSLog
 
 public enum BackgroundStatusCheckSchedule {
     case disabled
@@ -26,6 +27,8 @@ public enum BackgroundStatusCheckSchedule {
 public class JobManager: ObservableObject {
     /// The shared job manager.
     public static let `shared` = JobManager()
+    
+    private let logger = Logger()
     
     /// The jobs being managed by the job manager.
     @Published
@@ -64,9 +67,9 @@ public class JobManager: ObservableObject {
             // another background task.
             self.isBackgroundStatusChecksScheduled = false
             Task {
-                print("-- performing status checks")
+                self.logger.info("-- performing status checks")
                 await self.performStatusChecks()
-                print("-- completed")
+                self.logger.info("-- status checks completed")
                 self.scheduleBackgroundStatusCheck()
                 task.setTaskCompleted(success: true)
             }
@@ -99,9 +102,9 @@ public class JobManager: ObservableObject {
         request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: Int(timeInterval), to: .now)
         do {
             try BGTaskScheduler.shared.submit(request)
-            print("Background task scheduled.")
+            logger.info("Background task scheduled.")
         } catch(let error) {
-            print("Background task scheduling error \(error.localizedDescription)")
+            logger.error("Background task scheduling error \(error.localizedDescription)")
         }
     }
     
@@ -121,6 +124,7 @@ public class JobManager: ObservableObject {
     
     /// Called when the app will be terminated.
     @objc private func appWillTerminate() {
+        logger.info("-- app will terminate called")
         // Save the jobs to the user defaults when the app will be terminated to save the latest state.
         saveState()
     }
