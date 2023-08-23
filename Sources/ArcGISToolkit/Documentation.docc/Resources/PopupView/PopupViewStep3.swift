@@ -23,9 +23,7 @@ struct PopupExampleView: View {
     
     var body: some View {
         MapViewReader { proxy in
-            VStack {
-                MapView(map: dataModel.map)
-            }
+            MapView(map: dataModel.map)
         }
     }
 }
