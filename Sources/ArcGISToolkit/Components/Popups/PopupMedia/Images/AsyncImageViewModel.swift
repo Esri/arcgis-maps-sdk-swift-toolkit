@@ -12,7 +12,9 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
+import Combine
+import Foundation
+import UIKit
 
 ***REMOVED***/ A view model which performs the work necessary to asynchronously download an image
 ***REMOVED***/ from a URL and handles refreshing that image at a given time interval.
