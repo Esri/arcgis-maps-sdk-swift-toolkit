@@ -15,6 +15,7 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 import BackgroundTasks
+import OSLog
 
 public enum BackgroundStatusCheckSchedule {
 ***REMOVED***case disabled
@@ -26,6 +27,8 @@ public enum BackgroundStatusCheckSchedule {
 public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ The shared job manager.
 ***REMOVED***public static let `shared` = JobManager()
+***REMOVED***
+***REMOVED***private let logger = Logger()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The jobs being managed by the job manager.
 ***REMOVED***@Published
@@ -64,9 +67,9 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** another background task.
 ***REMOVED******REMOVED******REMOVED***self.isBackgroundStatusChecksScheduled = false
 ***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("-- performing status checks")
+***REMOVED******REMOVED******REMOVED******REMOVED***self.logger.info("-- performing status checks")
 ***REMOVED******REMOVED******REMOVED******REMOVED***await self.performStatusChecks()
-***REMOVED******REMOVED******REMOVED******REMOVED***print("-- completed")
+***REMOVED******REMOVED******REMOVED******REMOVED***self.logger.info("-- status checks completed")
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.scheduleBackgroundStatusCheck()
 ***REMOVED******REMOVED******REMOVED******REMOVED***task.setTaskCompleted(success: true)
 ***REMOVED******REMOVED***
@@ -99,9 +102,9 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***request.earliestBeginDate = Calendar.current.date(byAdding: .second, value: Int(timeInterval), to: .now)
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try BGTaskScheduler.shared.submit(request)
-***REMOVED******REMOVED******REMOVED***print("Background task scheduled.")
+***REMOVED******REMOVED******REMOVED***logger.info("Background task scheduled.")
 ***REMOVED*** catch(let error) {
-***REMOVED******REMOVED******REMOVED***print("Background task scheduling error \(error.localizedDescription)")
+***REMOVED******REMOVED******REMOVED***logger.error("Background task scheduling error \(error.localizedDescription)")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -121,6 +124,7 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Called when the app will be terminated.
 ***REMOVED***@objc private func appWillTerminate() {
+***REMOVED******REMOVED***logger.info("-- app will terminate called")
 ***REMOVED******REMOVED******REMOVED*** Save the jobs to the user defaults when the app will be terminated to save the latest state.
 ***REMOVED******REMOVED***saveState()
 ***REMOVED***
