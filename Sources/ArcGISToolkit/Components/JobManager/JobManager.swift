@@ -56,8 +56,8 @@ public class JobManager: ObservableObject {
     
     /// An initializer for the job manager.
     private init() {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(appMovingToBackground), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillTerminate), name: UIApplication.willTerminateNotification, object: nil)
         
         BGTaskScheduler.shared.register(forTaskWithIdentifier: statusChecksTaskIdentifier, using: nil) { task in
             // Reset flag because once the task is launched, we need to reschedule if we want to do
@@ -111,11 +111,17 @@ public class JobManager: ObservableObject {
     }
     
     /// Called when the app moves to the background.
-    @objc private func appMovingToBackground() {
+    @objc private func appWillResignActive() {
         // Schedule background status checks.
         scheduleBackgroundStatusCheck()
         
         // Save the jobs to the user defaults when the app moves to the background.
+        saveState()
+    }
+    
+    /// Called when the app will be terminated.
+    @objc private func appWillTerminate() {
+        // Save the jobs to the user defaults when the app will be terminated to save the latest state.
         saveState()
     }
     
@@ -130,6 +136,11 @@ public class JobManager: ObservableObject {
         }
     }
     
+    public func resumeAllPausedJobs() {
+        jobs.filter { $0.status == .paused }
+            .forEach { $0.start() }
+    }
+
     /// Saves all managed jobs to User Defaults.
     private func saveState() {
         let array = jobs.map { $0.toJSON() }
