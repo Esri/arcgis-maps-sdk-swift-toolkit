@@ -56,8 +56,8 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ An initializer for the job manager.
 ***REMOVED***private init() {
-***REMOVED******REMOVED***let notificationCenter = NotificationCenter.default
-***REMOVED******REMOVED***notificationCenter.addObserver(self, selector: #selector(appMovingToBackground), name: UIApplication.willResignActiveNotification, object: nil)
+***REMOVED******REMOVED***NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+***REMOVED******REMOVED***NotificationCenter.default.addObserver(self, selector: #selector(appWillTerminate), name: UIApplication.willTerminateNotification, object: nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***BGTaskScheduler.shared.register(forTaskWithIdentifier: statusChecksTaskIdentifier, using: nil) { task in
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Reset flag because once the task is launched, we need to reschedule if we want to do
@@ -111,11 +111,17 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Called when the app moves to the background.
-***REMOVED***@objc private func appMovingToBackground() {
+***REMOVED***@objc private func appWillResignActive() {
 ***REMOVED******REMOVED******REMOVED*** Schedule background status checks.
 ***REMOVED******REMOVED***scheduleBackgroundStatusCheck()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save the jobs to the user defaults when the app moves to the background.
+***REMOVED******REMOVED***saveState()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Called when the app will be terminated.
+***REMOVED***@objc private func appWillTerminate() {
+***REMOVED******REMOVED******REMOVED*** Save the jobs to the user defaults when the app will be terminated to save the latest state.
 ***REMOVED******REMOVED***saveState()
 ***REMOVED***
 ***REMOVED***
@@ -130,6 +136,11 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***public func resumeAllPausedJobs() {
+***REMOVED******REMOVED***jobs.filter { $0.status == .paused ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.forEach { $0.start() ***REMOVED***
+***REMOVED***
+
 ***REMOVED******REMOVED***/ Saves all managed jobs to User Defaults.
 ***REMOVED***private func saveState() {
 ***REMOVED******REMOVED***let array = jobs.map { $0.toJSON() ***REMOVED***
