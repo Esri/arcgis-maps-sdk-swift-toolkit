@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import ArcGIS
-import SwiftUI
 import Combine
 
 /// The `Authenticator` is a configurable object that handles authentication challenges. It will

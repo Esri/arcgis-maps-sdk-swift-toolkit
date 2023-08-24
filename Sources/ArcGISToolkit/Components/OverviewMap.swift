@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-import Combine
 import ArcGIS
+import Combine
+import SwiftUI
 
 /// `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
 /// on an existing `GeoView`, which shows a representation of the current `visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`).
@@ -58,13 +58,7 @@ public struct OverviewMap: View {
     private var scaleFactor = 25.0
     
     /// The data model containing the `Map` displayed in the overview map.
-    @StateObject private var dataModel = MapDataModel()
-    
-    /// The `Graphic` displaying the visible area of the main `GeoView`.
-    @StateObject private var graphic: Graphic
-    
-    /// The `GraphicsOverlay` used to display the visible area graphic.
-    @StateObject private var graphicsOverlay: GraphicsOverlay
+    @StateObject private var dataModel = DataModel()
     
     /// The user-defined map used in the overview map. Defaults to `nil`.
     private let userProvidedMap: Map?
@@ -89,7 +83,7 @@ public struct OverviewMap: View {
         OverviewMap(
             viewpoint: viewpoint,
             visibleArea: visibleArea,
-            symbol: .defaultFill,
+            symbol: .defaultFill(),
             map: map
         )
     }
@@ -105,7 +99,7 @@ public struct OverviewMap: View {
         with viewpoint: Viewpoint?,
         map: Map? = nil
     ) -> OverviewMap {
-        OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker, map: map)
+        OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker(), map: map)
     }
     
     /// Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
@@ -122,16 +116,6 @@ public struct OverviewMap: View {
         self.visibleArea = visibleArea
         self.viewpoint = viewpoint
         self.symbol = symbol
-        
-        let graphic = Graphic(symbol: self.symbol)
-        
-        // It is necessary to set the graphic and graphicsOverlay this way
-        // in order to prevent the main geoview from recreating the
-        // graphicsOverlay every draw cycle. That was causing refresh issues
-        // with the graphic during panning/zooming/rotating.
-        _graphic = StateObject(wrappedValue: graphic)
-        _graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
-        
         userProvidedMap = map
     }
     
@@ -139,7 +123,7 @@ public struct OverviewMap: View {
         MapView(
             map: effectiveMap,
             viewpoint: makeOverviewViewpoint(),
-            graphicsOverlays: [graphicsOverlay]
+            graphicsOverlays: [dataModel.graphicsOverlay]
         )
         .attributionBarHidden(true)
         .interactionModes([])
@@ -148,22 +132,23 @@ public struct OverviewMap: View {
             width: 1
         )
         .onAppear {
-            graphic.symbol = symbol
+            dataModel.graphic.geometry = visibleArea
+            dataModel.graphic.symbol = symbol
         }
         .onChange(of: visibleArea) { visibleArea in
             if let visibleArea = visibleArea {
-                graphic.geometry = visibleArea
+                dataModel.graphic.geometry = visibleArea
             }
         }
         .onChange(of: viewpoint) { viewpoint in
             if visibleArea == nil,
                let viewpoint = viewpoint,
                let point = viewpoint.targetGeometry as? Point {
-                graphic.geometry = point
+                dataModel.graphic.geometry = point
             }
         }
         .onChange(of: symbol) {
-            graphic.symbol = $0
+            dataModel.graphic.symbol = $0
         }
     }
     
@@ -211,26 +196,31 @@ public struct OverviewMap: View {
 
 private extension Symbol {
     /// The default marker symbol.
-    static let defaultMarker: MarkerSymbol = SimpleMarkerSymbol(
-        style: .cross,
-        color: .red,
-        size: 12.0
-    )
+    static func defaultMarker() -> Symbol {
+        return SimpleMarkerSymbol(style: .cross, color: .red, size: 12)
+    }
     
     /// The default fill symbol.
-    static let defaultFill: FillSymbol = SimpleFillSymbol(
-        style: .solid,
-        color: .clear,
-        outline: SimpleLineSymbol(
+    static func defaultFill() -> Symbol {
+        return SimpleFillSymbol(
             style: .solid,
-            color: .red,
-            width: 1.0
+            color: .clear,
+            outline: SimpleLineSymbol(style: .solid, color: .red, width: 1)
         )
-    )
+    }
 }
 
-/// A very basic data model class containing a Map.
-class MapDataModel: ObservableObject {
-    /// The default `Map` used for display in a `MapView`.
-    let defaultMap = Map(basemapStyle: .arcGISTopographic)
+private extension OverviewMap {
+    @MainActor
+    private class DataModel: ObservableObject {
+        /// The default `Map` used for display in a `MapView`.
+        private(set) lazy var defaultMap = Map(basemapStyle: .arcGISTopographic)
+        let graphic: Graphic
+        let graphicsOverlay: GraphicsOverlay
+        
+        init() {
+            graphic = Graphic()
+            graphicsOverlay = GraphicsOverlay(graphics: [graphic])
+        }
+    }
 }
