@@ -58,13 +58,7 @@ public struct OverviewMap: View {
 ***REMOVED***private var scaleFactor = 25.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the overview map.
-***REMOVED***@StateObject private var dataModel = MapDataModel()
-***REMOVED***
-***REMOVED******REMOVED***/ The `Graphic` displaying the visible area of the main `GeoView`.
-***REMOVED***@StateObject private var graphic: Graphic
-***REMOVED***
-***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display the visible area graphic.
-***REMOVED***@StateObject private var graphicsOverlay: GraphicsOverlay
+***REMOVED***@StateObject private var dataModel = DataModel()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The user-defined map used in the overview map. Defaults to `nil`.
 ***REMOVED***private let userProvidedMap: Map?
@@ -89,7 +83,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***OverviewMap(
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
 ***REMOVED******REMOVED******REMOVED***visibleArea: visibleArea,
-***REMOVED******REMOVED******REMOVED***symbol: .defaultFill,
+***REMOVED******REMOVED******REMOVED***symbol: .defaultFill(),
 ***REMOVED******REMOVED******REMOVED***map: map
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -105,7 +99,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***with viewpoint: Viewpoint?,
 ***REMOVED******REMOVED***map: Map? = nil
 ***REMOVED***) -> OverviewMap {
-***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker, map: map)
+***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker(), map: map)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
@@ -122,16 +116,6 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***self.visibleArea = visibleArea
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***self.symbol = symbol
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let graphic = Graphic(symbol: self.symbol)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** It is necessary to set the graphic and graphicsOverlay this way
-***REMOVED******REMOVED******REMOVED*** in order to prevent the main geoview from recreating the
-***REMOVED******REMOVED******REMOVED*** graphicsOverlay every draw cycle. That was causing refresh issues
-***REMOVED******REMOVED******REMOVED*** with the graphic during panning/zooming/rotating.
-***REMOVED******REMOVED***_graphic = StateObject(wrappedValue: graphic)
-***REMOVED******REMOVED***_graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***userProvidedMap = map
 ***REMOVED***
 ***REMOVED***
@@ -139,7 +123,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***MapView(
 ***REMOVED******REMOVED******REMOVED***map: effectiveMap,
 ***REMOVED******REMOVED******REMOVED***viewpoint: makeOverviewViewpoint(),
-***REMOVED******REMOVED******REMOVED***graphicsOverlays: [graphicsOverlay]
+***REMOVED******REMOVED******REMOVED***graphicsOverlays: [dataModel.graphicsOverlay]
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED***.interactionModes([])
@@ -148,22 +132,23 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED***width: 1
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***graphic.symbol = symbol
+***REMOVED******REMOVED******REMOVED***dataModel.graphic.geometry = visibleArea
+***REMOVED******REMOVED******REMOVED***dataModel.graphic.symbol = symbol
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: visibleArea) { visibleArea in
 ***REMOVED******REMOVED******REMOVED***if let visibleArea = visibleArea {
-***REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = visibleArea
+***REMOVED******REMOVED******REMOVED******REMOVED***dataModel.graphic.geometry = visibleArea
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: viewpoint) { viewpoint in
 ***REMOVED******REMOVED******REMOVED***if visibleArea == nil,
 ***REMOVED******REMOVED******REMOVED***   let viewpoint = viewpoint,
 ***REMOVED******REMOVED******REMOVED***   let point = viewpoint.targetGeometry as? Point {
-***REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = point
+***REMOVED******REMOVED******REMOVED******REMOVED***dataModel.graphic.geometry = point
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: symbol) {
-***REMOVED******REMOVED******REMOVED***graphic.symbol = $0
+***REMOVED******REMOVED******REMOVED***dataModel.graphic.symbol = $0
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -211,26 +196,31 @@ public struct OverviewMap: View {
 
 private extension Symbol {
 ***REMOVED******REMOVED***/ The default marker symbol.
-***REMOVED***static let defaultMarker: MarkerSymbol = SimpleMarkerSymbol(
-***REMOVED******REMOVED***style: .cross,
-***REMOVED******REMOVED***color: .red,
-***REMOVED******REMOVED***size: 12.0
-***REMOVED***)
+***REMOVED***static func defaultMarker() -> Symbol {
+***REMOVED******REMOVED***return SimpleMarkerSymbol(style: .cross, color: .red, size: 12)
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The default fill symbol.
-***REMOVED***static let defaultFill: FillSymbol = SimpleFillSymbol(
-***REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED***color: .clear,
-***REMOVED******REMOVED***outline: SimpleLineSymbol(
+***REMOVED***static func defaultFill() -> Symbol {
+***REMOVED******REMOVED***return SimpleFillSymbol(
 ***REMOVED******REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED******REMOVED***color: .red,
-***REMOVED******REMOVED******REMOVED***width: 1.0
+***REMOVED******REMOVED******REMOVED***color: .clear,
+***REMOVED******REMOVED******REMOVED***outline: SimpleLineSymbol(style: .solid, color: .red, width: 1)
 ***REMOVED******REMOVED***)
-***REMOVED***)
+***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A very basic data model class containing a Map.
-class MapDataModel: ObservableObject {
-***REMOVED******REMOVED***/ The default `Map` used for display in a `MapView`.
-***REMOVED***let defaultMap = Map(basemapStyle: .arcGISTopographic)
+private extension OverviewMap {
+***REMOVED***@MainActor
+***REMOVED***private class DataModel: ObservableObject {
+***REMOVED******REMOVED******REMOVED***/ The default `Map` used for display in a `MapView`.
+***REMOVED******REMOVED***private(set) lazy var defaultMap = Map(basemapStyle: .arcGISTopographic)
+***REMOVED******REMOVED***let graphic: Graphic
+***REMOVED******REMOVED***let graphicsOverlay: GraphicsOverlay
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***init() {
+***REMOVED******REMOVED******REMOVED***graphic = Graphic()
+***REMOVED******REMOVED******REMOVED***graphicsOverlay = GraphicsOverlay(graphics: [graphic])
+***REMOVED***
+***REMOVED***
 ***REMOVED***
