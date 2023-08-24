@@ -23,12 +23,10 @@ struct PopupExampleView: View {
     
     var body: some View {
         MapViewReader { proxy in
-            VStack {
-                MapView(map: dataModel.map)
-                    .onSingleTapGesture { screenPoint, _ in
-                        identifyScreenPoint = screenPoint
-                    }
-            }
+            MapView(map: dataModel.map)
+                .onSingleTapGesture { screenPoint, _ in
+                    identifyScreenPoint = screenPoint
+                }
         }
     }
 }
