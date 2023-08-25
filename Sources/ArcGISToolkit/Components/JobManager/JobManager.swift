@@ -143,6 +143,11 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func resumeAllPausedJobs() {
+***REMOVED******REMOVED******REMOVED*** Make sure the default background URL session is re-created here
+***REMOVED******REMOVED******REMOVED*** in case this method is called from an app relaunch due to background downloads
+***REMOVED******REMOVED******REMOVED*** completed for a terminated app. We need the session to be re-created in that case.
+***REMOVED******REMOVED***_ = ArcGISEnvironment.backgroundURLSession
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***jobs.filter { $0.status == .paused ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.forEach { $0.start() ***REMOVED***
 ***REMOVED***
