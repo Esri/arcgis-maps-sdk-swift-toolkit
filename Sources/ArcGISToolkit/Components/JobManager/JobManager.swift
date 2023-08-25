@@ -17,12 +17,17 @@ import Foundation
 import BackgroundTasks
 import OSLog
 
+***REMOVED***/ An enum that defines a schedule for background status checks.
 public enum BackgroundStatusCheckSchedule {
+***REMOVED******REMOVED***/ No background status checks will be requested.
 ***REMOVED***case disabled
+***REMOVED******REMOVED***/ Requests that the system schedule a background check at a regular interval.
+***REMOVED******REMOVED***/ Ultimately it is up to the discretion of the system if that check is run.
 ***REMOVED***case regularInterval(interval: TimeInterval)
 ***REMOVED***
 
 extension Logger {
+***REMOVED******REMOVED***/ A logger for the job manager.
 ***REMOVED***static let jobManager = Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
 ***REMOVED***
 
@@ -142,6 +147,7 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Resumes all paused jobs.
 ***REMOVED***public func resumeAllPausedJobs() {
 ***REMOVED******REMOVED******REMOVED*** Make sure the default background URL session is re-created here
 ***REMOVED******REMOVED******REMOVED*** in case this method is called from an app relaunch due to background downloads
