@@ -23,7 +23,7 @@ public enum BackgroundStatusCheckSchedule {
 ***REMOVED***
 
 extension Logger {
-***REMOVED***public static let jobManager = Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
+***REMOVED***static let jobManager = Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
 ***REMOVED***
 
 ***REMOVED***/ An object that manages saving jobs when the app is backgrounded and can reload them later.
