@@ -122,6 +122,9 @@ public class JobManager: ObservableObject {
     
     /// Called when the app moves to the background.
     @objc private func appWillResignActive() {
+        // Start a background task if necessary.
+        beginBackgroundTask()
+        
         // Schedule background status checks.
         scheduleBackgroundStatusCheck()
         
@@ -157,14 +160,13 @@ public class JobManager: ObservableObject {
         jobs.filter { $0.status == .paused }
             .forEach { $0.start() }
     }
-
+    
     /// Saves all managed jobs to User Defaults.
     public func saveState() {
         Logger.jobManager.debug("Saving state.")
         let array = jobs.map { $0.toJSON() }
         UserDefaults.standard.setValue(array, forKey: defaultsKey)
     }
-    
     
     /// Load any jobs that have been saved to User Defaults.
     private func loadState() {
@@ -176,5 +178,45 @@ public class JobManager: ObservableObject {
         jobs = strings.compactMap {
             try? Job.fromJSON($0) as? any JobProtocol
         }
+    }
+    
+    var backgroundTaskIdentifier: UIBackgroundTaskIdentifier?
+    
+    private func endCurrentBackgroundTask() {
+        guard let backgroundTaskIdentifier else {
+            Logger.jobManager.debug("No current background task to end.")
+            return
+        }
+        Logger.jobManager.debug("Ending current background task.")
+        UIApplication.shared.endBackgroundTask(backgroundTaskIdentifier)
+        self.backgroundTaskIdentifier = nil
+    }
+    
+    /// Starts a background task for extended time in the background if we have jobs that are
+    /// started but have yet to begin polling.
+    /// Also this function will end a background task if it's no longer required.
+    private func beginBackgroundTask() {
+        //
+        
+        if !jobs.contains(where: ({ $0.serverJobID.isEmpty && $0.status == .started })) {
+            Logger.jobManager.debug("No jobs that require starting a background task.")
+            // Ending current background task because we have no jobs that require it.
+            endCurrentBackgroundTask()
+            return
+        }
+        
+        guard backgroundTaskIdentifier == nil else {
+            Logger.jobManager.debug("Background task already started.")
+            return
+        }
+        
+        Logger.jobManager.debug("Starting a background task.")
+        
+        let identifier = UIApplication.shared.beginBackgroundTask() {
+            Logger.jobManager.debug("Out of background processesing time.")
+            self.endCurrentBackgroundTask()
+        }
+        
+        self.backgroundTaskIdentifier = identifier
     }
 }
