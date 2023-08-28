@@ -107,7 +107,7 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
 extension Authenticator: NetworkAuthenticationChallengeHandler {
 ***REMOVED***public func handleNetworkAuthenticationChallenge(
 ***REMOVED******REMOVED***_ challenge: NetworkAuthenticationChallenge
-***REMOVED***) async -> NetworkAuthenticationChallenge.Disposition  {
+***REMOVED***) async -> NetworkAuthenticationChallenge.Disposition {
 ***REMOVED******REMOVED******REMOVED*** If `promptForUntrustedHosts` is `false` then perform default handling
 ***REMOVED******REMOVED******REMOVED*** for server trust challenges.
 ***REMOVED******REMOVED***guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
