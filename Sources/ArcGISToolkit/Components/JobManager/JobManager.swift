@@ -122,6 +122,9 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Called when the app moves to the background.
 ***REMOVED***@objc private func appWillResignActive() {
+***REMOVED******REMOVED******REMOVED*** Start a background task if necessary.
+***REMOVED******REMOVED***beginBackgroundTask()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Schedule background status checks.
 ***REMOVED******REMOVED***scheduleBackgroundStatusCheck()
 ***REMOVED******REMOVED***
@@ -157,13 +160,12 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***jobs.filter { $0.status == .paused ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.forEach { $0.start() ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Saves all managed jobs to User Defaults.
 ***REMOVED***public func saveState() {
 ***REMOVED******REMOVED***Logger.jobManager.debug("Saving state.")
 ***REMOVED******REMOVED***let array = jobs.map { $0.toJSON() ***REMOVED***
 ***REMOVED******REMOVED***UserDefaults.standard.setValue(array, forKey: defaultsKey)
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Load any jobs that have been saved to User Defaults.
@@ -176,5 +178,45 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***jobs = strings.compactMap {
 ***REMOVED******REMOVED******REMOVED***try? Job.fromJSON($0) as? any JobProtocol
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var backgroundTaskIdentifier: UIBackgroundTaskIdentifier?
+***REMOVED***
+***REMOVED***private func endCurrentBackgroundTask() {
+***REMOVED******REMOVED***guard let backgroundTaskIdentifier else {
+***REMOVED******REMOVED******REMOVED***Logger.jobManager.debug("No current background task to end.")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***Logger.jobManager.debug("Ending current background task.")
+***REMOVED******REMOVED***UIApplication.shared.endBackgroundTask(backgroundTaskIdentifier)
+***REMOVED******REMOVED***self.backgroundTaskIdentifier = nil
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Starts a background task for extended time in the background if we have jobs that are
+***REMOVED******REMOVED***/ started but have yet to begin polling.
+***REMOVED******REMOVED***/ Also this function will end a background task if it's no longer required.
+***REMOVED***private func beginBackgroundTask() {
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if !jobs.contains(where: ({ $0.serverJobID.isEmpty && $0.status == .started ***REMOVED***)) {
+***REMOVED******REMOVED******REMOVED***Logger.jobManager.debug("No jobs that require starting a background task.")
+***REMOVED******REMOVED******REMOVED******REMOVED*** Ending current background task because we have no jobs that require it.
+***REMOVED******REMOVED******REMOVED***endCurrentBackgroundTask()
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard backgroundTaskIdentifier == nil else {
+***REMOVED******REMOVED******REMOVED***Logger.jobManager.debug("Background task already started.")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***Logger.jobManager.debug("Starting a background task.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let identifier = UIApplication.shared.beginBackgroundTask() {
+***REMOVED******REMOVED******REMOVED***Logger.jobManager.debug("Out of background processesing time.")
+***REMOVED******REMOVED******REMOVED***self.endCurrentBackgroundTask()
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***self.backgroundTaskIdentifier = identifier
 ***REMOVED***
 ***REMOVED***
