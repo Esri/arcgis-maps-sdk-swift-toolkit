@@ -107,7 +107,7 @@ extension Authenticator: ArcGISAuthenticationChallengeHandler {
 extension Authenticator: NetworkAuthenticationChallengeHandler {
     public func handleNetworkAuthenticationChallenge(
         _ challenge: NetworkAuthenticationChallenge
-    ) async -> NetworkAuthenticationChallenge.Disposition  {
+    ) async -> NetworkAuthenticationChallenge.Disposition {
         // If `promptForUntrustedHosts` is `false` then perform default handling
         // for server trust challenges.
         guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
