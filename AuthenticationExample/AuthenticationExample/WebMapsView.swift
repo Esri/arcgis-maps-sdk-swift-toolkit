@@ -42,6 +42,7 @@ struct WebMapsView: View {
         .task {
             guard webMapItems.isEmpty else { return }
             do {
+                // Try to fetch the featured items but if none available then find webmap items.
                 var items = try await portal.featuredItems
                     .filter { $0.kind == .webMap }
                 if items.isEmpty {
