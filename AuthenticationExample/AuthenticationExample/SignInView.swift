@@ -67,10 +67,12 @@ struct SignInView: View {***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch credential {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .password(let passwordCredential):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return passwordCredential.username
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .certificate:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .certificate(let certificateCredential):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return certificateCredential.identityName
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .serverTrust:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .smartCard(let smartCardCredential):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return smartCardCredential.identityName
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***@unknown default:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError("Unknown NetworkCredential")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
