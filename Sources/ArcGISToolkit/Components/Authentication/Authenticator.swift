@@ -13,6 +13,7 @@
 
 import ArcGIS
 import Combine
+import CryptoTokenKit
 
 /// The `Authenticator` is a configurable object that handles authentication challenges. It will
 /// display a user interface when network and ArcGIS authentication challenges occur.
@@ -111,6 +112,15 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
         // for server trust challenges.
         guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
             return .continueWithoutCredential
+        }
+        
+        // If the smart card is connected to the device then a personal identity verification (PIV)
+        // token is available in the `TKTokenWatcher().tokenIDs`. Create a smart card network
+        // credential with first available PIV token and continue with credential.
+        if challenge.kind == .clientCertificate,
+           let pivToken = TKTokenWatcher().tokenIDs.filter({ $0.localizedCaseInsensitiveContains("pivtoken") }).first,
+           let credential = try? NetworkCredential.smartCard(pivToken: pivToken) {
+            return .continueWithCredential(credential)
         }
         
         let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)
