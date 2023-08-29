@@ -873,7 +873,8 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let noConfigurationsAvailable = String(
 ***REMOVED******REMOVED***localized: "No configurations available",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A statement that no utility trace configurations are available."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let noneSelected = String(
