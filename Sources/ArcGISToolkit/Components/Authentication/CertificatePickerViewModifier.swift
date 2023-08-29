@@ -12,8 +12,9 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import UniformTypeIdentifiers
+import Combine
 ***REMOVED***
+import UniformTypeIdentifiers
 
 ***REMOVED***/ An object that provides the business logic for the workflow of prompting the user for a
 ***REMOVED***/ certificate and a password.

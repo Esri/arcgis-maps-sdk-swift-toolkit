@@ -1,71 +1,85 @@
 {
   "images" : [
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_40-1.png",
 ***REMOVED***  "idiom" : "iphone",
 ***REMOVED***  "scale" : "2x",
 ***REMOVED***  "size" : "20x20"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_60.png",
 ***REMOVED***  "idiom" : "iphone",
 ***REMOVED***  "scale" : "3x",
 ***REMOVED***  "size" : "20x20"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_58.png",
 ***REMOVED***  "idiom" : "iphone",
 ***REMOVED***  "scale" : "2x",
 ***REMOVED***  "size" : "29x29"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_87.png",
 ***REMOVED***  "idiom" : "iphone",
 ***REMOVED***  "scale" : "3x",
 ***REMOVED***  "size" : "29x29"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_80.png",
 ***REMOVED***  "idiom" : "iphone",
 ***REMOVED***  "scale" : "2x",
 ***REMOVED***  "size" : "40x40"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_120-1.png",
 ***REMOVED***  "idiom" : "iphone",
 ***REMOVED***  "scale" : "3x",
 ***REMOVED***  "size" : "40x40"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_120.png",
 ***REMOVED***  "idiom" : "iphone",
 ***REMOVED***  "scale" : "2x",
 ***REMOVED***  "size" : "60x60"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_180.png",
 ***REMOVED***  "idiom" : "iphone",
 ***REMOVED***  "scale" : "3x",
 ***REMOVED***  "size" : "60x60"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_20.png",
 ***REMOVED***  "idiom" : "ipad",
 ***REMOVED***  "scale" : "1x",
 ***REMOVED***  "size" : "20x20"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_40-2.png",
 ***REMOVED***  "idiom" : "ipad",
 ***REMOVED***  "scale" : "2x",
 ***REMOVED***  "size" : "20x20"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_29.png",
 ***REMOVED***  "idiom" : "ipad",
 ***REMOVED***  "scale" : "1x",
 ***REMOVED***  "size" : "29x29"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_58-1.png",
 ***REMOVED***  "idiom" : "ipad",
 ***REMOVED***  "scale" : "2x",
 ***REMOVED***  "size" : "29x29"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_40.png",
 ***REMOVED***  "idiom" : "ipad",
 ***REMOVED***  "scale" : "1x",
 ***REMOVED***  "size" : "40x40"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_80-1.png",
 ***REMOVED***  "idiom" : "ipad",
 ***REMOVED***  "scale" : "2x",
 ***REMOVED***  "size" : "40x40"
@@ -76,16 +90,19 @@
 ***REMOVED***  "size" : "76x76"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_152.png",
 ***REMOVED***  "idiom" : "ipad",
 ***REMOVED***  "scale" : "2x",
 ***REMOVED***  "size" : "76x76"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_167.png",
 ***REMOVED***  "idiom" : "ipad",
 ***REMOVED***  "scale" : "2x",
 ***REMOVED***  "size" : "83.5x83.5"
 ***REMOVED***,
 ***REMOVED***{
+***REMOVED***  "filename" : "iOS_1024.png",
 ***REMOVED***  "idiom" : "ios-marketing",
 ***REMOVED***  "scale" : "1x",
 ***REMOVED***  "size" : "1024x1024"

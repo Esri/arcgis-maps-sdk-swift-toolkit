@@ -1,0 +1,40 @@
+@Tutorial(time: 10) {
+***REMOVED***@Intro(title: "Authenticator Tutorial") {
+***REMOVED******REMOVED***The `Authenticator` is a configurable object that handles authentication challenges. It will
+***REMOVED******REMOVED***display a user interface when network and ArcGIS authentication challenges occur.
+***REMOVED******REMOVED***@Image(source: Authenticator, alt: "An image of the Authenticator component.")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Section(title: "Using the Authenticator") {
+***REMOVED******REMOVED***@ContentAndMedia {
+***REMOVED******REMOVED******REMOVED***@Image(source: Authenticator, alt: "An image of the Authenticator component.")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Steps {
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Declare and initialize an `Authenticator` member in your app.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: AuthenticatorStep1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Set the `Authenticator` to handle challenges.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: AuthenticatorStep2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Declare the app's body, placing the `Authenticator` into the hierarchy.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: AuthenticatorStep3)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Setup credential persistence.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ExampleApp.swift", file: AuthenticatorStep4)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***During sign-out, use these `AuthenticationManager` methods.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "SignOutView.swift", file: AuthenticatorStep5)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
