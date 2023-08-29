@@ -477,15 +477,15 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.vertical], 2)
-***REMOVED******REMOVED******REMOVED***Button(String.clearAllResultsButtonLabel, role: .destructive) {
+***REMOVED******REMOVED******REMOVED***Button(String.clearAllResults, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isShowingClearAllResultsConfirmationDialog = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED***.confirmationDialog(
-***REMOVED******REMOVED******REMOVED******REMOVED***String.clearAllResultsQuestion,
+***REMOVED******REMOVED******REMOVED******REMOVED***String.clearAllResults,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isShowingClearAllResultsConfirmationDialog
 ***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.clearAllResultsButtonLabel, role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.clearAllResults, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
 ***REMOVED******REMOVED******REMOVED***
@@ -811,14 +811,10 @@ private extension String {
 ***REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED***)
 ***REMOVED***
-***REMOVED***static let clearAllResultsButtonLabel = String(
-***REMOVED******REMOVED***localized: "Clear All Results",
-***REMOVED******REMOVED***bundle: .toolkitModule
-***REMOVED***)
-***REMOVED***
-***REMOVED***static let clearAllResultsQuestion = String(
-***REMOVED******REMOVED***localized: "Clear all results?",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED***static let clearAllResults = String(
+***REMOVED******REMOVED***localized: "Clear all results",
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A directive to clear all of the completed utility network traces."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let clearAllResultsMessage = String(
