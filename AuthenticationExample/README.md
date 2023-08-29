@@ -2,7 +2,7 @@
 
 This is an application that shows how to use the Authenticator toolkit component to fully support ArcGIS authentication and network authentication in an application.
 
-Documentation for the Authenticator toolkit components is [here](../Documentation/Authenticator/README.md).
+Documentation for the Authenticator toolkit components is [here](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/authenticator).
 
 ## Instructions
 
