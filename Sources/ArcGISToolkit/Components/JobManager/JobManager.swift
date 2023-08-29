@@ -66,6 +66,7 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ An initializer for the job manager.
 ***REMOVED***private init() {
+***REMOVED******REMOVED***NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
 ***REMOVED******REMOVED***NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
 ***REMOVED******REMOVED***NotificationCenter.default.addObserver(self, selector: #selector(appWillTerminate), name: UIApplication.willTerminateNotification, object: nil)
 ***REMOVED******REMOVED***
@@ -118,6 +119,12 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ A Boolean value indicating if there are jobs running.
 ***REMOVED***private var hasRunningJobs: Bool {
 ***REMOVED******REMOVED***!jobs.filter({ $0.status == .started ***REMOVED***).isEmpty
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Called when the app moves back to the foreground.
+***REMOVED***@objc private func appWillEnterForeground() {
+***REMOVED******REMOVED******REMOVED*** End any current background task.
+***REMOVED******REMOVED***endCurrentBackgroundTask()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Called when the app moves to the background.
@@ -180,8 +187,10 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The current background task identifier.
 ***REMOVED***var backgroundTaskIdentifier: UIBackgroundTaskIdentifier?
 ***REMOVED***
+***REMOVED******REMOVED***/ Ends any current background task.
 ***REMOVED***private func endCurrentBackgroundTask() {
 ***REMOVED******REMOVED***guard let backgroundTaskIdentifier else {
 ***REMOVED******REMOVED******REMOVED***Logger.jobManager.debug("No current background task to end.")
@@ -194,17 +203,17 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a background task for extended time in the background if we have jobs that are
 ***REMOVED******REMOVED***/ started but have yet to begin polling.
-***REMOVED******REMOVED***/ Also this function will end a background task if it's no longer required.
 ***REMOVED***private func beginBackgroundTask() {
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if !jobs.contains(where: ({ $0.serverJobID.isEmpty && $0.status == .started ***REMOVED***)) {
+***REMOVED******REMOVED******REMOVED*** Jobs that are started but do not yet have a server job ID are jobs that
+***REMOVED******REMOVED******REMOVED*** can benefit from starting a background task for extra execution time.
+***REMOVED******REMOVED******REMOVED*** This will hopefully allow a job to get to the polling state before the app is suspended.
+***REMOVED******REMOVED******REMOVED*** Once in a polling state that's where background refreshes can check job status.
+***REMOVED******REMOVED***if !jobs.contains(where: ({ $0.status == .started && $0.serverJobID.isEmpty ***REMOVED***)) {
 ***REMOVED******REMOVED******REMOVED***Logger.jobManager.debug("No jobs that require starting a background task.")
-***REMOVED******REMOVED******REMOVED******REMOVED*** Ending current background task because we have no jobs that require it.
-***REMOVED******REMOVED******REMOVED***endCurrentBackgroundTask()
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Already started.
 ***REMOVED******REMOVED***guard backgroundTaskIdentifier == nil else {
 ***REMOVED******REMOVED******REMOVED***Logger.jobManager.debug("Background task already started.")
 ***REMOVED******REMOVED******REMOVED***return
