@@ -113,8 +113,12 @@ public struct PopupView: View {
                         )
                     }
                 } else {
-                    VStack(alignment: .center) {
-                        Text("Evaluating popup expressions…", bundle: .toolkitModule)
+                    HStack(alignment: .center, spacing: 10) {
+                        Text(
+                            "Evaluating popup expressions",
+                            bundle: .toolkitModule,
+                            comment: "A label indicating popup expressions are being evaluated."
+                        )
                         ProgressView()
                     }
                     .frame(maxWidth: .infinity)
