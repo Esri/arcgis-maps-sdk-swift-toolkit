@@ -200,7 +200,8 @@ variable provides additional data. */
 /* No comment provided by engineer. */
 "Select a bookmark" = "Select a bookmark";
 
-/* No comment provided by engineer. */
+/* A label directing a user to select a facility. A facility contains one
+ or more levels in a floor-aware map or scene. */
 "Select a facility" = "Select a facility";
 
 /* No comment provided by engineer. */

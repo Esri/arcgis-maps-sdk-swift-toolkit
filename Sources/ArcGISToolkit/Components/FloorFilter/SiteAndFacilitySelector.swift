@@ -245,7 +245,14 @@ struct SiteAndFacilitySelector: View {
                     bundle: .toolkitModule,
                     comment: "A reference to all of the sites defined in a floor aware map."
                 ) :
-                viewModel.selection?.site?.name ?? String(localized: "Select a facility", bundle: .toolkitModule)
+                viewModel.selection?.site?.name ?? String(
+                    localized: "Select a facility",
+                    bundle: .toolkitModule,
+                    comment: """
+                             A label directing a user to select a facility. A facility contains one
+                             or more levels in a floor-aware map or scene.
+                             """
+                )
             )
         }
         
