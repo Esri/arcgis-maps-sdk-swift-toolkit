@@ -53,17 +53,12 @@
 ***REMOVED******REMOVED*** <EnvironmentVariable
 ***REMOVED******REMOVED******REMOVED***key = "LOGGING_FOR_JOB_MANAGER_EXAMPLE"
 ***REMOVED******REMOVED******REMOVED***value = ""
-***REMOVED******REMOVED******REMOVED***isEnabled = "YES">
-***REMOVED******REMOVED*** </EnvironmentVariable>
-***REMOVED******REMOVED*** <EnvironmentVariable
-***REMOVED******REMOVED******REMOVED***key = "LOGGING_FOR_SESSION_DEMULTIPLEXER"
-***REMOVED******REMOVED******REMOVED***value = "1"
-***REMOVED******REMOVED******REMOVED***isEnabled = "YES">
+***REMOVED******REMOVED******REMOVED***isEnabled = "NO">
 ***REMOVED******REMOVED*** </EnvironmentVariable>
 ***REMOVED******REMOVED*** <EnvironmentVariable
 ***REMOVED******REMOVED******REMOVED***key = "LOGGING_FOR_JOB_MANAGER"
 ***REMOVED******REMOVED******REMOVED***value = ""
-***REMOVED******REMOVED******REMOVED***isEnabled = "YES">
+***REMOVED******REMOVED******REMOVED***isEnabled = "NO">
 ***REMOVED******REMOVED*** </EnvironmentVariable>
 ***REMOVED***  </EnvironmentVariables>
    </LaunchAction>
