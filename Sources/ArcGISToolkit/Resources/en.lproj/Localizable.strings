@@ -262,7 +262,7 @@ load for an unknown reason. */
 /* No comment provided by engineer. */
 "Username" = "Username";
 
-/* No comment provided by engineer. */
+/* A value in a set of data contained in a popup. */
 "Value" = "Value";
 
 /* A label explaining that credentials are required to authenticate with specified host.
