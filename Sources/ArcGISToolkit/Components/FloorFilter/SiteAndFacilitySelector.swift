@@ -233,7 +233,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***prompt: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Filter facilities",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A search field allowing user to filter a list of facilities by name."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A field allowing a user to filter a list of facilities by name. A facility contains one or more levels in a floor-aware map or scene."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
