@@ -851,7 +851,8 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let modePickerTitle = String(
 ***REMOVED******REMOVED***localized: "Mode",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "The mode in which the utility network trace tool is being used (either creating traces or viewing traces)."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let nameLabel = String(
