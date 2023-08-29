@@ -30,13 +30,11 @@ extension Logger {
     /// A logger for the job manager.
     /// To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER".
     static let jobManager: Logger = {
-        let logger: Logger
         if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_JOB_MANAGER") {
-            logger = Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
+            return Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
         } else {
-            logger = Logger(OSLog.disabled)
+            return Logger(OSLog.disabled)
         }
-        return logger
     }()
 }
 
@@ -55,7 +53,7 @@ extension Logger {
 /// the ``JobManager/preferredBackgroundStatusCheckSchedule`` property). This will happen
 /// when the app is backgrounded. If the system later executes the background refresh task then the
 /// job manager will check the status of any running jobs. At that point the jobs may start
-/// downloading their result.
+/// downloading their result. Note, this does not work on the simulator.
 /// 4. By default, Jobs will download their results with background URL session. This means that the
 /// download can execute out of process, even if the app is terminated. If the app is terminated and
 /// then later relaunched by the system because a background downloaded completed, then you may
@@ -84,7 +82,7 @@ public class JobManager: ObservableObject {
     /// If you enable background status checks then you must also make sure to have enabled
     /// "Background Fetch" and "Background Processing" background modes in your application settings.
     /// You must also add "com.esri.ArcGISToolkit.jobManager.statusCheck" to the "Permitted background task scheduler identifiers"
-    /// in your application's plist file.
+    /// in your application's plist file. Note, this also only works on device and not on the simulator.
     /// More information can be found here: https://developer.apple.com/documentation/backgroundtasks/refreshing_and_maintaining_your_app_using_background_tasks
     public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
     
