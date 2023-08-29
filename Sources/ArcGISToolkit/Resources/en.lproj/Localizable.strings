@@ -125,7 +125,7 @@ east, etc.). */
 /* No comment provided by engineer. */
 "Media" = "Media";
 
-/* No comment provided by engineer. */
+/* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Mode";
 
 /* No comment provided by engineer. */

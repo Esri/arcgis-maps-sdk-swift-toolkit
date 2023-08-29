@@ -851,7 +851,8 @@ private extension String {
     
     static let modePickerTitle = String(
         localized: "Mode",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "The mode in which the utility network trace tool is being used (either creating traces or viewing traces)."
     )
     
     static let nameLabel = String(
