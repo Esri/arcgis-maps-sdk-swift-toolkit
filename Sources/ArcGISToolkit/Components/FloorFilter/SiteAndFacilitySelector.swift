@@ -103,7 +103,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***prompt: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Filter sites",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A search field allowing user to filter a list of sites by name."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A field allowing a user to filter a list of sites by name. A site contains one or more facilities in a floor-aware map or scene."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
