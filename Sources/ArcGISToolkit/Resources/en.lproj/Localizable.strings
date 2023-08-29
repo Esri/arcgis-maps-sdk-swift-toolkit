@@ -104,7 +104,7 @@ east, etc.). */
 /* A field in a chart of data contained in a popup. */
 "Field" = "Field";
 
-/* No comment provided by engineer. */
+/* A label in reference to fields contained in a chart of data. */
 "Fields" = "Fields";
 
 /* A search field allowing user to filter a list of facilities by name. */
