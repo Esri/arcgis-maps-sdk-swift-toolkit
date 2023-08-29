@@ -110,7 +110,7 @@ east, etc.). */
 /* A search field allowing user to filter a list of facilities by name. */
 "Filter facilities" = "Filter facilities";
 
-/* A search field allowing user to filter a list of sites by name. */
+/* A field allowing a user to filter a list of sites by name. A site contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Filter sites";
 
 /* No comment provided by engineer. */
