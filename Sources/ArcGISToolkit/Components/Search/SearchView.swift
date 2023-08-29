@@ -223,8 +223,9 @@ public struct SearchView: View {
                         "Repeat Search Here",
                         bundle: .toolkitModule,
                         comment: """
-                                  A button to show when a user has panned the map away from the
-                                  original search location.
+                                  A label for button to show when a user has panned the map away
+                                  from the original search location. 'Here' is in reference to the
+                                  current visible extent of the map or scene.
                                   """
                     )
                 }

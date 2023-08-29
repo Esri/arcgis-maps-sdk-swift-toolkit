@@ -186,8 +186,9 @@ east, etc.). */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Popup evaluation failed: %@";
 
-/* A button to show when a user has panned the map away from the
-original search location. */
+/* A label for button to show when a user has panned the map away
+ from the original search location. 'Here' is in reference to the
+ current visible extent of the map or scene. */
 "Repeat Search Here" = "Repeat Search Here";
 
 /* No comment provided by engineer. */
