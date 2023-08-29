@@ -131,7 +131,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"All sites",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A button allowing users to view a list of all sites defined in a floor aware map."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A reference to all of the sites defined in a floor aware map."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
@@ -240,8 +240,12 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED***.navigationTitle(
 ***REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling ?
-***REMOVED******REMOVED******REMOVED******REMOVED***String(localized: "All Sites", bundle: .toolkitModule) :
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection?.site?.name ?? String(localized: "Select a facility", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "All sites",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A reference to all of the sites defined in a floor aware map."
+***REMOVED******REMOVED******REMOVED******REMOVED***) :
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection?.site?.name ?? String(localized: "Select a facility", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***
