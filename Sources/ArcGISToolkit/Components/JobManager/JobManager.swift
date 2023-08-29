@@ -40,7 +40,28 @@ extension Logger {
 ***REMOVED***()
 ***REMOVED***
 
-***REMOVED***/ An object that manages saving jobs when the app is backgrounded and can reload them later.
+***REMOVED***/ An object that manages saving and loading jobs so that they can continue to run if the
+***REMOVED***/ app is backgrounded or even terminated.
+***REMOVED***/ There are 4 situations that the job manager helps with:
+***REMOVED***/ 1. The job manager will serialize jobs to the user defaults when an app is backgrounded
+***REMOVED***/ or terminated and then deserialize those jobs whenever an app is launched.
+***REMOVED***/ 2. The job manager will ask the system for some background processing time when an app
+***REMOVED***/ is backgrounded so that jobs that are not yet started on the server, can have some time to
+***REMOVED***/ allow them to start. This means if you kick off a job and it hasn't actually started on the server
+***REMOVED***/ when the app is backgrounded, the job should have enough time to start on the server which
+***REMOVED***/ will cause it to enter into a polling state. When the job is in the polling state it checks
+***REMOVED***/ the status of the server job every so often.
+***REMOVED***/ 3. The job manager will request from the system a background refresh task (if enabled via
+***REMOVED***/ the ``JobManager/preferredBackgroundStatusCheckSchedule`` property). This will happen
+***REMOVED***/ when the app is backgrounded. If the system later executes the background refresh task then the
+***REMOVED***/ job manager will check the status of any running jobs. At that point the jobs may start
+***REMOVED***/ downloading their result.
+***REMOVED***/ 4. By default, Jobs will download their results with background URL session. This means that the
+***REMOVED***/ download can execute out of process, even if the app is terminated. If the app is terminated and
+***REMOVED***/ then later relaunched by the system because a background downloaded completed, then you may
+***REMOVED***/ call the ``JobManager/resumeAllPausedJobs()`` method from the application relaunch point,
+***REMOVED***/ which will correllate the jobs to their respective downloads that completed and the jobs will
+***REMOVED***/ then finish.
 @MainActor
 public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ The shared job manager.
