@@ -24,35 +24,17 @@ import SwiftUI
 /// dedicated search panel. They will also be primarily simple containers
 /// that clients will fill with their own content.
 struct FloatingPanel<Content>: View where Content: View {
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) var verticalSizeClass
-    
     /// The background color of the floating panel.
     let backgroundColor: Color
-    
-    /// The content shown in the floating panel.
-    let content: Content
-    
-    /// Creates a `FloatingPanel`.
-    /// - Parameters:
-    ///   - backgroundColor: The background color of the floating panel.
-    ///   - selectedDetent: Controls the height of the panel.
-    ///   - isPresented: A Boolean value indicating if the view is presented.
-    ///   - content: The view shown in the floating panel.
-    init(
-        backgroundColor: Color,
-        selectedDetent: Binding<FloatingPanelDetent>,
-        isPresented: Binding<Bool>,
-        @ViewBuilder content: () -> Content
-    ) {
-        self.backgroundColor = backgroundColor
-        self.selectedDetent = selectedDetent
-        self.isPresented = isPresented
-        self.content = content()
-    }
-    
     /// A binding to the currently selected detent.
-    private var selectedDetent: Binding<FloatingPanelDetent>
+    @Binding var selectedDetent: FloatingPanelDetent
+    /// A binding to a Boolean value that determines whether the view is presented.
+    @Binding var isPresented: Bool
+    /// The content shown in the floating panel.
+    let content: () -> Content
+    
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     /// The color of the handle.
     @State private var handleColor: Color = .defaultHandleColor
@@ -60,11 +42,8 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The height of the content.
     @State private var height: CGFloat = .minHeight
     
-    /// A binding to a Boolean value that determines whether the view is presented.
-    private var isPresented: Binding<Bool>
-    
     /// The latest recorded drag gesture value.
-    @State var latestDragGesture: DragGesture.Value?
+    @State private var latestDragGesture: DragGesture.Value?
     
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .infinity
@@ -74,22 +53,25 @@ struct FloatingPanel<Content>: View where Content: View {
         horizontalSizeClass == .compact && verticalSizeClass == .regular
     }
     
-    public var body: some View {
+    var body: some View {
         GeometryReader { geometryProxy in
             VStack(spacing: 0) {
-                if isCompact && isPresented.wrappedValue {
-                    makeHandleView()
-                    Divider()
-                }
-                content
-                    .frame(height: height)
-                    .clipped()
-                    .padding(.bottom, isPresented.wrappedValue ? (isCompact ? 25 : 10) : .zero)
-                if !isCompact && isPresented.wrappedValue {
+                if isPresented {
+                    if isCompact {
+                        makeHandleView()
+                        Divider()
+                    }
+                    content()
+                        .frame(height: height)
+                        .clipped()
+                        .padding(.bottom, isCompact ? 25 : 10)
+                    if !isCompact {
                         Divider()
                         makeHandleView()
+                    }
                 }
             }
+            .frame(maxWidth: .infinity)
             .background(backgroundColor)
             .clipShape(
                 RoundedCorners(
@@ -103,6 +85,7 @@ struct FloatingPanel<Content>: View where Content: View {
                 height: geometryProxy.size.height,
                 alignment: isCompact ? .bottom : .top
             )
+            .animation(.easeInOut, value: isPresented)
             .onSizeChange {
                 maximumHeight = $0.height
                 if height > maximumHeight {
@@ -111,15 +94,25 @@ struct FloatingPanel<Content>: View where Content: View {
             }
             .onAppear {
                 withAnimation {
-                    height = isPresented.wrappedValue ? heightFor(detent: selectedDetent.wrappedValue) : .zero
+                    height = isPresented ? heightFor(detent: selectedDetent) : .zero
                 }
             }
-            .onChange(of: isPresented.wrappedValue) { isPresented in
+            .onChange(of: isPresented) { isPresented in
                 withAnimation {
-                    height = isPresented ? heightFor(detent: selectedDetent.wrappedValue) : .zero
+                    height = isPresented ? heightFor(detent: selectedDetent) : .zero
                 }
             }
-            .onChange(of: selectedDetent.wrappedValue) { selectedDetent in
+            .onChange(of: selectedDetent) { selectedDetent in
+                withAnimation {
+                    height = heightFor(detent: selectedDetent)
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
+                withAnimation {
+                    height = heightFor(detent: .full)
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
                 withAnimation {
                     height = heightFor(detent: selectedDetent)
                 }
@@ -151,7 +144,7 @@ struct FloatingPanel<Content>: View where Content: View {
                 let travelTime = min(0.35, distanceAhead / speed)
                 
                 withAnimation(.easeOut(duration: travelTime)) {
-                    selectedDetent.wrappedValue = newDetent
+                    selectedDetent = newDetent
                     height = targetHeight
                 }
                 handleColor = .defaultHandleColor
@@ -175,7 +168,7 @@ struct FloatingPanel<Content>: View where Content: View {
         guard speed > lowSpeedThreshold else {
             return allDetents.min {
                 abs(currentHeight - $0.height) < abs(currentHeight - $1.height)
-            }?.detent ?? selectedDetent.wrappedValue
+            }?.detent ?? selectedDetent
         }
         // Generate a new set of detents, filtering out those that would produce a height in the
         // opposite direction of the gesture, and sorting them in order of closest to furthest from
@@ -201,9 +194,9 @@ struct FloatingPanel<Content>: View where Content: View {
         // first candidate detent (the one that would produce the least size difference from the
         // current height).
         if speed >= highSpeedThreshold {
-            return candidateDetents.last?.0 ?? selectedDetent.wrappedValue
+            return candidateDetents.last?.0 ?? selectedDetent
         } else {
-            return candidateDetents.first?.0 ?? selectedDetent.wrappedValue
+            return candidateDetents.first?.0 ?? selectedDetent
         }
     }
     
