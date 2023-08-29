@@ -900,7 +900,8 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let traceButtonLabel = String(
 ***REMOVED******REMOVED***localized: "Trace",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label for a button to begin a utility network trace operation."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let traceConfigurationSectionLabel = String(
