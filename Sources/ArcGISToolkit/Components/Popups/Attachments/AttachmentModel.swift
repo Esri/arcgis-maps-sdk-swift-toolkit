@@ -11,9 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import Combine
 import QuickLook
+import SwiftUI
 
 /// A view model representing the combination of a `PopupAttachment` and
 /// an associated `UIImage` used as a thumbnail.
