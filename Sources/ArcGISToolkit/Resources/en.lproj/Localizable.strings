@@ -11,11 +11,8 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A section header for advanced options. */
 "Advanced Options" = "Advanced Options";
 
-/* A button allowing users to view a list of all sites defined in a floor aware map. */
+/* A reference to all of the sites defined in a floor aware map. */
 "All sites" = "All sites";
-
-/* No comment provided by engineer. */
-"All Sites" = "All Sites";
 
 /* A message describing the outcome of clearing all utility network trace results. */
 "All the trace inputs and results will be lost." = "All the trace inputs and results will be lost.";
