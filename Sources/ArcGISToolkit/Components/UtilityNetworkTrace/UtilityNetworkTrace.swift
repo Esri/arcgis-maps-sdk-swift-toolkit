@@ -862,7 +862,8 @@ private extension String {
     
     static let networkSectionLabel = String(
         localized: "Network",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to a specific utility network."
     )
     
     static let newTraceOptionLabel = String(
