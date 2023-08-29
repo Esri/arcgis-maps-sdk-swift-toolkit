@@ -50,11 +50,8 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "Certificate Trust Warning";
 
-/* No comment provided by engineer. */
-"Clear All Results" = "Clear All Results";
-
-/* No comment provided by engineer. */
-"Clear all results?" = "Clear all results?";
+/* A directive to clear all of the completed utility network traces. */
+"Clear all results" = "Clear all results";
 
 /* No comment provided by engineer. */
 "Color" = "Color";

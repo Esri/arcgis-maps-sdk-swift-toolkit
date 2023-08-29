@@ -477,15 +477,15 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             .padding([.vertical], 2)
-            Button(String.clearAllResultsButtonLabel, role: .destructive) {
+            Button(String.clearAllResults, role: .destructive) {
                 isShowingClearAllResultsConfirmationDialog = true
             }
             .buttonStyle(.bordered)
             .confirmationDialog(
-                String.clearAllResultsQuestion,
+                String.clearAllResults,
                 isPresented: $isShowingClearAllResultsConfirmationDialog
             ) {
-                Button(String.clearAllResultsButtonLabel, role: .destructive) {
+                Button(String.clearAllResults, role: .destructive) {
                     viewModel.deleteAllTraces()
                     currentActivity = .creatingTrace(nil)
                 }
@@ -811,14 +811,10 @@ private extension String {
         bundle: .toolkitModule
     )
     
-    static let clearAllResultsButtonLabel = String(
-        localized: "Clear All Results",
-        bundle: .toolkitModule
-    )
-    
-    static let clearAllResultsQuestion = String(
-        localized: "Clear all results?",
-        bundle: .toolkitModule
+    static let clearAllResults = String(
+        localized: "Clear all results",
+        bundle: .toolkitModule,
+        comment: "A directive to clear all of the completed utility network traces."
     )
     
     static let clearAllResultsMessage = String(
