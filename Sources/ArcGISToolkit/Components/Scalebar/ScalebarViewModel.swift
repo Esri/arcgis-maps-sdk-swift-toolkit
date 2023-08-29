@@ -12,8 +12,8 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import Combine
 import Foundation
-***REMOVED***
 
 @MainActor
 final class ScalebarViewModel: ObservableObject {

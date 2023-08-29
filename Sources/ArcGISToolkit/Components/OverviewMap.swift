@@ -16,7 +16,36 @@ import Combine
 ***REMOVED***
 
 ***REMOVED***/ `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
-***REMOVED***/ on an existing `GeoView`, which shows the visible extent of that `GeoView`.
+***REMOVED***/ on an existing `GeoView`, which shows a representation of the current `visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`).
+***REMOVED***/
+***REMOVED***/ | MapView | SceneView |
+***REMOVED***/ | ------- | --------- |
+***REMOVED***/ | ![OverviewMap - MapView](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/assets/16397058/61415dd8-cdbc-4048-a439-92cf13729e3e) | ![OverviewMap - SceneView](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/assets/16397058/5a201035-c303-48a5-bc95-1324796385ea) |
+***REMOVED***/
+***REMOVED***/ > Note: OverviewMap uses metered ArcGIS basemaps by default, so you will need to configure an API key. See [Security and authentication documentation](https:***REMOVED***developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys) for more information.
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ - Displays a representation of the current visible area or viewpoint for a connected `GeoView`.
+***REMOVED***/ - Supports a configurable scaling factor for setting the overview map's zoom level relative to
+***REMOVED***/ the connected view.
+***REMOVED***/ - Supports a configurable symbol for visualizing the current visible area or viewpoint
+***REMOVED***/ representation (a `FillSymbol` for a connected `MapView`; a `MarkerSymbol` for a connected
+***REMOVED***/ `SceneView`).
+***REMOVED***/ - Supports using a custom map in the overview map display.
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ For an `OverviewMap` on a `MapView`, the `MapView`'s `visibleArea` property will be represented in the `OverviewMap` as a polygon, which will rotate as the `MapView` rotates.
+***REMOVED***/
+***REMOVED***/ For an `OverviewMap` on a `SceneView`, the center point of the `SceneView`'s `currentViewpoint` property will be represented in the `OverviewMap` by a point.
+***REMOVED***/
+***REMOVED***/ To use a custom map in the `OverviewMap`, use the `map` argument in either ``OverviewMap/forMapView(with:visibleArea:map:)`` or ``OverviewMap/forSceneView(with:map:)``.
+***REMOVED***/
+***REMOVED***/ To see the `OverviewMap` in action, and for examples of `OverviewMap` customization, check out
+***REMOVED***/ the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+***REMOVED***/ and refer to [OverviewMapExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/OverviewMapExampleView.swift)
+***REMOVED***/ in the project. To learn more about using the `OverviewMap` see the [OverviewMap Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/overviewmaptutorial).
 public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ The `Viewpoint` of the main `GeoView`.
 ***REMOVED***let viewpoint: Viewpoint?
@@ -29,13 +58,7 @@ public struct OverviewMap: View {
 ***REMOVED***private var scaleFactor = 25.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the overview map.
-***REMOVED***@StateObject private var dataModel = MapDataModel()
-***REMOVED***
-***REMOVED******REMOVED***/ The `Graphic` displaying the visible area of the main `GeoView`.
-***REMOVED***@StateObject private var graphic: Graphic
-***REMOVED***
-***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display the visible area graphic.
-***REMOVED***@StateObject private var graphicsOverlay: GraphicsOverlay
+***REMOVED***@StateObject private var dataModel = DataModel()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The user-defined map used in the overview map. Defaults to `nil`.
 ***REMOVED***private let userProvidedMap: Map?
@@ -60,7 +83,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***OverviewMap(
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
 ***REMOVED******REMOVED******REMOVED***visibleArea: visibleArea,
-***REMOVED******REMOVED******REMOVED***symbol: .defaultFill,
+***REMOVED******REMOVED******REMOVED***symbol: .defaultFill(),
 ***REMOVED******REMOVED******REMOVED***map: map
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -76,7 +99,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***with viewpoint: Viewpoint?,
 ***REMOVED******REMOVED***map: Map? = nil
 ***REMOVED***) -> OverviewMap {
-***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker, map: map)
+***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker(), map: map)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
@@ -93,16 +116,6 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***self.visibleArea = visibleArea
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***self.symbol = symbol
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let graphic = Graphic(symbol: self.symbol)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** It is necessary to set the graphic and graphicsOverlay this way
-***REMOVED******REMOVED******REMOVED*** in order to prevent the main geoview from recreating the
-***REMOVED******REMOVED******REMOVED*** graphicsOverlay every draw cycle. That was causing refresh issues
-***REMOVED******REMOVED******REMOVED*** with the graphic during panning/zooming/rotating.
-***REMOVED******REMOVED***_graphic = StateObject(wrappedValue: graphic)
-***REMOVED******REMOVED***_graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***userProvidedMap = map
 ***REMOVED***
 ***REMOVED***
@@ -110,7 +123,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***MapView(
 ***REMOVED******REMOVED******REMOVED***map: effectiveMap,
 ***REMOVED******REMOVED******REMOVED***viewpoint: makeOverviewViewpoint(),
-***REMOVED******REMOVED******REMOVED***graphicsOverlays: [graphicsOverlay]
+***REMOVED******REMOVED******REMOVED***graphicsOverlays: [dataModel.graphicsOverlay]
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED***.interactionModes([])
@@ -119,22 +132,23 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED***width: 1
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***graphic.symbol = symbol
+***REMOVED******REMOVED******REMOVED***dataModel.graphic.geometry = visibleArea
+***REMOVED******REMOVED******REMOVED***dataModel.graphic.symbol = symbol
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: visibleArea) { visibleArea in
 ***REMOVED******REMOVED******REMOVED***if let visibleArea = visibleArea {
-***REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = visibleArea
+***REMOVED******REMOVED******REMOVED******REMOVED***dataModel.graphic.geometry = visibleArea
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: viewpoint) { viewpoint in
 ***REMOVED******REMOVED******REMOVED***if visibleArea == nil,
 ***REMOVED******REMOVED******REMOVED***   let viewpoint = viewpoint,
 ***REMOVED******REMOVED******REMOVED***   let point = viewpoint.targetGeometry as? Point {
-***REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = point
+***REMOVED******REMOVED******REMOVED******REMOVED***dataModel.graphic.geometry = point
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: symbol) {
-***REMOVED******REMOVED******REMOVED***graphic.symbol = $0
+***REMOVED******REMOVED******REMOVED***dataModel.graphic.symbol = $0
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -182,26 +196,31 @@ public struct OverviewMap: View {
 
 private extension Symbol {
 ***REMOVED******REMOVED***/ The default marker symbol.
-***REMOVED***static let defaultMarker: MarkerSymbol = SimpleMarkerSymbol(
-***REMOVED******REMOVED***style: .cross,
-***REMOVED******REMOVED***color: .red,
-***REMOVED******REMOVED***size: 12.0
-***REMOVED***)
+***REMOVED***static func defaultMarker() -> Symbol {
+***REMOVED******REMOVED***return SimpleMarkerSymbol(style: .cross, color: .red, size: 12)
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The default fill symbol.
-***REMOVED***static let defaultFill: FillSymbol = SimpleFillSymbol(
-***REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED***color: .clear,
-***REMOVED******REMOVED***outline: SimpleLineSymbol(
+***REMOVED***static func defaultFill() -> Symbol {
+***REMOVED******REMOVED***return SimpleFillSymbol(
 ***REMOVED******REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED******REMOVED***color: .red,
-***REMOVED******REMOVED******REMOVED***width: 1.0
+***REMOVED******REMOVED******REMOVED***color: .clear,
+***REMOVED******REMOVED******REMOVED***outline: SimpleLineSymbol(style: .solid, color: .red, width: 1)
 ***REMOVED******REMOVED***)
-***REMOVED***)
+***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A very basic data model class containing a Map.
-class MapDataModel: ObservableObject {
-***REMOVED******REMOVED***/ The default `Map` used for display in a `MapView`.
-***REMOVED***let defaultMap = Map(basemapStyle: .arcGISTopographic)
+private extension OverviewMap {
+***REMOVED***@MainActor
+***REMOVED***private class DataModel: ObservableObject {
+***REMOVED******REMOVED******REMOVED***/ The default `Map` used for display in a `MapView`.
+***REMOVED******REMOVED***private(set) lazy var defaultMap = Map(basemapStyle: .arcGISTopographic)
+***REMOVED******REMOVED***let graphic: Graphic
+***REMOVED******REMOVED***let graphicsOverlay: GraphicsOverlay
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***init() {
+***REMOVED******REMOVED******REMOVED***graphic = Graphic()
+***REMOVED******REMOVED******REMOVED***graphicsOverlay = GraphicsOverlay(graphics: [graphic])
+***REMOVED***
+***REMOVED***
 ***REMOVED***
