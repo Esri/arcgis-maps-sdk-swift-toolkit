@@ -108,7 +108,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
-***REMOVED******REMOVED******REMOVED***.navigationTitle(String(localized: "Sites", bundle: .toolkitModule))
+***REMOVED******REMOVED******REMOVED***.navigationTitle(String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Sites",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label in reference to all of the sites in a floor-aware map or scene."
+***REMOVED******REMOVED******REMOVED***))
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The "All sites" button.
