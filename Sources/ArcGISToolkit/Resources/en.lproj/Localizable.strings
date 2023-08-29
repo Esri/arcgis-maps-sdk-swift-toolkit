@@ -242,7 +242,7 @@ load for an unknown reason. */
 "The password was invalid." = "The password was invalid.";
 
 /* Description of error thrown when a remote image could not be loaded. */
-"The URL could not be reached or did not contain image data" = "The URL could not be reached or did not contain image data";
+"The URL could not be reached or did not contain image data." = "The URL could not be reached or did not contain image data.";
 
 /* No comment provided by engineer. */
 "Trace" = "Trace";
