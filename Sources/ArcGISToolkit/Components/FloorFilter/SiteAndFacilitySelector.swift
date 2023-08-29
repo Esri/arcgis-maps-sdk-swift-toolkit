@@ -108,7 +108,11 @@ struct SiteAndFacilitySelector: View {
             )
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
-            .navigationTitle(String(localized: "Sites", bundle: .toolkitModule))
+            .navigationTitle(String(
+                localized: "Sites",
+                bundle: .toolkitModule,
+                comment: "A label in reference to all of the sites in a floor-aware map or scene."
+            ))
         }
         
         /// The "All sites" button.

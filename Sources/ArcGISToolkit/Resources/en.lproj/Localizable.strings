@@ -204,7 +204,7 @@ variable provides additional data. */
  or more levels in a floor-aware map or scene. */
 "Select a facility" = "Select a facility";
 
-/* No comment provided by engineer. */
+/* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
 
 /* No comment provided by engineer. */
