@@ -302,8 +302,12 @@ struct SiteAndFacilitySelector: View {
 /// Displays text "No matches found".
 private struct NoMatchesView: View {
     var body: some View {
-        Text("No matches found", bundle: .toolkitModule)
-            .frame(maxHeight: .infinity)
+        Text(
+            "No matches found",
+            bundle: .toolkitModule,
+            comment: "A statement that no sites or facilities with names matching a filter phrase were found."
+        )
+        .frame(maxHeight: .infinity)
     }
 }
 

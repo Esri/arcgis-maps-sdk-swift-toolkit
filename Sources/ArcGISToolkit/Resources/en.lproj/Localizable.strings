@@ -143,7 +143,7 @@ east, etc.). */
 /* A statement that no utility trace configurations are available. */
 "No configurations available" = "No configurations available";
 
-/* No comment provided by engineer. */
+/* A statement that no sites or facilities with names matching a filter phrase were found. */
 "No matches found" = "No matches found";
 
 /* A message to show when there are no results or suggestions. */
