@@ -11,8 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import Combine
+import SwiftUI
 
 /// Defines how many results to return; one, many, or automatic based on circumstance.
 public enum SearchResultMode {
