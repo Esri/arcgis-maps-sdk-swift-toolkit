@@ -715,7 +715,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***private var currentTraceLabel: String {
 ***REMOVED******REMOVED***guard let index = viewModel.selectedTraceIndex else { return "Error" ***REMOVED***
 ***REMOVED******REMOVED***return String(
-***REMOVED******REMOVED******REMOVED***localized: "Trace \(index+1, specifier: "%lld1") of \(viewModel.completedTraces.count, specifier: "%lld2")",
+***REMOVED******REMOVED******REMOVED***localized: "Trace \(index+1, specifier: "%1$lld") of \(viewModel.completedTraces.count, specifier: "%2$lld")",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label indicating the index of the trace being viewed out of the total number of traces completed."
 ***REMOVED******REMOVED***)

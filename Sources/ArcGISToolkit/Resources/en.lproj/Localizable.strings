@@ -246,7 +246,7 @@ load for an unknown reason. */
 "Trace" = "Trace";
 
 /* A label indicating the index of the trace being viewed out of the total number of traces completed. */
-"Trace %lld1 of %lld2" = "Trace %lld1 of %lld2";
+"Trace %1$lld of %2$lld" = "Trace %1$lld of %2$lld";
 
 /* No comment provided by engineer. */
 "Trace Configuration" = "Trace Configuration";
