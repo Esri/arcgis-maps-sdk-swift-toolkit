@@ -30,13 +30,11 @@ extension Logger {
 ***REMOVED******REMOVED***/ A logger for the job manager.
 ***REMOVED******REMOVED***/ To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER".
 ***REMOVED***static let jobManager: Logger = {
-***REMOVED******REMOVED***let logger: Logger
 ***REMOVED******REMOVED***if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_JOB_MANAGER") {
-***REMOVED******REMOVED******REMOVED***logger = Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
+***REMOVED******REMOVED******REMOVED***return Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***logger = Logger(OSLog.disabled)
+***REMOVED******REMOVED******REMOVED***return Logger(OSLog.disabled)
 ***REMOVED***
-***REMOVED******REMOVED***return logger
 ***REMOVED***()
 ***REMOVED***
 
@@ -55,7 +53,7 @@ extension Logger {
 ***REMOVED***/ the ``JobManager/preferredBackgroundStatusCheckSchedule`` property). This will happen
 ***REMOVED***/ when the app is backgrounded. If the system later executes the background refresh task then the
 ***REMOVED***/ job manager will check the status of any running jobs. At that point the jobs may start
-***REMOVED***/ downloading their result.
+***REMOVED***/ downloading their result. Note, this does not work on the simulator.
 ***REMOVED***/ 4. By default, Jobs will download their results with background URL session. This means that the
 ***REMOVED***/ download can execute out of process, even if the app is terminated. If the app is terminated and
 ***REMOVED***/ then later relaunched by the system because a background downloaded completed, then you may
@@ -84,7 +82,7 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ If you enable background status checks then you must also make sure to have enabled
 ***REMOVED******REMOVED***/ "Background Fetch" and "Background Processing" background modes in your application settings.
 ***REMOVED******REMOVED***/ You must also add "com.esri.ArcGISToolkit.jobManager.statusCheck" to the "Permitted background task scheduler identifiers"
-***REMOVED******REMOVED***/ in your application's plist file.
+***REMOVED******REMOVED***/ in your application's plist file. Note, this also only works on device and not on the simulator.
 ***REMOVED******REMOVED***/ More information can be found here: https:***REMOVED***developer.apple.com/documentation/backgroundtasks/refreshing_and_maintaining_your_app_using_background_tasks
 ***REMOVED***public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
 ***REMOVED***
