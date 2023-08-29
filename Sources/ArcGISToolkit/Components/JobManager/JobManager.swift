@@ -17,27 +17,6 @@ import ArcGIS
 import BackgroundTasks
 import OSLog
 
-/// An enum that defines a schedule for background status checks.
-public enum BackgroundStatusCheckSchedule {
-    /// No background status checks will be requested.
-    case disabled
-    /// Requests that the system schedule a background check at a regular interval.
-    /// Ultimately it is up to the discretion of the system if that check is run.
-    case regularInterval(interval: TimeInterval)
-}
-
-extension Logger {
-    /// A logger for the job manager.
-    /// To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER".
-    static let jobManager: Logger = {
-        if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_JOB_MANAGER") {
-            return Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
-        } else {
-            return Logger(OSLog.disabled)
-        }
-    }()
-}
-
 /// An object that manages saving and loading jobs so that they can continue to run if the
 /// app is backgrounded or even terminated.
 /// There are 4 situations that the job manager helps with:
@@ -256,4 +235,25 @@ public class JobManager: ObservableObject {
         
         self.backgroundTaskIdentifier = identifier
     }
+}
+
+/// An enum that defines a schedule for background status checks.
+public enum BackgroundStatusCheckSchedule {
+    /// No background status checks will be requested.
+    case disabled
+    /// Requests that the system schedule a background check at a regular interval.
+    /// Ultimately it is up to the discretion of the system if that check is run.
+    case regularInterval(interval: TimeInterval)
+}
+
+extension Logger {
+    /// A logger for the job manager.
+    /// To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER".
+    static let jobManager: Logger = {
+        if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_JOB_MANAGER") {
+            return Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
+        } else {
+            return Logger(OSLog.disabled)
+        }
+    }()
 }
