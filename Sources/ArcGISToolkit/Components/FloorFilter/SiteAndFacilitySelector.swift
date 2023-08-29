@@ -131,7 +131,7 @@ struct SiteAndFacilitySelector: View {
                 Text(
                     "All sites",
                     bundle: .toolkitModule,
-                    comment: "A button allowing users to view a list of all sites defined in a floor aware map."
+                    comment: "A reference to all of the sites defined in a floor aware map."
                 )
             }
             .buttonStyle(.bordered)
@@ -240,8 +240,12 @@ struct SiteAndFacilitySelector: View {
             .disableAutocorrection(true)
             .navigationTitle(
                 usesAllSitesStyling ?
-                String(localized: "All Sites", bundle: .toolkitModule) :
-                    viewModel.selection?.site?.name ?? String(localized: "Select a facility", bundle: .toolkitModule)
+                String(
+                    localized: "All sites",
+                    bundle: .toolkitModule,
+                    comment: "A reference to all of the sites defined in a floor aware map."
+                ) :
+                viewModel.selection?.site?.name ?? String(localized: "Select a facility", bundle: .toolkitModule)
             )
         }
         
