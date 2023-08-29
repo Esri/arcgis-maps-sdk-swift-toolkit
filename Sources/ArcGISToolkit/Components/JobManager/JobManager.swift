@@ -66,6 +66,7 @@ public class JobManager: ObservableObject {
     
     /// An initializer for the job manager.
     private init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillTerminate), name: UIApplication.willTerminateNotification, object: nil)
         
@@ -118,6 +119,12 @@ public class JobManager: ObservableObject {
     /// A Boolean value indicating if there are jobs running.
     private var hasRunningJobs: Bool {
         !jobs.filter({ $0.status == .started }).isEmpty
+    }
+    
+    /// Called when the app moves back to the foreground.
+    @objc private func appWillEnterForeground() {
+        // End any current background task.
+        endCurrentBackgroundTask()
     }
     
     /// Called when the app moves to the background.
@@ -180,8 +187,10 @@ public class JobManager: ObservableObject {
         }
     }
     
+    /// The current background task identifier.
     var backgroundTaskIdentifier: UIBackgroundTaskIdentifier?
     
+    /// Ends any current background task.
     private func endCurrentBackgroundTask() {
         guard let backgroundTaskIdentifier else {
             Logger.jobManager.debug("No current background task to end.")
@@ -194,17 +203,17 @@ public class JobManager: ObservableObject {
     
     /// Starts a background task for extended time in the background if we have jobs that are
     /// started but have yet to begin polling.
-    /// Also this function will end a background task if it's no longer required.
     private func beginBackgroundTask() {
-        //
-        
-        if !jobs.contains(where: ({ $0.serverJobID.isEmpty && $0.status == .started })) {
+        // Jobs that are started but do not yet have a server job ID are jobs that
+        // can benefit from starting a background task for extra execution time.
+        // This will hopefully allow a job to get to the polling state before the app is suspended.
+        // Once in a polling state that's where background refreshes can check job status.
+        if !jobs.contains(where: ({ $0.status == .started && $0.serverJobID.isEmpty })) {
             Logger.jobManager.debug("No jobs that require starting a background task.")
-            // Ending current background task because we have no jobs that require it.
-            endCurrentBackgroundTask()
             return
         }
         
+        // Already started.
         guard backgroundTaskIdentifier == nil else {
             Logger.jobManager.debug("Background task already started.")
             return
