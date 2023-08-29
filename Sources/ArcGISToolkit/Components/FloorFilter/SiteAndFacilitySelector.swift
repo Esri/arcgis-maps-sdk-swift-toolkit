@@ -245,7 +245,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A reference to all of the sites defined in a floor aware map."
 ***REMOVED******REMOVED******REMOVED******REMOVED***) :
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection?.site?.name ?? String(localized: "Select a facility", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection?.site?.name ?? String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Select a facility",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label directing a user to select a facility. A facility contains one
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** or more levels in a floor-aware map or scene.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***
