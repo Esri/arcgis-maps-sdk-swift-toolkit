@@ -244,7 +244,7 @@ load for an unknown reason. */
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "The URL could not be reached or did not contain image data.";
 
-/* No comment provided by engineer. */
+/* A label for a button to begin a utility network trace operation. */
 "Trace" = "Trace";
 
 /* A label indicating the index of the trace being viewed out of the total number of traces completed. */
