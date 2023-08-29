@@ -862,7 +862,8 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let networkSectionLabel = String(
 ***REMOVED******REMOVED***localized: "Network",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label in reference to a specific utility network."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let newTraceOptionLabel = String(
