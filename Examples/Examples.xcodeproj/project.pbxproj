@@ -53,7 +53,7 @@
 		75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalebarExampleView.swift; sourceTree = "<group>"; };
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; };
 		E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterExampleView.swift; sourceTree = "<group>"; };
-		E47ABE402652FE0900FD2FE3 /* Examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Examples.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E47ABE402652FE0900FD2FE3 /* Toolkit Examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Toolkit Examples.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplesApp.swift; sourceTree = "<group>"; };
 		E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E47ABE4A2652FE0C00FD2FE3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -123,7 +123,7 @@
 		E47ABE412652FE0900FD2FE3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E47ABE402652FE0900FD2FE3 /* Examples.app */,
+				E47ABE402652FE0900FD2FE3 /* Toolkit Examples.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -171,9 +171,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E47ABE3F2652FE0900FD2FE3 /* Examples */ = {
+		E47ABE3F2652FE0900FD2FE3 /* Toolkit Examples */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E47ABE4F2652FE0C00FD2FE3 /* Build configuration list for PBXNativeTarget "Examples" */;
+			buildConfigurationList = E47ABE4F2652FE0C00FD2FE3 /* Build configuration list for PBXNativeTarget "Toolkit Examples" */;
 			buildPhases = (
 				E47ABE3C2652FE0900FD2FE3 /* Sources */,
 				E47ABE3D2652FE0900FD2FE3 /* Frameworks */,
@@ -185,12 +185,12 @@
 			);
 			dependencies = (
 			);
-			name = Examples;
+			name = "Toolkit Examples";
 			packageProductDependencies = (
 				E4E57DC5265D8EB00077A093 /* ArcGISToolkit */,
 			);
 			productName = Examples;
-			productReference = E47ABE402652FE0900FD2FE3 /* Examples.app */;
+			productReference = E47ABE402652FE0900FD2FE3 /* Toolkit Examples.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -220,7 +220,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E47ABE3F2652FE0900FD2FE3 /* Examples */,
+				E47ABE3F2652FE0900FD2FE3 /* Toolkit Examples */,
 			);
 		};
 /* End PBXProject section */
@@ -421,7 +421,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.1.0;
+				MARKETING_VERSION = 200.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -449,7 +449,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.1.0;
+				MARKETING_VERSION = 200.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -472,7 +472,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E47ABE4F2652FE0C00FD2FE3 /* Build configuration list for PBXNativeTarget "Examples" */ = {
+		E47ABE4F2652FE0C00FD2FE3 /* Build configuration list for PBXNativeTarget "Toolkit Examples" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E47ABE502652FE0C00FD2FE3 /* Debug */,
