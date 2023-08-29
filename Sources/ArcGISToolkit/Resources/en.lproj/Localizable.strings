@@ -158,7 +158,7 @@ east, etc.). */
 /* No comment provided by engineer. */
 "None selected" = "None selected";
 
-/* A trace function output result is not available. */
+/* A trace function output result was not provided. */
 "Not Available" = "Not Available";
 
 /* A string identifying a utility network object. */
