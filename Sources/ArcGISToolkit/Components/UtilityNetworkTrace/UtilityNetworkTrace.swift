@@ -442,7 +442,7 @@ public struct UtilityNetworkTrace: View {
                                             Text(
                                                 "Not Available",
                                                 bundle: .toolkitModule,
-                                                comment: "A trace function output result is not available."
+                                                comment: "A trace function output result was not provided."
                                             )
                                         }
                                     }
