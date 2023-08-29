@@ -20,7 +20,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Allow";
 
-/* No comment provided by engineer. */
+/* A fallback message to display when an image cannot be loaded. */
 "An error occurred loading the image: %@." = "An error occurred loading the image: %@.";
 
 /* No comment provided by engineer. */
