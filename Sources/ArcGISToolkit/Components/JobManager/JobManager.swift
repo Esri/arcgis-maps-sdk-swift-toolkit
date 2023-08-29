@@ -40,7 +40,28 @@ extension Logger {
     }()
 }
 
-/// An object that manages saving jobs when the app is backgrounded and can reload them later.
+/// An object that manages saving and loading jobs so that they can continue to run if the
+/// app is backgrounded or even terminated.
+/// There are 4 situations that the job manager helps with:
+/// 1. The job manager will serialize jobs to the user defaults when an app is backgrounded
+/// or terminated and then deserialize those jobs whenever an app is launched.
+/// 2. The job manager will ask the system for some background processing time when an app
+/// is backgrounded so that jobs that are not yet started on the server, can have some time to
+/// allow them to start. This means if you kick off a job and it hasn't actually started on the server
+/// when the app is backgrounded, the job should have enough time to start on the server which
+/// will cause it to enter into a polling state. When the job is in the polling state it checks
+/// the status of the server job every so often.
+/// 3. The job manager will request from the system a background refresh task (if enabled via
+/// the ``JobManager/preferredBackgroundStatusCheckSchedule`` property). This will happen
+/// when the app is backgrounded. If the system later executes the background refresh task then the
+/// job manager will check the status of any running jobs. At that point the jobs may start
+/// downloading their result.
+/// 4. By default, Jobs will download their results with background URL session. This means that the
+/// download can execute out of process, even if the app is terminated. If the app is terminated and
+/// then later relaunched by the system because a background downloaded completed, then you may
+/// call the ``JobManager/resumeAllPausedJobs()`` method from the application relaunch point,
+/// which will correllate the jobs to their respective downloads that completed and the jobs will
+/// then finish.
 @MainActor
 public class JobManager: ObservableObject {
     /// The shared job manager.
