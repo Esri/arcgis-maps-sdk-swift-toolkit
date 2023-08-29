@@ -715,7 +715,7 @@ public struct UtilityNetworkTrace: View {
     private var currentTraceLabel: String {
         guard let index = viewModel.selectedTraceIndex else { return "Error" }
         return String(
-            localized: "Trace \(index+1, specifier: "%lld1") of \(viewModel.completedTraces.count, specifier: "%lld2")",
+            localized: "Trace \(index+1, specifier: "%1$lld") of \(viewModel.completedTraces.count, specifier: "%2$lld")",
             bundle: .toolkitModule,
             comment: "A label indicating the index of the trace being viewed out of the total number of traces completed."
         )
