@@ -233,7 +233,7 @@ struct SiteAndFacilitySelector: View {
                 prompt: String(
                     localized: "Filter facilities",
                     bundle: .toolkitModule,
-                    comment: "A search field allowing user to filter a list of facilities by name."
+                    comment: "A field allowing a user to filter a list of facilities by name. A facility contains one or more levels in a floor-aware map or scene."
                 )
             )
             .keyboardType(.alphabet)
