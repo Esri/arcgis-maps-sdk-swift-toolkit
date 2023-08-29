@@ -131,7 +131,7 @@ east, etc.). */
 /* No comment provided by engineer. */
 "Name" = "Name";
 
-/* No comment provided by engineer. */
+/* A label in reference to a specific utility network. */
 "Network" = "Network";
 
 /* No comment provided by engineer. */
