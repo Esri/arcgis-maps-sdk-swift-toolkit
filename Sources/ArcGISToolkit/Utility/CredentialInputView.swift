@@ -172,7 +172,8 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED***TextField(
 ***REMOVED******REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Username",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label referring to a credential username."
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***text: $username
 ***REMOVED******REMOVED***)

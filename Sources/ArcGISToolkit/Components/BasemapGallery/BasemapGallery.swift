@@ -258,15 +258,37 @@ extension AlertItem {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
 ***REMOVED******REMOVED***case (.some(_), .some(_)):
-***REMOVED******REMOVED******REMOVED***message = String(localized: "The basemap has a spatial reference that is incompatible with the map.", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED***message = String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "The basemap has a spatial reference that is incompatible with the map.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label indicating the spatial reference of the chosen basemap doesn't
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** match the spatial reference of the geo model.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case (_, .none):
-***REMOVED******REMOVED******REMOVED***message = String(localized: "The map does not have a spatial reference.", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED***message = String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "The map does not have a spatial reference.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating the map doesn't have a spatial reference."
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case (.none, _):
-***REMOVED******REMOVED******REMOVED***message = String(localized: "The basemap does not have a spatial reference.", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED***message = String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "The basemap does not have a spatial reference.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating the chosen basemap doesn't have a spatial reference."
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.init(
-***REMOVED******REMOVED******REMOVED***title: String(localized: "Spatial reference mismatch.", bundle: .toolkitModule),
+***REMOVED******REMOVED******REMOVED***title: String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Spatial reference mismatch.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label indicating the spatial reference of the chosen basemap doesn't
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** match the spatial reference of the geo model.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***message: message
 ***REMOVED******REMOVED***)
 ***REMOVED***

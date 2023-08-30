@@ -900,18 +900,24 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let resultsOptionLabel = String(
 ***REMOVED******REMOVED***localized: "Results",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label for a button to show utility network trace results."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title for the starting points section
 ***REMOVED***static let startingPointsTitle = String(
 ***REMOVED******REMOVED***localized: "Starting Points",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** A label referring to the utility elements chosen as starting points for a utility
+***REMOVED******REMOVED******REMOVED******REMOVED*** network trace operation.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let terminalConfigurationPickerTitle = String(
 ***REMOVED******REMOVED***localized: "Terminal Configuration",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label in reference to the chosen terminal configuration of a utility network element."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let traceButtonLabel = String(
@@ -922,7 +928,8 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let traceConfigurationSectionLabel = String(
 ***REMOVED******REMOVED***localized: "Trace Configuration",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label in reference to a utility network trace configuration."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let unnamedAssetType = String(

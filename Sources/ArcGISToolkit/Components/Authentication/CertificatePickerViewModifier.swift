@@ -122,19 +122,19 @@ extension CertificateImportError: LocalizedError {
 ***REMOVED******REMOVED******REMOVED***return String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "The certificate file was invalid.",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: ""
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating the chosen file was invalid."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .invalidPassword:
 ***REMOVED******REMOVED******REMOVED***return String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "The password was invalid.",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: ""
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating the given password was invalid."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***return SecCopyErrorMessageString(rawValue, nil) as String? ?? String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "The certificate file or password was invalid.",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: ""
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating the chosen file or given password was invalid."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -350,7 +350,7 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.certificateError?.localizedDescription ?? String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "The certificate file or password was invalid.",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating the chosen file or given password was invalid."
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
@@ -379,7 +379,7 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Try Again",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button allowing the user to retry an operation."
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
