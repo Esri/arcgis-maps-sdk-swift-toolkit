@@ -65,7 +65,7 @@ east, etc.). */
 /* A label for a button used to continue the authentication operation. */
 "Continue" = "Continue";
 
-/* No comment provided by engineer. */
+/* A label indicating a certificate file was inaccessible. */
 "Could not access the certificate file." = "Could not access the certificate file.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
@@ -80,10 +80,11 @@ east, etc.). */
 /* No comment provided by engineer. */
 "Duplicate starting points cannot be added." = "Duplicate starting points cannot be added.";
 
-/* No comment provided by engineer. */
+/* A label indicating an element could not be identified as a starting point
+ for a utility network trace. */
 "Element could not be identified." = "Element could not be identified.";
 
-/* No comment provided by engineer. */
+/* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Error";
 
 /* No comment provided by engineer. */
