@@ -18,7 +18,7 @@ struct UtilityNetworkTraceUserAlert {
 ***REMOVED******REMOVED***/ Title of the alert.
 ***REMOVED***var title: String = String(
 ***REMOVED******REMOVED***localized: "Error",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: "A label in reference to an error that occurred during a utility network trace."
 ***REMOVED***)
 ***REMOVED***
