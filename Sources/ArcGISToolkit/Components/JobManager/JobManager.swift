@@ -19,26 +19,67 @@ import OSLog
 
 ***REMOVED***/ An object that manages saving and loading jobs so that they can continue to run if the
 ***REMOVED***/ app is backgrounded or even terminated.
-***REMOVED***/ There are 4 situations that the job manager helps with:
-***REMOVED***/ 1. The job manager will serialize jobs to the user defaults when an app is backgrounded
-***REMOVED***/ or terminated and then deserialize those jobs whenever an app is launched.
-***REMOVED***/ 2. The job manager will ask the system for some background processing time when an app
+***REMOVED***/
+***REMOVED***/ The job manager is not instantiable, you must use the ``shared`` instance.
+***REMOVED***/
+***REMOVED***/ **Background**
+***REMOVED***/
+***REMOVED***/ Jobs are long running server operations. When a job instance is started on the client,
+***REMOVED***/ it makes a request to a service asking it to start work on the server. At that point, the client
+***REMOVED***/ polls the server intermittently to check the status of the work. Once the work is completed
+***REMOVED***/ the result is downloaded with a background `URLSession`. This allows the download to
+***REMOVED***/ complete out of process, and the download task can relaunch the app upon completion, even
+***REMOVED***/ in the case where the app was terminated.
+***REMOVED***/
+***REMOVED***/ We do not expect users to keep an application in the foreground and wait for a job to complete.
+***REMOVED***/ Once the job is started, if the app is backgrounded, we can use an app refresh
+***REMOVED***/ background task to check the status of the work on the server. If the server work is complete
+***REMOVED***/ we can start downloading the result in the background at that point. If the work on the server
+***REMOVED***/ is not complete, we can reschedule another background app refresh to recheck status.
+***REMOVED***/
+***REMOVED***/ There is some iOS behavior to be aware of as well. In iOS, if an application is backgrounded,
+***REMOVED***/ the operating system can terminate the app at its discretion. This means that jobs need to be
+***REMOVED***/ serialized when an app is backgrounded so that if the app is terminated the jobs can be
+***REMOVED***/ rehydrated upon relaunch of the app.
+***REMOVED***/
+***REMOVED***/ Also in iOS if the user of an app removes the app from the app switcher (swiping up) then any
+***REMOVED***/ background downloads in progress are canceled by the operating system.
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ The job manager is an `ObservableObject` with a mutable ``jobs`` property. Adding a job to this
+***REMOVED***/ property will allow the job manager to do the work to make sure that we can rehydrate a job
+***REMOVED***/ if an app is terminated.
+***REMOVED***/
+***REMOVED***/ As such, the job manager will:
+***REMOVED***/
+***REMOVED***/***REMOVED*** - Serialize the job to the user defaults when the app is backgrounded
+***REMOVED***/***REMOVED*** - Deserialize the job when an application is relaunched
+***REMOVED***/
+***REMOVED***/ The job manager will help with the lifetime of jobs in other ways as well.
+***REMOVED***/
+***REMOVED***/ The job manager will ask the system for some background processing time when an app
 ***REMOVED***/ is backgrounded so that jobs that are not yet started on the server, can have some time to
 ***REMOVED***/ allow them to start. This means if you kick off a job and it hasn't actually started on the server
 ***REMOVED***/ when the app is backgrounded, the job should have enough time to start on the server which
-***REMOVED***/ will cause it to enter into a polling state. When the job is in the polling state it checks
-***REMOVED***/ the status of the server job every so often.
-***REMOVED***/ 3. The job manager will request from the system a background refresh task (if enabled via
-***REMOVED***/ the ``JobManager/preferredBackgroundStatusCheckSchedule`` property). This will happen
-***REMOVED***/ when the app is backgrounded. If the system later executes the background refresh task then the
+***REMOVED***/ will cause it to enter into a polling state. When the job reaches the polling state the
+***REMOVED***/ status of the work on the server can be checked intermittently.
+***REMOVED***/
+***REMOVED***/ To enable polling while an app is backgrounded, the job manager will request from the system a
+***REMOVED***/ background refresh task (if enabled via the ``JobManager/preferredBackgroundStatusCheckSchedule``
+***REMOVED***/ property). If the system later executes the background refresh task then the
 ***REMOVED***/ job manager will check the status of any running jobs. At that point the jobs may start
-***REMOVED***/ downloading their result. Note, this does not work on the simulator.
-***REMOVED***/ 4. By default, Jobs will download their results with background URL session. This means that the
+***REMOVED***/ downloading their result. Note, this does not work on the simulator, this behavior can only
+***REMOVED***/ be tested on an actual device.
+***REMOVED***/
+***REMOVED***/ Now that the job can check status in the background, it can start downloading in the background.
+***REMOVED***/ By default, jobs will download their results with background URL session. This means that the
 ***REMOVED***/ download can execute out of process, even if the app is terminated. If the app is terminated and
 ***REMOVED***/ then later relaunched by the system because a background downloaded completed, then you may
 ***REMOVED***/ call the ``JobManager/resumeAllPausedJobs()`` method from the application relaunch point,
 ***REMOVED***/ which will correllate the jobs to their respective downloads that completed and the jobs will
-***REMOVED***/ then finish.
+***REMOVED***/ then finish. The app relaunch point can happen via the SwiftUI modifier `.backgroundTask(.urlSession(...))`.
+***REMOVED***/ In UIKit it would be the `UIApplicationDelegate` method `func application(UIApplication, handleEventsForBackgroundURLSession: String, completionHandler: () -> Void)`
 @MainActor
 public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ The shared job manager.
