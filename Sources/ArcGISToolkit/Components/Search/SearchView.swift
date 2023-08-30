@@ -128,11 +128,15 @@ public struct SearchView: View {
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
-
+    
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
     /// `prompt` modifier.
-    private var prompt = String(localized: "Find a place or address", bundle: .toolkitModule)
+    private var prompt = String(
+        localized: "Find a place or address",
+        bundle: .toolkitModule,
+        comment: "A hint as to what a user can search for within a search bar."
+    )
     
     /// Determines whether a built-in result view will be shown. Defaults to `true`.
     /// If `false`, the result display/selection list is not shown. Set to false if you want to hide the results

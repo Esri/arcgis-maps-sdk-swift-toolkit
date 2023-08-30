@@ -118,6 +118,10 @@ extension PopupMedia: Identifiable {}
 private extension MediaPopupElement {
     /// Provides a default title to display if `title` is empty.
     var displayTitle: String {
-        title.isEmpty ? String(localized: "Media", bundle: .toolkitModule) : title
+        title.isEmpty ? String(
+            localized: "Media",
+            bundle: .toolkitModule,
+            comment: "A label referring to media elements contained within a popup."
+        ) : title
     }
 }

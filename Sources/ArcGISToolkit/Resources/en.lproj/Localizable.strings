@@ -118,31 +118,32 @@ network certificate. */
 /* A field allowing a user to filter a list of sites by name. A site contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Filter sites";
 
-/* No comment provided by engineer. */
+/* A hint as to what a user can search for within a search bar. */
 "Find a place or address" = "Find a place or address";
 
-/* No comment provided by engineer. */
+/* A label referring to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Fraction Along Edge";
 
-/* No comment provided by engineer. */
+/* A label referring to function outputs returned as results of a utility network
+ trace operation. */
 "Function Results" = "Function Results";
 
-/* No comment provided by engineer. */
+/* A label referring to media elements contained within a popup. */
 "Media" = "Media";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Mode";
 
-/* No comment provided by engineer. */
+/* A label referring to a user defined name given for an individual utility network trace. */
 "Name" = "Name";
 
 /* A label in reference to a specific utility network. */
 "Network" = "Network";
 
-/* No comment provided by engineer. */
+/* A label for a button to show new utility network trace configuration options. */
 "New trace" = "New trace";
 
-/* No comment provided by engineer. */
+/* A label indicating that no bookmarks are available for selection. */
 "No bookmarks" = "No bookmarks";
 
 /* A statement that no utility trace configurations are available. */
@@ -154,13 +155,13 @@ network certificate. */
 /* A message to show when there are no results or suggestions. */
 "No results found" = "No results found";
 
-/* No comment provided by engineer. */
+/* A label indicating that no utility named trace configurations are available. */
 "No trace types found." = "No trace types found.";
 
-/* No comment provided by engineer. */
+/* A label indicating that no utility networks are available. */
 "No utility networks found." = "No utility networks found.";
 
-/* No comment provided by engineer. */
+/* "A label indicating that no utility network trace configuration has been selected." */
 "None selected" = "None selected";
 
 /* A trace function output result was not provided. */
@@ -169,22 +170,24 @@ network certificate. */
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Object ID: %@";
 
-/* No comment provided by engineer. */
+/* A label for button to proceed with an operation. */
 "OK" = "OK";
 
-/* No comment provided by engineer. */
+/* A label referring to a credential password. */
 "Password" = "Password";
 
-/* No comment provided by engineer. */
+/* A label indicating that a password is required to proceed with an operation. */
 "Password Required" = "Password Required";
 
-/* No comment provided by engineer. */
+/* A label requesting the password associated with the chosen certificate. */
 "Please enter a password for the chosen certificate." = "Please enter a password for the chosen certificate.";
 
-/* No comment provided by engineer. */
+/* A label indicating that at least one starting location is required for the
+ chosen utility network trace configuration. */
 "Please set at least 1 starting location." = "Please set at least 1 starting location.";
 
-/* No comment provided by engineer. */
+/* A label indicating that at least two starting locations are required for the
+ chosen utility network trace configuration. */
 "Please set at least 2 starting locations." = "Please set at least 2 starting locations.";
 
 /* An error message shown when a popup cannot be displayed. The

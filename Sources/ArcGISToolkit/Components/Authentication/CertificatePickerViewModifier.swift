@@ -190,12 +190,13 @@ struct CertificatePickerViewModifier: ViewModifier {
                 fields: .password,
                 message: String(
                     localized: "Please enter a password for the chosen certificate.",
-                    bundle: .toolkitModule
+                    bundle: .toolkitModule,
+                    comment: "A label requesting the password associated with the chosen certificate."
                 ),
                 title: String(
                     localized: "Password Required",
                     bundle: .toolkitModule,
-                    comment: ""
+                    comment: "A label indicating that a password is required to proceed with an operation."
                 ),
                 cancelAction: .init(
                     title: String(
@@ -211,7 +212,7 @@ struct CertificatePickerViewModifier: ViewModifier {
                     title: String(
                         localized: "OK",
                         bundle: .toolkitModule,
-                        comment: ""
+                        comment: "A label for button to proceed with an operation."
                     ),
                     handler: { _, password in
                         viewModel.proceedToUseCertificate(withPassword: password)
