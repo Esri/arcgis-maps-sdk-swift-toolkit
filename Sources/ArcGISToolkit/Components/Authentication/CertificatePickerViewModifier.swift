@@ -212,7 +212,11 @@ private extension View {
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***alert(
-***REMOVED******REMOVED******REMOVED***Text("Certificate Required", bundle: .toolkitModule),
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Certificate Required",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating that a certificate is required to proceed."
+***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED***presenting: viewModel.challengingHost
 ***REMOVED******REMOVED***) { _ in

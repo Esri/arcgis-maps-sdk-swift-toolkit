@@ -57,7 +57,11 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(localized: "Continue", bundle: .toolkitModule),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Continue",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button used to continue the authentication operation."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { username, password in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let loginCredential = LoginCredential(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username: username, password: password

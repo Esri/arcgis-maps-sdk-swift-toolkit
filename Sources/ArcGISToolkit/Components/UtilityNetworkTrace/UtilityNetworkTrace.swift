@@ -809,7 +809,8 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let cancelStartingPointSelection = String(
 ***REMOVED******REMOVED***localized: "Cancel starting point selection",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label for a button to cancel the starting point selection operation."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let clearAllResults = String(
@@ -826,12 +827,14 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let colorLabel = String(
 ***REMOVED******REMOVED***localized: "Color",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label in reference to the color used to display utility trace result graphics."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let deleteButtonLabel = String(
 ***REMOVED******REMOVED***localized: "Delete",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label for a button used to delete a utility network trace input component or result."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title for the feature results section
