@@ -173,7 +173,7 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Username",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label referring to a credential username."
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label in reference to a credential username."
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***text: $username
 ***REMOVED******REMOVED***)
@@ -192,7 +192,7 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Password",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label referring to a credential password."
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label in reference to a credential password."
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***text: $password
 ***REMOVED******REMOVED***)

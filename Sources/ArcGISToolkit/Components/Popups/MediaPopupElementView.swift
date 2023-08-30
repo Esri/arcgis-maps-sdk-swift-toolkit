@@ -121,7 +121,7 @@ private extension MediaPopupElement {
 ***REMOVED******REMOVED***title.isEmpty ? String(
 ***REMOVED******REMOVED******REMOVED***localized: "Media",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label referring to media elements contained within a popup."
+***REMOVED******REMOVED******REMOVED***comment: "A label in reference to media elements contained within a popup."
 ***REMOVED******REMOVED***) : title
 ***REMOVED***
 ***REMOVED***

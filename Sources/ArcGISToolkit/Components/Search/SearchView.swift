@@ -135,7 +135,7 @@ public struct SearchView: View {
 ***REMOVED***private var prompt = String(
 ***REMOVED******REMOVED***localized: "Find a place or address",
 ***REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED***comment: "A hint as to what a user can search for within a search bar."
+***REMOVED******REMOVED***comment: "A hint as to what the user can search for within a search bar."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. Defaults to `true`.
@@ -227,7 +227,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Repeat Search Here",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  A label for button to show when a user has panned the map away
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  A label for button to show when the user has panned the map away
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  from the original search location. 'Here' is in reference to the
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  current visible extent of the map or scene.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  """

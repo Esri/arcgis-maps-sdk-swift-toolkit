@@ -842,7 +842,7 @@ private extension String {
 ***REMOVED******REMOVED***localized: "Feature Results",
 ***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED*** A label referring to utility elements returned as results of a utility network
+***REMOVED******REMOVED******REMOVED******REMOVED*** A label in reference to utility elements returned as results of a utility network
 ***REMOVED******REMOVED******REMOVED******REMOVED*** trace operation.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED***)
@@ -850,14 +850,14 @@ private extension String {
 ***REMOVED***static let fractionAlongEdgeSectionTitle = String(
 ***REMOVED******REMOVED***localized: "Fraction Along Edge",
 ***REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED***comment: "A label referring to a fractional distance along an edge style utility network element."
+***REMOVED******REMOVED***comment: "A label in reference to a fractional distance along an edge style utility network element."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let functionResultsSectionTitle = String(
 ***REMOVED******REMOVED***localized: "Function Results",
 ***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED*** A label referring to function outputs returned as results of a utility network
+***REMOVED******REMOVED******REMOVED******REMOVED*** A label in reference to function outputs returned as results of a utility network
 ***REMOVED******REMOVED******REMOVED******REMOVED*** trace operation.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED***)
@@ -871,7 +871,7 @@ private extension String {
 ***REMOVED***static let nameLabel = String(
 ***REMOVED******REMOVED***localized: "Name",
 ***REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED***comment: "A label referring to a user defined name given for an individual utility network trace."
+***REMOVED******REMOVED***comment: "A label in reference to the user defined name for an individual utility network trace."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let networkSectionLabel = String(
@@ -909,7 +909,7 @@ private extension String {
 ***REMOVED******REMOVED***localized: "Starting Points",
 ***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED*** A label referring to the utility elements chosen as starting points for a utility
+***REMOVED******REMOVED******REMOVED******REMOVED*** A label in reference to the utility elements chosen as starting points for a utility
 ***REMOVED******REMOVED******REMOVED******REMOVED*** network trace operation.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED***)
