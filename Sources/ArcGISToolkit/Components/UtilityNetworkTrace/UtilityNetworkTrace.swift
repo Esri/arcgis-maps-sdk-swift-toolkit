@@ -840,7 +840,11 @@ private extension String {
 ***REMOVED******REMOVED***/ Title for the feature results section
 ***REMOVED***static let featureResultsTitle = String(
 ***REMOVED******REMOVED***localized: "Feature Results",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** A label referring to utility elements returned as results of a utility network
+***REMOVED******REMOVED******REMOVED******REMOVED*** trace operation.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let fractionAlongEdgeSectionTitle = String(

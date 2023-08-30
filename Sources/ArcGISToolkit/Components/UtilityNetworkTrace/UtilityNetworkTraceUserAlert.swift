@@ -52,11 +52,19 @@ extension UtilityNetworkTraceUserAlert {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***title: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Failed to set starting point",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A message indicating that the chosen utility network element wasn't able
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to be used as a trace starting point.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***description: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Duplicate starting points cannot be added.",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A message indicating that the user attempted to use a single utility
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** network element for more than one trace starting point.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
