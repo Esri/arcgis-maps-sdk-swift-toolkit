@@ -173,7 +173,7 @@ struct CredentialInputSheetView: View {
             String(
                 localized: "Username",
                 bundle: .toolkitModule,
-                comment: "A label referring to a credential username."
+                comment: "A label in reference to a credential username."
             ),
             text: $username
         )
@@ -192,7 +192,7 @@ struct CredentialInputSheetView: View {
             String(
                 localized: "Password",
                 bundle: .toolkitModule,
-                comment: "A label referring to a credential password."
+                comment: "A label in reference to a credential password."
             ),
             text: $password
         )

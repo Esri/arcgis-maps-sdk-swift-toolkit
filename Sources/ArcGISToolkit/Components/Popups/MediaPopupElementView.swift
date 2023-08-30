@@ -121,7 +121,7 @@ private extension MediaPopupElement {
         title.isEmpty ? String(
             localized: "Media",
             bundle: .toolkitModule,
-            comment: "A label referring to media elements contained within a popup."
+            comment: "A label in reference to media elements contained within a popup."
         ) : title
     }
 }

@@ -842,7 +842,7 @@ private extension String {
         localized: "Feature Results",
         bundle: .toolkitModule,
         comment: """
-                 A label referring to utility elements returned as results of a utility network
+                 A label in reference to utility elements returned as results of a utility network
                  trace operation.
                  """
     )
@@ -850,14 +850,14 @@ private extension String {
     static let fractionAlongEdgeSectionTitle = String(
         localized: "Fraction Along Edge",
         bundle: .toolkitModule,
-        comment: "A label referring to a fractional distance along an edge style utility network element."
+        comment: "A label in reference to a fractional distance along an edge style utility network element."
     )
     
     static let functionResultsSectionTitle = String(
         localized: "Function Results",
         bundle: .toolkitModule,
         comment: """
-                 A label referring to function outputs returned as results of a utility network
+                 A label in reference to function outputs returned as results of a utility network
                  trace operation.
                  """
     )
@@ -871,7 +871,7 @@ private extension String {
     static let nameLabel = String(
         localized: "Name",
         bundle: .toolkitModule,
-        comment: "A label referring to a user defined name given for an individual utility network trace."
+        comment: "A label in reference to the user defined name for an individual utility network trace."
     )
     
     static let networkSectionLabel = String(
@@ -909,7 +909,7 @@ private extension String {
         localized: "Starting Points",
         bundle: .toolkitModule,
         comment: """
-                 A label referring to the utility elements chosen as starting points for a utility
+                 A label in reference to the utility elements chosen as starting points for a utility
                  network trace operation.
                  """
     )

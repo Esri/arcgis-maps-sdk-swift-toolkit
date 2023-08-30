@@ -135,7 +135,7 @@ public struct SearchView: View {
     private var prompt = String(
         localized: "Find a place or address",
         bundle: .toolkitModule,
-        comment: "A hint as to what a user can search for within a search bar."
+        comment: "A hint as to what the user can search for within a search bar."
     )
     
     /// Determines whether a built-in result view will be shown. Defaults to `true`.
@@ -227,7 +227,7 @@ public struct SearchView: View {
                         "Repeat Search Here",
                         bundle: .toolkitModule,
                         comment: """
-                                  A label for button to show when a user has panned the map away
+                                  A label for button to show when the user has panned the map away
                                   from the original search location. 'Here' is in reference to the
                                   current visible extent of the map or scene.
                                   """
