@@ -34,8 +34,12 @@ struct BookmarksHeader: View {
         HStack(alignment: .top) {
             Image(systemName: "bookmark")
             VStack(alignment: .leading) {
-                Text("Bookmarks", bundle: .toolkitModule)
-                    .font(.headline)
+                Text(
+                    "Bookmarks",
+                    bundle: .toolkitModule,
+                    comment: "A label in reference to bookmarks contained in a geo model."
+                )
+                .font(.headline)
                 Text("Select a bookmark", bundle: .toolkitModule)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
