@@ -41,10 +41,10 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Cancel";
 
-/* No comment provided by engineer. */
+/* A label for a button to cancel the starting point selection operation. */
 "Cancel starting point selection" = "Cancel starting point selection";
 
-/* No comment provided by engineer. */
+/* A label indicating that a certificate is required to proceed. */
 "Certificate Required" = "Certificate Required";
 
 /* A label indicating that the remote host's certificate is not trusted. */
@@ -53,7 +53,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Clear all results";
 
-/* No comment provided by engineer. */
+/* A label in reference to the color used to display utility trace result graphics. */
 "Color" = "Color";
 
 /* An compass description to be read by a screen reader describing the
@@ -62,7 +62,7 @@ second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
 "Compass, heading %lld degrees %@" = "Compass, heading %lld degrees %@";
 
-/* No comment provided by engineer. */
+/* A label for a button used to continue the authentication operation. */
 "Continue" = "Continue";
 
 /* No comment provided by engineer. */
@@ -71,7 +71,7 @@ east, etc.). */
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Dangerous: The certificate provided by '%@' is not signed by a trusted authority.";
 
-/* No comment provided by engineer. */
+/* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Delete";
 
 /* A button to close the bookmark selection menu. */
