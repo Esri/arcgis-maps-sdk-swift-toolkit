@@ -103,7 +103,10 @@ struct SiteAndFacilitySelector: View {
                 prompt: String(
                     localized: "Filter sites",
                     bundle: .toolkitModule,
-                    comment: "A field allowing a user to filter a list of sites by name. A site contains one or more facilities in a floor-aware map or scene."
+                    comment: """
+                             A field allowing the user to filter a list of sites by name. A site
+                             contains one or more facilities in a floor-aware map or scene.
+                             """
                 )
             )
             .keyboardType(.alphabet)
@@ -237,7 +240,10 @@ struct SiteAndFacilitySelector: View {
                 prompt: String(
                     localized: "Filter facilities",
                     bundle: .toolkitModule,
-                    comment: "A field allowing a user to filter a list of facilities by name. A facility contains one or more levels in a floor-aware map or scene."
+                    comment: """
+                             A field allowing the user to filter a list of facilities by name. A
+                             facility contains one or more levels in a floor-aware map or scene.
+                             """
                 )
             )
             .keyboardType(.alphabet)
@@ -253,7 +259,7 @@ struct SiteAndFacilitySelector: View {
                     localized: "Select a facility",
                     bundle: .toolkitModule,
                     comment: """
-                             A label directing a user to select a facility. A facility contains one
+                             A label directing the user to select a facility. A facility contains one
                              or more levels in a floor-aware map or scene.
                              """
                 )

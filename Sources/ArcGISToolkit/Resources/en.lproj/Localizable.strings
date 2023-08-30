@@ -102,7 +102,7 @@ network certificate. */
  to be used as a trace starting point. */
 "Failed to set starting point" = "Failed to set starting point";
 
-/* A label referring to utility elements returned as results of a utility network
+/* A label in reference to utility elements returned as results of a utility network
  trace operation. */
 "Feature Results" = "Feature Results";
 
@@ -112,29 +112,31 @@ network certificate. */
 /* A label in reference to fields contained in a chart of data. */
 "Fields" = "Fields";
 
-/* A field allowing a user to filter a list of facilities by name. A facility contains one or more levels in a floor-aware map or scene. */
+/* A field allowing the user to filter a list of facilities by name. A
+ facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "Filter facilities";
 
-/* A field allowing a user to filter a list of sites by name. A site contains one or more facilities in a floor-aware map or scene. */
+/* A field allowing the user to filter a list of sites by name. A site
+ contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Filter sites";
 
-/* A hint as to what a user can search for within a search bar. */
+/* A hint as to what the user can search for within a search bar. */
 "Find a place or address" = "Find a place or address";
 
-/* A label referring to a fractional distance along an edge style utility network element. */
+/* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Fraction Along Edge";
 
-/* A label referring to function outputs returned as results of a utility network
+/* A label in reference to function outputs returned as results of a utility network
  trace operation. */
 "Function Results" = "Function Results";
 
-/* A label referring to media elements contained within a popup. */
+/* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Mode";
 
-/* A label referring to a user defined name given for an individual utility network trace. */
+/* A label in reference to the user defined name for an individual utility network trace. */
 "Name" = "Name";
 
 /* A label in reference to a specific utility network. */
@@ -173,7 +175,7 @@ network certificate. */
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
-/* A label referring to a credential password. */
+/* A label in reference to a credential password. */
 "Password" = "Password";
 
 /* A label indicating that a password is required to proceed with an operation. */
@@ -194,7 +196,7 @@ network certificate. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Popup evaluation failed: %@";
 
-/* A label for button to show when a user has panned the map away
+/* A label for button to show when the user has panned the map away
  from the original search location. 'Here' is in reference to the
  current visible extent of the map or scene. */
 "Repeat Search Here" = "Repeat Search Here";
@@ -208,7 +210,7 @@ variable provides additional data. */
 /* A label prompting the user to make a selection from the available bookmarks. */
 "Select a bookmark" = "Select a bookmark";
 
-/* A label directing a user to select a facility. A facility contains one
+/* A label directing the user to select a facility. A facility contains one
  or more levels in a floor-aware map or scene. */
 "Select a facility" = "Select a facility";
 
@@ -219,7 +221,7 @@ variable provides additional data. */
  match the spatial reference of the geo model. */
 "Spatial reference mismatch." = "Spatial reference mismatch.";
 
-/* A label referring to the utility elements chosen as starting points for a utility
+/* A label in reference to the utility elements chosen as starting points for a utility
  network trace operation. */
 "Starting Points" = "Starting Points";
 
@@ -271,7 +273,7 @@ load for an unknown reason. */
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Unnamed Asset Type";
 
-/* A label referring to a credential username. */
+/* A label in reference to a credential username. */
 "Username" = "Username";
 
 /* A value in a set of data contained in a popup. */
