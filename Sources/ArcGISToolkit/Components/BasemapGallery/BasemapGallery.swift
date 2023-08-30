@@ -263,7 +263,7 @@ extension AlertItem {
                 bundle: .toolkitModule,
                 comment: """
                          A label indicating the spatial reference of the chosen basemap doesn't
-                         match the spatial reference of the geo model.
+                         match the spatial reference of the map.
                          """
             )
         case (_, .none):
@@ -286,7 +286,7 @@ extension AlertItem {
                 bundle: .toolkitModule,
                 comment: """
                          A label indicating the spatial reference of the chosen basemap doesn't
-                         match the spatial reference of the geo model.
+                         match the spatial reference of the map or scene.
                          """
             ),
             message: message
