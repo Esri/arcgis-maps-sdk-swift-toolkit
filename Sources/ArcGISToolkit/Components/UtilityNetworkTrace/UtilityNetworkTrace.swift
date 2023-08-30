@@ -840,7 +840,11 @@ private extension String {
     /// Title for the feature results section
     static let featureResultsTitle = String(
         localized: "Feature Results",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: """
+                 A label referring to utility elements returned as results of a utility network
+                 trace operation.
+                 """
     )
     
     static let fractionAlongEdgeSectionTitle = String(
