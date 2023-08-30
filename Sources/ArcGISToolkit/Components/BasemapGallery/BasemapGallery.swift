@@ -263,7 +263,7 @@ extension AlertItem {
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label indicating the spatial reference of the chosen basemap doesn't
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** match the spatial reference of the geo model.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** match the spatial reference of the map.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case (_, .none):
@@ -286,7 +286,7 @@ extension AlertItem {
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label indicating the spatial reference of the chosen basemap doesn't
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** match the spatial reference of the geo model.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** match the spatial reference of the map or scene.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***message: message

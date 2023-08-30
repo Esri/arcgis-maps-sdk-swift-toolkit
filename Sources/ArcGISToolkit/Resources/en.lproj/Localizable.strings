@@ -32,7 +32,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Authentication Required";
 
-/* A label in reference to bookmarks contained in a geo model. */
+/* A label in reference to bookmarks contained in a map or scene. */
 "Bookmarks" = "Bookmarks";
 
 /* A label for a button to open the system file browser. */
@@ -218,7 +218,7 @@ variable provides additional data. */
 "Sites" = "Sites";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
- match the spatial reference of the geo model. */
+ match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Spatial reference mismatch.";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
@@ -240,7 +240,7 @@ load for an unknown reason. */
 "The basemap failed to load for an unknown reason." = "The basemap failed to load for an unknown reason.";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
- match the spatial reference of the geo model. */
+ match the spatial reference of the map. */
 "The basemap has a spatial reference that is incompatible with the map." = "The basemap has a spatial reference that is incompatible with the map.";
 
 /* A label indicating the chosen file or given password was invalid. */

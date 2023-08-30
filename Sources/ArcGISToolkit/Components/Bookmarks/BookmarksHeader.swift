@@ -37,7 +37,7 @@ struct BookmarksHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Bookmarks",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label in reference to bookmarks contained in a geo model."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label in reference to bookmarks contained in a map or scene."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
