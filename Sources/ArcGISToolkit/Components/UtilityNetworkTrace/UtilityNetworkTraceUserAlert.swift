@@ -34,7 +34,11 @@ extension UtilityNetworkTraceUserAlert {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***description: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Please set at least 1 starting location.",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label indicating that at least one starting location is required for the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** chosen utility network trace configuration.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -43,7 +47,11 @@ extension UtilityNetworkTraceUserAlert {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***description: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Please set at least 2 starting locations.",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label indicating that at least two starting locations are required for the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** chosen utility network trace configuration.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -73,7 +81,8 @@ extension UtilityNetworkTraceUserAlert {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***description: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "No trace types found.",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating that no utility named trace configurations are available."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -82,7 +91,8 @@ extension UtilityNetworkTraceUserAlert {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***description: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "No utility networks found.",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating that no utility networks are available."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***

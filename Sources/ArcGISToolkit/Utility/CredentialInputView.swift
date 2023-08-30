@@ -190,7 +190,8 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED***SecureField(
 ***REMOVED******REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Password",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label referring to a credential password."
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***text: $password
 ***REMOVED******REMOVED***)

@@ -190,12 +190,13 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***fields: .password,
 ***REMOVED******REMOVED******REMOVED******REMOVED***message: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Please enter a password for the chosen certificate.",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label requesting the password associated with the chosen certificate."
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Password Required",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating that a password is required to proceed with an operation."
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(
@@ -211,7 +212,7 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "OK",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for button to proceed with an operation."
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, password in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedToUseCertificate(withPassword: password)

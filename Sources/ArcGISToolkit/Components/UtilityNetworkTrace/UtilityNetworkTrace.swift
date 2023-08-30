@@ -849,12 +849,17 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let fractionAlongEdgeSectionTitle = String(
 ***REMOVED******REMOVED***localized: "Fraction Along Edge",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label referring to a fractional distance along an edge style utility network element."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let functionResultsSectionTitle = String(
 ***REMOVED******REMOVED***localized: "Function Results",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** A label referring to function outputs returned as results of a utility network
+***REMOVED******REMOVED******REMOVED******REMOVED*** trace operation.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let modePickerTitle = String(
@@ -865,7 +870,8 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let nameLabel = String(
 ***REMOVED******REMOVED***localized: "Name",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label referring to a user defined name given for an individual utility network trace."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let networkSectionLabel = String(
@@ -876,7 +882,8 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let newTraceOptionLabel = String(
 ***REMOVED******REMOVED***localized: "New trace",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label for a button to show new utility network trace configuration options."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let noConfigurationsAvailable = String(
@@ -887,7 +894,8 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let noneSelected = String(
 ***REMOVED******REMOVED***localized: "None selected",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label indicating that no utility network trace configuration has been selected."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let resultsOptionLabel = String(
