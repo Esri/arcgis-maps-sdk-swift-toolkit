@@ -36,7 +36,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Bookmarks" = "Bookmarks";
 
 /* A label for a button to open the system file browser. */
-"Browse For Certificate" = "Browse For Certificate";
+"Browse" = "Browse";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Cancel";

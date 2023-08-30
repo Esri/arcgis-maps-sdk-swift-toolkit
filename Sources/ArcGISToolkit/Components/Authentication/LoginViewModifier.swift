@@ -29,10 +29,16 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.onAppear { isPresented = true ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.delayedOnAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present the sheet right away.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting it after initialization allows it to animate.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** However, this needs to happen after a slight delay or
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** it doesn't show.
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.credentialInput(
-***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
 ***REMOVED******REMOVED******REMOVED******REMOVED***message: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "You must sign in to access '\(challengingHost)'",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
