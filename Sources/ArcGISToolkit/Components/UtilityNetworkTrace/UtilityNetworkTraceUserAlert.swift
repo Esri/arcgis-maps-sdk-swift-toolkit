@@ -16,7 +16,11 @@
 ***REMOVED***/ A user presentable alert.
 struct UtilityNetworkTraceUserAlert {
 ***REMOVED******REMOVED***/ Title of the alert.
-***REMOVED***var title: String = String(localized: "Error", bundle: .toolkitModule)
+***REMOVED***var title: String = String(
+***REMOVED******REMOVED***localized: "Error",
+***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***comment: "A label in reference to an error that occurred during a utility network trace."
+***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Description of the alert.
 ***REMOVED***var description: String
@@ -79,7 +83,11 @@ extension UtilityNetworkTraceUserAlert {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***description: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Element could not be identified.",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label indicating an element could not be identified as a starting point
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** for a utility network trace.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***

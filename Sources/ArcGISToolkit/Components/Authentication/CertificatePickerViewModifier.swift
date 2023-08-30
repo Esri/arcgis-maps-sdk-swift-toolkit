@@ -132,7 +132,11 @@ extension CertificatePickerViewModel.CertificateError: LocalizedError {
 ***REMOVED***var errorDescription: String? {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .couldNotAccessCertificateFile:
-***REMOVED******REMOVED******REMOVED***return String(localized: "Could not access the certificate file.", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED***return String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Could not access the certificate file.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating a certificate file was inaccessible."
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .importError(let error):
 ***REMOVED******REMOVED******REMOVED***return error.localizedDescription
 ***REMOVED******REMOVED***case .other(let error):
