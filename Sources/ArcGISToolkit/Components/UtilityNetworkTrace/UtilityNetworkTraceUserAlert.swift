@@ -18,7 +18,7 @@ struct UtilityNetworkTraceUserAlert {
     /// Title of the alert.
     var title: String = String(
         localized: "Error",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
         comment: "A label in reference to an error that occurred during a utility network trace."
     )
     
