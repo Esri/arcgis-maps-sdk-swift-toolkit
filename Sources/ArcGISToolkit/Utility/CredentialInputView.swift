@@ -172,7 +172,8 @@ struct CredentialInputSheetView: View {
         TextField(
             String(
                 localized: "Username",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: "A label referring to a credential username."
             ),
             text: $username
         )

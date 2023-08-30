@@ -900,18 +900,24 @@ private extension String {
     
     static let resultsOptionLabel = String(
         localized: "Results",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button to show utility network trace results."
     )
     
     /// Title for the starting points section
     static let startingPointsTitle = String(
         localized: "Starting Points",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: """
+                 A label referring to the utility elements chosen as starting points for a utility
+                 network trace operation.
+                 """
     )
     
     static let terminalConfigurationPickerTitle = String(
         localized: "Terminal Configuration",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to the chosen terminal configuration of a utility network element."
     )
     
     static let traceButtonLabel = String(
@@ -922,7 +928,8 @@ private extension String {
     
     static let traceConfigurationSectionLabel = String(
         localized: "Trace Configuration",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to a utility network trace configuration."
     )
     
     static let unnamedAssetType = String(
