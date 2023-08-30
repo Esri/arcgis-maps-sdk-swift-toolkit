@@ -16,7 +16,11 @@ import SwiftUI
 /// A user presentable alert.
 struct UtilityNetworkTraceUserAlert {
     /// Title of the alert.
-    var title: String = String(localized: "Error", bundle: .toolkitModule)
+    var title: String = String(
+        localized: "Error",
+        bundle: .toolkitModule
+        comment: "A label in reference to an error that occurred during a utility network trace."
+    )
     
     /// Description of the alert.
     var description: String
@@ -79,7 +83,11 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "Element could not be identified.",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: """
+                         A label indicating an element could not be identified as a starting point
+                         for a utility network trace.
+                         """
             )
         )
     }
