@@ -43,7 +43,8 @@ import OSLog
 ***REMOVED***/ rehydrated upon relaunch of the app.
 ***REMOVED***/
 ***REMOVED***/ Also in iOS if the user of an app removes the app from the app switcher (swiping up) then any
-***REMOVED***/ background downloads in progress are canceled by the operating system.
+***REMOVED***/ background downloads in progress are canceled by the operating system. This behavior is intended
+***REMOVED***/ by iOS and any jobs that were in the process of downloading results will cease downloading.
 ***REMOVED***/
 ***REMOVED***/ **Features**
 ***REMOVED***/
@@ -53,8 +54,8 @@ import OSLog
 ***REMOVED***/
 ***REMOVED***/ As such, the job manager will:
 ***REMOVED***/
-***REMOVED***/***REMOVED*** - Serialize the job to the user defaults when the app is backgrounded
-***REMOVED***/***REMOVED*** - Deserialize the job when an application is relaunched
+***REMOVED***/  - Serialize the job to the user defaults when the app is backgrounded
+***REMOVED***/  - Deserialize the job when an application is relaunched
 ***REMOVED***/
 ***REMOVED***/ The job manager will help with the lifetime of jobs in other ways as well.
 ***REMOVED***/
