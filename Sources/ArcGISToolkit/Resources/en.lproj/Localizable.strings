@@ -199,13 +199,13 @@ variable provides additional data. */
  current visible extent of the map or scene. */
 "Repeat Search Here" = "Repeat Search Here";
 
-/* No comment provided by engineer. */
+/* A label for a button to show utility network trace results. */
 "Results" = "Results";
 
-/* No comment provided by engineer. */
+/* A label in reference to a search query entered by the user. */
 "Search Query" = "Search Query";
 
-/* No comment provided by engineer. */
+/* A label prompting the user to make a selection from the available bookmarks. */
 "Select a bookmark" = "Select a bookmark";
 
 /* A label directing a user to select a facility. A facility contains one
@@ -215,38 +215,42 @@ variable provides additional data. */
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
 
-/* No comment provided by engineer. */
+/* A label indicating the spatial reference of the chosen basemap doesn't
+ match the spatial reference of the geo model. */
 "Spatial reference mismatch." = "Spatial reference mismatch.";
 
-/* No comment provided by engineer. */
+/* A label referring to the utility elements chosen as starting points for a utility
+ network trace operation. */
 "Starting Points" = "Starting Points";
 
-/* No comment provided by engineer. */
+/* A label indicating that tapping an image will reveal
+ additional information. */
 "Tap on the image for more information." = "Tap on the image for more information.";
 
-/* No comment provided by engineer. */
+/* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Terminal Configuration";
 
-/* No comment provided by engineer. */
+/* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "The basemap does not have a spatial reference.";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to
 load for an unknown reason. */
 "The basemap failed to load for an unknown reason." = "The basemap failed to load for an unknown reason.";
 
-/* No comment provided by engineer. */
+/* A label indicating the spatial reference of the chosen basemap doesn't
+ match the spatial reference of the geo model. */
 "The basemap has a spatial reference that is incompatible with the map." = "The basemap has a spatial reference that is incompatible with the map.";
 
-/* No comment provided by engineer. */
+/* A label indicating the chosen file or given password was invalid. */
 "The certificate file or password was invalid." = "The certificate file or password was invalid.";
 
-/* No comment provided by engineer. */
+/* A label indicating the chosen file was invalid. */
 "The certificate file was invalid." = "The certificate file was invalid.";
 
-/* No comment provided by engineer. */
+/* A label indicating the map doesn't have a spatial reference. */
 "The map does not have a spatial reference." = "The map does not have a spatial reference.";
 
-/* No comment provided by engineer. */
+/* A label indicating the given password was invalid. */
 "The password was invalid." = "The password was invalid.";
 
 /* Description of error thrown when a remote image could not be loaded. */
@@ -258,16 +262,16 @@ load for an unknown reason. */
 /* A label indicating the index of the trace being viewed out of the total number of traces completed. */
 "Trace %1$lld of %2$lld" = "Trace %1$lld of %2$lld";
 
-/* No comment provided by engineer. */
+/* A label in reference to a utility network trace configuration. */
 "Trace Configuration" = "Trace Configuration";
 
-/* No comment provided by engineer. */
+/* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Try Again";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Unnamed Asset Type";
 
-/* No comment provided by engineer. */
+/* A label referring to a credential username. */
 "Username" = "Username";
 
 /* A value in a set of data contained in a popup. */

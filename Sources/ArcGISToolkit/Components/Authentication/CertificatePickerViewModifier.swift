@@ -122,19 +122,19 @@ extension CertificateImportError: LocalizedError {
             return String(
                 localized: "The certificate file was invalid.",
                 bundle: .toolkitModule,
-                comment: ""
+                comment: "A label indicating the chosen file was invalid."
             )
         case .invalidPassword:
             return String(
                 localized: "The password was invalid.",
                 bundle: .toolkitModule,
-                comment: ""
+                comment: "A label indicating the given password was invalid."
             )
         default:
             return SecCopyErrorMessageString(rawValue, nil) as String? ?? String(
                 localized: "The certificate file or password was invalid.",
                 bundle: .toolkitModule,
-                comment: ""
+                comment: "A label indicating the chosen file or given password was invalid."
             )
         }
     }
@@ -350,7 +350,7 @@ private extension View {
                     viewModel.certificateError?.localizedDescription ?? String(
                         localized: "The certificate file or password was invalid.",
                         bundle: .toolkitModule,
-                        comment: ""
+                        comment: "A label indicating the chosen file or given password was invalid."
                     )
                 )
                 .font(.subheadline)
@@ -379,7 +379,7 @@ private extension View {
                         Text(
                             "Try Again",
                             bundle: .toolkitModule,
-                            comment: ""
+                            comment: "A label for a button allowing the user to retry an operation."
                         )
                         .padding(.horizontal)
                     }

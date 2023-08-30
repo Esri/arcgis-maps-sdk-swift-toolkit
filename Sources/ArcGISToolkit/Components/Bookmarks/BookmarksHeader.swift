@@ -40,9 +40,13 @@ struct BookmarksHeader: View {
                     comment: "A label in reference to bookmarks contained in a geo model."
                 )
                 .font(.headline)
-                Text("Select a bookmark", bundle: .toolkitModule)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                Text(
+                    "Select a bookmark",
+                    bundle: .toolkitModule,
+                    comment: "A label prompting the user to make a selection from the available bookmarks."
+                )
+                .font(.subheadline)
+                .foregroundColor(.secondary)
             }
             .frame(
                 maxWidth: .infinity,
