@@ -174,7 +174,11 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(localized: "Cancel", bundle: .toolkitModule),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to cancel an operation."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -215,12 +219,20 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Browse For Certificate", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Browse For Certificate",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to open the system file browser."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to cancel an operation."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED*** message: { _ in
 ***REMOVED******REMOVED******REMOVED***Text(
@@ -277,7 +289,11 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to cancel an operation."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED***Text(

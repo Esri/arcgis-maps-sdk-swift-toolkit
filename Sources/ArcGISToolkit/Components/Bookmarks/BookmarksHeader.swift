@@ -34,8 +34,12 @@ struct BookmarksHeader: View {
 ***REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "bookmark")
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Bookmarks", bundle: .toolkitModule)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Bookmarks",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label in reference to bookmarks contained in a geo model."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Select a bookmark", bundle: .toolkitModule)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)

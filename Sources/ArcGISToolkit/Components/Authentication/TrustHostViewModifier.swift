@@ -59,7 +59,11 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .cancel)
 ***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to cancel an operation."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** message: { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(

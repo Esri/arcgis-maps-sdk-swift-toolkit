@@ -803,7 +803,8 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let attributesSectionTitle = String(
 ***REMOVED******REMOVED***localized: "Attributes",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label in reference to the attributes of a geo element."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let cancelStartingPointSelection = String(
