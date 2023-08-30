@@ -37,7 +37,7 @@ struct BookmarksHeader: View {
                 Text(
                     "Bookmarks",
                     bundle: .toolkitModule,
-                    comment: "A label in reference to bookmarks contained in a geo model."
+                    comment: "A label in reference to bookmarks contained in a map or scene."
                 )
                 .font(.headline)
                 Text(
