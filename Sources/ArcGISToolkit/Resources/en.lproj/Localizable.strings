@@ -23,22 +23,22 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A fallback message to display when an image cannot be loaded. */
 "An error occurred loading the image: %@." = "An error occurred loading the image: %@.";
 
-/* No comment provided by engineer. */
+/* A label in reference to attachments in a popup. */
 "Attachments" = "Attachments";
 
-/* No comment provided by engineer. */
+/* A label in reference to the attributes of a geo element. */
 "Attributes" = "Attributes";
 
-/* No comment provided by engineer. */
+/* A label indicating authentication is required to proceed. */
 "Authentication Required" = "Authentication Required";
 
-/* No comment provided by engineer. */
+/* A label in reference to bookmarks contained in a geo model. */
 "Bookmarks" = "Bookmarks";
 
-/* No comment provided by engineer. */
+/* A label for a button to open the system file browser. */
 "Browse For Certificate" = "Browse For Certificate";
 
-/* No comment provided by engineer. */
+/* A label for a button to cancel an operation. */
 "Cancel" = "Cancel";
 
 /* No comment provided by engineer. */

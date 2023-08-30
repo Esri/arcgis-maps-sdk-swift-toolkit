@@ -41,9 +41,17 @@ struct LoginViewModifier: ViewModifier {
                         The host is indicated in the variable.
                         """
                 ),
-                title: String(localized: "Authentication Required", bundle: .toolkitModule),
+                title: String(
+                    localized: "Authentication Required",
+                    bundle: .toolkitModule,
+                    comment: "A label indicating authentication is required to proceed."
+                ),
                 cancelAction: .init(
-                    title: String(localized: "Cancel", bundle: .toolkitModule),
+                    title: String(
+                        localized: "Cancel",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to cancel an operation."
+                    ),
                     handler: { _, _ in
                         onCancel()
                     }

@@ -59,7 +59,11 @@ struct TrustHostViewModifier: ViewModifier {
                 Button(role: .cancel) {
                     challenge.resume(with: .cancel)
                 } label: {
-                    Text("Cancel", bundle: .toolkitModule)
+                    Text(
+                        "Cancel",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to cancel an operation."
+                    )
                 }
             } message: { _ in
                 Text(

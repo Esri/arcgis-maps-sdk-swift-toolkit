@@ -174,7 +174,11 @@ struct CertificatePickerViewModifier: ViewModifier {
                     bundle: .toolkitModule
                 ),
                 cancelAction: .init(
-                    title: String(localized: "Cancel", bundle: .toolkitModule),
+                    title: String(
+                        localized: "Cancel",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to cancel an operation."
+                    ),
                     handler: { _, _ in
                         viewModel.cancel()
                     }
@@ -215,12 +219,20 @@ private extension View {
             Button {
                 viewModel.proceedFromPrompt()
             } label: {
-                Text("Browse For Certificate", bundle: .toolkitModule)
+                Text(
+                    "Browse For Certificate",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to open the system file browser."
+                )
             }
             Button(role: .cancel) {
                 viewModel.cancel()
             } label: {
-                Text("Cancel", bundle: .toolkitModule)
+                Text(
+                    "Cancel",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to cancel an operation."
+                )
             }
         } message: { _ in
             Text(
@@ -277,7 +289,11 @@ private extension View {
             Button(role: .cancel) {
                 viewModel.cancel()
             } label: {
-                Text("Cancel", bundle: .toolkitModule)
+                Text(
+                    "Cancel",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to cancel an operation."
+                )
             }
         } message: {
             Text(
