@@ -29,10 +29,16 @@ struct LoginViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .onAppear { isPresented = true }
+            .delayedOnAppear {
+                // Present the sheet right away.
+                // Setting it after initialization allows it to animate.
+                // However, this needs to happen after a slight delay or
+                // it doesn't show.
+                isPresented = true
+            }
             .credentialInput(
-                fields: .usernamePassword,
                 isPresented: $isPresented,
+                fields: .usernamePassword,
                 message: String(
                     localized: "You must sign in to access '\(challengingHost)'",
                     bundle: .toolkitModule,

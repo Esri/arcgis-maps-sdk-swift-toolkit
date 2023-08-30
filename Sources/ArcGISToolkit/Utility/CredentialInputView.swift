@@ -14,12 +14,106 @@
 import Foundation
 import SwiftUI
 
-/// A view that prompts a user to provide credentials. It can be configured to require either a username and
-/// password, or a password only.
-///
-/// The view is implemented as a wrapper for a UIKit `UIAlertController` because as of iOS 16,
-/// SwiftUI alerts don't support visible but disabled buttons.
-struct CredentialInputView: UIViewControllerRepresentable {
+extension View {
+    /// Presents user experiences for collecting credentials from the user.
+    /// - Parameters:
+    ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
+    ///   - fields: The fields shown in the view.
+    ///   - message: Descriptive text that provides more details about the reason for the alert.
+    ///   - title: The title of the alert.
+    ///   - cancelAction: The cancel action.
+    ///   - continueAction: The continue action.
+    @ViewBuilder func credentialInput(
+        isPresented: Binding<Bool>,
+        fields: CredentialInputSheetView.Fields,
+        message: String,
+        title: String,
+        cancelAction: CredentialInputSheetView.Action,
+        continueAction: CredentialInputSheetView.Action
+    ) -> some View {
+        modifier(
+            CredentialInputModifier(
+                isPresented: isPresented,
+                fields: fields,
+                message: message,
+                title: title,
+                cancelAction: cancelAction,
+                continueAction: continueAction
+            )
+        )
+    }
+}
+
+struct CredentialInputSheetView_Previews: PreviewProvider {
+    static var previews: some View {
+        Text("test")
+            .credentialInput(
+                isPresented: .constant(true),
+                fields: .usernamePassword,
+                message: "You must sign in to access 'arcgis.com'",
+                title: "Authentication Required",
+                cancelAction: .init(
+                    title: "Cancel",
+                    handler: { _, _ in
+                    }
+                ),
+                continueAction: .init(
+                    title: "Continue",
+                    handler: { username, password in
+                    }
+                )
+            )
+    }
+}
+
+/// A view modifier that prompts for credentials.
+struct CredentialInputModifier: ViewModifier {
+    
+    /// A Boolean value indicating whether or not the view is displayed.
+    var isPresented: Binding<Bool>
+    
+    /// The fields shown in the view.
+    let fields: CredentialInputSheetView.Fields
+    
+    /// Descriptive text that provides more details about the reason for the alert.
+    let message: String
+    
+    /// The title of the alert.
+    let title: String
+    
+    /// The cancel action.
+    let cancelAction: CredentialInputSheetView.Action
+    
+    /// The continue action.
+    let continueAction: CredentialInputSheetView.Action
+    
+    @ViewBuilder func body(content: Content) -> some View {
+        content
+            .sheet(isPresented: isPresented) {
+                CredentialInputSheetView(
+                    isPresented: isPresented,
+                    fields: fields,
+                    message: message,
+                    title: title,
+                    cancelAction: cancelAction,
+                    continueAction: continueAction
+                )
+                .mediumPresentationDetents()
+                .interactiveDismissDisabled()
+            }
+    }
+}
+
+struct CredentialInputSheetView: View {
+    /// The fields shown in the alert.
+    private let fields: Fields
+    
+    /// Descriptive text that provides more details about the reason for the alert.
+    private let message: String
+    
+    /// The title of the alert.
+    private let title: String
+    
     /// The cancel action.
     private let cancelAction: Action
     
@@ -27,45 +121,37 @@ struct CredentialInputView: UIViewControllerRepresentable {
     private let continueAction: Action
     
     /// The value in the username field.
-    ///
-    /// This member is unused when usage is set to `Usage.passwordOnly`.
     @State private var username = ""
-    
-    /// A Boolean value indicating whether or not the view is displayed.
-    @Binding private var isPresented: Bool
-    
-    /// Descriptive text that provides more details about the reason for the alert.
-    private let message: String
     
     /// The value in the password field.
     @State private var password = ""
     
-    /// The title of the alert.
-    private let title: String
+    /// A Boolean value indicating whether or not the view is displayed.
+    private var isPresented: Binding<Bool>
     
-    /// The fields shown in the alert.
-    private let fields: Fields
+    @FocusState private var usernameFieldIsFocused: Bool
+    
+    @FocusState private var passwordFieldIsFocused: Bool
     
     /// Creates the view.
     /// - Parameters:
-    ///   - fields: The fields shown in the alert.
     ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
+    ///   - fields: The fields shown in the alert.
     ///   - message: Descriptive text that provides more details about the reason for the alert.
     ///   - title: The title of the alert.
     ///   - cancelAction: The cancel action.
     ///   - continueAction: The continue action.
     init(
-        fields: Fields,
         isPresented: Binding<Bool>,
+        fields: Fields,
         message: String,
         title: String,
         cancelAction: Action,
         continueAction: Action
     ) {
+        self.isPresented = isPresented
         self.cancelAction = cancelAction
         self.continueAction = continueAction
-        
-        _isPresented = isPresented
         
         self.fields = fields
         self.message = message
@@ -82,141 +168,110 @@ struct CredentialInputView: UIViewControllerRepresentable {
         }
     }
     
-    /// Creates the alert controller.
-    /// - Parameter context: A context structure containing information about the current state of the
-    /// system.
-    /// - Returns: The alert controller displayed to the user.
-    private func makeAlertController(context: Context) -> UIAlertController {
-        let uiAlertController = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
+    var usernameTextField: some View {
+        TextField(
+            String(
+                localized: "Username",
+                bundle: .toolkitModule
+            ),
+            text: $username
         )
-        
-        let cancelUIAlertAction = UIAlertAction(
-            title: cancelAction.title,
-            style: .cancel
-        ) { _ in
-            cancelAction.handler(username, password)
+        .textInputAutocapitalization(.never)
+        .autocorrectionDisabled(true)
+        .textContentType(.username)
+        .focused($usernameFieldIsFocused)
+        .submitLabel(.next)
+        .onSubmit {
+            passwordFieldIsFocused = true
         }
-        
-        let continueUIAlertAction = UIAlertAction(
-            title: continueAction.title,
-            style: .default
-        ) { _ in
-            continueAction.handler(username, password)
-        }
-        
-        if fields == .usernamePassword {
-            uiAlertController.addTextField { textField in
-                textField.addAction(
-                    UIAction { _ in
-                        username = textField.text ?? ""
-                        continueUIAlertAction.isEnabled = isContinueEnabled
-                    },
-                    for: .editingChanged
-                )
-                textField.autocapitalizationType = .none
-                textField.autocorrectionType = .no
-                textField.placeholder = String(localized: "Username", bundle: .toolkitModule)
-                textField.returnKeyType = .next
-                textField.textContentType = .username
+    }
+    
+    var passwordTextField: some View {
+        SecureField(
+            String(
+                localized: "Password",
+                bundle: .toolkitModule
+            ),
+            text: $password
+        )
+        .submitLabel(.done)
+        .textInputAutocapitalization(.never)
+        .autocorrectionDisabled(true)
+        .textContentType(.password)
+        .onSubmit {
+            if isContinueEnabled {
+                isPresented.wrappedValue = false
+                continueAction.handler(username, password)
             }
         }
-        
-        uiAlertController.addTextField { textField in
-            textField.addAction(
-                UIAction { _ in
-                    password = textField.text ?? ""
-                    continueUIAlertAction.isEnabled = isContinueEnabled
-                },
-                for: .editingChanged
-            )
-            textField.autocapitalizationType = .none
-            textField.autocorrectionType = .no
-            
-            // Add a coordinator to the password field so that the primary
-            // keyboard action can be disabled when the field is empty.
-            textField.delegate = context.coordinator
-            
-            textField.isSecureTextEntry = true
-            textField.placeholder = String(localized: "Password", bundle: .toolkitModule)
-            textField.returnKeyType = .go
-            textField.textContentType = .password
+        .focused($passwordFieldIsFocused)
+    }
+    
+    var body: some View {
+        GeometryReader { proxy in
+            VStack {
+                VStack(alignment: .center) {
+                    VStack(spacing: 8) {
+                        Text(title)
+                            .font(.title)
+                            .multilineTextAlignment(.center)
+                        Text(message)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(.vertical)
+                    VStack {
+                        switch fields {
+                        case .password:
+                            passwordTextField
+                        case .usernamePassword:
+                            usernameTextField
+                            Divider()
+                            passwordTextField
+                        }
+                        Divider()
+                    }
+                    .padding([.bottom, .horizontal])
+                    HStack {
+                        Spacer()
+                        Button(role: .cancel) {
+                            cancelAction.handler("", "")
+                        } label: {
+                            Text(cancelAction.title)
+                                .padding(.horizontal)
+                        }
+                        .buttonStyle(.bordered)
+                        Spacer()
+                        Button {
+                            isPresented.wrappedValue = false
+                            continueAction.handler(username, password)
+                        } label: {
+                            Text(continueAction.title)
+                                .padding(.horizontal)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(!isContinueEnabled)
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                .padding()
+                Spacer()
+            }
         }
-        
-        cancelUIAlertAction.isEnabled = true
-        continueUIAlertAction.isEnabled = false
-        
-        uiAlertController.addAction(cancelUIAlertAction)
-        uiAlertController.addAction(continueUIAlertAction)
-        uiAlertController.preferredAction = continueUIAlertAction
-        
-        return uiAlertController
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    func makeUIViewController(context: Context) -> some UIViewController {
-        return UIViewController()
-    }
-    
-    func updateUIViewController(
-        _ uiViewController: UIViewControllerType,
-        context: Context
-    ) {
-        guard isPresented else { return }
-        let alertController = makeAlertController(context: context)
-        // On a physical iOS 16 device, without the following delay, the
-        // presentation fails and the following warning is logged: "Attempt to
-        // present UIAlertController on UIViewController whose view is not in
-        // the window hierarchy."
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            uiViewController.present(alertController, animated: true) {
-                isPresented = false
+        .onAppear {
+            // Set initial focus of text field.
+            switch fields {
+            case .usernamePassword:
+                usernameFieldIsFocused = true
+            case .password:
+                passwordFieldIsFocused = true
             }
         }
     }
 }
-
-extension CredentialInputView {
-    /// The coordinator for the login view that acts as a delegate to the underlying
-    /// `UIAlertViewController`.
-    final class Coordinator: NSObject, UITextFieldDelegate {
-        /// The view that owns this coordinator.
-        let parent: CredentialInputView
-        
-        /// Creates the coordinator.
-        /// - Parameter parent: The view that owns this coordinator.
-        init(_ parent: CredentialInputView) {
-            self.parent = parent
-        }
-        
-        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            guard !parent.password.isEmpty else { return false }
-            parent.continueAction.handler(
-                parent.username,
-                parent.password
-            )
-            return true
-        }
-    }
-}
-
-extension CredentialInputView {
-    /// A configuration for an alert action.
-    struct Action {
-        /// The title of the action.
-        let title: String
-        
-        /// The block to execute when the action is triggered.
-        let handler: (String, String) -> Void
-    }
-}
-
-extension CredentialInputView {
+extension CredentialInputSheetView {
     /// The fields shown in the alert. This determines if the view is intended to require either a username
     /// and password, or a password only.
     enum Fields {
@@ -228,68 +283,14 @@ extension CredentialInputView {
     }
 }
 
-extension View {
-    /// Presents user experiences for collecting credentials from the user.
-    /// - Parameters:
-    ///   - fields: The fields shown in the view.
-    ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
-    ///   - message: Descriptive text that provides more details about the reason for the alert.
-    ///   - title: The title of the alert.
-    ///   - cancelAction: The cancel action.
-    ///   - continueAction: The continue action.
-    @ViewBuilder func credentialInput(
-        fields: CredentialInputView.Fields,
-        isPresented: Binding<Bool>,
-        message: String,
-        title: String,
-        cancelAction: CredentialInputView.Action,
-        continueAction: CredentialInputView.Action
-    ) -> some View {
-        modifier(
-            CredentialInputModifier(
-                fields: fields,
-                isPresented: isPresented,
-                message: message,
-                title: title,
-                cancelAction: cancelAction,
-                continueAction: continueAction
-            )
-        )
-    }
-}
-
-/// A view modifier that prompts for credentials.
-struct CredentialInputModifier: ViewModifier {
-    
-    /// The fields shown in the view.
-    let fields: CredentialInputView.Fields
-    
-    /// A Boolean value indicating whether or not the view is displayed.
-    @Binding var isPresented: Bool
-    
-    /// Descriptive text that provides more details about the reason for the alert.
-    let message: String
-    
-    /// The title of the alert.
-    let title: String
-    
-    /// The cancel action.
-    let cancelAction: CredentialInputView.Action
-    
-    /// The continue action.
-    let continueAction: CredentialInputView.Action
-    
-    @ViewBuilder func body(content: Content) -> some View {
-        ZStack {
-            content
-            CredentialInputView(
-                fields: fields,
-                isPresented: $isPresented,
-                message: message,
-                title: title,
-                cancelAction: cancelAction,
-                continueAction: continueAction
-            )
-        }
+extension CredentialInputSheetView {
+    /// A configuration for an alert action.
+    struct Action {
+        /// The title of the action.
+        let title: String
+        
+        /// The block to execute when the action is triggered.
+        /// The parameters are the username and the password.
+        let handler: (String, String) -> Void
     }
 }
