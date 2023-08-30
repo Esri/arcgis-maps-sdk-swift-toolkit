@@ -21,25 +21,27 @@ import ArcGIS
         let model = CertificatePickerViewModel(challenge: challenge)
         
         XCTAssertNil(model.certificateURL)
-        XCTAssertTrue(model.showPrompt)
+        XCTAssertFalse(model.showPrompt)
         XCTAssertFalse(model.showPicker)
         XCTAssertFalse(model.showPassword)
         XCTAssertFalse(model.showCertificateError)
         XCTAssertEqual(model.challengingHost, "host.com")
         
-        model.proceedFromPrompt()
+        model.proceedToPicker()
+        // Have to wait here because the proceed function is delayed to avoid a bug.
+        try? await Task.sleep(nanoseconds: 300_000_000)
         XCTAssertTrue(model.showPicker)
         
         let url = URL(fileURLWithPath: "/does-not-exist.pfx")
-        model.proceed(withCertificateURL: url)
+        model.proceedToPasswordEntry(forCertificateWithURL: url)
         XCTAssertEqual(model.certificateURL, url)
         XCTAssertTrue(model.showPassword)
         
-        model.proceed(withPassword: "1234")
+        model.proceedToUseCertificate(withPassword: "1234")
         // Have to yield here because the proceed function kicks off a task.
         await Task.yield()
         // Have to wait here because the proceed function waits to avoid a bug.
-        try? await Task.sleep(nanoseconds: 300_000)
+        try? await Task.sleep(nanoseconds: 300_000_000)
         // Another yield seems to be required to deal with timing when running the test
         // repeatedly.
         await Task.yield()

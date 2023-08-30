@@ -12,6 +12,7 @@
 // limitations under the License.
 
 import SwiftUI
+import ArcGIS
 
 public extension View {
     /// Presents user experiences for collecting network authentication credentials from the user.
@@ -37,6 +38,7 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
             Color.clear
                 .frame(width: 0, height: 0)
                 .modifier(AuthenticatorModifier(authenticator: authenticator))
+                ._oAuthWebViewSheet()
         }
     }
 }
