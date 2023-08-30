@@ -52,11 +52,19 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             title: String(
                 localized: "Failed to set starting point",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: """
+                         A message indicating that the chosen utility network element wasn't able
+                         to be used as a trace starting point.
+                         """
             ),
             description: String(
                 localized: "Duplicate starting points cannot be added.",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: """
+                         A message indicating that the user attempted to use a single utility
+                         network element for more than one trace starting point.
+                         """
             )
         )
     }

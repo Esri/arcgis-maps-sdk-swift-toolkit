@@ -336,7 +336,10 @@ private extension View {
                 Text(
                     "Error importing certificate",
                     bundle: .toolkitModule,
-                    comment: ""
+                    comment: """
+                             A message indicating that some error occurred while importing a chosen
+                             network certificate.
+                             """
                 )
                 .font(.title)
                 .multilineTextAlignment(.center)
