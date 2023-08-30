@@ -55,7 +55,6 @@ struct CredentialInputSheetView_Previews: PreviewProvider {
                 cancelAction: .init(
                     title: "Cancel",
                     handler: { _, _ in
-                        
                     }
                 ),
                 continueAction: .init(
