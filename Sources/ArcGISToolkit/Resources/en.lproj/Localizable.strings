@@ -39,7 +39,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Bookmarks" = "Bookmarks";
 
 /* No comment provided by engineer. */
-"Browse For Certificate" = "Browse For Certificate";
+"Browse" = "Browse";
 
 /* No comment provided by engineer. */
 "Cancel" = "Cancel";
