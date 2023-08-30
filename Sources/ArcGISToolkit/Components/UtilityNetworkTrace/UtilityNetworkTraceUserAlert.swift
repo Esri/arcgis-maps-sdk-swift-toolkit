@@ -34,7 +34,11 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "Please set at least 1 starting location.",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: """
+                         A label indicating that at least one starting location is required for the
+                         chosen utility network trace configuration.
+                         """
             )
         )
     }
@@ -43,7 +47,11 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "Please set at least 2 starting locations.",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: """
+                         A label indicating that at least two starting locations are required for the
+                         chosen utility network trace configuration.
+                         """
             )
         )
     }
@@ -73,7 +81,8 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "No trace types found.",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: "A label indicating that no utility named trace configurations are available."
             )
         )
     }
@@ -82,7 +91,8 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "No utility networks found.",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: "A label indicating that no utility networks are available."
             )
         )
     }

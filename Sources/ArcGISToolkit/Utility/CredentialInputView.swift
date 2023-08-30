@@ -190,7 +190,8 @@ struct CredentialInputSheetView: View {
         SecureField(
             String(
                 localized: "Password",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: "A label referring to a credential password."
             ),
             text: $password
         )

@@ -849,12 +849,17 @@ private extension String {
     
     static let fractionAlongEdgeSectionTitle = String(
         localized: "Fraction Along Edge",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label referring to a fractional distance along an edge style utility network element."
     )
     
     static let functionResultsSectionTitle = String(
         localized: "Function Results",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: """
+                 A label referring to function outputs returned as results of a utility network
+                 trace operation.
+                 """
     )
     
     static let modePickerTitle = String(
@@ -865,7 +870,8 @@ private extension String {
     
     static let nameLabel = String(
         localized: "Name",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label referring to a user defined name given for an individual utility network trace."
     )
     
     static let networkSectionLabel = String(
@@ -876,7 +882,8 @@ private extension String {
     
     static let newTraceOptionLabel = String(
         localized: "New trace",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button to show new utility network trace configuration options."
     )
     
     static let noConfigurationsAvailable = String(
@@ -887,7 +894,8 @@ private extension String {
     
     static let noneSelected = String(
         localized: "None selected",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label indicating that no utility network trace configuration has been selected."
     )
     
     static let resultsOptionLabel = String(
