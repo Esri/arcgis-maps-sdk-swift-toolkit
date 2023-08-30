@@ -57,7 +57,11 @@ struct LoginViewModifier: ViewModifier {
                     }
                 ),
                 continueAction: .init(
-                    title: String(localized: "Continue", bundle: .toolkitModule),
+                    title: String(
+                        localized: "Continue",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button used to continue the authentication operation."
+                    ),
                     handler: { username, password in
                         let loginCredential = LoginCredential(
                             username: username, password: password

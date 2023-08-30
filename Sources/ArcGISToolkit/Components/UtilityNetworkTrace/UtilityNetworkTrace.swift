@@ -809,7 +809,8 @@ private extension String {
     
     static let cancelStartingPointSelection = String(
         localized: "Cancel starting point selection",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button to cancel the starting point selection operation."
     )
     
     static let clearAllResults = String(
@@ -826,12 +827,14 @@ private extension String {
     
     static let colorLabel = String(
         localized: "Color",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to the color used to display utility trace result graphics."
     )
     
     static let deleteButtonLabel = String(
         localized: "Delete",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button used to delete a utility network trace input component or result."
     )
     
     /// Title for the feature results section

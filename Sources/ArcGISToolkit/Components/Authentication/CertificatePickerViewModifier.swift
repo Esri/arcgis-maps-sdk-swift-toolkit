@@ -212,7 +212,11 @@ private extension View {
         viewModel: CertificatePickerViewModel
     ) -> some View {
         alert(
-            Text("Certificate Required", bundle: .toolkitModule),
+            Text(
+                "Certificate Required",
+                bundle: .toolkitModule,
+                comment: "A label indicating that a certificate is required to proceed."
+            ),
             isPresented: isPresented,
             presenting: viewModel.challengingHost
         ) { _ in
