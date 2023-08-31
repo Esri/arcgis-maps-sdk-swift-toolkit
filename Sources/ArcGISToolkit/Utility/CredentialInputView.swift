@@ -98,7 +98,6 @@ struct CredentialInputModifier: ViewModifier {
                     cancelAction: cancelAction,
                     continueAction: continueAction
                 )
-                .mediumPresentationDetents()
                 .interactiveDismissDisabled()
             }
     }
