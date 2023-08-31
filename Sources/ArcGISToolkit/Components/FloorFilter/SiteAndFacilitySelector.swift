@@ -320,7 +320,7 @@ struct SiteAndFacilitySelector: View {
 private struct NoMatchesView: View {
     var body: some View {
         Text(
-            "No matches found",
+            "No matches found.",
             bundle: .toolkitModule,
             comment: "A statement that no sites or facilities with names matching a filter phrase were found."
         )
