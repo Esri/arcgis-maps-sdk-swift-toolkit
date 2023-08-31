@@ -887,7 +887,7 @@ private extension String {
     )
     
     static let noConfigurationsAvailable = String(
-        localized: "No configurations available",
+        localized: "No configurations available.",
         bundle: .toolkitModule,
         comment: "A statement that no utility trace configurations are available."
     )
