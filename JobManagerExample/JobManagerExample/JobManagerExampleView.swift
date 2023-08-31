@@ -215,7 +215,6 @@ private struct JobView: View {
         content.title = "Job Completed"
         content.subtitle = jobType
         content.body = status.displayText
-        content.badge = 1
         content.categoryIdentifier = "Job Completion"
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
