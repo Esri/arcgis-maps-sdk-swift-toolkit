@@ -1,23 +1,29 @@
+// Copyright 2023 Esri.
 //
-//  ContentView.swift
-//  JobManagerExample
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
 //
-//  Created by Ryan Olson on 8/15/23.
-//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-import SwiftUI
-import ArcGISToolkit
 import ArcGIS
-import UserNotifications
+import ArcGISToolkit
 import OSLog
+import SwiftUI
+import UserNotifications
 
 @MainActor
 struct JobManagerExampleView: View {
-    // The job manager used by this view.
+    /// The job manager used by this view.
     @ObservedObject var jobManager = JobManager.shared
-    // A Boolean value indicating if we are currently adding a geodatabase job.
+    /// A Boolean value indicating if we are currently adding a geodatabase job.
     @State var isAddingGeodatabaseJob = false
-    // A Boolean value indicating if we are currently adding an offline map job.
+    /// A Boolean value indicating if we are currently adding an offline map job.
     @State var isAddingOfflineMapJob = false
     
     init() {
@@ -56,7 +62,7 @@ struct JobManagerExampleView: View {
         }
     }
     
-    // The jobs menu.
+    /// The jobs menu.
     var menu: some View {
         Menu {
             Button {
@@ -120,7 +126,7 @@ private struct JobView: View {
     var job: Job
     /// The job's error in case of failure.
     @State var error: Error?
-    /// The job's satus.
+    /// The job's status.
     @State var status: Job.Status
     /// The latest job message.
     @State var message: JobMessage?
@@ -306,7 +312,7 @@ extension JobManagerExampleView {
 }
 
 extension FileManager {
-    /// The path the documents folder.
+    /// The path to the documents folder.
     var documentsPath: URL {
         URL(
             fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
