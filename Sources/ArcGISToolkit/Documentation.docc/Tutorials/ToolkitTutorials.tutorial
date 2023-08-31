@@ -44,6 +44,13 @@
         @TutorialReference(tutorial: "doc:FloorFilterTutorial")
     }
     
+    @Chapter(name: "JobManager") {
+        The `JobManager` component simplifies visualization of GIS data for a specific floor of a
+        building in your application.
+        @Image(source: FloorFilter, alt: "An image of the FloorFilter component.")
+        @TutorialReference(tutorial: "doc:JobManagerTutorial")
+    }
+    
     @Chapter(name: "OverviewMap") {
         `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map")
         superimposed on an existing `GeoView`, which shows a representation of the current 
