@@ -215,7 +215,6 @@ private struct JobView: View {
 ***REMOVED******REMOVED***content.title = "Job Completed"
 ***REMOVED******REMOVED***content.subtitle = jobType
 ***REMOVED******REMOVED***content.body = status.displayText
-***REMOVED******REMOVED***content.badge = 1
 ***REMOVED******REMOVED***content.categoryIdentifier = "Job Completion"
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
