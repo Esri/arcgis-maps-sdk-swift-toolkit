@@ -98,7 +98,6 @@ struct CredentialInputModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: cancelAction,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction: continueAction
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.mediumPresentationDetents()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED******REMOVED***
 ***REMOVED***
