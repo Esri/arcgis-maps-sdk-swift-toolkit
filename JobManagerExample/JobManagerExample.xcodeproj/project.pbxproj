@@ -21,7 +21,7 @@
 		88140D5E2A8BD940003F55D4 /* JobManagerExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobManagerExampleView.swift; sourceTree = "<group>"; };
 		88140D602A8BD941003F55D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		88140D632A8BD941003F55D4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		88140D6A2A8BDC75003F55D4 /* arcgis-maps-sdk-swift-toolkit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "arcgis-maps-sdk-swift-toolkit"; path = "../"; sourceTree = "<group>"; };
+		88140D6A2A8BDC75003F55D4 /* arcgis-maps-sdk-swift-toolkit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "arcgis-maps-sdk-swift-toolkit"; path = ".."; sourceTree = "<group>"; };
 		88140D6E2A8C1312003F55D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		88140D6F2A8D5845003F55D4 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
