@@ -1,21 +1,21 @@
 // Copyright 2023 Esri.
-
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 // http://www.apache.org/licenses/LICENSE-2.0
-
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
-import SwiftUI
 import ArcGIS
 import BackgroundTasks
+import Foundation
 import OSLog
+import SwiftUI
 
 /// An object that manages saving and loading jobs so that they can continue to run if the
 /// app is backgrounded or even terminated.
@@ -78,7 +78,7 @@ import OSLog
 /// download can execute out of process, even if the app is terminated. If the app is terminated and
 /// then later relaunched by the system because a background downloaded completed, then you may
 /// call the ``JobManager/resumeAllPausedJobs()`` method from the application relaunch point,
-/// which will correllate the jobs to their respective downloads that completed and the jobs will
+/// which will correlate the jobs to their respective downloads that completed and the jobs will
 /// then finish. The app relaunch point can happen via the SwiftUI modifier `.backgroundTask(.urlSession(...))`.
 /// In UIKit it would be the `UIApplicationDelegate` method `func application(UIApplication, handleEventsForBackgroundURLSession: String, completionHandler: () -> Void)`
 @MainActor
@@ -102,9 +102,11 @@ public class JobManager: ObservableObject {
     /// The operating system ultimately decides when to allow a background task to run.
     /// If you enable background status checks then you must also make sure to have enabled
     /// "Background Fetch" and "Background Processing" background modes in your application settings.
-    /// You must also add "com.esri.ArcGISToolkit.jobManager.statusCheck" to the "Permitted background task scheduler identifiers"
-    /// in your application's plist file. Note, this also only works on device and not on the simulator.
-    /// More information can be found here: https://developer.apple.com/documentation/backgroundtasks/refreshing_and_maintaining_your_app_using_background_tasks
+    /// - Note: You must also add "com.esri.ArcGISToolkit.jobManager.statusCheck" to the "Permitted
+    /// background task scheduler identifiers" in your application's plist file. This only works on
+    /// device and not on the simulator.
+    /// More information can be found [here](https://developer.apple.com/documentation/backgroundtasks/refreshing_and_maintaining_your_app_using_background_tasks).
+
     public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
     
     /// The background task identifier for status checks.
@@ -290,7 +292,8 @@ public enum BackgroundStatusCheckSchedule {
 
 extension Logger {
     /// A logger for the job manager.
-    /// To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER".
+    /// To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER" under Scheme
+    /// > Arguments > Environment Variables
     static let jobManager: Logger = {
         if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_JOB_MANAGER") {
             return Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
