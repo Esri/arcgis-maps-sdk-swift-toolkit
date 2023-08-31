@@ -1,14 +1,20 @@
+***REMOVED*** Copyright 2023 Esri.
 ***REMOVED***
-***REMOVED***  JobManagerExampleApp.swift
-***REMOVED***  JobManagerExample
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
 ***REMOVED***
-***REMOVED***  Created by Ryan Olson on 8/15/23.
-***REMOVED***
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
 
 ***REMOVED***
 ***REMOVED***Toolkit
-***REMOVED***
 import OSLog
+***REMOVED***
 
 ***REMOVED***
 struct JobManagerExampleApp: App {
@@ -19,7 +25,7 @@ struct JobManagerExampleApp: App {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
-***REMOVED******REMOVED******REMOVED***Logger.jobManagerExample.debug("UrlSession background task SwiftUI callback.")
+***REMOVED******REMOVED******REMOVED***Logger.jobManagerExample.debug("URLSession background task SwiftUI callback.")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Allow the `ArcGISURLSession` to handle it's background task events.
 ***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
@@ -33,7 +39,8 @@ struct JobManagerExampleApp: App {
 
 extension Logger {
 ***REMOVED******REMOVED***/ A logger for the job manager example.
-***REMOVED******REMOVED***/ To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER_EXAMPLE".
+***REMOVED******REMOVED***/ To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER_EXAMPLE" under
+***REMOVED******REMOVED***/ Scheme > Arguments > Environment Variables
 ***REMOVED***static let jobManagerExample: Logger = {
 ***REMOVED******REMOVED***if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_JOB_MANAGER_EXAMPLE") {
 ***REMOVED******REMOVED******REMOVED***return Logger(subsystem: "com.esri.ArcGISToolkit.Examples", category: "JobManagerExample")

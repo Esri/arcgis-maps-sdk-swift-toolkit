@@ -1,23 +1,29 @@
+***REMOVED*** Copyright 2023 Esri.
 ***REMOVED***
-***REMOVED***  ContentView.swift
-***REMOVED***  JobManagerExample
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
 ***REMOVED***
-***REMOVED***  Created by Ryan Olson on 8/15/23.
-***REMOVED***
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
 
 ***REMOVED***
 ***REMOVED***Toolkit
+import OSLog
 ***REMOVED***
 import UserNotifications
-import OSLog
 
 @MainActor
 struct JobManagerExampleView: View {
-***REMOVED******REMOVED*** The job manager used by this view.
+***REMOVED******REMOVED***/ The job manager used by this view.
 ***REMOVED***@ObservedObject var jobManager = JobManager.shared
-***REMOVED******REMOVED*** A Boolean value indicating if we are currently adding a geodatabase job.
+***REMOVED******REMOVED***/ A Boolean value indicating if we are currently adding a geodatabase job.
 ***REMOVED***@State var isAddingGeodatabaseJob = false
-***REMOVED******REMOVED*** A Boolean value indicating if we are currently adding an offline map job.
+***REMOVED******REMOVED***/ A Boolean value indicating if we are currently adding an offline map job.
 ***REMOVED***@State var isAddingOfflineMapJob = false
 ***REMOVED***
 ***REMOVED***init() {
@@ -56,7 +62,7 @@ struct JobManagerExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** The jobs menu.
+***REMOVED******REMOVED***/ The jobs menu.
 ***REMOVED***var menu: some View {
 ***REMOVED******REMOVED***Menu {
 ***REMOVED******REMOVED******REMOVED***Button {
@@ -120,7 +126,7 @@ private struct JobView: View {
 ***REMOVED***var job: Job
 ***REMOVED******REMOVED***/ The job's error in case of failure.
 ***REMOVED***@State var error: Error?
-***REMOVED******REMOVED***/ The job's satus.
+***REMOVED******REMOVED***/ The job's status.
 ***REMOVED***@State var status: Job.Status
 ***REMOVED******REMOVED***/ The latest job message.
 ***REMOVED***@State var message: JobMessage?
@@ -306,7 +312,7 @@ extension JobManagerExampleView {
 ***REMOVED***
 
 extension FileManager {
-***REMOVED******REMOVED***/ The path the documents folder.
+***REMOVED******REMOVED***/ The path to the documents folder.
 ***REMOVED***var documentsPath: URL {
 ***REMOVED******REMOVED***URL(
 ***REMOVED******REMOVED******REMOVED***fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]

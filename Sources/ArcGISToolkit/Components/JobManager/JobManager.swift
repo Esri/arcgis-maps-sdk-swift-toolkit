@@ -1,21 +1,21 @@
 ***REMOVED*** Copyright 2023 Esri.
-
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
 ***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Foundation
-***REMOVED***
 ***REMOVED***
 import BackgroundTasks
+import Foundation
 import OSLog
+***REMOVED***
 
 ***REMOVED***/ An object that manages saving and loading jobs so that they can continue to run if the
 ***REMOVED***/ app is backgrounded or even terminated.
@@ -78,7 +78,7 @@ import OSLog
 ***REMOVED***/ download can execute out of process, even if the app is terminated. If the app is terminated and
 ***REMOVED***/ then later relaunched by the system because a background downloaded completed, then you may
 ***REMOVED***/ call the ``JobManager/resumeAllPausedJobs()`` method from the application relaunch point,
-***REMOVED***/ which will correllate the jobs to their respective downloads that completed and the jobs will
+***REMOVED***/ which will correlate the jobs to their respective downloads that completed and the jobs will
 ***REMOVED***/ then finish. The app relaunch point can happen via the SwiftUI modifier `.backgroundTask(.urlSession(...))`.
 ***REMOVED***/ In UIKit it would be the `UIApplicationDelegate` method `func application(UIApplication, handleEventsForBackgroundURLSession: String, completionHandler: () -> Void)`
 @MainActor
@@ -102,9 +102,11 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ The operating system ultimately decides when to allow a background task to run.
 ***REMOVED******REMOVED***/ If you enable background status checks then you must also make sure to have enabled
 ***REMOVED******REMOVED***/ "Background Fetch" and "Background Processing" background modes in your application settings.
-***REMOVED******REMOVED***/ You must also add "com.esri.ArcGISToolkit.jobManager.statusCheck" to the "Permitted background task scheduler identifiers"
-***REMOVED******REMOVED***/ in your application's plist file. Note, this also only works on device and not on the simulator.
-***REMOVED******REMOVED***/ More information can be found here: https:***REMOVED***developer.apple.com/documentation/backgroundtasks/refreshing_and_maintaining_your_app_using_background_tasks
+***REMOVED******REMOVED***/ - Note: You must also add "com.esri.ArcGISToolkit.jobManager.statusCheck" to the "Permitted
+***REMOVED******REMOVED***/ background task scheduler identifiers" in your application's plist file. This only works on
+***REMOVED******REMOVED***/ device and not on the simulator.
+***REMOVED******REMOVED***/ More information can be found [here](https:***REMOVED***developer.apple.com/documentation/backgroundtasks/refreshing_and_maintaining_your_app_using_background_tasks).
+
 ***REMOVED***public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
 ***REMOVED***
 ***REMOVED******REMOVED***/ The background task identifier for status checks.
@@ -290,7 +292,8 @@ public enum BackgroundStatusCheckSchedule {
 
 extension Logger {
 ***REMOVED******REMOVED***/ A logger for the job manager.
-***REMOVED******REMOVED***/ To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER".
+***REMOVED******REMOVED***/ To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER" under Scheme
+***REMOVED******REMOVED***/ > Arguments > Environment Variables
 ***REMOVED***static let jobManager: Logger = {
 ***REMOVED******REMOVED***if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_JOB_MANAGER") {
 ***REMOVED******REMOVED******REMOVED***return Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")

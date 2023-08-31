@@ -2,7 +2,7 @@
 
 This is an application that shows how to use the JobManager toolkit component.
 
-Documentation for the JobManager toolkit components is [here](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/jobmanager).
+Documentation for the JobManager toolkit component is [here](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/jobmanager).
 
 ## Instructions
 
