@@ -24,7 +24,7 @@ extension String {
     
     static var value: Self {
         .init(
-            localized: "Field",
+            localized: "Value",
             bundle: .toolkitModule,
             comment: "A value in a set of data contained in a popup."
         )
