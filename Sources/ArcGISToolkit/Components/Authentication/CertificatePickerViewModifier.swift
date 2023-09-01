@@ -199,11 +199,7 @@ struct CertificatePickerViewModifier: ViewModifier {
                     comment: "A label indicating that a password is required to proceed with an operation."
                 ),
                 cancelAction: .init(
-                    title: String(
-                        localized: "Cancel",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to cancel an operation."
-                    ),
+                    title: String.cancel,
                     handler: { _, _ in
                         viewModel.cancel()
                     }
@@ -268,12 +264,8 @@ private extension View {
                         isPresented.wrappedValue = false
                         viewModel.cancel()
                     } label: {
-                        Text(
-                            "Cancel",
-                            bundle: .toolkitModule,
-                            comment: "A label for a button to cancel an operation."
-                        )
-                        .padding(.horizontal)
+                        Text(String.cancel)
+                            .padding(.horizontal)
                     }
                     .buttonStyle(.bordered)
                     Spacer()
@@ -363,12 +355,8 @@ private extension View {
                         isPresented.wrappedValue = false
                         viewModel.cancel()
                     } label: {
-                        Text(
-                            "Cancel",
-                            bundle: .toolkitModule,
-                            comment: "A label for a button to cancel an operation."
-                        )
-                        .padding(.horizontal)
+                        Text(String.cancel)
+                            .padding(.horizontal)
                     }
                     .buttonStyle(.bordered)
                     Spacer()
