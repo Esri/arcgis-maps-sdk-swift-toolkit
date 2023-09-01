@@ -224,7 +224,7 @@ public struct SearchView: View {
                     viewModel.repeatSearch()
                 } label: {
                     Text(
-                        "Repeat search here",
+                        "Repeat Search Here",
                         bundle: .toolkitModule,
                         comment: """
                                   A label for button to show when the user has panned the map away
