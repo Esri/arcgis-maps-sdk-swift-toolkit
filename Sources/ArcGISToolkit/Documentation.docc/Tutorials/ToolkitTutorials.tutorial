@@ -45,9 +45,8 @@
     }
     
     @Chapter(name: "JobManager") {
-        The `JobManager` component simplifies visualization of GIS data for a specific floor of a
-        building in your application.
-        @Image(source: FloorFilter, alt: "An image of the FloorFilter component.")
+        The `JobManager` manages saving and loading jobs so that they can continue to run if the
+        app is backgrounded or even terminated.
         @TutorialReference(tutorial: "doc:JobManagerTutorial")
     }
     

@@ -1,15 +1,10 @@
 @Tutorial(time: 10) {
     @Intro(title: "JobManager Tutorial") {
-        The `JobManager` is a configurable object that handles authentication challenges. It will
-        display a user interface when network and ArcGIS authentication challenges occur.
-        @Image(source: Authenticator, alt: "An image of the Authenticator component.")
+        The `JobManager` manages saving and loading jobs so that they can continue to run if the
+        app is backgrounded or even terminated.
     }
     
-    @Section(title: "Using the Authenticator") {
-        @ContentAndMedia {
-            @Image(source: Authenticator, alt: "An image of the Authenticator component.")
-        }
-        
+    @Section(title: "Using the JobManager") {
         @Steps {
             @Step {
                 Declare and initialize an `Authenticator` member in your app.
