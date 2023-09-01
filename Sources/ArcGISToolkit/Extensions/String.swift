@@ -18,7 +18,7 @@ extension String {
         .init(
             localized: "Field",
             bundle: .toolkitModule,
-            comment: "A field in a chart of data contained in a popup."
+            comment: "A field in a set of data contained in a popup."
         )
     }
     
@@ -26,7 +26,7 @@ extension String {
         .init(
             localized: "Value",
             bundle: .toolkitModule,
-            comment: "A value in a chart of data contained in a popup."
+            comment: "A value in a set of data contained in a popup."
         )
     }
 }
