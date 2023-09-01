@@ -78,11 +78,11 @@ east, etc.). */
 "Done" = "Done";
 
 /* A message indicating that the user attempted to use a single utility
- network element for more than one trace starting point. */
+network element for more than one trace starting point. */
 "Duplicate starting points cannot be added." = "Duplicate starting points cannot be added.";
 
 /* A label indicating an element could not be identified as a starting point
- for a utility network trace. */
+for a utility network trace. */
 "Element could not be identified." = "Element could not be identified.";
 
 /* A label in reference to an error that occurred during a utility network trace. */
@@ -95,39 +95,39 @@ network certificate. */
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "Error loading basemap.";
 
-/* A label indicating popup expressions are evaluating. */
+/* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Evaluating popup expressions";
 
 /* A message indicating that the chosen utility network element wasn't able
- to be used as a trace starting point. */
+to be used as a trace starting point. */
 "Failed to set starting point" = "Failed to set starting point";
 
 /* A label in reference to utility elements returned as results of a utility network
- trace operation. */
+trace operation. */
 "Feature Results" = "Feature Results";
 
-/* A field in a chart of data contained in a popup. */
+/* A field in a set of data contained in a popup. */
 "Field" = "Field";
 
-/* A label in reference to fields contained in a chart of data. */
+/* A label in reference to fields in a set of data contained in a popup. */
 "Fields" = "Fields";
 
 /* A field allowing the user to filter a list of facilities by name. A
- facility contains one or more levels in a floor-aware map or scene. */
+facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "Filter facilities";
 
 /* A field allowing the user to filter a list of sites by name. A site
- contains one or more facilities in a floor-aware map or scene. */
+contains one or more facilities in a floor-aware map or scene. */
 "Filter sites" = "Filter sites";
 
-/* A hint as to what the user can search for within a search bar. */
+/* A hint for the user on what to search for in a search bar. */
 "Find a place or address" = "Find a place or address";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
 "Fraction Along Edge" = "Fraction Along Edge";
 
 /* A label in reference to function outputs returned as results of a utility network
- trace operation. */
+trace operation. */
 "Function Results" = "Function Results";
 
 /* A label in reference to media elements contained within a popup. */
@@ -149,10 +149,10 @@ network certificate. */
 "No bookmarks" = "No bookmarks";
 
 /* A statement that no utility trace configurations are available. */
-"No configurations available" = "No configurations available";
+"No configurations available." = "No configurations available.";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
-"No matches found" = "No matches found";
+"No matches found." = "No matches found.";
 
 /* A message to show when there are no results or suggestions. */
 "No results found" = "No results found";
@@ -163,7 +163,7 @@ network certificate. */
 /* A label indicating that no utility networks are available. */
 "No utility networks found." = "No utility networks found.";
 
-/* "A label indicating that no utility network trace configuration has been selected." */
+/* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "None selected";
 
 /* A trace function output result was not provided. */
@@ -185,11 +185,11 @@ network certificate. */
 "Please enter a password for the chosen certificate." = "Please enter a password for the chosen certificate.";
 
 /* A label indicating that at least one starting location is required for the
- chosen utility network trace configuration. */
+chosen utility network trace configuration. */
 "Please set at least 1 starting location." = "Please set at least 1 starting location.";
 
 /* A label indicating that at least two starting locations are required for the
- chosen utility network trace configuration. */
+chosen utility network trace configuration. */
 "Please set at least 2 starting locations." = "Please set at least 2 starting locations.";
 
 /* An error message shown when a popup cannot be displayed. The
@@ -197,9 +197,9 @@ variable provides additional data. */
 "Popup evaluation failed: %@" = "Popup evaluation failed: %@";
 
 /* A label for button to show when the user has panned the map away
- from the original search location. 'Here' is in reference to the
- current visible extent of the map or scene. */
-"Repeat Search Here" = "Repeat Search Here";
+from the original search location. 'here' is in reference to the
+current visible extent of the map or scene. */
+"Repeat search here" = "Repeat search here";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Results";
@@ -211,26 +211,29 @@ variable provides additional data. */
 "Select a bookmark" = "Select a bookmark";
 
 /* A label directing the user to select a facility. A facility contains one
- or more levels in a floor-aware map or scene. */
+or more levels in a floor-aware map or scene. */
 "Select a facility" = "Select a facility";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
 "Sites" = "Sites";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
- match the spatial reference of the map or scene. */
+match the spatial reference of the map or scene. */
 "Spatial reference mismatch." = "Spatial reference mismatch.";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
- network trace operation. */
+network trace operation. */
 "Starting Points" = "Starting Points";
 
 /* A label indicating that tapping an image will reveal
- additional information. */
+additional information. */
 "Tap on the image for more information." = "Tap on the image for more information.";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
 "Terminal Configuration" = "Terminal Configuration";
+
+/* A label for development purposes only. This is not user visible. */
+"test" = "test";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
 "The basemap does not have a spatial reference." = "The basemap does not have a spatial reference.";
@@ -240,7 +243,7 @@ load for an unknown reason. */
 "The basemap failed to load for an unknown reason." = "The basemap failed to load for an unknown reason.";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
- match the spatial reference of the map. */
+match the spatial reference of the map. */
 "The basemap has a spatial reference that is incompatible with the map." = "The basemap has a spatial reference that is incompatible with the map.";
 
 /* A label indicating the chosen file or given password was invalid. */
