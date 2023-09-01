@@ -39,7 +39,11 @@ struct BookmarksList: View {
         Group {
             if bookmarks.isEmpty {
                 Label {
-                    Text("No bookmarks", bundle: .toolkitModule)
+                    Text(
+                        "No bookmarks",
+                        bundle: .toolkitModule,
+                        comment: "A label indicating that no bookmarks are available for selection."
+                    )
                 } icon: {
                     Image(systemName: "bookmark.slash")
                 }

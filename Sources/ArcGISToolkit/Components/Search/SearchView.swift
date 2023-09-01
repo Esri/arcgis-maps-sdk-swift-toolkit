@@ -128,11 +128,15 @@ public struct SearchView: View {
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
-
+    
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
     /// `prompt` modifier.
-    private var prompt = String(localized: "Find a place or address", bundle: .toolkitModule)
+    private var prompt = String(
+        localized: "Find a place or address",
+        bundle: .toolkitModule,
+        comment: "A hint for the user on what to search for in a search bar."
+    )
     
     /// Determines whether a built-in result view will be shown. Defaults to `true`.
     /// If `false`, the result display/selection list is not shown. Set to false if you want to hide the results
@@ -220,11 +224,12 @@ public struct SearchView: View {
                     viewModel.repeatSearch()
                 } label: {
                     Text(
-                        "Repeat Search Here",
+                        "Repeat search here",
                         bundle: .toolkitModule,
                         comment: """
-                                  A button to show when a user has panned the map away from the
-                                  original search location.
+                                  A label for button to show when the user has panned the map away
+                                  from the original search location. 'here' is in reference to the
+                                  current visible extent of the map or scene.
                                   """
                     )
                 }
