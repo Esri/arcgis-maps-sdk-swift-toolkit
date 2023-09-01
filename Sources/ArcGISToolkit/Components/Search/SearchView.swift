@@ -228,7 +228,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  A label for button to show when the user has panned the map away
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  from the original search location. 'here' is in reference to the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  from the original search location. 'Here' is in reference to the
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  current visible extent of the map or scene.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  """
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
