@@ -20,9 +20,7 @@ import SwiftUI
 struct JobManagerExampleApp: App {
     var body: some SwiftUI.Scene {
         WindowGroup {
-            NavigationView {
-                JobManagerExampleView()
-            }
+            JobManagerExampleView()
         }
         .backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
             Logger.jobManagerExample.debug("URLSession background task SwiftUI callback.")
