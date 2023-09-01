@@ -49,14 +49,14 @@ struct BarChart: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isColumnChart {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Vertical bars.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BarMark(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value("Field", $0.label),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value("Value", $0.value)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.field, $0.label),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.value, $0.value)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Horizontal bars.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BarMark(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value("Value", $0.value),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value("Field", $0.label)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.value, $0.value),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.field, $0.label)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
