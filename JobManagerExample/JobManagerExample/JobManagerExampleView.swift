@@ -33,6 +33,13 @@ struct JobManagerExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***HStack(spacing: 10) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***if isAddingGeodatabaseJob || isAddingOfflineMapJob {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***menu
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***List(jobManager.jobs, id: \.id) { job in
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***JobView(job: job)
@@ -52,14 +59,7 @@ struct JobManagerExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .automatic) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isAddingGeodatabaseJob || isAddingOfflineMapJob {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***menu
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The jobs menu.

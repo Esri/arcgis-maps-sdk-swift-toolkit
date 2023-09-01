@@ -20,9 +20,7 @@ import OSLog
 struct JobManagerExampleApp: App {
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED******REMOVED***JobManagerExampleView()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***JobManagerExampleView()
 ***REMOVED***
 ***REMOVED******REMOVED***.backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
 ***REMOVED******REMOVED******REMOVED***Logger.jobManagerExample.debug("URLSession background task SwiftUI callback.")
