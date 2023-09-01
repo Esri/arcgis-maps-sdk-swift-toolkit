@@ -14,6 +14,16 @@
 import Foundation
 
 extension String {
+***REMOVED******REMOVED***/ A localized string for the word "Cancel".
+***REMOVED***static var cancel: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Cancel",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to cancel an operation."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the word "Field".
 ***REMOVED***static var field: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Field",
@@ -22,6 +32,7 @@ extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A localized string for the word "Value".
 ***REMOVED***static var value: Self {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "Value",
