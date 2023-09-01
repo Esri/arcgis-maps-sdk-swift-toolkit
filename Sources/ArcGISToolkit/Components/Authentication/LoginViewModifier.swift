@@ -53,11 +53,7 @@ struct LoginViewModifier: ViewModifier {
                     comment: "A label indicating authentication is required to proceed."
                 ),
                 cancelAction: .init(
-                    title: String(
-                        localized: "Cancel",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to cancel an operation."
-                    ),
+                    title: String.cancel,
                     handler: { _, _ in
                         onCancel()
                     }

@@ -71,12 +71,8 @@ struct TrustHostViewModifier: ViewModifier {
                             isPresented = false
                             challenge.resume(with: .cancel)
                         } label: {
-                            Text(
-                                "Cancel",
-                                bundle: .toolkitModule,
-                                comment: "A label for a button to cancel an operation."
-                            )
-                            .padding(.horizontal)
+                            Text(String.cancel)
+                                .padding(.horizontal)
                         }
                         .buttonStyle(.bordered)
                         Spacer()

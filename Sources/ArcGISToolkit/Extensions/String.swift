@@ -14,6 +14,16 @@
 import Foundation
 
 extension String {
+    /// A localized string for the word "Cancel".
+    static var cancel: Self {
+        .init(
+            localized: "Cancel",
+            bundle: .toolkitModule,
+            comment: "A label for a button to cancel an operation."
+        )
+    }
+    
+    /// A localized string for the word "Field".
     static var field: Self {
         .init(
             localized: "Field",
@@ -22,6 +32,7 @@ extension String {
         )
     }
     
+    /// A localized string for the word "Value".
     static var value: Self {
         .init(
             localized: "Value",
