@@ -224,7 +224,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.repeatSearch()
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Repeat search here",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Repeat Search Here",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  A label for button to show when the user has panned the map away
