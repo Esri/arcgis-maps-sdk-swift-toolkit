@@ -33,6 +33,13 @@ struct JobManagerExampleView: View {
     
     var body: some View {
         VStack {
+            HStack(spacing: 10) {
+                Spacer()
+                if isAddingGeodatabaseJob || isAddingOfflineMapJob {
+                    ProgressView()
+                }
+                menu
+            }
             List(jobManager.jobs, id: \.id) { job in
                 HStack {
                     JobView(job: job)
@@ -52,14 +59,7 @@ struct JobManagerExampleView: View {
                 }
             }
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .automatic) {
-                if isAddingGeodatabaseJob || isAddingOfflineMapJob {
-                    ProgressView()
-                }
-                menu
-            }
-        }
+        .padding()
     }
     
     /// The jobs menu.
