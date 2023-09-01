@@ -135,7 +135,7 @@ public struct SearchView: View {
     private var prompt = String(
         localized: "Find a place or address",
         bundle: .toolkitModule,
-        comment: "A hint for user what to search in a search bar."
+        comment: "A hint for the user on what to search for in a search bar."
     )
     
     /// Determines whether a built-in result view will be shown. Defaults to `true`.
