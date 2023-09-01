@@ -91,7 +91,7 @@ private extension FieldsPopupElement {
         title.isEmpty ? String(
             localized: "Fields",
             bundle: .toolkitModule,
-            comment: "A label in reference to fields contained in a chart of data."
+            comment: "A label in reference to fields in a chart of data contained in a popup."
         ) : title
     }
 }
