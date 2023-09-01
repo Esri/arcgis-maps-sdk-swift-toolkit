@@ -24,7 +24,7 @@ extension String {
 ***REMOVED***
 ***REMOVED***static var value: Self {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Field",
+***REMOVED******REMOVED******REMOVED***localized: "Value",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A value in a set of data contained in a popup."
 ***REMOVED******REMOVED***)
