@@ -91,7 +91,7 @@ private extension FieldsPopupElement {
 ***REMOVED******REMOVED***title.isEmpty ? String(
 ***REMOVED******REMOVED******REMOVED***localized: "Fields",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label in reference to fields in a chart of data contained in a popup."
+***REMOVED******REMOVED******REMOVED***comment: "A label in reference to fields in a set of data contained in a popup."
 ***REMOVED******REMOVED***) : title
 ***REMOVED***
 ***REMOVED***
