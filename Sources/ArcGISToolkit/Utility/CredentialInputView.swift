@@ -46,23 +46,27 @@ extension View {
 
 struct CredentialInputSheetView_Previews: PreviewProvider {
     static var previews: some View {
-        Text("test")
-            .credentialInput(
-                isPresented: .constant(true),
-                fields: .usernamePassword,
-                message: "You must sign in to access 'arcgis.com'",
-                title: "Authentication Required",
-                cancelAction: .init(
-                    title: "Cancel",
-                    handler: { _, _ in
-                    }
-                ),
-                continueAction: .init(
-                    title: "Continue",
-                    handler: { username, password in
-                    }
-                )
+        Text(
+            "test",
+            bundle: .toolkitModule,
+            comment: "A label for development purposes only. This is not user visible."
+        )
+        .credentialInput(
+            isPresented: .constant(true),
+            fields: .usernamePassword,
+            message: "You must sign in to access 'arcgis.com'",
+            title: "Authentication Required",
+            cancelAction: .init(
+                title: "Cancel",
+                handler: { _, _ in
+                }
+            ),
+            continueAction: .init(
+                title: "Continue",
+                handler: { username, password in
+                }
             )
+        )
     }
 }
 
@@ -171,7 +175,8 @@ struct CredentialInputSheetView: View {
         TextField(
             String(
                 localized: "Username",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: "A label in reference to a credential username."
             ),
             text: $username
         )
@@ -189,7 +194,8 @@ struct CredentialInputSheetView: View {
         SecureField(
             String(
                 localized: "Password",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: "A label in reference to a credential password."
             ),
             text: $password
         )
