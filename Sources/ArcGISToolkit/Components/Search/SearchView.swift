@@ -228,7 +228,7 @@ public struct SearchView: View {
                         bundle: .toolkitModule,
                         comment: """
                                   A label for button to show when the user has panned the map away
-                                  from the original search location. 'here' is in reference to the
+                                  from the original search location. 'Here' is in reference to the
                                   current visible extent of the map or scene.
                                   """
                     )
