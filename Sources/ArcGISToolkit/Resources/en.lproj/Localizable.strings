@@ -199,7 +199,7 @@ variable provides additional data. */
 /* A label for button to show when the user has panned the map away
 from the original search location. 'here' is in reference to the
 current visible extent of the map or scene. */
-"Repeat search here" = "Repeat search here";
+"Repeat Search Here" = "Repeat Search Here";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Results";
