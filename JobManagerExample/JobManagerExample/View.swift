@@ -27,7 +27,7 @@ extension View {
 ***REMOVED******REMOVED***_ sequence: S,
 ***REMOVED******REMOVED***perform action: ((S.Element) -> Void)?
 ***REMOVED***) -> some View where S: AsyncSequence {
-***REMOVED******REMOVED***if let action = action {
+***REMOVED******REMOVED***if let action {
 ***REMOVED******REMOVED******REMOVED***task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for try await element in sequence {
