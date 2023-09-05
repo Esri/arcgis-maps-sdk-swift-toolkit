@@ -12,4 +12,4 @@ Documentation for the JobManager toolkit component is [here](https://developers.
 
 ## Note
 
-This example makes use of the `backgroundTask(...)` view modifier which requires iOS 16.
+This example makes use of the `backgroundTask(_:action:)` view modifier which requires iOS 16.
