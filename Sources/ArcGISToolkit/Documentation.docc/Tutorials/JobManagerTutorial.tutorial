@@ -7,7 +7,10 @@
     @Section(title: "Using the JobManager") {
         @Steps {
             @Step {
-                Declare and initialize an `Authenticator` member in your app.
+                Start with a SwiftUI app that has added the ArcGIS Maps SDK Swift Toolkit as a
+                package dependency. We will create an app that can kick off a job and persist it
+                between sessions.
+                
                 @Code(name: "ExampleApp.swift", file: JobManagerStep1)
             }
             
