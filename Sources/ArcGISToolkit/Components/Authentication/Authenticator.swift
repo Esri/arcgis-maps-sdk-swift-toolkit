@@ -53,10 +53,10 @@ import CryptoTokenKit
 @MainActor
 public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ A value indicating whether we should prompt the user when encountering an untrusted host.
-***REMOVED***public let promptForUntrustedHosts: Bool
+***REMOVED***let promptForUntrustedHosts: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The OAuth configurations that this authenticator can work with.
-***REMOVED***public var oAuthUserConfigurations: [OAuthUserConfiguration]
+***REMOVED***let oAuthUserConfigurations: [OAuthUserConfiguration]
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to call once the user has signed out.
 ***REMOVED***public var signOutAction: (() async -> Void) = {***REMOVED***
