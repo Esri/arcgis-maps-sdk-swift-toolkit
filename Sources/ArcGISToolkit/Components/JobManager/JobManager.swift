@@ -81,6 +81,7 @@ import OSLog
 ***REMOVED***/ which will correlate the jobs to their respective downloads that completed and the jobs will
 ***REMOVED***/ then finish. The app relaunch point can happen via the SwiftUI modifier `.backgroundTask(.urlSession(...))`.
 ***REMOVED***/ In UIKit it would be the `UIApplicationDelegate` method `func application(UIApplication, handleEventsForBackgroundURLSession: String, completionHandler: () -> Void)`
+***REMOVED***/ - Since: 200.3
 @MainActor
 public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ The shared job manager.
@@ -106,7 +107,6 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***/ background task scheduler identifiers" in your application's plist file. This only works on
 ***REMOVED******REMOVED***/ device and not on the simulator.
 ***REMOVED******REMOVED***/ More information can be found [here](https:***REMOVED***developer.apple.com/documentation/backgroundtasks/refreshing_and_maintaining_your_app_using_background_tasks).
-
 ***REMOVED***public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
 ***REMOVED***
 ***REMOVED******REMOVED***/ The background task identifier for status checks.
@@ -169,7 +169,7 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if there are jobs running.
 ***REMOVED***private var hasRunningJobs: Bool {
-***REMOVED******REMOVED***!jobs.filter({ $0.status == .started ***REMOVED***).isEmpty
+***REMOVED******REMOVED***jobs.contains { $0.status == .started ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Called when the app moves back to the foreground.
@@ -210,7 +210,7 @@ public class JobManager: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Resumes all paused jobs.
 ***REMOVED***public func resumeAllPausedJobs() {
-***REMOVED******REMOVED******REMOVED*** Make sure the default background URL session is re-created here
+***REMOVED******REMOVED******REMOVED*** Make sure the default background URLSession is re-created here
 ***REMOVED******REMOVED******REMOVED*** in case this method is called from an app relaunch due to background downloads
 ***REMOVED******REMOVED******REMOVED*** completed for a terminated app. We need the session to be re-created in that case.
 ***REMOVED******REMOVED***_ = ArcGISEnvironment.backgroundURLSession
@@ -226,7 +226,7 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***UserDefaults.standard.setValue(array, forKey: defaultsKey)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Load any jobs that have been saved to User Defaults.
+***REMOVED******REMOVED***/ Load any jobs that have been saved to UserDefaults.
 ***REMOVED***private func loadState() {
 ***REMOVED******REMOVED***Logger.jobManager.debug("Loading state.")
 ***REMOVED******REMOVED***guard let strings = UserDefaults.standard.array(forKey: defaultsKey) as? [String] else {
@@ -273,7 +273,7 @@ public class JobManager: ObservableObject {
 ***REMOVED******REMOVED***Logger.jobManager.debug("Starting a background task.")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let identifier = UIApplication.shared.beginBackgroundTask() {
-***REMOVED******REMOVED******REMOVED***Logger.jobManager.debug("Out of background processesing time.")
+***REMOVED******REMOVED******REMOVED***Logger.jobManager.debug("Out of background processing time.")
 ***REMOVED******REMOVED******REMOVED***self.endCurrentBackgroundTask()
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -292,8 +292,9 @@ public enum BackgroundStatusCheckSchedule {
 
 extension Logger {
 ***REMOVED******REMOVED***/ A logger for the job manager.
+***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER" under Scheme
-***REMOVED******REMOVED***/ > Arguments > Environment Variables
+***REMOVED******REMOVED***/ -> Arguments -> Environment Variables
 ***REMOVED***static let jobManager: Logger = {
 ***REMOVED******REMOVED***if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_JOB_MANAGER") {
 ***REMOVED******REMOVED******REMOVED***return Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
