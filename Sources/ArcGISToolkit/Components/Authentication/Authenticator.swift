@@ -53,10 +53,10 @@ import SwiftUI
 @MainActor
 public final class Authenticator: ObservableObject {
     /// A value indicating whether we should prompt the user when encountering an untrusted host.
-    public let promptForUntrustedHosts: Bool
+    let promptForUntrustedHosts: Bool
     
     /// The OAuth configurations that this authenticator can work with.
-    public var oAuthUserConfigurations: [OAuthUserConfiguration]
+    let oAuthUserConfigurations: [OAuthUserConfiguration]
     
     /// The closure to call once the user has signed out.
     public var signOutAction: (() async -> Void) = {}
