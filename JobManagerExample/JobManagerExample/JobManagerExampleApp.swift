@@ -36,9 +36,10 @@ struct JobManagerExampleApp: App {
 }
 
 extension Logger {
-    /// A logger for the job manager example.
-    /// To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER_EXAMPLE" under
-    /// Scheme > Arguments > Environment Variables
+    /// A logger for the job manager.
+    ///
+    /// To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER_EXAMPLE" under Scheme
+    /// -> Arguments -> Environment Variables
     static let jobManagerExample: Logger = {
         if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_JOB_MANAGER_EXAMPLE") {
             return Logger(subsystem: "com.esri.ArcGISToolkit.Examples", category: "JobManagerExample")

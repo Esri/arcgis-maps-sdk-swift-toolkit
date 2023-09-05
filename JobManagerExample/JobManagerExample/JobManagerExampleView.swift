@@ -22,9 +22,9 @@ struct JobManagerExampleView: View {
     /// The job manager used by this view.
     @ObservedObject var jobManager = JobManager.shared
     /// A Boolean value indicating if we are currently adding a geodatabase job.
-    @State var isAddingGeodatabaseJob = false
+    @State private var isAddingGeodatabaseJob = false
     /// A Boolean value indicating if we are currently adding an offline map job.
-    @State var isAddingOfflineMapJob = false
+    @State private var isAddingOfflineMapJob = false
     
     init() {
         // Ask the job manager to schedule background status checks for every 30 seconds.
@@ -53,8 +53,8 @@ struct JobManagerExampleView: View {
             }
         }
         .onAppear {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                if let error = error {
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
+                if let error {
                     print(error.localizedDescription)
                 }
             }
@@ -125,11 +125,11 @@ private struct JobView: View {
     /// The job that this view shows data for.
     var job: Job
     /// The job's error in case of failure.
-    @State var error: Error?
+    @State private var error: Error?
     /// The job's status.
-    @State var status: Job.Status
+    @State private var status: Job.Status
     /// The latest job message.
-    @State var message: JobMessage?
+    @State private var message: JobMessage?
     
     /// Initializer that takes a job for which to show the data for.
     init(job: Job) {
@@ -157,13 +157,13 @@ private struct JobView: View {
             Text(jobType)
             Text(status.displayText)
                 .font(.footnote)
-            if let error = error {
+            if let error {
                 Text(error.localizedDescription)
                     .font(.footnote)
                     .foregroundColor(.secondary)
                     .lineLimit(1)
             } else {
-                if let message = message {
+                if let message {
                     Text(message.text)
                         .font(.footnote)
                         .foregroundColor(.secondary)
