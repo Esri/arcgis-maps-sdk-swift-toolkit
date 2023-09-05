@@ -102,7 +102,7 @@ public class JobManager: ObservableObject {
     /// When the value of this property is not `disabled`, this setting is just a preference.
     /// The operating system ultimately decides when to allow a background task to run.
     /// If you enable background status checks then you must also make sure to have enabled
-    /// the "Background Fetch" background mode in your application settings.
+    /// "Background Fetch" and "Background Processing" background modes in your application settings.
     /// - Note: You must also add "com.esri.ArcGISToolkit.jobManager.statusCheck" to the "Permitted
     /// background task scheduler identifiers" in your application's plist file. This only works on
     /// device and not on the simulator.
