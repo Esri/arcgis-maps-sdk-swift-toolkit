@@ -14,6 +14,7 @@
 import ArcGIS
 import Combine
 import CryptoTokenKit
+import SwiftUI
 
 /// The `Authenticator` is a configurable object that handles authentication challenges. It will
 /// display a user interface when network and ArcGIS authentication challenges occur.
