@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import Combine
 
 /// A very basic data model class containing a Map. Since a `Map` is not an observable object,
 /// clients can use `MapDataModel` as an example of how you would store a map in a data model

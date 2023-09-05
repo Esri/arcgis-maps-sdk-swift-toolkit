@@ -11,8 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import Combine
+import Foundation
+import UIKit
 
 /// A view model which performs the work necessary to asynchronously download an image
 /// from a URL and handles refreshing that image at a given time interval.
@@ -108,7 +110,7 @@ struct LoadImageError: Error {
 extension LoadImageError: LocalizedError {
     public var errorDescription: String? {
         return String(
-            localized: "The URL could not be reached or did not contain image data",
+            localized: "The URL could not be reached or did not contain image data.",
             bundle: .toolkitModule,
             comment: "Description of error thrown when a remote image could not be loaded."
         )

@@ -16,7 +16,7 @@ import ArcGIS
 
 /// A view that displays the web maps of a portal.
 struct WebMapsView: View {
-    /// The portal from which the featured content can be fetched.
+    /// The portal from which the web maps can be fetched.
     var portal: Portal
     
     /// A Boolean value indicating whether the featured content is being loaded.
@@ -42,6 +42,7 @@ struct WebMapsView: View {
         .task {
             guard webMapItems.isEmpty else { return }
             do {
+                // Try to fetch the featured items but if none available then find webmap items.
                 var items = try await portal.featuredItems
                     .filter { $0.kind == .webMap }
                 if items.isEmpty {
@@ -55,7 +56,7 @@ struct WebMapsView: View {
             
             isLoading = false
         }
-        .navigationTitle("Featured Maps")
+        .navigationTitle("Web Maps")
     }
 }
 

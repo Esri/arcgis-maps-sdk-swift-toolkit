@@ -12,10 +12,43 @@
 // limitations under the License.
 
 import ArcGIS
-import SwiftUI
 import Combine
+import CryptoTokenKit
 
-/// A configurable object that handles authentication challenges.
+/// The `Authenticator` is a configurable object that handles authentication challenges. It will
+/// display a user interface when network and ArcGIS authentication challenges occur.
+///
+/// ![image](https://user-images.githubusercontent.com/3998072/203615041-c887d5e3-bb64-469a-a76b-126059329e92.png)
+///
+/// **Features**
+/// 
+/// The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is
+/// asked to handle an authentication challenge. This will handle many different types of
+/// authentication, for example:
+///
+///   - ArcGIS authentication (token and OAuth)
+///   - Integrated Windows Authentication (IWA)
+///   - Client Certificate (PKI)
+///
+/// The `Authenticator` can be configured to support securely persisting credentials to the keychain.
+///
+/// `Authenticator` is accessible via a modifier on `View`:
+///
+/// ```swift
+/// /// Presents user experiences for collecting network authentication credentials from the user.
+/// /// - Parameter authenticator: The authenticator for which credentials will be prompted.
+/// @ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View
+/// ```
+///
+/// **Behavior**
+///
+/// The `authenticator(_:)` view modifier will display an alert prompting the user for credentials. If
+/// credentials were persisted to the keychain, the authenticator will use those instead of
+/// requiring the user to re-enter credentials.
+///
+/// To see the `Authenticator` in action, check out the [Authentication Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/AuthenticationExample)
+/// and refer to [AuthenticationApp.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/AuthenticationExample/AuthenticationExample/AuthenticationApp.swift).
+/// To learn more about using the `Authenticator`, see the [Authenticator Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/authenticatortutorial).
 @MainActor
 public final class Authenticator: ObservableObject {
     /// A value indicating whether we should prompt the user when encountering an untrusted host.
@@ -88,17 +121,18 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
     ) async -> NetworkAuthenticationChallenge.Disposition {
         // Set last connected smart card.
         smartCardManager.setLastConnectedCard()
-        
+
         // If `promptForUntrustedHosts` is `false` then perform default handling
         // for server trust challenges.
         guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
             return .continueWithoutCredential
         }
         
-        // If smart card is connected to the device then a personal identity verification (PIV) token
-        // is available then create a smart card network credential and continue.
+        // If the smart card is connected to the device then a personal identity verification (PIV)
+        // token is available in the `TKTokenWatcher().tokenIDs`. Create a smart card network
+        // credential with first available PIV token and continue with credential.
         if challenge.kind == .clientCertificate,
-           let pivToken = smartCardManager.pivToken,
+           let pivToken = TKTokenWatcher().tokenIDs.filter({ $0.localizedCaseInsensitiveContains("pivtoken") }).first,
            let credential = try? NetworkCredential.smartCard(pivToken: pivToken) {
             return .continueWithCredential(credential)
         }

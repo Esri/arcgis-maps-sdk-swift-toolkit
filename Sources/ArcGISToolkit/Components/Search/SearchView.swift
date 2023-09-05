@@ -14,7 +14,51 @@
 import SwiftUI
 import ArcGIS
 
-/// `SearchView` presents a search experience, powered by an underlying `SearchViewModel`.
+/// `SearchView` enables searching using one or more locators, with support for suggestions,
+/// automatic zooming, and custom search sources.
+///
+/// | iPhone | iPad |
+/// | ------ | ---- |
+/// | ![image](https://user-images.githubusercontent.com/3998072/203608897-5f3bf34a-0931-4d11-b3fc-18a5dd07131a.png) | ![image](https://user-images.githubusercontent.com/3998072/203608708-45a0096c-a8d6-457c-9ee1-8cdb9e5bb15a.png) |
+///
+/// **Features**
+///
+/// - Updates search suggestions as you type.
+/// - Supports using the Esri world geocoder or any other ArcGIS locators.
+/// - Supports searching using custom search sources.
+/// - Allows for customization of the display of search results.
+/// - Allows you to repeat a search within a defined area, and displays a button to enable that
+/// search when the view's viewpoint changes.
+///
+/// `SearchView` uses search sources which implement the ``SearchSource`` protocol.
+///
+/// `SearchView` provides the following search sources:
+///
+/// - ``LocatorSearchSource``
+/// - ``SmartLocatorSearchSource``
+///
+/// `SearchView` provides several instance methods, allowing customization and additional search
+/// behaviors (such as displaying a "Repeat search here" button). See "Instance Methods" below.
+///
+/// **Behavior**
+///
+/// The `SearchView` will display the results list view at half height, exposing a portion of the
+/// underlying map below the list, in compact environments. The user can hide or show the result
+/// list after searching by clicking on the up/down chevron symbol on the right of the search bar.
+///
+/// **Associated Types**
+///
+/// `SearchView` has the following associated types:
+///
+/// - ``SearchField``
+/// - ``SearchResult``
+/// - ``SearchSuggestion``
+/// - ``SearchOutcome``
+/// - ``SearchResultMode``
+///
+/// To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+/// and refer to [SearchExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
+/// in the project. To learn more about using the `SearchView` see the [SearchView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/searchviewtutorial).
 public struct SearchView: View {
     /// Creates a `SearchView`.
     /// - Parameters:
@@ -84,11 +128,15 @@ public struct SearchView: View {
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
-
+    
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
     /// `prompt` modifier.
-    private var prompt = String(localized: "Find a place or address", bundle: .toolkitModule)
+    private var prompt = String(
+        localized: "Find a place or address",
+        bundle: .toolkitModule,
+        comment: "A hint for the user on what to search for in a search bar."
+    )
     
     /// Determines whether a built-in result view will be shown. Defaults to `true`.
     /// If `false`, the result display/selection list is not shown. Set to false if you want to hide the results
@@ -179,8 +227,9 @@ public struct SearchView: View {
                         "Repeat Search Here",
                         bundle: .toolkitModule,
                         comment: """
-                                  A button to show when a user has panned the map away from the
-                                  original search location.
+                                  A label for button to show when the user has panned the map away
+                                  from the original search location. 'Here' is in reference to the
+                                  current visible extent of the map or scene.
                                   """
                     )
                 }
