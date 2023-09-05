@@ -12,8 +12,9 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
+import Combine
 import QuickLook
+***REMOVED***
 
 ***REMOVED***/ A view model representing the combination of a `PopupAttachment` and
 ***REMOVED***/ an associated `UIImage` used as a thumbnail.

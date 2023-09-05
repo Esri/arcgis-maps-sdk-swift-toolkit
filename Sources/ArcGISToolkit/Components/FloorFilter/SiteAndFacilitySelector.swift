@@ -103,12 +103,19 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***prompt: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Filter sites",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A search field allowing user to filter a list of sites by name."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A field allowing the user to filter a list of sites by name. A site
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** contains one or more facilities in a floor-aware map or scene.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
-***REMOVED******REMOVED******REMOVED***.navigationTitle(String(localized: "Sites", bundle: .toolkitModule))
+***REMOVED******REMOVED******REMOVED***.navigationTitle(String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Sites",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label in reference to all of the sites in a floor-aware map or scene."
+***REMOVED******REMOVED******REMOVED***))
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The "All sites" button.
@@ -131,7 +138,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"All sites",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A button allowing users to view a list of all sites defined in a floor aware map."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A reference to all of the sites defined in a floor aware map."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
@@ -233,15 +240,29 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***prompt: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Filter facilities",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A search field allowing user to filter a list of facilities by name."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A field allowing the user to filter a list of facilities by name. A
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** facility contains one or more levels in a floor-aware map or scene.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED***.navigationTitle(
 ***REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling ?
-***REMOVED******REMOVED******REMOVED******REMOVED***String(localized: "All Sites", bundle: .toolkitModule) :
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection?.site?.name ?? String(localized: "Select a facility", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "All sites",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A reference to all of the sites defined in a floor aware map."
+***REMOVED******REMOVED******REMOVED******REMOVED***) :
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection?.site?.name ?? String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Select a facility",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A label directing the user to select a facility. A facility contains one
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** or more levels in a floor-aware map or scene.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -298,8 +319,12 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***/ Displays text "No matches found".
 private struct NoMatchesView: View {
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text("No matches found", bundle: .toolkitModule)
-***REMOVED******REMOVED******REMOVED***.frame(maxHeight: .infinity)
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"No matches found.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A statement that no sites or facilities with names matching a filter phrase were found."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.frame(maxHeight: .infinity)
 ***REMOVED***
 ***REMOVED***
 

@@ -59,3 +59,26 @@ extension View {
 ***REMOVED******REMOVED***modifier(SelectedModifier(isSelected: isSelected))
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Returns a new view with medium presentation detents, if presentation
+***REMOVED******REMOVED***/ detents are supported (iOS 16 and up).
+***REMOVED***func mediumPresentationDetents() -> some View {
+***REMOVED******REMOVED***if #available(iOS 16.0, *) {
+***REMOVED******REMOVED******REMOVED***return self
+***REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return self
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Performs the provided action when the view appears after a slight delay.
+***REMOVED******REMOVED***/ - Tip: Occasionally delaying allows a sheet's presentation animation to work correctly.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - delay: The delay to wait before allow the task to proceed, in nanoseconds. Defaults to 1/4 second.
+***REMOVED******REMOVED***/   - action: The action to perform after the delay.
+***REMOVED***func delayedOnAppear(nanoseconds: UInt64 = 250_000_000, action: @MainActor @escaping () -> Void) -> some View {
+***REMOVED******REMOVED***task { @MainActor in
+***REMOVED******REMOVED******REMOVED***try? await Task.sleep(nanoseconds: nanoseconds)
+***REMOVED******REMOVED******REMOVED***action()
+***REMOVED***
+***REMOVED***
+***REMOVED***

@@ -12,7 +12,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
+import Combine
 
 ***REMOVED***/ A very basic data model class containing a Scene. Since a `Scene` is not an observable object,
 ***REMOVED***/ clients can use `SceneDataModel` as an example of how you would store a scene in a data model

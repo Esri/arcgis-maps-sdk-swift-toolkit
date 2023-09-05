@@ -14,7 +14,40 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ Displays the current scale on-screen
+***REMOVED***/ A scalebar displays the representation of an accurate linear measurement on the map. It provides
+***REMOVED***/ a visual indication through which users can determine the size of features or the distance
+***REMOVED***/ between features on a map. A scale bar is a line or bar divided into parts. It is labeled with
+***REMOVED***/ its ground length, usually in multiples of map units, such as tens of kilometers or hundreds of
+***REMOVED***/ miles.
+***REMOVED***/
+***REMOVED***/ ![An image of a map with a Scalebar overlaid](https:***REMOVED***user-images.githubusercontent.com/3998072/203605457-df6f845c-9245-4608-a61e-6d1e2e63a81b.png)
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ - Can be configured to display as either a bar or line, with different styles for each.
+***REMOVED***/ - Can be configured with custom colors for fills, lines, shadows, and text.
+***REMOVED***/ - Can be configured to automatically hide after a pan or zoom operation.
+***REMOVED***/ - Displays both metric and imperial units.
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ The scalebar uses geodetic calculations to provide accurate measurements for maps of any
+***REMOVED***/ spatial reference. The measurement is accurate for the center of the map extent being displayed.
+***REMOVED***/ This means at smaller scales (zoomed way out) you might find it somewhat inaccurate at the
+***REMOVED***/ extremes of the visible extent. As the map is panned and zoomed, the scalebar automatically
+***REMOVED***/ grows and shrinks and updates its measurement based on the new map extent.
+***REMOVED***/
+***REMOVED***/ **Associated Types**
+***REMOVED***/
+***REMOVED***/ Scalebar has the following associated types:
+***REMOVED***/
+***REMOVED***/ - ``ScalebarSettings``
+***REMOVED***/ - ``ScalebarStyle``
+***REMOVED***/ - ``ScalebarUnits``
+***REMOVED***/
+***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+***REMOVED***/ and refer to [ScalebarExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/ScalebarExampleView.swift) 
+***REMOVED***/ in the project. To learn more about using the `Scalebar` see the [Scalebar Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/scalebartutorial).
 public struct Scalebar: View {
 ***REMOVED******REMOVED*** - MARK: Internal/Private vars
 ***REMOVED***

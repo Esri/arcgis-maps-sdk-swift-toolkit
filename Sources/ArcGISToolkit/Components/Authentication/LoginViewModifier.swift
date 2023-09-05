@@ -29,10 +29,16 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.onAppear { isPresented = true ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.delayedOnAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present the sheet right away.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting it after initialization allows it to animate.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** However, this needs to happen after a slight delay or
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** it doesn't show.
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.credentialInput(
-***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
 ***REMOVED******REMOVED******REMOVED******REMOVED***message: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "You must sign in to access '\(challengingHost)'",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -41,15 +47,23 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***The host is indicated in the variable.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"""
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***title: String(localized: "Authentication Required", bundle: .toolkitModule),
+***REMOVED******REMOVED******REMOVED******REMOVED***title: String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Authentication Required",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating authentication is required to proceed."
+***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(localized: "Cancel", bundle: .toolkitModule),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String.cancel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCancel()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(localized: "Continue", bundle: .toolkitModule),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Continue",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button used to continue the authentication operation."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { username, password in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let loginCredential = LoginCredential(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username: username, password: password

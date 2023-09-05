@@ -12,7 +12,9 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
+import Combine
+import Foundation
+import UIKit
 
 ***REMOVED***/ A view model which performs the work necessary to asynchronously download an image
 ***REMOVED***/ from a URL and handles refreshing that image at a given time interval.
@@ -108,7 +110,7 @@ struct LoadImageError: Error {
 extension LoadImageError: LocalizedError {
 ***REMOVED***public var errorDescription: String? {
 ***REMOVED******REMOVED***return String(
-***REMOVED******REMOVED******REMOVED***localized: "The URL could not be reached or did not contain image data",
+***REMOVED******REMOVED******REMOVED***localized: "The URL could not be reached or did not contain image data.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Description of error thrown when a remote image could not be loaded."
 ***REMOVED******REMOVED***)

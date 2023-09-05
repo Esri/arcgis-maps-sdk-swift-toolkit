@@ -12,6 +12,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+***REMOVED***
 
 public extension View {
 ***REMOVED******REMOVED***/ Presents user experiences for collecting network authentication credentials from the user.
@@ -37,6 +38,7 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***Color.clear
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 0, height: 0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.modifier(AuthenticatorModifier(authenticator: authenticator))
+***REMOVED******REMOVED******REMOVED******REMOVED***._oAuthWebViewSheet()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

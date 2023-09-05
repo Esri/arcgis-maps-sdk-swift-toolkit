@@ -12,6 +12,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import Combine
 ***REMOVED***
 
 ***REMOVED***/ Defines how many results to return; one, many, or automatic based on circumstance.

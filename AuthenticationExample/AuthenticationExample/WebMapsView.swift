@@ -16,7 +16,7 @@
 
 ***REMOVED***/ A view that displays the web maps of a portal.
 struct WebMapsView: View {
-***REMOVED******REMOVED***/ The portal from which the featured content can be fetched.
+***REMOVED******REMOVED***/ The portal from which the web maps can be fetched.
 ***REMOVED***var portal: Portal
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the featured content is being loaded.
@@ -42,6 +42,7 @@ struct WebMapsView: View {
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***guard webMapItems.isEmpty else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Try to fetch the featured items but if none available then find webmap items.
 ***REMOVED******REMOVED******REMOVED******REMOVED***var items = try await portal.featuredItems
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.filter { $0.kind == .webMap ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if items.isEmpty {
@@ -55,7 +56,7 @@ struct WebMapsView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***isLoading = false
 ***REMOVED***
-***REMOVED******REMOVED***.navigationTitle("Featured Maps")
+***REMOVED******REMOVED***.navigationTitle("Web Maps")
 ***REMOVED***
 ***REMOVED***
 

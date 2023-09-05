@@ -21,25 +21,27 @@ import XCTest
 ***REMOVED******REMOVED***let model = CertificatePickerViewModel(challenge: challenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertNil(model.certificateURL)
-***REMOVED******REMOVED***XCTAssertTrue(model.showPrompt)
+***REMOVED******REMOVED***XCTAssertFalse(model.showPrompt)
 ***REMOVED******REMOVED***XCTAssertFalse(model.showPicker)
 ***REMOVED******REMOVED***XCTAssertFalse(model.showPassword)
 ***REMOVED******REMOVED***XCTAssertFalse(model.showCertificateError)
 ***REMOVED******REMOVED***XCTAssertEqual(model.challengingHost, "host.com")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.proceedFromPrompt()
+***REMOVED******REMOVED***model.proceedToPicker()
+***REMOVED******REMOVED******REMOVED*** Have to wait here because the proceed function is delayed to avoid a bug.
+***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 300_000_000)
 ***REMOVED******REMOVED***XCTAssertTrue(model.showPicker)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let url = URL(fileURLWithPath: "/does-not-exist.pfx")
-***REMOVED******REMOVED***model.proceed(withCertificateURL: url)
+***REMOVED******REMOVED***model.proceedToPasswordEntry(forCertificateWithURL: url)
 ***REMOVED******REMOVED***XCTAssertEqual(model.certificateURL, url)
 ***REMOVED******REMOVED***XCTAssertTrue(model.showPassword)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.proceed(withPassword: "1234")
+***REMOVED******REMOVED***model.proceedToUseCertificate(withPassword: "1234")
 ***REMOVED******REMOVED******REMOVED*** Have to yield here because the proceed function kicks off a task.
 ***REMOVED******REMOVED***await Task.yield()
 ***REMOVED******REMOVED******REMOVED*** Have to wait here because the proceed function waits to avoid a bug.
-***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 300_000)
+***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 300_000_000)
 ***REMOVED******REMOVED******REMOVED*** Another yield seems to be required to deal with timing when running the test
 ***REMOVED******REMOVED******REMOVED*** repeatedly.
 ***REMOVED******REMOVED***await Task.yield()
