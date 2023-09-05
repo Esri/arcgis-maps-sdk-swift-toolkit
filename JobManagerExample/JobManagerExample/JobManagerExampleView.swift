@@ -22,9 +22,9 @@ struct JobManagerExampleView: View {
 ***REMOVED******REMOVED***/ The job manager used by this view.
 ***REMOVED***@ObservedObject var jobManager = JobManager.shared
 ***REMOVED******REMOVED***/ A Boolean value indicating if we are currently adding a geodatabase job.
-***REMOVED***@State var isAddingGeodatabaseJob = false
+***REMOVED***@State private var isAddingGeodatabaseJob = false
 ***REMOVED******REMOVED***/ A Boolean value indicating if we are currently adding an offline map job.
-***REMOVED***@State var isAddingOfflineMapJob = false
+***REMOVED***@State private var isAddingOfflineMapJob = false
 ***REMOVED***
 ***REMOVED***init() {
 ***REMOVED******REMOVED******REMOVED*** Ask the job manager to schedule background status checks for every 30 seconds.
@@ -53,8 +53,8 @@ struct JobManagerExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let error = error {
+***REMOVED******REMOVED******REMOVED***UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let error {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -125,11 +125,11 @@ private struct JobView: View {
 ***REMOVED******REMOVED***/ The job that this view shows data for.
 ***REMOVED***var job: Job
 ***REMOVED******REMOVED***/ The job's error in case of failure.
-***REMOVED***@State var error: Error?
+***REMOVED***@State private var error: Error?
 ***REMOVED******REMOVED***/ The job's status.
-***REMOVED***@State var status: Job.Status
+***REMOVED***@State private var status: Job.Status
 ***REMOVED******REMOVED***/ The latest job message.
-***REMOVED***@State var message: JobMessage?
+***REMOVED***@State private var message: JobMessage?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializer that takes a job for which to show the data for.
 ***REMOVED***init(job: Job) {
@@ -157,13 +157,13 @@ private struct JobView: View {
 ***REMOVED******REMOVED******REMOVED***Text(jobType)
 ***REMOVED******REMOVED******REMOVED***Text(status.displayText)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED***if let error = error {
+***REMOVED******REMOVED******REMOVED***if let error {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let message = message {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let message {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(message.text)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
