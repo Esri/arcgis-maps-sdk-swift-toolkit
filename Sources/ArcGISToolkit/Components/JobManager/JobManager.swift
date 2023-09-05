@@ -81,6 +81,7 @@ import SwiftUI
 /// which will correlate the jobs to their respective downloads that completed and the jobs will
 /// then finish. The app relaunch point can happen via the SwiftUI modifier `.backgroundTask(.urlSession(...))`.
 /// In UIKit it would be the `UIApplicationDelegate` method `func application(UIApplication, handleEventsForBackgroundURLSession: String, completionHandler: () -> Void)`
+/// - Since: 200.3
 @MainActor
 public class JobManager: ObservableObject {
     /// The shared job manager.
@@ -106,7 +107,6 @@ public class JobManager: ObservableObject {
     /// background task scheduler identifiers" in your application's plist file. This only works on
     /// device and not on the simulator.
     /// More information can be found [here](https://developer.apple.com/documentation/backgroundtasks/refreshing_and_maintaining_your_app_using_background_tasks).
-
     public var preferredBackgroundStatusCheckSchedule: BackgroundStatusCheckSchedule = .disabled
     
     /// The background task identifier for status checks.
@@ -169,7 +169,7 @@ public class JobManager: ObservableObject {
     
     /// A Boolean value indicating if there are jobs running.
     private var hasRunningJobs: Bool {
-        !jobs.filter({ $0.status == .started }).isEmpty
+        jobs.contains { $0.status == .started }
     }
     
     /// Called when the app moves back to the foreground.
@@ -210,7 +210,7 @@ public class JobManager: ObservableObject {
     
     /// Resumes all paused jobs.
     public func resumeAllPausedJobs() {
-        // Make sure the default background URL session is re-created here
+        // Make sure the default background URLSession is re-created here
         // in case this method is called from an app relaunch due to background downloads
         // completed for a terminated app. We need the session to be re-created in that case.
         _ = ArcGISEnvironment.backgroundURLSession
@@ -226,7 +226,7 @@ public class JobManager: ObservableObject {
         UserDefaults.standard.setValue(array, forKey: defaultsKey)
     }
     
-    /// Load any jobs that have been saved to User Defaults.
+    /// Load any jobs that have been saved to UserDefaults.
     private func loadState() {
         Logger.jobManager.debug("Loading state.")
         guard let strings = UserDefaults.standard.array(forKey: defaultsKey) as? [String] else {
@@ -273,7 +273,7 @@ public class JobManager: ObservableObject {
         Logger.jobManager.debug("Starting a background task.")
         
         let identifier = UIApplication.shared.beginBackgroundTask() {
-            Logger.jobManager.debug("Out of background processesing time.")
+            Logger.jobManager.debug("Out of background processing time.")
             self.endCurrentBackgroundTask()
         }
         
@@ -292,8 +292,9 @@ public enum BackgroundStatusCheckSchedule {
 
 extension Logger {
     /// A logger for the job manager.
+    ///
     /// To enable logging add an environment variable named "LOGGING_FOR_JOB_MANAGER" under Scheme
-    /// > Arguments > Environment Variables
+    /// -> Arguments -> Environment Variables
     static let jobManager: Logger = {
         if ProcessInfo.processInfo.environment.keys.contains("LOGGING_FOR_JOB_MANAGER") {
             return Logger(subsystem: "com.esri.ArcGISToolkit", category: "JobManager")
