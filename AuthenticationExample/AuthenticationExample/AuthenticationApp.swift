@@ -48,6 +48,7 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** - Client Certificate (PKI)
 ***REMOVED******REMOVED******REMOVED***.authenticator(authenticator)
 ***REMOVED******REMOVED******REMOVED***.environmentObject(authenticator)
+***REMOVED******REMOVED******REMOVED***.environmentObject(authenticator.smartCardManager)
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isSettingUp = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Here we setup credential stores to be persistent, which means that it will
@@ -57,6 +58,13 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** then the user will need to be prompted once again.
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
 ***REMOVED******REMOVED******REMOVED******REMOVED***isSettingUp = false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***authenticator.signOutAction = {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSettingUp = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await authenticator.signOut()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSettingUp = false
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
