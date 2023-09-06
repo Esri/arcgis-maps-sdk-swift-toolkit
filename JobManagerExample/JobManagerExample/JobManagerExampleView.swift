@@ -51,6 +51,7 @@ struct JobManagerExampleView: View {
                     .buttonStyle(.borderless)
                 }
             }
+            .listStyle(.plain)
         }
         .onAppear {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
@@ -139,7 +140,7 @@ private struct JobView: View {
     
     /// A Boolean value indicating if the progress is showing.
     var isShowingProgress: Bool {
-        job.status == .started || job.status == .paused
+        job.status == .started || (job.status == .paused && job.progress.fractionCompleted > 0)
     }
     
     /// A Boolean value indicating if the cancel button is showing.
