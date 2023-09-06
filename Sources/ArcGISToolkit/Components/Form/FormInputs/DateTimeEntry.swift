@@ -100,6 +100,7 @@ struct DateTimeEntry: View {
                         .foregroundColor(.secondary)
                 } else {
                     ClearButton { date = nil }
+                        .accessibilityIdentifier("\(element.label) Clear Button")
                 }
             }
         }
