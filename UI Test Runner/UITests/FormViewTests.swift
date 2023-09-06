@@ -188,6 +188,86 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***func testCase_2_1() throws {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let calendarImage = app.images["Required Date Calendar Image"]
+***REMOVED******REMOVED***let clearButton = app.buttons["Required Date Clear Button"]
+***REMOVED******REMOVED***let datePicker = app.datePickers["Required Date Date Picker"]
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Required Date"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Date Value"]
+***REMOVED******REMOVED***let footer = app.staticTexts["Required Date Footer"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let nowButton = app.buttons["Required Date Now Button"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Form View component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
+***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
+***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if fieldValue.label != "No Value" {
+***REMOVED******REMOVED******REMOVED***clearButton.tap()
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***"No Value"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***footer.isHittable,
+***REMOVED******REMOVED******REMOVED***"The required label wasn't visible."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"Required"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***calendarImage.isHittable,
+***REMOVED******REMOVED******REMOVED***"The calendar image wasn't visible."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***calendarImage.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***datePicker.isHittable,
+***REMOVED******REMOVED******REMOVED***"The date picker wasn't visible."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***Date.now.formatted(.dateTime.day().month().year().hour().minute())
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***nowButton.isHittable,
+***REMOVED******REMOVED******REMOVED***"The now button wasn't visible."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
+***REMOVED******REMOVED***while !(footer.isHittable) {
+***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"Date Entry is Required"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 
 private extension String {
 ***REMOVED******REMOVED***/ 257 characters of Lorem ipsum text
