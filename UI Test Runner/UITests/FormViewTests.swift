@@ -187,6 +187,86 @@ final class FormViewTests: XCTestCase {
             "The character count wasn't visible."
         )
     }
+    
+    func testCase_2_1() throws {
+        let app = XCUIApplication()
+        let calendarImage = app.images["Required Date Calendar Image"]
+        let clearButton = app.buttons["Required Date Clear Button"]
+        let datePicker = app.datePickers["Required Date Date Picker"]
+        let fieldTitle = app.staticTexts["Required Date"]
+        let fieldValue = app.staticTexts["Required Date Value"]
+        let footer = app.staticTexts["Required Date Footer"]
+        let formTitle = app.staticTexts["DateTimePoint"]
+        let formViewTestsButton = app.buttons["Form View Tests"]
+        let nowButton = app.buttons["Required Date Now Button"]
+        
+        app.launch()
+            
+        // Open the Form View component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        // Scroll to the target form element.
+        while !(fieldTitle.isHittable) {
+            app.scrollViews.firstMatch.swipeUp(velocity: 500)
+        }
+        
+        if fieldValue.label != "No Value" {
+            clearButton.tap()
+        }
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "No Value"
+        )
+        
+        XCTAssertTrue(
+            footer.isHittable,
+            "The required label wasn't visible."
+        )
+        
+        XCTAssertEqual(
+            footer.label,
+            "Required"
+        )
+        
+        XCTAssertTrue(
+            calendarImage.isHittable,
+            "The calendar image wasn't visible."
+        )
+        
+        calendarImage.tap()
+        
+        XCTAssertTrue(
+            datePicker.isHittable,
+            "The date picker wasn't visible."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            Date.now.formatted(.dateTime.day().month().year().hour().minute())
+        )
+        
+        XCTAssertTrue(
+            nowButton.isHittable,
+            "The now button wasn't visible."
+        )
+        
+        // Scroll to the target form element.
+        while !(footer.isHittable) {
+            app.scrollViews.firstMatch.swipeUp(velocity: 500)
+        }
+        
+        XCTAssertEqual(
+            footer.label,
+            "Date Entry is Required"
+        )
+    }
 }
 
 private extension String {
