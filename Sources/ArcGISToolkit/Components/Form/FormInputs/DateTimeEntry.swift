@@ -88,6 +88,7 @@ struct DateTimeEntry: View {
     @ViewBuilder var dateDisplay: some View {
         HStack {
             Text(formattedDate ?? .noValue)
+                .accessibilityIdentifier("\(element.label) Value")
                 .foregroundColor(displayColor)
             
             Spacer()
@@ -98,6 +99,7 @@ struct DateTimeEntry: View {
                 if date == nil {
                     Image(systemName: "calendar")
                         .foregroundColor(.secondary)
+                        .accessibilityIdentifier("\(element.label) Calendar Image")
                 } else {
                     ClearButton { date = nil }
                         .accessibilityIdentifier("\(element.label) Clear Button")
@@ -132,6 +134,7 @@ struct DateTimeEntry: View {
             in: dateRange,
             displayedComponents: input.includeTime ? [.date, .hourAndMinute] : [.date]
         ) { }
+            .accessibilityIdentifier("\(element.label) Date Picker")
     }
     
     /// The range of dates available for selection, if applicable.
@@ -169,6 +172,7 @@ struct DateTimeEntry: View {
         }
         .font(.footnote)
         .foregroundColor(requiredValueMissing ? .red : .secondary)
+        .accessibilityIdentifier("\(element.label) Footer")
     }
     
     /// The human-readable date and time selection.
@@ -187,6 +191,7 @@ struct DateTimeEntry: View {
         } label: {
             input.includeTime ? Text.now : .today
         }
+        .accessibilityIdentifier("\(element.label) \(input.includeTime ? "Now" : "Today") Button")
     }
 }
 
