@@ -270,12 +270,64 @@ final class FormViewTests: XCTestCase {
     
     func testCase_2_2() {
         let app = XCUIApplication()
+        let datePicker = app.datePickers["Launch Date and Time for Apollo 11 Date Picker"]
+        let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
+        let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
+        let footer = app.staticTexts["Launch Date and Time for Apollo 11 Footer"]
+        let formTitle = app.staticTexts["DateTimePoint"]
         let formViewTestsButton = app.buttons["Form View Tests"]
+        let nowButton = app.buttons["Launch Date and Time for Apollo 11 Now Button"]
         
         app.launch()
             
         // Open the Form View component test view.
         formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        fieldValue.tap()
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title wasn't visible."
+        )
+        
+        // TODO: Make this work with local timezone
+//        XCTAssertEqual(
+//            fieldValue.label,
+//            "Jul 7, 1969 at 20:17 UTC"
+//        )
+        
+        XCTAssertEqual(
+            footer.label,
+            "Enter the launch date and time (July 7, 1969 20:17 UTC)"
+        )
+        
+        XCTAssertTrue(
+            datePicker.isHittable,
+            "The date picker wasn't visible."
+        )
+        
+        XCTAssertTrue(
+            nowButton.isHittable,
+            "The now button wasn't visible."
+        )
+        
+        fieldValue.tap()
+        
+        XCTAssertTrue(
+            fieldValue.isHittable,
+            "The label wasn't visible."
+        )
+        
+        XCTAssertFalse(
+            datePicker.isHittable,
+            "The date picker was visible."
+        )
     }
     
     func testCase_2_3() {
