@@ -269,23 +269,53 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_2_2() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Form View component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_2_3() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Form View component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_2_4() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Form View component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_2_5() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Form View component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_2_6() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Form View component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED***
 ***REMOVED***
 
