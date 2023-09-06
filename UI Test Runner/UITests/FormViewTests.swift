@@ -269,23 +269,53 @@ final class FormViewTests: XCTestCase {
     }
     
     func testCase_2_2() {
+        let app = XCUIApplication()
+        let formViewTestsButton = app.buttons["Form View Tests"]
         
+        app.launch()
+            
+        // Open the Form View component test view.
+        formViewTestsButton.tap()
     }
     
     func testCase_2_3() {
+        let app = XCUIApplication()
+        let formViewTestsButton = app.buttons["Form View Tests"]
         
+        app.launch()
+            
+        // Open the Form View component test view.
+        formViewTestsButton.tap()
     }
     
     func testCase_2_4() {
+        let app = XCUIApplication()
+        let formViewTestsButton = app.buttons["Form View Tests"]
         
+        app.launch()
+            
+        // Open the Form View component test view.
+        formViewTestsButton.tap()
     }
     
     func testCase_2_5() {
+        let app = XCUIApplication()
+        let formViewTestsButton = app.buttons["Form View Tests"]
         
+        app.launch()
+            
+        // Open the Form View component test view.
+        formViewTestsButton.tap()
     }
     
     func testCase_2_6() {
+        let app = XCUIApplication()
+        let formViewTestsButton = app.buttons["Form View Tests"]
         
+        app.launch()
+            
+        // Open the Form View component test view.
+        formViewTestsButton.tap()
     }
 }
 
