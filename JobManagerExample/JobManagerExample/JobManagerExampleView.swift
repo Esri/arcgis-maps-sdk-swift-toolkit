@@ -51,6 +51,7 @@ struct JobManagerExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderless)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
@@ -139,7 +140,7 @@ private struct JobView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the progress is showing.
 ***REMOVED***var isShowingProgress: Bool {
-***REMOVED******REMOVED***job.status == .started || job.status == .paused
+***REMOVED******REMOVED***job.status == .started || (job.status == .paused && job.progress.fractionCompleted > 0)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the cancel button is showing.
