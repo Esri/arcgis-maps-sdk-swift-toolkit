@@ -296,11 +296,14 @@ final class FormViewTests: XCTestCase {
             "The field title wasn't visible."
         )
         
-        // TODO: Make this work with local timezone
-//        XCTAssertEqual(
-//            fieldValue.label,
-//            "Jul 7, 1969 at 20:17 UTC"
-//        )
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        let localDate = formatter.date(from: "1969-07-07T20:17:00.000Z")
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            localDate?.formatted(.dateTime.day().month().year().hour().minute())
+        )
         
         XCTAssertEqual(
             footer.label,
