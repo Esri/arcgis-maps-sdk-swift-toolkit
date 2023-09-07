@@ -454,12 +454,28 @@ final class FormViewTests: XCTestCase {
     
     func testCase_2_5() {
         let app = XCUIApplication()
+        let fieldTitle = app.staticTexts["start and end date time"]
+        let fieldValue = app.staticTexts["start and end date time Value"]
+        let formTitle = app.staticTexts["DateTimePoint"]
         let formViewTestsButton = app.buttons["Form View Tests"]
         
         app.launch()
             
         // Open the Form View component test view.
         formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        // Scroll to the target form element.
+        while !(fieldTitle.isHittable) {
+            app.scrollViews.firstMatch.swipeUp(velocity: 500)
+        }
+        
+        fieldValue.tap()
     }
     
     func testCase_2_6() {
