@@ -335,12 +335,65 @@ final class FormViewTests: XCTestCase {
     
     func testCase_2_3() {
         let app = XCUIApplication()
+        let datePicker = app.datePickers["Launch Date for Apollo 11 Date Picker"]
+        let fieldTitle = app.staticTexts["Launch Date for Apollo 11"]
+        let fieldValue = app.staticTexts["Launch Date for Apollo 11 Value"]
+        let footer = app.staticTexts["Launch Date for Apollo 11 Footer"]
+        let formTitle = app.staticTexts["DateTimePoint"]
         let formViewTestsButton = app.buttons["Form View Tests"]
+        let todayButton = app.buttons["Launch Date for Apollo 11 Today Button"]
         
         app.launch()
             
         // Open the Form View component test view.
         formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        // Scroll to the target form element.
+        while !(fieldTitle.isHittable) {
+            app.scrollViews.firstMatch.swipeUp(velocity: 500)
+        }
+        
+        XCTAssertTrue(
+            footer.isHittable,
+            "The footer wasn't visible."
+        )
+        
+        fieldValue.tap()
+        
+        XCTAssertEqual(
+            footer.label,
+            "Enter the Date for the Apollo 11 launch"
+        )
+        
+        XCTAssertTrue(
+            fieldValue.isHittable,
+            "The field value wasn't visible."
+        )
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let localDate = formatter.date(from: "2023-07-14")
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            localDate?.formatted(.dateTime.day().month().year())
+        )
+        
+        XCTAssertTrue(
+            datePicker.isHittable,
+            "The date picker wasn't visible."
+        )
+        
+        XCTAssertTrue(
+            todayButton.isHittable,
+            "The today button wasn't visible."
+        )
     }
     
     func testCase_2_4() {
