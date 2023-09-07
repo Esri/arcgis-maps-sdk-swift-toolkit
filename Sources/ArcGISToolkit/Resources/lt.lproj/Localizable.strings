@@ -1,294 +1,294 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
-"%lld selected" = "Đ_%lld selected______________ớ";
+"%lld selected" = "Į_%lld selected______________š";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
-"A certificate is required to access content on %@." = "Đ_A certificate is required to access content on %@__________________________ớ.";
+"A certificate is required to access content on %@." = "Į_A certificate is required to access content on %@__________________________š.";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "Đ_Add new_______________ớ";
+"Add new" = "Į_Add new_______________š";
 
 /* A section header for advanced options. */
-"Advanced Options" = "Đ_Advanced Options_________________ớ";
+"Advanced Options" = "Į_Advanced Options_________________š";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "Đ_All sites___________________ớ";
+"All sites" = "Į_All sites___________________š";
 
 /* A message describing the outcome of clearing all utility network trace results. */
-"All the trace inputs and results will be lost." = "Đ_All the trace inputs and results will be lost________________________ớ.";
+"All the trace inputs and results will be lost." = "Į_All the trace inputs and results will be lost________________________š.";
 
 /* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "Đ_Allow___________ớ";
+"Allow" = "Į_Allow___________š";
 
 /* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "Đ_An error occurred loading the image: %@_____________________ớ.";
+"An error occurred loading the image: %@." = "Į_An error occurred loading the image: %@_____________________š.";
 
 /* A label in reference to attachments in a popup. */
-"Attachments" = "Đ_Attachments____________ớ";
+"Attachments" = "Į_Attachments____________š";
 
 /* A label in reference to the attributes of a geo element. */
-"Attributes" = "Đ_Attributes_____________________ớ";
+"Attributes" = "Į_Attributes_____________________š";
 
 /* A label indicating authentication is required to proceed. */
-"Authentication Required" = "Đ_Authentication Required________________________ớ";
+"Authentication Required" = "Į_Authentication Required________________________š";
 
 /* A label in reference to bookmarks contained in a map or scene. */
-"Bookmarks" = "Đ_Bookmarks___________________ớ";
+"Bookmarks" = "Į_Bookmarks___________________š";
 
 /* A label for a button to open the system file browser. */
-"Browse" = "Đ_Browse_____________ớ";
+"Browse" = "Į_Browse_____________š";
 
 /* A label for a button to cancel an operation. */
-"Cancel" = "Đ_Cancel_____________ớ";
+"Cancel" = "Į_Cancel_____________š";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "Đ_Cancel starting point selection_________________ớ";
+"Cancel starting point selection" = "Į_Cancel starting point selection_________________š";
 
 /* A label indicating that a certificate is required to proceed. */
-"Certificate Required" = "Đ_Certificate Required_____________________ớ";
+"Certificate Required" = "Į_Certificate Required_____________________š";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "Đ_Certificate Trust Warning__________________________ớ";
+"Certificate Trust Warning" = "Į_Certificate Trust Warning__________________________š";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "Đ_Clear all results__________________ớ";
+"Clear all results" = "Į_Clear all results__________________š";
 
 /* A label in reference to the color used to display utility trace result graphics. */
-"Color" = "Đ_Color___________ớ";
+"Color" = "Į_Color___________š";
 
 /* An compass description to be read by a screen reader describing the
 current heading. The first variable being a degree value and the
 second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
-"Compass, heading %lld degrees %@" = "Đ_Compass, heading %lld degrees %@_________________ớ";
+"Compass, heading %lld degrees %@" = "Į_Compass, heading %lld degrees %@_________________š";
 
 /* A label for a button used to continue the authentication operation. */
-"Continue" = "Đ_Continue_________________ớ";
+"Continue" = "Į_Continue_________________š";
 
 /* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "Đ_Could not access the certificate file____________________ớ.";
+"Could not access the certificate file." = "Į_Could not access the certificate file____________________š.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Đ_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________ớ.";
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Į_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________š.";
 
 /* A label for a button used to delete a utility network trace input component or result. */
-"Delete" = "Đ_Delete_____________ớ";
+"Delete" = "Į_Delete_____________š";
 
 /* A button to close the bookmark selection menu. */
-"Done" = "Đ_Done_________ớ";
+"Done" = "Į_Done_________š";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
-"Duplicate starting points cannot be added." = "Đ_Duplicate starting points cannot be added______________________ớ.";
+"Duplicate starting points cannot be added." = "Į_Duplicate starting points cannot be added______________________š.";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
-"Element could not be identified." = "Đ_Element could not be identified_________________ớ.";
+"Element could not be identified." = "Į_Element could not be identified_________________š.";
 
 /* A label in reference to an error that occurred during a utility network trace. */
-"Error" = "Đ_Error___________ớ";
+"Error" = "Į_Error___________š";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
-"Error importing certificate" = "Đ_Error importing certificate____________________________ớ";
+"Error importing certificate" = "Į_Error importing certificate____________________________š";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
-"Error loading basemap." = "Đ_Error loading basemap_______________________ớ.";
+"Error loading basemap." = "Į_Error loading basemap_______________________š.";
 
 /* A label indicating popup expressions are being evaluated. */
-"Evaluating popup expressions" = "Đ_Evaluating popup expressions_____________________________ớ";
+"Evaluating popup expressions" = "Į_Evaluating popup expressions_____________________________š";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
-"Failed to set starting point" = "Đ_Failed to set starting point_____________________________ớ";
+"Failed to set starting point" = "Į_Failed to set starting point_____________________________š";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
-"Feature Results" = "Đ_Feature Results________________ớ";
+"Feature Results" = "Į_Feature Results________________š";
 
 /* A field in a set of data contained in a popup. */
-"Field" = "Đ_Field___________ớ";
+"Field" = "Į_Field___________š";
 
 /* A label in reference to fields in a set of data contained in a popup. */
-"Fields" = "Đ_Fields_____________ớ";
+"Fields" = "Į_Fields_____________š";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
-"Filter facilities" = "Đ_Filter facilities__________________ớ";
+"Filter facilities" = "Į_Filter facilities__________________š";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
-"Filter sites" = "Đ_Filter sites_____________ớ";
+"Filter sites" = "Į_Filter sites_____________š";
 
 /* A hint for the user on what to search for in a search bar. */
-"Find a place or address" = "Đ_Find a place or address________________________ớ";
+"Find a place or address" = "Į_Find a place or address________________________š";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
-"Fraction Along Edge" = "Đ_Fraction Along Edge____________________ớ";
+"Fraction Along Edge" = "Į_Fraction Along Edge____________________š";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
-"Function Results" = "Đ_Function Results_________________ớ";
+"Function Results" = "Į_Function Results_________________š";
 
 /* A label in reference to media elements contained within a popup. */
-"Media" = "Đ_Media___________ớ";
+"Media" = "Į_Media___________š";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
-"Mode" = "Đ_Mode_________ớ";
+"Mode" = "Į_Mode_________š";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
-"Name" = "Đ_Name_________ớ";
+"Name" = "Į_Name_________š";
 
 /* A label in reference to a specific utility network. */
-"Network" = "Đ_Network_______________ớ";
+"Network" = "Į_Network_______________š";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "Đ_New trace___________________ớ";
+"New trace" = "Į_New trace___________________š";
 
 /* A label indicating that no bookmarks are available for selection. */
-"No bookmarks" = "Đ_No bookmarks_____________ớ";
+"No bookmarks" = "Į_No bookmarks_____________š";
 
 /* A statement that no utility trace configurations are available. */
-"No configurations available." = "Đ_No configurations available_____________________________ớ.";
+"No configurations available." = "Į_No configurations available_____________________________š.";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
-"No matches found." = "Đ_No matches found__________________ớ.";
+"No matches found." = "Į_No matches found__________________š.";
 
 /* A message to show when there are no results or suggestions. */
-"No results found" = "Đ_No results found_________________ớ";
+"No results found" = "Į_No results found_________________š";
 
 /* A label indicating that no utility named trace configurations are available. */
-"No trace types found." = "Đ_No trace types found______________________ớ.";
+"No trace types found." = "Į_No trace types found______________________š.";
 
 /* A label indicating that no utility networks are available. */
-"No utility networks found." = "Đ_No utility networks found___________________________ớ.";
+"No utility networks found." = "Į_No utility networks found___________________________š.";
 
 /* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "Đ_None selected______________ớ";
+"None selected" = "Į_None selected______________š";
 
 /* A trace function output result was not provided. */
-"Not Available" = "Đ_Not Available______________ớ";
+"Not Available" = "Į_Not Available______________š";
 
 /* A string identifying a utility network object. */
-"Object ID: %@" = "Đ_Object ID: %@______________ớ";
+"Object ID: %@" = "Į_Object ID: %@______________š";
 
 /* A label for button to proceed with an operation. */
-"OK" = "Đ_OK_____ớ";
+"OK" = "Į_OK_____š";
 
 /* A label in reference to a credential password. */
-"Password" = "Đ_Password_________________ớ";
+"Password" = "Į_Password_________________š";
 
 /* A label indicating that a password is required to proceed with an operation. */
-"Password Required" = "Đ_Password Required__________________ớ";
+"Password Required" = "Į_Password Required__________________š";
 
 /* A label requesting the password associated with the chosen certificate. */
-"Please enter a password for the chosen certificate." = "Đ_Please enter a password for the chosen certificate___________________________ớ.";
+"Please enter a password for the chosen certificate." = "Į_Please enter a password for the chosen certificate___________________________š.";
 
 /* A label indicating that at least one starting location is required for the
 chosen utility network trace configuration. */
-"Please set at least 1 starting location." = "Đ_Please set at least 1 starting location_____________________ớ.";
+"Please set at least 1 starting location." = "Į_Please set at least 1 starting location_____________________š.";
 
 /* A label indicating that at least two starting locations are required for the
 chosen utility network trace configuration. */
-"Please set at least 2 starting locations." = "Đ_Please set at least 2 starting locations______________________ớ.";
+"Please set at least 2 starting locations." = "Į_Please set at least 2 starting locations______________________š.";
 
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
-"Popup evaluation failed: %@" = "Đ_Popup evaluation failed: %@____________________________ớ";
+"Popup evaluation failed: %@" = "Į_Popup evaluation failed: %@____________________________š";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
-"Repeat Search Here" = "Đ_Repeat Search Here___________________ớ";
+"Repeat Search Here" = "Į_Repeat Search Here___________________š";
 
 /* A label for a button to show utility network trace results. */
-"Results" = "Đ_Results_______________ớ";
+"Results" = "Į_Results_______________š";
 
 /* A label in reference to a search query entered by the user. */
-"Search Query" = "Đ_Search Query_____________ớ";
+"Search Query" = "Į_Search Query_____________š";
 
 /* A label prompting the user to make a selection from the available bookmarks. */
-"Select a bookmark" = "Đ_Select a bookmark__________________ớ";
+"Select a bookmark" = "Į_Select a bookmark__________________š";
 
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
-"Select a facility" = "Đ_Select a facility__________________ớ";
+"Select a facility" = "Į_Select a facility__________________š";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
-"Sites" = "Đ_Sites___________ớ";
+"Sites" = "Į_Sites___________š";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
-"Spatial reference mismatch." = "Đ_Spatial reference mismatch____________________________ớ.";
+"Spatial reference mismatch." = "Į_Spatial reference mismatch____________________________š.";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
-"Starting Points" = "Đ_Starting Points________________ớ";
+"Starting Points" = "Į_Starting Points________________š";
 
 /* A label indicating that tapping an image will reveal
 additional information. */
-"Tap on the image for more information." = "Đ_Tap on the image for more information____________________ớ.";
+"Tap on the image for more information." = "Į_Tap on the image for more information____________________š.";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
-"Terminal Configuration" = "Đ_Terminal Configuration_______________________ớ";
+"Terminal Configuration" = "Į_Terminal Configuration_______________________š";
 
 /* A label for development purposes only. This is not user visible. */
-"test" = "Đ_test_________ớ";
+"test" = "Į_test_________š";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
-"The basemap does not have a spatial reference." = "Đ_The basemap does not have a spatial reference________________________ớ.";
+"The basemap does not have a spatial reference." = "Į_The basemap does not have a spatial reference________________________š.";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to
 load for an unknown reason. */
-"The basemap failed to load for an unknown reason." = "Đ_The basemap failed to load for an unknown reason__________________________ớ.";
+"The basemap failed to load for an unknown reason." = "Į_The basemap failed to load for an unknown reason__________________________š.";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map. */
-"The basemap has a spatial reference that is incompatible with the map." = "Đ_The basemap has a spatial reference that is incompatible with the map____________________________________ớ.";
+"The basemap has a spatial reference that is incompatible with the map." = "Į_The basemap has a spatial reference that is incompatible with the map____________________________________š.";
 
 /* A label indicating the chosen file or given password was invalid. */
-"The certificate file or password was invalid." = "Đ_The certificate file or password was invalid________________________ớ.";
+"The certificate file or password was invalid." = "Į_The certificate file or password was invalid________________________š.";
 
 /* A label indicating the chosen file was invalid. */
-"The certificate file was invalid." = "Đ_The certificate file was invalid__________________ớ.";
+"The certificate file was invalid." = "Į_The certificate file was invalid__________________š.";
 
 /* A label indicating the map doesn't have a spatial reference. */
-"The map does not have a spatial reference." = "Đ_The map does not have a spatial reference______________________ớ.";
+"The map does not have a spatial reference." = "Į_The map does not have a spatial reference______________________š.";
 
 /* A label indicating the given password was invalid. */
-"The password was invalid." = "Đ_The password was invalid__________________________ớ.";
+"The password was invalid." = "Į_The password was invalid__________________________š.";
 
 /* Description of error thrown when a remote image could not be loaded. */
-"The URL could not be reached or did not contain image data." = "Đ_The URL could not be reached or did not contain image data_______________________________ớ.";
+"The URL could not be reached or did not contain image data." = "Į_The URL could not be reached or did not contain image data_______________________________š.";
 
 /* A label for a button to begin a utility network trace operation. */
-"Trace" = "Đ_Trace___________ớ";
+"Trace" = "Į_Trace___________š";
 
 /* A label indicating the index of the trace being viewed out of the total number of traces completed. */
-"Trace %1$lld of %2$lld" = "Đ_Trace %1$lld of %2$lld_______________________ớ";
+"Trace %1$lld of %2$lld" = "Į_Trace %1$lld of %2$lld_______________________š";
 
 /* A label in reference to a utility network trace configuration. */
-"Trace Configuration" = "Đ_Trace Configuration____________________ớ";
+"Trace Configuration" = "Į_Trace Configuration____________________š";
 
 /* A label for a button allowing the user to retry an operation. */
-"Try Again" = "Đ_Try Again___________________ớ";
+"Try Again" = "Į_Try Again___________________š";
 
 /* A label to use in place of a utility element asset type name. */
-"Unnamed Asset Type" = "Đ_Unnamed Asset Type___________________ớ";
+"Unnamed Asset Type" = "Į_Unnamed Asset Type___________________š";
 
 /* A label in reference to a credential username. */
-"Username" = "Đ_Username_________________ớ";
+"Username" = "Į_Username_________________š";
 
 /* A value in a set of data contained in a popup. */
-"Value" = "Đ_Value___________ớ";
+"Value" = "Į_Value___________š";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
-"You must sign in to access '%@'" = "Đ_You must sign in to access '%@'_________________ớ";
+"You must sign in to access '%@'" = "Į_You must sign in to access '%@'_________________š";
 
 /* A button to change the map to the extent of the selected trace. */
-"Zoom To" = "Đ_Zoom To_______________ớ";
+"Zoom To" = "Į_Zoom To_______________š";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "Đ_Zoom to result_______________ớ";
+"Zoom to result" = "Į_Zoom to result_______________š";
 
