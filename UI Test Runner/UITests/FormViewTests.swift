@@ -17,7 +17,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***/ Text Box with no hint, no description, value not required.
 ***REMOVED***func testCase_1_1() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
@@ -67,7 +67,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***/ Tests focused and unfocused state, with value (populated).
 ***REMOVED***func testCase_1_2() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
@@ -145,7 +145,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***func testCase_1_3() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
@@ -197,7 +197,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Date Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Required Date Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let nowButton = app.buttons["Required Date Now Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -275,7 +275,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date and Time for Apollo 11 Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let nowButton = app.buttons["Launch Date and Time for Apollo 11 Now Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -340,7 +340,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date for Apollo 11 Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date for Apollo 11 Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let todayButton = app.buttons["Launch Date for Apollo 11 Today Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -403,7 +403,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date Time End Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date Time End Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let nowButton = app.buttons["Launch Date Time End Now Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -464,7 +464,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["start and end date time Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["start and end date time Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let nowButton = app.buttons["start and end date time Now Button"]
 ***REMOVED******REMOVED***let previousMonthButton = datePicker.buttons["Previous Month"]
 ***REMOVED******REMOVED***let julyFirstButton = datePicker.collectionViews.staticTexts["1"]
@@ -531,7 +531,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED******REMOVED***
