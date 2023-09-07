@@ -459,10 +459,15 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***func testCase_2_5() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let datePicker = app.datePickers["start and end date time Date Picker"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["start and end date time"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["start and end date time Value"]
+***REMOVED******REMOVED***let footer = app.staticTexts["start and end date time Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let nowButton = app.buttons["start and end date time Now Button"]
+***REMOVED******REMOVED***let previousMonthButton = datePicker.buttons["Previous Month"]
+***REMOVED******REMOVED***let julyFirstButton = datePicker.collectionViews.staticTexts["1"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED******REMOVED***
@@ -481,6 +486,43 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
+***REMOVED******REMOVED***while !(footer.isHittable) {
+***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 250)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***footer.isHittable,
+***REMOVED******REMOVED******REMOVED***"The footer wasn't visible."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED******REMOVED***Form with Start date and End date defined
+***REMOVED******REMOVED******REMOVED***Start July 1, 1969
+***REMOVED******REMOVED******REMOVED***End  July 31, 1969
+***REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***nowButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***julyFirstButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let formatter = DateFormatter()
+***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+***REMOVED******REMOVED***let localDate = formatter.date(from: "1969-07-01T07:00:00.000Z")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***localDate?.formatted(.dateTime.day().month().year().hour().minute())
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***previousMonthButton.isEnabled,
+***REMOVED******REMOVED******REMOVED***"The user was able to view June 1969 in the calendar."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_2_6() {
