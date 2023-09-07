@@ -296,11 +296,14 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The field title wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** TODO: Make this work with local timezone
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED******REMOVED***fieldValue.label,
-***REMOVED******REMOVED******REMOVED******REMOVED***"Jul 7, 1969 at 20:17 UTC"
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***let formatter = DateFormatter()
+***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+***REMOVED******REMOVED***let localDate = formatter.date(from: "1969-07-07T20:17:00.000Z")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***localDate?.formatted(.dateTime.day().month().year().hour().minute())
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***footer.label,
