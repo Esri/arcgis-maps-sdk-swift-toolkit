@@ -335,12 +335,65 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***func testCase_2_3() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let datePicker = app.datePickers["Launch Date for Apollo 11 Date Picker"]
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Launch Date for Apollo 11"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date for Apollo 11 Value"]
+***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date for Apollo 11 Footer"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let todayButton = app.buttons["Launch Date for Apollo 11 Today Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the Form View component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
+***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
+***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***footer.isHittable,
+***REMOVED******REMOVED******REMOVED***"The footer wasn't visible."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***fieldValue.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"Enter the Date for the Apollo 11 launch"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldValue.isHittable,
+***REMOVED******REMOVED******REMOVED***"The field value wasn't visible."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let formatter = DateFormatter()
+***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd"
+***REMOVED******REMOVED***let localDate = formatter.date(from: "2023-07-14")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***localDate?.formatted(.dateTime.day().month().year())
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***datePicker.isHittable,
+***REMOVED******REMOVED******REMOVED***"The date picker wasn't visible."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***todayButton.isHittable,
+***REMOVED******REMOVED******REMOVED***"The today button wasn't visible."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_2_4() {
