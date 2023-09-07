@@ -454,12 +454,28 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***func testCase_2_5() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["start and end date time"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["start and end date time Value"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the Form View component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
+***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
+***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_2_6() {
