@@ -187,7 +187,14 @@ struct DateTimeEntry: View {
     /// The button to set the date to the present time.
     var todayOrNowButton: some View {
         Button {
-            date = .now
+            let now = Date.now
+            if dateRange.contains(now) {
+                date = now
+            } else if now > dateRange.upperBound {
+                date = dateRange.upperBound
+            } else {
+                date = dateRange.lowerBound
+            }
         } label: {
             input.includeTime ? Text.now : .today
         }
