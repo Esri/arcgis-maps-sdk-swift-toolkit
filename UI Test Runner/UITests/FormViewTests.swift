@@ -201,7 +201,7 @@ final class FormViewTests: XCTestCase {
         let nowButton = app.buttons["Required Date Now Button"]
         
         app.launch()
-            
+        
         // Open the Form View component test view.
         formViewTestsButton.tap()
         
