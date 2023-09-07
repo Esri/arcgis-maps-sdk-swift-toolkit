@@ -1,2 +1,294 @@
-/* No comment provided by engineer. */
-"Delete" = "Ştergere";
+/* A label declaring the number of starting points selected for a utility network trace. */
+"%lld selected" = "Ă_%lld selected______________ș";
+
+/* An alert message indicating that a certificate is required to access
+content on a remote host. The variable is the host that prompted the challenge. */
+"A certificate is required to access content on %@." = "Ă_A certificate is required to access content on %@__________________________ș.";
+
+/* A button to add new utility trace starting points. */
+"Add new" = "Ă_Add new_______________ș";
+
+/* A section header for advanced options. */
+"Advanced Options" = "Ă_Advanced Options_________________ș";
+
+/* A reference to all of the sites defined in a floor aware map. */
+"All sites" = "Ă_All sites___________________ș";
+
+/* A message describing the outcome of clearing all utility network trace results. */
+"All the trace inputs and results will be lost." = "Ă_All the trace inputs and results will be lost________________________ș.";
+
+/* A button indicating the user accepts a potentially dangerous action. */
+"Allow" = "Ă_Allow___________ș";
+
+/* A fallback message to display when an image cannot be loaded. */
+"An error occurred loading the image: %@." = "Ă_An error occurred loading the image: %@_____________________ș.";
+
+/* A label in reference to attachments in a popup. */
+"Attachments" = "Ă_Attachments____________ș";
+
+/* A label in reference to the attributes of a geo element. */
+"Attributes" = "Ă_Attributes_____________________ș";
+
+/* A label indicating authentication is required to proceed. */
+"Authentication Required" = "Ă_Authentication Required________________________ș";
+
+/* A label in reference to bookmarks contained in a map or scene. */
+"Bookmarks" = "Ă_Bookmarks___________________ș";
+
+/* A label for a button to open the system file browser. */
+"Browse" = "Ă_Browse_____________ș";
+
+/* A label for a button to cancel an operation. */
+"Cancel" = "Ă_Cancel_____________ș";
+
+/* A label for a button to cancel the starting point selection operation. */
+"Cancel starting point selection" = "Ă_Cancel starting point selection_________________ș";
+
+/* A label indicating that a certificate is required to proceed. */
+"Certificate Required" = "Ă_Certificate Required_____________________ș";
+
+/* A label indicating that the remote host's certificate is not trusted. */
+"Certificate Trust Warning" = "Ă_Certificate Trust Warning__________________________ș";
+
+/* A directive to clear all of the completed utility network traces. */
+"Clear all results" = "Ă_Clear all results__________________ș";
+
+/* A label in reference to the color used to display utility trace result graphics. */
+"Color" = "Ă_Color___________ș";
+
+/* An compass description to be read by a screen reader describing the
+current heading. The first variable being a degree value and the
+second being a corresponding cardinal direction (north, northeast,
+east, etc.). */
+"Compass, heading %lld degrees %@" = "Ă_Compass, heading %lld degrees %@_________________ș";
+
+/* A label for a button used to continue the authentication operation. */
+"Continue" = "Ă_Continue_________________ș";
+
+/* A label indicating a certificate file was inaccessible. */
+"Could not access the certificate file." = "Ă_Could not access the certificate file____________________ș.";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Ă_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________ș.";
+
+/* A label for a button used to delete a utility network trace input component or result. */
+"Delete" = "Ă_Delete_____________ș";
+
+/* A button to close the bookmark selection menu. */
+"Done" = "Ă_Done_________ș";
+
+/* A message indicating that the user attempted to use a single utility
+network element for more than one trace starting point. */
+"Duplicate starting points cannot be added." = "Ă_Duplicate starting points cannot be added______________________ș.";
+
+/* A label indicating an element could not be identified as a starting point
+for a utility network trace. */
+"Element could not be identified." = "Ă_Element could not be identified_________________ș.";
+
+/* A label in reference to an error that occurred during a utility network trace. */
+"Error" = "Ă_Error___________ș";
+
+/* A message indicating that some error occurred while importing a chosen
+network certificate. */
+"Error importing certificate" = "Ă_Error importing certificate____________________________ș";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
+"Error loading basemap." = "Ă_Error loading basemap_______________________ș.";
+
+/* A label indicating popup expressions are being evaluated. */
+"Evaluating popup expressions" = "Ă_Evaluating popup expressions_____________________________ș";
+
+/* A message indicating that the chosen utility network element wasn't able
+to be used as a trace starting point. */
+"Failed to set starting point" = "Ă_Failed to set starting point_____________________________ș";
+
+/* A label in reference to utility elements returned as results of a utility network
+trace operation. */
+"Feature Results" = "Ă_Feature Results________________ș";
+
+/* A field in a set of data contained in a popup. */
+"Field" = "Ă_Field___________ș";
+
+/* A label in reference to fields in a set of data contained in a popup. */
+"Fields" = "Ă_Fields_____________ș";
+
+/* A field allowing the user to filter a list of facilities by name. A
+facility contains one or more levels in a floor-aware map or scene. */
+"Filter facilities" = "Ă_Filter facilities__________________ș";
+
+/* A field allowing the user to filter a list of sites by name. A site
+contains one or more facilities in a floor-aware map or scene. */
+"Filter sites" = "Ă_Filter sites_____________ș";
+
+/* A hint for the user on what to search for in a search bar. */
+"Find a place or address" = "Ă_Find a place or address________________________ș";
+
+/* A label in reference to a fractional distance along an edge style utility network element. */
+"Fraction Along Edge" = "Ă_Fraction Along Edge____________________ș";
+
+/* A label in reference to function outputs returned as results of a utility network
+trace operation. */
+"Function Results" = "Ă_Function Results_________________ș";
+
+/* A label in reference to media elements contained within a popup. */
+"Media" = "Ă_Media___________ș";
+
+/* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
+"Mode" = "Ă_Mode_________ș";
+
+/* A label in reference to the user defined name for an individual utility network trace. */
+"Name" = "Ă_Name_________ș";
+
+/* A label in reference to a specific utility network. */
+"Network" = "Ă_Network_______________ș";
+
+/* A label for a button to show new utility network trace configuration options. */
+"New trace" = "Ă_New trace___________________ș";
+
+/* A label indicating that no bookmarks are available for selection. */
+"No bookmarks" = "Ă_No bookmarks_____________ș";
+
+/* A statement that no utility trace configurations are available. */
+"No configurations available." = "Ă_No configurations available_____________________________ș.";
+
+/* A statement that no sites or facilities with names matching a filter phrase were found. */
+"No matches found." = "Ă_No matches found__________________ș.";
+
+/* A message to show when there are no results or suggestions. */
+"No results found" = "Ă_No results found_________________ș";
+
+/* A label indicating that no utility named trace configurations are available. */
+"No trace types found." = "Ă_No trace types found______________________ș.";
+
+/* A label indicating that no utility networks are available. */
+"No utility networks found." = "Ă_No utility networks found___________________________ș.";
+
+/* A label indicating that no utility network trace configuration has been selected. */
+"None selected" = "Ă_None selected______________ș";
+
+/* A trace function output result was not provided. */
+"Not Available" = "Ă_Not Available______________ș";
+
+/* A string identifying a utility network object. */
+"Object ID: %@" = "Ă_Object ID: %@______________ș";
+
+/* A label for button to proceed with an operation. */
+"OK" = "Ă_OK_____ș";
+
+/* A label in reference to a credential password. */
+"Password" = "Ă_Password_________________ș";
+
+/* A label indicating that a password is required to proceed with an operation. */
+"Password Required" = "Ă_Password Required__________________ș";
+
+/* A label requesting the password associated with the chosen certificate. */
+"Please enter a password for the chosen certificate." = "Ă_Please enter a password for the chosen certificate___________________________ș.";
+
+/* A label indicating that at least one starting location is required for the
+chosen utility network trace configuration. */
+"Please set at least 1 starting location." = "Ă_Please set at least 1 starting location_____________________ș.";
+
+/* A label indicating that at least two starting locations are required for the
+chosen utility network trace configuration. */
+"Please set at least 2 starting locations." = "Ă_Please set at least 2 starting locations______________________ș.";
+
+/* An error message shown when a popup cannot be displayed. The
+variable provides additional data. */
+"Popup evaluation failed: %@" = "Ă_Popup evaluation failed: %@____________________________ș";
+
+/* A label for button to show when the user has panned the map away
+from the original search location. 'Here' is in reference to the
+current visible extent of the map or scene. */
+"Repeat Search Here" = "Ă_Repeat Search Here___________________ș";
+
+/* A label for a button to show utility network trace results. */
+"Results" = "Ă_Results_______________ș";
+
+/* A label in reference to a search query entered by the user. */
+"Search Query" = "Ă_Search Query_____________ș";
+
+/* A label prompting the user to make a selection from the available bookmarks. */
+"Select a bookmark" = "Ă_Select a bookmark__________________ș";
+
+/* A label directing the user to select a facility. A facility contains one
+or more levels in a floor-aware map or scene. */
+"Select a facility" = "Ă_Select a facility__________________ș";
+
+/* A label in reference to all of the sites in a floor-aware map or scene. */
+"Sites" = "Ă_Sites___________ș";
+
+/* A label indicating the spatial reference of the chosen basemap doesn't
+match the spatial reference of the map or scene. */
+"Spatial reference mismatch." = "Ă_Spatial reference mismatch____________________________ș.";
+
+/* A label in reference to the utility elements chosen as starting points for a utility
+network trace operation. */
+"Starting Points" = "Ă_Starting Points________________ș";
+
+/* A label indicating that tapping an image will reveal
+additional information. */
+"Tap on the image for more information." = "Ă_Tap on the image for more information____________________ș.";
+
+/* A label in reference to the chosen terminal configuration of a utility network element. */
+"Terminal Configuration" = "Ă_Terminal Configuration_______________________ș";
+
+/* A label for development purposes only. This is not user visible. */
+"test" = "Ă_test_________ș";
+
+/* A label indicating the chosen basemap doesn't have a spatial reference. */
+"The basemap does not have a spatial reference." = "Ă_The basemap does not have a spatial reference________________________ș.";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to
+load for an unknown reason. */
+"The basemap failed to load for an unknown reason." = "Ă_The basemap failed to load for an unknown reason__________________________ș.";
+
+/* A label indicating the spatial reference of the chosen basemap doesn't
+match the spatial reference of the map. */
+"The basemap has a spatial reference that is incompatible with the map." = "Ă_The basemap has a spatial reference that is incompatible with the map____________________________________ș.";
+
+/* A label indicating the chosen file or given password was invalid. */
+"The certificate file or password was invalid." = "Ă_The certificate file or password was invalid________________________ș.";
+
+/* A label indicating the chosen file was invalid. */
+"The certificate file was invalid." = "Ă_The certificate file was invalid__________________ș.";
+
+/* A label indicating the map doesn't have a spatial reference. */
+"The map does not have a spatial reference." = "Ă_The map does not have a spatial reference______________________ș.";
+
+/* A label indicating the given password was invalid. */
+"The password was invalid." = "Ă_The password was invalid__________________________ș.";
+
+/* Description of error thrown when a remote image could not be loaded. */
+"The URL could not be reached or did not contain image data." = "Ă_The URL could not be reached or did not contain image data_______________________________ș.";
+
+/* A label for a button to begin a utility network trace operation. */
+"Trace" = "Ă_Trace___________ș";
+
+/* A label indicating the index of the trace being viewed out of the total number of traces completed. */
+"Trace %1$lld of %2$lld" = "Ă_Trace %1$lld of %2$lld_______________________ș";
+
+/* A label in reference to a utility network trace configuration. */
+"Trace Configuration" = "Ă_Trace Configuration____________________ș";
+
+/* A label for a button allowing the user to retry an operation. */
+"Try Again" = "Ă_Try Again___________________ș";
+
+/* A label to use in place of a utility element asset type name. */
+"Unnamed Asset Type" = "Ă_Unnamed Asset Type___________________ș";
+
+/* A label in reference to a credential username. */
+"Username" = "Ă_Username_________________ș";
+
+/* A value in a set of data contained in a popup. */
+"Value" = "Ă_Value___________ș";
+
+/* A label explaining that credentials are required to authenticate with specified host.
+The host is indicated in the variable. */
+"You must sign in to access '%@'" = "Ă_You must sign in to access '%@'_________________ș";
+
+/* A button to change the map to the extent of the selected trace. */
+"Zoom To" = "Ă_Zoom To_______________ș";
+
+/* A user option specifying that a map should automatically change to show completed trace results. */
+"Zoom to result" = "Ă_Zoom to result_______________ș";
+
