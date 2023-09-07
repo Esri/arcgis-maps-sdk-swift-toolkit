@@ -398,12 +398,58 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***func testCase_2_4() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let clearButton = app.buttons["Launch Date Time End Clear Button"]
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Launch Date Time End"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date Time End Value"]
+***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date Time End Footer"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Form View Tests"]
+***REMOVED******REMOVED***let nowButton = app.buttons["Launch Date Time End Now Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the Form View component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
+***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
+***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if fieldValue.label != "No Value" {
+***REMOVED******REMOVED******REMOVED***clearButton.tap()
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***fieldValue.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
+***REMOVED******REMOVED***while !(footer.isHittable) {
+***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 250)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***footer.isHittable,
+***REMOVED******REMOVED******REMOVED***"The footer wasn't visible."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***nowButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***fieldValue.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let formatter = DateFormatter()
+***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+***REMOVED******REMOVED***let localDate = formatter.date(from: "1969-07-27T07:00:00.000Z")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***localDate?.formatted(.dateTime.day().month().year().hour().minute())
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_2_5() {
