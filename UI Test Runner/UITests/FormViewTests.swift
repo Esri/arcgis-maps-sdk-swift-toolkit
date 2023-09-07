@@ -17,7 +17,7 @@ final class FormViewTests: XCTestCase {
     /// Text Box with no hint, no description, value not required.
     func testCase_1_1() throws {
         let app = XCUIApplication()
-        let formViewTestsButton = app.buttons["Form View Tests"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
         let formTitle = app.staticTexts["InputValidation"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
@@ -67,7 +67,7 @@ final class FormViewTests: XCTestCase {
     /// Tests focused and unfocused state, with value (populated).
     func testCase_1_2() throws {
         let app = XCUIApplication()
-        let formViewTestsButton = app.buttons["Form View Tests"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
         let formTitle = app.staticTexts["InputValidation"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
@@ -145,7 +145,7 @@ final class FormViewTests: XCTestCase {
     
     func testCase_1_3() throws {
         let app = XCUIApplication()
-        let formViewTestsButton = app.buttons["Form View Tests"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
         let formTitle = app.staticTexts["InputValidation"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
@@ -197,7 +197,7 @@ final class FormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Required Date Value"]
         let footer = app.staticTexts["Required Date Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let formViewTestsButton = app.buttons["Form View Tests"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
         let nowButton = app.buttons["Required Date Now Button"]
         
         app.launch()
@@ -275,7 +275,7 @@ final class FormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
         let footer = app.staticTexts["Launch Date and Time for Apollo 11 Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let formViewTestsButton = app.buttons["Form View Tests"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
         let nowButton = app.buttons["Launch Date and Time for Apollo 11 Now Button"]
         
         app.launch()
@@ -340,7 +340,7 @@ final class FormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Launch Date for Apollo 11 Value"]
         let footer = app.staticTexts["Launch Date for Apollo 11 Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let formViewTestsButton = app.buttons["Form View Tests"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
         let todayButton = app.buttons["Launch Date for Apollo 11 Today Button"]
         
         app.launch()
@@ -403,7 +403,7 @@ final class FormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Launch Date Time End Value"]
         let footer = app.staticTexts["Launch Date Time End Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let formViewTestsButton = app.buttons["Form View Tests"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
         let nowButton = app.buttons["Launch Date Time End Now Button"]
         
         app.launch()
@@ -464,7 +464,7 @@ final class FormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["start and end date time Value"]
         let footer = app.staticTexts["start and end date time Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let formViewTestsButton = app.buttons["Form View Tests"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
         let nowButton = app.buttons["start and end date time Now Button"]
         let previousMonthButton = datePicker.buttons["Previous Month"]
         let julyFirstButton = datePicker.collectionViews.staticTexts["1"]
@@ -531,7 +531,7 @@ final class FormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
         let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let formViewTestsButton = app.buttons["Form View Tests"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
         
         app.launch()
             
