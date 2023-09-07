@@ -187,7 +187,14 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***/ The button to set the date to the present time.
 ***REMOVED***var todayOrNowButton: some View {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***date = .now
+***REMOVED******REMOVED******REMOVED***let now = Date.now
+***REMOVED******REMOVED******REMOVED***if dateRange.contains(now) {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = now
+***REMOVED******REMOVED*** else if now > dateRange.upperBound {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = dateRange.upperBound
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = dateRange.lowerBound
+***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***input.includeTime ? Text.now : .today
 ***REMOVED***
