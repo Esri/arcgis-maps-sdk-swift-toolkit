@@ -442,6 +442,11 @@ final class FormViewTests: XCTestCase {
         
         fieldValue.tap()
         
+        XCTAssertEqual(
+            footer.label,
+            "End date and Time 7/27/1969 12:00:00 AM"
+        )
+        
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let localDate = formatter.date(from: "1969-07-27T07:00:00.000Z")
