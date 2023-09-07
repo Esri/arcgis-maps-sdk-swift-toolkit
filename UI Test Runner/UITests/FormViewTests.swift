@@ -201,7 +201,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let nowButton = app.buttons["Required Date Now Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the Form View component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
