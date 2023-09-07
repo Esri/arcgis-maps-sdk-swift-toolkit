@@ -398,12 +398,58 @@ final class FormViewTests: XCTestCase {
     
     func testCase_2_4() {
         let app = XCUIApplication()
+        let clearButton = app.buttons["Launch Date Time End Clear Button"]
+        let fieldTitle = app.staticTexts["Launch Date Time End"]
+        let fieldValue = app.staticTexts["Launch Date Time End Value"]
+        let footer = app.staticTexts["Launch Date Time End Footer"]
+        let formTitle = app.staticTexts["DateTimePoint"]
         let formViewTestsButton = app.buttons["Form View Tests"]
+        let nowButton = app.buttons["Launch Date Time End Now Button"]
         
         app.launch()
             
         // Open the Form View component test view.
         formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        // Scroll to the target form element.
+        while !(fieldTitle.isHittable) {
+            app.scrollViews.firstMatch.swipeUp(velocity: 500)
+        }
+        
+        if fieldValue.label != "No Value" {
+            clearButton.tap()
+        }
+        
+        fieldValue.tap()
+        
+        // Scroll to the target form element.
+        while !(footer.isHittable) {
+            app.scrollViews.firstMatch.swipeUp(velocity: 250)
+        }
+        
+        XCTAssertTrue(
+            footer.isHittable,
+            "The footer wasn't visible."
+        )
+        
+        nowButton.tap()
+        
+        fieldValue.tap()
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        let localDate = formatter.date(from: "1969-07-27T07:00:00.000Z")
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            localDate?.formatted(.dateTime.day().month().year().hour().minute())
+        )
     }
     
     func testCase_2_5() {
