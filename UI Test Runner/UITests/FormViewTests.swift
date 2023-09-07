@@ -527,12 +527,39 @@ final class FormViewTests: XCTestCase {
     
     func testCase_2_6() {
         let app = XCUIApplication()
+        let clearButton = app.buttons["Launch Date and Time for Apollo 11 Clear Button"]
+        let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
+        let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
+        let formTitle = app.staticTexts["DateTimePoint"]
         let formViewTestsButton = app.buttons["Form View Tests"]
         
         app.launch()
             
         // Open the Form View component test view.
         formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title wasn't visible."
+        )
+        
+        XCTAssertTrue(
+            clearButton.isHittable,
+            "The clear button wasn't visible."
+        )
+        
+        clearButton.tap()
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "No Value"
+        )
     }
 }
 
