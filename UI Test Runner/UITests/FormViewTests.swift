@@ -459,10 +459,15 @@ final class FormViewTests: XCTestCase {
     
     func testCase_2_5() {
         let app = XCUIApplication()
+        let datePicker = app.datePickers["start and end date time Date Picker"]
         let fieldTitle = app.staticTexts["start and end date time"]
         let fieldValue = app.staticTexts["start and end date time Value"]
+        let footer = app.staticTexts["start and end date time Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
         let formViewTestsButton = app.buttons["Form View Tests"]
+        let nowButton = app.buttons["start and end date time Now Button"]
+        let previousMonthButton = datePicker.buttons["Previous Month"]
+        let julyFirstButton = datePicker.collectionViews.staticTexts["1"]
         
         app.launch()
             
@@ -481,6 +486,43 @@ final class FormViewTests: XCTestCase {
         }
         
         fieldValue.tap()
+        
+        // Scroll to the target form element.
+        while !(footer.isHittable) {
+            app.scrollViews.firstMatch.swipeUp(velocity: 250)
+        }
+        
+        XCTAssertTrue(
+            footer.isHittable,
+            "The footer wasn't visible."
+        )
+        
+        XCTAssertEqual(
+            footer.label,
+            """
+            Form with Start date and End date defined
+            Start July 1, 1969
+            End  July 31, 1969
+            """
+        )
+        
+        nowButton.tap()
+        
+        julyFirstButton.tap()
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        let localDate = formatter.date(from: "1969-07-01T07:00:00.000Z")
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            localDate?.formatted(.dateTime.day().month().year().hour().minute())
+        )
+        
+        XCTAssertFalse(
+            previousMonthButton.isEnabled,
+            "The user was able to view June 1969 in the calendar."
+        )
     }
     
     func testCase_2_6() {
