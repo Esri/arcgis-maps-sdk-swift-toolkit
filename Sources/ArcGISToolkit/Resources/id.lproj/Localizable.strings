@@ -1,2 +1,294 @@
-/* No comment provided by engineer. */
-"Delete" = "Hapus";
+/* A label declaring the number of starting points selected for a utility network trace. */
+"%lld selected" = "ng_%lld selected______________ny";
+
+/* An alert message indicating that a certificate is required to access
+content on a remote host. The variable is the host that prompted the challenge. */
+"A certificate is required to access content on %@." = "ng_A certificate is required to access content on %@__________________________ny.";
+
+/* A button to add new utility trace starting points. */
+"Add new" = "ng_Add new_______________ny";
+
+/* A section header for advanced options. */
+"Advanced Options" = "ng_Advanced Options_________________ny";
+
+/* A reference to all of the sites defined in a floor aware map. */
+"All sites" = "ng_All sites___________________ny";
+
+/* A message describing the outcome of clearing all utility network trace results. */
+"All the trace inputs and results will be lost." = "ng_All the trace inputs and results will be lost________________________ny.";
+
+/* A button indicating the user accepts a potentially dangerous action. */
+"Allow" = "ng_Allow___________ny";
+
+/* A fallback message to display when an image cannot be loaded. */
+"An error occurred loading the image: %@." = "ng_An error occurred loading the image: %@_____________________ny.";
+
+/* A label in reference to attachments in a popup. */
+"Attachments" = "ng_Attachments____________ny";
+
+/* A label in reference to the attributes of a geo element. */
+"Attributes" = "ng_Attributes_____________________ny";
+
+/* A label indicating authentication is required to proceed. */
+"Authentication Required" = "ng_Authentication Required________________________ny";
+
+/* A label in reference to bookmarks contained in a map or scene. */
+"Bookmarks" = "ng_Bookmarks___________________ny";
+
+/* A label for a button to open the system file browser. */
+"Browse" = "ng_Browse_____________ny";
+
+/* A label for a button to cancel an operation. */
+"Cancel" = "ng_Cancel_____________ny";
+
+/* A label for a button to cancel the starting point selection operation. */
+"Cancel starting point selection" = "ng_Cancel starting point selection_________________ny";
+
+/* A label indicating that a certificate is required to proceed. */
+"Certificate Required" = "ng_Certificate Required_____________________ny";
+
+/* A label indicating that the remote host's certificate is not trusted. */
+"Certificate Trust Warning" = "ng_Certificate Trust Warning__________________________ny";
+
+/* A directive to clear all of the completed utility network traces. */
+"Clear all results" = "ng_Clear all results__________________ny";
+
+/* A label in reference to the color used to display utility trace result graphics. */
+"Color" = "ng_Color___________ny";
+
+/* An compass description to be read by a screen reader describing the
+current heading. The first variable being a degree value and the
+second being a corresponding cardinal direction (north, northeast,
+east, etc.). */
+"Compass, heading %lld degrees %@" = "ng_Compass, heading %lld degrees %@_________________ny";
+
+/* A label for a button used to continue the authentication operation. */
+"Continue" = "ng_Continue_________________ny";
+
+/* A label indicating a certificate file was inaccessible. */
+"Could not access the certificate file." = "ng_Could not access the certificate file____________________ny.";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "ng_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________ny.";
+
+/* A label for a button used to delete a utility network trace input component or result. */
+"Delete" = "ng_Delete_____________ny";
+
+/* A button to close the bookmark selection menu. */
+"Done" = "ng_Done_________ny";
+
+/* A message indicating that the user attempted to use a single utility
+network element for more than one trace starting point. */
+"Duplicate starting points cannot be added." = "ng_Duplicate starting points cannot be added______________________ny.";
+
+/* A label indicating an element could not be identified as a starting point
+for a utility network trace. */
+"Element could not be identified." = "ng_Element could not be identified_________________ny.";
+
+/* A label in reference to an error that occurred during a utility network trace. */
+"Error" = "ng_Error___________ny";
+
+/* A message indicating that some error occurred while importing a chosen
+network certificate. */
+"Error importing certificate" = "ng_Error importing certificate____________________________ny";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
+"Error loading basemap." = "ng_Error loading basemap_______________________ny.";
+
+/* A label indicating popup expressions are being evaluated. */
+"Evaluating popup expressions" = "ng_Evaluating popup expressions_____________________________ny";
+
+/* A message indicating that the chosen utility network element wasn't able
+to be used as a trace starting point. */
+"Failed to set starting point" = "ng_Failed to set starting point_____________________________ny";
+
+/* A label in reference to utility elements returned as results of a utility network
+trace operation. */
+"Feature Results" = "ng_Feature Results________________ny";
+
+/* A field in a set of data contained in a popup. */
+"Field" = "ng_Field___________ny";
+
+/* A label in reference to fields in a set of data contained in a popup. */
+"Fields" = "ng_Fields_____________ny";
+
+/* A field allowing the user to filter a list of facilities by name. A
+facility contains one or more levels in a floor-aware map or scene. */
+"Filter facilities" = "ng_Filter facilities__________________ny";
+
+/* A field allowing the user to filter a list of sites by name. A site
+contains one or more facilities in a floor-aware map or scene. */
+"Filter sites" = "ng_Filter sites_____________ny";
+
+/* A hint for the user on what to search for in a search bar. */
+"Find a place or address" = "ng_Find a place or address________________________ny";
+
+/* A label in reference to a fractional distance along an edge style utility network element. */
+"Fraction Along Edge" = "ng_Fraction Along Edge____________________ny";
+
+/* A label in reference to function outputs returned as results of a utility network
+trace operation. */
+"Function Results" = "ng_Function Results_________________ny";
+
+/* A label in reference to media elements contained within a popup. */
+"Media" = "ng_Media___________ny";
+
+/* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
+"Mode" = "ng_Mode_________ny";
+
+/* A label in reference to the user defined name for an individual utility network trace. */
+"Name" = "ng_Name_________ny";
+
+/* A label in reference to a specific utility network. */
+"Network" = "ng_Network_______________ny";
+
+/* A label for a button to show new utility network trace configuration options. */
+"New trace" = "ng_New trace___________________ny";
+
+/* A label indicating that no bookmarks are available for selection. */
+"No bookmarks" = "ng_No bookmarks_____________ny";
+
+/* A statement that no utility trace configurations are available. */
+"No configurations available." = "ng_No configurations available_____________________________ny.";
+
+/* A statement that no sites or facilities with names matching a filter phrase were found. */
+"No matches found." = "ng_No matches found__________________ny.";
+
+/* A message to show when there are no results or suggestions. */
+"No results found" = "ng_No results found_________________ny";
+
+/* A label indicating that no utility named trace configurations are available. */
+"No trace types found." = "ng_No trace types found______________________ny.";
+
+/* A label indicating that no utility networks are available. */
+"No utility networks found." = "ng_No utility networks found___________________________ny.";
+
+/* A label indicating that no utility network trace configuration has been selected. */
+"None selected" = "ng_None selected______________ny";
+
+/* A trace function output result was not provided. */
+"Not Available" = "ng_Not Available______________ny";
+
+/* A string identifying a utility network object. */
+"Object ID: %@" = "ng_Object ID: %@______________ny";
+
+/* A label for button to proceed with an operation. */
+"OK" = "ng_OK_____ny";
+
+/* A label in reference to a credential password. */
+"Password" = "ng_Password_________________ny";
+
+/* A label indicating that a password is required to proceed with an operation. */
+"Password Required" = "ng_Password Required__________________ny";
+
+/* A label requesting the password associated with the chosen certificate. */
+"Please enter a password for the chosen certificate." = "ng_Please enter a password for the chosen certificate___________________________ny.";
+
+/* A label indicating that at least one starting location is required for the
+chosen utility network trace configuration. */
+"Please set at least 1 starting location." = "ng_Please set at least 1 starting location_____________________ny.";
+
+/* A label indicating that at least two starting locations are required for the
+chosen utility network trace configuration. */
+"Please set at least 2 starting locations." = "ng_Please set at least 2 starting locations______________________ny.";
+
+/* An error message shown when a popup cannot be displayed. The
+variable provides additional data. */
+"Popup evaluation failed: %@" = "ng_Popup evaluation failed: %@____________________________ny";
+
+/* A label for button to show when the user has panned the map away
+from the original search location. 'Here' is in reference to the
+current visible extent of the map or scene. */
+"Repeat Search Here" = "ng_Repeat Search Here___________________ny";
+
+/* A label for a button to show utility network trace results. */
+"Results" = "ng_Results_______________ny";
+
+/* A label in reference to a search query entered by the user. */
+"Search Query" = "ng_Search Query_____________ny";
+
+/* A label prompting the user to make a selection from the available bookmarks. */
+"Select a bookmark" = "ng_Select a bookmark__________________ny";
+
+/* A label directing the user to select a facility. A facility contains one
+or more levels in a floor-aware map or scene. */
+"Select a facility" = "ng_Select a facility__________________ny";
+
+/* A label in reference to all of the sites in a floor-aware map or scene. */
+"Sites" = "ng_Sites___________ny";
+
+/* A label indicating the spatial reference of the chosen basemap doesn't
+match the spatial reference of the map or scene. */
+"Spatial reference mismatch." = "ng_Spatial reference mismatch____________________________ny.";
+
+/* A label in reference to the utility elements chosen as starting points for a utility
+network trace operation. */
+"Starting Points" = "ng_Starting Points________________ny";
+
+/* A label indicating that tapping an image will reveal
+additional information. */
+"Tap on the image for more information." = "ng_Tap on the image for more information____________________ny.";
+
+/* A label in reference to the chosen terminal configuration of a utility network element. */
+"Terminal Configuration" = "ng_Terminal Configuration_______________________ny";
+
+/* A label for development purposes only. This is not user visible. */
+"test" = "ng_test_________ny";
+
+/* A label indicating the chosen basemap doesn't have a spatial reference. */
+"The basemap does not have a spatial reference." = "ng_The basemap does not have a spatial reference________________________ny.";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to
+load for an unknown reason. */
+"The basemap failed to load for an unknown reason." = "ng_The basemap failed to load for an unknown reason__________________________ny.";
+
+/* A label indicating the spatial reference of the chosen basemap doesn't
+match the spatial reference of the map. */
+"The basemap has a spatial reference that is incompatible with the map." = "ng_The basemap has a spatial reference that is incompatible with the map____________________________________ny.";
+
+/* A label indicating the chosen file or given password was invalid. */
+"The certificate file or password was invalid." = "ng_The certificate file or password was invalid________________________ny.";
+
+/* A label indicating the chosen file was invalid. */
+"The certificate file was invalid." = "ng_The certificate file was invalid__________________ny.";
+
+/* A label indicating the map doesn't have a spatial reference. */
+"The map does not have a spatial reference." = "ng_The map does not have a spatial reference______________________ny.";
+
+/* A label indicating the given password was invalid. */
+"The password was invalid." = "ng_The password was invalid__________________________ny.";
+
+/* Description of error thrown when a remote image could not be loaded. */
+"The URL could not be reached or did not contain image data." = "ng_The URL could not be reached or did not contain image data_______________________________ny.";
+
+/* A label for a button to begin a utility network trace operation. */
+"Trace" = "ng_Trace___________ny";
+
+/* A label indicating the index of the trace being viewed out of the total number of traces completed. */
+"Trace %1$lld of %2$lld" = "ng_Trace %1$lld of %2$lld_______________________ny";
+
+/* A label in reference to a utility network trace configuration. */
+"Trace Configuration" = "ng_Trace Configuration____________________ny";
+
+/* A label for a button allowing the user to retry an operation. */
+"Try Again" = "ng_Try Again___________________ny";
+
+/* A label to use in place of a utility element asset type name. */
+"Unnamed Asset Type" = "ng_Unnamed Asset Type___________________ny";
+
+/* A label in reference to a credential username. */
+"Username" = "ng_Username_________________ny";
+
+/* A value in a set of data contained in a popup. */
+"Value" = "ng_Value___________ny";
+
+/* A label explaining that credentials are required to authenticate with specified host.
+The host is indicated in the variable. */
+"You must sign in to access '%@'" = "ng_You must sign in to access '%@'_________________ny";
+
+/* A button to change the map to the extent of the selected trace. */
+"Zoom To" = "ng_Zoom To_______________ny";
+
+/* A user option specifying that a map should automatically change to show completed trace results. */
+"Zoom to result" = "ng_Zoom to result_______________ny";
+
