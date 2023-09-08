@@ -14,6 +14,10 @@
 import XCTest
 
 final class FormViewTests: XCTestCase {
+***REMOVED***override func setUp() async throws {
+***REMOVED******REMOVED***continueAfterFailure = false
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Text Box with no hint, no description, value not required.
 ***REMOVED***func testCase_1_1() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
