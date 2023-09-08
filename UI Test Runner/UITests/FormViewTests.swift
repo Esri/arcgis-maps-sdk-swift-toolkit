@@ -42,26 +42,48 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            textField.isHittable,
-            "The target text field wasn't visible."
+            fieldTitle.exists,
+            "The field title doesn't exist."
         )
         
+#if !targetEnvironment(macCatalyst)
         XCTAssertFalse(
-            helperText.isHittable,
-            "The helper text wasn't hidden."
+            textField.hasFocus,
+            "The target text field has focus."
         )
+#endif
         
         XCTAssertFalse(
-            characterCount.isHittable,
-            "The character count wasn't hidden."
+            footer.isHittable,
+            "The footer isn't hittable."
         )
         
         // Give focus to the target text field.
         textField.tap()
         
         XCTAssertTrue(
-            characterCount.isHittable,
-            "The character count wasn't visible."
+            fieldTitle.exists,
+            "The field title doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            footer.exists,
+            "The footer doesn't exist."
+        )
+        
+        XCTAssertEqual(
+            footer.label,
+            "Maximum 256 characters"
+        )
+    
+        XCTAssertTrue(
+            characterIndicator.exists,
+            "The character indicator doesn't exist."
+        )
+        
+        XCTAssertEqual(
+            characterIndicator.label,
+            "0"
         )
     }
     
@@ -88,71 +110,78 @@ final class FormViewTests: XCTestCase {
             "The form failed to open after 5 seconds."
         )
         
-        // Scroll to the target form element.
-        while !(fieldTitle.isHittable) {
-            app.scrollViews.firstMatch.swipeUp(velocity: 500)
-        }
-        
-        XCTAssertTrue(
-            textField.isHittable,
-            "The text field wasn't visible."
-        )
-        
         textField.tap()
         
         app.typeText("Sample text")
         
         XCTAssertTrue(
-            helperText.isHittable,
-            "The helper text wasn't visible."
+            fieldTitle.exists,
+            "The field title doesn't exist."
         )
         
         XCTAssertTrue(
-            characterCount.isHittable,
-            "The character count wasn't visible."
+            footer.exists,
+            "The footer doesn't exist."
+        )
+        
+        XCTAssertEqual(
+            footer.label,
+            "Maximum 256 characters"
         )
         
         XCTAssertTrue(
-            clearButton.isHittable,
-            "The clear button wasn't visible."
+            characterIndicator.isHittable,
+            "The character count isn't hittable."
         )
         
-        #if targetEnvironment(macCatalyst)
-            app.typeText("\r")
-        #else
-            returnButton.tap()
-        #endif
+        XCTAssertEqual(
+            characterIndicator.label,
+            "11"
+        )
+        
+        XCTAssertTrue(
+            clearButton.exists,
+            "The clear button doesn't exist."
+        )
+        
+#if targetEnvironment(macCatalyst)
+        app.typeText("\r")
+#else
+        returnButton.tap()
+#endif
         
         XCTAssertTrue(
             fieldTitle.isHittable,
-            "The title wasn't visible."
+            "The title isn't hittable."
         )
         
         XCTAssertFalse(
-            helperText.isHittable,
-            "The helper text wasn't hidden."
+            footer.isHittable,
+            "The footer is hittable."
         )
         
         XCTAssertTrue(
             clearButton.isHittable,
-            "The clear button wasn't visible."
+            "The clear button isn't hittable."
         )
         
         XCTAssertTrue(
             textField.isHittable,
-            "The text field wasn't visible."
+            "The text field isn't hittable."
         )
     }
     
     /// Test case 1.3: unfocused and focused state, with error value (> 256 chars)
     func testCase_1_3() throws {
         let app = XCUIApplication()
+        let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
+        let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
+        let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formViewTestsButton = app.buttons["FormView Tests"]
         let formTitle = app.staticTexts["InputValidation"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
+        let returnButton = app.buttons["Return"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
-        let helperText = app.staticTexts["Maximum 256 characters"]
-        let characterCount = app.staticTexts["257"]
         
         app.launch()
         
@@ -165,28 +194,74 @@ final class FormViewTests: XCTestCase {
             "The form failed to open after 5 seconds."
         )
         
-        // Scroll to the target form element.
-        while !(fieldTitle.isHittable) {
-            app.scrollViews.firstMatch.swipeUp(velocity: 500)
-        }
-        
         textField.tap()
         
         app.typeText(.loremIpsum257)
         
         XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The title wasn't visible."
+            fieldTitle.exists,
+            "The title doesn't exist."
         )
         
         XCTAssertTrue(
-            helperText.isHittable,
-            "The helper text wasn't visible."
+            footer.exists,
+            "The footer doesn't exist."
+        )
+        
+        XCTAssertEqual(
+            footer.label,
+            "Maximum 256 characters"
         )
         
         XCTAssertTrue(
-            characterCount.isHittable,
-            "The character count wasn't visible."
+            characterIndicator.exists,
+            "The character count doesn't exist."
+        )
+        
+        XCTAssertEqual(
+            characterIndicator.label,
+            "257"
+        )
+        
+        XCTAssertTrue(
+            clearButton.exists,
+            "The clear button doesn't exist."
+        )
+        
+#if targetEnvironment(macCatalyst)
+        app.typeText("\r")
+#else
+        returnButton.tap()
+#endif
+        
+        XCTAssertTrue(
+            fieldTitle.exists,
+            "The title doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            footer.exists,
+            "The footer doesn't exist."
+        )
+        
+        XCTAssertEqual(
+            footer.label,
+            "Maximum 256 characters"
+        )
+        
+        XCTAssertFalse(
+            characterIndicator.exists,
+            "The character count exists."
+        )
+        
+        XCTAssertTrue(
+            clearButton.isHittable,
+            "The clear button isn't hittable."
+        )
+        
+        XCTAssertTrue(
+            textField.isHittable,
+            "The text field isn't hittable."
         )
     }
     
@@ -216,11 +291,6 @@ final class FormViewTests: XCTestCase {
             "The form failed to open after 5 seconds."
         )
         
-        // Scroll to the target form element.
-        while !(fieldTitle.isHittable) {
-            app.scrollViews.firstMatch.swipeUp(velocity: 500)
-        }
-        
         if fieldValue.label != "No Value" {
             clearButton.tap()
         }
@@ -232,7 +302,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertTrue(
             footer.isHittable,
-            "The required label wasn't visible."
+            "The required label isn't hittable."
         )
         
         XCTAssertEqual(
@@ -242,14 +312,14 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertTrue(
             calendarImage.isHittable,
-            "The calendar image wasn't visible."
+            "The calendar image isn't hittable."
         )
         
         fieldValue.tap()
         
         XCTAssertTrue(
             datePicker.isHittable,
-            "The date picker wasn't visible."
+            "The date picker isn't hittable."
         )
         
         XCTAssertEqual(
@@ -259,13 +329,8 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertTrue(
             nowButton.isHittable,
-            "The now button wasn't visible."
+            "The now button isn't hittable."
         )
-        
-        // Scroll to the target form element.
-        while !(footer.isHittable) {
-            app.scrollViews.firstMatch.swipeUp(velocity: 500)
-        }
         
         XCTAssertEqual(
             footer.label,
@@ -299,7 +364,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertTrue(
             fieldTitle.isHittable,
-            "The field title wasn't visible."
+            "The field title isn't hittable."
         )
         
         let formatter = DateFormatter()
@@ -318,24 +383,24 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertTrue(
             datePicker.isHittable,
-            "The date picker wasn't visible."
+            "The date picker isn't hittable."
         )
         
         XCTAssertTrue(
             nowButton.isHittable,
-            "The now button wasn't visible."
+            "The now button isn't hittable."
         )
         
         fieldValue.tap()
         
         XCTAssertTrue(
             fieldValue.isHittable,
-            "The label wasn't visible."
+            "The label isn't hittable."
         )
         
         XCTAssertFalse(
             datePicker.isHittable,
-            "The date picker was visible."
+            "The date picker was hittable."
         )
     }
     
@@ -361,14 +426,9 @@ final class FormViewTests: XCTestCase {
             "The form failed to open after 5 seconds."
         )
         
-        // Scroll to the target form element.
-        while !(fieldTitle.isHittable) {
-            app.scrollViews.firstMatch.swipeUp(velocity: 500)
-        }
-        
         XCTAssertTrue(
             footer.isHittable,
-            "The footer wasn't visible."
+            "The footer isn't hittable."
         )
         
         fieldValue.tap()
@@ -380,7 +440,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertTrue(
             fieldValue.isHittable,
-            "The field value wasn't visible."
+            "The field value isn't hittable."
         )
         
         let formatter = DateFormatter()
@@ -394,12 +454,12 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertTrue(
             datePicker.isHittable,
-            "The date picker wasn't visible."
+            "The date picker isn't hittable."
         )
         
         XCTAssertTrue(
             todayButton.isHittable,
-            "The today button wasn't visible."
+            "The today button isn't hittable."
         )
     }
     
@@ -425,25 +485,15 @@ final class FormViewTests: XCTestCase {
             "The form failed to open after 5 seconds."
         )
         
-        // Scroll to the target form element.
-        while !(fieldTitle.isHittable) {
-            app.scrollViews.firstMatch.swipeUp(velocity: 500)
-        }
-        
         if fieldValue.label != "No Value" {
             clearButton.tap()
         }
         
         fieldValue.tap()
         
-        // Scroll to the target form element.
-        while !(footer.isHittable) {
-            app.scrollViews.firstMatch.swipeUp(velocity: 250)
-        }
-        
         XCTAssertTrue(
             footer.isHittable,
-            "The footer wasn't visible."
+            "The footer isn't hittable."
         )
         
         nowButton.tap()
@@ -489,21 +539,11 @@ final class FormViewTests: XCTestCase {
             "The form failed to open after 5 seconds."
         )
         
-        // Scroll to the target form element.
-        while !(fieldTitle.isHittable) {
-            app.scrollViews.firstMatch.swipeUp(velocity: 500)
-        }
-        
         fieldValue.tap()
-        
-        // Scroll to the target form element.
-        while !(footer.isHittable) {
-            app.scrollViews.firstMatch.swipeUp(velocity: 250)
-        }
         
         XCTAssertTrue(
             footer.isHittable,
-            "The footer wasn't visible."
+            "The footer isn't hittable."
         )
         
         XCTAssertEqual(
@@ -556,12 +596,12 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertTrue(
             fieldTitle.isHittable,
-            "The field title wasn't visible."
+            "The field title isn't hittable."
         )
         
         XCTAssertTrue(
             clearButton.isHittable,
-            "The clear button wasn't visible."
+            "The clear button isn't hittable."
         )
         
         clearButton.tap()
