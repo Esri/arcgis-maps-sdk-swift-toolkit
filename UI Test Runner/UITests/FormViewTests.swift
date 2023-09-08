@@ -66,14 +66,14 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***/ Tests focused and unfocused state, with value (populated).
 ***REMOVED***func testCase_1_2() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let helperText = app.staticTexts["Maximum 256 characters"]
-***REMOVED******REMOVED***let characterCount = app.staticTexts["11"]
 ***REMOVED******REMOVED***let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
 ***REMOVED******REMOVED***let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let returnButton = app.buttons["Return"]
+***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
