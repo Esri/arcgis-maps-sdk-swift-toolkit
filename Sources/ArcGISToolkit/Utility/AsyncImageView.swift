@@ -20,7 +20,7 @@ struct AsyncImageView: View {
 ***REMOVED***private var url: URL?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `LoadableImage` representing the view.
-***REMOVED***var loadableImage: LoadableImage?
+***REMOVED***private var loadableImage: LoadableImage?
 
 ***REMOVED******REMOVED***/ The `ContentMode` defining how the image fills the available space.
 ***REMOVED***private let contentMode: ContentMode
@@ -50,6 +50,7 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***self.mediaSize = mediaSize
 ***REMOVED******REMOVED***self.url = url
 ***REMOVED******REMOVED***self.refreshInterval = refreshInterval
+***REMOVED******REMOVED***loadableImage = nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: AsyncImageViewModel())
 ***REMOVED***
@@ -58,7 +59,6 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - loadableImage: The `LoadableImage` representing the image.
 ***REMOVED******REMOVED***/   - contentMode: The `ContentMode` defining how the image fills the available space.
-***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
 ***REMOVED******REMOVED***/   - mediaSize: The size of the media's frame.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***loadableImage: LoadableImage,
@@ -118,15 +118,6 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***.onAppear() {
 ***REMOVED******REMOVED******REMOVED***viewModel.url = url
 ***REMOVED******REMOVED******REMOVED***viewModel.loadableImage = loadableImage
-***REMOVED******REMOVED******REMOVED***viewModel.refreshInterval = refreshInterval
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: url) { _ in
-***REMOVED******REMOVED******REMOVED***viewModel.url = url
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: loadableImage) { _ in
-***REMOVED******REMOVED******REMOVED***viewModel.loadableImage = loadableImage
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: refreshInterval) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.refreshInterval = refreshInterval
 ***REMOVED***
 ***REMOVED***
