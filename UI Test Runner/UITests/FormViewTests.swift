@@ -18,7 +18,9 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***continueAfterFailure = false
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Text Box with no hint, no description, value not required.
+***REMOVED******REMOVED*** - MARK: Test case 1: Text Box with no hint, no description, value not required
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 1.1: unfocused and focused state, no value
 ***REMOVED***func testCase_1_1() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
@@ -63,7 +65,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Tests focused and unfocused state, with value (populated).
+***REMOVED******REMOVED***/ Test case 1.2: focused and unfocused state, with value (populated)
 ***REMOVED***func testCase_1_2() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
@@ -142,6 +144,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test case 1.3: unfocused and focused state, with error value (> 256 chars)
 ***REMOVED***func testCase_1_3() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
@@ -187,6 +190,9 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED*** - MARK: Test case 2: Test case 2: DateTime picker input type
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 2.1: Unfocused and focused state, no value, date required
 ***REMOVED***func testCase_2_1() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let calendarImage = app.images["Required Date Calendar Image"]
@@ -267,6 +273,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test case 2.2: Focused and unfocused state, with value (populated)
 ***REMOVED***func testCase_2_2() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let datePicker = app.datePickers["Launch Date and Time for Apollo 11 Date Picker"]
@@ -332,6 +339,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test case 2.3: Date only, no time
 ***REMOVED***func testCase_2_3() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let datePicker = app.datePickers["Launch Date for Apollo 11 Date Picker"]
@@ -395,6 +403,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test case 2.4: Maximum date
 ***REMOVED***func testCase_2_4() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let clearButton = app.buttons["Launch Date Time End Clear Button"]
@@ -456,6 +465,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test case 2.5: Minimum date
 ***REMOVED***func testCase_2_5() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let datePicker = app.datePickers["start and end date time Date Picker"]
@@ -524,6 +534,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test case 2.6: Clear date
 ***REMOVED***func testCase_2_6() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let clearButton = app.buttons["Launch Date and Time for Apollo 11 Clear Button"]
