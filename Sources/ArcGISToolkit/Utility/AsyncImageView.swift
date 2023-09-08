@@ -20,7 +20,7 @@ struct AsyncImageView: View {
     private var url: URL?
     
     /// The `LoadableImage` representing the view.
-    var loadableImage: LoadableImage?
+    private var loadableImage: LoadableImage?
 
     /// The `ContentMode` defining how the image fills the available space.
     private let contentMode: ContentMode
@@ -50,6 +50,7 @@ struct AsyncImageView: View {
         self.mediaSize = mediaSize
         self.url = url
         self.refreshInterval = refreshInterval
+        loadableImage = nil
         
         _viewModel = StateObject(wrappedValue: AsyncImageViewModel())
     }
@@ -58,7 +59,6 @@ struct AsyncImageView: View {
     /// - Parameters:
     ///   - loadableImage: The `LoadableImage` representing the image.
     ///   - contentMode: The `ContentMode` defining how the image fills the available space.
-    ///   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
     ///   - mediaSize: The size of the media's frame.
     public init(
         loadableImage: LoadableImage,
@@ -118,15 +118,6 @@ struct AsyncImageView: View {
         .onAppear() {
             viewModel.url = url
             viewModel.loadableImage = loadableImage
-            viewModel.refreshInterval = refreshInterval
-        }
-        .onChange(of: url) { _ in
-            viewModel.url = url
-        }
-        .onChange(of: loadableImage) { _ in
-            viewModel.loadableImage = loadableImage
-        }
-        .onChange(of: refreshInterval) { _ in
             viewModel.refreshInterval = refreshInterval
         }
     }
