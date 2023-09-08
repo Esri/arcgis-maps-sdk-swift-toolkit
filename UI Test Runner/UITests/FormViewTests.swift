@@ -21,12 +21,12 @@ final class FormViewTests: XCTestCase {
     /// Text Box with no hint, no description, value not required.
     func testCase_1_1() throws {
         let app = XCUIApplication()
-        let formViewTestsButton = app.buttons["FormView Tests"]
-        let formTitle = app.staticTexts["InputValidation"]
+        let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
+        let formTitle = app.staticTexts["InputValidation"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
-        let helperText = app.staticTexts["Maximum 256 characters"]
-        let characterCount = app.staticTexts["0"]
         
         app.launch()
         
