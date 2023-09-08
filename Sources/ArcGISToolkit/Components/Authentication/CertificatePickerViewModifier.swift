@@ -36,7 +36,7 @@ import UniformTypeIdentifiers
 ***REMOVED***var certificateURL: URL?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the prompt.
-***REMOVED***@Published var showPrompt = true
+***REMOVED***@Published var showPrompt = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the certificate file picker.
 ***REMOVED***@Published var showPicker = false
@@ -63,21 +63,26 @@ import UniformTypeIdentifiers
 ***REMOVED***
 ***REMOVED******REMOVED***/ Proceeds to show the file picker. This should be called after the prompt that notifies the
 ***REMOVED******REMOVED***/ user that a certificate must be selected.
-***REMOVED***func proceedFromPrompt() {
-***REMOVED******REMOVED***showPicker = true
+***REMOVED***func proceedToPicker() {
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED*** If we don't delay this, then the picker does not animate in.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Delay for 0.25 seconds.
+***REMOVED******REMOVED******REMOVED***try await Task.sleep(nanoseconds: 250_000_000)
+***REMOVED******REMOVED******REMOVED***self.showPicker = true
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Proceeds to show the user the password form. This should be called after the user selects
 ***REMOVED******REMOVED***/ a certificate.
 ***REMOVED******REMOVED***/ - Parameter url: The URL of the certificate that the user chose.
-***REMOVED***func proceed(withCertificateURL url: URL) {
+***REMOVED***func proceedToPasswordEntry(forCertificateWithURL url: URL) {
 ***REMOVED******REMOVED***certificateURL = url
 ***REMOVED******REMOVED***showPassword = true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Attempts to use the certificate and password to respond to the challenge.
 ***REMOVED******REMOVED***/ - Parameter password: The password for the certificate.
-***REMOVED***func proceed(withPassword password: String) {
+***REMOVED***func proceedToUseCertificate(withPassword password: String) {
 ***REMOVED******REMOVED***guard let certificateURL = certificateURL else {
 ***REMOVED******REMOVED******REMOVED***preconditionFailure()
 ***REMOVED***
@@ -103,10 +108,8 @@ import UniformTypeIdentifiers
 ***REMOVED***func cancel() {
 ***REMOVED******REMOVED***challenge.resume(with: .cancel)
 ***REMOVED***
-
-***REMOVED***private func showCertificateError(_ error: CertificateError) async {
-***REMOVED******REMOVED******REMOVED*** This is required to prevent an "already presenting" error.
-***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 100_000)
+***REMOVED***
+***REMOVED***private func showCertificateError(_ error: CertificateError) {
 ***REMOVED******REMOVED***certificateError = error
 ***REMOVED******REMOVED***showCertificateError = true
 ***REMOVED***
@@ -116,13 +119,22 @@ extension CertificateImportError: LocalizedError {
 ***REMOVED***public var errorDescription: String? {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .invalidData:
-***REMOVED******REMOVED******REMOVED***return String(localized: "The certificate file was invalid.", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED***return String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "The certificate file was invalid.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating the chosen file was invalid."
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .invalidPassword:
-***REMOVED******REMOVED******REMOVED***return String(localized: "The password was invalid.", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED***return String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "The password was invalid.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating the given password was invalid."
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***return SecCopyErrorMessageString(rawValue, nil) as String? ?? String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "The certificate file or password was invalid.",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating the chosen file or given password was invalid."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -132,7 +144,11 @@ extension CertificatePickerViewModel.CertificateError: LocalizedError {
 ***REMOVED***var errorDescription: String? {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .couldNotAccessCertificateFile:
-***REMOVED******REMOVED******REMOVED***return String(localized: "Could not access the certificate file.", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED***return String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Could not access the certificate file.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating a certificate file was inaccessible."
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .importError(let error):
 ***REMOVED******REMOVED******REMOVED***return error.localizedDescription
 ***REMOVED******REMOVED***case .other(let error):
@@ -154,6 +170,13 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED***.delayedOnAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present the prompt right away.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting it after initialization allows it to animate.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** However, this needs to happen after a slight delay or
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** it doesn't show.
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.showPrompt = true
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.promptBrowseCertificate(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showPrompt,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
@@ -163,30 +186,36 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.credentialInput(
-***REMOVED******REMOVED******REMOVED******REMOVED***fields: .password,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showPassword,
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: .password,
 ***REMOVED******REMOVED******REMOVED******REMOVED***message: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Please enter a password for the chosen certificate.",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label requesting the password associated with the chosen certificate."
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "Password Required",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating that a password is required to proceed with an operation."
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(localized: "Cancel", bundle: .toolkitModule),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String.cancel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(localized: "OK", bundle: .toolkitModule),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "OK",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for button to proceed with an operation."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, password in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withPassword: password)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedToUseCertificate(withPassword: password)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.alertCertificateError(
+***REMOVED******REMOVED******REMOVED***.certificateErrorSheet(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showCertificateError,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
 ***REMOVED******REMOVED******REMOVED***)
@@ -207,30 +236,58 @@ private extension View {
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***alert(
-***REMOVED******REMOVED******REMOVED***Text("Certificate Required", bundle: .toolkitModule),
-***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***presenting: viewModel.challengingHost
-***REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Browse For Certificate", bundle: .toolkitModule)
+***REMOVED******REMOVED***sheet(isPresented: isPresented) {
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Certificate Required",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating that a certificate is required to proceed."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"A certificate is required to access content on \(viewModel.challengingHost).",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** An alert message indicating that a certificate is required to access
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** content on a remote host. The variable is the host that prompted the challenge.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.cancel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedToPicker()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Browse",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to open the system file browser."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .toolkitModule)
-***REMOVED******REMOVED***
-***REMOVED*** message: { _ in
-***REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED***"A certificate is required to access content on \(viewModel.challengingHost).",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** An alert message indicating that a certificate is required to access
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** content on a remote host. The variable is the host that prompted the challenge.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED******REMOVED******REMOVED***.mediumPresentationDetents()
+***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -246,46 +303,82 @@ private extension View {
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***sheet(isPresented: isPresented) {
 ***REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withCertificateURL: $0)
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedToPasswordEntry(forCertificateWithURL: $0)
 ***REMOVED******REMOVED*** onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
 ***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 private extension View {
-***REMOVED******REMOVED***/ Displays an alert to notify that there was an error importing the certificate.
+***REMOVED******REMOVED***/ Displays a sheet to notify that there was an error importing the certificate.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
 ***REMOVED******REMOVED***/   - viewModel: The view model associated with the view.
-***REMOVED***@MainActor @ViewBuilder func alertCertificateError(
+***REMOVED***@MainActor @ViewBuilder func certificateErrorSheet(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***alert(
-***REMOVED******REMOVED******REMOVED***Text("Error importing certificate", bundle: .toolkitModule),
-***REMOVED******REMOVED******REMOVED***isPresented: isPresented
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Try Again", bundle: .toolkitModule)
+***REMOVED******REMOVED***sheet(isPresented: isPresented) {
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Error importing certificate",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A message indicating that some error occurred while importing a chosen
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** network certificate.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.certificateError?.localizedDescription ?? String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "The certificate file or password was invalid.",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating the chosen file or given password was invalid."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.cancel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedToPicker()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Try Again",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button allowing the user to retry an operation."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel", bundle: .toolkitModule)
-***REMOVED******REMOVED***
-***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.certificateError?.localizedDescription ?? String(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "The certificate file or password was invalid.",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
-***REMOVED******REMOVED******REMOVED******REMOVED*** )
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED******REMOVED******REMOVED***.mediumPresentationDetents()
+***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
