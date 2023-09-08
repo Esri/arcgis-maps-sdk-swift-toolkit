@@ -240,7 +240,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The calendar image wasn't visible."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***calendarImage.tap()
+***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***datePicker.isHittable,
