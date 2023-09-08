@@ -17,8 +17,11 @@ import ArcGIS
 /// A view displaying an async image, with error display and progress view.
 struct AsyncImageView: View {
     /// The `URL` of the image.
-    private var url: URL
+    private var url: URL?
     
+    /// The `LoadableImage` representing the view.
+    var loadableImage: LoadableImage?
+
     /// The `ContentMode` defining how the image fills the available space.
     private let contentMode: ContentMode
     
@@ -51,7 +54,27 @@ struct AsyncImageView: View {
         _viewModel = StateObject(wrappedValue: AsyncImageViewModel())
     }
     
-    var body: some View {
+    /// Creates an `AsyncImageView`.
+    /// - Parameters:
+    ///   - loadableImage: The `LoadableImage` representing the image.
+    ///   - contentMode: The `ContentMode` defining how the image fills the available space.
+    ///   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
+    ///   - mediaSize: The size of the media's frame.
+    public init(
+        loadableImage: LoadableImage,
+        contentMode: ContentMode = .fit,
+        mediaSize: CGSize? = nil
+    ) {
+        self.contentMode = contentMode
+        self.mediaSize = mediaSize
+        self.loadableImage = loadableImage
+        refreshInterval = nil
+        url = nil
+        
+        _viewModel = StateObject(wrappedValue: AsyncImageViewModel())
+    }
+
+    public var body: some View {
         ZStack {
             switch viewModel.result {
             case .success(let image):
@@ -94,10 +117,14 @@ struct AsyncImageView: View {
         }
         .onAppear() {
             viewModel.url = url
+            viewModel.loadableImage = loadableImage
             viewModel.refreshInterval = refreshInterval
         }
         .onChange(of: url) { _ in
             viewModel.url = url
+        }
+        .onChange(of: loadableImage) { _ in
+            viewModel.loadableImage = loadableImage
         }
         .onChange(of: refreshInterval) { _ in
             viewModel.refreshInterval = refreshInterval
