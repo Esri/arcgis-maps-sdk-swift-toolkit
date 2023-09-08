@@ -82,6 +82,7 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED***if let primaryMessage {
 ***REMOVED******REMOVED******REMOVED******REMOVED***primaryMessage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if isFocused, description.isEmpty || validationError != nil {
