@@ -23,9 +23,9 @@ final class FormViewTests: XCTestCase {
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
+        let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
         let formViewTestsButton = app.buttons["FormView Tests"]
-        let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
         
         app.launch()
