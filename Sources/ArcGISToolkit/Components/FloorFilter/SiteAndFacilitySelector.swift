@@ -103,12 +103,19 @@ struct SiteAndFacilitySelector: View {
                 prompt: String(
                     localized: "Filter sites",
                     bundle: .toolkitModule,
-                    comment: "A search field allowing user to filter a list of sites by name."
+                    comment: """
+                             A field allowing the user to filter a list of sites by name. A site
+                             contains one or more facilities in a floor-aware map or scene.
+                             """
                 )
             )
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
-            .navigationTitle(String(localized: "Sites", bundle: .toolkitModule))
+            .navigationTitle(String(
+                localized: "Sites",
+                bundle: .toolkitModule,
+                comment: "A label in reference to all of the sites in a floor-aware map or scene."
+            ))
         }
         
         /// The "All sites" button.
@@ -131,7 +138,7 @@ struct SiteAndFacilitySelector: View {
                 Text(
                     "All sites",
                     bundle: .toolkitModule,
-                    comment: "A button allowing users to view a list of all sites defined in a floor aware map."
+                    comment: "A reference to all of the sites defined in a floor aware map."
                 )
             }
             .buttonStyle(.bordered)
@@ -233,15 +240,29 @@ struct SiteAndFacilitySelector: View {
                 prompt: String(
                     localized: "Filter facilities",
                     bundle: .toolkitModule,
-                    comment: "A search field allowing user to filter a list of facilities by name."
+                    comment: """
+                             A field allowing the user to filter a list of facilities by name. A
+                             facility contains one or more levels in a floor-aware map or scene.
+                             """
                 )
             )
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
             .navigationTitle(
                 usesAllSitesStyling ?
-                String(localized: "All Sites", bundle: .toolkitModule) :
-                    viewModel.selection?.site?.name ?? String(localized: "Select a facility", bundle: .toolkitModule)
+                String(
+                    localized: "All sites",
+                    bundle: .toolkitModule,
+                    comment: "A reference to all of the sites defined in a floor aware map."
+                ) :
+                viewModel.selection?.site?.name ?? String(
+                    localized: "Select a facility",
+                    bundle: .toolkitModule,
+                    comment: """
+                             A label directing the user to select a facility. A facility contains one
+                             or more levels in a floor-aware map or scene.
+                             """
+                )
             )
         }
         
@@ -298,8 +319,12 @@ struct SiteAndFacilitySelector: View {
 /// Displays text "No matches found".
 private struct NoMatchesView: View {
     var body: some View {
-        Text("No matches found", bundle: .toolkitModule)
-            .frame(maxHeight: .infinity)
+        Text(
+            "No matches found.",
+            bundle: .toolkitModule,
+            comment: "A statement that no sites or facilities with names matching a filter phrase were found."
+        )
+        .frame(maxHeight: .infinity)
     }
 }
 

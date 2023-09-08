@@ -26,6 +26,13 @@ import UIKit
         }
     }
     
+    /// The `LoadableImage` representing the view.
+    var loadableImage: LoadableImage? {
+        didSet {
+            refresh()
+        }
+    }
+    
     /// The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
     var refreshInterval: TimeInterval? {
         didSet {
@@ -67,9 +74,9 @@ import UIKit
         refresh()
     }
     
-    /// Refreshes the image data from `url` and creates the image.
+    /// Refreshes the image data from `url` or `loadableImage` and creates the image.
     private func refresh() {
-        guard !isRefreshing else { return }
+        guard !isRefreshing, (url != nil || loadableImage != nil) else { return }
         
         // Only refresh if we're not already refreshing.  Sometimes the
         // `refreshInterval` will be shorter than the time it takes to
@@ -78,28 +85,43 @@ import UIKit
         // we may never get an image to display.
         isRefreshing = true
         Task { [weak self] in
-            guard let self, let url else { return }
+            guard let self else { return }
             
             do {
-                let (data, _) = try await ArcGISEnvironment.urlSession.data(from: url)
-                DispatchQueue.main.async { [weak self] in
-                    if let image = UIImage(data: data) {
-                        self?.result = .success(image)
-                    } else {
-                        // We have data, but couldn't create an image.
-                        self?.result = .failure(LoadImageError())
-                    }
+                if let url {
+                    try await loadFromURL(url: url)
+                } else if let loadableImage {
+                    try await loadFromLoadableImage(loadableImage: loadableImage)
                 }
             } catch {
                 result = .failure(error)
             }
-            
-            isRefreshing = false
-            if let refreshInterval,
-               refreshInterval >= 1 {
-                progressInterval = Date()...Date().addingTimeInterval(refreshInterval)
+        }
+    }
+    
+    private func loadFromURL(url: URL) async throws {
+        let (data, _) = try await ArcGISEnvironment.urlSession.data(from: url)
+        DispatchQueue.main.async { [weak self] in
+            if let image = UIImage(data: data) {
+                self?.result = .success(image)
+                print("image success: \(url.absoluteString)")
+            } else {
+                // We have data, but couldn't create an image.
+                self?.result = .failure(LoadImageError())
+                print("image failure: \(url.absoluteString)")
             }
         }
+        
+        isRefreshing = false
+        if let refreshInterval,
+           refreshInterval >= 1 {
+            progressInterval = Date()...Date().addingTimeInterval(refreshInterval)
+        }
+    }
+        
+    private func loadFromLoadableImage(loadableImage: LoadableImage) async throws {
+        try await loadableImage.load()
+        result = .success(loadableImage.image)
     }
 }
 
@@ -110,7 +132,7 @@ struct LoadImageError: Error {
 extension LoadImageError: LocalizedError {
     public var errorDescription: String? {
         return String(
-            localized: "The URL could not be reached or did not contain image data",
+            localized: "The URL could not be reached or did not contain image data.",
             bundle: .toolkitModule,
             comment: "Description of error thrown when a remote image could not be loaded."
         )

@@ -49,53 +49,15 @@ struct FormExampleView: View {
                 }
                 .ignoresSafeArea(.keyboard)
                 
-                // Present a FormView in a native SwiftUI sheet
-                .sheet(isPresented: $isPresented) {
-                    if useControlsInForm {
-                        HStack {
-                            Button("Cancel", role: .cancel) {
-                                formViewModel.undoEdits()
-                                isPresented = false
-                            }
-                            .padding()
-                            .buttonStyle(.bordered)
-                            Spacer()
-                            Button("Submit") {
-                                Task {
-                                    await formViewModel.submitChanges()
-                                    isPresented = false
-                                }
-                            }
-                            .padding()
-                            .buttonStyle(.borderedProminent)
-                        }
-                    }
-                    
-                    if #available(iOS 16.4, *) {
-                        FormView(featureForm: featureForm)
-                            .padding()
-                            .presentationBackground(.thinMaterial)
-                            .presentationBackgroundInteraction(.enabled(upThrough: .medium))
-                            .presentationDetents([.medium])
-                    } else {
-                        FormView(featureForm: featureForm)
-                            .padding()
-                    }
-                }
-                
                 // Or present a FormView in a Floating Panel (provided via the Toolkit)
-//                .floatingPanel(
-//                    selectedDetent: .constant(.half),
-//                    horizontalAlignment: .leading,
-//                    isPresented: $isPresented
-//                ) {
-//                    Group {
-//                        if isPresented {
-//                            FormView(featureForm: featureForm)
-//                                .padding()
-//                        }
-//                    }
-//                }
+                .floatingPanel(
+                    selectedDetent: .constant(.half),
+                    horizontalAlignment: .leading,
+                    isPresented: $isPresented
+                ) {
+                    FormView(featureForm: featureForm)
+                        .padding()
+                }
                 
                 .environmentObject(formViewModel)
                 .navigationBarBackButtonHidden(isPresented)
