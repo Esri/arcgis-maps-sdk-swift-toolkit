@@ -18,7 +18,9 @@ final class FormViewTests: XCTestCase {
         continueAfterFailure = false
     }
     
-    /// Text Box with no hint, no description, value not required.
+    // - MARK: Test case 1: Text Box with no hint, no description, value not required
+    
+    /// Test case 1.1: unfocused and focused state, no value
     func testCase_1_1() throws {
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
@@ -63,7 +65,7 @@ final class FormViewTests: XCTestCase {
         )
     }
     
-    /// Tests focused and unfocused state, with value (populated).
+    /// Test case 1.2: focused and unfocused state, with value (populated)
     func testCase_1_2() throws {
         let app = XCUIApplication()
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
@@ -142,6 +144,7 @@ final class FormViewTests: XCTestCase {
         )
     }
     
+    /// Test case 1.3: unfocused and focused state, with error value (> 256 chars)
     func testCase_1_3() throws {
         let app = XCUIApplication()
         let formViewTestsButton = app.buttons["FormView Tests"]
@@ -187,6 +190,9 @@ final class FormViewTests: XCTestCase {
         )
     }
     
+    // - MARK: Test case 2: Test case 2: DateTime picker input type
+    
+    /// Test case 2.1: Unfocused and focused state, no value, date required
     func testCase_2_1() throws {
         let app = XCUIApplication()
         let calendarImage = app.images["Required Date Calendar Image"]
@@ -267,6 +273,7 @@ final class FormViewTests: XCTestCase {
         )
     }
     
+    /// Test case 2.2: Focused and unfocused state, with value (populated)
     func testCase_2_2() {
         let app = XCUIApplication()
         let datePicker = app.datePickers["Launch Date and Time for Apollo 11 Date Picker"]
@@ -332,6 +339,7 @@ final class FormViewTests: XCTestCase {
         )
     }
     
+    /// Test case 2.3: Date only, no time
     func testCase_2_3() {
         let app = XCUIApplication()
         let datePicker = app.datePickers["Launch Date for Apollo 11 Date Picker"]
@@ -395,6 +403,7 @@ final class FormViewTests: XCTestCase {
         )
     }
     
+    /// Test case 2.4: Maximum date
     func testCase_2_4() {
         let app = XCUIApplication()
         let clearButton = app.buttons["Launch Date Time End Clear Button"]
@@ -456,6 +465,7 @@ final class FormViewTests: XCTestCase {
         )
     }
     
+    /// Test case 2.5: Minimum date
     func testCase_2_5() {
         let app = XCUIApplication()
         let datePicker = app.datePickers["start and end date time Date Picker"]
@@ -524,6 +534,7 @@ final class FormViewTests: XCTestCase {
         )
     }
     
+    /// Test case 2.6: Clear date
     func testCase_2_6() {
         let app = XCUIApplication()
         let clearButton = app.buttons["Launch Date and Time for Apollo 11 Clear Button"]
