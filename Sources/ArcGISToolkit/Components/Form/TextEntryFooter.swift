@@ -26,6 +26,9 @@ struct TextEntryFooter: View {
     /// The current length of the text in the text entry field.
     private let currentLength: Int
     
+    /// The field's parent element.
+    private let element: FieldFormElement
+    
     /// A Boolean value indicating whether the text entry field is focused.
     private let isFocused: Bool
     
@@ -55,6 +58,7 @@ struct TextEntryFooter: View {
         input: FormInput
     ) {
         self.currentLength = currentLength
+        self.element = element
         self.isFocused = isFocused
         self.description = element.description
         //TODO: add `required` property to API
@@ -82,6 +86,7 @@ struct TextEntryFooter: View {
             Spacer()
             if isFocused, description.isEmpty || validationError != nil {
                 Text(currentLength, format: .number)
+                    .accessibilityIdentifier("\(element.label) Character Indicator")
             }
         }
         .font(.footnote)
