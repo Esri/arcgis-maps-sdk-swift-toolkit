@@ -15,7 +15,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying an async image, with error display and progress view.
-struct AsyncImageView: View {
+public struct AsyncImageView: View {
 ***REMOVED******REMOVED***/ The `URL` of the image.
 ***REMOVED***private var url: URL?
 ***REMOVED***
@@ -40,7 +40,7 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***/   - contentMode: The `ContentMode` defining how the image fills the available space.
 ***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
 ***REMOVED******REMOVED***/   - mediaSize: The size of the media's frame.
-***REMOVED***init(
+***REMOVED***public init(
 ***REMOVED******REMOVED***url: URL,
 ***REMOVED******REMOVED***contentMode: ContentMode = .fit,
 ***REMOVED******REMOVED***refreshInterval: TimeInterval? = nil,
