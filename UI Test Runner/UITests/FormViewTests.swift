@@ -240,7 +240,7 @@ final class FormViewTests: XCTestCase {
             "The calendar image wasn't visible."
         )
         
-        calendarImage.tap()
+        fieldValue.tap()
         
         XCTAssertTrue(
             datePicker.isHittable,
