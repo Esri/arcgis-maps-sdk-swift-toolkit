@@ -30,7 +30,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the Form View component test view.
+        // Open the FormView component test view.
         formViewTestsButton.tap()
         
         // Wait and verify that the form is opened.
@@ -82,7 +82,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the Form View component test view.
+        // Open the FormView component test view.
         formViewTestsButton.tap()
         
         // Wait and verify that the form is opened.
@@ -158,7 +158,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the Form View component test view.
+        // Open the FormView component test view.
         formViewTestsButton.tap()
         
         // Wait and verify that the form is opened.
@@ -206,7 +206,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the Form View component test view.
+        // Open the FormView component test view.
         formViewTestsButton.tap()
         
         // Wait and verify that the form is opened.
@@ -284,7 +284,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
             
-        // Open the Form View component test view.
+        // Open the FormView component test view.
         formViewTestsButton.tap()
         
         // Wait and verify that the form is opened.
@@ -349,7 +349,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
             
-        // Open the Form View component test view.
+        // Open the FormView component test view.
         formViewTestsButton.tap()
         
         // Wait and verify that the form is opened.
@@ -412,7 +412,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
             
-        // Open the Form View component test view.
+        // Open the FormView component test view.
         formViewTestsButton.tap()
         
         // Wait and verify that the form is opened.
@@ -475,7 +475,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
             
-        // Open the Form View component test view.
+        // Open the FormView component test view.
         formViewTestsButton.tap()
         
         // Wait and verify that the form is opened.
@@ -539,7 +539,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
             
-        // Open the Form View component test view.
+        // Open the FormView component test view.
         formViewTestsButton.tap()
         
         // Wait and verify that the form is opened.
