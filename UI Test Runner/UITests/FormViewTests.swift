@@ -39,11 +39,6 @@ final class FormViewTests: XCTestCase {
             "The form failed to open after 5 seconds."
         )
         
-        // Scroll to the target form element.
-        while !(fieldTitle.isHittable) {
-            app.scrollViews.firstMatch.swipeUp(velocity: 500)
-        }
-        
         XCTAssertTrue(
             textField.isHittable,
             "The target text field wasn't visible."
