@@ -15,7 +15,7 @@ import SwiftUI
 import ArcGIS
 
 /// A view displaying an async image, with error display and progress view.
-struct AsyncImageView: View {
+public struct AsyncImageView: View {
     /// The `URL` of the image.
     private var url: URL?
     
@@ -40,7 +40,7 @@ struct AsyncImageView: View {
     ///   - contentMode: The `ContentMode` defining how the image fills the available space.
     ///   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
     ///   - mediaSize: The size of the media's frame.
-    init(
+    public init(
         url: URL,
         contentMode: ContentMode = .fit,
         refreshInterval: TimeInterval? = nil,
