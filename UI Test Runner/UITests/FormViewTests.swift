@@ -39,11 +39,6 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
-***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
-***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***textField.isHittable,
 ***REMOVED******REMOVED******REMOVED***"The target text field wasn't visible."
