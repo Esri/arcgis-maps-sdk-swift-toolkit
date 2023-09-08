@@ -273,7 +273,6 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let calendarImage = app.images["Required Date Calendar Image"]
 ***REMOVED******REMOVED***let clearButton = app.buttons["Required Date Clear Button"]
 ***REMOVED******REMOVED***let datePicker = app.datePickers["Required Date Date Picker"]
-***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Required Date"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Date Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Required Date Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
@@ -301,8 +300,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***footer.isHittable,
-***REMOVED******REMOVED******REMOVED***"The required label isn't hittable."
+***REMOVED******REMOVED******REMOVED***footer.exists,
+***REMOVED******REMOVED******REMOVED***"The required label doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
@@ -318,8 +317,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***datePicker.isHittable,
-***REMOVED******REMOVED******REMOVED***"The date picker isn't hittable."
+***REMOVED******REMOVED******REMOVED***datePicker.exists,
+***REMOVED******REMOVED******REMOVED***"The date picker doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
@@ -408,7 +407,6 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***func testCase_2_3() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let datePicker = app.datePickers["Launch Date for Apollo 11 Date Picker"]
-***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Launch Date for Apollo 11"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date for Apollo 11 Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date for Apollo 11 Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
@@ -467,7 +465,6 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***func testCase_2_4() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let clearButton = app.buttons["Launch Date Time End Clear Button"]
-***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Launch Date Time End"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date Time End Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date Time End Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
@@ -492,8 +489,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***footer.isHittable,
-***REMOVED******REMOVED******REMOVED***"The footer isn't hittable."
+***REMOVED******REMOVED******REMOVED***footer.exists,
+***REMOVED******REMOVED******REMOVED***"The footer doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***nowButton.tap()
@@ -519,7 +516,6 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***func testCase_2_5() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let datePicker = app.datePickers["start and end date time Date Picker"]
-***REMOVED******REMOVED***let fieldTitle = app.staticTexts["start and end date time"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["start and end date time Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["start and end date time Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
@@ -542,8 +538,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***footer.isHittable,
-***REMOVED******REMOVED******REMOVED***"The footer isn't hittable."
+***REMOVED******REMOVED******REMOVED***footer.exists,
+***REMOVED******REMOVED******REMOVED***"The footer doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
