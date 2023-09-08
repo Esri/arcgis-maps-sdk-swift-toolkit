@@ -39,7 +39,11 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if bookmarks.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("No bookmarks", bundle: .toolkitModule)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"No bookmarks",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating that no bookmarks are available for selection."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** icon: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "bookmark.slash")
 ***REMOVED******REMOVED******REMOVED***
