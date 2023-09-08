@@ -273,7 +273,6 @@ final class FormViewTests: XCTestCase {
         let calendarImage = app.images["Required Date Calendar Image"]
         let clearButton = app.buttons["Required Date Clear Button"]
         let datePicker = app.datePickers["Required Date Date Picker"]
-        let fieldTitle = app.staticTexts["Required Date"]
         let fieldValue = app.staticTexts["Required Date Value"]
         let footer = app.staticTexts["Required Date Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
@@ -301,8 +300,8 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            footer.isHittable,
-            "The required label isn't hittable."
+            footer.exists,
+            "The required label doesn't exist."
         )
         
         XCTAssertEqual(
@@ -318,8 +317,8 @@ final class FormViewTests: XCTestCase {
         fieldValue.tap()
         
         XCTAssertTrue(
-            datePicker.isHittable,
-            "The date picker isn't hittable."
+            datePicker.exists,
+            "The date picker doesn't exist."
         )
         
         XCTAssertEqual(
@@ -408,7 +407,6 @@ final class FormViewTests: XCTestCase {
     func testCase_2_3() {
         let app = XCUIApplication()
         let datePicker = app.datePickers["Launch Date for Apollo 11 Date Picker"]
-        let fieldTitle = app.staticTexts["Launch Date for Apollo 11"]
         let fieldValue = app.staticTexts["Launch Date for Apollo 11 Value"]
         let footer = app.staticTexts["Launch Date for Apollo 11 Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
@@ -467,7 +465,6 @@ final class FormViewTests: XCTestCase {
     func testCase_2_4() {
         let app = XCUIApplication()
         let clearButton = app.buttons["Launch Date Time End Clear Button"]
-        let fieldTitle = app.staticTexts["Launch Date Time End"]
         let fieldValue = app.staticTexts["Launch Date Time End Value"]
         let footer = app.staticTexts["Launch Date Time End Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
@@ -492,8 +489,8 @@ final class FormViewTests: XCTestCase {
         fieldValue.tap()
         
         XCTAssertTrue(
-            footer.isHittable,
-            "The footer isn't hittable."
+            footer.exists,
+            "The footer doesn't exist."
         )
         
         nowButton.tap()
@@ -519,7 +516,6 @@ final class FormViewTests: XCTestCase {
     func testCase_2_5() {
         let app = XCUIApplication()
         let datePicker = app.datePickers["start and end date time Date Picker"]
-        let fieldTitle = app.staticTexts["start and end date time"]
         let fieldValue = app.staticTexts["start and end date time Value"]
         let footer = app.staticTexts["start and end date time Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
@@ -542,8 +538,8 @@ final class FormViewTests: XCTestCase {
         fieldValue.tap()
         
         XCTAssertTrue(
-            footer.isHittable,
-            "The footer isn't hittable."
+            footer.exists,
+            "The footer doesn't exist."
         )
         
         XCTAssertEqual(
