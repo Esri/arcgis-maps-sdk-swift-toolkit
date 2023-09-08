@@ -14,6 +14,10 @@
 import XCTest
 
 final class FormViewTests: XCTestCase {
+    override func setUp() async throws {
+        continueAfterFailure = false
+    }
+    
     /// Text Box with no hint, no description, value not required.
     func testCase_1_1() throws {
         let app = XCUIApplication()
