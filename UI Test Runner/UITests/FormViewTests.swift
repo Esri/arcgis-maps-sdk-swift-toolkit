@@ -42,26 +42,48 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***textField.isHittable,
-***REMOVED******REMOVED******REMOVED***"The target text field wasn't visible."
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
+#if !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***XCTAssertFalse(
-***REMOVED******REMOVED******REMOVED***helperText.isHittable,
-***REMOVED******REMOVED******REMOVED***"The helper text wasn't hidden."
+***REMOVED******REMOVED******REMOVED***textField.hasFocus,
+***REMOVED******REMOVED******REMOVED***"The target text field has focus."
 ***REMOVED******REMOVED***)
+#endif
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(
-***REMOVED******REMOVED******REMOVED***characterCount.isHittable,
-***REMOVED******REMOVED******REMOVED***"The character count wasn't hidden."
+***REMOVED******REMOVED******REMOVED***footer.isHittable,
+***REMOVED******REMOVED******REMOVED***"The footer isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Give focus to the target text field.
 ***REMOVED******REMOVED***textField.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***characterCount.isHittable,
-***REMOVED******REMOVED******REMOVED***"The character count wasn't visible."
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***footer.exists,
+***REMOVED******REMOVED******REMOVED***"The footer doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"Maximum 256 characters"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***characterIndicator.exists,
+***REMOVED******REMOVED******REMOVED***"The character indicator doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***characterIndicator.label,
+***REMOVED******REMOVED******REMOVED***"0"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -88,71 +110,78 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
-***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
-***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***textField.isHittable,
-***REMOVED******REMOVED******REMOVED***"The text field wasn't visible."
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***textField.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.typeText("Sample text")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***helperText.isHittable,
-***REMOVED******REMOVED******REMOVED***"The helper text wasn't visible."
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***characterCount.isHittable,
-***REMOVED******REMOVED******REMOVED***"The character count wasn't visible."
+***REMOVED******REMOVED******REMOVED***footer.exists,
+***REMOVED******REMOVED******REMOVED***"The footer doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"Maximum 256 characters"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***clearButton.isHittable,
-***REMOVED******REMOVED******REMOVED***"The clear button wasn't visible."
+***REMOVED******REMOVED******REMOVED***characterIndicator.isHittable,
+***REMOVED******REMOVED******REMOVED***"The character count isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***#if targetEnvironment(macCatalyst)
-***REMOVED******REMOVED******REMOVED***app.typeText("\r")
-***REMOVED******REMOVED***#else
-***REMOVED******REMOVED******REMOVED***returnButton.tap()
-***REMOVED******REMOVED***#endif
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***characterIndicator.label,
+***REMOVED******REMOVED******REMOVED***"11"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***clearButton.exists,
+***REMOVED******REMOVED******REMOVED***"The clear button doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+#if targetEnvironment(macCatalyst)
+***REMOVED******REMOVED***app.typeText("\r")
+#else
+***REMOVED******REMOVED***returnButton.tap()
+#endif
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
-***REMOVED******REMOVED******REMOVED***"The title wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The title isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(
-***REMOVED******REMOVED******REMOVED***helperText.isHittable,
-***REMOVED******REMOVED******REMOVED***"The helper text wasn't hidden."
+***REMOVED******REMOVED******REMOVED***footer.isHittable,
+***REMOVED******REMOVED******REMOVED***"The footer is hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***clearButton.isHittable,
-***REMOVED******REMOVED******REMOVED***"The clear button wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The clear button isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***textField.isHittable,
-***REMOVED******REMOVED******REMOVED***"The text field wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The text field isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 1.3: unfocused and focused state, with error value (> 256 chars)
 ***REMOVED***func testCase_1_3() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
+***REMOVED******REMOVED***let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
+***REMOVED******REMOVED***let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
+***REMOVED******REMOVED***let returnButton = app.buttons["Return"]
 ***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
-***REMOVED******REMOVED***let helperText = app.staticTexts["Maximum 256 characters"]
-***REMOVED******REMOVED***let characterCount = app.staticTexts["257"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -165,28 +194,74 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
-***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
-***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***textField.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.typeText(.loremIpsum257)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
-***REMOVED******REMOVED******REMOVED***"The title wasn't visible."
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The title doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***helperText.isHittable,
-***REMOVED******REMOVED******REMOVED***"The helper text wasn't visible."
+***REMOVED******REMOVED******REMOVED***footer.exists,
+***REMOVED******REMOVED******REMOVED***"The footer doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"Maximum 256 characters"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***characterCount.isHittable,
-***REMOVED******REMOVED******REMOVED***"The character count wasn't visible."
+***REMOVED******REMOVED******REMOVED***characterIndicator.exists,
+***REMOVED******REMOVED******REMOVED***"The character count doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***characterIndicator.label,
+***REMOVED******REMOVED******REMOVED***"257"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***clearButton.exists,
+***REMOVED******REMOVED******REMOVED***"The clear button doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+#if targetEnvironment(macCatalyst)
+***REMOVED******REMOVED***app.typeText("\r")
+#else
+***REMOVED******REMOVED***returnButton.tap()
+#endif
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The title doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***footer.exists,
+***REMOVED******REMOVED******REMOVED***"The footer doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"Maximum 256 characters"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***characterIndicator.exists,
+***REMOVED******REMOVED******REMOVED***"The character count exists."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***clearButton.isHittable,
+***REMOVED******REMOVED******REMOVED***"The clear button isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***textField.isHittable,
+***REMOVED******REMOVED******REMOVED***"The text field isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -216,11 +291,6 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
-***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
-***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if fieldValue.label != "No Value" {
 ***REMOVED******REMOVED******REMOVED***clearButton.tap()
 ***REMOVED***
@@ -232,7 +302,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***footer.isHittable,
-***REMOVED******REMOVED******REMOVED***"The required label wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The required label isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
@@ -242,14 +312,14 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***calendarImage.isHittable,
-***REMOVED******REMOVED******REMOVED***"The calendar image wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The calendar image isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***datePicker.isHittable,
-***REMOVED******REMOVED******REMOVED***"The date picker wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The date picker isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
@@ -259,13 +329,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***nowButton.isHittable,
-***REMOVED******REMOVED******REMOVED***"The now button wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The now button isn't hittable."
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
-***REMOVED******REMOVED***while !(footer.isHittable) {
-***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
-***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***footer.label,
@@ -299,7 +364,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
-***REMOVED******REMOVED******REMOVED***"The field title wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let formatter = DateFormatter()
@@ -318,24 +383,24 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***datePicker.isHittable,
-***REMOVED******REMOVED******REMOVED***"The date picker wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The date picker isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***nowButton.isHittable,
-***REMOVED******REMOVED******REMOVED***"The now button wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The now button isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldValue.isHittable,
-***REMOVED******REMOVED******REMOVED***"The label wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The label isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(
 ***REMOVED******REMOVED******REMOVED***datePicker.isHittable,
-***REMOVED******REMOVED******REMOVED***"The date picker was visible."
+***REMOVED******REMOVED******REMOVED***"The date picker was hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -361,14 +426,9 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
-***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
-***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***footer.isHittable,
-***REMOVED******REMOVED******REMOVED***"The footer wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The footer isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
@@ -380,7 +440,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldValue.isHittable,
-***REMOVED******REMOVED******REMOVED***"The field value wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The field value isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let formatter = DateFormatter()
@@ -394,12 +454,12 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***datePicker.isHittable,
-***REMOVED******REMOVED******REMOVED***"The date picker wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The date picker isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***todayButton.isHittable,
-***REMOVED******REMOVED******REMOVED***"The today button wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The today button isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -425,25 +485,15 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
-***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
-***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if fieldValue.label != "No Value" {
 ***REMOVED******REMOVED******REMOVED***clearButton.tap()
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
-***REMOVED******REMOVED***while !(footer.isHittable) {
-***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 250)
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***footer.isHittable,
-***REMOVED******REMOVED******REMOVED***"The footer wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The footer isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***nowButton.tap()
@@ -489,21 +539,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
-***REMOVED******REMOVED***while !(fieldTitle.isHittable) {
-***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 500)
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Scroll to the target form element.
-***REMOVED******REMOVED***while !(footer.isHittable) {
-***REMOVED******REMOVED******REMOVED***app.scrollViews.firstMatch.swipeUp(velocity: 250)
-***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***footer.isHittable,
-***REMOVED******REMOVED******REMOVED***"The footer wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The footer isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
@@ -556,12 +596,12 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
-***REMOVED******REMOVED******REMOVED***"The field title wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***clearButton.isHittable,
-***REMOVED******REMOVED******REMOVED***"The clear button wasn't visible."
+***REMOVED******REMOVED******REMOVED***"The clear button isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***clearButton.tap()
