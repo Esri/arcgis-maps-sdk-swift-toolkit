@@ -82,6 +82,7 @@ struct TextEntryFooter: View {
         HStack(alignment: .top) {
             if let primaryMessage {
                 primaryMessage
+                    .accessibilityIdentifier("\(element.label) Footer")
             }
             Spacer()
             if isFocused, description.isEmpty || validationError != nil {
