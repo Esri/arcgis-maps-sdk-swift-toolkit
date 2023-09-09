@@ -60,9 +60,9 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***if let date = featureForm?.feature.attributes[element.fieldName] as? Date {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.date = date
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let dateFormatter = DateFormatter()
+***REMOVED******REMOVED******REMOVED***dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+***REMOVED******REMOVED******REMOVED***self.date = dateFormatter.date(from: element.value)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
 ***REMOVED******REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
