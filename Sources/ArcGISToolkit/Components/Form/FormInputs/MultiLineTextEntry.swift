@@ -95,11 +95,10 @@ struct MultiLineTextEntry: View {
         )
         .padding([.bottom], elementPadding)
         .onAppear {
-            let text = featureForm?.feature.attributes[element.fieldName] as? String
-            if let text, !text.isEmpty {
+            let text = element.value
+            if !text.isEmpty {
                 isPlaceholder = false
                 self.text = text
-                
             } else {
                 isPlaceholder = true
                 self.text = element.hint
