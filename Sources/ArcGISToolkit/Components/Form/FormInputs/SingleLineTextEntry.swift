@@ -54,7 +54,7 @@ struct SingleLineTextEntry: View {
             .padding([.top], elementPadding)
         // Secondary foreground color is used across entry views for consistency.
         HStack {
-            TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
+            TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
                 .focused($isFocused)
                 .accessibilityIdentifier("\(element.label) Text Field")
             if !text.isEmpty {
@@ -71,7 +71,7 @@ struct SingleLineTextEntry: View {
         )
         .padding([.bottom], elementPadding)
         .onAppear {
-            text = featureForm?.feature.attributes[element.fieldName] as? String ?? ""
+            text = element.value
         }
         .onChange(of: isFocused) { newFocus in
             if newFocus {
