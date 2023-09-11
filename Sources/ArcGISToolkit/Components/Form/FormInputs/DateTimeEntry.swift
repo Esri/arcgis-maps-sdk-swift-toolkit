@@ -60,7 +60,11 @@ struct DateTimeEntry: View {
         }
         .padding([.bottom], elementPadding)
         .onAppear {
-            self.date = DateFormatter.arcGISDateFormatter.date(from: element.value)
+            if element.value.isEmpty {
+                date = nil
+            } else {
+                date = DateFormatter.arcGISDateFormatter.date(from: element.value)
+            }
         }
         .onChange(of: date) { newDate in
             //TODO: add `required` property to API
