@@ -88,6 +88,7 @@ struct DateTimeEntry: View {
 ***REMOVED***@ViewBuilder var dateDisplay: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Text(formattedDate ?? .noValue)
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Value")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(displayColor)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
@@ -98,8 +99,10 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Calendar Image")
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { date = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -131,6 +134,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***in: dateRange,
 ***REMOVED******REMOVED******REMOVED***displayedComponents: input.includeTime ? [.date, .hourAndMinute] : [.date]
 ***REMOVED******REMOVED***) { ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Date Picker")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The range of dates available for selection, if applicable.
@@ -168,6 +172,7 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.foregroundColor(requiredValueMissing ? .red : .secondary)
+***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The human-readable date and time selection.
@@ -182,10 +187,18 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***/ The button to set the date to the present time.
 ***REMOVED***var todayOrNowButton: some View {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***date = .now
+***REMOVED******REMOVED******REMOVED***let now = Date.now
+***REMOVED******REMOVED******REMOVED***if dateRange.contains(now) {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = now
+***REMOVED******REMOVED*** else if now > dateRange.upperBound {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = dateRange.upperBound
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = dateRange.lowerBound
+***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***input.includeTime ? Text.now : .today
 ***REMOVED***
+***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(input.includeTime ? "Now" : "Today") Button")
 ***REMOVED***
 ***REMOVED***
 
