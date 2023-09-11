@@ -34,8 +34,6 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED***@State private var selectedName: String?
 ***REMOVED***
-***REMOVED******REMOVED***@State private var switchState: Bool = false
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a Switch input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
