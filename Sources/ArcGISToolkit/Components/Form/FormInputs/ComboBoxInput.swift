@@ -34,8 +34,6 @@ struct ComboBoxInput: View {
     
     @State private var selectedName: String?
     
-//    @State private var switchState: Bool = false
-    
     /// Creates a view for a Switch input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
