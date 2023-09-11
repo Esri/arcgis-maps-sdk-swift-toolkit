@@ -310,8 +310,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***calendarImage.isHittable,
-***REMOVED******REMOVED******REMOVED***"The calendar image isn't hittable."
+***REMOVED******REMOVED******REMOVED***calendarImage.exists,
+***REMOVED******REMOVED******REMOVED***"The calendar image doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
