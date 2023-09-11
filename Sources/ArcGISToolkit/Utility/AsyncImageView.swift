@@ -21,7 +21,7 @@ public struct AsyncImageView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `LoadableImage` representing the view.
 ***REMOVED***private var loadableImage: LoadableImage?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The `ContentMode` defining how the image fills the available space.
 ***REMOVED***private let contentMode: ContentMode
 ***REMOVED***
@@ -73,7 +73,7 @@ public struct AsyncImageView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: AsyncImageViewModel())
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***switch viewModel.result {
