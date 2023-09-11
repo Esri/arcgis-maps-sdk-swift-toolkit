@@ -367,8 +367,8 @@ final class FormViewTests: XCTestCase {
         )
         
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let localDate = formatter.date(from: "1969-07-07T20:17:00.000Z")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        let localDate = formatter.date(from: "1969-07-07T20:17:00")
         
         XCTAssertEqual(
             fieldValue.label,
