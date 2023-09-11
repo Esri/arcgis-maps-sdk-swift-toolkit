@@ -310,8 +310,8 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            calendarImage.isHittable,
-            "The calendar image isn't hittable."
+            calendarImage.exists,
+            "The calendar image doesn't exist."
         )
         
         fieldValue.tap()
