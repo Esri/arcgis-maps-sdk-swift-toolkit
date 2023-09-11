@@ -60,9 +60,7 @@ struct DateTimeEntry: View {
         }
         .padding([.bottom], elementPadding)
         .onAppear {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            self.date = dateFormatter.date(from: element.value)
+            self.date = DateFormatter.arcGISDateFormatter.date(from: element.value)
         }
         .onChange(of: date) { newDate in
             //TODO: add `required` property to API
@@ -202,6 +200,13 @@ struct DateTimeEntry: View {
     }
 }
 
+private extension DateFormatter {
+    static let arcGISDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        return dateFormatter
+    }()
+}
 
 private extension String {
     /// A string indicating that no date or time has been set for a date/time field.
