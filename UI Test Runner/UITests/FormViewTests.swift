@@ -367,8 +367,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let formatter = DateFormatter()
-***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-***REMOVED******REMOVED***let localDate = formatter.date(from: "1969-07-07T20:17:00.000Z")
+***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+***REMOVED******REMOVED***let localDate = formatter.date(from: "1969-07-07T20:17:00")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
