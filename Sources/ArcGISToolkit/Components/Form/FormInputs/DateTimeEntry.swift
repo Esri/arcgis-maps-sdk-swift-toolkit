@@ -60,7 +60,11 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***self.date = DateFormatter.arcGISDateFormatter.date(from: element.value)
+***REMOVED******REMOVED******REMOVED***if element.value.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = DateFormatter.arcGISDateFormatter.date(from: element.value)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
 ***REMOVED******REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
