@@ -21,7 +21,7 @@ public struct AsyncImageView: View {
     
     /// The `LoadableImage` representing the view.
     private var loadableImage: LoadableImage?
-
+    
     /// The `ContentMode` defining how the image fills the available space.
     private let contentMode: ContentMode
     
@@ -73,7 +73,7 @@ public struct AsyncImageView: View {
         
         _viewModel = StateObject(wrappedValue: AsyncImageViewModel())
     }
-
+    
     public var body: some View {
         ZStack {
             switch viewModel.result {
