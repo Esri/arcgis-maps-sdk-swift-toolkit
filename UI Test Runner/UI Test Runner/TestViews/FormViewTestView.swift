@@ -34,87 +34,60 @@ struct FormViewTestView: View {
     @State private var featureForm: FeatureForm?
     
     var body: some View {
-        MapViewReader { mapViewProxy in
-            MapView(map: map)
-                .onSingleTapGesture { screenPoint, _ in
-                    identifyScreenPoint = screenPoint
-                }
-                .task {
-                    try? await map.load()
-                    let featureLayer = map.operationalLayers.first as? FeatureLayer
-                    let parameters = QueryParameters()
-                    parameters.addObjectID(1)
-                    let result = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
-                    guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else { return }
-                    try? await feature.load()
-                    guard let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition else { return }
-                    featureForm = FeatureForm(feature: feature, definition: formDefinition)
-                    formViewModel.startEditing(feature)
-                    isPresented = true
-                }
-                .ignoresSafeArea(.keyboard)
+        MapView(map: map)
+            .onSingleTapGesture { screenPoint, _ in
+                identifyScreenPoint = screenPoint
+            }
+            .task {
+                try? await map.load()
+                let featureLayer = map.operationalLayers.first as? FeatureLayer
+                let parameters = QueryParameters()
+                parameters.addObjectID(1)
+                let result = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
+                guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else { return }
+                try? await feature.load()
+                guard let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition else { return }
+                featureForm = FeatureForm(feature: feature, definition: formDefinition)
+                formViewModel.startEditing(feature)
+                isPresented = true
+            }
+            .ignoresSafeArea(.keyboard)
+        
+            .floatingPanel(
+                selectedDetent: .constant(.full),
+                horizontalAlignment: .leading,
+                isPresented: $isPresented
+            ) {
+                FormView(featureForm: featureForm)
+                    .padding()
+            }
+        
+            .environmentObject(formViewModel)
+            .navigationBarBackButtonHidden(isPresented)
+            .toolbar {
+                // Once iOS 16.0 is the minimum supported, the two conditionals to show the
+                // buttons can be merged and hoisted up as the root content of the toolbar.
                 
-                // Present a FormView in a native SwiftUI sheet
-                .sheet(isPresented: $isPresented) {
-                    if useControlsInForm {
-                        HStack {
-                            Button("Cancel", role: .cancel) {
-                                formViewModel.undoEdits()
-                                isPresented = false
-                            }
-                            .padding()
-                            .buttonStyle(.bordered)
-                            Spacer()
-                            Button("Submit") {
-                                Task {
-                                    await formViewModel.submitChanges()
-                                    isPresented = false
-                                }
-                            }
-                            .padding()
-                            .buttonStyle(.borderedProminent)
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if isPresented && !useControlsInForm {
+                        Button("Cancel", role: .cancel) {
+                            formViewModel.undoEdits()
+                            isPresented = false
                         }
                     }
-                    
-                    if #available(iOS 16.4, *) {
-                        FormView(featureForm: featureForm)
-                            .padding()
-                            .presentationBackground(.thinMaterial)
-                            .presentationBackgroundInteraction(.enabled(upThrough: .medium))
-                            .presentationDetents([.medium])
-                    } else {
-                        FormView(featureForm: featureForm)
-                            .padding()
-                    }
                 }
                 
-                .environmentObject(formViewModel)
-                .navigationBarBackButtonHidden(isPresented)
-                .toolbar {
-                    // Once iOS 16.0 is the minimum supported, the two conditionals to show the
-                    // buttons can be merged and hoisted up as the root content of the toolbar.
-                    
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        if isPresented && !useControlsInForm {
-                            Button("Cancel", role: .cancel) {
-                                formViewModel.undoEdits()
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if isPresented && !useControlsInForm {
+                        Button("Submit") {
+                            Task {
+                                await formViewModel.submitChanges()
                                 isPresented = false
                             }
                         }
                     }
-                    
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        if isPresented && !useControlsInForm {
-                            Button("Submit") {
-                                Task {
-                                    await formViewModel.submitChanges()
-                                    isPresented = false
-                                }
-                            }
-                        }
-                    }
                 }
-        }
+            }
     }
 }
 
