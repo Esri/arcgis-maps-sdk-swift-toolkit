@@ -67,6 +67,10 @@ struct DateTimeEntry: View {
             }
         }
         .onChange(of: date) { newDate in
+            guard let currentDate = DateFormatter.arcGISDateFormatter.date(from: element.value),
+                  newDate != currentDate else {
+                return
+            }
             //TODO: add `required` property to API
             requiredValueMissing = /*element.required && */newDate == nil
             featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)

@@ -106,6 +106,9 @@ struct MultiLineTextEntry: View {
         }
         .onChange(of: text) { newValue in
             if !isPlaceholder {
+                guard newValue != element.value else {
+                    return
+                }
                 featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
             }
         }

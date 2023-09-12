@@ -79,6 +79,9 @@ struct SingleLineTextEntry: View {
             }
         }
         .onChange(of: text) { newValue in
+            guard newValue != element.value else {
+                return
+            }
             featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
         }
     }
