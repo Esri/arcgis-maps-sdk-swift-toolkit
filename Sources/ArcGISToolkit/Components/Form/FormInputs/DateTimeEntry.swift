@@ -63,11 +63,11 @@ struct DateTimeEntry: View {
             if element.value.isEmpty {
                 date = nil
             } else {
-                date = DateFormatter.arcGISDateFormatter.date(from: element.value)
+                date = try? Date(element.value, strategy: Date.ParseStrategy.arcGISDateParseStrategy)
             }
         }
         .onChange(of: date) { newDate in
-            guard let currentDate = DateFormatter.arcGISDateFormatter.date(from: element.value),
+            guard let currentDate = try? Date(element.value, strategy: Date.ParseStrategy.arcGISDateParseStrategy),
                   newDate != currentDate else {
                 return
             }
@@ -208,12 +208,14 @@ struct DateTimeEntry: View {
     }
 }
 
-private extension DateFormatter {
-    static let arcGISDateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        return dateFormatter
-    }()
+private extension Date.ParseStrategy {
+    /// A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
+    static var arcGISDateParseStrategy: Self {
+        .fixed(
+            format: "\(year: .defaultDigits)-\(month: .defaultDigits)-\(day: .defaultDigits)T\(hour: .defaultDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .defaultDigits):\(second: .defaultDigits)",
+            timeZone: .current
+        )
+    }
 }
 
 private extension String {
