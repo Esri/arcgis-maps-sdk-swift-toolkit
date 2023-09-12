@@ -63,11 +63,11 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***if element.value.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***date = DateFormatter.arcGISDateFormatter.date(from: element.value)
+***REMOVED******REMOVED******REMOVED******REMOVED***date = try? Date(element.value, strategy: Date.ParseStrategy.arcGISDateParseStrategy)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
-***REMOVED******REMOVED******REMOVED***guard let currentDate = DateFormatter.arcGISDateFormatter.date(from: element.value),
+***REMOVED******REMOVED******REMOVED***guard let currentDate = try? Date(element.value, strategy: Date.ParseStrategy.arcGISDateParseStrategy),
 ***REMOVED******REMOVED******REMOVED******REMOVED***  newDate != currentDate else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
@@ -208,12 +208,14 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 
-private extension DateFormatter {
-***REMOVED***static let arcGISDateFormatter: DateFormatter = {
-***REMOVED******REMOVED***let dateFormatter = DateFormatter()
-***REMOVED******REMOVED***dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-***REMOVED******REMOVED***return dateFormatter
-***REMOVED***()
+private extension Date.ParseStrategy {
+***REMOVED******REMOVED***/ A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
+***REMOVED***static var arcGISDateParseStrategy: Self {
+***REMOVED******REMOVED***.fixed(
+***REMOVED******REMOVED******REMOVED***format: "\(year: .defaultDigits)-\(month: .defaultDigits)-\(day: .defaultDigits)T\(hour: .defaultDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .defaultDigits):\(second: .defaultDigits)",
+***REMOVED******REMOVED******REMOVED***timeZone: .current
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 
 private extension String {
