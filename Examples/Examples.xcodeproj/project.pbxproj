@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C5C14EF2AA14CAD00153B82 /* ARViewExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5C14EE2AA14CAD00153B82 /* ARViewExampleView.swift */; ***REMOVED***;
 		4D19FCB52881C8F3002601E8 /* PopupExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */; ***REMOVED***;
 		75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */; ***REMOVED***;
 		752A4FC4294D268000A49479 /* MapDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752A4FC2294D268000A49479 /* MapDataModel.swift */; ***REMOVED***;
@@ -44,6 +45,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1C5C14EE2AA14CAD00153B82 /* ARViewExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityNetworkTraceExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		752A4FC2294D268000A49479 /* MapDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataModel.swift; sourceTree = "<group>"; ***REMOVED***;
@@ -94,15 +96,16 @@
 		E40F58042656E509006F5CB9 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
-				4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */,
+				1C5C14EE2AA14CAD00153B82 /* ARViewExampleView.swift */,
 				E4C389D426B8A12C002BC255 /* BasemapGalleryExampleView.swift */,
 				75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */,
+				75657E4727ABAC8400EE865B /* CompassExampleView.swift */,
+				E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */,
+				E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */,
 				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */,
+				4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */,
 				75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */,
 				E42BFBE82672BF9500159107 /* SearchExampleView.swift */,
-				E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */,
-				75657E4727ABAC8400EE865B /* CompassExampleView.swift */,
-				E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */,
 				75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */,
 			);
 			name = Examples;
@@ -270,6 +273,7 @@
 				E48A73452658227100F5C118 /* Examples.swift in Sources */,
 				75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */,
 				75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */,
+				1C5C14EF2AA14CAD00153B82 /* ARViewExampleView.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
 				E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */,
