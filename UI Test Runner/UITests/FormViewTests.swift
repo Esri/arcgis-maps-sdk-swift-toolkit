@@ -366,9 +366,10 @@ final class FormViewTests: XCTestCase {
             "The field title isn't hittable."
         )
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        let localDate = formatter.date(from: "1969-07-07T20:17:00")
+        let localDate = try? Date(
+            "1969-07-07T20:17:00",
+            strategy: Date.ParseStrategy.arcGISDateParseStrategy
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -441,9 +442,10 @@ final class FormViewTests: XCTestCase {
             "The field value isn't hittable."
         )
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let localDate = formatter.date(from: "2023-07-14")
+        let localDate = try? Date(
+            "2023-07-14T08:53:00",
+            strategy: Date.ParseStrategy.arcGISDateParseStrategy
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -502,9 +504,10 @@ final class FormViewTests: XCTestCase {
             "End date and Time 7/27/1969 12:00:00 AM"
         )
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let localDate = formatter.date(from: "1969-07-27T07:00:00.000Z")
+        let localDate = try? Date(
+            "1969-07-27T00:00:00",
+            strategy: Date.ParseStrategy.arcGISDateParseStrategy
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -555,9 +558,10 @@ final class FormViewTests: XCTestCase {
         
         julyFirstButton.tap()
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let localDate = formatter.date(from: "1969-07-01T07:00:00.000Z")
+        let localDate = try? Date(
+            "1969-07-01T07:00:00",
+            strategy: Date.ParseStrategy.arcGISDateParseStrategy
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -605,6 +609,16 @@ final class FormViewTests: XCTestCase {
         XCTAssertEqual(
             fieldValue.label,
             "No Value"
+        )
+    }
+}
+
+private extension Date.ParseStrategy {
+    /// A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
+    static var arcGISDateParseStrategy: Self {
+        .fixed(
+            format: "\(year: .defaultDigits)-\(month: .defaultDigits)-\(day: .defaultDigits)T\(hour: .defaultDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .defaultDigits):\(second: .defaultDigits)",
+            timeZone: .current
         )
     }
 }
