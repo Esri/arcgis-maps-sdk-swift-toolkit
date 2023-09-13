@@ -161,8 +161,7 @@ public struct ARView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let arSCNView,
 ***REMOVED******REMOVED******REMOVED******REMOVED***let cameraController,
 ***REMOVED******REMOVED******REMOVED******REMOVED***let initialTransformation,
-***REMOVED******REMOVED******REMOVED******REMOVED***let sceneViewController,
-***REMOVED******REMOVED******REMOVED******REMOVED***let sceneViewProxy = sceneViewController.sceneViewProxy
+***REMOVED******REMOVED******REMOVED******REMOVED***let sceneViewController
 ***REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***guard lastGoodDeviceOrientation != nil else { return ***REMOVED***
@@ -195,7 +194,8 @@ public struct ARView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if deviceOrientation.isValidInterfaceOrientation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lastGoodDeviceOrientation = deviceOrientation
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.setFieldOfViewFromLensIntrinsics(
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewController.setFieldOfViewFromLensIntrinsics(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***xFocalLength: intrinsics[0][0],
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***yFocalLength: intrinsics[1][1],
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***xPrincipal: intrinsics[2][0],
@@ -207,7 +207,7 @@ public struct ARView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.
-***REMOVED******REMOVED******REMOVED***sceneViewProxy.draw()
+***REMOVED******REMOVED******REMOVED***sceneViewController.draw()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Call our arSCNViewDelegate method.
 ***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.renderer?(renderer, willRenderScene: scene, atTime: time)

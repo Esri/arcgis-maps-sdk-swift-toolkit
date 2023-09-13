@@ -38,8 +38,8 @@ class ArcGISSceneViewController: UIHostingController<ArcGISSceneViewController.H
 ***REMOVED******REMOVED***super.init(rootView: HostedView(model: model))
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var sceneViewProxy: SceneViewProxy? {
-***REMOVED******REMOVED***get { model.sceneViewProxy ***REMOVED***
+***REMOVED***required dynamic init?(coder aDecoder: NSCoder) {
+***REMOVED******REMOVED***fatalError("init(coder:) has not been implemented")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var scene: ArcGIS.Scene {
@@ -87,8 +87,28 @@ class ArcGISSceneViewController: UIHostingController<ArcGISSceneViewController.H
 ***REMOVED******REMOVED***set { model.viewDrawingMode = newValue ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***required dynamic init?(coder aDecoder: NSCoder) {
-***REMOVED******REMOVED***fatalError("init(coder:) has not been implemented")
+***REMOVED***func draw() {
+***REMOVED******REMOVED***model.sceneViewProxy?.draw()
+***REMOVED***
+***REMOVED***
+***REMOVED***func setFieldOfViewFromLensIntrinsics(
+***REMOVED******REMOVED***xFocalLength: Float,
+***REMOVED******REMOVED***yFocalLength: Float,
+***REMOVED******REMOVED***xPrincipal: Float,
+***REMOVED******REMOVED***yPrincipal: Float,
+***REMOVED******REMOVED***xImageSize: Float,
+***REMOVED******REMOVED***yImageSize: Float,
+***REMOVED******REMOVED***deviceOrientation: UIDeviceOrientation
+***REMOVED***) {
+***REMOVED******REMOVED***model.sceneViewProxy?.setFieldOfViewFromLensIntrinsics(
+***REMOVED******REMOVED******REMOVED***xFocalLength: xFocalLength,
+***REMOVED******REMOVED******REMOVED***yFocalLength: yFocalLength,
+***REMOVED******REMOVED******REMOVED***xPrincipal: xPrincipal,
+***REMOVED******REMOVED******REMOVED***yPrincipal: yPrincipal,
+***REMOVED******REMOVED******REMOVED***xImageSize: xImageSize,
+***REMOVED******REMOVED******REMOVED***yImageSize: yImageSize,
+***REMOVED******REMOVED******REMOVED***deviceOrientation: deviceOrientation
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
