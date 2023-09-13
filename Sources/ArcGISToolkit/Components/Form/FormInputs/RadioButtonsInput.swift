@@ -11,8 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 struct RadioButtonsInput: View {
     @Environment(\.formElementPadding) var elementPadding
@@ -22,7 +22,6 @@ struct RadioButtonsInput: View {
     
     private var featureForm: FeatureForm?
     
-
     /// The current date selection.
     @State private var date: Date?
     
