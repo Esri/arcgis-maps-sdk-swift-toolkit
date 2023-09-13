@@ -63,7 +63,7 @@ struct DateTimeEntry: View {
             if element.value.isEmpty {
                 date = nil
             } else {
-                date = try? Date(element.value, strategy: Date.ParseStrategy.arcGISDateParseStrategy)
+                date = try? Date(element.value, strategy: .arcGISDateParseStrategy)
             }
         }
         .onChange(of: date) { newDate in
