@@ -46,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		1C5C14EE2AA14CAD00153B82 /* ARViewExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewExampleView.swift; sourceTree = "<group>"; };
+		1C5C14EE2AA14CAD00153B82 /* FlyoverExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyoverExampleView.swift; sourceTree = "<group>"; };
 		4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupExampleView.swift; sourceTree = "<group>"; };
 		75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityNetworkTraceExampleView.swift; sourceTree = "<group>"; };
 		752A4FC2294D268000A49479 /* MapDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataModel.swift; sourceTree = "<group>"; };
@@ -97,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				1C5C14EE2AA14CAD00153B82 /* ARViewExampleView.swift */,
+				1C5C14EE2AA14CAD00153B82 /* FlyoverExampleView.swift */,
 				E4C389D426B8A12C002BC255 /* BasemapGalleryExampleView.swift */,
 				75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */,
 				75657E4727ABAC8400EE865B /* CompassExampleView.swift */,
@@ -274,6 +276,7 @@
 				75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */,
 				75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */,
 				1C5C14EF2AA14CAD00153B82 /* ARViewExampleView.swift in Sources */,
+				1C5C14EF2AA14CAD00153B82 /* FlyoverExampleView.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
 				E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */,
