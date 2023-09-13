@@ -10,7 +10,6 @@ import UIKit
 import SwiftUI
 import ArcGIS
 
-@MainActor
 class ArcGISSceneViewController: UIHostingController<ArcGISSceneViewController.HostedView> {
     private let model: HostedViewModel
     
