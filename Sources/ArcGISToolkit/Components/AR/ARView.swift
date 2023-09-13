@@ -152,8 +152,8 @@ public struct ARView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.renderer?(renderer, didApplyConstraintsAtTime: time)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***@MainActor
 ***REMOVED******REMOVED***public func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
+
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If we aren't tracking yet, return.
 ***REMOVED******REMOVED******REMOVED******REMOVED***  guard isTracking else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***

@@ -10,7 +10,6 @@ import UIKit
 ***REMOVED***
 ***REMOVED***
 
-@MainActor
 class ArcGISSceneViewController: UIHostingController<ArcGISSceneViewController.HostedView> {
 ***REMOVED***private let model: HostedViewModel
 ***REMOVED***
