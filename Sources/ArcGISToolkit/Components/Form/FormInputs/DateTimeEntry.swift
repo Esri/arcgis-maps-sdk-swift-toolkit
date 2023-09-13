@@ -208,7 +208,7 @@ struct DateTimeEntry: View {
     }
 }
 
-private extension Date.ParseStrategy {
+private extension ParseStrategy where Self == Date.ParseStrategy {
     /// A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
     static var arcGISDateParseStrategy: Self {
         .fixed(
