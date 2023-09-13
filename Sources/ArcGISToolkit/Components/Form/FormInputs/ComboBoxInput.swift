@@ -49,7 +49,6 @@ struct ComboBoxInput: View {
             // Need to figure out $selectedValue, given that codedValue.code is an "Object"
             // CodedValue is equatable and hashable, so maybe that's enough??
             Picker(element.label, selection: $selectedName) {
-                Text("coded values go here")
 //                ForEach(element.codedValues) { codedValue in
 //                    Text(codedValue.name)
 //                        .tag(codedValue.code)
