@@ -33,7 +33,7 @@ public struct RealityGeoView: UIViewControllerRepresentable {
             cameraController: cameraController,
             renderVideoFeed: renderVideoFeed
         )
-        viewController.arSCNView.delegate = context.coordinator
+        viewController.arView.delegate = context.coordinator
         setProperties(for: viewController, with: context)
         return viewController
     }
@@ -55,7 +55,7 @@ public struct RealityGeoView: UIViewControllerRepresentable {
     }
     
     private func setProperties(for viewController: RealityGeoViewController, with context: Context) {
-        context.coordinator.arSCNView = viewController.arSCNView
+        context.coordinator.arView = viewController.arView
         context.coordinator.isTracking = viewController.isTracking
         context.coordinator.lastGoodDeviceOrientation = viewController.lastGoodDeviceOrientation
         context.coordinator.initialTransformation = viewController.initialTransformation
@@ -69,11 +69,11 @@ public struct RealityGeoView: UIViewControllerRepresentable {
 
 extension RealityGeoView {
     public class Coordinator: NSObject, ARSCNViewDelegate, SCNSceneRendererDelegate, ARSessionObserver {
-        /// We implement `ARSCNViewDelegate` methods, but will use `arSCNViewDelegate` to forward them to clients.
+        /// We implement `ARSCNViewDelegate` methods, but will use `delegate` to forward them to clients.
         /// - Since: 200.3
-        public weak var arSCNViewDelegate: ARSCNViewDelegate?
+        public weak var delegate: ARSCNViewDelegate?
         
-        var arSCNView: ARSCNView?
+        var arView: ARSCNView?
         var isTracking: Bool = false
         var sceneViewController: ArcGISSceneViewController?
         var lastGoodDeviceOrientation: UIDeviceOrientation?
@@ -82,63 +82,63 @@ extension RealityGeoView {
         // ARSCNViewDelegate methods
         
         public func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-            arSCNViewDelegate?.renderer?(renderer, didAdd: node, for: anchor)
+            delegate?.renderer?(renderer, didAdd: node, for: anchor)
         }
         
         public func renderer(_ renderer: SCNSceneRenderer, willUpdate node: SCNNode, for anchor: ARAnchor) {
-            arSCNViewDelegate?.renderer?(renderer, willUpdate: node, for: anchor)
+            delegate?.renderer?(renderer, willUpdate: node, for: anchor)
         }
         
         public func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-            arSCNViewDelegate?.renderer?(renderer, didUpdate: node, for: anchor)
+            delegate?.renderer?(renderer, didUpdate: node, for: anchor)
         }
         
         public func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-            arSCNViewDelegate?.renderer?(renderer, didRemove: node, for: anchor)
+            delegate?.renderer?(renderer, didRemove: node, for: anchor)
         }
         
         // ARSessionObserver methods
         
         public func session(_ session: ARSession, didFailWithError error: Error) {
-            arSCNViewDelegate?.session?(session, didFailWithError: error)
+            delegate?.session?(session, didFailWithError: error)
         }
         
         public func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-            arSCNViewDelegate?.session?(session, cameraDidChangeTrackingState: camera)
+            delegate?.session?(session, cameraDidChangeTrackingState: camera)
         }
         
         public func sessionWasInterrupted(_ session: ARSession) {
-            arSCNViewDelegate?.sessionWasInterrupted?(session)
+            delegate?.sessionWasInterrupted?(session)
         }
         
         public func sessionInterruptionEnded(_ session: ARSession) {
-            arSCNViewDelegate?.sessionWasInterrupted?(session)
+            delegate?.sessionWasInterrupted?(session)
         }
         
         public func sessionShouldAttemptRelocalization(_ session: ARSession) -> Bool {
-            return arSCNViewDelegate?.sessionShouldAttemptRelocalization?(session) ?? false
+            return delegate?.sessionShouldAttemptRelocalization?(session) ?? false
         }
         
         public func session(_ session: ARSession, didOutputAudioSampleBuffer audioSampleBuffer: CMSampleBuffer) {
-            arSCNViewDelegate?.session?(session, didOutputAudioSampleBuffer: audioSampleBuffer)
+            delegate?.session?(session, didOutputAudioSampleBuffer: audioSampleBuffer)
         }
         
         // SCNSceneRendererDelegate methods
         
         public  func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-            arSCNViewDelegate?.renderer?(renderer, updateAtTime: time)
+            delegate?.renderer?(renderer, updateAtTime: time)
         }
         
         public func renderer(_ renderer: SCNSceneRenderer, didApplyAnimationsAtTime time: TimeInterval) {
-            arSCNViewDelegate?.renderer?(renderer, didApplyConstraintsAtTime: time)
+            delegate?.renderer?(renderer, didApplyConstraintsAtTime: time)
         }
         
         public func renderer(_ renderer: SCNSceneRenderer, didSimulatePhysicsAtTime time: TimeInterval) {
-            arSCNViewDelegate?.renderer?(renderer, didSimulatePhysicsAtTime: time)
+            delegate?.renderer?(renderer, didSimulatePhysicsAtTime: time)
         }
         
         public func renderer(_ renderer: SCNSceneRenderer, didApplyConstraintsAtTime time: TimeInterval) {
-            arSCNViewDelegate?.renderer?(renderer, didApplyConstraintsAtTime: time)
+            delegate?.renderer?(renderer, didApplyConstraintsAtTime: time)
         }
         
         public func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
@@ -146,7 +146,7 @@ extension RealityGeoView {
             //  guard isTracking else { return }
             
             guard
-                let arSCNView,
+                let arView,
                 let initialTransformation,
                 let sceneViewController
             else { return }
@@ -154,7 +154,7 @@ extension RealityGeoView {
             guard lastGoodDeviceOrientation != nil else { return }
             
             // Get transform from SCNView.pointOfView.
-            guard let transform = arSCNView.pointOfView?.transform else { return }
+            guard let transform = arView.pointOfView?.transform else { return }
             let cameraTransform = simd_double4x4(transform)
             
             let cameraQuat = simd_quatd(cameraTransform)
@@ -173,7 +173,7 @@ extension RealityGeoView {
             cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
             
             // Set FOV on camera.
-            if let camera = arSCNView.session.currentFrame?.camera {
+            if let camera = arView.session.currentFrame?.camera {
                 let intrinsics = camera.intrinsics
                 let imageResolution = camera.imageResolution
                 
@@ -198,11 +198,11 @@ extension RealityGeoView {
             sceneViewController.draw()
             
             // Call our arSCNViewDelegate method.
-            arSCNViewDelegate?.renderer?(renderer, willRenderScene: scene, atTime: time)
+            delegate?.renderer?(renderer, willRenderScene: scene, atTime: time)
         }
         
         public func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
-            arSCNViewDelegate?.renderer?(renderer, didRenderScene: scene, atTime: time)
+            delegate?.renderer?(renderer, didRenderScene: scene, atTime: time)
         }
     }
 }
@@ -210,7 +210,7 @@ extension RealityGeoView {
 public class RealityGeoViewController: UIViewController {
     /// The view used to display the `ARKit` camera image and 3D `SceneKit` content.
     /// - Since: 200.3
-    let arSCNView = ARSCNView(frame: .zero)
+    let arView = ARSCNView(frame: .zero)
     
     /// Denotes whether tracking location and angles has started.
     /// - Since: 200.3
@@ -225,7 +225,7 @@ public class RealityGeoViewController: UIViewController {
         didSet {
             // If we're already tracking, reset tracking to use the new configuration.
             if isTracking, deviceSupportsARKit {
-                arSCNView.session.run(arConfiguration, options: .resetTracking)
+                arView.session.run(arConfiguration, options: .resetTracking)
             }
         }
     }
@@ -308,7 +308,7 @@ public class RealityGeoViewController: UIViewController {
         if !deviceSupportsARKit || !renderVideoFeed {
             // User is not using ARKit, or they don't want to see video,
             // set the arSCNView.alpha to 0.0 so it doesn't display.
-            arSCNView.alpha = 0
+            arView.alpha = 0
         }
     }
     
@@ -324,9 +324,9 @@ public class RealityGeoViewController: UIViewController {
         super.viewDidLoad()
         
         if deviceSupportsARKit {
-            view.addSubview(arSCNView)
-            arSCNView.frame = view.bounds
-            arSCNView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            view.addSubview(arView)
+            arView.frame = view.bounds
+            arView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         }
         
         // Add scene view controller
@@ -355,7 +355,7 @@ public class RealityGeoViewController: UIViewController {
     private func finalizeStart() {
         // Run the ARSession.
         if deviceSupportsARKit {
-            arSCNView.session.run(arConfiguration, options: .resetTracking)
+            arView.session.run(arConfiguration, options: .resetTracking)
         }
         isTracking = true
     }
@@ -385,7 +385,7 @@ public class RealityGeoViewController: UIViewController {
     /// - Since: 200.3
     public func stopTracking() async {
         Task.detached { @MainActor in
-            self.arSCNView.session.pause()
+            self.arView.session.pause()
             await self.locationDataSource?.stop()
             self.isTracking = false
         }
