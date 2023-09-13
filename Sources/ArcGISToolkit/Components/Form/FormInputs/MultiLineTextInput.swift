@@ -14,8 +14,8 @@
 import SwiftUI
 import ArcGIS
 
-/// A view for text entry spanning multiple lines.
-struct MultiLineTextEntry: View {
+/// A view for text input spanning multiple lines.
+struct MultiLineTextInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// The model for the ancestral form view.
@@ -43,7 +43,7 @@ struct MultiLineTextEntry: View {
     /// The input configuration of the field.
     private let input: TextAreaFormInput
     
-    /// Creates a view for text entry spanning multiple lines.
+    /// Creates a view for text input spanning multiple lines.
     /// - Parameters:
     ///   - featureForm: <#featureForm description#>
     ///   - element: The field's parent element.
@@ -84,8 +84,8 @@ struct MultiLineTextEntry: View {
                 model.focusedFieldName = element.fieldName
             }
         }
-        .formTextEntryStyle()
-        TextEntryFooter(
+        .formTextInputStyle()
+        TextInputFooter(
             currentLength: isPlaceholder ? .zero : text.count,
             isFocused: isFocused,
             element: element,

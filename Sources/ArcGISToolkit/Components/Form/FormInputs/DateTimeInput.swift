@@ -14,7 +14,7 @@
 import SwiftUI
 import ArcGIS
 
-struct DateTimeEntry: View {
+struct DateTimeInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// The model for the ancestral form view.
@@ -22,7 +22,6 @@ struct DateTimeEntry: View {
     
     private var featureForm: FeatureForm?
     
-
     /// The current date selection.
     @State private var date: Date?
     
@@ -38,7 +37,7 @@ struct DateTimeEntry: View {
     /// The input configuration of the field.
     private let input: DateTimePickerFormInput
     
-    /// Creates a view for a date and time (if applicable) entry.
+    /// Creates a view for a date (and time if applicable) input.
     /// - Parameters:
     ///   - featureForm: <#featureForm description#>
     ///   - element: The field's parent element.
@@ -84,7 +83,7 @@ struct DateTimeEntry: View {
     }
     
     /// Elements for display the date selection.
-    /// - Note: Secondary foreground color is used across entry views for consistency.
+    /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
         HStack {
             Text(formattedDate ?? .noValue)
@@ -107,7 +106,7 @@ struct DateTimeEntry: View {
             }
         }
         .padding([.vertical], 1.5)
-        .formTextEntryStyle()
+        .formTextInputStyle()
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {

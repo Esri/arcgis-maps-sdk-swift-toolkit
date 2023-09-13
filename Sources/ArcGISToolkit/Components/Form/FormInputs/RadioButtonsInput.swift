@@ -37,7 +37,7 @@ struct RadioButtonsInput: View {
     /// The input configuration of the field.
     private let input: DateTimePickerFormInput
     
-    /// Creates a view for a date and time (if applicable) entry.
+    /// Creates a view for a date (and time if applicable) input.
     /// - Parameters:
     ///   - featureForm: <#featureForm description#>
     ///   - element: The field's parent element.
@@ -83,7 +83,7 @@ struct RadioButtonsInput: View {
     }
     
     /// Elements for display the date selection.
-    /// - Note: Secondary foreground color is used across entry views for consistency.
+    /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
         HStack {
             Text(formattedDate ?? .noValue)
@@ -103,7 +103,7 @@ struct RadioButtonsInput: View {
             }
         }
         .padding([.vertical], 1.5)
-        .formTextEntryStyle()
+        .formTextInputStyle()
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {
