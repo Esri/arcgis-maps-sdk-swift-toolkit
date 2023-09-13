@@ -15,7 +15,7 @@
 ***REMOVED***
 ***REMOVED***Toolkit
 
-struct ARViewExampleView: View {
+struct FlyoverExampleView: View {
 ***REMOVED***private var scene: ArcGIS.Scene = {
 ***REMOVED******REMOVED***let scene = Scene(
 ***REMOVED******REMOVED******REMOVED***item: PortalItem(
