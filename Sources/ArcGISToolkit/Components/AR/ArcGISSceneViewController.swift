@@ -12,7 +12,7 @@ import UIKit
 
 @MainActor
 class ArcGISSceneViewController: UIHostingController<ArcGISSceneViewController.HostedView> {
-***REMOVED***private let model: ViewModel
+***REMOVED***private let model: HostedViewModel
 ***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***scene: ArcGIS.Scene = Scene(),
@@ -37,6 +37,10 @@ class ArcGISSceneViewController: UIHostingController<ArcGISSceneViewController.H
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***super.init(rootView: HostedView(model: model))
+***REMOVED***
+***REMOVED***
+***REMOVED***var sceneViewProxy: SceneViewProxy? {
+***REMOVED******REMOVED***get { model.sceneViewProxy ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var scene: ArcGIS.Scene {
@@ -91,9 +95,9 @@ class ArcGISSceneViewController: UIHostingController<ArcGISSceneViewController.H
 
 extension ArcGISSceneViewController {
 ***REMOVED***struct HostedView: View {
-***REMOVED******REMOVED***@ObservedObject private var model: ViewModel
+***REMOVED******REMOVED***@ObservedObject private var model: HostedViewModel
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***fileprivate init(model: ViewModel) {
+***REMOVED******REMOVED***fileprivate init(model: HostedViewModel) {
 ***REMOVED******REMOVED******REMOVED***self.model = model
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -111,6 +115,11 @@ extension ArcGISSceneViewController {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(model.isAttributionBarHidden)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(model.viewDrawingMode)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("-- setting proxy")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.sceneViewProxy = proxy
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("-- setting proxy 2")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.sceneViewProxy = proxy
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea()
@@ -120,7 +129,7 @@ extension ArcGISSceneViewController {
 ***REMOVED***
 
 @MainActor
-private class ViewModel: ObservableObject {
+private class HostedViewModel: ObservableObject {
 ***REMOVED***var sceneViewProxy: SceneViewProxy?
 ***REMOVED***
 ***REMOVED***@Published var scene: ArcGIS.Scene
