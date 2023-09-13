@@ -366,7 +366,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let localDate = try? Date("1969-07-07T20:17:00", strategy: .arcGISDateParseStrategy)
+***REMOVED******REMOVED***let localDate = Calendar.current.date(
+***REMOVED******REMOVED******REMOVED***from: DateComponents(
+***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 1969, month: 7, day: 8, hour: 3, minute: 17
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -439,7 +443,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The field value isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let localDate = try? Date("2023-07-14T08:53:00", strategy: .arcGISDateParseStrategy)
+***REMOVED******REMOVED***let localDate = Calendar.current.date(
+***REMOVED******REMOVED******REMOVED***from: DateComponents(
+***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 2023, month: 7, day: 15, hour: 3, minute: 53
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -498,7 +506,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"End date and Time 7/27/1969 12:00:00 AM"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let localDate = try? Date("1969-07-27T00:00:00", strategy: .arcGISDateParseStrategy)
+***REMOVED******REMOVED***let localDate = Calendar.current.date(
+***REMOVED******REMOVED******REMOVED***from: DateComponents(
+***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 1969, month: 7, day: 27, hour: 7
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -549,7 +561,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***julyFirstButton.tap()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let localDate = try? Date("1969-07-01T00:00:00", strategy: .arcGISDateParseStrategy)
+***REMOVED******REMOVED***let localDate = Calendar.current.date(
+***REMOVED******REMOVED******REMOVED***from: DateComponents(
+***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 1969, month: 7, day: 1, hour: 7
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -597,16 +613,6 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
 ***REMOVED******REMOVED******REMOVED***"No Value"
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-
-private extension ParseStrategy where Self == Date.ParseStrategy {
-***REMOVED******REMOVED***/ A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
-***REMOVED***static var arcGISDateParseStrategy: Self {
-***REMOVED******REMOVED***.fixed(
-***REMOVED******REMOVED******REMOVED***format: "\(year: .defaultDigits)-\(month: .defaultDigits)-\(day: .defaultDigits)T\(hour: .defaultDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .defaultDigits):\(second: .defaultDigits)",
-***REMOVED******REMOVED******REMOVED***timeZone: .current
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
