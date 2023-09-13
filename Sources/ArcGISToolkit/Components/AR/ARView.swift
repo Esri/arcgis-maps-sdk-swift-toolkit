@@ -207,7 +207,7 @@ public struct ARView: UIViewControllerRepresentable {
             }
             
             // Render the Scene with the new transformation.
-            sceneViewProxy.manualDraw()
+            sceneViewProxy.draw()
             
             // Call our arSCNViewDelegate method.
             arSCNViewDelegate?.renderer?(renderer, willRenderScene: scene, atTime: time)
