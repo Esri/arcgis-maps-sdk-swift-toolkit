@@ -38,8 +38,8 @@ class ArcGISSceneViewController: UIHostingController<ArcGISSceneViewController.H
         super.init(rootView: HostedView(model: model))
     }
     
-    var sceneViewProxy: SceneViewProxy? {
-        get { model.sceneViewProxy }
+    required dynamic init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     var scene: ArcGIS.Scene {
@@ -87,8 +87,28 @@ class ArcGISSceneViewController: UIHostingController<ArcGISSceneViewController.H
         set { model.viewDrawingMode = newValue }
     }
     
-    required dynamic init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func draw() {
+        model.sceneViewProxy?.draw()
+    }
+    
+    func setFieldOfViewFromLensIntrinsics(
+        xFocalLength: Float,
+        yFocalLength: Float,
+        xPrincipal: Float,
+        yPrincipal: Float,
+        xImageSize: Float,
+        yImageSize: Float,
+        deviceOrientation: UIDeviceOrientation
+    ) {
+        model.sceneViewProxy?.setFieldOfViewFromLensIntrinsics(
+            xFocalLength: xFocalLength,
+            yFocalLength: yFocalLength,
+            xPrincipal: xPrincipal,
+            yPrincipal: yPrincipal,
+            xImageSize: xImageSize,
+            yImageSize: yImageSize,
+            deviceOrientation: deviceOrientation
+        )
     }
 }
 

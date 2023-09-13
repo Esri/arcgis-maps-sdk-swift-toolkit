@@ -161,8 +161,7 @@ public struct ARView: UIViewControllerRepresentable {
                 let arSCNView,
                 let cameraController,
                 let initialTransformation,
-                let sceneViewController,
-                let sceneViewProxy = sceneViewController.sceneViewProxy
+                let sceneViewController
             else { return }
             
             guard lastGoodDeviceOrientation != nil else { return }
@@ -195,7 +194,8 @@ public struct ARView: UIViewControllerRepresentable {
                 if deviceOrientation.isValidInterfaceOrientation {
                     lastGoodDeviceOrientation = deviceOrientation
                 }
-                sceneViewProxy.setFieldOfViewFromLensIntrinsics(
+                
+                sceneViewController.setFieldOfViewFromLensIntrinsics(
                     xFocalLength: intrinsics[0][0],
                     yFocalLength: intrinsics[1][1],
                     xPrincipal: intrinsics[2][0],
@@ -207,7 +207,7 @@ public struct ARView: UIViewControllerRepresentable {
             }
             
             // Render the Scene with the new transformation.
-            sceneViewProxy.draw()
+            sceneViewController.draw()
             
             // Call our arSCNViewDelegate method.
             arSCNViewDelegate?.renderer?(renderer, willRenderScene: scene, atTime: time)
