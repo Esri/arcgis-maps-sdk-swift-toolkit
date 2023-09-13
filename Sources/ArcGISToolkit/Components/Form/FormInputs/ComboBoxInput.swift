@@ -28,11 +28,6 @@ struct ComboBoxInput: View {
     
     @State private var value: Bool?
     
-    enum Flavor: String, CaseIterable, Identifiable {
-        case chocolate, vanilla, strawberry
-        var id: Self { self }
-    }
-    
     @State private var selectedName: String?
     
     /// Creates a view for a combo box input.
@@ -53,18 +48,14 @@ struct ComboBoxInput: View {
             
             // Need to figure out $selectedValue, given that codedValue.code is an "Object"
             // CodedValue is equatable and hashable, so maybe that's enough??
-            Picker("element.label", selection: $selectedName) {
+            Picker(element.label, selection: $selectedName) {
                 Text("coded values go here")
 //                ForEach(element.codedValues) { codedValue in
 //                    Text(codedValue.name)
 //                        .tag(codedValue.code)
 //                }
             }
-//                Picker("Flavor", selection: $selectedFlavor) {
-//                    Text("Chocolate").tag(Flavor.chocolate)
-//                    Text("Vanilla").tag(Flavor.vanilla)
-//                    Text("Strawberry").tag(Flavor.strawberry)
-//                }
+            .accessibilityIdentifier("\(element.label) Picker")
             .pickerStyle(.menu)
             
             footer
