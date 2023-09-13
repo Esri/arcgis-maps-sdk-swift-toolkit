@@ -35,7 +35,7 @@ struct ComboBoxInput: View {
     
     @State private var selectedName: String?
     
-    /// Creates a view for a Switch input.
+    /// Creates a view for a combo box input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
     ///   - element: The field's parent element.
@@ -85,7 +85,7 @@ struct ComboBoxInput: View {
         }
     }
     
-    /// The message shown below the date editor and viewer.
+    /// The message shown below the picker.
     @ViewBuilder var footer: some View {
         Text(element.description)
             .font(.footnote)
