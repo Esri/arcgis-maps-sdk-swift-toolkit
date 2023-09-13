@@ -14,8 +14,8 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view for text entry spanning multiple lines.
-struct MultiLineTextEntry: View {
+***REMOVED***/ A view for text input spanning multiple lines.
+struct MultiLineTextInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
@@ -43,7 +43,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED***/ The input configuration of the field.
 ***REMOVED***private let input: TextAreaFormInput
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a view for text entry spanning multiple lines.
+***REMOVED******REMOVED***/ Creates a view for text input spanning multiple lines.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: <#featureForm description#>
 ***REMOVED******REMOVED***/   - element: The field's parent element.
@@ -84,8 +84,8 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = element.fieldName
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.formTextEntryStyle()
-***REMOVED******REMOVED***TextEntryFooter(
+***REMOVED******REMOVED***.formTextInputStyle()
+***REMOVED******REMOVED***TextInputFooter(
 ***REMOVED******REMOVED******REMOVED***currentLength: isPlaceholder ? .zero : text.count,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
 ***REMOVED******REMOVED******REMOVED***element: element,

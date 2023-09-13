@@ -14,43 +14,43 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view shown at the bottom of each text entry element in a form.
-struct TextEntryFooter: View {
+***REMOVED***/ A view shown at the bottom of each text input element in a form.
+struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ An error that is present when a length constraint is not met.
 ***REMOVED***@State private var validationError: LengthError?
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the text entry field has previously satisfied the minimum
+***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field has previously satisfied the minimum
 ***REMOVED******REMOVED***/ length at any point in time.
 ***REMOVED***@State private var hasPreviouslySatisfiedMinimum: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ The current length of the text in the text entry field.
+***REMOVED******REMOVED***/ The current length of the text in the text input field.
 ***REMOVED***private let currentLength: Int
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the text entry field is focused.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field is focused.
 ***REMOVED***private let isFocused: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ The description of the text entry field.
+***REMOVED******REMOVED***/ The description of the text input field.
 ***REMOVED***private let description: String
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the text entry field is required.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field is required.
 ***REMOVED***private let isRequired: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ The maximum allowable length of text in the text entry field.
+***REMOVED******REMOVED***/ The maximum allowable length of text in the text input field.
 ***REMOVED***private let maxLength: Int
 ***REMOVED***
-***REMOVED******REMOVED***/ The minimum allowable length of text in the text entry field.
+***REMOVED******REMOVED***/ The minimum allowable length of text in the text input field.
 ***REMOVED***private let minLength: Int
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a footer shown at the bottom of each text entry element in a form.
+***REMOVED******REMOVED***/ Creates a footer shown at the bottom of each text input element in a form.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - currentLength: The current length of the text in the text entry field.
-***REMOVED******REMOVED***/   - isFocused: A Boolean value indicating whether the text entry field is focused.
-***REMOVED******REMOVED***/   - element: A field element that provides a description for the text entry and whether
-***REMOVED******REMOVED***/  or not text is required for this entry.
-***REMOVED******REMOVED***/   - input: A form input that provides length constraints for the text entry.
+***REMOVED******REMOVED***/   - currentLength: The current length of the text in the text input field.
+***REMOVED******REMOVED***/   - isFocused: A Boolean value indicating whether the text input field is focused.
+***REMOVED******REMOVED***/   - element: A field element that provides a description for the text input and whether
+***REMOVED******REMOVED***/  or not text is required for this input.
+***REMOVED******REMOVED***/   - input: A form input that provides length constraints for the text input.
 ***REMOVED***init(
 ***REMOVED******REMOVED***currentLength: Int,
 ***REMOVED******REMOVED***isFocused: Bool,
@@ -74,7 +74,7 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
 ***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
 ***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***fatalError("TextEntryFooter can only be used with TextAreaFormInput or TextBoxFormInput")
+***REMOVED******REMOVED******REMOVED***fatalError("TextInputFooter can only be used with TextAreaFormInput or TextBoxFormInput")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -109,7 +109,7 @@ struct TextEntryFooter: View {
 ***REMOVED***
 ***REMOVED***
 
-extension TextEntryFooter {
+extension TextInputFooter {
 ***REMOVED******REMOVED***/ The primary message to be shown in the footer, if any, dependent on the presence of a
 ***REMOVED******REMOVED***/ validation error, description, and focus state.
 ***REMOVED***var primaryMessage: Text? {
@@ -130,7 +130,7 @@ extension TextEntryFooter {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The length validation scheme performed on the text entry, determined by the minimum and
+***REMOVED******REMOVED***/ The length validation scheme performed on the text input, determined by the minimum and
 ***REMOVED******REMOVED***/ maximum lengths.
 ***REMOVED***var scheme: LengthValidationScheme {
 ***REMOVED******REMOVED***if minLength == 0 {

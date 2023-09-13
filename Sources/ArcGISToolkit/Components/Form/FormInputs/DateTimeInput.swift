@@ -14,7 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 
-struct DateTimeEntry: View {
+struct DateTimeInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
@@ -22,7 +22,6 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
-
 ***REMOVED******REMOVED***/ The current date selection.
 ***REMOVED***@State private var date: Date?
 ***REMOVED***
@@ -38,7 +37,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***/ The input configuration of the field.
 ***REMOVED***private let input: DateTimePickerFormInput
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a view for a date and time (if applicable) entry.
+***REMOVED******REMOVED***/ Creates a view for a date (and time if applicable) input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: <#featureForm description#>
 ***REMOVED******REMOVED***/   - element: The field's parent element.
@@ -84,7 +83,7 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Elements for display the date selection.
-***REMOVED******REMOVED***/ - Note: Secondary foreground color is used across entry views for consistency.
+***REMOVED******REMOVED***/ - Note: Secondary foreground color is used across input views for consistency.
 ***REMOVED***@ViewBuilder var dateDisplay: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Text(formattedDate ?? .noValue)
@@ -107,7 +106,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.vertical], 1.5)
-***REMOVED******REMOVED***.formTextEntryStyle()
+***REMOVED******REMOVED***.formTextInputStyle()
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***withAnimation {

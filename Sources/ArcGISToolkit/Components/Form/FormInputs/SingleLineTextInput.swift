@@ -14,8 +14,8 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view for single line text entry.
-struct SingleLineTextEntry: View {
+***REMOVED***/ A view for single line text input.
+struct SingleLineTextInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
@@ -36,7 +36,7 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***/ The input configuration of the field.
 ***REMOVED***private let input: TextBoxFormInput
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a view for single line text entry.
+***REMOVED******REMOVED***/ Creates a view for single line text input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: <#featureForm description#>
 ***REMOVED******REMOVED***/   - element: The field's parent element.
@@ -50,9 +50,9 @@ struct SingleLineTextEntry: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FormElementHeader(element: element)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across entry views for consistency.
+***REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across input views for consistency.
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
+***REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Field")
 ***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
@@ -60,8 +60,8 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.formTextEntryStyle()
-***REMOVED******REMOVED***TextEntryFooter(
+***REMOVED******REMOVED***.formTextInputStyle()
+***REMOVED******REMOVED***TextInputFooter(
 ***REMOVED******REMOVED******REMOVED***currentLength: text.count,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
 ***REMOVED******REMOVED******REMOVED***element: element,
