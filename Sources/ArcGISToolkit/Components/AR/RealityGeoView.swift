@@ -27,8 +27,8 @@ public struct RealityGeoView: UIViewControllerRepresentable {
 ***REMOVED***private let cameraController: TransformationMatrixCameraController
 ***REMOVED***private let trackingMode: RealityTrackingMode
 ***REMOVED***
-***REMOVED***public func makeUIViewController(context: Context) -> ARViewController {
-***REMOVED******REMOVED***let viewController = ARViewController(
+***REMOVED***public func makeUIViewController(context: Context) -> RealityGeoViewController {
+***REMOVED******REMOVED***let viewController = RealityGeoViewController(
 ***REMOVED******REMOVED******REMOVED***scene: scene,
 ***REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED***renderVideoFeed: renderVideoFeed
@@ -38,7 +38,7 @@ public struct RealityGeoView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***return viewController
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func updateUIViewController(_ uiViewController: ARViewController, context: Context) {
+***REMOVED***public func updateUIViewController(_ uiViewController: RealityGeoViewController, context: Context) {
 ***REMOVED******REMOVED***setProperties(for: uiViewController, with: context)
 ***REMOVED***
 ***REMOVED***
@@ -54,7 +54,7 @@ public struct RealityGeoView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***self.renderVideoFeed = renderVideoFeed
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func setProperties(for viewController: ARViewController, with context: Context) {
+***REMOVED***private func setProperties(for viewController: RealityGeoViewController, with context: Context) {
 ***REMOVED******REMOVED***context.coordinator.arSCNView = viewController.arSCNView
 ***REMOVED******REMOVED***context.coordinator.isTracking = viewController.isTracking
 ***REMOVED******REMOVED***context.coordinator.lastGoodDeviceOrientation = viewController.lastGoodDeviceOrientation
@@ -207,7 +207,7 @@ extension RealityGeoView {
 ***REMOVED***
 ***REMOVED***
 
-public class ARViewController: UIViewController {
+public class RealityGeoViewController: UIViewController {
 ***REMOVED******REMOVED***/ The view used to display the `ARKit` camera image and 3D `SceneKit` content.
 ***REMOVED******REMOVED***/ - Since: 200.3
 ***REMOVED***let arSCNView = ARSCNView(frame: .zero)
