@@ -308,17 +308,7 @@ public class ARViewController: UIViewController {
     // MARK: Private properties
     
     /// The `TransformationMatrixCameraController` used to control the Scene.
-    var cameraController = TransformationMatrixCameraController()
-    
-    /// Operations that happen after device tracking has started.
-    @MainActor
-    private func finalizeStart() {
-        // Run the ARSession.
-        if self.isUsingARKit {
-            self.arSCNView.session.run(self.arConfiguration, options: .resetTracking)
-        }
-        self.isTracking = true
-    }
+    let cameraController: TransformationMatrixCameraController
     
     var sceneViewController: ArcGISSceneViewController
     
@@ -329,6 +319,8 @@ public class ARViewController: UIViewController {
         analysisOverlays: [AnalysisOverlay] = [],
         renderVideoFeed: Bool
     ) {
+        self.cameraController = cameraController
+        
         sceneViewController = ArcGISSceneViewController(
             scene: scene,
             cameraController: cameraController,
@@ -372,6 +364,7 @@ public class ARViewController: UIViewController {
         // Add scene view controller
         addChild(sceneViewController)
         sceneViewController.view.frame = self.view.bounds
+        view.addSubview(sceneViewController.view)
         sceneViewController.view.backgroundColor = .clear
         sceneViewController.view.frame = view.bounds
         sceneViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -387,6 +380,16 @@ public class ARViewController: UIViewController {
         Task {
             await stopTracking()
         }
+    }
+    
+    /// Operations that happen after device tracking has started.
+    @MainActor
+    private func finalizeStart() {
+        // Run the ARSession.
+        if self.isUsingARKit {
+            self.arSCNView.session.run(self.arConfiguration, options: .resetTracking)
+        }
+        self.isTracking = true
     }
     
     /// Starts device tracking.
