@@ -14,43 +14,43 @@
 import SwiftUI
 import ArcGIS
 
-/// A view shown at the bottom of each text entry element in a form.
-struct TextEntryFooter: View {
+/// A view shown at the bottom of each text input element in a form.
+struct TextInputFooter: View {
     /// An error that is present when a length constraint is not met.
     @State private var validationError: LengthError?
     
-    /// A Boolean value indicating whether the text entry field has previously satisfied the minimum
+    /// A Boolean value indicating whether the text input field has previously satisfied the minimum
     /// length at any point in time.
     @State private var hasPreviouslySatisfiedMinimum: Bool
     
-    /// The current length of the text in the text entry field.
+    /// The current length of the text in the text input field.
     private let currentLength: Int
     
     /// The field's parent element.
     private let element: FieldFormElement
     
-    /// A Boolean value indicating whether the text entry field is focused.
+    /// A Boolean value indicating whether the text input field is focused.
     private let isFocused: Bool
     
-    /// The description of the text entry field.
+    /// The description of the text input field.
     private let description: String
     
-    /// A Boolean value indicating whether the text entry field is required.
+    /// A Boolean value indicating whether the text input field is required.
     private let isRequired: Bool
     
-    /// The maximum allowable length of text in the text entry field.
+    /// The maximum allowable length of text in the text input field.
     private let maxLength: Int
     
-    /// The minimum allowable length of text in the text entry field.
+    /// The minimum allowable length of text in the text input field.
     private let minLength: Int
     
-    /// Creates a footer shown at the bottom of each text entry element in a form.
+    /// Creates a footer shown at the bottom of each text input element in a form.
     /// - Parameters:
-    ///   - currentLength: The current length of the text in the text entry field.
-    ///   - isFocused: A Boolean value indicating whether the text entry field is focused.
-    ///   - element: A field element that provides a description for the text entry and whether
-    ///  or not text is required for this entry.
-    ///   - input: A form input that provides length constraints for the text entry.
+    ///   - currentLength: The current length of the text in the text input field.
+    ///   - isFocused: A Boolean value indicating whether the text input field is focused.
+    ///   - element: A field element that provides a description for the text input and whether
+    ///  or not text is required for this input.
+    ///   - input: A form input that provides length constraints for the text input.
     init(
         currentLength: Int,
         isFocused: Bool,
@@ -74,7 +74,7 @@ struct TextEntryFooter: View {
             self.minLength = input.minLength
             _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
         default:
-            fatalError("TextEntryFooter can only be used with TextAreaFormInput or TextBoxFormInput")
+            fatalError("TextInputFooter can only be used with TextAreaFormInput or TextBoxFormInput")
         }
     }
     
@@ -109,7 +109,7 @@ struct TextEntryFooter: View {
     }
 }
 
-extension TextEntryFooter {
+extension TextInputFooter {
     /// The primary message to be shown in the footer, if any, dependent on the presence of a
     /// validation error, description, and focus state.
     var primaryMessage: Text? {
@@ -130,7 +130,7 @@ extension TextEntryFooter {
         }
     }
     
-    /// The length validation scheme performed on the text entry, determined by the minimum and
+    /// The length validation scheme performed on the text input, determined by the minimum and
     /// maximum lengths.
     var scheme: LengthValidationScheme {
         if minLength == 0 {

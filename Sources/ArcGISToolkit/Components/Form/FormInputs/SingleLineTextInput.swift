@@ -14,8 +14,8 @@
 import SwiftUI
 import ArcGIS
 
-/// A view for single line text entry.
-struct SingleLineTextEntry: View {
+/// A view for single line text input.
+struct SingleLineTextInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// <#Description#>
@@ -36,7 +36,7 @@ struct SingleLineTextEntry: View {
     /// The input configuration of the field.
     private let input: TextBoxFormInput
     
-    /// Creates a view for single line text entry.
+    /// Creates a view for single line text input.
     /// - Parameters:
     ///   - featureForm: <#featureForm description#>
     ///   - element: The field's parent element.
@@ -50,9 +50,9 @@ struct SingleLineTextEntry: View {
     var body: some View {
         FormElementHeader(element: element)
             .padding([.top], elementPadding)
-        // Secondary foreground color is used across entry views for consistency.
+        // Secondary foreground color is used across input views for consistency.
         HStack {
-            TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
+            TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
                 .focused($isFocused)
                 .accessibilityIdentifier("\(element.label) Text Field")
             if !text.isEmpty {
@@ -60,8 +60,8 @@ struct SingleLineTextEntry: View {
                     .accessibilityIdentifier("\(element.label) Clear Button")
             }
         }
-        .formTextEntryStyle()
-        TextEntryFooter(
+        .formTextInputStyle()
+        TextInputFooter(
             currentLength: text.count,
             isFocused: isFocused,
             element: element,

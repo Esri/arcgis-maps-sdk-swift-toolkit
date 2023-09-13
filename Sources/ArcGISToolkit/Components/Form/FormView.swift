@@ -62,11 +62,11 @@ extension FormView {
         case let `input` as ComboBoxFormInput:
             ComboBoxInput(featureForm: featureForm, element: element, input: `input`)
         case let `input` as DateTimePickerFormInput:
-            DateTimeEntry(featureForm: featureForm, element: element, input: `input`)
+            DateTimeInput(featureForm: featureForm, element: element, input: `input`)
         case let `input` as TextAreaFormInput:
-            MultiLineTextEntry(featureForm: featureForm, element: element, input: `input`)
+            MultiLineTextInput(featureForm: featureForm, element: element, input: `input`)
         case let `input` as TextBoxFormInput:
-            SingleLineTextEntry(featureForm: featureForm, element: element, input: `input`)
+            SingleLineTextInput(featureForm: featureForm, element: element, input: `input`)
         default:
             EmptyView()
         }
