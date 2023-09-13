@@ -49,7 +49,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Need to figure out $selectedValue, given that codedValue.code is an "Object"
 ***REMOVED******REMOVED******REMOVED******REMOVED*** CodedValue is equatable and hashable, so maybe that's enough??
 ***REMOVED******REMOVED******REMOVED***Picker(element.label, selection: $selectedName) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("coded values go here")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(element.codedValues) { codedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(codedValue.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(codedValue.code)
