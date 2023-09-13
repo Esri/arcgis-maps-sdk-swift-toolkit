@@ -153,7 +153,6 @@ public struct ARView: UIViewControllerRepresentable {
         }
         
         public func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
-
             // If we aren't tracking yet, return.
             //  guard isTracking else { return }
             
