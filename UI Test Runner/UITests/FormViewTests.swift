@@ -549,7 +549,7 @@ final class FormViewTests: XCTestCase {
         
         julyFirstButton.tap()
         
-        let localDate = try? Date("1969-07-01T07:00:00", strategy: .arcGISDateParseStrategy)
+        let localDate = try? Date("1969-07-01T00:00:00", strategy: .arcGISDateParseStrategy)
         
         XCTAssertEqual(
             fieldValue.label,
