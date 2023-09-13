@@ -59,6 +59,8 @@ extension FormView {
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
 ***REMOVED******REMOVED***switch element.input {
+***REMOVED******REMOVED***case let `input` as ComboBoxFormInput:
+***REMOVED******REMOVED******REMOVED***ComboBoxInput(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***case let `input` as DateTimePickerFormInput:
 ***REMOVED******REMOVED******REMOVED***DateTimeEntry(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***case let `input` as TextAreaFormInput:
