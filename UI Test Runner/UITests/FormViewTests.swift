@@ -366,7 +366,11 @@ final class FormViewTests: XCTestCase {
             "The field title isn't hittable."
         )
         
-        let localDate = try? Date("1969-07-07T20:17:00", strategy: .arcGISDateParseStrategy)
+        let localDate = Calendar.current.date(
+            from: DateComponents(
+                timeZone: .gmt, year: 1969, month: 7, day: 8, hour: 3, minute: 17
+            )
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -439,7 +443,11 @@ final class FormViewTests: XCTestCase {
             "The field value isn't hittable."
         )
         
-        let localDate = try? Date("2023-07-14T08:53:00", strategy: .arcGISDateParseStrategy)
+        let localDate = Calendar.current.date(
+            from: DateComponents(
+                timeZone: .gmt, year: 2023, month: 7, day: 15, hour: 3, minute: 53
+            )
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -498,7 +506,11 @@ final class FormViewTests: XCTestCase {
             "End date and Time 7/27/1969 12:00:00 AM"
         )
         
-        let localDate = try? Date("1969-07-27T00:00:00", strategy: .arcGISDateParseStrategy)
+        let localDate = Calendar.current.date(
+            from: DateComponents(
+                timeZone: .gmt, year: 1969, month: 7, day: 27, hour: 7
+            )
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -549,7 +561,11 @@ final class FormViewTests: XCTestCase {
         
         julyFirstButton.tap()
         
-        let localDate = try? Date("1969-07-01T00:00:00", strategy: .arcGISDateParseStrategy)
+        let localDate = Calendar.current.date(
+            from: DateComponents(
+                timeZone: .gmt, year: 1969, month: 7, day: 1, hour: 7
+            )
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -597,16 +613,6 @@ final class FormViewTests: XCTestCase {
         XCTAssertEqual(
             fieldValue.label,
             "No Value"
-        )
-    }
-}
-
-private extension ParseStrategy where Self == Date.ParseStrategy {
-    /// A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
-    static var arcGISDateParseStrategy: Self {
-        .fixed(
-            format: "\(year: .defaultDigits)-\(month: .defaultDigits)-\(day: .defaultDigits)T\(hour: .defaultDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .defaultDigits):\(second: .defaultDigits)",
-            timeZone: .current
         )
     }
 }
