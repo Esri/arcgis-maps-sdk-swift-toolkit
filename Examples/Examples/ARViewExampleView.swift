@@ -49,10 +49,10 @@ struct ARViewExampleView: View {
 ***REMOVED***()
 
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***ARView(
+***REMOVED******REMOVED***RealityGeoView(
 ***REMOVED******REMOVED******REMOVED***scene: scene,
 ***REMOVED******REMOVED******REMOVED***cameraController: cameraController,
-***REMOVED******REMOVED******REMOVED***locationTrackingMode: .initial,
+***REMOVED******REMOVED******REMOVED***trackingMode: .initial,
 ***REMOVED******REMOVED******REMOVED***renderVideoFeed: true
 ***REMOVED******REMOVED***)
 ***REMOVED***
