@@ -134,11 +134,6 @@ extension ArcGISSceneViewController {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(model.isAttributionBarHidden)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(model.viewDrawingMode)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("-- setting proxy")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.sceneViewProxy = proxy
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("-- setting proxy 2")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.model.sceneViewProxy = proxy
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea()
