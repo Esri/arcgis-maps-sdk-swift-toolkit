@@ -549,7 +549,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***julyFirstButton.tap()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let localDate = try? Date("1969-07-01T07:00:00", strategy: .arcGISDateParseStrategy)
+***REMOVED******REMOVED***let localDate = try? Date("1969-07-01T00:00:00", strategy: .arcGISDateParseStrategy)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
