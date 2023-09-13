@@ -27,8 +27,8 @@ public struct RealityGeoView: UIViewControllerRepresentable {
     private let cameraController: TransformationMatrixCameraController
     private let trackingMode: RealityTrackingMode
     
-    public func makeUIViewController(context: Context) -> ARViewController {
-        let viewController = ARViewController(
+    public func makeUIViewController(context: Context) -> RealityGeoViewController {
+        let viewController = RealityGeoViewController(
             scene: scene,
             cameraController: cameraController,
             renderVideoFeed: renderVideoFeed
@@ -38,7 +38,7 @@ public struct RealityGeoView: UIViewControllerRepresentable {
         return viewController
     }
     
-    public func updateUIViewController(_ uiViewController: ARViewController, context: Context) {
+    public func updateUIViewController(_ uiViewController: RealityGeoViewController, context: Context) {
         setProperties(for: uiViewController, with: context)
     }
     
@@ -54,7 +54,7 @@ public struct RealityGeoView: UIViewControllerRepresentable {
         self.renderVideoFeed = renderVideoFeed
     }
     
-    private func setProperties(for viewController: ARViewController, with context: Context) {
+    private func setProperties(for viewController: RealityGeoViewController, with context: Context) {
         context.coordinator.arSCNView = viewController.arSCNView
         context.coordinator.isTracking = viewController.isTracking
         context.coordinator.lastGoodDeviceOrientation = viewController.lastGoodDeviceOrientation
@@ -207,7 +207,7 @@ extension RealityGeoView {
     }
 }
 
-public class ARViewController: UIViewController {
+public class RealityGeoViewController: UIViewController {
     /// The view used to display the `ARKit` camera image and 3D `SceneKit` content.
     /// - Since: 200.3
     let arSCNView = ARSCNView(frame: .zero)
