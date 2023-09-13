@@ -33,7 +33,7 @@ public struct RealityGeoView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED***renderVideoFeed: renderVideoFeed
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***viewController.arSCNView.delegate = context.coordinator
+***REMOVED******REMOVED***viewController.arView.delegate = context.coordinator
 ***REMOVED******REMOVED***setProperties(for: viewController, with: context)
 ***REMOVED******REMOVED***return viewController
 ***REMOVED***
@@ -55,7 +55,7 @@ public struct RealityGeoView: UIViewControllerRepresentable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func setProperties(for viewController: RealityGeoViewController, with context: Context) {
-***REMOVED******REMOVED***context.coordinator.arSCNView = viewController.arSCNView
+***REMOVED******REMOVED***context.coordinator.arView = viewController.arView
 ***REMOVED******REMOVED***context.coordinator.isTracking = viewController.isTracking
 ***REMOVED******REMOVED***context.coordinator.lastGoodDeviceOrientation = viewController.lastGoodDeviceOrientation
 ***REMOVED******REMOVED***context.coordinator.initialTransformation = viewController.initialTransformation
@@ -69,11 +69,11 @@ public struct RealityGeoView: UIViewControllerRepresentable {
 
 extension RealityGeoView {
 ***REMOVED***public class Coordinator: NSObject, ARSCNViewDelegate, SCNSceneRendererDelegate, ARSessionObserver {
-***REMOVED******REMOVED******REMOVED***/ We implement `ARSCNViewDelegate` methods, but will use `arSCNViewDelegate` to forward them to clients.
+***REMOVED******REMOVED******REMOVED***/ We implement `ARSCNViewDelegate` methods, but will use `delegate` to forward them to clients.
 ***REMOVED******REMOVED******REMOVED***/ - Since: 200.3
-***REMOVED******REMOVED***public weak var arSCNViewDelegate: ARSCNViewDelegate?
+***REMOVED******REMOVED***public weak var delegate: ARSCNViewDelegate?
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var arSCNView: ARSCNView?
+***REMOVED******REMOVED***var arView: ARSCNView?
 ***REMOVED******REMOVED***var isTracking: Bool = false
 ***REMOVED******REMOVED***var sceneViewController: ArcGISSceneViewController?
 ***REMOVED******REMOVED***var lastGoodDeviceOrientation: UIDeviceOrientation?
@@ -82,63 +82,63 @@ extension RealityGeoView {
 ***REMOVED******REMOVED******REMOVED*** ARSCNViewDelegate methods
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.renderer?(renderer, didAdd: node, for: anchor)
+***REMOVED******REMOVED******REMOVED***delegate?.renderer?(renderer, didAdd: node, for: anchor)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func renderer(_ renderer: SCNSceneRenderer, willUpdate node: SCNNode, for anchor: ARAnchor) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.renderer?(renderer, willUpdate: node, for: anchor)
+***REMOVED******REMOVED******REMOVED***delegate?.renderer?(renderer, willUpdate: node, for: anchor)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.renderer?(renderer, didUpdate: node, for: anchor)
+***REMOVED******REMOVED******REMOVED***delegate?.renderer?(renderer, didUpdate: node, for: anchor)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.renderer?(renderer, didRemove: node, for: anchor)
+***REMOVED******REMOVED******REMOVED***delegate?.renderer?(renderer, didRemove: node, for: anchor)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** ARSessionObserver methods
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func session(_ session: ARSession, didFailWithError error: Error) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.session?(session, didFailWithError: error)
+***REMOVED******REMOVED******REMOVED***delegate?.session?(session, didFailWithError: error)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.session?(session, cameraDidChangeTrackingState: camera)
+***REMOVED******REMOVED******REMOVED***delegate?.session?(session, cameraDidChangeTrackingState: camera)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func sessionWasInterrupted(_ session: ARSession) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.sessionWasInterrupted?(session)
+***REMOVED******REMOVED******REMOVED***delegate?.sessionWasInterrupted?(session)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func sessionInterruptionEnded(_ session: ARSession) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.sessionWasInterrupted?(session)
+***REMOVED******REMOVED******REMOVED***delegate?.sessionWasInterrupted?(session)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func sessionShouldAttemptRelocalization(_ session: ARSession) -> Bool {
-***REMOVED******REMOVED******REMOVED***return arSCNViewDelegate?.sessionShouldAttemptRelocalization?(session) ?? false
+***REMOVED******REMOVED******REMOVED***return delegate?.sessionShouldAttemptRelocalization?(session) ?? false
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func session(_ session: ARSession, didOutputAudioSampleBuffer audioSampleBuffer: CMSampleBuffer) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.session?(session, didOutputAudioSampleBuffer: audioSampleBuffer)
+***REMOVED******REMOVED******REMOVED***delegate?.session?(session, didOutputAudioSampleBuffer: audioSampleBuffer)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** SCNSceneRendererDelegate methods
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public  func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.renderer?(renderer, updateAtTime: time)
+***REMOVED******REMOVED******REMOVED***delegate?.renderer?(renderer, updateAtTime: time)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func renderer(_ renderer: SCNSceneRenderer, didApplyAnimationsAtTime time: TimeInterval) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.renderer?(renderer, didApplyConstraintsAtTime: time)
+***REMOVED******REMOVED******REMOVED***delegate?.renderer?(renderer, didApplyConstraintsAtTime: time)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func renderer(_ renderer: SCNSceneRenderer, didSimulatePhysicsAtTime time: TimeInterval) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.renderer?(renderer, didSimulatePhysicsAtTime: time)
+***REMOVED******REMOVED******REMOVED***delegate?.renderer?(renderer, didSimulatePhysicsAtTime: time)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func renderer(_ renderer: SCNSceneRenderer, didApplyConstraintsAtTime time: TimeInterval) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.renderer?(renderer, didApplyConstraintsAtTime: time)
+***REMOVED******REMOVED******REMOVED***delegate?.renderer?(renderer, didApplyConstraintsAtTime: time)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
@@ -146,7 +146,7 @@ extension RealityGeoView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***  guard isTracking else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***guard
-***REMOVED******REMOVED******REMOVED******REMOVED***let arSCNView,
+***REMOVED******REMOVED******REMOVED******REMOVED***let arView,
 ***REMOVED******REMOVED******REMOVED******REMOVED***let initialTransformation,
 ***REMOVED******REMOVED******REMOVED******REMOVED***let sceneViewController
 ***REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
@@ -154,7 +154,7 @@ extension RealityGeoView {
 ***REMOVED******REMOVED******REMOVED***guard lastGoodDeviceOrientation != nil else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Get transform from SCNView.pointOfView.
-***REMOVED******REMOVED******REMOVED***guard let transform = arSCNView.pointOfView?.transform else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let transform = arView.pointOfView?.transform else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***let cameraTransform = simd_double4x4(transform)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let cameraQuat = simd_quatd(cameraTransform)
@@ -173,7 +173,7 @@ extension RealityGeoView {
 ***REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set FOV on camera.
-***REMOVED******REMOVED******REMOVED***if let camera = arSCNView.session.currentFrame?.camera {
+***REMOVED******REMOVED******REMOVED***if let camera = arView.session.currentFrame?.camera {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let intrinsics = camera.intrinsics
 ***REMOVED******REMOVED******REMOVED******REMOVED***let imageResolution = camera.imageResolution
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -198,11 +198,11 @@ extension RealityGeoView {
 ***REMOVED******REMOVED******REMOVED***sceneViewController.draw()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Call our arSCNViewDelegate method.
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.renderer?(renderer, willRenderScene: scene, atTime: time)
+***REMOVED******REMOVED******REMOVED***delegate?.renderer?(renderer, willRenderScene: scene, atTime: time)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
-***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.renderer?(renderer, didRenderScene: scene, atTime: time)
+***REMOVED******REMOVED******REMOVED***delegate?.renderer?(renderer, didRenderScene: scene, atTime: time)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -210,7 +210,7 @@ extension RealityGeoView {
 public class RealityGeoViewController: UIViewController {
 ***REMOVED******REMOVED***/ The view used to display the `ARKit` camera image and 3D `SceneKit` content.
 ***REMOVED******REMOVED***/ - Since: 200.3
-***REMOVED***let arSCNView = ARSCNView(frame: .zero)
+***REMOVED***let arView = ARSCNView(frame: .zero)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Denotes whether tracking location and angles has started.
 ***REMOVED******REMOVED***/ - Since: 200.3
@@ -225,7 +225,7 @@ public class RealityGeoViewController: UIViewController {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If we're already tracking, reset tracking to use the new configuration.
 ***REMOVED******REMOVED******REMOVED***if isTracking, deviceSupportsARKit {
-***REMOVED******REMOVED******REMOVED******REMOVED***arSCNView.session.run(arConfiguration, options: .resetTracking)
+***REMOVED******REMOVED******REMOVED******REMOVED***arView.session.run(arConfiguration, options: .resetTracking)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -308,7 +308,7 @@ public class RealityGeoViewController: UIViewController {
 ***REMOVED******REMOVED***if !deviceSupportsARKit || !renderVideoFeed {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** User is not using ARKit, or they don't want to see video,
 ***REMOVED******REMOVED******REMOVED******REMOVED*** set the arSCNView.alpha to 0.0 so it doesn't display.
-***REMOVED******REMOVED******REMOVED***arSCNView.alpha = 0
+***REMOVED******REMOVED******REMOVED***arView.alpha = 0
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -324,9 +324,9 @@ public class RealityGeoViewController: UIViewController {
 ***REMOVED******REMOVED***super.viewDidLoad()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if deviceSupportsARKit {
-***REMOVED******REMOVED******REMOVED***view.addSubview(arSCNView)
-***REMOVED******REMOVED******REMOVED***arSCNView.frame = view.bounds
-***REMOVED******REMOVED******REMOVED***arSCNView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+***REMOVED******REMOVED******REMOVED***view.addSubview(arView)
+***REMOVED******REMOVED******REMOVED***arView.frame = view.bounds
+***REMOVED******REMOVED******REMOVED***arView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Add scene view controller
@@ -355,7 +355,7 @@ public class RealityGeoViewController: UIViewController {
 ***REMOVED***private func finalizeStart() {
 ***REMOVED******REMOVED******REMOVED*** Run the ARSession.
 ***REMOVED******REMOVED***if deviceSupportsARKit {
-***REMOVED******REMOVED******REMOVED***arSCNView.session.run(arConfiguration, options: .resetTracking)
+***REMOVED******REMOVED******REMOVED***arView.session.run(arConfiguration, options: .resetTracking)
 ***REMOVED***
 ***REMOVED******REMOVED***isTracking = true
 ***REMOVED***
@@ -385,7 +385,7 @@ public class RealityGeoViewController: UIViewController {
 ***REMOVED******REMOVED***/ - Since: 200.3
 ***REMOVED***public func stopTracking() async {
 ***REMOVED******REMOVED***Task.detached { @MainActor in
-***REMOVED******REMOVED******REMOVED***self.arSCNView.session.pause()
+***REMOVED******REMOVED******REMOVED***self.arView.session.pause()
 ***REMOVED******REMOVED******REMOVED***await self.locationDataSource?.stop()
 ***REMOVED******REMOVED******REMOVED***self.isTracking = false
 ***REMOVED***
