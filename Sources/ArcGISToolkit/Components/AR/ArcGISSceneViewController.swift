@@ -22,7 +22,7 @@ class ArcGISSceneViewController: UIHostingController<ArcGISSceneViewController.H
 ***REMOVED***init(
 ***REMOVED******REMOVED***scene: ArcGIS.Scene = Scene(),
 ***REMOVED******REMOVED***cameraController: CameraController = TransformationMatrixCameraController(),
-***REMOVED******REMOVED***timeExtent: Binding<TimeExtent?>? = nil,
+***REMOVED******REMOVED***timeExtent: TimeExtent? = nil,
 ***REMOVED******REMOVED***graphicsOverlays: [GraphicsOverlay] = [],
 ***REMOVED******REMOVED***analysisOverlays: [AnalysisOverlay] = [],
 ***REMOVED******REMOVED***spaceEffect: SceneView.SpaceEffect = .stars,
