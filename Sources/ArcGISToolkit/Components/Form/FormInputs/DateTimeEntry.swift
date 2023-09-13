@@ -67,7 +67,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
-***REMOVED******REMOVED******REMOVED***guard let currentDate = try? Date(element.value, strategy: Date.ParseStrategy.arcGISDateParseStrategy),
+***REMOVED******REMOVED******REMOVED***guard let currentDate = try? Date(element.value, strategy: .arcGISDateParseStrategy),
 ***REMOVED******REMOVED******REMOVED******REMOVED***  newDate != currentDate else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
