@@ -22,7 +22,6 @@ struct RadioButtonsInput: View {
 ***REMOVED***
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
-
 ***REMOVED******REMOVED***/ The current date selection.
 ***REMOVED***@State private var date: Date?
 ***REMOVED***
