@@ -207,7 +207,7 @@ public struct ARView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.
-***REMOVED******REMOVED******REMOVED***sceneViewProxy.manualDraw()
+***REMOVED******REMOVED******REMOVED***sceneViewProxy.draw()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Call our arSCNViewDelegate method.
 ***REMOVED******REMOVED******REMOVED***arSCNViewDelegate?.renderer?(renderer, willRenderScene: scene, atTime: time)
