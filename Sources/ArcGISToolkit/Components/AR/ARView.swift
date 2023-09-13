@@ -22,14 +22,10 @@ public enum ARLocationTrackingMode {
 ***REMOVED***
 
 public struct ARView: UIViewControllerRepresentable {
-***REMOVED***
-***REMOVED***private var scene: ArcGIS.Scene = Scene()
-***REMOVED***
-***REMOVED***private var renderVideoFeed: Bool
-***REMOVED***
-***REMOVED***private var cameraController = TransformationMatrixCameraController()
-***REMOVED***
-***REMOVED***private var locationTrackingMode: ARLocationTrackingMode
+***REMOVED***private let scene: ArcGIS.Scene
+***REMOVED***private let renderVideoFeed: Bool
+***REMOVED***private let cameraController: TransformationMatrixCameraController
+***REMOVED***private let locationTrackingMode: ARLocationTrackingMode
 ***REMOVED***
 ***REMOVED***public func makeUIViewController(context: Context) -> ARViewController {
 ***REMOVED******REMOVED***let viewController = ARViewController(
@@ -61,7 +57,6 @@ public struct ARView: UIViewControllerRepresentable {
 ***REMOVED***private func setProperties(for viewController: ARViewController, with context: Context) {
 ***REMOVED******REMOVED***context.coordinator.arSCNView = viewController.arSCNView
 ***REMOVED******REMOVED***context.coordinator.isTracking = viewController.isTracking
-***REMOVED******REMOVED***context.coordinator.cameraController = viewController.cameraController
 ***REMOVED******REMOVED***context.coordinator.lastGoodDeviceOrientation = viewController.lastGoodDeviceOrientation
 ***REMOVED******REMOVED***context.coordinator.initialTransformation = viewController.initialTransformation
 ***REMOVED******REMOVED***context.coordinator.sceneViewController = viewController.sceneViewController
@@ -71,23 +66,17 @@ public struct ARView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***Coordinator()
 ***REMOVED***
 ***REMOVED***
+
+extension ARView {
 ***REMOVED***public class Coordinator: NSObject, ARSCNViewDelegate, SCNSceneRendererDelegate, ARSessionObserver {
 ***REMOVED******REMOVED******REMOVED***/ We implement `ARSCNViewDelegate` methods, but will use `arSCNViewDelegate` to forward them to clients.
 ***REMOVED******REMOVED******REMOVED***/ - Since: 200.3
 ***REMOVED******REMOVED***public weak var arSCNViewDelegate: ARSCNViewDelegate?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var arSCNView: ARSCNView?
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var isTracking: Bool = false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var sceneViewProxy: SceneViewProxy?
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var sceneViewController: ArcGISSceneViewController?
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var cameraController: TransformationMatrixCameraController?
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var lastGoodDeviceOrientation: UIDeviceOrientation?
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var initialTransformation: TransformationMatrix?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** ARSCNViewDelegate methods
@@ -158,7 +147,6 @@ public struct ARView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***guard
 ***REMOVED******REMOVED******REMOVED******REMOVED***let arSCNView,
-***REMOVED******REMOVED******REMOVED******REMOVED***let cameraController,
 ***REMOVED******REMOVED******REMOVED******REMOVED***let initialTransformation,
 ***REMOVED******REMOVED******REMOVED******REMOVED***let sceneViewController
 ***REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
@@ -181,6 +169,7 @@ public struct ARView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set the matrix on the camera controller.
+***REMOVED******REMOVED******REMOVED***let cameraController = sceneViewController.cameraController as! TransformationMatrixCameraController
 ***REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set FOV on camera.
