@@ -15,7 +15,7 @@ import SwiftUI
 import ArcGIS
 import ArcGISToolkit
 
-struct ARViewExampleView: View {
+struct FlyoverExampleView: View {
     private var scene: ArcGIS.Scene = {
         let scene = Scene(
             item: PortalItem(
