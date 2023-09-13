@@ -153,7 +153,6 @@ public struct ARView: UIViewControllerRepresentable {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
-
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If we aren't tracking yet, return.
 ***REMOVED******REMOVED******REMOVED******REMOVED***  guard isTracking else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
