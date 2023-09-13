@@ -208,7 +208,7 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 
-private extension Date.ParseStrategy {
+private extension ParseStrategy where Self == Date.ParseStrategy {
 ***REMOVED******REMOVED***/ A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
 ***REMOVED***static var arcGISDateParseStrategy: Self {
 ***REMOVED******REMOVED***.fixed(
