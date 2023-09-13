@@ -366,10 +366,7 @@ final class FormViewTests: XCTestCase {
             "The field title isn't hittable."
         )
         
-        let localDate = try? Date(
-            "1969-07-07T20:17:00",
-            strategy: Date.ParseStrategy.arcGISDateParseStrategy
-        )
+        let localDate = try? Date("1969-07-07T20:17:00", strategy: .arcGISDateParseStrategy)
         
         XCTAssertEqual(
             fieldValue.label,
@@ -442,10 +439,7 @@ final class FormViewTests: XCTestCase {
             "The field value isn't hittable."
         )
         
-        let localDate = try? Date(
-            "2023-07-14T08:53:00",
-            strategy: Date.ParseStrategy.arcGISDateParseStrategy
-        )
+        let localDate = try? Date("2023-07-14T08:53:00", strategy: .arcGISDateParseStrategy)
         
         XCTAssertEqual(
             fieldValue.label,
@@ -504,10 +498,7 @@ final class FormViewTests: XCTestCase {
             "End date and Time 7/27/1969 12:00:00 AM"
         )
         
-        let localDate = try? Date(
-            "1969-07-27T00:00:00",
-            strategy: Date.ParseStrategy.arcGISDateParseStrategy
-        )
+        let localDate = try? Date("1969-07-27T00:00:00", strategy: .arcGISDateParseStrategy)
         
         XCTAssertEqual(
             fieldValue.label,
@@ -558,10 +549,7 @@ final class FormViewTests: XCTestCase {
         
         julyFirstButton.tap()
         
-        let localDate = try? Date(
-            "1969-07-01T07:00:00",
-            strategy: Date.ParseStrategy.arcGISDateParseStrategy
-        )
+        let localDate = try? Date("1969-07-01T07:00:00", strategy: .arcGISDateParseStrategy)
         
         XCTAssertEqual(
             fieldValue.label,
@@ -613,7 +601,7 @@ final class FormViewTests: XCTestCase {
     }
 }
 
-private extension Date.ParseStrategy {
+private extension ParseStrategy where Self == Date.ParseStrategy {
     /// A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
     static var arcGISDateParseStrategy: Self {
         .fixed(
