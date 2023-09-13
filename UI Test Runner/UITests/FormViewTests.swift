@@ -366,10 +366,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let localDate = try? Date(
-***REMOVED******REMOVED******REMOVED***"1969-07-07T20:17:00",
-***REMOVED******REMOVED******REMOVED***strategy: Date.ParseStrategy.arcGISDateParseStrategy
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let localDate = try? Date("1969-07-07T20:17:00", strategy: .arcGISDateParseStrategy)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -442,10 +439,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The field value isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let localDate = try? Date(
-***REMOVED******REMOVED******REMOVED***"2023-07-14T08:53:00",
-***REMOVED******REMOVED******REMOVED***strategy: Date.ParseStrategy.arcGISDateParseStrategy
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let localDate = try? Date("2023-07-14T08:53:00", strategy: .arcGISDateParseStrategy)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -504,10 +498,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"End date and Time 7/27/1969 12:00:00 AM"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let localDate = try? Date(
-***REMOVED******REMOVED******REMOVED***"1969-07-27T00:00:00",
-***REMOVED******REMOVED******REMOVED***strategy: Date.ParseStrategy.arcGISDateParseStrategy
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let localDate = try? Date("1969-07-27T00:00:00", strategy: .arcGISDateParseStrategy)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -558,10 +549,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***julyFirstButton.tap()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let localDate = try? Date(
-***REMOVED******REMOVED******REMOVED***"1969-07-01T07:00:00",
-***REMOVED******REMOVED******REMOVED***strategy: Date.ParseStrategy.arcGISDateParseStrategy
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let localDate = try? Date("1969-07-01T07:00:00", strategy: .arcGISDateParseStrategy)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -613,7 +601,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 
-private extension Date.ParseStrategy {
+private extension ParseStrategy where Self == Date.ParseStrategy {
 ***REMOVED******REMOVED***/ A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
 ***REMOVED***static var arcGISDateParseStrategy: Self {
 ***REMOVED******REMOVED***.fixed(
