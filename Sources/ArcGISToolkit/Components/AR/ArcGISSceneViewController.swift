@@ -184,11 +184,3 @@ private class HostedViewModel: ObservableObject {
         self.viewDrawingMode = viewDrawingMode
     }
 }
-
-/*
- 
- .spaceEffect(.transparent)
- .atmosphereEffect(.off)
- .attributionBarHidden(true)
- .viewDrawingMode(.manual)
- */
