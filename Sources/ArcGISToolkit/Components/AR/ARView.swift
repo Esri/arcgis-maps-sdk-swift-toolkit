@@ -308,17 +308,7 @@ public class ARViewController: UIViewController {
 ***REMOVED******REMOVED*** MARK: Private properties
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `TransformationMatrixCameraController` used to control the Scene.
-***REMOVED***var cameraController = TransformationMatrixCameraController()
-***REMOVED***
-***REMOVED******REMOVED***/ Operations that happen after device tracking has started.
-***REMOVED***@MainActor
-***REMOVED***private func finalizeStart() {
-***REMOVED******REMOVED******REMOVED*** Run the ARSession.
-***REMOVED******REMOVED***if self.isUsingARKit {
-***REMOVED******REMOVED******REMOVED***self.arSCNView.session.run(self.arConfiguration, options: .resetTracking)
-***REMOVED***
-***REMOVED******REMOVED***self.isTracking = true
-***REMOVED***
+***REMOVED***let cameraController: TransformationMatrixCameraController
 ***REMOVED***
 ***REMOVED***var sceneViewController: ArcGISSceneViewController
 ***REMOVED***
@@ -329,6 +319,8 @@ public class ARViewController: UIViewController {
 ***REMOVED******REMOVED***analysisOverlays: [AnalysisOverlay] = [],
 ***REMOVED******REMOVED***renderVideoFeed: Bool
 ***REMOVED***) {
+***REMOVED******REMOVED***self.cameraController = cameraController
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***sceneViewController = ArcGISSceneViewController(
 ***REMOVED******REMOVED******REMOVED***scene: scene,
 ***REMOVED******REMOVED******REMOVED***cameraController: cameraController,
@@ -372,6 +364,7 @@ public class ARViewController: UIViewController {
 ***REMOVED******REMOVED******REMOVED*** Add scene view controller
 ***REMOVED******REMOVED***addChild(sceneViewController)
 ***REMOVED******REMOVED***sceneViewController.view.frame = self.view.bounds
+***REMOVED******REMOVED***view.addSubview(sceneViewController.view)
 ***REMOVED******REMOVED***sceneViewController.view.backgroundColor = .clear
 ***REMOVED******REMOVED***sceneViewController.view.frame = view.bounds
 ***REMOVED******REMOVED***sceneViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -387,6 +380,16 @@ public class ARViewController: UIViewController {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***await stopTracking()
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Operations that happen after device tracking has started.
+***REMOVED***@MainActor
+***REMOVED***private func finalizeStart() {
+***REMOVED******REMOVED******REMOVED*** Run the ARSession.
+***REMOVED******REMOVED***if self.isUsingARKit {
+***REMOVED******REMOVED******REMOVED***self.arSCNView.session.run(self.arConfiguration, options: .resetTracking)
+***REMOVED***
+***REMOVED******REMOVED***self.isTracking = true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts device tracking.
