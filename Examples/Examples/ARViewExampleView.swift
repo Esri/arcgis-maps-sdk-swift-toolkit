@@ -49,10 +49,10 @@ struct ARViewExampleView: View {
     }()
 
     var body: some View {
-        ARView(
+        RealityGeoView(
             scene: scene,
             cameraController: cameraController,
-            locationTrackingMode: .initial,
+            trackingMode: .initial,
             renderVideoFeed: true
         )
     }

@@ -15,17 +15,17 @@ import ArcGIS
 import ARKit
 import SwiftUI
 
-public enum ARLocationTrackingMode {
+public enum RealityTrackingMode {
     case ignore
     case initial
     case continuous
 }
 
-public struct ARView: UIViewControllerRepresentable {
+public struct RealityGeoView: UIViewControllerRepresentable {
     private let scene: ArcGIS.Scene
     private let renderVideoFeed: Bool
     private let cameraController: TransformationMatrixCameraController
-    private let locationTrackingMode: ARLocationTrackingMode
+    private let trackingMode: RealityTrackingMode
     
     public func makeUIViewController(context: Context) -> ARViewController {
         let viewController = ARViewController(
@@ -45,12 +45,12 @@ public struct ARView: UIViewControllerRepresentable {
     public init(
         scene: ArcGIS.Scene = ArcGIS.Scene(),
         cameraController: TransformationMatrixCameraController = TransformationMatrixCameraController(),
-        locationTrackingMode: ARLocationTrackingMode = .ignore,
+        trackingMode: RealityTrackingMode = .ignore,
         renderVideoFeed: Bool
     ) {
         self.scene = scene
         self.cameraController = cameraController
-        self.locationTrackingMode = locationTrackingMode
+        self.trackingMode = trackingMode
         self.renderVideoFeed = renderVideoFeed
     }
     
@@ -67,7 +67,7 @@ public struct ARView: UIViewControllerRepresentable {
     }
 }
 
-extension ARView {
+extension RealityGeoView {
     public class Coordinator: NSObject, ARSCNViewDelegate, SCNSceneRendererDelegate, ARSessionObserver {
         /// We implement `ARSCNViewDelegate` methods, but will use `arSCNViewDelegate` to forward them to clients.
         /// - Since: 200.3
@@ -216,26 +216,15 @@ public class ARViewController: UIViewController {
     /// - Since: 200.3
     public private(set) var isTracking: Bool = false
     
-    /// Denotes whether ARKit is being used to track location and angles.
-    /// - Since: 200.3
-    public private(set) var isUsingARKit: Bool = true
-    
     /// Whether `ARKit` is supported on this device.
-    private let deviceSupportsARKit: Bool = {
-        return ARWorldTrackingConfiguration.isSupported
-    }()
+    private let deviceSupportsARKit: Bool = ARWorldTrackingConfiguration.isSupported
     
     /// The world tracking information used by `ARKit`.
     /// - Since: 200.3
-    public var arConfiguration: ARConfiguration = {
-        let configuration = ARWorldTrackingConfiguration()
-        configuration.worldAlignment = .gravityAndHeading
-        configuration.planeDetection = [.horizontal]
-        return configuration
-    }() {
+    public var arConfiguration: ARConfiguration {
         didSet {
             // If we're already tracking, reset tracking to use the new configuration.
-            if isTracking, isUsingARKit {
+            if isTracking, deviceSupportsARKit {
                 arSCNView.session.run(arConfiguration, options: .resetTracking)
             }
         }
@@ -245,7 +234,7 @@ public class ARViewController: UIViewController {
     var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     
     /// The tracking mode controlling how the locations generated from the location data source are used during AR tracking.
-    private var locationTrackingMode: ARLocationTrackingMode = .ignore
+    private var trackingMode: RealityTrackingMode = .ignore
     
     /// The initial transformation used for a table top experience.  Defaults to the Identity Matrix.
     /// - Since: 200.3
@@ -262,41 +251,32 @@ public class ARViewController: UIViewController {
     /// The translation factor used to support a table top AR experience.
     /// - Since: 200.3
     public dynamic var translationFactor: Double {
-        get {
-            return cameraController.translationFactor
-        }
-        set {
-            cameraController.translationFactor = newValue
-        }
+        get { cameraController.translationFactor }
+        set { cameraController.translationFactor = newValue }
     }
     
-    /// Determines the clipping distance around the originCamera. The units are meters; the default is 0.0. When the value is set to 0.0 there is no enforced clipping distance.
-    /// Setting the value to 10.0 will only render data 10 meters around the originCamera.
+    /// Determines the clipping distance around the originCamera. The units are meters; the default is `nil`.
+    /// When the value is set to `nil`, there is no enforced clipping distance and therefore no limiting of displayed data.
+    /// Setting the value to 10.0 will only render data 10 meters around the origin camera.
     /// - Since: 200.3
-    public var clippingDistance: Double {
-        get {
-            return cameraController.clippingDistance ?? 0.0
-        }
-        set {
-            cameraController.clippingDistance = newValue
-        }
+    public var clippingDistance: Double? {
+        get { cameraController.clippingDistance }
+        set { cameraController.clippingDistance = newValue }
     }
     
     /// The viewpoint camera used to set the initial view of the sceneView instead of the device's GPS location via the location data source.  You can use Key-Value Observing to track changes to the origin camera.
     /// - Since: 200.3
     public dynamic var originCamera: Camera {
-        get {
-            return cameraController.originCamera
-        }
-        set {
-            cameraController.originCamera = newValue
-        }
+        get { cameraController.originCamera }
+        set { cameraController.originCamera = newValue }
     }
     
     // MARK: Private properties
     
     /// The `TransformationMatrixCameraController` used to control the Scene.
-    let cameraController: TransformationMatrixCameraController
+    var cameraController: TransformationMatrixCameraController {
+        sceneViewController.cameraController as! TransformationMatrixCameraController
+    }
     
     var sceneViewController: ArcGISSceneViewController
     
@@ -305,10 +285,8 @@ public class ARViewController: UIViewController {
         cameraController: TransformationMatrixCameraController,
         graphicsOverlays: [GraphicsOverlay] = [],
         analysisOverlays: [AnalysisOverlay] = [],
-        renderVideoFeed: Bool
+        renderVideoFeed: Bool = true
     ) {
-        self.cameraController = cameraController
-        
         sceneViewController = ArcGISSceneViewController(
             scene: scene,
             cameraController: cameraController,
@@ -320,9 +298,14 @@ public class ARViewController: UIViewController {
             viewDrawingMode: .manual
         )
         
+        let config = ARWorldTrackingConfiguration()
+        config.worldAlignment = .gravityAndHeading
+        config.planeDetection = [.horizontal]
+        arConfiguration = config
+        
         super.init(nibName: nil, bundle: nil)
         
-        if !isUsingARKit || !renderVideoFeed {
+        if !deviceSupportsARKit || !renderVideoFeed {
             // User is not using ARKit, or they don't want to see video,
             // set the arSCNView.alpha to 0.0 so it doesn't display.
             arSCNView.alpha = 0
@@ -346,9 +329,6 @@ public class ARViewController: UIViewController {
             arSCNView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         }
         
-        // Use ARKit if device supports it.
-        isUsingARKit = deviceSupportsARKit
-        
         // Add scene view controller
         addChild(sceneViewController)
         sceneViewController.view.frame = self.view.bounds
@@ -358,15 +338,15 @@ public class ARViewController: UIViewController {
         sceneViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         sceneViewController.didMove(toParent: self)
         
-        Task {
-            try await self.startTracking(self.locationTrackingMode)
+        Task.detached {
+            try await self.startTracking(withMode: self.trackingMode)
         }
     }
     
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        Task {
-            await stopTracking()
+        Task.detached {
+            await self.stopTracking()
         }
     }
     
@@ -374,22 +354,20 @@ public class ARViewController: UIViewController {
     @MainActor
     private func finalizeStart() {
         // Run the ARSession.
-        if self.isUsingARKit {
-            self.arSCNView.session.run(self.arConfiguration, options: .resetTracking)
+        if deviceSupportsARKit {
+            arSCNView.session.run(arConfiguration, options: .resetTracking)
         }
-        self.isTracking = true
+        isTracking = true
     }
     
     /// Starts device tracking.
-    ///
-    /// - Parameter completion: The completion handler called when start tracking completes.  If tracking starts successfully, the `error` property will be nil; if tracking fails to start, the error will be non-nil and contain the reason for failure.
     /// - Since: 200.3
-    public func startTracking(_ locationTrackingMode: ARLocationTrackingMode) async throws {
+    public func startTracking(withMode mode: RealityTrackingMode) async throws {
         // We have a location data source that needs to be started.
-        self.locationTrackingMode = locationTrackingMode
-        if locationTrackingMode != .ignore,
+        self.trackingMode = mode
+        if mode != .ignore,
            let locationDataSource = self.locationDataSource {
-            Task {
+            Task.detached { @MainActor in
                 do {
                     try await locationDataSource.start()
                     self.finalizeStart()
@@ -406,10 +384,10 @@ public class ARViewController: UIViewController {
     /// Suspends device tracking.
     /// - Since: 200.3
     public func stopTracking() async {
-        Task {
-            arSCNView.session.pause()
-            await locationDataSource?.stop()
-            isTracking = false
+        Task.detached { @MainActor in
+            self.arSCNView.session.pause()
+            await self.locationDataSource?.stop()
+            self.isTracking = false
         }
     }
     
