@@ -22,14 +22,10 @@ public enum ARLocationTrackingMode {
 }
 
 public struct ARView: UIViewControllerRepresentable {
-    
-    private var scene: ArcGIS.Scene = Scene()
-    
-    private var renderVideoFeed: Bool
-    
-    private var cameraController = TransformationMatrixCameraController()
-    
-    private var locationTrackingMode: ARLocationTrackingMode
+    private let scene: ArcGIS.Scene
+    private let renderVideoFeed: Bool
+    private let cameraController: TransformationMatrixCameraController
+    private let locationTrackingMode: ARLocationTrackingMode
     
     public func makeUIViewController(context: Context) -> ARViewController {
         let viewController = ARViewController(
@@ -61,7 +57,6 @@ public struct ARView: UIViewControllerRepresentable {
     private func setProperties(for viewController: ARViewController, with context: Context) {
         context.coordinator.arSCNView = viewController.arSCNView
         context.coordinator.isTracking = viewController.isTracking
-        context.coordinator.cameraController = viewController.cameraController
         context.coordinator.lastGoodDeviceOrientation = viewController.lastGoodDeviceOrientation
         context.coordinator.initialTransformation = viewController.initialTransformation
         context.coordinator.sceneViewController = viewController.sceneViewController
@@ -70,24 +65,18 @@ public struct ARView: UIViewControllerRepresentable {
     public func makeCoordinator() -> Coordinator {
         Coordinator()
     }
-    
+}
+
+extension ARView {
     public class Coordinator: NSObject, ARSCNViewDelegate, SCNSceneRendererDelegate, ARSessionObserver {
         /// We implement `ARSCNViewDelegate` methods, but will use `arSCNViewDelegate` to forward them to clients.
         /// - Since: 200.3
         public weak var arSCNViewDelegate: ARSCNViewDelegate?
         
         var arSCNView: ARSCNView?
-        
         var isTracking: Bool = false
-        
-        var sceneViewProxy: SceneViewProxy?
-        
         var sceneViewController: ArcGISSceneViewController?
-        
-        var cameraController: TransformationMatrixCameraController?
-        
         var lastGoodDeviceOrientation: UIDeviceOrientation?
-        
         var initialTransformation: TransformationMatrix?
         
         // ARSCNViewDelegate methods
@@ -158,7 +147,6 @@ public struct ARView: UIViewControllerRepresentable {
             
             guard
                 let arSCNView,
-                let cameraController,
                 let initialTransformation,
                 let sceneViewController
             else { return }
@@ -181,6 +169,7 @@ public struct ARView: UIViewControllerRepresentable {
             )
             
             // Set the matrix on the camera controller.
+            let cameraController = sceneViewController.cameraController as! TransformationMatrixCameraController
             cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
             
             // Set FOV on camera.
