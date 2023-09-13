@@ -28,11 +28,6 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED***@State private var value: Bool?
 ***REMOVED***
-***REMOVED***enum Flavor: String, CaseIterable, Identifiable {
-***REMOVED******REMOVED***case chocolate, vanilla, strawberry
-***REMOVED******REMOVED***var id: Self { self ***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED***@State private var selectedName: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a combo box input.
@@ -53,18 +48,14 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Need to figure out $selectedValue, given that codedValue.code is an "Object"
 ***REMOVED******REMOVED******REMOVED******REMOVED*** CodedValue is equatable and hashable, so maybe that's enough??
-***REMOVED******REMOVED******REMOVED***Picker("element.label", selection: $selectedName) {
+***REMOVED******REMOVED******REMOVED***Picker(element.label, selection: $selectedName) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("coded values go here")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(element.codedValues) { codedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(codedValue.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(codedValue.code)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Picker("Flavor", selection: $selectedFlavor) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Chocolate").tag(Flavor.chocolate)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Vanilla").tag(Flavor.vanilla)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Strawberry").tag(Flavor.strawberry)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Picker")
 ***REMOVED******REMOVED******REMOVED***.pickerStyle(.menu)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***footer
