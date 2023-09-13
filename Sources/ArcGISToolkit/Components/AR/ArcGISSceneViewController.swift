@@ -12,7 +12,7 @@ import ArcGIS
 
 @MainActor
 class ArcGISSceneViewController: UIHostingController<ArcGISSceneViewController.HostedView> {
-    private let model: ViewModel
+    private let model: HostedViewModel
     
     init(
         scene: ArcGIS.Scene = Scene(),
@@ -37,6 +37,10 @@ class ArcGISSceneViewController: UIHostingController<ArcGISSceneViewController.H
         )
         
         super.init(rootView: HostedView(model: model))
+    }
+    
+    var sceneViewProxy: SceneViewProxy? {
+        get { model.sceneViewProxy }
     }
     
     var scene: ArcGIS.Scene {
@@ -91,9 +95,9 @@ class ArcGISSceneViewController: UIHostingController<ArcGISSceneViewController.H
 
 extension ArcGISSceneViewController {
     struct HostedView: View {
-        @ObservedObject private var model: ViewModel
+        @ObservedObject private var model: HostedViewModel
         
-        fileprivate init(model: ViewModel) {
+        fileprivate init(model: HostedViewModel) {
             self.model = model
         }
         
@@ -111,6 +115,11 @@ extension ArcGISSceneViewController {
                 .attributionBarHidden(model.isAttributionBarHidden)
                 .viewDrawingMode(model.viewDrawingMode)
                 .onAppear {
+                    print("-- setting proxy")
+                    self.model.sceneViewProxy = proxy
+                }
+                .task {
+                    print("-- setting proxy 2")
                     self.model.sceneViewProxy = proxy
                 }
                 .ignoresSafeArea()
@@ -120,7 +129,7 @@ extension ArcGISSceneViewController {
 }
 
 @MainActor
-private class ViewModel: ObservableObject {
+private class HostedViewModel: ObservableObject {
     var sceneViewProxy: SceneViewProxy?
     
     @Published var scene: ArcGIS.Scene
