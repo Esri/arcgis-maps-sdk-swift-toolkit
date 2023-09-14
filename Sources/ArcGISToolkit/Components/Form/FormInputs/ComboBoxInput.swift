@@ -71,7 +71,12 @@ struct ComboBoxInput: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 Divider()
                                 List(codedValues, id: \.self) { codedValue in
-                                    Text(codedValue.name)
+                                    HStack {
+                                        Text(codedValue.name)
+                                        Spacer()
+                                        Image(systemName: "checkmark")
+                                            .foregroundColor(.accentColor)
+                                    }
                                 }
                                 .listStyle(.plain)
                                 .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Filter")
