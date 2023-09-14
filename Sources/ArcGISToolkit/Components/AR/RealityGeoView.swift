@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import ArcGIS
-import ARKit
+import RealityKit
 import SwiftUI
 
 public enum RealityGeoViewTrackingMode {
