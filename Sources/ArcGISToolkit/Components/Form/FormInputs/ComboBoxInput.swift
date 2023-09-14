@@ -56,7 +56,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedName ?? "No value")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedValue?.name ?? "No value")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(selectedValue != nil ? .primary : .secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
