@@ -30,6 +30,12 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED***@State private var selectedName: String?
 ***REMOVED***
+***REMOVED***@State private var codedValues = [CodedValue]()
+***REMOVED***
+***REMOVED***@State private var isPresented = false
+***REMOVED***
+***REMOVED***@State private var searchText = ""
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a combo box input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
@@ -42,25 +48,60 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Need to figure out $selectedValue, given that codedValue.code is an "Object"
-***REMOVED******REMOVED******REMOVED******REMOVED*** CodedValue is equatable and hashable, so maybe that's enough??
-***REMOVED******REMOVED******REMOVED***Picker(element.label, selection: $selectedName) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(element.codedValues) { codedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(codedValue.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(codedValue.code)
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.value)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationView {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.gray)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(codedValues, id: \.name) { codedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(codedValue.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Filter")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(element.label)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if /*element.value.isEmpty*/ true {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "list.bullet")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Picker")
-***REMOVED******REMOVED******REMOVED***.pickerStyle(.menu)
+***REMOVED******REMOVED******REMOVED***.formTextInputStyle()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***footer
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***codedValues = featureForm!.codedValues(fieldName: element.fieldName)
+***REMOVED******REMOVED******REMOVED***codedValues.forEach { cv in
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let value = element.value {  ***REMOVED*** returns name for CodedValues
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switchState = (value == input.onValue.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -80,5 +121,32 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***Text(element.description)
 ***REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED***
+***REMOVED***
+
+extension CodedValue: Equatable {
+***REMOVED***public static func == (lhs: CodedValue, rhs: CodedValue) -> Bool {
+***REMOVED******REMOVED***lhs.name == rhs.name
+***REMOVED***
+***REMOVED***
+
+extension CodedValue: Hashable {
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED******REMOVED*** Note: We're not hashing `suggestResult` as `SearchSuggestion` is
+***REMOVED******REMOVED******REMOVED*** created from a `SuggestResult` and `suggestResult` will be different
+***REMOVED******REMOVED******REMOVED*** for two separate geocode operations even though they represent the
+***REMOVED******REMOVED******REMOVED*** same suggestion.
+***REMOVED******REMOVED***hasher.combine(name)
+***REMOVED***
+***REMOVED***
+
+extension FeatureForm {
+***REMOVED***func codedValues(fieldName: String) -> [CodedValue] {
+***REMOVED******REMOVED***if let field = feature.table?.field(named: fieldName),
+***REMOVED******REMOVED***   let domain = field.domain as? CodedValueDomain {
+***REMOVED******REMOVED******REMOVED***return domain.codedValues
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return []
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
