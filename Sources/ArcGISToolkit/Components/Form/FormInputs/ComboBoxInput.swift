@@ -25,7 +25,7 @@ struct ComboBoxInput: View {
     @State private var isPresented = false
     
     /// <#Description#>
-    @State private var searchText = ""
+    @State private var filterPhrase = ""
     
     /// <#Description#>
     @State private var selectedValue: CodedValue?
@@ -118,7 +118,7 @@ struct ComboBoxInput: View {
                     }
                 }
                 .listStyle(.plain)
-                .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Filter")
+                .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: "Filter")
                 .navigationTitle(element.label)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
