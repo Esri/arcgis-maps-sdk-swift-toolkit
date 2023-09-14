@@ -66,7 +66,7 @@ struct ComboBoxInput: View {
                 .padding([.top], elementPadding)
             
             HStack {
-                Text(selectedValue?.name ?? "No value")
+                Text(selectedValue?.name ?? .noValue)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
                 
@@ -132,7 +132,7 @@ struct ComboBoxInput: View {
                     }
                 }
                 .listStyle(.plain)
-                .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: "Filter")
+                .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: .filter)
                 .navigationTitle(element.label)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -140,13 +140,24 @@ struct ComboBoxInput: View {
                         Button {
                             isPresented = false
                         } label: {
-                            Text("Done")
+                            Text.done
                                 .bold()
                         }
                     }
                 }
             }
         }
+    }
+}
+
+private extension Text {
+    /// A label for a text entry field that allows the user to filter a list of values by name.
+    static var filter: Self {
+        .init(
+            "Filter",
+            bundle: .toolkitModule,
+            comment: "A label for a text entry field that allows the user to filter a list of values by name."
+        )
     }
 }
 
