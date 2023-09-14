@@ -18,6 +18,22 @@ import SwiftUI
 struct ComboBoxInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
+    /// <#Description#>
+    @State private var codedValues = [CodedValue]()
+    
+    /// <#Description#>
+    @State private var isPresented = false
+    
+    /// <#Description#>
+    @State private var searchText = ""
+    
+    /// <#Description#>
+    @State private var selectedName: String?
+    
+    /// <#Description#>
+    @State private var value: Bool?
+    
+    /// <#Description#>
     private var featureForm: FeatureForm?
     
     /// The field's parent element.
@@ -25,16 +41,6 @@ struct ComboBoxInput: View {
     
     /// The input configuration of the field.
     private let input: ComboBoxFormInput
-    
-    @State private var value: Bool?
-    
-    @State private var selectedName: String?
-    
-    @State private var codedValues = [CodedValue]()
-    
-    @State private var isPresented = false
-    
-    @State private var searchText = ""
     
     /// Creates a view for a combo box input.
     /// - Parameters:
