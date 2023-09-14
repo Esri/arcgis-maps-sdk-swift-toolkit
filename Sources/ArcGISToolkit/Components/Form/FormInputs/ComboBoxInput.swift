@@ -59,44 +59,6 @@ struct ComboBoxInput: View {
                 Text(selectedValue?.name ?? "No value")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
-                    .sheet(isPresented: $isPresented) {
-                        NavigationView {
-                            VStack {
-                                Text(element.description)
-                                    .foregroundColor(.secondary)
-                                    .font(.subheadline)
-                                    .padding(.horizontal)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                Divider()
-                                List(codedValues, id: \.self) { codedValue in
-                                    HStack {
-                                        Button(codedValue.name) {
-                                            selectedValue = codedValue
-                                        }
-                                        Spacer()
-                                        if codedValue == selectedValue {
-                                            Image(systemName: "checkmark")
-                                                .foregroundColor(.accentColor)
-                                        }
-                                    }
-                                }
-                                .listStyle(.plain)
-                                .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Filter")
-                                .navigationTitle(element.label)
-                                .navigationBarTitleDisplayMode(.inline)
-                                .toolbar {
-                                    ToolbarItem(placement: .navigationBarTrailing) {
-                                        Button {
-                                            isPresented = false
-                                        } label: {
-                                            Text("Done")
-                                                .bold()
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
                 
                 if selectedValue == nil {
                     Image(systemName: "list.bullet")
@@ -107,6 +69,9 @@ struct ComboBoxInput: View {
                 }
             }
             .formTextInputStyle()
+            .sheet(isPresented: $isPresented) {
+                picker
+            }
             .onTapGesture {
                  isPresented = true
             }
@@ -128,6 +93,46 @@ struct ComboBoxInput: View {
         Text(element.description)
             .font(.footnote)
             .foregroundColor(.secondary)
+    }
+    
+    /// The view that allows user to filter and select coded value names.
+    var picker: some View {
+        NavigationView {
+            VStack {
+                Text(element.description)
+                    .foregroundColor(.secondary)
+                    .font(.subheadline)
+                    .padding(.horizontal)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Divider()
+                List(codedValues, id: \.self) { codedValue in
+                    HStack {
+                        Button(codedValue.name) {
+                            selectedValue = codedValue
+                        }
+                        Spacer()
+                        if codedValue == selectedValue {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.accentColor)
+                        }
+                    }
+                }
+                .listStyle(.plain)
+                .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Filter")
+                .navigationTitle(element.label)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            isPresented = false
+                        } label: {
+                            Text("Done")
+                                .bold()
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
