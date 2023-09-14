@@ -30,6 +30,12 @@ struct ComboBoxInput: View {
     
     @State private var selectedName: String?
     
+    @State private var codedValues = [CodedValue]()
+    
+    @State private var isPresented = false
+    
+    @State private var searchText = ""
+    
     /// Creates a view for a combo box input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
@@ -42,25 +48,60 @@ struct ComboBoxInput: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             FormElementHeader(element: element)
                 .padding([.top], elementPadding)
             
-            // Need to figure out $selectedValue, given that codedValue.code is an "Object"
-            // CodedValue is equatable and hashable, so maybe that's enough??
-            Picker(element.label, selection: $selectedName) {
-//                ForEach(element.codedValues) { codedValue in
-//                    Text(codedValue.name)
-//                        .tag(codedValue.code)
-//                }
+            HStack {
+                Text(element.value)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .sheet(isPresented: $isPresented) {
+                        NavigationView {
+                            VStack {
+                                Text(element.description)
+                                    .foregroundColor(.gray)
+                                    .font(.subheadline)
+                                List(codedValues, id: \.name) { codedValue in
+                                    Text(codedValue.name)
+                                }
+                                .listStyle(.plain)
+                                .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Filter")
+                                .navigationTitle(element.label)
+                                .navigationBarTitleDisplayMode(.inline)
+                                .toolbar {
+                                    ToolbarItem(placement: .navigationBarTrailing) {
+                                        Button("Done") {
+                                            withAnimation {
+                                                isPresented = false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                
+                if /*element.value.isEmpty*/ true {
+                    Button {
+                        isPresented = true
+                    } label: {
+                        Image(systemName: "list.bullet")
+                    }
+                    .buttonStyle(.plain)
+                } else {
+//                    ClearButton { }
+//                        .accessibilityIdentifier("\(element.label) Clear Button")
+                }
             }
-            .accessibilityIdentifier("\(element.label) Picker")
-            .pickerStyle(.menu)
+            .formTextInputStyle()
             
             footer
         }
         .padding([.bottom], elementPadding)
         .onAppear {
+            codedValues = featureForm!.codedValues(fieldName: element.fieldName)
+            codedValues.forEach { cv in
+            }
             //            if let value = element.value {  // returns name for CodedValues
             //                switchState = (value == input.onValue.name)
             //            }
@@ -80,5 +121,32 @@ struct ComboBoxInput: View {
         Text(element.description)
             .font(.footnote)
             .foregroundColor(.secondary)
+    }
+}
+
+extension CodedValue: Equatable {
+    public static func == (lhs: CodedValue, rhs: CodedValue) -> Bool {
+        lhs.name == rhs.name
+    }
+}
+
+extension CodedValue: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        // Note: We're not hashing `suggestResult` as `SearchSuggestion` is
+        // created from a `SuggestResult` and `suggestResult` will be different
+        // for two separate geocode operations even though they represent the
+        // same suggestion.
+        hasher.combine(name)
+    }
+}
+
+extension FeatureForm {
+    func codedValues(fieldName: String) -> [CodedValue] {
+        if let field = feature.table?.field(named: fieldName),
+           let domain = field.domain as? CodedValueDomain {
+            return domain.codedValues
+        } else {
+            return []
+        }
     }
 }
