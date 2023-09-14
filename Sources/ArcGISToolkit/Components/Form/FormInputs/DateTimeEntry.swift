@@ -60,11 +60,17 @@ struct DateTimeEntry: View {
         }
         .padding([.bottom], elementPadding)
         .onAppear {
-            if let date = featureForm?.feature.attributes[element.fieldName] as? Date {
-                self.date = date
+            if element.value.isEmpty {
+                date = nil
+            } else {
+                date = try? Date(element.value, strategy: .arcGISDateParseStrategy)
             }
         }
         .onChange(of: date) { newDate in
+            guard let currentDate = try? Date(element.value, strategy: .arcGISDateParseStrategy),
+                  newDate != currentDate else {
+                return
+            }
             //TODO: add `required` property to API
             requiredValueMissing = /*element.required && */newDate == nil
             featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
@@ -202,6 +208,15 @@ struct DateTimeEntry: View {
     }
 }
 
+private extension ParseStrategy where Self == Date.ParseStrategy {
+    /// A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
+    static var arcGISDateParseStrategy: Self {
+        .fixed(
+            format: "\(year: .defaultDigits)-\(month: .defaultDigits)-\(day: .defaultDigits)T\(hour: .defaultDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .defaultDigits):\(second: .defaultDigits)",
+            timeZone: .current
+        )
+    }
+}
 
 private extension String {
     /// A string indicating that no date or time has been set for a date/time field.
