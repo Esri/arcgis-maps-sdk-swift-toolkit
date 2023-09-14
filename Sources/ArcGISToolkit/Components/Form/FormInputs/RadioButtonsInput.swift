@@ -190,18 +190,6 @@ struct RadioButtonsInput: View {
 ***REMOVED***
 ***REMOVED***
 
-
-private extension String {
-***REMOVED******REMOVED***/ A string indicating that no date or time has been set for a date/time field.
-***REMOVED***static var noValue: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "No Value",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A string indicating that no date or time has been set for a date/time field."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-
 private extension Text {
 ***REMOVED******REMOVED***/ A label for a button to choose the current time and date for a field.
 ***REMOVED***static var now: Self {
