@@ -65,7 +65,7 @@ struct ComboBoxInput: View {
                         NavigationView {
                             VStack {
                                 Text(element.description)
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(.secondary)
                                     .font(.subheadline)
                                     .padding(.horizontal)
                                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -103,6 +103,7 @@ struct ComboBoxInput: View {
                         Image(systemName: "list.bullet")
                     }
                     .buttonStyle(.plain)
+                    .foregroundColor(.secondary)
                 } else {
                     ClearButton { selectedName = nil }
                         .accessibilityIdentifier("\(element.label) Clear Button")
