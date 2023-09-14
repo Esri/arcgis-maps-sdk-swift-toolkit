@@ -70,8 +70,7 @@ public struct ARGeoView: UIViewControllerRepresentable {
 extension ARGeoView {
 ***REMOVED***public class Coordinator: NSObject, ARSCNViewDelegate, SCNSceneRendererDelegate, ARSessionObserver {
 ***REMOVED******REMOVED******REMOVED***/ We implement `ARSCNViewDelegate` methods, but will use `delegate` to forward them to clients.
-***REMOVED******REMOVED******REMOVED***/ - Since: 200.3
-***REMOVED******REMOVED***public weak var delegate: ARSCNViewDelegate?
+***REMOVED******REMOVED***weak var delegate: ARSCNViewDelegate?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var arView: ARSCNView?
 ***REMOVED******REMOVED***var isTracking: Bool = false
