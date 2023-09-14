@@ -80,7 +80,7 @@ struct ComboBoxInput: View {
             }
             .formTextInputStyle()
             .sheet(isPresented: $isPresented) {
-                picker
+                pickerRoot
             }
             .onTapGesture {
                  isPresented = true
@@ -102,6 +102,22 @@ struct ComboBoxInput: View {
         }
     }
     
+    /// The root of the picker view.
+    ///
+    /// Adds navigation context to support toolbar items and other visual elements in the picker.
+    /// - Note `NavigationView` is deprecated after iOS 17.0.
+    @ViewBuilder var pickerRoot: some View {
+        if #available(iOS 16, macCatalyst 16, *) {
+            NavigationStack {
+                picker
+            }
+        } else {
+            NavigationView {
+                picker
+            }
+        }
+    }
+    
     /// The message shown below the picker.
     @ViewBuilder var footer: some View {
         Text(element.description)
@@ -111,38 +127,36 @@ struct ComboBoxInput: View {
     
     /// The view that allows the user to filter and select coded values by name.
     var picker: some View {
-        NavigationView {
-            VStack {
-                Text(element.description)
-                    .foregroundColor(.secondary)
-                    .font(.subheadline)
-                    .padding(.horizontal)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Divider()
-                List(matchingValues, id: \.self) { codedValue in
-                    HStack {
-                        Button(codedValue.name) {
-                            selectedValue = codedValue
-                        }
-                        Spacer()
-                        if codedValue == selectedValue {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(.accentColor)
-                        }
+        VStack {
+            Text(element.description)
+                .foregroundColor(.secondary)
+                .font(.subheadline)
+                .padding(.horizontal)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Divider()
+            List(matchingValues, id: \.self) { codedValue in
+                HStack {
+                    Button(codedValue.name) {
+                        selectedValue = codedValue
+                    }
+                    Spacer()
+                    if codedValue == selectedValue {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(.accentColor)
                     }
                 }
-                .listStyle(.plain)
-                .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: .filter)
-                .navigationTitle(element.label)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            isPresented = false
-                        } label: {
-                            Text.done
-                                .bold()
-                        }
+            }
+            .listStyle(.plain)
+            .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: .filter)
+            .navigationTitle(element.label)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        isPresented = false
+                    } label: {
+                        Text.done
+                            .bold()
                     }
                 }
             }
