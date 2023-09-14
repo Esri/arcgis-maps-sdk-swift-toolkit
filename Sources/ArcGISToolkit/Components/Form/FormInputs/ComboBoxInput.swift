@@ -97,19 +97,17 @@ struct ComboBoxInput: View {
                     }
                 
                 if selectedName == nil {
-                    Button {
-                        isPresented = true
-                    } label: {
-                        Image(systemName: "list.bullet")
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundColor(.secondary)
+                    Image(systemName: "list.bullet")
+                        .foregroundColor(.secondary)
                 } else {
                     ClearButton { selectedName = nil }
                         .accessibilityIdentifier("\(element.label) Clear Button")
                 }
             }
             .formTextInputStyle()
+            .onTapGesture {
+                 isPresented = true
+            }
             
             footer
         }
