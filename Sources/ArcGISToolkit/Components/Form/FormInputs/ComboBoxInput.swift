@@ -104,8 +104,8 @@ struct ComboBoxInput: View {
                     }
                     .buttonStyle(.plain)
                 } else {
-//                    ClearButton { }
-//                        .accessibilityIdentifier("\(element.label) Clear Button")
+                    ClearButton { selectedName = nil }
+                        .accessibilityIdentifier("\(element.label) Clear Button")
                 }
             }
             .formTextInputStyle()
