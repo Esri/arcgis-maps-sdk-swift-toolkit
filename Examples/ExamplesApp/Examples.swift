@@ -36,7 +36,8 @@ extension ExampleList {
 ***REMOVED***static let augmentedReality = Self(
 ***REMOVED******REMOVED***name: "Augmented Reality",
 ***REMOVED******REMOVED***examples: [
-***REMOVED******REMOVED******REMOVED***AnyExample("Flyover", content: FlyoverExampleView())
+***REMOVED******REMOVED******REMOVED***AnyExample("Flyover", content: FlyoverExampleView()),
+***REMOVED******REMOVED******REMOVED***AnyExample("Reality Kit Flyover", content: RealityFlyoverExampleView())
 ***REMOVED******REMOVED***]
 ***REMOVED***)
 ***REMOVED***
