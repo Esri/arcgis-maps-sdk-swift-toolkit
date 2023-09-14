@@ -23,14 +23,19 @@ public enum ARGeoViewTrackingMode {
 
 public struct ARGeoView: UIViewControllerRepresentable {
     private let scene: ArcGIS.Scene
-    private let renderVideoFeed: Bool
     private let cameraController: TransformationMatrixCameraController
     private let trackingMode: ARGeoViewTrackingMode
+    private let renderVideoFeed: Bool
+    private let graphicsOverlays: [GraphicsOverlay]
+    private let analysisOverlays: [AnalysisOverlay]
     
     public func makeUIViewController(context: Context) -> ViewController {
         let viewController = ViewController(
             scene: scene,
             cameraController: cameraController,
+            graphicsOverlays: graphicsOverlays,
+            analysisOverlays: analysisOverlays,
+            trackingMode: trackingMode,
             renderVideoFeed: renderVideoFeed
         )
         viewController.arView.delegate = context.coordinator
@@ -45,11 +50,15 @@ public struct ARGeoView: UIViewControllerRepresentable {
     public init(
         scene: ArcGIS.Scene = ArcGIS.Scene(),
         cameraController: TransformationMatrixCameraController = TransformationMatrixCameraController(),
-        trackingMode: ARGeoViewTrackingMode = .ignore,
-        renderVideoFeed: Bool
+        graphicsOverlays: [GraphicsOverlay] = [],
+        analysisOverlays: [AnalysisOverlay] = [],
+        trackingMode: ARGeoViewTrackingMode = .initial,
+        renderVideoFeed: Bool = true
     ) {
         self.scene = scene
         self.cameraController = cameraController
+        self.graphicsOverlays = graphicsOverlays
+        self.analysisOverlays = analysisOverlays
         self.trackingMode = trackingMode
         self.renderVideoFeed = renderVideoFeed
     }
@@ -274,9 +283,10 @@ extension ARGeoView {
         public init(
             scene: ArcGIS.Scene,
             cameraController: TransformationMatrixCameraController,
-            graphicsOverlays: [GraphicsOverlay] = [],
-            analysisOverlays: [AnalysisOverlay] = [],
-            renderVideoFeed: Bool = true
+            graphicsOverlays: [GraphicsOverlay],
+            analysisOverlays: [AnalysisOverlay],
+            trackingMode: ARGeoViewTrackingMode,
+            renderVideoFeed: Bool
         ) {
             sceneViewController = ArcGISSceneViewController(
                 scene: scene,
@@ -293,6 +303,8 @@ extension ARGeoView {
             config.worldAlignment = .gravityAndHeading
             config.planeDetection = [.horizontal]
             arConfiguration = config
+            
+            self.trackingMode = trackingMode
             
             super.init(nibName: nil, bundle: nil)
             
