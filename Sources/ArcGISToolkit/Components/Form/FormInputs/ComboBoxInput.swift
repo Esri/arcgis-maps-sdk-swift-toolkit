@@ -59,7 +59,7 @@ struct ComboBoxInput: View {
                 .padding([.top], elementPadding)
             
             HStack {
-                Text(element.value)
+                Text(selectedName ?? "No value")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .sheet(isPresented: $isPresented) {
                         NavigationView {
