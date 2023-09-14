@@ -61,7 +61,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.gray)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(codedValues, id: \.name) { codedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(codedValues, id: \.self) { codedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(codedValue.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
@@ -100,8 +100,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-***REMOVED******REMOVED******REMOVED***codedValues.forEach { cv in
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let value = element.value {  ***REMOVED*** returns name for CodedValues
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switchState = (value == input.onValue.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -132,10 +130,6 @@ extension CodedValue: Equatable {
 
 extension CodedValue: Hashable {
 ***REMOVED***public func hash(into hasher: inout Hasher) {
-***REMOVED******REMOVED******REMOVED*** Note: We're not hashing `suggestResult` as `SearchSuggestion` is
-***REMOVED******REMOVED******REMOVED*** created from a `SuggestResult` and `suggestResult` will be different
-***REMOVED******REMOVED******REMOVED*** for two separate geocode operations even though they represent the
-***REMOVED******REMOVED******REMOVED*** same suggestion.
 ***REMOVED******REMOVED***hasher.combine(name)
 ***REMOVED***
 ***REMOVED***
