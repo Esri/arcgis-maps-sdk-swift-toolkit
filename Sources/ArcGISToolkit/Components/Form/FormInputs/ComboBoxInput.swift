@@ -70,10 +70,11 @@ struct ComboBoxInput: View {
                                 .navigationBarTitleDisplayMode(.inline)
                                 .toolbar {
                                     ToolbarItem(placement: .navigationBarTrailing) {
-                                        Button("Done") {
-                                            withAnimation {
-                                                isPresented = false
-                                            }
+                                        Button {
+                                            isPresented = false
+                                        } label: {
+                                            Text("Done")
+                                                .bold()
                                         }
                                     }
                                 }
