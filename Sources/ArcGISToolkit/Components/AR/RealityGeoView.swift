@@ -14,6 +14,7 @@
 import ArcGIS
 import ARKit
 import SwiftUI
+import RealityKit
 
 public enum RealityGeoViewTrackingMode {
     case ignore
