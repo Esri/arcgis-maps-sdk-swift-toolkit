@@ -49,7 +49,7 @@ struct FlyoverExampleView: View {
     }()
 
     var body: some View {
-        ARGeoView(
+        ARGeoView2(
             scene: scene,
             cameraController: cameraController
         )
