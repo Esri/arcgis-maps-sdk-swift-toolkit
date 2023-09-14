@@ -25,7 +25,7 @@ struct ComboBoxInput: View {
 ***REMOVED***@State private var isPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@State private var searchText = ""
+***REMOVED***@State private var filterPhrase = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***@State private var selectedValue: CodedValue?
@@ -118,7 +118,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED***.searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Filter")
+***REMOVED******REMOVED******REMOVED******REMOVED***.searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: "Filter")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(element.label)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
