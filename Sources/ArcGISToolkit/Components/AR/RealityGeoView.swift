@@ -14,6 +14,7 @@
 ***REMOVED***
 import ARKit
 ***REMOVED***
+import RealityKit
 
 public enum RealityGeoViewTrackingMode {
 ***REMOVED***case ignore
