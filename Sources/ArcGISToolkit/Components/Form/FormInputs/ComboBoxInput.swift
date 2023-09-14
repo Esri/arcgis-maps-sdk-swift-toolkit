@@ -61,7 +61,7 @@ struct ComboBoxInput: View {
                                 Text(element.description)
                                     .foregroundColor(.gray)
                                     .font(.subheadline)
-                                List(codedValues, id: \.name) { codedValue in
+                                List(codedValues, id: \.self) { codedValue in
                                     Text(codedValue.name)
                                 }
                                 .listStyle(.plain)
@@ -100,8 +100,6 @@ struct ComboBoxInput: View {
         .padding([.bottom], elementPadding)
         .onAppear {
             codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-            codedValues.forEach { cv in
-            }
             //            if let value = element.value {  // returns name for CodedValues
             //                switchState = (value == input.onValue.name)
             //            }
@@ -132,10 +130,6 @@ extension CodedValue: Equatable {
 
 extension CodedValue: Hashable {
     public func hash(into hasher: inout Hasher) {
-        // Note: We're not hashing `suggestResult` as `SearchSuggestion` is
-        // created from a `SuggestResult` and `suggestResult` will be different
-        // for two separate geocode operations even though they represent the
-        // same suggestion.
         hasher.combine(name)
     }
 }
