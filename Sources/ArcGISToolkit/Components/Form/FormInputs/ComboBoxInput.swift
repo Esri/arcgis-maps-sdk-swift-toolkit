@@ -30,7 +30,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
 ***REMOVED***
-***REMOVED******REMOVED***/ The parent form interface.
+***REMOVED******REMOVED***/ The feature form containing the input.
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
