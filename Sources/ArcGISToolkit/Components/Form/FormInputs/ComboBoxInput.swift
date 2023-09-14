@@ -39,6 +39,16 @@ struct ComboBoxInput: View {
     /// The input configuration of the field.
     private let input: ComboBoxFormInput
     
+    /// A subset of coded values with names containing `filterPhrase` or all of the coded values
+    /// if `filterPhrase` is empty.
+    var matchingValues: [CodedValue] {
+        guard !filterPhrase.isEmpty else {
+            return codedValues
+        }
+        return codedValues
+            .filter { $0.name.localizedStandardContains(filterPhrase) }
+    }
+    
     /// Creates a view for a combo box input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
@@ -105,7 +115,7 @@ struct ComboBoxInput: View {
                     .padding(.horizontal)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
-                List(codedValues, id: \.self) { codedValue in
+                List(matchingValues, id: \.self) { codedValue in
                     HStack {
                         Button(codedValue.name) {
                             selectedValue = codedValue
