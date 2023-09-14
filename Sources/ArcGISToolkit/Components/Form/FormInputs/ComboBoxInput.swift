@@ -94,6 +94,10 @@ struct ComboBoxInput: View {
             selectedValue = codedValues.first { $0.name == element.value }
         }
         .onChange(of: selectedValue) { newValue in
+            guard let current = codedValues.first(where: { $0.name == element.value }),
+                  current != newValue else {
+                return
+            }
             featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
         }
     }
