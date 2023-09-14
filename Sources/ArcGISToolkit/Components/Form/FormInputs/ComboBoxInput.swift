@@ -30,7 +30,7 @@ struct ComboBoxInput: View {
     /// The selected option.
     @State private var selectedValue: CodedValue?
     
-    /// The parent form interface.
+    /// The feature form containing the input.
     private var featureForm: FeatureForm?
     
     /// The field's parent element.

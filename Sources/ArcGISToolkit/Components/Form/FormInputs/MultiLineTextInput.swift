@@ -21,7 +21,7 @@ struct MultiLineTextInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// <#Description#>
+    /// The feature form containing the input.
     private var featureForm: FeatureForm?
     
     /// A Boolean value indicating whether or not the field is focused.
@@ -45,7 +45,7 @@ struct MultiLineTextInput: View {
     
     /// Creates a view for text input spanning multiple lines.
     /// - Parameters:
-    ///   - featureForm: <#featureForm description#>
+    ///   - featureForm: The feature form containing the input.
     ///   - element: The field's parent element.
     ///   - input: The input configuration of the field.
     init(featureForm: FeatureForm?, element: FieldFormElement, input: TextAreaFormInput) {
