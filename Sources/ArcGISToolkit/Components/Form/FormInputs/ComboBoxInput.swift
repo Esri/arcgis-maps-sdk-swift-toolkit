@@ -56,7 +56,7 @@ struct ComboBoxInput: View {
                 .padding([.top], elementPadding)
             
             HStack {
-                Text(selectedName ?? "No value")
+                Text(selectedValue?.name ?? "No value")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
                     .sheet(isPresented: $isPresented) {
