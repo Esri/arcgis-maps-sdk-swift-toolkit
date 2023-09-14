@@ -53,6 +53,7 @@ struct SingleLineTextInput: View {
         // Secondary foreground color is used across input views for consistency.
         HStack {
             TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
+                .keyboardType(keyboardType)
                 .focused($isFocused)
                 .accessibilityIdentifier("\(element.label) Text Field")
             if !text.isEmpty {
@@ -62,7 +63,7 @@ struct SingleLineTextInput: View {
         }
         .formTextInputStyle()
         TextInputFooter(
-            currentLength: text.count,
+            text: text,
             isFocused: isFocused,
             element: element,
             input: input
@@ -78,6 +79,46 @@ struct SingleLineTextInput: View {
         }
         .onChange(of: text) { newValue in
             featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+        }
+    }
+}
+
+private extension SingleLineTextInput {
+    var isNumericInput: Bool {
+        if let field = featureForm?.feature.table?.field(named: element.fieldName)?.type {
+            return field.isNumeric
+        }
+        return false
+    }
+    
+    var isDecimalInput: Bool {
+        if let field = featureForm?.feature.table?.field(named: element.fieldName)?.type {
+            return field.isFloatingPoint
+        }
+        return false
+    }
+
+    var keyboardType: UIKeyboardType {
+        isNumericInput ? (isDecimalInput ? .decimalPad : .numberPad) : .default
+    }
+}
+
+private extension FieldType {
+    var isNumeric: Bool {
+        self == .float32 || self == .float64 || self == .int16 || self == .int32 || self == .int64
+    }
+    
+    var isFloatingPoint: Bool {
+        self == .float32 || self == .float64
+    }
+}
+
+extension SingleLineTextInput {
+    var rangeDomain: RangeDomain? {
+        if let field = featureForm?.feature.table?.field(named: element.fieldName) {
+           return field.domain as? RangeDomain
+        } else {
+            return nil
         }
     }
 }

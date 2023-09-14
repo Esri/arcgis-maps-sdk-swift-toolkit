@@ -23,9 +23,12 @@ struct TextInputFooter: View {
     /// length at any point in time.
     @State private var hasPreviouslySatisfiedMinimum: Bool
     
+    /// The current text in the text input field.
+    private let text: String
+    
     /// The current length of the text in the text input field.
     private let currentLength: Int
-    
+
     /// The field's parent element.
     private let element: FieldFormElement
     
@@ -44,6 +47,10 @@ struct TextInputFooter: View {
     /// The minimum allowable length of text in the text input field.
     private let minLength: Int
     
+    /// The range domain for the text field input. This is used to
+    /// generate messages if the numeric value is out-of-range.
+    private let rangeDomain: RangeDomain? = nil
+    
     /// Creates a footer shown at the bottom of each text input element in a form.
     /// - Parameters:
     ///   - currentLength: The current length of the text in the text input field.
@@ -52,12 +59,14 @@ struct TextInputFooter: View {
     ///  or not text is required for this input.
     ///   - input: A form input that provides length constraints for the text input.
     init(
-        currentLength: Int,
+        text: String,
         isFocused: Bool,
         element: FieldFormElement,
-        input: FormInput
+        input: FormInput,
+        rangeDomain: RangeDomain? = nil
     ) {
-        self.currentLength = currentLength
+        self.text = text
+        self.currentLength = text.count
         self.element = element
         self.isFocused = isFocused
         self.description = element.description
