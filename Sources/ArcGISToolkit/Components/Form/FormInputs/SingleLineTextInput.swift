@@ -69,7 +69,7 @@ struct SingleLineTextInput: View {
         )
         .padding([.bottom], elementPadding)
         .onAppear {
-            text = featureForm?.feature.attributes[element.fieldName] as? String ?? ""
+            text = element.value
         }
         .onChange(of: isFocused) { newFocus in
             if newFocus {
@@ -77,6 +77,9 @@ struct SingleLineTextInput: View {
             }
         }
         .onChange(of: text) { newValue in
+            guard newValue != element.value else {
+                return
+            }
             featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
         }
     }
