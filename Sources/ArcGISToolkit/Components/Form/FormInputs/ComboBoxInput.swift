@@ -74,8 +74,10 @@ struct ComboBoxInput: View {
                                     HStack {
                                         Text(codedValue.name)
                                         Spacer()
-                                        Image(systemName: "checkmark")
-                                            .foregroundColor(.accentColor)
+                                        if codedValue.name == selectedName {
+                                            Image(systemName: "checkmark")
+                                                .foregroundColor(.accentColor)
+                                        }
                                     }
                                 }
                                 .listStyle(.plain)
