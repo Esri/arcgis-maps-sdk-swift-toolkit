@@ -18,22 +18,19 @@ import SwiftUI
 struct ComboBoxInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// <#Description#>
+    /// The set of options in the combo box.
     @State private var codedValues = [CodedValue]()
     
-    /// <#Description#>
+    /// A Boolean value indicating if the combo box picker is presented.
     @State private var isPresented = false
     
-    /// <#Description#>
-    @State private var searchText = ""
+    /// The phrase to use when filtering by coded value name.
+    @State private var filterPhrase = ""
     
-    /// <#Description#>
-    @State private var selectedName: String?
+    /// The selected option.
+    @State private var selectedValue: CodedValue?
     
-    /// <#Description#>
-    @State private var value: Bool?
-    
-    /// <#Description#>
+    /// The feature form containing the input.
     private var featureForm: FeatureForm?
     
     /// The field's parent element.
@@ -59,73 +56,35 @@ struct ComboBoxInput: View {
                 .padding([.top], elementPadding)
             
             HStack {
-                Text(element.value)
+                Text(selectedValue?.name ?? "No value")
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .sheet(isPresented: $isPresented) {
-                        NavigationView {
-                            VStack {
-                                Text(element.description)
-                                    .foregroundColor(.gray)
-                                    .font(.subheadline)
-                                    .padding(.horizontal)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                Divider()
-                                List(codedValues, id: \.self) { codedValue in
-                                    HStack {
-                                        Text(codedValue.name)
-                                        Spacer()
-                                        Image(systemName: "checkmark")
-                                            .foregroundColor(.accentColor)
-                                    }
-                                }
-                                .listStyle(.plain)
-                                .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Filter")
-                                .navigationTitle(element.label)
-                                .navigationBarTitleDisplayMode(.inline)
-                                .toolbar {
-                                    ToolbarItem(placement: .navigationBarTrailing) {
-                                        Button {
-                                            isPresented = false
-                                        } label: {
-                                            Text("Done")
-                                                .bold()
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    .foregroundColor(selectedValue != nil ? .primary : .secondary)
                 
-                if selectedName == nil {
-                    Button {
-                        isPresented = true
-                    } label: {
-                        Image(systemName: "list.bullet")
-                    }
-                    .buttonStyle(.plain)
+                if selectedValue == nil {
+                    Image(systemName: "list.bullet")
+                        .foregroundColor(.secondary)
                 } else {
-                    ClearButton { selectedName = nil }
+                    ClearButton { selectedValue = nil }
                         .accessibilityIdentifier("\(element.label) Clear Button")
                 }
             }
             .formTextInputStyle()
+            .sheet(isPresented: $isPresented) {
+                picker
+            }
+            .onTapGesture {
+                 isPresented = true
+            }
             
             footer
         }
         .padding([.bottom], elementPadding)
         .onAppear {
             codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-            //            if let value = element.value {  // returns name for CodedValues
-            //                switchState = (value == input.onValue.name)
-            //            }
-            if let codedValue = featureForm?.feature.attributes[element.fieldName] as? CodedValue {
-                selectedName = codedValue.name
-            }
+            selectedValue = codedValues.first { $0.name == element.value }
         }
-        .onChange(of: selectedName) { newValue in
-//            let codedValue = element.codedValues.first { $0.name == newValue }
-//            // element.updateValue(codedValue)
-//            featureForm?.feature.setAttributeValue(codedValue, forKey: element.fieldName)
+        .onChange(of: selectedValue) { newValue in
+            featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
         }
     }
     
@@ -135,21 +94,64 @@ struct ComboBoxInput: View {
             .font(.footnote)
             .foregroundColor(.secondary)
     }
+    
+    /// The view that allows the user to filter and select coded values by name.
+    var picker: some View {
+        NavigationView {
+            VStack {
+                Text(element.description)
+                    .foregroundColor(.secondary)
+                    .font(.subheadline)
+                    .padding(.horizontal)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Divider()
+                List(codedValues, id: \.self) { codedValue in
+                    HStack {
+                        Button(codedValue.name) {
+                            selectedValue = codedValue
+                        }
+                        Spacer()
+                        if codedValue == selectedValue {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.accentColor)
+                        }
+                    }
+                }
+                .listStyle(.plain)
+                .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: "Filter")
+                .navigationTitle(element.label)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            isPresented = false
+                        } label: {
+                            Text("Done")
+                                .bold()
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 extension CodedValue: Equatable {
+    /// - Note: Equatable conformance added temporarily in lieu of finalized API.
     public static func == (lhs: CodedValue, rhs: CodedValue) -> Bool {
         lhs.name == rhs.name
     }
 }
 
 extension CodedValue: Hashable {
+    /// - Note: Hashable conformance added temporarily in lieu of finalized API.
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }
 }
 
 extension FeatureForm {
+    /// - Note: This property added temporarily in lieu of finalized API.
     func codedValues(fieldName: String) -> [CodedValue] {
         if let field = feature.table?.field(named: fieldName),
            let domain = field.domain as? CodedValueDomain {
