@@ -51,9 +51,7 @@ struct FlyoverExampleView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ARGeoView(
 ***REMOVED******REMOVED******REMOVED***scene: scene,
-***REMOVED******REMOVED******REMOVED***cameraController: cameraController,
-***REMOVED******REMOVED******REMOVED***trackingMode: .initial,
-***REMOVED******REMOVED******REMOVED***renderVideoFeed: true
+***REMOVED******REMOVED******REMOVED***cameraController: cameraController
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
