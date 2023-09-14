@@ -119,7 +119,7 @@ extension ARGeoView2 {
         /// The initial transformation used for a table top experience.  Defaults to the Identity Matrix.
         private var initialTransformation: TransformationMatrix = .identity
         
-        let sceneViewController: ArcGISSceneViewController
+        private let sceneViewController: ArcGISSceneViewController
         
         public override func viewDidLoad() {
             super.viewDidLoad()
