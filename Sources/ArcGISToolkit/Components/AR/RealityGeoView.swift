@@ -12,7 +12,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import RealityKit
+import ARKit
 ***REMOVED***
 
 public enum RealityGeoViewTrackingMode {
