@@ -96,7 +96,7 @@ struct ComboBoxInput: View {
                         }
                     }
                 
-                if /*element.value.isEmpty*/ true {
+                if selectedName == nil {
                     Button {
                         isPresented = true
                     } label: {
