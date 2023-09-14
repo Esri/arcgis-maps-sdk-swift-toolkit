@@ -28,10 +28,7 @@ struct ComboBoxInput: View {
 ***REMOVED***@State private var searchText = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@State private var selectedName: String?
-***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@State private var value: Bool?
+***REMOVED***@State private var selectedValue: CodedValue?
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***private var featureForm: FeatureForm?
@@ -73,10 +70,10 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(codedValues, id: \.self) { codedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(codedValue.name) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedName = codedValue.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValue
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if codedValue.name == selectedName {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if codedValue == selectedValue {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -100,11 +97,11 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if selectedName == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***if selectedValue == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "list.bullet")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { selectedName = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { selectedValue = nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -118,17 +115,10 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let value = element.value {  ***REMOVED*** returns name for CodedValues
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switchState = (value == input.onValue.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let codedValue = featureForm?.feature.attributes[element.fieldName] as? CodedValue {
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedName = codedValue.name
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == element.value ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: selectedName) { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***let codedValue = element.codedValues.first { $0.name == newValue ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** element.updateValue(codedValue)
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(codedValue, forKey: element.fieldName)
+***REMOVED******REMOVED***.onChange(of: selectedValue) { newValue in
+***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
