@@ -18,19 +18,19 @@
 struct ComboBoxInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The set of options in the combo box.
 ***REMOVED***@State private var codedValues = [CodedValue]()
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ A Boolean value indicating if the combo box picker is presented.
 ***REMOVED***@State private var isPresented = false
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The phrase to use when filtering by coded value name.
 ***REMOVED***@State private var filterPhrase = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The parent form interface.
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
@@ -95,7 +95,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The view that allows user to filter and select coded value names.
+***REMOVED******REMOVED***/ The view that allows the user to filter and select coded values by name.
 ***REMOVED***var picker: some View {
 ***REMOVED******REMOVED***NavigationView {
 ***REMOVED******REMOVED******REMOVED***VStack {
