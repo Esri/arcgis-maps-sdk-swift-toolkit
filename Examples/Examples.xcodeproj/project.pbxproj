@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1C5C14EF2AA14CAD00153B82 /* ARViewExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5C14EE2AA14CAD00153B82 /* ARViewExampleView.swift */; ***REMOVED***;
+		1C5C14EF2AA14CAD00153B82 /* FlyoverExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5C14EE2AA14CAD00153B82 /* FlyoverExampleView.swift */; ***REMOVED***;
 		4D19FCB52881C8F3002601E8 /* PopupExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */; ***REMOVED***;
 		75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */; ***REMOVED***;
 		752A4FC4294D268000A49479 /* MapDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752A4FC2294D268000A49479 /* MapDataModel.swift */; ***REMOVED***;
@@ -45,7 +46,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1C5C14EE2AA14CAD00153B82 /* ARViewExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		1C5C14EE2AA14CAD00153B82 /* FlyoverExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyoverExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityNetworkTraceExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
@@ -97,7 +97,6 @@
 		E40F58042656E509006F5CB9 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
-				1C5C14EE2AA14CAD00153B82 /* ARViewExampleView.swift */,
 				1C5C14EE2AA14CAD00153B82 /* FlyoverExampleView.swift */,
 				E4C389D426B8A12C002BC255 /* BasemapGalleryExampleView.swift */,
 				75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */,
@@ -275,7 +274,6 @@
 				E48A73452658227100F5C118 /* Examples.swift in Sources */,
 				75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */,
 				75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */,
-				1C5C14EF2AA14CAD00153B82 /* ARViewExampleView.swift in Sources */,
 				1C5C14EF2AA14CAD00153B82 /* FlyoverExampleView.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
