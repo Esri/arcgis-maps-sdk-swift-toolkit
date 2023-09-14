@@ -218,17 +218,6 @@ private extension ParseStrategy where Self == Date.ParseStrategy {
     }
 }
 
-private extension String {
-    /// A string indicating that no date or time has been set for a date/time field.
-    static var noValue: Self {
-        .init(
-            localized: "No Value",
-            bundle: .toolkitModule,
-            comment: "A string indicating that no date or time has been set for a date/time field."
-        )
-    }
-}
-
 private extension Text {
     /// A label for a button to choose the current time and date for a field.
     static var now: Self {
