@@ -49,7 +49,7 @@ struct FlyoverExampleView: View {
 ***REMOVED***()
 
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***RealityGeoView(
+***REMOVED******REMOVED***ARGeoView(
 ***REMOVED******REMOVED******REMOVED***scene: scene,
 ***REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED***trackingMode: .initial,
