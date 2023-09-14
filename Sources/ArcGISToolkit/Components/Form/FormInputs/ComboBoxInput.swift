@@ -72,7 +72,9 @@ struct ComboBoxInput: View {
                                 Divider()
                                 List(codedValues, id: \.self) { codedValue in
                                     HStack {
-                                        Text(codedValue.name)
+                                        Button(codedValue.name) {
+                                            selectedName = codedValue.name
+                                        }
                                         Spacer()
                                         if codedValue.name == selectedName {
                                             Image(systemName: "checkmark")
