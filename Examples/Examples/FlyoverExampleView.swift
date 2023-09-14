@@ -49,7 +49,7 @@ struct FlyoverExampleView: View {
     }()
 
     var body: some View {
-        RealityGeoView(
+        ARGeoView(
             scene: scene,
             cameraController: cameraController,
             trackingMode: .initial,
