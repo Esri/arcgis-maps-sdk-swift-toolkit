@@ -28,10 +28,7 @@ struct ComboBoxInput: View {
     @State private var searchText = ""
     
     /// <#Description#>
-    @State private var selectedName: String?
-    
-    /// <#Description#>
-    @State private var value: Bool?
+    @State private var selectedValue: CodedValue?
     
     /// <#Description#>
     private var featureForm: FeatureForm?
@@ -73,10 +70,10 @@ struct ComboBoxInput: View {
                                 List(codedValues, id: \.self) { codedValue in
                                     HStack {
                                         Button(codedValue.name) {
-                                            selectedName = codedValue.name
+                                            selectedValue = codedValue
                                         }
                                         Spacer()
-                                        if codedValue.name == selectedName {
+                                        if codedValue == selectedValue {
                                             Image(systemName: "checkmark")
                                                 .foregroundColor(.accentColor)
                                         }
@@ -100,11 +97,11 @@ struct ComboBoxInput: View {
                         }
                     }
                 
-                if selectedName == nil {
+                if selectedValue == nil {
                     Image(systemName: "list.bullet")
                         .foregroundColor(.secondary)
                 } else {
-                    ClearButton { selectedName = nil }
+                    ClearButton { selectedValue = nil }
                         .accessibilityIdentifier("\(element.label) Clear Button")
                 }
             }
@@ -118,17 +115,10 @@ struct ComboBoxInput: View {
         .padding([.bottom], elementPadding)
         .onAppear {
             codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-            //            if let value = element.value {  // returns name for CodedValues
-            //                switchState = (value == input.onValue.name)
-            //            }
-            if let codedValue = featureForm?.feature.attributes[element.fieldName] as? CodedValue {
-                selectedName = codedValue.name
-            }
+            selectedValue = codedValues.first { $0.name == element.value }
         }
-        .onChange(of: selectedName) { newValue in
-//            let codedValue = element.codedValues.first { $0.name == newValue }
-//            // element.updateValue(codedValue)
-//            featureForm?.feature.setAttributeValue(codedValue, forKey: element.fieldName)
+        .onChange(of: selectedValue) { newValue in
+            featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
         }
     }
     
