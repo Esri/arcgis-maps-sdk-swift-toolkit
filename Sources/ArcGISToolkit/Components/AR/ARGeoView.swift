@@ -23,14 +23,19 @@ public enum ARGeoViewTrackingMode {
 
 public struct ARGeoView: UIViewControllerRepresentable {
 ***REMOVED***private let scene: ArcGIS.Scene
-***REMOVED***private let renderVideoFeed: Bool
 ***REMOVED***private let cameraController: TransformationMatrixCameraController
 ***REMOVED***private let trackingMode: ARGeoViewTrackingMode
+***REMOVED***private let renderVideoFeed: Bool
+***REMOVED***private let graphicsOverlays: [GraphicsOverlay]
+***REMOVED***private let analysisOverlays: [AnalysisOverlay]
 ***REMOVED***
 ***REMOVED***public func makeUIViewController(context: Context) -> ViewController {
 ***REMOVED******REMOVED***let viewController = ViewController(
 ***REMOVED******REMOVED******REMOVED***scene: scene,
 ***REMOVED******REMOVED******REMOVED***cameraController: cameraController,
+***REMOVED******REMOVED******REMOVED***graphicsOverlays: graphicsOverlays,
+***REMOVED******REMOVED******REMOVED***analysisOverlays: analysisOverlays,
+***REMOVED******REMOVED******REMOVED***trackingMode: trackingMode,
 ***REMOVED******REMOVED******REMOVED***renderVideoFeed: renderVideoFeed
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***viewController.arView.delegate = context.coordinator
@@ -45,11 +50,15 @@ public struct ARGeoView: UIViewControllerRepresentable {
 ***REMOVED***public init(
 ***REMOVED******REMOVED***scene: ArcGIS.Scene = ArcGIS.Scene(),
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController = TransformationMatrixCameraController(),
-***REMOVED******REMOVED***trackingMode: ARGeoViewTrackingMode = .ignore,
-***REMOVED******REMOVED***renderVideoFeed: Bool
+***REMOVED******REMOVED***graphicsOverlays: [GraphicsOverlay] = [],
+***REMOVED******REMOVED***analysisOverlays: [AnalysisOverlay] = [],
+***REMOVED******REMOVED***trackingMode: ARGeoViewTrackingMode = .initial,
+***REMOVED******REMOVED***renderVideoFeed: Bool = true
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.scene = scene
 ***REMOVED******REMOVED***self.cameraController = cameraController
+***REMOVED******REMOVED***self.graphicsOverlays = graphicsOverlays
+***REMOVED******REMOVED***self.analysisOverlays = analysisOverlays
 ***REMOVED******REMOVED***self.trackingMode = trackingMode
 ***REMOVED******REMOVED***self.renderVideoFeed = renderVideoFeed
 ***REMOVED***
@@ -274,9 +283,10 @@ extension ARGeoView {
 ***REMOVED******REMOVED***public init(
 ***REMOVED******REMOVED******REMOVED***scene: ArcGIS.Scene,
 ***REMOVED******REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
-***REMOVED******REMOVED******REMOVED***graphicsOverlays: [GraphicsOverlay] = [],
-***REMOVED******REMOVED******REMOVED***analysisOverlays: [AnalysisOverlay] = [],
-***REMOVED******REMOVED******REMOVED***renderVideoFeed: Bool = true
+***REMOVED******REMOVED******REMOVED***graphicsOverlays: [GraphicsOverlay],
+***REMOVED******REMOVED******REMOVED***analysisOverlays: [AnalysisOverlay],
+***REMOVED******REMOVED******REMOVED***trackingMode: ARGeoViewTrackingMode,
+***REMOVED******REMOVED******REMOVED***renderVideoFeed: Bool
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***sceneViewController = ArcGISSceneViewController(
 ***REMOVED******REMOVED******REMOVED******REMOVED***scene: scene,
@@ -293,6 +303,8 @@ extension ARGeoView {
 ***REMOVED******REMOVED******REMOVED***config.worldAlignment = .gravityAndHeading
 ***REMOVED******REMOVED******REMOVED***config.planeDetection = [.horizontal]
 ***REMOVED******REMOVED******REMOVED***arConfiguration = config
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***self.trackingMode = trackingMode
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***super.init(nibName: nil, bundle: nil)
 ***REMOVED******REMOVED******REMOVED***
