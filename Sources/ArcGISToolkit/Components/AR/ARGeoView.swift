@@ -13,6 +13,7 @@
 
 import ArcGIS
 import ARKit
+import RealityKit
 import SwiftUI
 
 public enum ARGeoViewTrackingMode {
@@ -33,7 +34,7 @@ public struct ARGeoView: UIViewControllerRepresentable {
             cameraController: cameraController,
             renderVideoFeed: renderVideoFeed
         )
-        viewController.arView.delegate = context.coordinator
+        viewController.arView.session.delegate = context.coordinator
         setProperties(for: viewController, with: context)
         return viewController
     }
@@ -68,33 +69,15 @@ public struct ARGeoView: UIViewControllerRepresentable {
 }
 
 extension ARGeoView {
-    public class Coordinator: NSObject, ARSCNViewDelegate, SCNSceneRendererDelegate, ARSessionObserver {
+    public class Coordinator: NSObject, ARSessionDelegate, ARSessionObserver {
         /// We implement `ARSCNViewDelegate` methods, but will use `delegate` to forward them to clients.
-        weak var delegate: ARSCNViewDelegate?
+        weak var delegate: ARSessionDelegate?
         
-        var arView: ARSCNView?
+        var arView: ARView?
         var isTracking: Bool = false
         var sceneViewController: ArcGISSceneViewController?
         var lastGoodDeviceOrientation: UIDeviceOrientation?
         var initialTransformation: TransformationMatrix?
-        
-        // ARSCNViewDelegate methods
-        
-        public func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-            delegate?.renderer?(renderer, didAdd: node, for: anchor)
-        }
-        
-        public func renderer(_ renderer: SCNSceneRenderer, willUpdate node: SCNNode, for anchor: ARAnchor) {
-            delegate?.renderer?(renderer, willUpdate: node, for: anchor)
-        }
-        
-        public func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-            delegate?.renderer?(renderer, didUpdate: node, for: anchor)
-        }
-        
-        public func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-            delegate?.renderer?(renderer, didRemove: node, for: anchor)
-        }
         
         // ARSessionObserver methods
         
@@ -122,49 +105,39 @@ extension ARGeoView {
             delegate?.session?(session, didOutputAudioSampleBuffer: audioSampleBuffer)
         }
         
-        // SCNSceneRendererDelegate methods
-        
-        public  func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-            delegate?.renderer?(renderer, updateAtTime: time)
+        // ARSessionDelegate methods
+        public func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
+            delegate?.session?(session, didAdd: anchors)
         }
         
-        public func renderer(_ renderer: SCNSceneRenderer, didApplyAnimationsAtTime time: TimeInterval) {
-            delegate?.renderer?(renderer, didApplyConstraintsAtTime: time)
+        public func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
+            delegate?.session?(session, didChange: geoTrackingStatus)
         }
         
-        public func renderer(_ renderer: SCNSceneRenderer, didSimulatePhysicsAtTime time: TimeInterval) {
-            delegate?.renderer?(renderer, didSimulatePhysicsAtTime: time)
+        public func session(_ session: ARSession, didRemove anchors: [ARAnchor]) {
+            delegate?.session?(session, didRemove: anchors)
         }
         
-        public func renderer(_ renderer: SCNSceneRenderer, didApplyConstraintsAtTime time: TimeInterval) {
-            delegate?.renderer?(renderer, didApplyConstraintsAtTime: time)
-        }
-        
-        public func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
-            // If we aren't tracking yet, return.
-            //  guard isTracking else { return }
-            
-            guard
-                let arView,
-                let initialTransformation,
-                let sceneViewController
+        public func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
+            guard let arView,
+                  let initialTransformation,
+                  let sceneViewController
             else { return }
             
             guard lastGoodDeviceOrientation != nil else { return }
             
-            // Get transform from SCNView.pointOfView.
-            guard let transform = arView.pointOfView?.transform else { return }
-            let cameraTransform = simd_double4x4(transform)
+            let cameraTransform = arView.cameraTransform.matrix
             
-            let cameraQuat = simd_quatd(cameraTransform)
+            let cameraQuat = simd_quatf(cameraTransform)
+            
             let transformationMatrix = TransformationMatrix.normalized(
-                quaternionX: cameraQuat.vector.x,
-                quaternionY: cameraQuat.vector.y,
-                quaternionZ: cameraQuat.vector.z,
-                quaternionW: cameraQuat.vector.w,
-                translationX: cameraTransform.columns.3.x,
-                translationY: cameraTransform.columns.3.y,
-                translationZ: cameraTransform.columns.3.z
+                quaternionX: Double(cameraQuat.vector.x),
+                quaternionY: Double(cameraQuat.vector.y),
+                quaternionZ: Double(cameraQuat.vector.z),
+                quaternionW: Double(cameraQuat.vector.w),
+                translationX: Double(cameraTransform.columns.3.x),
+                translationY: Double(cameraTransform.columns.3.y),
+                translationZ: Double(cameraTransform.columns.3.z)
             )
             
             // Set the matrix on the camera controller.
@@ -172,7 +145,7 @@ extension ARGeoView {
             cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
             
             // Set FOV on camera.
-            if let camera = arView.session.currentFrame?.camera {
+            if let camera = session.currentFrame?.camera {
                 let intrinsics = camera.intrinsics
                 let imageResolution = camera.imageResolution
                 
@@ -191,25 +164,24 @@ extension ARGeoView {
                     yImageSize: Float(imageResolution.height),
                     deviceOrientation: lastGoodDeviceOrientation!
                 )
+                
+                // Render the Scene with the new transformation.
+                sceneViewController.draw()
             }
             
-            // Render the Scene with the new transformation.
-            sceneViewController.draw()
-            
-            // Call our arSCNViewDelegate method.
-            delegate?.renderer?(renderer, willRenderScene: scene, atTime: time)
+            delegate?.session?(session, didUpdate: anchors)
         }
         
-        public func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
-            delegate?.renderer?(renderer, didRenderScene: scene, atTime: time)
+        public func session(_ session: ARSession, didUpdate frame: ARFrame) {
+            delegate?.session?(session, didUpdate: frame)
         }
     }
 }
 
 extension ARGeoView {
     public class ViewController: UIViewController {
-        /// The view used to display the `ARKit` camera image and 3D `SceneKit` content.
-        let arView = ARSCNView(frame: .zero)
+        /// The view used to display the `RealityKit` camera image and 3D `SceneKit` content.
+        let arView = ARView(frame: .zero)
         
         /// Denotes whether tracking location and angles has started.
         /// - Since: 200.3
