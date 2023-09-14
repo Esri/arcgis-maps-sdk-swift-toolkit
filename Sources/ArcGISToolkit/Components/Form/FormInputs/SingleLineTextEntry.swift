@@ -52,7 +52,7 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across entry views for consistency.
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint ?? "").foregroundColor(.secondary))
+***REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Field")
 ***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
@@ -69,7 +69,7 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***text = featureForm?.feature.attributes[element.fieldName] as? String ?? ""
+***REMOVED******REMOVED******REMOVED***text = element.value
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { newFocus in
 ***REMOVED******REMOVED******REMOVED***if newFocus {
@@ -77,6 +77,9 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { newValue in
+***REMOVED******REMOVED******REMOVED***guard newValue != element.value else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
 ***REMOVED***
 ***REMOVED***

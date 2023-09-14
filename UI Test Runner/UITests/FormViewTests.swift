@@ -306,12 +306,12 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***footer.label,
-***REMOVED******REMOVED******REMOVED***"Required"
+***REMOVED******REMOVED******REMOVED***"Date Entry is Required"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***calendarImage.isHittable,
-***REMOVED******REMOVED******REMOVED***"The calendar image isn't hittable."
+***REMOVED******REMOVED******REMOVED***calendarImage.exists,
+***REMOVED******REMOVED******REMOVED***"The calendar image doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
@@ -366,9 +366,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let formatter = DateFormatter()
-***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-***REMOVED******REMOVED***let localDate = formatter.date(from: "1969-07-07T20:17:00.000Z")
+***REMOVED******REMOVED***let localDate = Calendar.current.date(
+***REMOVED******REMOVED******REMOVED***from: DateComponents(
+***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 1969, month: 7, day: 8, hour: 3, minute: 17
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -441,9 +443,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The field value isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let formatter = DateFormatter()
-***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd"
-***REMOVED******REMOVED***let localDate = formatter.date(from: "2023-07-14")
+***REMOVED******REMOVED***let localDate = Calendar.current.date(
+***REMOVED******REMOVED******REMOVED***from: DateComponents(
+***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 2023, month: 7, day: 15, hour: 3, minute: 53
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -502,9 +506,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"End date and Time 7/27/1969 12:00:00 AM"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let formatter = DateFormatter()
-***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-***REMOVED******REMOVED***let localDate = formatter.date(from: "1969-07-27T07:00:00.000Z")
+***REMOVED******REMOVED***let localDate = Calendar.current.date(
+***REMOVED******REMOVED******REMOVED***from: DateComponents(
+***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 1969, month: 7, day: 27, hour: 7
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -555,9 +561,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***julyFirstButton.tap()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let formatter = DateFormatter()
-***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-***REMOVED******REMOVED***let localDate = formatter.date(from: "1969-07-01T07:00:00.000Z")
+***REMOVED******REMOVED***let localDate = Calendar.current.date(
+***REMOVED******REMOVED******REMOVED***from: DateComponents(
+***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 1969, month: 7, day: 1, hour: 7
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
