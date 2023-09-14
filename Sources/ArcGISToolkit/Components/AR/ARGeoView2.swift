@@ -108,14 +108,7 @@ extension ARGeoView2 {
         private let deviceSupportsARKit: Bool = ARWorldTrackingConfiguration.isSupported
         
         /// The world tracking information used by `ARKit`.
-        var arConfiguration: ARConfiguration {
-            didSet {
-                // If we're already tracking, reset tracking to use the new configuration.
-                if isTracking, deviceSupportsARKit {
-                    arView.session.run(arConfiguration, options: .resetTracking)
-                }
-            }
-        }
+        private let arConfiguration: ARConfiguration
         
         /// The last portrait or landscape orientation value.
         private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
@@ -125,11 +118,6 @@ extension ARGeoView2 {
         
         /// The initial transformation used for a table top experience.  Defaults to the Identity Matrix.
         private var initialTransformation: TransformationMatrix = .identity
-        
-        /// The `TransformationMatrixCameraController` used to control the Scene.
-        private var cameraController: TransformationMatrixCameraController {
-            sceneViewController.cameraController as! TransformationMatrixCameraController
-        }
         
         let sceneViewController: ArcGISSceneViewController
         
@@ -154,7 +142,7 @@ extension ARGeoView2 {
         
         override public func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
-            self.startTracking(withMode: self.trackingMode)
+            self.startTracking()
         }
         
         public override func viewWillDisappear(_ animated: Bool) {
@@ -163,8 +151,7 @@ extension ARGeoView2 {
         }
         
         /// Starts device tracking.
-        func startTracking(withMode mode: ARGeoViewTrackingMode) {
-            self.trackingMode = mode
+        private func startTracking() {
             if deviceSupportsARKit {
                 arView.session.run(arConfiguration, options: .resetTracking)
             }
@@ -172,7 +159,7 @@ extension ARGeoView2 {
         }
         
         /// Suspends device tracking.
-        func stopTracking() {
+        private func stopTracking() {
             self.arView.session.pause()
             self.isTracking = false
         }
@@ -180,12 +167,9 @@ extension ARGeoView2 {
 }
 
 extension ARGeoView2.ViewController: ARSCNViewDelegate {
-    
-    // ARSCNViewDelegate methods
-    
     public func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
         // If we aren't tracking yet, return.
-        //  guard isTracking else { return }
+        guard isTracking else { return }
         
         // Get transform from SCNView.pointOfView.
         guard let transform = arView.pointOfView?.transform else { return }
