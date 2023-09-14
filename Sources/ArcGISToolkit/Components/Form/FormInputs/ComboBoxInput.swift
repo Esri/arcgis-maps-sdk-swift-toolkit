@@ -39,6 +39,16 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The input configuration of the field.
 ***REMOVED***private let input: ComboBoxFormInput
 ***REMOVED***
+***REMOVED******REMOVED***/ A subset of coded values with names containing `filterPhrase` or all of the coded values
+***REMOVED******REMOVED***/ if `filterPhrase` is empty.
+***REMOVED***var matchingValues: [CodedValue] {
+***REMOVED******REMOVED***guard !filterPhrase.isEmpty else {
+***REMOVED******REMOVED******REMOVED***return codedValues
+***REMOVED***
+***REMOVED******REMOVED***return codedValues
+***REMOVED******REMOVED******REMOVED***.filter { $0.name.localizedStandardContains(filterPhrase) ***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a combo box input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
@@ -105,7 +115,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***List(codedValues, id: \.self) { codedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***List(matchingValues, id: \.self) { codedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(codedValue.name) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValue
