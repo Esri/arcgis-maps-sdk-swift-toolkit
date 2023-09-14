@@ -119,7 +119,7 @@ extension ARGeoView2 {
 ***REMOVED******REMOVED******REMOVED***/ The initial transformation used for a table top experience.  Defaults to the Identity Matrix.
 ***REMOVED******REMOVED***private var initialTransformation: TransformationMatrix = .identity
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let sceneViewController: ArcGISSceneViewController
+***REMOVED******REMOVED***private let sceneViewController: ArcGISSceneViewController
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public override func viewDidLoad() {
 ***REMOVED******REMOVED******REMOVED***super.viewDidLoad()
