@@ -137,18 +137,21 @@ struct ComboBoxInput: View {
 }
 
 extension CodedValue: Equatable {
+    /// - Note: Equatable conformance added temporarily in lieu of finalized API.
     public static func == (lhs: CodedValue, rhs: CodedValue) -> Bool {
         lhs.name == rhs.name
     }
 }
 
 extension CodedValue: Hashable {
+    /// - Note: Hashable conformance added temporarily in lieu of finalized API.
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }
 }
 
 extension FeatureForm {
+    /// - Note: This property added temporarily in lieu of finalized API.
     func codedValues(fieldName: String) -> [CodedValue] {
         if let field = feature.table?.field(named: fieldName),
            let domain = field.domain as? CodedValueDomain {
