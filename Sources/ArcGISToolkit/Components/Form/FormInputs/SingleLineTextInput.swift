@@ -53,6 +53,7 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across input views for consistency.
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
+***REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Field")
 ***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
@@ -62,7 +63,7 @@ struct SingleLineTextInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.formTextInputStyle()
 ***REMOVED******REMOVED***TextInputFooter(
-***REMOVED******REMOVED******REMOVED***currentLength: text.count,
+***REMOVED******REMOVED******REMOVED***text: text,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
 ***REMOVED******REMOVED******REMOVED***element: element,
 ***REMOVED******REMOVED******REMOVED***input: input
@@ -78,6 +79,46 @@ struct SingleLineTextInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { newValue in
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension SingleLineTextInput {
+***REMOVED***var isNumericInput: Bool {
+***REMOVED******REMOVED***if let field = featureForm?.feature.table?.field(named: element.fieldName)?.type {
+***REMOVED******REMOVED******REMOVED***return field.isNumeric
+***REMOVED***
+***REMOVED******REMOVED***return false
+***REMOVED***
+***REMOVED***
+***REMOVED***var isDecimalInput: Bool {
+***REMOVED******REMOVED***if let field = featureForm?.feature.table?.field(named: element.fieldName)?.type {
+***REMOVED******REMOVED******REMOVED***return field.isFloatingPoint
+***REMOVED***
+***REMOVED******REMOVED***return false
+***REMOVED***
+
+***REMOVED***var keyboardType: UIKeyboardType {
+***REMOVED******REMOVED***isNumericInput ? (isDecimalInput ? .decimalPad : .numberPad) : .default
+***REMOVED***
+***REMOVED***
+
+private extension FieldType {
+***REMOVED***var isNumeric: Bool {
+***REMOVED******REMOVED***self == .float32 || self == .float64 || self == .int16 || self == .int32 || self == .int64
+***REMOVED***
+***REMOVED***
+***REMOVED***var isFloatingPoint: Bool {
+***REMOVED******REMOVED***self == .float32 || self == .float64
+***REMOVED***
+***REMOVED***
+
+extension SingleLineTextInput {
+***REMOVED***var rangeDomain: RangeDomain? {
+***REMOVED******REMOVED***if let field = featureForm?.feature.table?.field(named: element.fieldName) {
+***REMOVED******REMOVED***   return field.domain as? RangeDomain
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

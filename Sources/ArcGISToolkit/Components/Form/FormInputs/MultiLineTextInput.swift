@@ -86,7 +86,7 @@ struct MultiLineTextInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.formTextInputStyle()
 ***REMOVED******REMOVED***TextInputFooter(
-***REMOVED******REMOVED******REMOVED***currentLength: isPlaceholder ? .zero : text.count,
+***REMOVED******REMOVED******REMOVED***text: isPlaceholder ? "" : text,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
 ***REMOVED******REMOVED******REMOVED***element: element,
 ***REMOVED******REMOVED******REMOVED***input: input

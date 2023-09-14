@@ -23,9 +23,12 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ length at any point in time.
 ***REMOVED***@State private var hasPreviouslySatisfiedMinimum: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ The current text in the text input field.
+***REMOVED***private let text: String
+***REMOVED***
 ***REMOVED******REMOVED***/ The current length of the text in the text input field.
 ***REMOVED***private let currentLength: Int
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The field's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
@@ -44,6 +47,10 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ The minimum allowable length of text in the text input field.
 ***REMOVED***private let minLength: Int
 ***REMOVED***
+***REMOVED******REMOVED***/ The range domain for the text field input. This is used to
+***REMOVED******REMOVED***/ generate messages if the numeric value is out-of-range.
+***REMOVED***private let rangeDomain: RangeDomain? = nil
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a footer shown at the bottom of each text input element in a form.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - currentLength: The current length of the text in the text input field.
@@ -52,12 +59,14 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/  or not text is required for this input.
 ***REMOVED******REMOVED***/   - input: A form input that provides length constraints for the text input.
 ***REMOVED***init(
-***REMOVED******REMOVED***currentLength: Int,
+***REMOVED******REMOVED***text: String,
 ***REMOVED******REMOVED***isFocused: Bool,
 ***REMOVED******REMOVED***element: FieldFormElement,
-***REMOVED******REMOVED***input: FormInput
+***REMOVED******REMOVED***input: FormInput,
+***REMOVED******REMOVED***rangeDomain: RangeDomain? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.currentLength = currentLength
+***REMOVED******REMOVED***self.text = text
+***REMOVED******REMOVED***self.currentLength = text.count
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.isFocused = isFocused
 ***REMOVED******REMOVED***self.description = element.description
