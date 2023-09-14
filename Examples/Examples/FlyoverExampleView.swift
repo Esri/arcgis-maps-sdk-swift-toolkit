@@ -51,9 +51,7 @@ struct FlyoverExampleView: View {
     var body: some View {
         ARGeoView(
             scene: scene,
-            cameraController: cameraController,
-            trackingMode: .initial,
-            renderVideoFeed: true
+            cameraController: cameraController
         )
     }
 }
