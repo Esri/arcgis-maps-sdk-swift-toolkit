@@ -108,14 +108,7 @@ extension ARGeoView2 {
 ***REMOVED******REMOVED***private let deviceSupportsARKit: Bool = ARWorldTrackingConfiguration.isSupported
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The world tracking information used by `ARKit`.
-***REMOVED******REMOVED***var arConfiguration: ARConfiguration {
-***REMOVED******REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we're already tracking, reset tracking to use the new configuration.
-***REMOVED******REMOVED******REMOVED******REMOVED***if isTracking, deviceSupportsARKit {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arView.session.run(arConfiguration, options: .resetTracking)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***private let arConfiguration: ARConfiguration
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The last portrait or landscape orientation value.
 ***REMOVED******REMOVED***private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
@@ -125,11 +118,6 @@ extension ARGeoView2 {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The initial transformation used for a table top experience.  Defaults to the Identity Matrix.
 ***REMOVED******REMOVED***private var initialTransformation: TransformationMatrix = .identity
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The `TransformationMatrixCameraController` used to control the Scene.
-***REMOVED******REMOVED***private var cameraController: TransformationMatrixCameraController {
-***REMOVED******REMOVED******REMOVED***sceneViewController.cameraController as! TransformationMatrixCameraController
-***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let sceneViewController: ArcGISSceneViewController
 ***REMOVED******REMOVED***
@@ -154,7 +142,7 @@ extension ARGeoView2 {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***override public func viewWillAppear(_ animated: Bool) {
 ***REMOVED******REMOVED******REMOVED***super.viewWillAppear(animated)
-***REMOVED******REMOVED******REMOVED***self.startTracking(withMode: self.trackingMode)
+***REMOVED******REMOVED******REMOVED***self.startTracking()
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***public override func viewWillDisappear(_ animated: Bool) {
@@ -163,8 +151,7 @@ extension ARGeoView2 {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Starts device tracking.
-***REMOVED******REMOVED***func startTracking(withMode mode: ARGeoViewTrackingMode) {
-***REMOVED******REMOVED******REMOVED***self.trackingMode = mode
+***REMOVED******REMOVED***private func startTracking() {
 ***REMOVED******REMOVED******REMOVED***if deviceSupportsARKit {
 ***REMOVED******REMOVED******REMOVED******REMOVED***arView.session.run(arConfiguration, options: .resetTracking)
 ***REMOVED******REMOVED***
@@ -172,7 +159,7 @@ extension ARGeoView2 {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Suspends device tracking.
-***REMOVED******REMOVED***func stopTracking() {
+***REMOVED******REMOVED***private func stopTracking() {
 ***REMOVED******REMOVED******REMOVED***self.arView.session.pause()
 ***REMOVED******REMOVED******REMOVED***self.isTracking = false
 ***REMOVED***
@@ -180,12 +167,9 @@ extension ARGeoView2 {
 ***REMOVED***
 
 extension ARGeoView2.ViewController: ARSCNViewDelegate {
-***REMOVED***
-***REMOVED******REMOVED*** ARSCNViewDelegate methods
-***REMOVED***
 ***REMOVED***public func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
 ***REMOVED******REMOVED******REMOVED*** If we aren't tracking yet, return.
-***REMOVED******REMOVED******REMOVED***  guard isTracking else { return ***REMOVED***
+***REMOVED******REMOVED***guard isTracking else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Get transform from SCNView.pointOfView.
 ***REMOVED******REMOVED***guard let transform = arView.pointOfView?.transform else { return ***REMOVED***
