@@ -93,11 +93,10 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***let text = featureForm?.feature.attributes[element.fieldName] as? String
-***REMOVED******REMOVED******REMOVED***if let text, !text.isEmpty {
+***REMOVED******REMOVED******REMOVED***let text = element.value
+***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.text = text
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.text = element.hint
@@ -105,6 +104,9 @@ struct MultiLineTextInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { newValue in
 ***REMOVED******REMOVED******REMOVED***if !isPlaceholder {
+***REMOVED******REMOVED******REMOVED******REMOVED***guard newValue != element.value else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
 ***REMOVED******REMOVED***
 ***REMOVED***

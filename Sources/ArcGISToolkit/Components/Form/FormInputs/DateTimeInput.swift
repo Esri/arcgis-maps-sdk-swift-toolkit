@@ -60,11 +60,17 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***if let date = featureForm?.feature.attributes[element.fieldName] as? Date {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.date = date
+***REMOVED******REMOVED******REMOVED***if element.value.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = try? Date(element.value, strategy: .arcGISDateParseStrategy)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
+***REMOVED******REMOVED******REMOVED***guard let currentDate = try? Date(element.value, strategy: .arcGISDateParseStrategy),
+***REMOVED******REMOVED******REMOVED******REMOVED***  newDate != currentDate else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
 ***REMOVED******REMOVED******REMOVED***requiredValueMissing = /*element.required && */newDate == nil
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
@@ -202,6 +208,15 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED***
 
+private extension ParseStrategy where Self == Date.ParseStrategy {
+***REMOVED******REMOVED***/ A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
+***REMOVED***static var arcGISDateParseStrategy: Self {
+***REMOVED******REMOVED***.fixed(
+***REMOVED******REMOVED******REMOVED***format: "\(year: .defaultDigits)-\(month: .defaultDigits)-\(day: .defaultDigits)T\(hour: .defaultDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .defaultDigits):\(second: .defaultDigits)",
+***REMOVED******REMOVED******REMOVED***timeZone: .current
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 
 private extension String {
 ***REMOVED******REMOVED***/ A string indicating that no date or time has been set for a date/time field.
