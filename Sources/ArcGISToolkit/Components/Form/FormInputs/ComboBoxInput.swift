@@ -18,6 +18,22 @@
 struct ComboBoxInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var codedValues = [CodedValue]()
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var isPresented = false
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var searchText = ""
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var selectedName: String?
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@State private var value: Bool?
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
@@ -25,16 +41,6 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the field.
 ***REMOVED***private let input: ComboBoxFormInput
-***REMOVED***
-***REMOVED***@State private var value: Bool?
-***REMOVED***
-***REMOVED***@State private var selectedName: String?
-***REMOVED***
-***REMOVED***@State private var codedValues = [CodedValue]()
-***REMOVED***
-***REMOVED***@State private var isPresented = false
-***REMOVED***
-***REMOVED***@State private var searchText = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a combo box input.
 ***REMOVED******REMOVED***/ - Parameters:
