@@ -18,6 +18,7 @@ import SwiftUI
 struct SwitchInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
+    /// The feature form containing the input.
     private var featureForm: FeatureForm?
     
     /// The field's parent element.
