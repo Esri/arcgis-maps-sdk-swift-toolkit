@@ -67,6 +67,9 @@ struct ComboBoxInput: View {
                                 Text(element.description)
                                     .foregroundColor(.gray)
                                     .font(.subheadline)
+                                    .padding(.horizontal)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                Divider()
                                 List(codedValues, id: \.self) { codedValue in
                                     Text(codedValue.name)
                                 }
