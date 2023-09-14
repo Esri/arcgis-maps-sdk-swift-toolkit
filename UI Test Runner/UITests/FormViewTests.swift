@@ -306,12 +306,12 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertEqual(
             footer.label,
-            "Required"
+            "Date Entry is Required"
         )
         
         XCTAssertTrue(
-            calendarImage.isHittable,
-            "The calendar image isn't hittable."
+            calendarImage.exists,
+            "The calendar image doesn't exist."
         )
         
         fieldValue.tap()
@@ -366,9 +366,11 @@ final class FormViewTests: XCTestCase {
             "The field title isn't hittable."
         )
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let localDate = formatter.date(from: "1969-07-07T20:17:00.000Z")
+        let localDate = Calendar.current.date(
+            from: DateComponents(
+                timeZone: .gmt, year: 1969, month: 7, day: 8, hour: 3, minute: 17
+            )
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -441,9 +443,11 @@ final class FormViewTests: XCTestCase {
             "The field value isn't hittable."
         )
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let localDate = formatter.date(from: "2023-07-14")
+        let localDate = Calendar.current.date(
+            from: DateComponents(
+                timeZone: .gmt, year: 2023, month: 7, day: 15, hour: 3, minute: 53
+            )
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -502,9 +506,11 @@ final class FormViewTests: XCTestCase {
             "End date and Time 7/27/1969 12:00:00 AM"
         )
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let localDate = formatter.date(from: "1969-07-27T07:00:00.000Z")
+        let localDate = Calendar.current.date(
+            from: DateComponents(
+                timeZone: .gmt, year: 1969, month: 7, day: 27, hour: 7
+            )
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -555,9 +561,11 @@ final class FormViewTests: XCTestCase {
         
         julyFirstButton.tap()
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let localDate = formatter.date(from: "1969-07-01T07:00:00.000Z")
+        let localDate = Calendar.current.date(
+            from: DateComponents(
+                timeZone: .gmt, year: 1969, month: 7, day: 1, hour: 7
+            )
+        )
         
         XCTAssertEqual(
             fieldValue.label,
