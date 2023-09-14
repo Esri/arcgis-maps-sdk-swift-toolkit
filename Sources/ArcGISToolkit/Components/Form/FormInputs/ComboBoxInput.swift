@@ -83,7 +83,7 @@ struct ComboBoxInput: View {
                 pickerRoot
             }
             .onTapGesture {
-                 isPresented = true
+                isPresented = true
             }
             
             footer
