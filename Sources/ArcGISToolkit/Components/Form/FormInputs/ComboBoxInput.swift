@@ -18,19 +18,19 @@ import SwiftUI
 struct ComboBoxInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// <#Description#>
+    /// The set of options in the combo box.
     @State private var codedValues = [CodedValue]()
     
-    /// <#Description#>
+    /// A Boolean value indicating if the combo box picker is presented.
     @State private var isPresented = false
     
-    /// <#Description#>
+    /// The phrase to use when filtering by coded value name.
     @State private var filterPhrase = ""
     
-    /// <#Description#>
+    /// The selected option.
     @State private var selectedValue: CodedValue?
     
-    /// <#Description#>
+    /// The parent form interface.
     private var featureForm: FeatureForm?
     
     /// The field's parent element.
@@ -95,7 +95,7 @@ struct ComboBoxInput: View {
             .foregroundColor(.secondary)
     }
     
-    /// The view that allows user to filter and select coded value names.
+    /// The view that allows the user to filter and select coded values by name.
     var picker: some View {
         NavigationView {
             VStack {
