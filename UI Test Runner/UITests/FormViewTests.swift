@@ -265,7 +265,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** - MARK: Test case 2: Test case 2: DateTime picker input type
+***REMOVED******REMOVED*** - MARK: Test case 2: DateTime picker input type
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 2.1: Unfocused and focused state, no value, date required
 ***REMOVED***func testCase_2_1() throws {
@@ -613,6 +613,25 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
 ***REMOVED******REMOVED******REMOVED***"No Value"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** - MARK: Test case 3: Combo Box input type
+***REMOVED***
+***REMOVED***func testCase_3_1() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
