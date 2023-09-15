@@ -14,8 +14,8 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view shown at the top of each field element in a form.
-struct FormElementHeader: View {
+***REMOVED***/ A view shown at the top of a field element in a form.
+struct InputHeader: View {
 ***REMOVED******REMOVED***/ The form element the header is for.
 ***REMOVED***let element: FieldFormElement
 ***REMOVED***
