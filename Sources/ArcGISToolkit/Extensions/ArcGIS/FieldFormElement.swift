@@ -1,10 +1,11 @@
 ***REMOVED*** Copyright 2023 Esri.
-
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED******REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -12,16 +13,10 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
 
-***REMOVED***/ A view shown at the top of each field element in a form.
-struct FormElementHeader: View {
-***REMOVED******REMOVED***/ The form element the header is for.
-***REMOVED***let element: FieldFormElement
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(verbatim: "\(element.label + (element.isRequired ? " *" : ""))")
-***REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+extension FieldFormElement {
+***REMOVED******REMOVED***/ - Note: This property added temporarily in lieu of finalized API.
+***REMOVED***var isRequired: Bool {
+***REMOVED******REMOVED***requiredExpressionName.contains("true")
 ***REMOVED***
 ***REMOVED***

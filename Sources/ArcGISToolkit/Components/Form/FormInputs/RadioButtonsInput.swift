@@ -66,8 +66,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
-***REMOVED******REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
-***REMOVED******REMOVED******REMOVED***requiredValueMissing = /*element.required && */newDate == nil
+***REMOVED******REMOVED******REMOVED***requiredValueMissing = element.isRequired && newDate == nil
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.focusedFieldName) { newFocusedFieldName in
