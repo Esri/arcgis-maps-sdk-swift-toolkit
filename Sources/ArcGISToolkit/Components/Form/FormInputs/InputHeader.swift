@@ -14,8 +14,8 @@
 import SwiftUI
 import ArcGIS
 
-/// A view shown at the top of each field element in a form.
-struct FormElementHeader: View {
+/// A view shown at the top of a field element in a form.
+struct InputHeader: View {
     /// The form element the header is for.
     let element: FieldFormElement
     
