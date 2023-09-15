@@ -11,8 +11,6 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Foundation
-
 extension String {
 ***REMOVED******REMOVED***/ A localized string for the word "Cancel".
 ***REMOVED***static var cancel: Self {
