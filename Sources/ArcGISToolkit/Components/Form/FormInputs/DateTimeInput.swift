@@ -71,8 +71,7 @@ struct DateTimeInput: View {
                   newDate != currentDate else {
                 return
             }
-            //TODO: add `required` property to API
-            requiredValueMissing = /*element.required && */newDate == nil
+            requiredValueMissing = element.isRequired && newDate == nil
             featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
         }
         .onChange(of: model.focusedFieldName) { newFocusedFieldName in
