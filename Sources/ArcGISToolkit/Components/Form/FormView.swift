@@ -19,11 +19,11 @@
 public struct FormView: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The form's configuration.
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
-***REMOVED******REMOVED***/ - Parameter featureForm: <#featureForm description#>
+***REMOVED******REMOVED***/ - Parameter featureForm: The form's configuration.
 ***REMOVED***public init(featureForm: FeatureForm?) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED***
