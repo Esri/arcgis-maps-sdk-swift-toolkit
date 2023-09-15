@@ -21,9 +21,6 @@ struct FormViewTestView: View {
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
 ***REMOVED***@State private var map = Map(url: .sampleData)!
 ***REMOVED***
-***REMOVED******REMOVED***/ The point on the screen the user tapped on to identify a feature.
-***REMOVED***@State private var identifyScreenPoint: CGPoint?
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the form is displayed.
 ***REMOVED***@State private var isPresented = false
 ***REMOVED***
@@ -35,9 +32,6 @@ struct FormViewTestView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map)
-***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***identifyScreenPoint = screenPoint
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await map.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***let featureLayer = map.operationalLayers.first as? FeatureLayer
@@ -102,6 +96,6 @@ private extension FormViewTestView {
 
 private extension URL {
 ***REMOVED***static var sampleData: Self {
-***REMOVED******REMOVED***.init(string: <#URL#>)!
+***REMOVED******REMOVED******REMOVED*** Text tests
 ***REMOVED***
 ***REMOVED***
