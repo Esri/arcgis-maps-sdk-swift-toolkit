@@ -20,10 +20,10 @@ struct ARSwiftUIView {
     private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
     private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
     private(set) var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
-    private let onProxyAvailableAction: ((ARSwiftUIViewProxy) -> Void)?
+    private let proxy: ARSwiftUIViewProxy?
     
-    init(onProxyAvailable action: ((ARSwiftUIViewProxy) -> Void)? = nil) {
-        onProxyAvailableAction = action
+    init(proxy: ARSwiftUIViewProxy? = nil) {
+        self.proxy = proxy
     }
     
     func onRender(
@@ -55,7 +55,7 @@ extension ARSwiftUIView: UIViewRepresentable {
     func makeUIView(context: Context) -> ARSCNView {
         let arView = ARSCNView()
         arView.delegate = context.coordinator
-        onProxyAvailableAction?(ARSwiftUIViewProxy(arView: arView))
+        proxy?.arView = arView
         return arView
     }
     
@@ -89,19 +89,15 @@ extension ARSwiftUIView {
     }
 }
 
-struct ARSwiftUIViewProxy {
-    private let arView: ARSCNView
+class ARSwiftUIViewProxy {
+    var arView: ARSCNView?
     
-    init(arView: ARSCNView) {
-        self.arView = arView
-    }
-    
-    var session: ARSession {
-        arView.session
+    var session: ARSession? {
+        arView?.session
     }
     
     var pointOfView: SCNNode? {
-        arView.pointOfView
+        arView?.pointOfView
     }
 }
 
@@ -120,15 +116,8 @@ public struct ARGeoView3: View {
     
     /// The last portrait or landscape orientation value.
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
-    
-    // Wrapped so that we can update it during a view update.
-    @State private var arViewProxyWrapper: ValueWrapper<ARSwiftUIViewProxy?> = .init(value: nil)
+    @State private var arViewProxy = ARSwiftUIViewProxy()
     @State private var sceneViewProxy: SceneViewProxy?
-    
-    // Convenience property.
-    private var arViewProxy: ARSwiftUIViewProxy? {
-        get { arViewProxyWrapper.value }
-    }
     
     public init(
         scene: ArcGIS.Scene,
@@ -144,20 +133,18 @@ public struct ARGeoView3: View {
     
     public var body: some View {
         ZStack {
-            ARSwiftUIView { proxy in
-                arViewProxyWrapper.value = proxy
-            }
-            .onRender { _, _, _ in
-                if let arViewProxy = arViewProxy, let sceneViewProxy {
-                    render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
+            ARSwiftUIView(proxy: arViewProxy)
+                .onRender { _, _, _ in
+                    if let sceneViewProxy {
+                        render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
+                    }
                 }
-            }
-            .onAppear {
-                arViewProxy?.session.run(configuration)
-            }
-            .onDisappear {
-                arViewProxy?.session.pause()
-            }
+                .onAppear {
+                    arViewProxy.session?.run(configuration)
+                }
+                .onDisappear {
+                    arViewProxy.session?.pause()
+                }
             SceneViewReader { sceneViewProxy in
                 SceneView(
                     scene: scene,
@@ -179,6 +166,7 @@ private extension ARGeoView3 {
     func render(arViewProxy: ARSwiftUIViewProxy, sceneViewProxy: SceneViewProxy) {
         // Get transform from SCNView.pointOfView.
         guard let transform = arViewProxy.pointOfView?.transform else { return }
+        guard let session = arViewProxy.session else { return }
         
         let cameraTransform = simd_double4x4(transform)
         
@@ -197,7 +185,7 @@ private extension ARGeoView3 {
         cameraController.transformationMatrix = .identity.adding(transformationMatrix)
         
         // Set FOV on camera.
-        if let camera = arViewProxy.session.currentFrame?.camera {
+        if let camera = session.currentFrame?.camera {
             let intrinsics = camera.intrinsics
             let imageResolution = camera.imageResolution
             
