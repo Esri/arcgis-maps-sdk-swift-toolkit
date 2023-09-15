@@ -20,10 +20,10 @@ struct ARSwiftUIView {
 ***REMOVED***private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
 ***REMOVED***private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
 ***REMOVED***private(set) var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
-***REMOVED***private let onProxyAvailableAction: ((ARSwiftUIViewProxy) -> Void)?
+***REMOVED***private let proxy: ARSwiftUIViewProxy?
 ***REMOVED***
-***REMOVED***init(onProxyAvailable action: ((ARSwiftUIViewProxy) -> Void)? = nil) {
-***REMOVED******REMOVED***onProxyAvailableAction = action
+***REMOVED***init(proxy: ARSwiftUIViewProxy? = nil) {
+***REMOVED******REMOVED***self.proxy = proxy
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func onRender(
@@ -55,7 +55,7 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***func makeUIView(context: Context) -> ARSCNView {
 ***REMOVED******REMOVED***let arView = ARSCNView()
 ***REMOVED******REMOVED***arView.delegate = context.coordinator
-***REMOVED******REMOVED***onProxyAvailableAction?(ARSwiftUIViewProxy(arView: arView))
+***REMOVED******REMOVED***proxy?.arView = arView
 ***REMOVED******REMOVED***return arView
 ***REMOVED***
 ***REMOVED***
@@ -89,19 +89,15 @@ extension ARSwiftUIView {
 ***REMOVED***
 ***REMOVED***
 
-struct ARSwiftUIViewProxy {
-***REMOVED***private let arView: ARSCNView
+class ARSwiftUIViewProxy {
+***REMOVED***var arView: ARSCNView?
 ***REMOVED***
-***REMOVED***init(arView: ARSCNView) {
-***REMOVED******REMOVED***self.arView = arView
-***REMOVED***
-***REMOVED***
-***REMOVED***var session: ARSession {
-***REMOVED******REMOVED***arView.session
+***REMOVED***var session: ARSession? {
+***REMOVED******REMOVED***arView?.session
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var pointOfView: SCNNode? {
-***REMOVED******REMOVED***arView.pointOfView
+***REMOVED******REMOVED***arView?.pointOfView
 ***REMOVED***
 ***REMOVED***
 
@@ -120,15 +116,8 @@ public struct ARGeoView3: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The last portrait or landscape orientation value.
 ***REMOVED***@State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
-***REMOVED***
-***REMOVED******REMOVED*** Wrapped so that we can update it during a view update.
-***REMOVED***@State private var arViewProxyWrapper: ValueWrapper<ARSwiftUIViewProxy?> = .init(value: nil)
+***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
-***REMOVED***
-***REMOVED******REMOVED*** Convenience property.
-***REMOVED***private var arViewProxy: ARSwiftUIViewProxy? {
-***REMOVED******REMOVED***get { arViewProxyWrapper.value ***REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***public init(
 ***REMOVED******REMOVED***scene: ArcGIS.Scene,
@@ -144,20 +133,18 @@ public struct ARGeoView3: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***ARSwiftUIView { proxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***arViewProxyWrapper.value = proxy
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onRender { _, _, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let arViewProxy = arViewProxy, let sceneViewProxy {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
+***REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onRender { _, _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let sceneViewProxy {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy?.session.run(configuration)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy?.session.pause()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.pause()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scene: scene,
@@ -179,6 +166,7 @@ private extension ARGeoView3 {
 ***REMOVED***func render(arViewProxy: ARSwiftUIViewProxy, sceneViewProxy: SceneViewProxy) {
 ***REMOVED******REMOVED******REMOVED*** Get transform from SCNView.pointOfView.
 ***REMOVED******REMOVED***guard let transform = arViewProxy.pointOfView?.transform else { return ***REMOVED***
+***REMOVED******REMOVED***guard let session = arViewProxy.session else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraTransform = simd_double4x4(transform)
 ***REMOVED******REMOVED***
@@ -197,7 +185,7 @@ private extension ARGeoView3 {
 ***REMOVED******REMOVED***cameraController.transformationMatrix = .identity.adding(transformationMatrix)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set FOV on camera.
-***REMOVED******REMOVED***if let camera = arViewProxy.session.currentFrame?.camera {
+***REMOVED******REMOVED***if let camera = session.currentFrame?.camera {
 ***REMOVED******REMOVED******REMOVED***let intrinsics = camera.intrinsics
 ***REMOVED******REMOVED******REMOVED***let imageResolution = camera.imageResolution
 ***REMOVED******REMOVED******REMOVED***
