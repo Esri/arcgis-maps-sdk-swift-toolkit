@@ -134,15 +134,31 @@ struct ComboBoxInput: View {
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .leading)
             Divider()
-            List(matchingValues, id: \.self) { codedValue in
-                HStack {
-                    Button(codedValue.name) {
-                        selectedValue = codedValue
+            List {
+                if element.value.isEmpty && !element.isRequired {
+                    if input.noValueOption == .show {
+                        HStack {
+                            Button(input.noValueLabel.isEmpty ? String.noValue : input.noValueLabel) {
+                                selectedValue = nil
+                            }
+                            Spacer()
+                            if selectedValue == nil {
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(.accentColor)
+                            }
+                        }
                     }
-                    Spacer()
-                    if codedValue == selectedValue {
-                        Image(systemName: "checkmark")
-                            .foregroundColor(.accentColor)
+                }
+                ForEach(matchingValues, id: \.self) { codedValue in
+                    HStack {
+                        Button(codedValue.name) {
+                            selectedValue = codedValue
+                        }
+                        Spacer()
+                        if codedValue == selectedValue {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.accentColor)
+                        }
                     }
                 }
             }
