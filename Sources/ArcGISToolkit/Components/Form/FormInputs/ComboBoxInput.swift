@@ -66,7 +66,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(displayValue)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedValue?.name ?? placeholderValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(selectedValue != nil ? .primary : .secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -98,6 +98,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***  current != newValue else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***requiredValueMissing = element.isRequired && newValue == nil
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
 ***REMOVED***
 ***REMOVED***
@@ -181,19 +182,18 @@ struct ComboBoxInput: View {
 ***REMOVED***
 
 extension ComboBoxInput {
-***REMOVED******REMOVED*** The current value to display.
-***REMOVED***var displayValue: String {
-***REMOVED******REMOVED***switch (selectedValue, element.isRequired, input.noValueOption, input.noValueLabel.isEmpty) {
-***REMOVED******REMOVED***case (nil, true, _, true):
+***REMOVED******REMOVED*** The placeholder value to display.
+***REMOVED***var placeholderValue: String {
+***REMOVED******REMOVED***guard !element.isRequired else {
 ***REMOVED******REMOVED******REMOVED***return .enterValue
-***REMOVED******REMOVED***case (nil, false, .show, true):
+***REMOVED***
+***REMOVED******REMOVED***switch (input.noValueOption, input.noValueLabel.isEmpty) {
+***REMOVED******REMOVED***case (.show, true):
 ***REMOVED******REMOVED******REMOVED***return .noValue
-***REMOVED******REMOVED***case (nil, false, .show, false):
+***REMOVED******REMOVED***case (.show, false):
 ***REMOVED******REMOVED******REMOVED***return input.noValueLabel
-***REMOVED******REMOVED***case (nil, false, .hide, _):
+***REMOVED******REMOVED***case (.hide, _):
 ***REMOVED******REMOVED******REMOVED***return ""
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***return selectedValue!.name
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
