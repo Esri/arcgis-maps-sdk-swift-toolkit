@@ -21,9 +21,6 @@ struct FormViewTestView: View {
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
     
-    /// The point on the screen the user tapped on to identify a feature.
-    @State private var identifyScreenPoint: CGPoint?
-    
     /// A Boolean value indicating whether or not the form is displayed.
     @State private var isPresented = false
     
@@ -35,9 +32,6 @@ struct FormViewTestView: View {
     
     var body: some View {
         MapView(map: map)
-            .onSingleTapGesture { screenPoint, _ in
-                identifyScreenPoint = screenPoint
-            }
             .task {
                 try? await map.load()
                 let featureLayer = map.operationalLayers.first as? FeatureLayer
@@ -102,6 +96,6 @@ private extension FormViewTestView {
 
 private extension URL {
     static var sampleData: Self {
-        .init(string: <#URL#>)!
+        // Text tests
     }
 }
