@@ -69,7 +69,9 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***func makeUIView(context: Context) -> ARSCNView {
 ***REMOVED******REMOVED***let arView = ARSCNView()
 ***REMOVED******REMOVED***arView.delegate = context.coordinator
-***REMOVED******REMOVED***onProxyAvailableAction?(Proxy(arView: arView))
+***REMOVED******REMOVED***DispatchQueue.main.async {
+***REMOVED******REMOVED******REMOVED***onProxyAvailableAction?(Proxy(arView: arView))
+***REMOVED***
 ***REMOVED******REMOVED***return arView
 ***REMOVED***
 ***REMOVED***
@@ -130,6 +132,7 @@ public struct ARGeoView3: View {
 ***REMOVED***@State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
 ***REMOVED***
 ***REMOVED***@State private var arViewProxy: ARSwiftUIView.Proxy?
+***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
 ***REMOVED***
 ***REMOVED***public init(
 ***REMOVED******REMOVED***scene: ArcGIS.Scene,
@@ -145,18 +148,18 @@ public struct ARGeoView3: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***ARSwiftUIView()
+***REMOVED******REMOVED******REMOVED******REMOVED***.alpha(0)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onProxyAvailable { proxy in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.arViewProxy = proxy
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.session.run(configuration)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onRender { _, _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let arViewProxy, let sceneViewProxy {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.alpha(0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onProxyAvailable { proxy in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.arViewProxy = proxy
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.session.run(configuration)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onRender { _, _, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let arViewProxy {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scene: scene,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController
@@ -165,6 +168,9 @@ public struct ARGeoView3: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.sceneViewProxy = sceneViewProxy
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -214,5 +220,6 @@ private extension ARGeoView3 {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.
 ***REMOVED******REMOVED***sceneViewProxy.draw()
+***REMOVED******REMOVED******REMOVED***print("-- drawing")
 ***REMOVED***
 ***REMOVED***
