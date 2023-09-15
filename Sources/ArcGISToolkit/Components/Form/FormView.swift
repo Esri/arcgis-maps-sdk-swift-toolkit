@@ -19,11 +19,11 @@ import SwiftUI
 public struct FormView: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// <#Description#>
+    /// The form's configuration.
     private var featureForm: FeatureForm?
     
     /// Initializes a form view.
-    /// - Parameter featureForm: <#featureForm description#>
+    /// - Parameter featureForm: The form's configuration.
     public init(featureForm: FeatureForm?) {
         self.featureForm = featureForm
     }
