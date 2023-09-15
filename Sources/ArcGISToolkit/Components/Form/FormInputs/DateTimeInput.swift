@@ -51,12 +51,12 @@ struct DateTimeInput: View {
     
     var body: some View {
         Group {
-            FormElementHeader(element: element)
+            InputHeader(element: element)
                 .padding([.top], elementPadding)
             
             dateEditor
             
-            footer
+            InputFooter(element: element, requiredValueMissing: requiredValueMissing)
         }
         .padding([.bottom], elementPadding)
         .onAppear {
@@ -164,20 +164,6 @@ struct DateTimeInput: View {
         } else {
             return .primary
         }
-    }
-    
-    /// The message shown below the date editor and viewer.
-    @ViewBuilder var footer: some View {
-        Group {
-            if requiredValueMissing {
-                Text.required
-            } else {
-                Text(element.description)
-            }
-        }
-        .font(.footnote)
-        .foregroundColor(requiredValueMissing ? .red : .secondary)
-        .accessibilityIdentifier("\(element.label) Footer")
     }
     
     /// The human-readable date and time selection.
