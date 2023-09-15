@@ -11,6 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import Foundation
+
 extension String {
     /// A localized string for the word "Cancel".
     static var cancel: Self {
