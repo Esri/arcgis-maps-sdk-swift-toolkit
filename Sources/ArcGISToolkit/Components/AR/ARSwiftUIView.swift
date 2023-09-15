@@ -14,8 +14,9 @@
 import Foundation
 import ARKit
 import SwiftUI
+import ArcGIS
 
-public struct ARSwiftUIView {
+struct ARSwiftUIView {
     private(set) var alpha: CGFloat = 1.0
     private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
     private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
@@ -25,13 +26,13 @@ public struct ARSwiftUIView {
     init() {
     }
     
-    public func alpha(_ alpha: CGFloat) -> Self {
+    func alpha(_ alpha: CGFloat) -> Self {
         var view = self
         view.alpha = alpha
         return view
     }
     
-    public func onRender(
+    func onRender(
         perform action: @escaping (SCNSceneRenderer, SCNScene, TimeInterval) -> Void
     ) -> Self {
         var view = self
@@ -39,7 +40,7 @@ public struct ARSwiftUIView {
         return view
     }
     
-    public func onCameraTrackingStateChange(
+    func onCameraTrackingStateChange(
         perform action: @escaping (ARSession, ARCamera) -> Void
     ) -> Self {
         var view = self
@@ -47,7 +48,7 @@ public struct ARSwiftUIView {
         return view
     }
     
-    public func onGeoTrackingStatusChange(
+    func onGeoTrackingStatusChange(
         perform action: @escaping (ARSession, ARGeoTrackingStatus) -> Void
     ) -> Self {
         var view = self
@@ -55,7 +56,7 @@ public struct ARSwiftUIView {
         return view
     }
     
-    public func onProxyAvailable(
+    func onProxyAvailable(
         perform action: @escaping (ARSwiftUIView.Proxy) -> Void
     ) -> Self {
         var view = self
@@ -65,45 +66,45 @@ public struct ARSwiftUIView {
 }
 
 extension ARSwiftUIView: UIViewRepresentable {
-    public func makeUIView(context: Context) -> ARSCNView {
+    func makeUIView(context: Context) -> ARSCNView {
         let arView = ARSCNView()
         arView.delegate = context.coordinator
         onProxyAvailableAction?(Proxy(arView: arView))
         return arView
     }
     
-    public func updateUIView(_ uiView: ARSCNView, context: Context) {
+    func updateUIView(_ uiView: ARSCNView, context: Context) {
     }
     
-    public func makeCoordinator() -> Coordinator {
+    func makeCoordinator() -> Coordinator {
         Coordinator(arSwiftUIView: self)
     }
 }
 
 extension ARSwiftUIView {
-    public class Coordinator: NSObject, ARSCNViewDelegate {
+    class Coordinator: NSObject, ARSCNViewDelegate {
         private let view: ARSwiftUIView
         
         init(arSwiftUIView: ARSwiftUIView) {
             self.view = arSwiftUIView
         }
         
-        public func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
+        func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
             view.onRenderAction?(renderer, scene, time)
         }
         
-        public func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
+        func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
             view.onCameraTrackingStateChangeAction?(session, camera)
         }
         
-        public func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
+        func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
             view.onGeoTrackingStatusChangeAction?(session, geoTrackingStatus)
         }
     }
 }
 
 extension ARSwiftUIView {
-    public class Proxy {
+    class Proxy {
         private let arView: ARSCNView
         
         init(arView: ARSCNView) {
@@ -118,4 +119,120 @@ extension ARSwiftUIView {
             arView.pointOfView
         }
     }
+}
+
+public struct ARGeoView3: View {
+    private let configuration: ARWorldTrackingConfiguration
+    
+    init() {
+        configuration = ARWorldTrackingConfiguration()
+        configuration.worldAlignment = .gravityAndHeading
+        configuration.planeDetection = [.horizontal]
+    }
+    
+    public var body: some View {
+        ZStack {
+            SceneViewReader { proxy in
+                ARSwiftUIView()
+                    .alpha(0)
+                    .onProxyAvailable { proxy in
+                        proxy.session.run(configuration)
+                    }
+                    .onRenderAction { renderer, scene, time in
+                        
+                    }
+                SceneView(
+                    scene: ExampleVars.scene,
+                    cameraController: ExampleVars.cameraController
+                )
+                .attributionBarHidden(true)
+                .spaceEffect(.transparent)
+                .viewDrawingMode(.manual)
+                .atmosphereEffect(.off)
+            }
+        }
+    }
+}
+
+private extension ARGeoView3 {
+    func render() {
+        // Get transform from SCNView.pointOfView.
+        guard let transform = arView.pointOfView?.transform else { return }
+        let cameraTransform = simd_double4x4(transform)
+        
+        let cameraQuat = simd_quatd(cameraTransform)
+        let transformationMatrix = TransformationMatrix.normalized(
+            quaternionX: cameraQuat.vector.x,
+            quaternionY: cameraQuat.vector.y,
+            quaternionZ: cameraQuat.vector.z,
+            quaternionW: cameraQuat.vector.w,
+            translationX: cameraTransform.columns.3.x,
+            translationY: cameraTransform.columns.3.y,
+            translationZ: cameraTransform.columns.3.z
+        )
+        
+        // Set the matrix on the camera controller.
+        let cameraController = sceneViewController.cameraController as! TransformationMatrixCameraController
+        cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
+        
+        // Set FOV on camera.
+        if let camera = arView.session.currentFrame?.camera {
+            let intrinsics = camera.intrinsics
+            let imageResolution = camera.imageResolution
+            
+            // Get the device orientation, but don't allow non-landscape/portrait values.
+            let deviceOrientation = UIDevice.current.orientation
+            if deviceOrientation.isValidInterfaceOrientation {
+                lastGoodDeviceOrientation = deviceOrientation
+            }
+            
+            sceneViewController.setFieldOfViewFromLensIntrinsics(
+                xFocalLength: intrinsics[0][0],
+                yFocalLength: intrinsics[1][1],
+                xPrincipal: intrinsics[2][0],
+                yPrincipal: intrinsics[2][1],
+                xImageSize: Float(imageResolution.width),
+                yImageSize: Float(imageResolution.height),
+                deviceOrientation: lastGoodDeviceOrientation
+            )
+        }
+        
+        // Render the Scene with the new transformation.
+        sceneViewController.draw()
+    }
+}
+
+
+private enum ExampleVars {
+    static var scene: ArcGIS.Scene = {
+        let scene = Scene(
+            item: PortalItem(
+                portal: .arcGISOnline(connection: .anonymous),
+                id: PortalItem.ID("7558ee942b2547019f66885c44d4f0b1")!
+            )
+        )
+        
+        scene.initialViewpoint = Viewpoint(
+            latitude: 37.8651,
+            longitude: 119.5383,
+            scale: 10
+        )
+        
+        return scene
+    }()
+    
+    static var cameraController: TransformationMatrixCameraController = {
+        let controller = TransformationMatrixCameraController()
+        controller.originCamera = Camera(
+            lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
+            distance: 1_000,
+            heading: 40,
+            pitch: 90,
+            roll: 0
+        )
+        
+        controller.translationFactor = 3000
+        controller.clippingDistance = 6000
+        return controller
+    }()
 }

@@ -37,7 +37,8 @@ extension ExampleList {
         name: "Augmented Reality",
         examples: [
             AnyExample("Flyover", content: FlyoverExampleView()),
-            AnyExample("Reality Kit Flyover", content: RealityFlyoverExampleView())
+            AnyExample("Reality Kit Flyover", content: RealityFlyoverExampleView()),
+            AnyExample("SwiftUI Flyover", content: SwiftUIFlyoverExampleView())
         ]
     )
     
