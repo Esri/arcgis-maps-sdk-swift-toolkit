@@ -66,7 +66,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedValue?.name ?? .noValue)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(displayValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(selectedValue != nil ? .primary : .secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -180,6 +180,35 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED***
 
+extension ComboBoxInput {
+***REMOVED******REMOVED*** The current value to display.
+***REMOVED***var displayValue: String {
+***REMOVED******REMOVED***switch (selectedValue, element.isRequired, input.noValueOption, input.noValueLabel.isEmpty) {
+***REMOVED******REMOVED***case (nil, true, _, true):
+***REMOVED******REMOVED******REMOVED***return .enterValue
+***REMOVED******REMOVED***case (nil, false, .show, true):
+***REMOVED******REMOVED******REMOVED***return .noValue
+***REMOVED******REMOVED***case (nil, false, .show, false):
+***REMOVED******REMOVED******REMOVED***return input.noValueLabel
+***REMOVED******REMOVED***case (nil, false, .hide, _):
+***REMOVED******REMOVED******REMOVED***return ""
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***return selectedValue!.name
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension String {
+***REMOVED******REMOVED***/ A label for a combo box input that prompts the user to enter a value.
+***REMOVED***static var enterValue: Self {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Enter Value",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a combo box input that prompts the user to enter a value."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***
 private extension Text {
 ***REMOVED******REMOVED***/ A label for a text entry field that allows the user to filter a list of values by name.
 ***REMOVED***static var filter: Self {
