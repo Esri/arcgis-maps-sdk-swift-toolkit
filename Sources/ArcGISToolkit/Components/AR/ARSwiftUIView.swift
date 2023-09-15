@@ -20,7 +20,13 @@ struct ARSwiftUIView {
 ***REMOVED***private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
 ***REMOVED***private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
 ***REMOVED***private(set) var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
-***REMOVED***private(set) var onProxyAvailableAction: ((ARSwiftUIView.Proxy) -> Void)?
+***REMOVED***private(set) var onProxyAvailableAction: ((ARSwiftUIViewProxy) -> Void)?
+***REMOVED***
+***REMOVED***var proxy: Binding<ARSwiftUIViewProxy?>?
+***REMOVED***
+***REMOVED***init(proxy: Binding<ARSwiftUIViewProxy?>? = nil) {
+***REMOVED******REMOVED***self.proxy = proxy
+***REMOVED***
 ***REMOVED***
 ***REMOVED***func onRender(
 ***REMOVED******REMOVED***perform action: @escaping (SCNSceneRenderer, SCNScene, TimeInterval) -> Void
@@ -47,7 +53,7 @@ struct ARSwiftUIView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func onProxyAvailable(
-***REMOVED******REMOVED***perform action: @escaping (ARSwiftUIView.Proxy) -> Void
+***REMOVED******REMOVED***perform action: @escaping (ARSwiftUIViewProxy) -> Void
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.onProxyAvailableAction = action
@@ -59,8 +65,8 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***func makeUIView(context: Context) -> ARSCNView {
 ***REMOVED******REMOVED***let arView = ARSCNView()
 ***REMOVED******REMOVED***arView.delegate = context.coordinator
-***REMOVED******REMOVED***DispatchQueue.main.async {
-***REMOVED******REMOVED******REMOVED***onProxyAvailableAction?(Proxy(arView: arView))
+***REMOVED******REMOVED***if let proxy {
+***REMOVED******REMOVED******REMOVED***proxy.wrappedValue = ARSwiftUIViewProxy(arView: arView)
 ***REMOVED***
 ***REMOVED******REMOVED***return arView
 ***REMOVED***
@@ -95,23 +101,58 @@ extension ARSwiftUIView {
 ***REMOVED***
 ***REMOVED***
 
-extension ARSwiftUIView {
-***REMOVED***class Proxy {
-***REMOVED******REMOVED***private let arView: ARSCNView
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(arView: ARSCNView) {
-***REMOVED******REMOVED******REMOVED***self.arView = arView
+struct ARSwiftUIViewProxy {
+***REMOVED***private let arView: ARSCNView
 ***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED***init(arView: ARSCNView) {
+***REMOVED******REMOVED***self.arView = arView
+***REMOVED***
+***REMOVED***
+***REMOVED***var session: ARSession {
+***REMOVED******REMOVED***arView.session
+***REMOVED***
+***REMOVED***
+***REMOVED***var pointOfView: SCNNode? {
+***REMOVED******REMOVED***arView.pointOfView
+***REMOVED***
+***REMOVED***
+
+***REMOVED***struct ARSwiftUIViewProxy {
+***REMOVED******REMOVED***var arView: ARSCNView!
+***REMOVED***
 ***REMOVED******REMOVED***var session: ARSession {
-***REMOVED******REMOVED******REMOVED***arView.session
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***precondition(arView != nil)
+***REMOVED******REMOVED******REMOVED***return arView.session
 ***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***var pointOfView: SCNNode? {
-***REMOVED******REMOVED******REMOVED***arView.pointOfView
+***REMOVED******REMOVED******REMOVED***precondition(arView != nil)
+***REMOVED******REMOVED******REMOVED***return arView.pointOfView
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***struct ARSwiftUIViewReader<Content>: View where Content: View {
+***REMOVED******REMOVED******REMOVED***/ The view builder that creates the reader's content.
+***REMOVED******REMOVED***var content: (ARSwiftUIViewProxy) -> Content
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The proxy of this reader.
+***REMOVED******REMOVED***@State private var proxy = ARSwiftUIViewProxy()
 ***REMOVED***
+***REMOVED******REMOVED***init(@ViewBuilder content: @escaping (ARSwiftUIViewProxy) -> Content) {
+***REMOVED******REMOVED******REMOVED***self.content = content
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***content(proxy)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onPreferenceChange(PreferredARSCNViewKey.self) { arView in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.arView = arView
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***struct PreferredARSCNViewKey: PreferenceKey {
+***REMOVED******REMOVED***static func reduce(value: inout ARSCNView?, nextValue: () -> ARSCNView?) {***REMOVED***
+***REMOVED******REMOVED***
 
 public struct ARGeoView3: View {
 ***REMOVED***private let scene: ArcGIS.Scene
@@ -121,7 +162,7 @@ public struct ARGeoView3: View {
 ***REMOVED******REMOVED***/ The last portrait or landscape orientation value.
 ***REMOVED***@State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
 ***REMOVED***
-***REMOVED***@State private var arViewProxy: ARSwiftUIView.Proxy?
+***REMOVED***@State private var arViewProxy: ARSwiftUIViewProxy?
 ***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
 ***REMOVED***
 ***REMOVED***public init(
@@ -169,7 +210,7 @@ public struct ARGeoView3: View {
 ***REMOVED***
 
 private extension ARGeoView3 {
-***REMOVED***func render(arViewProxy: ARSwiftUIView.Proxy, sceneViewProxy: SceneViewProxy) {
+***REMOVED***func render(arViewProxy: ARSwiftUIViewProxy, sceneViewProxy: SceneViewProxy) {
 ***REMOVED******REMOVED******REMOVED*** Get transform from SCNView.pointOfView.
 ***REMOVED******REMOVED***guard let transform = arViewProxy.pointOfView?.transform else { return ***REMOVED***
 ***REMOVED******REMOVED***
