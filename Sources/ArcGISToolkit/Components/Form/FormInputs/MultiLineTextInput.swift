@@ -55,7 +55,7 @@ struct MultiLineTextInput: View {
     }
     
     var body: some View {
-        FormElementHeader(element: element)
+        InputHeader(element: element)
             .padding([.top], elementPadding)
         HStack(alignment: .bottom) {
             if #available(iOS 16.0, *) {

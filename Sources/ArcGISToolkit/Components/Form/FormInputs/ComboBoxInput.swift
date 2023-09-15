@@ -65,7 +65,7 @@ struct ComboBoxInput: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            FormElementHeader(element: element)
+            InputHeader(element: element)
                 .padding([.top], elementPadding)
             
             HStack {
@@ -89,7 +89,7 @@ struct ComboBoxInput: View {
                 isPresented = true
             }
             
-            footer
+            InputFooter(element: element, requiredValueMissing: requiredValueMissing)
         }
         .padding([.bottom], elementPadding)
         .onAppear {
@@ -120,13 +120,6 @@ struct ComboBoxInput: View {
                 picker
             }
         }
-    }
-    
-    /// The message shown below the picker.
-    @ViewBuilder var footer: some View {
-        Text(element.description)
-            .font(.footnote)
-            .foregroundColor(.secondary)
     }
     
     /// The view that allows the user to filter and select coded values by name.

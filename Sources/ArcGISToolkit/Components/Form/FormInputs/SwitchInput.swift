@@ -44,7 +44,7 @@ struct SwitchInput: View {
     
     var body: some View {
         Group {
-            FormElementHeader(element: element)
+            InputHeader(element: element)
                 .padding([.top], elementPadding)
             Toggle(element.label, isOn: $switchState)
                 .toggleStyle(.switch)

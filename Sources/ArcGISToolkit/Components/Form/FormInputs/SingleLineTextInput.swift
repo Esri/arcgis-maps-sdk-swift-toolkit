@@ -48,7 +48,7 @@ struct SingleLineTextInput: View {
     }
     
     var body: some View {
-        FormElementHeader(element: element)
+        InputHeader(element: element)
             .padding([.top], elementPadding)
         // Secondary foreground color is used across input views for consistency.
         HStack {
