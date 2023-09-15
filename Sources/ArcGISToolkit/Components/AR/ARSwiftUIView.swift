@@ -16,9 +16,19 @@ import ARKit
 ***REMOVED***
 
 public struct ARSwiftUIView {
+***REMOVED***private(set) var alpha: CGFloat = 1.0
 ***REMOVED***private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
+***REMOVED***private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
+***REMOVED***private(set) var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
+***REMOVED***private(set) var onProxyAvailableAction: ((ARSwiftUIView.Proxy) -> Void)?
 ***REMOVED***
 ***REMOVED***init() {
+***REMOVED***
+***REMOVED***
+***REMOVED***public func alpha(_ alpha: CGFloat) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.alpha = alpha
+***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func onRender(
@@ -29,11 +39,36 @@ public struct ARSwiftUIView {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
+***REMOVED***public func onCameraTrackingStateChange(
+***REMOVED******REMOVED***perform action: @escaping (ARSession, ARCamera) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onCameraTrackingStateChangeAction = action
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED***public func onGeoTrackingStatusChange(
+***REMOVED******REMOVED***perform action: @escaping (ARSession, ARGeoTrackingStatus) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onGeoTrackingStatusChangeAction = action
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED***public func onProxyAvailable(
+***REMOVED******REMOVED***perform action: @escaping (ARSwiftUIView.Proxy) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onProxyAvailableAction = action
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
 
 extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***public func makeUIView(context: Context) -> ARSCNView {
 ***REMOVED******REMOVED***let arView = ARSCNView()
 ***REMOVED******REMOVED***arView.delegate = context.coordinator
+***REMOVED******REMOVED***onProxyAvailableAction?(Proxy(arView: arView))
 ***REMOVED******REMOVED***return arView
 ***REMOVED***
 ***REMOVED***
@@ -56,10 +91,31 @@ extension ARSwiftUIView {
 ***REMOVED******REMOVED***public func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
 ***REMOVED******REMOVED******REMOVED***view.onRenderAction?(renderer, scene, time)
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***public func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
+***REMOVED******REMOVED******REMOVED***view.onCameraTrackingStateChangeAction?(session, camera)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***public func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
+***REMOVED******REMOVED******REMOVED***view.onGeoTrackingStatusChangeAction?(session, geoTrackingStatus)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 extension ARSwiftUIView {
-***REMOVED***public class Model: ObservableObject {
+***REMOVED***public class Proxy {
+***REMOVED******REMOVED***private let arView: ARSCNView
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***init(arView: ARSCNView) {
+***REMOVED******REMOVED******REMOVED***self.arView = arView
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var session: ARSession {
+***REMOVED******REMOVED******REMOVED***arView.session
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var pointOfView: SCNNode? {
+***REMOVED******REMOVED******REMOVED***arView.pointOfView
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
