@@ -27,6 +27,9 @@ struct ComboBoxInput: View {
     /// The phrase to use when filtering by coded value name.
     @State private var filterPhrase = ""
     
+    /// A Boolean value indicating whether a value is required but missing.
+    @State private var requiredValueMissing = false
+    
     /// The selected option.
     @State private var selectedValue: CodedValue?
     
