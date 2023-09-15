@@ -44,7 +44,7 @@ struct SwitchInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***Toggle(element.label, isOn: $switchState)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.switch)

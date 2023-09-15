@@ -51,12 +51,12 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***dateEditor
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***footer
+***REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
@@ -164,20 +164,6 @@ struct DateTimeInput: View {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return .primary
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The message shown below the date editor and viewer.
-***REMOVED***@ViewBuilder var footer: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if requiredValueMissing {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text.required
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED***.foregroundColor(requiredValueMissing ? .red : .secondary)
-***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The human-readable date and time selection.

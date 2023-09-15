@@ -48,7 +48,7 @@ struct SingleLineTextInput: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED***InputHeader(element: element)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across input views for consistency.
 ***REMOVED******REMOVED***HStack {
