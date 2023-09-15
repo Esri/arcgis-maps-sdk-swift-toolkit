@@ -66,8 +66,7 @@ struct RadioButtonsInput: View {
             }
         }
         .onChange(of: date) { newDate in
-            //TODO: add `required` property to API
-            requiredValueMissing = /*element.required && */newDate == nil
+            requiredValueMissing = element.isRequired && newDate == nil
             featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
         }
         .onChange(of: model.focusedFieldName) { newFocusedFieldName in
