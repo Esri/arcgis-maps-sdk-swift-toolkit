@@ -20,12 +20,10 @@ struct ARSwiftUIView {
 ***REMOVED***private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
 ***REMOVED***private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
 ***REMOVED***private(set) var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
-***REMOVED***private(set) var onProxyAvailableAction: ((ARSwiftUIViewProxy) -> Void)?
+***REMOVED***private let onProxyAvailableAction: ((ARSwiftUIViewProxy) -> Void)?
 ***REMOVED***
-***REMOVED***var proxy: Binding<ARSwiftUIViewProxy?>?
-***REMOVED***
-***REMOVED***init(proxy: Binding<ARSwiftUIViewProxy?>? = nil) {
-***REMOVED******REMOVED***self.proxy = proxy
+***REMOVED***init(onProxyAvailable action: ((ARSwiftUIViewProxy) -> Void)? = nil) {
+***REMOVED******REMOVED***onProxyAvailableAction = action
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func onRender(
@@ -52,24 +50,12 @@ struct ARSwiftUIView {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func onProxyAvailable(
-***REMOVED******REMOVED***perform action: @escaping (ARSwiftUIViewProxy) -> Void
-***REMOVED***) -> Self {
-***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.onProxyAvailableAction = action
-***REMOVED******REMOVED***return view
-***REMOVED***
-***REMOVED***
 
 extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***func makeUIView(context: Context) -> ARSCNView {
 ***REMOVED******REMOVED***let arView = ARSCNView()
 ***REMOVED******REMOVED***arView.delegate = context.coordinator
-***REMOVED******REMOVED***if let proxy {
-***REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
-***REMOVED******REMOVED******REMOVED******REMOVED***proxy.wrappedValue = ARSwiftUIViewProxy(arView: arView)
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***onProxyAvailableAction?(ARSwiftUIViewProxy(arView: arView))
 ***REMOVED******REMOVED***return arView
 ***REMOVED***
 ***REMOVED***
@@ -119,6 +105,14 @@ struct ARSwiftUIViewProxy {
 ***REMOVED***
 ***REMOVED***
 
+class ValueWrapper<Value> {
+***REMOVED***var value: Value
+***REMOVED***
+***REMOVED***init(value: Value) {
+***REMOVED******REMOVED***self.value = value
+***REMOVED***
+***REMOVED***
+
 public struct ARGeoView3: View {
 ***REMOVED***private let scene: ArcGIS.Scene
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
@@ -127,8 +121,14 @@ public struct ARGeoView3: View {
 ***REMOVED******REMOVED***/ The last portrait or landscape orientation value.
 ***REMOVED***@State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
 ***REMOVED***
-***REMOVED***@State private var arViewProxy: ARSwiftUIViewProxy?
+***REMOVED******REMOVED*** Wrapped so that we can update it during a view update.
+***REMOVED***@State private var arViewProxyWrapper: ValueWrapper<ARSwiftUIViewProxy?> = .init(value: nil)
 ***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
+***REMOVED***
+***REMOVED******REMOVED*** Convenience property.
+***REMOVED***private var arViewProxy: ARSwiftUIViewProxy? {
+***REMOVED******REMOVED***get { arViewProxyWrapper.value ***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***public init(
 ***REMOVED******REMOVED***scene: ArcGIS.Scene,
@@ -144,18 +144,20 @@ public struct ARGeoView3: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: $arViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onRender { _, _, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let arViewProxy, let sceneViewProxy {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***ARSwiftUIView { proxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***arViewProxyWrapper.value = proxy
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onRender { _, _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let arViewProxy = arViewProxy, let sceneViewProxy {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy?.session.run(configuration)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy?.session.pause()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy?.session.run(configuration)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy?.session.pause()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scene: scene,
