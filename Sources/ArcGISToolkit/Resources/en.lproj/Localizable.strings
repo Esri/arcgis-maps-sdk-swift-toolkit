@@ -222,8 +222,7 @@ from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
 "Repeat Search Here" = "Repeat Search Here";
 
-/* A label indicating a required field was left blank.
-Text indicating a field is required */
+/* A label indicating a field is required */
 "Required" = "Required";
 
 /* A label for a button to show utility network trace results. */
