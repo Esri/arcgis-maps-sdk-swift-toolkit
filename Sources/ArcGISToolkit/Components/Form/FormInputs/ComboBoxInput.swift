@@ -66,7 +66,7 @@ struct ComboBoxInput: View {
                 .padding([.top], elementPadding)
             
             HStack {
-                Text(displayValue)
+                Text(selectedValue?.name ?? placeholderValue)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
                 
@@ -98,6 +98,7 @@ struct ComboBoxInput: View {
                   current != newValue else {
                 return
             }
+            requiredValueMissing = element.isRequired && newValue == nil
             featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
         }
     }
@@ -181,19 +182,18 @@ struct ComboBoxInput: View {
 }
 
 extension ComboBoxInput {
-    // The current value to display.
-    var displayValue: String {
-        switch (selectedValue, element.isRequired, input.noValueOption, input.noValueLabel.isEmpty) {
-        case (nil, true, _, true):
+    // The placeholder value to display.
+    var placeholderValue: String {
+        guard !element.isRequired else {
             return .enterValue
-        case (nil, false, .show, true):
+        }
+        switch (input.noValueOption, input.noValueLabel.isEmpty) {
+        case (.show, true):
             return .noValue
-        case (nil, false, .show, false):
+        case (.show, false):
             return input.noValueLabel
-        case (nil, false, .hide, _):
+        case (.hide, _):
             return ""
-        default:
-            return selectedValue!.name
         }
     }
 }
