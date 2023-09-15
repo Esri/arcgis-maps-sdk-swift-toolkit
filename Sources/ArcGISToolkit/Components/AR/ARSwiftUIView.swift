@@ -17,20 +17,10 @@ import ARKit
 ***REMOVED***
 
 struct ARSwiftUIView {
-***REMOVED***private(set) var alpha: CGFloat = 1.0
 ***REMOVED***private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
 ***REMOVED***private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
 ***REMOVED***private(set) var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
 ***REMOVED***private(set) var onProxyAvailableAction: ((ARSwiftUIView.Proxy) -> Void)?
-***REMOVED***
-***REMOVED***init() {
-***REMOVED***
-***REMOVED***
-***REMOVED***func alpha(_ alpha: CGFloat) -> Self {
-***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.alpha = alpha
-***REMOVED******REMOVED***return view
-***REMOVED***
 ***REMOVED***
 ***REMOVED***func onRender(
 ***REMOVED******REMOVED***perform action: @escaping (SCNSceneRenderer, SCNScene, TimeInterval) -> Void
@@ -149,7 +139,6 @@ public struct ARGeoView3: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***ARSwiftUIView()
-***REMOVED******REMOVED******REMOVED******REMOVED***.alpha(0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onProxyAvailable { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.arViewProxy = proxy
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.session.run(configuration)
@@ -158,6 +147,9 @@ public struct ARGeoView3: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let arViewProxy, let sceneViewProxy {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy?.session.pause()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(
@@ -180,6 +172,7 @@ private extension ARGeoView3 {
 ***REMOVED***func render(arViewProxy: ARSwiftUIView.Proxy, sceneViewProxy: SceneViewProxy) {
 ***REMOVED******REMOVED******REMOVED*** Get transform from SCNView.pointOfView.
 ***REMOVED******REMOVED***guard let transform = arViewProxy.pointOfView?.transform else { return ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraTransform = simd_double4x4(transform)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraQuat = simd_quatd(cameraTransform)
@@ -220,6 +213,5 @@ private extension ARGeoView3 {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.
 ***REMOVED******REMOVED***sceneViewProxy.draw()
-***REMOVED******REMOVED******REMOVED***print("-- drawing")
 ***REMOVED***
 ***REMOVED***
