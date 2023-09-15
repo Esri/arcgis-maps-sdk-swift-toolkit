@@ -66,7 +66,7 @@ struct ComboBoxInput: View {
                 .padding([.top], elementPadding)
             
             HStack {
-                Text(selectedValue?.name ?? .noValue)
+                Text(displayValue)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
                 
@@ -180,6 +180,35 @@ struct ComboBoxInput: View {
     }
 }
 
+extension ComboBoxInput {
+    // The current value to display.
+    var displayValue: String {
+        switch (selectedValue, element.isRequired, input.noValueOption, input.noValueLabel.isEmpty) {
+        case (nil, true, _, true):
+            return .enterValue
+        case (nil, false, .show, true):
+            return .noValue
+        case (nil, false, .show, false):
+            return input.noValueLabel
+        case (nil, false, .hide, _):
+            return ""
+        default:
+            return selectedValue!.name
+        }
+    }
+}
+
+private extension String {
+    /// A label for a combo box input that prompts the user to enter a value.
+    static var enterValue: Self {
+        .init(
+            localized: "Enter Value",
+            bundle: .toolkitModule,
+            comment: "A label for a combo box input that prompts the user to enter a value."
+        )
+    }
+}
+    
 private extension Text {
     /// A label for a text entry field that allows the user to filter a list of values by name.
     static var filter: Self {
