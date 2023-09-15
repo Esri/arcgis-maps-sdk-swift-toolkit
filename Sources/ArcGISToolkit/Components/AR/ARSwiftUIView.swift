@@ -66,7 +66,9 @@ extension ARSwiftUIView: UIViewRepresentable {
         let arView = ARSCNView()
         arView.delegate = context.coordinator
         if let proxy {
-            proxy.wrappedValue = ARSwiftUIViewProxy(arView: arView)
+            DispatchQueue.main.async {
+                proxy.wrappedValue = ARSwiftUIViewProxy(arView: arView)
+            }
         }
         return arView
     }
@@ -117,43 +119,6 @@ struct ARSwiftUIViewProxy {
     }
 }
 
-//struct ARSwiftUIViewProxy {
-//    var arView: ARSCNView!
-//
-//    var session: ARSession {
-//        precondition(arView != nil)
-//        return arView.session
-//    }
-//
-//    var pointOfView: SCNNode? {
-//        precondition(arView != nil)
-//        return arView.pointOfView
-//    }
-//}
-//
-//struct ARSwiftUIViewReader<Content>: View where Content: View {
-//    /// The view builder that creates the reader's content.
-//    var content: (ARSwiftUIViewProxy) -> Content
-//
-//    /// The proxy of this reader.
-//    @State private var proxy = ARSwiftUIViewProxy()
-//
-//    init(@ViewBuilder content: @escaping (ARSwiftUIViewProxy) -> Content) {
-//        self.content = content
-//    }
-//
-//    var body: some View {
-//        content(proxy)
-//            .onPreferenceChange(PreferredARSCNViewKey.self) { arView in
-//                proxy.arView = arView
-//            }
-//    }
-//}
-//
-//struct PreferredARSCNViewKey: PreferenceKey {
-//    static func reduce(value: inout ARSCNView?, nextValue: () -> ARSCNView?) {}
-//}
-
 public struct ARGeoView3: View {
     private let scene: ArcGIS.Scene
     private let configuration: ARWorldTrackingConfiguration
@@ -179,15 +144,14 @@ public struct ARGeoView3: View {
     
     public var body: some View {
         ZStack {
-            ARSwiftUIView()
-                .onProxyAvailable { proxy in
-                    self.arViewProxy = proxy
-                    proxy.session.run(configuration)
-                }
+            ARSwiftUIView(proxy: $arViewProxy)
                 .onRender { _, _, _ in
                     if let arViewProxy, let sceneViewProxy {
                         render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
                     }
+                }
+                .onAppear {
+                    arViewProxy?.session.run(configuration)
                 }
                 .onDisappear {
                     arViewProxy?.session.pause()
