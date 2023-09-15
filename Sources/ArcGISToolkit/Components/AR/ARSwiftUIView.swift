@@ -17,20 +17,10 @@ import SwiftUI
 import ArcGIS
 
 struct ARSwiftUIView {
-    private(set) var alpha: CGFloat = 1.0
     private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
     private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
     private(set) var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
     private(set) var onProxyAvailableAction: ((ARSwiftUIView.Proxy) -> Void)?
-    
-    init() {
-    }
-    
-    func alpha(_ alpha: CGFloat) -> Self {
-        var view = self
-        view.alpha = alpha
-        return view
-    }
     
     func onRender(
         perform action: @escaping (SCNSceneRenderer, SCNScene, TimeInterval) -> Void
@@ -149,7 +139,6 @@ public struct ARGeoView3: View {
     public var body: some View {
         ZStack {
             ARSwiftUIView()
-                .alpha(0)
                 .onProxyAvailable { proxy in
                     self.arViewProxy = proxy
                     proxy.session.run(configuration)
@@ -158,6 +147,9 @@ public struct ARGeoView3: View {
                     if let arViewProxy, let sceneViewProxy {
                         render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
                     }
+                }
+                .onDisappear {
+                    arViewProxy?.session.pause()
                 }
             SceneViewReader { sceneViewProxy in
                 SceneView(
@@ -180,6 +172,7 @@ private extension ARGeoView3 {
     func render(arViewProxy: ARSwiftUIView.Proxy, sceneViewProxy: SceneViewProxy) {
         // Get transform from SCNView.pointOfView.
         guard let transform = arViewProxy.pointOfView?.transform else { return }
+        
         let cameraTransform = simd_double4x4(transform)
         
         let cameraQuat = simd_quatd(cameraTransform)
@@ -220,6 +213,5 @@ private extension ARGeoView3 {
         
         // Render the Scene with the new transformation.
         sceneViewProxy.draw()
-        //print("-- drawing")
     }
 }
