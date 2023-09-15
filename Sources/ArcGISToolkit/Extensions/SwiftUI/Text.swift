@@ -23,4 +23,13 @@ extension Text {
             comment: "A label for a button for the user to indicate completion of the current task."
         )
     }
+    
+    /// Localized text for the word "Required".
+    static var required: Self {
+        Text(
+            "Required",
+            bundle: .toolkitModule,
+            comment: "A label indicating a field is required"
+        )
+    }
 }
