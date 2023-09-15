@@ -66,7 +66,9 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED******REMOVED***let arView = ARSCNView()
 ***REMOVED******REMOVED***arView.delegate = context.coordinator
 ***REMOVED******REMOVED***if let proxy {
-***REMOVED******REMOVED******REMOVED***proxy.wrappedValue = ARSwiftUIViewProxy(arView: arView)
+***REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
+***REMOVED******REMOVED******REMOVED******REMOVED***proxy.wrappedValue = ARSwiftUIViewProxy(arView: arView)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***return arView
 ***REMOVED***
@@ -117,43 +119,6 @@ struct ARSwiftUIViewProxy {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***struct ARSwiftUIViewProxy {
-***REMOVED******REMOVED***var arView: ARSCNView!
-***REMOVED***
-***REMOVED******REMOVED***var session: ARSession {
-***REMOVED******REMOVED******REMOVED***precondition(arView != nil)
-***REMOVED******REMOVED******REMOVED***return arView.session
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***var pointOfView: SCNNode? {
-***REMOVED******REMOVED******REMOVED***precondition(arView != nil)
-***REMOVED******REMOVED******REMOVED***return arView.pointOfView
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***struct ARSwiftUIViewReader<Content>: View where Content: View {
-***REMOVED******REMOVED******REMOVED***/ The view builder that creates the reader's content.
-***REMOVED******REMOVED***var content: (ARSwiftUIViewProxy) -> Content
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The proxy of this reader.
-***REMOVED******REMOVED***@State private var proxy = ARSwiftUIViewProxy()
-***REMOVED***
-***REMOVED******REMOVED***init(@ViewBuilder content: @escaping (ARSwiftUIViewProxy) -> Content) {
-***REMOVED******REMOVED******REMOVED***self.content = content
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***content(proxy)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onPreferenceChange(PreferredARSCNViewKey.self) { arView in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.arView = arView
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***struct PreferredARSCNViewKey: PreferenceKey {
-***REMOVED******REMOVED***static func reduce(value: inout ARSCNView?, nextValue: () -> ARSCNView?) {***REMOVED***
-***REMOVED******REMOVED***
-
 public struct ARGeoView3: View {
 ***REMOVED***private let scene: ArcGIS.Scene
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
@@ -179,15 +144,14 @@ public struct ARGeoView3: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***ARSwiftUIView()
-***REMOVED******REMOVED******REMOVED******REMOVED***.onProxyAvailable { proxy in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.arViewProxy = proxy
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.session.run(configuration)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: $arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onRender { _, _, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let arViewProxy, let sceneViewProxy {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy?.session.run(configuration)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy?.session.pause()
