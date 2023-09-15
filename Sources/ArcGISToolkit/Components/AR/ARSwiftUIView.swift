@@ -20,7 +20,13 @@ struct ARSwiftUIView {
     private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
     private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
     private(set) var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
-    private(set) var onProxyAvailableAction: ((ARSwiftUIView.Proxy) -> Void)?
+    private(set) var onProxyAvailableAction: ((ARSwiftUIViewProxy) -> Void)?
+    
+    var proxy: Binding<ARSwiftUIViewProxy?>?
+    
+    init(proxy: Binding<ARSwiftUIViewProxy?>? = nil) {
+        self.proxy = proxy
+    }
     
     func onRender(
         perform action: @escaping (SCNSceneRenderer, SCNScene, TimeInterval) -> Void
@@ -47,7 +53,7 @@ struct ARSwiftUIView {
     }
     
     func onProxyAvailable(
-        perform action: @escaping (ARSwiftUIView.Proxy) -> Void
+        perform action: @escaping (ARSwiftUIViewProxy) -> Void
     ) -> Self {
         var view = self
         view.onProxyAvailableAction = action
@@ -59,8 +65,8 @@ extension ARSwiftUIView: UIViewRepresentable {
     func makeUIView(context: Context) -> ARSCNView {
         let arView = ARSCNView()
         arView.delegate = context.coordinator
-        DispatchQueue.main.async {
-            onProxyAvailableAction?(Proxy(arView: arView))
+        if let proxy {
+            proxy.wrappedValue = ARSwiftUIViewProxy(arView: arView)
         }
         return arView
     }
@@ -95,23 +101,58 @@ extension ARSwiftUIView {
     }
 }
 
-extension ARSwiftUIView {
-    class Proxy {
-        private let arView: ARSCNView
-        
-        init(arView: ARSCNView) {
-            self.arView = arView
-        }
-        
-        var session: ARSession {
-            arView.session
-        }
-        
-        var pointOfView: SCNNode? {
-            arView.pointOfView
-        }
+struct ARSwiftUIViewProxy {
+    private let arView: ARSCNView
+    
+    init(arView: ARSCNView) {
+        self.arView = arView
+    }
+    
+    var session: ARSession {
+        arView.session
+    }
+    
+    var pointOfView: SCNNode? {
+        arView.pointOfView
     }
 }
+
+//struct ARSwiftUIViewProxy {
+//    var arView: ARSCNView!
+//
+//    var session: ARSession {
+//        precondition(arView != nil)
+//        return arView.session
+//    }
+//
+//    var pointOfView: SCNNode? {
+//        precondition(arView != nil)
+//        return arView.pointOfView
+//    }
+//}
+//
+//struct ARSwiftUIViewReader<Content>: View where Content: View {
+//    /// The view builder that creates the reader's content.
+//    var content: (ARSwiftUIViewProxy) -> Content
+//
+//    /// The proxy of this reader.
+//    @State private var proxy = ARSwiftUIViewProxy()
+//
+//    init(@ViewBuilder content: @escaping (ARSwiftUIViewProxy) -> Content) {
+//        self.content = content
+//    }
+//
+//    var body: some View {
+//        content(proxy)
+//            .onPreferenceChange(PreferredARSCNViewKey.self) { arView in
+//                proxy.arView = arView
+//            }
+//    }
+//}
+//
+//struct PreferredARSCNViewKey: PreferenceKey {
+//    static func reduce(value: inout ARSCNView?, nextValue: () -> ARSCNView?) {}
+//}
 
 public struct ARGeoView3: View {
     private let scene: ArcGIS.Scene
@@ -121,7 +162,7 @@ public struct ARGeoView3: View {
     /// The last portrait or landscape orientation value.
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     
-    @State private var arViewProxy: ARSwiftUIView.Proxy?
+    @State private var arViewProxy: ARSwiftUIViewProxy?
     @State private var sceneViewProxy: SceneViewProxy?
     
     public init(
@@ -169,7 +210,7 @@ public struct ARGeoView3: View {
 }
 
 private extension ARGeoView3 {
-    func render(arViewProxy: ARSwiftUIView.Proxy, sceneViewProxy: SceneViewProxy) {
+    func render(arViewProxy: ARSwiftUIViewProxy, sceneViewProxy: SceneViewProxy) {
         // Get transform from SCNView.pointOfView.
         guard let transform = arViewProxy.pointOfView?.transform else { return }
         
