@@ -265,7 +265,7 @@ final class FormViewTests: XCTestCase {
         )
     }
     
-    // - MARK: Test case 2: Test case 2: DateTime picker input type
+    // - MARK: Test case 2: DateTime picker input type
     
     /// Test case 2.1: Unfocused and focused state, no value, date required
     func testCase_2_1() throws {
@@ -613,6 +613,25 @@ final class FormViewTests: XCTestCase {
         XCTAssertEqual(
             fieldValue.label,
             "No Value"
+        )
+    }
+    
+    // - MARK: Test case 3: Combo Box input type
+    
+    func testCase_3_1() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
         )
     }
 }
