@@ -20,12 +20,10 @@ struct ARSwiftUIView {
     private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
     private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
     private(set) var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
-    private(set) var onProxyAvailableAction: ((ARSwiftUIViewProxy) -> Void)?
+    private let onProxyAvailableAction: ((ARSwiftUIViewProxy) -> Void)?
     
-    var proxy: Binding<ARSwiftUIViewProxy?>?
-    
-    init(proxy: Binding<ARSwiftUIViewProxy?>? = nil) {
-        self.proxy = proxy
+    init(onProxyAvailable action: ((ARSwiftUIViewProxy) -> Void)? = nil) {
+        onProxyAvailableAction = action
     }
     
     func onRender(
@@ -51,25 +49,13 @@ struct ARSwiftUIView {
         view.onGeoTrackingStatusChangeAction = action
         return view
     }
-    
-    func onProxyAvailable(
-        perform action: @escaping (ARSwiftUIViewProxy) -> Void
-    ) -> Self {
-        var view = self
-        view.onProxyAvailableAction = action
-        return view
-    }
 }
 
 extension ARSwiftUIView: UIViewRepresentable {
     func makeUIView(context: Context) -> ARSCNView {
         let arView = ARSCNView()
         arView.delegate = context.coordinator
-        if let proxy {
-            DispatchQueue.main.async {
-                proxy.wrappedValue = ARSwiftUIViewProxy(arView: arView)
-            }
-        }
+        onProxyAvailableAction?(ARSwiftUIViewProxy(arView: arView))
         return arView
     }
     
@@ -119,6 +105,14 @@ struct ARSwiftUIViewProxy {
     }
 }
 
+class ValueWrapper<Value> {
+    var value: Value
+    
+    init(value: Value) {
+        self.value = value
+    }
+}
+
 public struct ARGeoView3: View {
     private let scene: ArcGIS.Scene
     private let configuration: ARWorldTrackingConfiguration
@@ -127,8 +121,14 @@ public struct ARGeoView3: View {
     /// The last portrait or landscape orientation value.
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     
-    @State private var arViewProxy: ARSwiftUIViewProxy?
+    // Wrapped so that we can update it during a view update.
+    @State private var arViewProxyWrapper: ValueWrapper<ARSwiftUIViewProxy?> = .init(value: nil)
     @State private var sceneViewProxy: SceneViewProxy?
+    
+    // Convenience property.
+    private var arViewProxy: ARSwiftUIViewProxy? {
+        get { arViewProxyWrapper.value }
+    }
     
     public init(
         scene: ArcGIS.Scene,
@@ -144,18 +144,20 @@ public struct ARGeoView3: View {
     
     public var body: some View {
         ZStack {
-            ARSwiftUIView(proxy: $arViewProxy)
-                .onRender { _, _, _ in
-                    if let arViewProxy, let sceneViewProxy {
-                        render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
-                    }
+            ARSwiftUIView { proxy in
+                arViewProxyWrapper.value = proxy
+            }
+            .onRender { _, _, _ in
+                if let arViewProxy = arViewProxy, let sceneViewProxy {
+                    render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
                 }
-                .onAppear {
-                    arViewProxy?.session.run(configuration)
-                }
-                .onDisappear {
-                    arViewProxy?.session.pause()
-                }
+            }
+            .onAppear {
+                arViewProxy?.session.run(configuration)
+            }
+            .onDisappear {
+                arViewProxy?.session.pause()
+            }
             SceneViewReader { sceneViewProxy in
                 SceneView(
                     scene: scene,
