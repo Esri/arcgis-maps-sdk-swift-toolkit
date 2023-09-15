@@ -14,8 +14,9 @@
 import Foundation
 import ARKit
 ***REMOVED***
+***REMOVED***
 
-public struct ARSwiftUIView {
+struct ARSwiftUIView {
 ***REMOVED***private(set) var alpha: CGFloat = 1.0
 ***REMOVED***private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
 ***REMOVED***private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
@@ -25,13 +26,13 @@ public struct ARSwiftUIView {
 ***REMOVED***init() {
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func alpha(_ alpha: CGFloat) -> Self {
+***REMOVED***func alpha(_ alpha: CGFloat) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.alpha = alpha
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func onRender(
+***REMOVED***func onRender(
 ***REMOVED******REMOVED***perform action: @escaping (SCNSceneRenderer, SCNScene, TimeInterval) -> Void
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
@@ -39,7 +40,7 @@ public struct ARSwiftUIView {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func onCameraTrackingStateChange(
+***REMOVED***func onCameraTrackingStateChange(
 ***REMOVED******REMOVED***perform action: @escaping (ARSession, ARCamera) -> Void
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
@@ -47,7 +48,7 @@ public struct ARSwiftUIView {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func onGeoTrackingStatusChange(
+***REMOVED***func onGeoTrackingStatusChange(
 ***REMOVED******REMOVED***perform action: @escaping (ARSession, ARGeoTrackingStatus) -> Void
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
@@ -55,7 +56,7 @@ public struct ARSwiftUIView {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func onProxyAvailable(
+***REMOVED***func onProxyAvailable(
 ***REMOVED******REMOVED***perform action: @escaping (ARSwiftUIView.Proxy) -> Void
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
@@ -65,45 +66,45 @@ public struct ARSwiftUIView {
 ***REMOVED***
 
 extension ARSwiftUIView: UIViewRepresentable {
-***REMOVED***public func makeUIView(context: Context) -> ARSCNView {
+***REMOVED***func makeUIView(context: Context) -> ARSCNView {
 ***REMOVED******REMOVED***let arView = ARSCNView()
 ***REMOVED******REMOVED***arView.delegate = context.coordinator
 ***REMOVED******REMOVED***onProxyAvailableAction?(Proxy(arView: arView))
 ***REMOVED******REMOVED***return arView
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func updateUIView(_ uiView: ARSCNView, context: Context) {
+***REMOVED***func updateUIView(_ uiView: ARSCNView, context: Context) {
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func makeCoordinator() -> Coordinator {
+***REMOVED***func makeCoordinator() -> Coordinator {
 ***REMOVED******REMOVED***Coordinator(arSwiftUIView: self)
 ***REMOVED***
 ***REMOVED***
 
 extension ARSwiftUIView {
-***REMOVED***public class Coordinator: NSObject, ARSCNViewDelegate {
+***REMOVED***class Coordinator: NSObject, ARSCNViewDelegate {
 ***REMOVED******REMOVED***private let view: ARSwiftUIView
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(arSwiftUIView: ARSwiftUIView) {
 ***REMOVED******REMOVED******REMOVED***self.view = arSwiftUIView
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***public func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
+***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
 ***REMOVED******REMOVED******REMOVED***view.onRenderAction?(renderer, scene, time)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***public func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
+***REMOVED******REMOVED***func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
 ***REMOVED******REMOVED******REMOVED***view.onCameraTrackingStateChangeAction?(session, camera)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***public func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
+***REMOVED******REMOVED***func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
 ***REMOVED******REMOVED******REMOVED***view.onGeoTrackingStatusChangeAction?(session, geoTrackingStatus)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 extension ARSwiftUIView {
-***REMOVED***public class Proxy {
+***REMOVED***class Proxy {
 ***REMOVED******REMOVED***private let arView: ARSCNView
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(arView: ARSCNView) {
@@ -118,4 +119,120 @@ extension ARSwiftUIView {
 ***REMOVED******REMOVED******REMOVED***arView.pointOfView
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+
+public struct ARGeoView3: View {
+***REMOVED***private let configuration: ARWorldTrackingConfiguration
+***REMOVED***
+***REMOVED***init() {
+***REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
+***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
+***REMOVED******REMOVED***configuration.planeDetection = [.horizontal]
+***REMOVED***
+***REMOVED***
+***REMOVED***public var body: some View {
+***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.alpha(0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onProxyAvailable { proxy in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.session.run(configuration)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onRenderAction { renderer, scene, time in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scene: ExampleVars.scene,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: ExampleVars.cameraController
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
+***REMOVED******REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
+***REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
+***REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension ARGeoView3 {
+***REMOVED***func render() {
+***REMOVED******REMOVED******REMOVED*** Get transform from SCNView.pointOfView.
+***REMOVED******REMOVED***guard let transform = arView.pointOfView?.transform else { return ***REMOVED***
+***REMOVED******REMOVED***let cameraTransform = simd_double4x4(transform)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let cameraQuat = simd_quatd(cameraTransform)
+***REMOVED******REMOVED***let transformationMatrix = TransformationMatrix.normalized(
+***REMOVED******REMOVED******REMOVED***quaternionX: cameraQuat.vector.x,
+***REMOVED******REMOVED******REMOVED***quaternionY: cameraQuat.vector.y,
+***REMOVED******REMOVED******REMOVED***quaternionZ: cameraQuat.vector.z,
+***REMOVED******REMOVED******REMOVED***quaternionW: cameraQuat.vector.w,
+***REMOVED******REMOVED******REMOVED***translationX: cameraTransform.columns.3.x,
+***REMOVED******REMOVED******REMOVED***translationY: cameraTransform.columns.3.y,
+***REMOVED******REMOVED******REMOVED***translationZ: cameraTransform.columns.3.z
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set the matrix on the camera controller.
+***REMOVED******REMOVED***let cameraController = sceneViewController.cameraController as! TransformationMatrixCameraController
+***REMOVED******REMOVED***cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set FOV on camera.
+***REMOVED******REMOVED***if let camera = arView.session.currentFrame?.camera {
+***REMOVED******REMOVED******REMOVED***let intrinsics = camera.intrinsics
+***REMOVED******REMOVED******REMOVED***let imageResolution = camera.imageResolution
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Get the device orientation, but don't allow non-landscape/portrait values.
+***REMOVED******REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
+***REMOVED******REMOVED******REMOVED***if deviceOrientation.isValidInterfaceOrientation {
+***REMOVED******REMOVED******REMOVED******REMOVED***lastGoodDeviceOrientation = deviceOrientation
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***sceneViewController.setFieldOfViewFromLensIntrinsics(
+***REMOVED******REMOVED******REMOVED******REMOVED***xFocalLength: intrinsics[0][0],
+***REMOVED******REMOVED******REMOVED******REMOVED***yFocalLength: intrinsics[1][1],
+***REMOVED******REMOVED******REMOVED******REMOVED***xPrincipal: intrinsics[2][0],
+***REMOVED******REMOVED******REMOVED******REMOVED***yPrincipal: intrinsics[2][1],
+***REMOVED******REMOVED******REMOVED******REMOVED***xImageSize: Float(imageResolution.width),
+***REMOVED******REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
+***REMOVED******REMOVED******REMOVED******REMOVED***deviceOrientation: lastGoodDeviceOrientation
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.
+***REMOVED******REMOVED***sceneViewController.draw()
+***REMOVED***
+***REMOVED***
+
+
+private enum ExampleVars {
+***REMOVED***static var scene: ArcGIS.Scene = {
+***REMOVED******REMOVED***let scene = Scene(
+***REMOVED******REMOVED******REMOVED***item: PortalItem(
+***REMOVED******REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
+***REMOVED******REMOVED******REMOVED******REMOVED***id: PortalItem.ID("7558ee942b2547019f66885c44d4f0b1")!
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***scene.initialViewpoint = Viewpoint(
+***REMOVED******REMOVED******REMOVED***latitude: 37.8651,
+***REMOVED******REMOVED******REMOVED***longitude: 119.5383,
+***REMOVED******REMOVED******REMOVED***scale: 10
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return scene
+***REMOVED***()
+***REMOVED***
+***REMOVED***static var cameraController: TransformationMatrixCameraController = {
+***REMOVED******REMOVED***let controller = TransformationMatrixCameraController()
+***REMOVED******REMOVED***controller.originCamera = Camera(
+***REMOVED******REMOVED******REMOVED***lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
+***REMOVED******REMOVED******REMOVED***distance: 1_000,
+***REMOVED******REMOVED******REMOVED***heading: 40,
+***REMOVED******REMOVED******REMOVED***pitch: 90,
+***REMOVED******REMOVED******REMOVED***roll: 0
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***controller.translationFactor = 3000
+***REMOVED******REMOVED***controller.clippingDistance = 6000
+***REMOVED******REMOVED***return controller
+***REMOVED***()
 ***REMOVED***

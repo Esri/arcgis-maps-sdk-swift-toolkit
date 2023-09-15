@@ -37,7 +37,8 @@ extension ExampleList {
 ***REMOVED******REMOVED***name: "Augmented Reality",
 ***REMOVED******REMOVED***examples: [
 ***REMOVED******REMOVED******REMOVED***AnyExample("Flyover", content: FlyoverExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Reality Kit Flyover", content: RealityFlyoverExampleView())
+***REMOVED******REMOVED******REMOVED***AnyExample("Reality Kit Flyover", content: RealityFlyoverExampleView()),
+***REMOVED******REMOVED******REMOVED***AnyExample("SwiftUI Flyover", content: SwiftUIFlyoverExampleView())
 ***REMOVED******REMOVED***]
 ***REMOVED***)
 ***REMOVED***
