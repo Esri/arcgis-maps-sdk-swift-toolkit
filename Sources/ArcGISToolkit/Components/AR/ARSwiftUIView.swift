@@ -69,7 +69,9 @@ extension ARSwiftUIView: UIViewRepresentable {
     func makeUIView(context: Context) -> ARSCNView {
         let arView = ARSCNView()
         arView.delegate = context.coordinator
-        onProxyAvailableAction?(Proxy(arView: arView))
+        DispatchQueue.main.async {
+            onProxyAvailableAction?(Proxy(arView: arView))
+        }
         return arView
     }
     
@@ -130,6 +132,7 @@ public struct ARGeoView3: View {
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     
     @State private var arViewProxy: ARSwiftUIView.Proxy?
+    @State private var sceneViewProxy: SceneViewProxy?
     
     public init(
         scene: ArcGIS.Scene,
@@ -145,18 +148,18 @@ public struct ARGeoView3: View {
     
     public var body: some View {
         ZStack {
+            ARSwiftUIView()
+                .alpha(0)
+                .onProxyAvailable { proxy in
+                    self.arViewProxy = proxy
+                    proxy.session.run(configuration)
+                }
+                .onRender { _, _, _ in
+                    if let arViewProxy, let sceneViewProxy {
+                        render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
+                    }
+                }
             SceneViewReader { sceneViewProxy in
-                ARSwiftUIView()
-                    .alpha(0)
-                    .onProxyAvailable { proxy in
-                        self.arViewProxy = proxy
-                        proxy.session.run(configuration)
-                    }
-                    .onRender { _, _, _ in
-                        if let arViewProxy {
-                            render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
-                        }
-                    }
                 SceneView(
                     scene: scene,
                     cameraController: cameraController
@@ -165,6 +168,9 @@ public struct ARGeoView3: View {
                 .spaceEffect(.transparent)
                 .viewDrawingMode(.manual)
                 .atmosphereEffect(.off)
+                .onAppear {
+                    self.sceneViewProxy = sceneViewProxy
+                }
             }
         }
     }
@@ -214,5 +220,6 @@ private extension ARGeoView3 {
         
         // Render the Scene with the new transformation.
         sceneViewProxy.draw()
+        //print("-- drawing")
     }
 }
