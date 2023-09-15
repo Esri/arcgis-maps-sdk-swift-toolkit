@@ -24,3 +24,12 @@ extension Text {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Localized text for the word "Required".
+***REMOVED***static var required: Self {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Required",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label indicating a field is required"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***

@@ -227,15 +227,6 @@ private extension Text {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A label indicating a required field was left blank.
-***REMOVED***static var required: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***"Required",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label indicating a required field was left blank."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ A label for a button to choose the current date for a field.
 ***REMOVED***static var today: Self {
 ***REMOVED******REMOVED***.init(

@@ -122,7 +122,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***case (.some(let lengthError), _, _):
 ***REMOVED******REMOVED******REMOVED***switch (lengthError, scheme) {
 ***REMOVED******REMOVED******REMOVED***case (.emptyWhenRequired, .max):
-***REMOVED******REMOVED******REMOVED******REMOVED***return requiredText
+***REMOVED******REMOVED******REMOVED******REMOVED***return .required
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***return validationText
 ***REMOVED******REMOVED***
@@ -193,15 +193,6 @@ extension TextInputFooter {
 ***REMOVED******REMOVED******REMOVED***"Enter \(minLength) to \(maxLength) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's minimum and maximum number of allowed characters."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Text indicating a field is required.
-***REMOVED***var requiredText: Text {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Required",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field is required"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
