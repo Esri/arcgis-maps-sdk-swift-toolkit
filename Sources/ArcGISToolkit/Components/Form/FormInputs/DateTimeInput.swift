@@ -227,15 +227,6 @@ private extension Text {
         )
     }
     
-    /// A label indicating a required field was left blank.
-    static var required: Self {
-        .init(
-            "Required",
-            bundle: .toolkitModule,
-            comment: "A label indicating a required field was left blank."
-        )
-    }
-    
     /// A label for a button to choose the current date for a field.
     static var today: Self {
         .init(

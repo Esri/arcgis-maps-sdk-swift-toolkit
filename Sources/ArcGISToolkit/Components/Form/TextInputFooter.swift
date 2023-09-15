@@ -122,7 +122,7 @@ extension TextInputFooter {
         case (.some(let lengthError), _, _):
             switch (lengthError, scheme) {
             case (.emptyWhenRequired, .max):
-                return requiredText
+                return .required
             default:
                 return validationText
             }
@@ -193,15 +193,6 @@ extension TextInputFooter {
             "Enter \(minLength) to \(maxLength) characters",
             bundle: .toolkitModule,
             comment: "Text indicating a field's minimum and maximum number of allowed characters."
-        )
-    }
-    
-    /// Text indicating a field is required.
-    var requiredText: Text {
-        Text(
-            "Required",
-            bundle: .toolkitModule,
-            comment: "Text indicating a field is required"
         )
     }
 }
