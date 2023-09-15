@@ -27,6 +27,9 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The phrase to use when filtering by coded value name.
 ***REMOVED***@State private var filterPhrase = ""
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether a value is required but missing.
+***REMOVED***@State private var requiredValueMissing = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
 ***REMOVED***
