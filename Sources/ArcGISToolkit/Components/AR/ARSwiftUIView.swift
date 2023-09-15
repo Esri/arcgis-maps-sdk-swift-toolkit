@@ -122,9 +122,22 @@ extension ARSwiftUIView {
 }
 
 public struct ARGeoView3: View {
+    private let scene: ArcGIS.Scene
     private let configuration: ARWorldTrackingConfiguration
+    private let cameraController: TransformationMatrixCameraController
     
-    init() {
+    /// The last portrait or landscape orientation value.
+    @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
+    
+    @State private var arViewProxy: ARSwiftUIView.Proxy?
+    
+    public init(
+        scene: ArcGIS.Scene,
+        cameraController: TransformationMatrixCameraController
+    ) {
+        self.cameraController = cameraController
+        self.scene = scene
+        
         configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
         configuration.planeDetection = [.horizontal]
@@ -132,18 +145,21 @@ public struct ARGeoView3: View {
     
     public var body: some View {
         ZStack {
-            SceneViewReader { proxy in
+            SceneViewReader { sceneViewProxy in
                 ARSwiftUIView()
                     .alpha(0)
                     .onProxyAvailable { proxy in
+                        self.arViewProxy = proxy
                         proxy.session.run(configuration)
                     }
-                    .onRenderAction { renderer, scene, time in
-                        
+                    .onRender { _, _, _ in
+                        if let arViewProxy {
+                            render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
+                        }
                     }
                 SceneView(
-                    scene: ExampleVars.scene,
-                    cameraController: ExampleVars.cameraController
+                    scene: scene,
+                    cameraController: cameraController
                 )
                 .attributionBarHidden(true)
                 .spaceEffect(.transparent)
@@ -155,9 +171,9 @@ public struct ARGeoView3: View {
 }
 
 private extension ARGeoView3 {
-    func render() {
+    func render(arViewProxy: ARSwiftUIView.Proxy, sceneViewProxy: SceneViewProxy) {
         // Get transform from SCNView.pointOfView.
-        guard let transform = arView.pointOfView?.transform else { return }
+        guard let transform = arViewProxy.pointOfView?.transform else { return }
         let cameraTransform = simd_double4x4(transform)
         
         let cameraQuat = simd_quatd(cameraTransform)
@@ -172,11 +188,10 @@ private extension ARGeoView3 {
         )
         
         // Set the matrix on the camera controller.
-        let cameraController = sceneViewController.cameraController as! TransformationMatrixCameraController
-        cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
+        cameraController.transformationMatrix = .identity.adding(transformationMatrix)
         
         // Set FOV on camera.
-        if let camera = arView.session.currentFrame?.camera {
+        if let camera = arViewProxy.session.currentFrame?.camera {
             let intrinsics = camera.intrinsics
             let imageResolution = camera.imageResolution
             
@@ -186,7 +201,7 @@ private extension ARGeoView3 {
                 lastGoodDeviceOrientation = deviceOrientation
             }
             
-            sceneViewController.setFieldOfViewFromLensIntrinsics(
+            sceneViewProxy.setFieldOfViewFromLensIntrinsics(
                 xFocalLength: intrinsics[0][0],
                 yFocalLength: intrinsics[1][1],
                 xPrincipal: intrinsics[2][0],
@@ -198,41 +213,6 @@ private extension ARGeoView3 {
         }
         
         // Render the Scene with the new transformation.
-        sceneViewController.draw()
+        sceneViewProxy.draw()
     }
-}
-
-
-private enum ExampleVars {
-    static var scene: ArcGIS.Scene = {
-        let scene = Scene(
-            item: PortalItem(
-                portal: .arcGISOnline(connection: .anonymous),
-                id: PortalItem.ID("7558ee942b2547019f66885c44d4f0b1")!
-            )
-        )
-        
-        scene.initialViewpoint = Viewpoint(
-            latitude: 37.8651,
-            longitude: 119.5383,
-            scale: 10
-        )
-        
-        return scene
-    }()
-    
-    static var cameraController: TransformationMatrixCameraController = {
-        let controller = TransformationMatrixCameraController()
-        controller.originCamera = Camera(
-            lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
-            distance: 1_000,
-            heading: 40,
-            pitch: 90,
-            roll: 0
-        )
-        
-        controller.translationFactor = 3000
-        controller.clippingDistance = 6000
-        return controller
-    }()
 }
