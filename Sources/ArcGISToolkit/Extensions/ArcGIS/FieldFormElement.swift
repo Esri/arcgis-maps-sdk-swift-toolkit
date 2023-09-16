@@ -4,7 +4,7 @@
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
 ***REMOVED***
-***REMOVED******REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***   http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
 ***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
