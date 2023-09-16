@@ -72,10 +72,12 @@ struct ComboBoxInput: View {
                 Text(selectedValue?.name ?? placeholderValue)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
+                    .accessibilityIdentifier("\(element.label) Value")
                 
                 if selectedValue == nil {
                     Image(systemName: "list.bullet")
                         .foregroundColor(.secondary)
+                        .accessibilityIdentifier("\(element.label) Options Button")
                 } else {
                     ClearButton { selectedValue = nil }
                         .accessibilityIdentifier("\(element.label) Clear Button")
