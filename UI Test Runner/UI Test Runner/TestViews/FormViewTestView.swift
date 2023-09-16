@@ -96,6 +96,6 @@ private extension FormViewTestView {
 
 private extension URL {
 ***REMOVED***static var sampleData: Self {
-***REMOVED******REMOVED******REMOVED*** Text tests
+***REMOVED******REMOVED***.init(string: <#URL#>)!
 ***REMOVED***
 ***REMOVED***
