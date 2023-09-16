@@ -34,5 +34,6 @@ struct InputFooter: View {
         }
         .font(.footnote)
         .foregroundColor(requiredValueMissing ? .red : .secondary)
+        .accessibilityIdentifier("\(element.label) Footer")
     }
 }
