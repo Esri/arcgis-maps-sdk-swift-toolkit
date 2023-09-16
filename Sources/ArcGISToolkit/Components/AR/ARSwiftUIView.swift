@@ -117,7 +117,6 @@ public struct ARGeoView3: View {
     /// The last portrait or landscape orientation value.
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     @State private var arViewProxy = ARSwiftUIViewProxy()
-    @State private var sceneViewProxy: SceneViewProxy?
     
     public init(
         scene: ArcGIS.Scene,
@@ -133,19 +132,17 @@ public struct ARGeoView3: View {
     
     public var body: some View {
         ZStack {
-            ARSwiftUIView(proxy: arViewProxy)
-                .onRender { _, _, _ in
-                    if let sceneViewProxy {
+            SceneViewReader { sceneViewProxy in
+                ARSwiftUIView(proxy: arViewProxy)
+                    .onRender { _, _, _ in
                         render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
                     }
-                }
-                .onAppear {
-                    arViewProxy.session?.run(configuration)
-                }
-                .onDisappear {
-                    arViewProxy.session?.pause()
-                }
-            SceneViewReader { sceneViewProxy in
+                    .onAppear {
+                        arViewProxy.session?.run(configuration)
+                    }
+                    .onDisappear {
+                        arViewProxy.session?.pause()
+                    }
                 SceneView(
                     scene: scene,
                     cameraController: cameraController
@@ -154,9 +151,6 @@ public struct ARGeoView3: View {
                 .spaceEffect(.transparent)
                 .viewDrawingMode(.manual)
                 .atmosphereEffect(.off)
-                .onAppear {
-                    self.sceneViewProxy = sceneViewProxy
-                }
             }
         }
     }
