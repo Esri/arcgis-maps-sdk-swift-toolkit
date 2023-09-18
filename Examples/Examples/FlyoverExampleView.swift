@@ -32,26 +32,20 @@ struct FlyoverExampleView: View {
 
 ***REMOVED******REMOVED***return scene
 ***REMOVED***()
-
-***REMOVED***private var cameraController: TransformationMatrixCameraController = {
-***REMOVED******REMOVED***let controller = TransformationMatrixCameraController()
-***REMOVED******REMOVED***controller.originCamera = Camera(
-***REMOVED******REMOVED******REMOVED***lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
-***REMOVED******REMOVED******REMOVED***distance: 1_000,
-***REMOVED******REMOVED******REMOVED***heading: 40,
-***REMOVED******REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED******REMOVED***roll: 0
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***controller.translationFactor = 3000
-***REMOVED******REMOVED***controller.clippingDistance = 6000
-***REMOVED******REMOVED***return controller
-***REMOVED***()
-
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***ARGeoView2(
-***REMOVED******REMOVED******REMOVED***scene: scene,
-***REMOVED******REMOVED******REMOVED***cameraController: cameraController
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***ARFlyoverView(
+***REMOVED******REMOVED******REMOVED***initialCamera: Camera(
+***REMOVED******REMOVED******REMOVED******REMOVED***lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
+***REMOVED******REMOVED******REMOVED******REMOVED***distance: 1_000,
+***REMOVED******REMOVED******REMOVED******REMOVED***heading: 40,
+***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
+***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***translationFactor: 3_000,
+***REMOVED******REMOVED******REMOVED***clippingDistance: 60_000
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
