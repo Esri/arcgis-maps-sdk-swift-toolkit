@@ -38,31 +38,18 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: featureForm?.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeometryReader { geometryProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Color.clear.preference(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***key: ScrollPreferenceKey.self,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: geometryProxy
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(in: .named(scrollViewCoordinateSpace)).origin
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onPreferenceChange(ScrollPreferenceKey.self) { position in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.formScroll = position.y
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(featureForm?.elements ?? [], id: \.label) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.coordinateSpace(name: scrollViewCoordinateSpace)
+***REMOVED******REMOVED***.gesture(
+***REMOVED******REMOVED******REMOVED***DragGesture()
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChanged {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.lastScroll = $0.time
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***
-
-struct ScrollPreferenceKey: SwiftUI.PreferenceKey {
-***REMOVED***static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) { ***REMOVED***
-***REMOVED***
-***REMOVED***static var defaultValue: CGPoint { .zero ***REMOVED***
 ***REMOVED***
 
 extension FormView {

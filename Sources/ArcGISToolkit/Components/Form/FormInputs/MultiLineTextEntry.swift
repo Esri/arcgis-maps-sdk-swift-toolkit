@@ -110,7 +110,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: model.formScroll) { _ in
+***REMOVED******REMOVED***.onChange(of: model.lastScroll) { _ in
 ***REMOVED******REMOVED******REMOVED***if isFocused { isFocused = false ***REMOVED***
 ***REMOVED***
 ***REMOVED***
