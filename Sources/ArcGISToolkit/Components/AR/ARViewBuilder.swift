@@ -62,7 +62,7 @@ public struct ARViewBuilder: View {
     }
 }
 
-private extension ARGeoView3 {
+private extension ARViewBuilder {
     func render(arViewProxy: ARSwiftUIViewProxy, sceneViewProxy: SceneViewProxy) {
         // Get transform from SCNView.pointOfView.
         guard let transform = arViewProxy.pointOfView?.transform else { return }
