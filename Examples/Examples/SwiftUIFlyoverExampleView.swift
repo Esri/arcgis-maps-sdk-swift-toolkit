@@ -48,7 +48,13 @@ struct SwiftUIFlyoverExampleView: View {
 ***REMOVED******REMOVED***return controller
 ***REMOVED***()
 
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***ARGeoView3(scene: scene, cameraController: cameraController)
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***ARGeoView3(scene: scene, cameraController: cameraController)
+***REMOVED******REMOVED***ARViewBuilder {
+***REMOVED******REMOVED******REMOVED***SceneView(scene: scene, cameraController: cameraController)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

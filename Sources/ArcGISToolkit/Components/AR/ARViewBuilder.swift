@@ -11,21 +11,19 @@ import ARKit
 ***REMOVED***
 
 public struct ARViewBuilder: View {
-***REMOVED***private let scene: ArcGIS.Scene
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
-***REMOVED***private let cameraController: TransformationMatrixCameraController
 ***REMOVED***
 ***REMOVED******REMOVED***/ The last portrait or landscape orientation value.
 ***REMOVED***@State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
 ***REMOVED***
+***REMOVED***private let sceneViewBuilder: () -> SceneView
+***REMOVED***
 ***REMOVED***public init(
-***REMOVED******REMOVED***scene: ArcGIS.Scene,
-***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController
+***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping () -> SceneView
 ***REMOVED***) {
-***REMOVED******REMOVED***self.cameraController = cameraController
-***REMOVED******REMOVED***self.scene = scene
+***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
 ***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
@@ -34,29 +32,26 @@ public struct ARViewBuilder: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***SceneViewReader { readerSceneViewProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onRender { _, _, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.pause()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scene: scene,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
-***REMOVED******REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
-***REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
-***REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.sceneViewProxy = readerSceneViewProxy
+***REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onRender { _, _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.pause()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.sceneViewProxy = proxy
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -82,7 +77,7 @@ private extension ARViewBuilder {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the matrix on the camera controller.
-***REMOVED******REMOVED***cameraController.transformationMatrix = .identity.adding(transformationMatrix)
+***REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = .identity.adding(transformationMatrix)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set FOV on camera.
 ***REMOVED******REMOVED***if let camera = session.currentFrame?.camera {
