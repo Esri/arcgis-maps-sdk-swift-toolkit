@@ -14,6 +14,52 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ `UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace configurations.
+***REMOVED***/
+***REMOVED***/ | iPhone | iPad |
+***REMOVED***/ | ------ | ---- |
+***REMOVED***/ | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204343568-a236ae0d-6b70-4175-a70c-41c902123ea1.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204344567-c86b3a49-6109-4333-8993-7fdc74f2b35d.png) |
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ The utility network trace tool displays a list of named trace configurations defined for utility
+***REMOVED***/ networks in a web map. It enables users to add starting points and perform trace analysis from
+***REMOVED***/ the selected named trace configuration.
+***REMOVED***/
+***REMOVED***/ A named trace configuration defined for a utility network in a webmap comprises the parameters
+***REMOVED***/ used for a utility network trace.
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ The tool allows users to:
+***REMOVED***/
+***REMOVED***/  - Choose between multiple networks (if more than one is defined in a webmap).
+***REMOVED***/  - Choose between named trace configurations:
+***REMOVED***/ ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204346359-419b0056-3a30-4120-9b47-c68513abde42.png)
+***REMOVED***/  - Add trace starting points either programmatically or by tapping on a map view, then use the
+***REMOVED***/  inspection view to narrow the selection:
+***REMOVED***/ ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204346273-38374067-a0b8-4db4-8e40-62b38e1603c8.png)
+***REMOVED***/  - View trace results:
+***REMOVED***/
+***REMOVED***/ | iPhone | iPad |
+***REMOVED***/ | ------ | ---- |
+***REMOVED***/ | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204343941-91775a25-8dc0-4866-8273-0d4bfaa91aeb.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204344435-173fbf34-59d6-4a0f-84bf-30ed5de3572e.png) |
+***REMOVED***/
+***REMOVED***/  - Run multiple trace scenarios, then use color and name to compare results:
+***REMOVED***/ ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/204346039-038ba4fa-201a-428c-ae84-be8f10c91cf7.png)
+***REMOVED***/
+***REMOVED***/  - See user-friendly warnings to help avoid common mistakes, including specifying too many
+***REMOVED***/ starting points or running the same trace configuration multiple times.
+***REMOVED***/
+***REMOVED***/ **Associated Types**
+***REMOVED***/
+***REMOVED***/ `UtilityNetworkTrace` has the following associated type:
+***REMOVED***/
+***REMOVED***/ - ``UtilityNetworkTraceStartingPoint``
+***REMOVED***/
+***REMOVED***/ To see the `UtilityNetworkTrace` in action, check out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+***REMOVED***/ and refer to [UtilityNetworkTraceExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/UtilityNetworkTraceExampleView.swift)
+***REMOVED***/ in the project. To learn more about using the `UtilityNetworkTrace` see the [UtilityNetworkTrace Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/utilitynetworktracetutorial).
 public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The proxy to provide access to map view operations.
 ***REMOVED***private var mapViewProxy: MapViewProxy?
@@ -396,7 +442,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Not Available",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A trace function output result is not available."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A trace function output result was not provided."
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -431,15 +477,15 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.vertical], 2)
-***REMOVED******REMOVED******REMOVED***Button(String.clearAllResultsButtonLabel, role: .destructive) {
+***REMOVED******REMOVED******REMOVED***Button(String.clearAllResults, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isShowingClearAllResultsConfirmationDialog = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED***.confirmationDialog(
-***REMOVED******REMOVED******REMOVED******REMOVED***String.clearAllResultsQuestion,
+***REMOVED******REMOVED******REMOVED******REMOVED***String.clearAllResults,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isShowingClearAllResultsConfirmationDialog
 ***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.clearAllResultsButtonLabel, role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(String.clearAllResults, role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
 ***REMOVED******REMOVED******REMOVED***
@@ -669,7 +715,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***private var currentTraceLabel: String {
 ***REMOVED******REMOVED***guard let index = viewModel.selectedTraceIndex else { return "Error" ***REMOVED***
 ***REMOVED******REMOVED***return String(
-***REMOVED******REMOVED******REMOVED***localized: "Trace \(index+1, specifier: "%lld") of \(viewModel.completedTraces.count, specifier: "%lld")",
+***REMOVED******REMOVED******REMOVED***localized: "Trace \(index+1, specifier: "%1$lld") of \(viewModel.completedTraces.count, specifier: "%2$lld")",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label indicating the index of the trace being viewed out of the total number of traces completed."
 ***REMOVED******REMOVED***)
@@ -757,22 +803,20 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let attributesSectionTitle = String(
 ***REMOVED******REMOVED***localized: "Attributes",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label in reference to the attributes of a geo element."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let cancelStartingPointSelection = String(
 ***REMOVED******REMOVED***localized: "Cancel starting point selection",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label for a button to cancel the starting point selection operation."
 ***REMOVED***)
 ***REMOVED***
-***REMOVED***static let clearAllResultsButtonLabel = String(
-***REMOVED******REMOVED***localized: "Clear All Results",
-***REMOVED******REMOVED***bundle: .toolkitModule
-***REMOVED***)
-***REMOVED***
-***REMOVED***static let clearAllResultsQuestion = String(
-***REMOVED******REMOVED***localized: "Clear all results?",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED***static let clearAllResults = String(
+***REMOVED******REMOVED***localized: "Clear all results",
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A directive to clear all of the completed utility network traces."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let clearAllResultsMessage = String(
@@ -783,84 +827,109 @@ private extension String {
 ***REMOVED***
 ***REMOVED***static let colorLabel = String(
 ***REMOVED******REMOVED***localized: "Color",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label in reference to the color used to display utility trace result graphics."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let deleteButtonLabel = String(
 ***REMOVED******REMOVED***localized: "Delete",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label for a button used to delete a utility network trace input component or result."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title for the feature results section
 ***REMOVED***static let featureResultsTitle = String(
 ***REMOVED******REMOVED***localized: "Feature Results",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** A label in reference to utility elements returned as results of a utility network
+***REMOVED******REMOVED******REMOVED******REMOVED*** trace operation.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let fractionAlongEdgeSectionTitle = String(
 ***REMOVED******REMOVED***localized: "Fraction Along Edge",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label in reference to a fractional distance along an edge style utility network element."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let functionResultsSectionTitle = String(
 ***REMOVED******REMOVED***localized: "Function Results",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** A label in reference to function outputs returned as results of a utility network
+***REMOVED******REMOVED******REMOVED******REMOVED*** trace operation.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let modePickerTitle = String(
 ***REMOVED******REMOVED***localized: "Mode",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "The mode in which the utility network trace tool is being used (either creating traces or viewing traces)."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let nameLabel = String(
 ***REMOVED******REMOVED***localized: "Name",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label in reference to the user defined name for an individual utility network trace."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let networkSectionLabel = String(
 ***REMOVED******REMOVED***localized: "Network",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label in reference to a specific utility network."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let newTraceOptionLabel = String(
 ***REMOVED******REMOVED***localized: "New trace",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label for a button to show new utility network trace configuration options."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let noConfigurationsAvailable = String(
-***REMOVED******REMOVED***localized: "No configurations available",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***localized: "No configurations available.",
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A statement that no utility trace configurations are available."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let noneSelected = String(
 ***REMOVED******REMOVED***localized: "None selected",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label indicating that no utility network trace configuration has been selected."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let resultsOptionLabel = String(
 ***REMOVED******REMOVED***localized: "Results",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label for a button to show utility network trace results."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title for the starting points section
 ***REMOVED***static let startingPointsTitle = String(
 ***REMOVED******REMOVED***localized: "Starting Points",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** A label in reference to the utility elements chosen as starting points for a utility
+***REMOVED******REMOVED******REMOVED******REMOVED*** network trace operation.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let terminalConfigurationPickerTitle = String(
 ***REMOVED******REMOVED***localized: "Terminal Configuration",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label in reference to the chosen terminal configuration of a utility network element."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let traceButtonLabel = String(
 ***REMOVED******REMOVED***localized: "Trace",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label for a button to begin a utility network trace operation."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let traceConfigurationSectionLabel = String(
 ***REMOVED******REMOVED***localized: "Trace Configuration",
-***REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: "A label in reference to a utility network trace configuration."
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let unnamedAssetType = String(

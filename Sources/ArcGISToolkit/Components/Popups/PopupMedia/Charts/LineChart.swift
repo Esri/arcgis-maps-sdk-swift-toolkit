@@ -41,12 +41,12 @@ struct LineChart: View {
 #if canImport(Charts)
 ***REMOVED******REMOVED******REMOVED***Chart(chartData) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***LineMark(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value("Field", $0.label),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value("Value", $0.value)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.field, $0.label),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.value, $0.value)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***PointMark(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value("Field", $0.label),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value("Value", $0.value)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.field, $0.label),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.value, $0.value)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.chartXAxis {

@@ -15,12 +15,9 @@
 ***REMOVED***
 
 ***REMOVED***/ Forms allow users to edit information about GIS features.
-***REMOVED***/ - Since: 200.2
+***REMOVED***/ - Since: 200.3
 public struct FormView: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
-***REMOVED***
-***REMOVED******REMOVED***/ The model for this form view.
-***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***private var featureForm: FeatureForm?

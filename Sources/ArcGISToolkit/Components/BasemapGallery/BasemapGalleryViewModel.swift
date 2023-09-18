@@ -12,7 +12,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
+import Combine
 
 ***REMOVED***/ Manages the state for a `BasemapGallery`.
 @MainActor class BasemapGalleryViewModel: ObservableObject {

@@ -54,8 +54,6 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.
-***REMOVED******REMOVED***/ [More info](https:***REMOVED***openradar.appspot.com/FB12432084)
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FormElementHeader(element: element)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
@@ -66,9 +64,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if isFocused {
-***REMOVED******REMOVED******REMOVED******REMOVED***DoneButton { isFocused = false ***REMOVED***
-***REMOVED******REMOVED*** else if !text.isEmpty {
+***REMOVED******REMOVED******REMOVED***if isFocused && !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -97,11 +93,10 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***let text = featureForm?.feature.attributes[element.fieldName] as? String
-***REMOVED******REMOVED******REMOVED***if let text, !text.isEmpty {
+***REMOVED******REMOVED******REMOVED***let text = element.value
+***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.text = text
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.text = element.hint
@@ -109,6 +104,9 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { newValue in
 ***REMOVED******REMOVED******REMOVED***if !isPlaceholder {
+***REMOVED******REMOVED******REMOVED******REMOVED***guard newValue != element.value else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
 ***REMOVED******REMOVED***
 ***REMOVED***

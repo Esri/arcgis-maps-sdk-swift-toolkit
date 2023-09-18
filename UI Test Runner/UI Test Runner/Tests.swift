@@ -20,7 +20,7 @@ struct Tests: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Tests", destination: BookmarksTestView())
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Form View Tests", destination: FormViewTestView())
+***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("FormView Tests", destination: FormViewTestView())
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationViewStyle(.stack)

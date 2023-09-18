@@ -26,6 +26,9 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED***/ The current length of the text in the text entry field.
 ***REMOVED***private let currentLength: Int
 ***REMOVED***
+***REMOVED******REMOVED***/ The field's parent element.
+***REMOVED***private let element: FieldFormElement
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the text entry field is focused.
 ***REMOVED***private let isFocused: Bool
 ***REMOVED***
@@ -55,6 +58,7 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED***input: FormInput
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.currentLength = currentLength
+***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.isFocused = isFocused
 ***REMOVED******REMOVED***self.description = element.description
 ***REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
@@ -78,10 +82,12 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED***if let primaryMessage {
 ***REMOVED******REMOVED******REMOVED******REMOVED***primaryMessage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if isFocused, description.isEmpty || validationError != nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(currentLength, format: .number)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Character Indicator")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.footnote)

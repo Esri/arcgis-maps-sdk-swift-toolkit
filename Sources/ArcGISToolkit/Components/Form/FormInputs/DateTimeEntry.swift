@@ -60,11 +60,17 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***if let date = featureForm?.feature.attributes[element.fieldName] as? Date {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.date = date
+***REMOVED******REMOVED******REMOVED***if element.value.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = try? Date(element.value, strategy: .arcGISDateParseStrategy)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
+***REMOVED******REMOVED******REMOVED***guard let currentDate = try? Date(element.value, strategy: .arcGISDateParseStrategy),
+***REMOVED******REMOVED******REMOVED******REMOVED***  newDate != currentDate else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
 ***REMOVED******REMOVED******REMOVED***requiredValueMissing = /*element.required && */newDate == nil
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
@@ -88,6 +94,7 @@ struct DateTimeEntry: View {
 ***REMOVED***@ViewBuilder var dateDisplay: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Text(formattedDate ?? .noValue)
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Value")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(displayColor)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
@@ -98,8 +105,10 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Calendar Image")
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { date = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -131,6 +140,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED***in: dateRange,
 ***REMOVED******REMOVED******REMOVED***displayedComponents: input.includeTime ? [.date, .hourAndMinute] : [.date]
 ***REMOVED******REMOVED***) { ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Date Picker")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The range of dates available for selection, if applicable.
@@ -168,6 +178,7 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.foregroundColor(requiredValueMissing ? .red : .secondary)
+***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The human-readable date and time selection.
@@ -182,13 +193,30 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***/ The button to set the date to the present time.
 ***REMOVED***var todayOrNowButton: some View {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***date = .now
+***REMOVED******REMOVED******REMOVED***let now = Date.now
+***REMOVED******REMOVED******REMOVED***if dateRange.contains(now) {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = now
+***REMOVED******REMOVED*** else if now > dateRange.upperBound {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = dateRange.upperBound
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = dateRange.lowerBound
+***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***input.includeTime ? Text.now : .today
 ***REMOVED***
+***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(input.includeTime ? "Now" : "Today") Button")
 ***REMOVED***
 ***REMOVED***
 
+private extension ParseStrategy where Self == Date.ParseStrategy {
+***REMOVED******REMOVED***/ A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
+***REMOVED***static var arcGISDateParseStrategy: Self {
+***REMOVED******REMOVED***.fixed(
+***REMOVED******REMOVED******REMOVED***format: "\(year: .defaultDigits)-\(month: .defaultDigits)-\(day: .defaultDigits)T\(hour: .defaultDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .defaultDigits):\(second: .defaultDigits)",
+***REMOVED******REMOVED******REMOVED***timeZone: .current
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 
 private extension String {
 ***REMOVED******REMOVED***/ A string indicating that no date or time has been set for a date/time field.
