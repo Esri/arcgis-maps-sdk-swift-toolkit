@@ -176,7 +176,7 @@ public struct ARGeoView3: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED***  ***REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
