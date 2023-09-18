@@ -1,6 +1,6 @@
 # ArcGIS Maps SDK for Swift Toolkit
 
-[![doc](https://img.shields.io/badge/Doc-purple)](Documentation)  [![SPM](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager/)
+[![doc](https://img.shields.io/badge/Doc-purple)](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/)  [![SPM](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager/)
 
 The ArcGIS Maps SDK for Swift Toolkit contains components that will simplify your Swift app development. It is built off of the new ArcGIS Maps SDK for Swift.
 
@@ -10,17 +10,18 @@ To use Toolkit in your project:
 
 ## Toolkit Components
 
-* **[Authenticator](Documentation/Authenticator)** - Displays a user interface when network and ArcGIS authentication challenges occur.
-* **[BasemapGallery](Documentation/BasemapGallery)** - Displays a collection of basemaps.
-* **[Bookmarks](Documentation/Bookmarks)** - Shows bookmarks, from a map, scene, or a list.
-* **[Compass](Documentation/Compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map points north.
-* **[FloatingPanel](Documentation/FloatingPanel)** - Allows display of view-related content in a "bottom sheet". 
-* **[FloorFilter](Documentation/FloorFilter)** - Allows filtering of floor plan data in a geo view by a site, a building in the site, or a floor in the building. 
-* **[OverviewMap](Documentation/OverviewMap)** - Displays the visible extent of a geo view in a small "inset" map.
-* **[Popup](Documentation/Popup)** - Displays details, media, and attachments of features and graphics.
-* **[Scalebar](Documentation/Scalebar)** - Displays current scale reference.
-* **[Search](Documentation/Search)** - Displays a search experience for geo views.
-* **[UtilityNetworkTrace](Documentation/UtilityNetworkTrace)** - Runs traces on a web map published with a utility network and trace configurations.
+* **[Authenticator](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/authenticator)** - Displays a user interface when network and ArcGIS authentication challenges occur.
+* **[BasemapGallery](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/basemapgallery)** - Displays a collection of basemaps.
+* **[Bookmarks](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/bookmarks)** - Shows bookmarks, from a map, scene, or a list.
+* **[Compass](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map points north.
+* **[FloatingPanel](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/floatingpanel)** - Allows display of view-related content in a "bottom sheet". 
+* **[FloorFilter](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/floorfilter)** - Allows filtering of floor plan data in a geo view by a site, a building in the site, or a floor in the building.
+* **[JobManager](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/jobmanager)** - Manages saving and loading jobs so that they can continue to run if the app is backgrounded or even terminated by the system.
+* **[OverviewMap](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/overviewmap)** - Displays the visible extent of a geo view in a small "inset" map.
+* **[PopupView](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/popupview)** - Displays details, media, and attachments of features and graphics.
+* **[Scalebar](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/scalebar)** - Displays current scale reference.
+* **[SearchView](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/searchview)** - Displays a search experience for geo views.
+* **[UtilityNetworkTrace](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/utilitynetworktrace)** - Runs traces on a web map published with a utility network and trace configurations.
 
 ## Requirements
 * ArcGIS Maps SDK for Swift
@@ -48,6 +49,7 @@ Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS
 
 ## Additional Resources
 
+* [Toolkit Tutorials](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/toolkittutorials)
 * [Developers guide documentation](https://developers.arcgis.com/swift)
 * [Maps SDK API Reference](https://developers.arcgis.com/swift/api-reference/documentation/arcgis)
 * [Samples](https://github.com/Esri/arcgis-maps-sdk-swift-samples)

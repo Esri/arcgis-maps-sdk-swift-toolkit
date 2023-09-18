@@ -14,11 +14,43 @@
 import SwiftUI
 import ArcGIS
 
-/// The `BasemapGallery` tool displays a collection of basemaps from either
-/// ArcGIS Online, a user-defined portal, or an array of `BasemapGalleryItem`s.
-/// When a new basemap is selected from the `BasemapGallery` and the optional
-/// `BasemapGalleryViewModel.geoModel` property is set, then the basemap of the
-/// `geoModel` is replaced with the basemap in the gallery.
+/// The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined
+/// portal, or an array of ``BasemapGalleryItem`` objects. When a new basemap is selected from the
+/// `BasemapGallery` and a geo model was provided when the basemap gallery was created, the
+/// basemap of the `geoModel` is replaced with the basemap in the gallery.
+///
+/// | iPhone | iPad |
+/// | ------ | ---- |
+/// | ![image](https://user-images.githubusercontent.com/3998072/205385086-cb9bc0a0-3c46-484d-aefa-8878c7112a3e.png) | ![image](https://user-images.githubusercontent.com/3998072/205384854-79f25efe-25f4-4330-a487-b64b528a9daf.png) |
+///
+/// > Note: `BasemapGallery` uses metered ArcGIS basemaps by default, so you will need to configure
+/// an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys)
+/// for more information.
+///
+/// **Features**
+///
+/// - Can be configured to use a list, grid, or automatic layout. When using an
+/// automatic layout, list or grid presentation is chosen based on the horizontal size class of the
+/// environment.
+/// - Displays basemaps from a portal or a custom collection. If neither a custom portal or array of
+/// basemaps is provided, the list of basemaps will be loaded from ArcGIS Online.
+/// - Displays a representation of the map or scene's current basemap if that basemap exists in the
+/// gallery.
+/// - Displays a name and thumbnail for each basemap.
+/// - Can be configured to automatically change the basemap of a geo model based on user selection.
+///
+/// `BasemapGallery` has the following helper class: ``BasemapGalleryItem``
+///
+/// **Behavior**
+///
+/// Selecting a basemap with a spatial reference that does not match that of the geo model
+/// will display an error. It will also display an error if a provided base map cannot be loaded. If
+/// a `GeoModel` is provided to the `BasemapGallery`, selecting an item in the gallery will set that
+/// basemap on the geo model.
+///
+/// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+/// and refer to [BasemapGalleryExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BasemapGalleryExampleView.swift)
+/// in the project. To learn more about using the `BasemapGallery` see the [BasemapGallery Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/basemapgallerytutorial).
 public struct BasemapGallery: View {
     /// The view style of the gallery.
     public enum Style {
@@ -189,7 +221,7 @@ private extension BasemapGallery {
 // MARK: Modifiers
 
 public extension BasemapGallery {
-    /// The style of the basemap gallery. Defaults to ``Style/automatic(listWidth:gridWidth:)``.
+    /// The style of the basemap gallery. Defaults to ``Style/automatic(maxGridItemWidth:)``.
     /// - Parameter style: The `Style` to use.
     /// - Returns: The `BasemapGallery`.
     func style(
@@ -226,15 +258,37 @@ extension AlertItem {
         
         switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
         case (.some(_), .some(_)):
-            message = String(localized: "The basemap has a spatial reference that is incompatible with the map.", bundle: .toolkitModule)
+            message = String(
+                localized: "The basemap has a spatial reference that is incompatible with the map.",
+                bundle: .toolkitModule,
+                comment: """
+                         A label indicating the spatial reference of the chosen basemap doesn't
+                         match the spatial reference of the map.
+                         """
+            )
         case (_, .none):
-            message = String(localized: "The map does not have a spatial reference.", bundle: .toolkitModule)
+            message = String(
+                localized: "The map does not have a spatial reference.",
+                bundle: .toolkitModule,
+                comment: "A label indicating the map doesn't have a spatial reference."
+            )
         case (.none, _):
-            message = String(localized: "The basemap does not have a spatial reference.", bundle: .toolkitModule)
+            message = String(
+                localized: "The basemap does not have a spatial reference.",
+                bundle: .toolkitModule,
+                comment: "A label indicating the chosen basemap doesn't have a spatial reference."
+            )
         }
         
         self.init(
-            title: String(localized: "Spatial reference mismatch.", bundle: .toolkitModule),
+            title: String(
+                localized: "Spatial reference mismatch.",
+                bundle: .toolkitModule,
+                comment: """
+                         A label indicating the spatial reference of the chosen basemap doesn't
+                         match the spatial reference of the map or scene.
+                         """
+            ),
             message: message
         )
     }

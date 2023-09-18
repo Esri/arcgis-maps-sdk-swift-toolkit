@@ -14,6 +14,52 @@
 import ArcGIS
 import SwiftUI
 
+/// `UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace configurations.
+///
+/// | iPhone | iPad |
+/// | ------ | ---- |
+/// | ![image](https://user-images.githubusercontent.com/3998072/204343568-a236ae0d-6b70-4175-a70c-41c902123ea1.png) | ![image](https://user-images.githubusercontent.com/3998072/204344567-c86b3a49-6109-4333-8993-7fdc74f2b35d.png) |
+///
+/// **Features**
+///
+/// The utility network trace tool displays a list of named trace configurations defined for utility
+/// networks in a web map. It enables users to add starting points and perform trace analysis from
+/// the selected named trace configuration.
+///
+/// A named trace configuration defined for a utility network in a webmap comprises the parameters
+/// used for a utility network trace.
+///
+/// **Behavior**
+///
+/// The tool allows users to:
+///
+///  - Choose between multiple networks (if more than one is defined in a webmap).
+///  - Choose between named trace configurations:
+/// ![image](https://user-images.githubusercontent.com/3998072/204346359-419b0056-3a30-4120-9b47-c68513abde42.png)
+///  - Add trace starting points either programmatically or by tapping on a map view, then use the
+///  inspection view to narrow the selection:
+/// ![image](https://user-images.githubusercontent.com/3998072/204346273-38374067-a0b8-4db4-8e40-62b38e1603c8.png)
+///  - View trace results:
+///
+/// | iPhone | iPad |
+/// | ------ | ---- |
+/// | ![image](https://user-images.githubusercontent.com/3998072/204343941-91775a25-8dc0-4866-8273-0d4bfaa91aeb.png) | ![image](https://user-images.githubusercontent.com/3998072/204344435-173fbf34-59d6-4a0f-84bf-30ed5de3572e.png) |
+///
+///  - Run multiple trace scenarios, then use color and name to compare results:
+/// ![image](https://user-images.githubusercontent.com/3998072/204346039-038ba4fa-201a-428c-ae84-be8f10c91cf7.png)
+///
+///  - See user-friendly warnings to help avoid common mistakes, including specifying too many
+/// starting points or running the same trace configuration multiple times.
+///
+/// **Associated Types**
+///
+/// `UtilityNetworkTrace` has the following associated type:
+///
+/// - ``UtilityNetworkTraceStartingPoint``
+///
+/// To see the `UtilityNetworkTrace` in action, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
+/// and refer to [UtilityNetworkTraceExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/UtilityNetworkTraceExampleView.swift)
+/// in the project. To learn more about using the `UtilityNetworkTrace` see the [UtilityNetworkTrace Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/utilitynetworktracetutorial).
 public struct UtilityNetworkTrace: View {
     /// The proxy to provide access to map view operations.
     private var mapViewProxy: MapViewProxy?
@@ -396,7 +442,7 @@ public struct UtilityNetworkTrace: View {
                                             Text(
                                                 "Not Available",
                                                 bundle: .toolkitModule,
-                                                comment: "A trace function output result is not available."
+                                                comment: "A trace function output result was not provided."
                                             )
                                         }
                                     }
@@ -431,15 +477,15 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             .padding([.vertical], 2)
-            Button(String.clearAllResultsButtonLabel, role: .destructive) {
+            Button(String.clearAllResults, role: .destructive) {
                 isShowingClearAllResultsConfirmationDialog = true
             }
             .buttonStyle(.bordered)
             .confirmationDialog(
-                String.clearAllResultsQuestion,
+                String.clearAllResults,
                 isPresented: $isShowingClearAllResultsConfirmationDialog
             ) {
-                Button(String.clearAllResultsButtonLabel, role: .destructive) {
+                Button(String.clearAllResults, role: .destructive) {
                     viewModel.deleteAllTraces()
                     currentActivity = .creatingTrace(nil)
                 }
@@ -669,7 +715,7 @@ public struct UtilityNetworkTrace: View {
     private var currentTraceLabel: String {
         guard let index = viewModel.selectedTraceIndex else { return "Error" }
         return String(
-            localized: "Trace \(index+1, specifier: "%lld") of \(viewModel.completedTraces.count, specifier: "%lld")",
+            localized: "Trace \(index+1, specifier: "%1$lld") of \(viewModel.completedTraces.count, specifier: "%2$lld")",
             bundle: .toolkitModule,
             comment: "A label indicating the index of the trace being viewed out of the total number of traces completed."
         )
@@ -757,22 +803,20 @@ private extension String {
     
     static let attributesSectionTitle = String(
         localized: "Attributes",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to the attributes of a geo element."
     )
     
     static let cancelStartingPointSelection = String(
         localized: "Cancel starting point selection",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button to cancel the starting point selection operation."
     )
     
-    static let clearAllResultsButtonLabel = String(
-        localized: "Clear All Results",
-        bundle: .toolkitModule
-    )
-    
-    static let clearAllResultsQuestion = String(
-        localized: "Clear all results?",
-        bundle: .toolkitModule
+    static let clearAllResults = String(
+        localized: "Clear all results",
+        bundle: .toolkitModule,
+        comment: "A directive to clear all of the completed utility network traces."
     )
     
     static let clearAllResultsMessage = String(
@@ -783,84 +827,109 @@ private extension String {
     
     static let colorLabel = String(
         localized: "Color",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to the color used to display utility trace result graphics."
     )
     
     static let deleteButtonLabel = String(
         localized: "Delete",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button used to delete a utility network trace input component or result."
     )
     
     /// Title for the feature results section
     static let featureResultsTitle = String(
         localized: "Feature Results",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: """
+                 A label in reference to utility elements returned as results of a utility network
+                 trace operation.
+                 """
     )
     
     static let fractionAlongEdgeSectionTitle = String(
         localized: "Fraction Along Edge",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to a fractional distance along an edge style utility network element."
     )
     
     static let functionResultsSectionTitle = String(
         localized: "Function Results",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: """
+                 A label in reference to function outputs returned as results of a utility network
+                 trace operation.
+                 """
     )
     
     static let modePickerTitle = String(
         localized: "Mode",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "The mode in which the utility network trace tool is being used (either creating traces or viewing traces)."
     )
     
     static let nameLabel = String(
         localized: "Name",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to the user defined name for an individual utility network trace."
     )
     
     static let networkSectionLabel = String(
         localized: "Network",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to a specific utility network."
     )
     
     static let newTraceOptionLabel = String(
         localized: "New trace",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button to show new utility network trace configuration options."
     )
     
     static let noConfigurationsAvailable = String(
-        localized: "No configurations available",
-        bundle: .toolkitModule
+        localized: "No configurations available.",
+        bundle: .toolkitModule,
+        comment: "A statement that no utility trace configurations are available."
     )
     
     static let noneSelected = String(
         localized: "None selected",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label indicating that no utility network trace configuration has been selected."
     )
     
     static let resultsOptionLabel = String(
         localized: "Results",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button to show utility network trace results."
     )
     
     /// Title for the starting points section
     static let startingPointsTitle = String(
         localized: "Starting Points",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: """
+                 A label in reference to the utility elements chosen as starting points for a utility
+                 network trace operation.
+                 """
     )
     
     static let terminalConfigurationPickerTitle = String(
         localized: "Terminal Configuration",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to the chosen terminal configuration of a utility network element."
     )
     
     static let traceButtonLabel = String(
         localized: "Trace",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button to begin a utility network trace operation."
     )
     
     static let traceConfigurationSectionLabel = String(
         localized: "Trace Configuration",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to a utility network trace configuration."
     )
     
     static let unnamedAssetType = String(
