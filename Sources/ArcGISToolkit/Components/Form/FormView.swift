@@ -38,31 +38,18 @@ public struct FormView: View {
             VStack(alignment: .leading) {
                 FormHeader(title: featureForm?.title)
                     .padding([.bottom], elementPadding)
-                    .background(
-                        GeometryReader { geometryProxy in
-                            Color.clear.preference(
-                                key: ScrollPreferenceKey.self,
-                                value: geometryProxy
-                                    .frame(in: .named(scrollViewCoordinateSpace)).origin
-                            )
-                        }
-                    )
-                    .onPreferenceChange(ScrollPreferenceKey.self) { position in
-                        model.formScroll = position.y
-                    }
                 ForEach(featureForm?.elements ?? [], id: \.label) { element in
                     makeElement(element)
                 }
             }
         }
-        .coordinateSpace(name: scrollViewCoordinateSpace)
+        .gesture(
+            DragGesture()
+                .onChanged {
+                    model.lastScroll = $0.time
+                }
+        )
     }
-}
-
-struct ScrollPreferenceKey: SwiftUI.PreferenceKey {
-    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) { }
-    
-    static var defaultValue: CGPoint { .zero }
 }
 
 extension FormView {
