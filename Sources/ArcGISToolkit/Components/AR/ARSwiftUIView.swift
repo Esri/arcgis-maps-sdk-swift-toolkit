@@ -176,7 +176,7 @@ public struct ARGeoView3: View {
 //                    .viewDrawingMode(.manual)
 //                }
 //          }
-        }
+//        }
     }
 }
 
