@@ -1,294 +1,294 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
-"%lld selected" = "ã_%lld selected______________Ç";
+"%lld selected" = "%lld selecionado(s)";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
-"A certificate is required to access content on %@." = "ã_A certificate is required to access content on %@__________________________Ç.";
+"A certificate is required to access content on %@." = "É necessário um certificado para aceder a conteúdos em %@.";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "ã_Add new_______________Ç";
+"Add new" = "Adicionar novo";
 
 /* A section header for advanced options. */
-"Advanced Options" = "ã_Advanced Options_________________Ç";
+"Advanced Options" = "Opções Avançadas";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "ã_All sites___________________Ç";
+"All sites" = "Todos os sites";
 
 /* A message describing the outcome of clearing all utility network trace results. */
-"All the trace inputs and results will be lost." = "ã_All the trace inputs and results will be lost________________________Ç.";
+"All the trace inputs and results will be lost." = "Todas as entradas e resultados do rastreio serão perdidos.";
 
 /* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "ã_Allow___________Ç";
+"Allow" = "Permitir";
 
 /* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "ã_An error occurred loading the image: %@_____________________Ç.";
+"An error occurred loading the image: %@." = "Ocorreu um erro ao carregar a imagem: %@.";
 
 /* A label in reference to attachments in a popup. */
-"Attachments" = "ã_Attachments____________Ç";
+"Attachments" = "Anexos";
 
 /* A label in reference to the attributes of a geo element. */
-"Attributes" = "ã_Attributes_____________________Ç";
+"Attributes" = "Atributos";
 
 /* A label indicating authentication is required to proceed. */
-"Authentication Required" = "ã_Authentication Required________________________Ç";
+"Authentication Required" = "Autenticação Necessária";
 
 /* A label in reference to bookmarks contained in a map or scene. */
-"Bookmarks" = "ã_Bookmarks___________________Ç";
+"Bookmarks" = "Marcadores";
 
 /* A label for a button to open the system file browser. */
-"Browse" = "ã_Browse_____________Ç";
+"Browse" = "Procurar";
 
 /* A label for a button to cancel an operation. */
-"Cancel" = "ã_Cancel_____________Ç";
+"Cancel" = "Cancelar";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "ã_Cancel starting point selection_________________Ç";
+"Cancel starting point selection" = "Cancelar a seleção do ponto de partida";
 
 /* A label indicating that a certificate is required to proceed. */
-"Certificate Required" = "ã_Certificate Required_____________________Ç";
+"Certificate Required" = "Certificado Necessário";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "ã_Certificate Trust Warning__________________________Ç";
+"Certificate Trust Warning" = "Aviso de Fiabilidade do Certificado";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "ã_Clear all results__________________Ç";
+"Clear all results" = "Limpar todos os resultados";
 
 /* A label in reference to the color used to display utility trace result graphics. */
-"Color" = "ã_Color___________Ç";
+"Color" = "Cor";
 
 /* An compass description to be read by a screen reader describing the
 current heading. The first variable being a degree value and the
 second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
-"Compass, heading %lld degrees %@" = "ã_Compass, heading %lld degrees %@_________________Ç";
+"Compass, heading %lld degrees %@" = "Bússola, direção %lld graus %@";
 
 /* A label for a button used to continue the authentication operation. */
-"Continue" = "ã_Continue_________________Ç";
+"Continue" = "Continuar";
 
 /* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "ã_Could not access the certificate file____________________Ç.";
+"Could not access the certificate file." = "Não foi possível aceder ao ficheiro de certificado.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "ã_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________Ç.";
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Perigo: o certificado fornecido por '%@' não está assinado por uma autoridade fidedigna.";
 
 /* A label for a button used to delete a utility network trace input component or result. */
-"Delete" = "ã_Delete_____________Ç";
+"Delete" = "Eliminar";
 
 /* A button to close the bookmark selection menu. */
-"Done" = "ã_Done_________Ç";
+"Done" = "Concluído";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
-"Duplicate starting points cannot be added." = "ã_Duplicate starting points cannot be added______________________Ç.";
+"Duplicate starting points cannot be added." = "Não é possível adicionar pontos de partida duplicados.";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
-"Element could not be identified." = "ã_Element could not be identified_________________Ç.";
+"Element could not be identified." = "Não foi possível identificar o elemento.";
 
 /* A label in reference to an error that occurred during a utility network trace. */
-"Error" = "ã_Error___________Ç";
+"Error" = "Erro";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
-"Error importing certificate" = "ã_Error importing certificate____________________________Ç";
+"Error importing certificate" = "Erro ao importar o certificado";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
-"Error loading basemap." = "ã_Error loading basemap_______________________Ç.";
+"Error loading basemap." = "Erro ao carregar o mapa base.";
 
 /* A label indicating popup expressions are being evaluated. */
-"Evaluating popup expressions" = "ã_Evaluating popup expressions_____________________________Ç";
+"Evaluating popup expressions" = "A avaliar expressões pop-up";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
-"Failed to set starting point" = "ã_Failed to set starting point_____________________________Ç";
+"Failed to set starting point" = "Falha ao definir o ponto de partida";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
-"Feature Results" = "ã_Feature Results________________Ç";
+"Feature Results" = "Resultados de Elementos";
 
 /* A field in a set of data contained in a popup. */
-"Field" = "ã_Field___________Ç";
+"Field" = "Campo";
 
 /* A label in reference to fields in a set of data contained in a popup. */
-"Fields" = "ã_Fields_____________Ç";
+"Fields" = "Campos";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
-"Filter facilities" = "ã_Filter facilities__________________Ç";
+"Filter facilities" = "Filtrar instalações";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
-"Filter sites" = "ã_Filter sites_____________Ç";
+"Filter sites" = "Filtrar sites";
 
 /* A hint for the user on what to search for in a search bar. */
-"Find a place or address" = "ã_Find a place or address________________________Ç";
+"Find a place or address" = "Encontrar um local ou endereço";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
-"Fraction Along Edge" = "ã_Fraction Along Edge____________________Ç";
+"Fraction Along Edge" = "Fração ao Longo da Aresta";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
-"Function Results" = "ã_Function Results_________________Ç";
+"Function Results" = "Resultados da Função";
 
 /* A label in reference to media elements contained within a popup. */
-"Media" = "ã_Media___________Ç";
+"Media" = "Multimédia";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
-"Mode" = "ã_Mode_________Ç";
+"Mode" = "Modo";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
-"Name" = "ã_Name_________Ç";
+"Name" = "Nome";
 
 /* A label in reference to a specific utility network. */
-"Network" = "ã_Network_______________Ç";
+"Network" = "Rede";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "ã_New trace___________________Ç";
+"New trace" = "Novo rastreio";
 
 /* A label indicating that no bookmarks are available for selection. */
-"No bookmarks" = "ã_No bookmarks_____________Ç";
+"No bookmarks" = "Sem marcadores";
 
 /* A statement that no utility trace configurations are available. */
-"No configurations available." = "ã_No configurations available_____________________________Ç.";
+"No configurations available." = "Não existem configurações disponíveis.";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
-"No matches found." = "ã_No matches found__________________Ç.";
+"No matches found." = "Não foram encontradas correspondências.";
 
 /* A message to show when there are no results or suggestions. */
-"No results found" = "ã_No results found_________________Ç";
+"No results found" = "Nenhum resultado encontrado";
 
 /* A label indicating that no utility named trace configurations are available. */
-"No trace types found." = "ã_No trace types found______________________Ç.";
+"No trace types found." = "Não foram encontrados tipos de rastreio.";
 
 /* A label indicating that no utility networks are available. */
-"No utility networks found." = "ã_No utility networks found___________________________Ç.";
+"No utility networks found." = "Não foram encontradas redes de serviços públicos.";
 
 /* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "ã_None selected______________Ç";
+"None selected" = "Nenhum selecionado";
 
 /* A trace function output result was not provided. */
-"Not Available" = "ã_Not Available______________Ç";
+"Not Available" = "Não Disponível";
 
 /* A string identifying a utility network object. */
-"Object ID: %@" = "ã_Object ID: %@______________Ç";
+"Object ID: %@" = "ID de Objeto: %@";
 
 /* A label for button to proceed with an operation. */
-"OK" = "ã_OK_____Ç";
+"OK" = "OK";
 
 /* A label in reference to a credential password. */
-"Password" = "ã_Password_________________Ç";
+"Password" = "Palavra-passe";
 
 /* A label indicating that a password is required to proceed with an operation. */
-"Password Required" = "ã_Password Required__________________Ç";
+"Password Required" = "Palavra-Passe Obrigatória";
 
 /* A label requesting the password associated with the chosen certificate. */
-"Please enter a password for the chosen certificate." = "ã_Please enter a password for the chosen certificate___________________________Ç.";
+"Please enter a password for the chosen certificate." = "Introduza uma palavra-passe para o certificado selecionado.";
 
 /* A label indicating that at least one starting location is required for the
 chosen utility network trace configuration. */
-"Please set at least 1 starting location." = "ã_Please set at least 1 starting location_____________________Ç.";
+"Please set at least 1 starting location." = "Defina pelo menos 1 localização de partida.";
 
 /* A label indicating that at least two starting locations are required for the
 chosen utility network trace configuration. */
-"Please set at least 2 starting locations." = "ã_Please set at least 2 starting locations______________________Ç.";
+"Please set at least 2 starting locations." = "Defina pelo menos 2 localizações de partida.";
 
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
-"Popup evaluation failed: %@" = "ã_Popup evaluation failed: %@____________________________Ç";
+"Popup evaluation failed: %@" = "A avaliação de pop-up falhou: %@";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
-"Repeat Search Here" = "ã_Repeat Search Here___________________Ç";
+"Repeat Search Here" = "Repetir Pesquisa Aqui";
 
 /* A label for a button to show utility network trace results. */
-"Results" = "ã_Results_______________Ç";
+"Results" = "Resultados";
 
 /* A label in reference to a search query entered by the user. */
-"Search Query" = "ã_Search Query_____________Ç";
+"Search Query" = "Consulta de Pesquisa";
 
 /* A label prompting the user to make a selection from the available bookmarks. */
-"Select a bookmark" = "ã_Select a bookmark__________________Ç";
+"Select a bookmark" = "Selecione um marcador";
 
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
-"Select a facility" = "ã_Select a facility__________________Ç";
+"Select a facility" = "Selecione uma instalação";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
-"Sites" = "ã_Sites___________Ç";
+"Sites" = "Sites";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
-"Spatial reference mismatch." = "ã_Spatial reference mismatch____________________________Ç.";
+"Spatial reference mismatch." = "Incompatibilidade da referência espacial.";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
-"Starting Points" = "ã_Starting Points________________Ç";
+"Starting Points" = "Pontos de Partida";
 
 /* A label indicating that tapping an image will reveal
 additional information. */
-"Tap on the image for more information." = "ã_Tap on the image for more information____________________Ç.";
+"Tap on the image for more information." = "Toque na imagem para obter mais informações.";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
-"Terminal Configuration" = "ã_Terminal Configuration_______________________Ç";
+"Terminal Configuration" = "Configuração de Terminal";
 
 /* A label for development purposes only. This is not user visible. */
-"test" = "ã_test_________Ç";
+"test" = "teste";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
-"The basemap does not have a spatial reference." = "ã_The basemap does not have a spatial reference________________________Ç.";
+"The basemap does not have a spatial reference." = "O mapa base não tem uma referência espacial.";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to
 load for an unknown reason. */
-"The basemap failed to load for an unknown reason." = "ã_The basemap failed to load for an unknown reason__________________________Ç.";
+"The basemap failed to load for an unknown reason." = "O carregamento do mapa base falhou por uma razão desconhecida.";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map. */
-"The basemap has a spatial reference that is incompatible with the map." = "ã_The basemap has a spatial reference that is incompatible with the map____________________________________Ç.";
+"The basemap has a spatial reference that is incompatible with the map." = "O mapa base tem uma referência espacial que é incompatível com o mapa.";
 
 /* A label indicating the chosen file or given password was invalid. */
-"The certificate file or password was invalid." = "ã_The certificate file or password was invalid________________________Ç.";
+"The certificate file or password was invalid." = "A palavra-passe ou o ficheiro de certificado era inválido.";
 
 /* A label indicating the chosen file was invalid. */
-"The certificate file was invalid." = "ã_The certificate file was invalid__________________Ç.";
+"The certificate file was invalid." = "O ficheiro de certificado era inválido.";
 
 /* A label indicating the map doesn't have a spatial reference. */
-"The map does not have a spatial reference." = "ã_The map does not have a spatial reference______________________Ç.";
+"The map does not have a spatial reference." = "O mapa não tem uma referência espacial.";
 
 /* A label indicating the given password was invalid. */
-"The password was invalid." = "ã_The password was invalid__________________________Ç.";
+"The password was invalid." = "A palavra-passe era inválida.";
 
 /* Description of error thrown when a remote image could not be loaded. */
-"The URL could not be reached or did not contain image data." = "ã_The URL could not be reached or did not contain image data_______________________________Ç.";
+"The URL could not be reached or did not contain image data." = "Não foi possível aceder ao URL ou este não continha dados de imagem.";
 
 /* A label for a button to begin a utility network trace operation. */
-"Trace" = "ã_Trace___________Ç";
+"Trace" = "Rastrear";
 
 /* A label indicating the index of the trace being viewed out of the total number of traces completed. */
-"Trace %1$lld of %2$lld" = "ã_Trace %1$lld of %2$lld_______________________Ç";
+"Trace %1$lld of %2$lld" = "Rastrear %1$lld de %2$lld";
 
 /* A label in reference to a utility network trace configuration. */
-"Trace Configuration" = "ã_Trace Configuration____________________Ç";
+"Trace Configuration" = "Configuração de Rastreio";
 
 /* A label for a button allowing the user to retry an operation. */
-"Try Again" = "ã_Try Again___________________Ç";
+"Try Again" = "Tente Novamente";
 
 /* A label to use in place of a utility element asset type name. */
-"Unnamed Asset Type" = "ã_Unnamed Asset Type___________________Ç";
+"Unnamed Asset Type" = "Tipo de Ativo Sem Nome";
 
 /* A label in reference to a credential username. */
-"Username" = "ã_Username_________________Ç";
+"Username" = "Nome de utilizador";
 
 /* A value in a set of data contained in a popup. */
-"Value" = "ã_Value___________Ç";
+"Value" = "Valor";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
-"You must sign in to access '%@'" = "ã_You must sign in to access '%@'_________________Ç";
+"You must sign in to access '%@'" = "Tem de iniciar sessão para aceder a '%@'";
 
 /* A button to change the map to the extent of the selected trace. */
-"Zoom To" = "ã_Zoom To_______________Ç";
+"Zoom To" = "Zoom Para";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "ã_Zoom to result_______________Ç";
+"Zoom to result" = "Aumentar zoom até ao resultado";
 
