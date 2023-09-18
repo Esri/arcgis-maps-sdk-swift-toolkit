@@ -45,6 +45,9 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***print("feature isloaded: \(featureForm?.feature.loadStatus); domain = \(element.domain)")
+***REMOVED******REMOVED***print("feature domain: \(featureForm?.feature.table?.field(named: element.fieldName)?.domain)")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -66,7 +69,9 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED***text: text,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
 ***REMOVED******REMOVED******REMOVED***element: element,
-***REMOVED******REMOVED******REMOVED***input: input
+***REMOVED******REMOVED******REMOVED***input: input,
+***REMOVED******REMOVED******REMOVED***isNumeric: isNumericInput,
+***REMOVED******REMOVED******REMOVED***isDecimal: isDecimalInput
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
@@ -78,7 +83,20 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { newValue in
-***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Note: this will be replaced by `element.updateValue()`, which will
+***REMOVED******REMOVED******REMOVED******REMOVED*** handle all the following logic internally.
+***REMOVED******REMOVED******REMOVED***if isDecimalInput {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this should handle other decimal types as well, if they exist (float?)
+***REMOVED******REMOVED******REMOVED******REMOVED***let value = Double(newValue)
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
+***REMOVED******REMOVED*** else if isNumericInput {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this should handle more than just Int32
+***REMOVED******REMOVED******REMOVED******REMOVED***let value = Int32(newValue)
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text field
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -97,7 +115,7 @@ private extension SingleLineTextInput {
 ***REMOVED***
 ***REMOVED******REMOVED***return false
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***var keyboardType: UIKeyboardType {
 ***REMOVED******REMOVED***isNumericInput ? (isDecimalInput ? .decimalPad : .numberPad) : .default
 ***REMOVED***
@@ -116,7 +134,7 @@ private extension FieldType {
 extension SingleLineTextInput {
 ***REMOVED***var rangeDomain: RangeDomain? {
 ***REMOVED******REMOVED***if let field = featureForm?.feature.table?.field(named: element.fieldName) {
-***REMOVED******REMOVED***   return field.domain as? RangeDomain
+***REMOVED******REMOVED******REMOVED***return field.domain as? RangeDomain
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***

@@ -17,12 +17,15 @@
 ***REMOVED***/ A view shown at the bottom of each text input element in a form.
 struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ An error that is present when a length constraint is not met.
-***REMOVED***@State private var validationError: LengthError?
+***REMOVED***@State private var validationError: TextValidationError?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field has previously satisfied the minimum
 ***REMOVED******REMOVED***/ length at any point in time.
 ***REMOVED***@State private var hasPreviouslySatisfiedMinimum: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field has been edited.
+***REMOVED***@State private var hasBeenEdited = false
+
 ***REMOVED******REMOVED***/ The current text in the text input field.
 ***REMOVED***private let text: String
 ***REMOVED***
@@ -47,10 +50,19 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ The minimum allowable length of text in the text input field.
 ***REMOVED***private let minLength: Int
 ***REMOVED***
+***REMOVED******REMOVED***/ The maximum allowable value in the text input field.
+***REMOVED***private let maxValue: Double = 10
+***REMOVED***
+***REMOVED******REMOVED***/ The minimum allowable length in the text input field.
+***REMOVED***private let minValue: Double = 1
+
 ***REMOVED******REMOVED***/ The range domain for the text field input. This is used to
 ***REMOVED******REMOVED***/ generate messages if the numeric value is out-of-range.
-***REMOVED***private let rangeDomain: RangeDomain? = nil
+***REMOVED***private let rangeDomain: RangeDomain?
 ***REMOVED***
+***REMOVED***private var isNumeric: Bool
+***REMOVED***private var isDecimal: Bool
+
 ***REMOVED******REMOVED***/ Creates a footer shown at the bottom of each text input element in a form.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - currentLength: The current length of the text in the text input field.
@@ -63,7 +75,9 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***isFocused: Bool,
 ***REMOVED******REMOVED***element: FieldFormElement,
 ***REMOVED******REMOVED***input: FormInput,
-***REMOVED******REMOVED***rangeDomain: RangeDomain? = nil
+***REMOVED******REMOVED***rangeDomain: RangeDomain? = nil,
+***REMOVED******REMOVED***isNumeric: Bool = false,
+***REMOVED******REMOVED***isDecimal: Bool = false
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.text = text
 ***REMOVED******REMOVED***self.currentLength = text.count
@@ -72,7 +86,11 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***self.description = element.description
 ***REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
 ***REMOVED******REMOVED***self.isRequired = false***REMOVED***element.required
+***REMOVED******REMOVED***self.rangeDomain = rangeDomain
+***REMOVED******REMOVED***self.isNumeric = isNumeric
+***REMOVED******REMOVED***self.isDecimal = isDecimal
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***print("isNumeric: \(isNumeric)")
 ***REMOVED******REMOVED***switch input {
 ***REMOVED******REMOVED***case let input as TextBoxFormInput:
 ***REMOVED******REMOVED******REMOVED***self.maxLength = input.maxLength
@@ -94,7 +112,8 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if isFocused, description.isEmpty || validationError != nil {
+***REMOVED******REMOVED******REMOVED***if isFocused, description.isEmpty || validationError != nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***isNumeric == false {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(currentLength, format: .number)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Character Indicator")
 ***REMOVED******REMOVED***
@@ -102,16 +121,17 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.foregroundColor(validationError == nil ? .secondary : .red)
 ***REMOVED******REMOVED***.onChange(of: currentLength) { newLength in
-***REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum {
-***REMOVED******REMOVED******REMOVED******REMOVED***if newLength >= minLength {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***hasPreviouslySatisfiedMinimum = true
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if newLength >= minLength {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***hasPreviouslySatisfiedMinimum = true
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***hasBeenEdited = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: newLength, focused: isFocused)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { newIsFocused in
-***REMOVED******REMOVED******REMOVED***if hasPreviouslySatisfiedMinimum || !newIsFocused {
+***REMOVED******REMOVED******REMOVED***if hasBeenEdited || !newIsFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: currentLength, focused: newIsFocused)
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -129,8 +149,8 @@ extension TextInputFooter {
 ***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED******REMOVED***case (.none, false, _):
 ***REMOVED******REMOVED******REMOVED***return Text(description)
-***REMOVED******REMOVED***case (.some(let lengthError), _, _):
-***REMOVED******REMOVED******REMOVED***switch (lengthError, scheme) {
+***REMOVED******REMOVED***case (.some(let validationError), _, _):
+***REMOVED******REMOVED******REMOVED***switch (validationError, scheme) {
 ***REMOVED******REMOVED******REMOVED***case (.emptyWhenRequired, .max):
 ***REMOVED******REMOVED******REMOVED******REMOVED***return requiredText
 ***REMOVED******REMOVED******REMOVED***default:
@@ -153,13 +173,18 @@ extension TextInputFooter {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The length validation text, dependent on the length validation scheme.
 ***REMOVED***var validationText: Text {
-***REMOVED******REMOVED***switch scheme {
-***REMOVED******REMOVED***case .max:
-***REMOVED******REMOVED******REMOVED***return maximumText
-***REMOVED******REMOVED***case .minAndMax:
-***REMOVED******REMOVED******REMOVED***return minAndMaxText
-***REMOVED******REMOVED***case .exact:
-***REMOVED******REMOVED******REMOVED***return exactText
+***REMOVED******REMOVED***if isNumeric {
+***REMOVED******REMOVED******REMOVED***print("range = \(rangeDomain)")
+***REMOVED******REMOVED******REMOVED***return rangeDomain == nil ? Text("") : minAndMaxValue
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***switch scheme {
+***REMOVED******REMOVED******REMOVED***case .max:
+***REMOVED******REMOVED******REMOVED******REMOVED***return maximumText
+***REMOVED******REMOVED******REMOVED***case .minAndMax:
+***REMOVED******REMOVED******REMOVED******REMOVED***return minAndMaxText
+***REMOVED******REMOVED******REMOVED***case .exact:
+***REMOVED******REMOVED******REMOVED******REMOVED***return exactText
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -167,7 +192,9 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ - Parameter length: The length of text to use for validation.
 ***REMOVED******REMOVED***/ - Parameter focused: The focus state to use for validation.
 ***REMOVED***func validate(length: Int, focused: Bool) {
-***REMOVED******REMOVED***if length == .zero && isRequired && !focused {
+***REMOVED******REMOVED***if isNumeric {
+***REMOVED******REMOVED******REMOVED***validationError = .outOfRange
+***REMOVED*** else if length == .zero && isRequired && !focused {
 ***REMOVED******REMOVED******REMOVED***validationError = .emptyWhenRequired
 ***REMOVED*** else if length < minLength || length > maxLength {
 ***REMOVED******REMOVED******REMOVED***validationError = .minOrMaxUnmet
@@ -212,6 +239,15 @@ extension TextInputFooter {
 ***REMOVED******REMOVED******REMOVED***"Required",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field is required"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Text indicating a field's number value is not in the correct range of acceptable values.
+***REMOVED***var minAndMaxValue: Text {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Enter value from \(minValue) to \(maxValue)",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's number value is not in the correct range of acceptable values."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
