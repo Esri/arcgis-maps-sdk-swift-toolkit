@@ -110,7 +110,7 @@ struct MultiLineTextEntry: View {
                 featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
             }
         }
-        .onChange(of: model.formScroll) { _ in
+        .onChange(of: model.lastScroll) { _ in
             if isFocused { isFocused = false }
         }
     }
