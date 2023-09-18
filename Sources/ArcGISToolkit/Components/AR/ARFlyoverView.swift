@@ -65,6 +65,7 @@ public struct ARFlyoverView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
