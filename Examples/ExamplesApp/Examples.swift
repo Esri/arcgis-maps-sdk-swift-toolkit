@@ -36,9 +36,7 @@ extension ExampleList {
     static let augmentedReality = Self(
         name: "Augmented Reality",
         examples: [
-            AnyExample("Flyover", content: FlyoverExampleView()),
-            AnyExample("Reality Kit Flyover", content: RealityFlyoverExampleView()),
-            AnyExample("SwiftUI Flyover", content: SwiftUIFlyoverExampleView())
+            AnyExample("Flyover", content: FlyoverExampleView())
         ]
     )
     

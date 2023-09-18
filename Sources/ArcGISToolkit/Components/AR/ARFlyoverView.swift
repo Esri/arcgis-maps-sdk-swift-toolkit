@@ -23,6 +23,7 @@ public struct ARFlyoverView: View {
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     @State private var arViewProxy = ARSwiftUIViewProxy()
     @State private var sceneViewProxy: SceneViewProxy?
+    @State private var cameraController: TransformationMatrixCameraController
     
     private let sceneViewBuilder: () -> SceneView
     
@@ -33,6 +34,11 @@ public struct ARFlyoverView: View {
         @ViewBuilder sceneView: @escaping () -> SceneView
     ) {
         self.sceneViewBuilder = sceneView
+        
+        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+        cameraController.translationFactor = translationFactor
+        cameraController.clippingDistance = clippingDistance
+        _cameraController = .init(initialValue: cameraController)
         
         configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
