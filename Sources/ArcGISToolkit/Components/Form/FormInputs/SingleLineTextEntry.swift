@@ -18,8 +18,6 @@
 struct SingleLineTextEntry: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED***@Environment(\.formScroll) var formScroll
-***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
@@ -84,8 +82,8 @@ struct SingleLineTextEntry: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: formScroll) { _ in
-***REMOVED******REMOVED******REMOVED***isFocused = false
+***REMOVED******REMOVED***.onChange(of: model.formScroll) { _ in
+***REMOVED******REMOVED******REMOVED***if isFocused { isFocused = false ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

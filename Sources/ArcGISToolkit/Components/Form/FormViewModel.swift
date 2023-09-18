@@ -31,6 +31,9 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The name of the current focused field, if one exists.
 ***REMOVED***@Published var focusedFieldName: String?
 ***REMOVED***
+***REMOVED******REMOVED***/ The form's vertical scroll offset.
+***REMOVED***@Published var formScroll: CGFloat?
+***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
 ***REMOVED***public init() {***REMOVED***
 ***REMOVED***

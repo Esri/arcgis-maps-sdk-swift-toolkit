@@ -19,7 +19,8 @@
 public struct FormView: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED***@State private var formScroll: CGFloat = .zero
+***REMOVED******REMOVED***/ The model for the ancestral form view.
+***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***private var featureForm: FeatureForm?
@@ -47,7 +48,7 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onPreferenceChange(ScrollPreferenceKey.self) { position in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formScroll = position.y
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.formScroll = position.y
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(featureForm?.elements ?? [], id: \.label) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
@@ -55,7 +56,6 @@ public struct FormView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.coordinateSpace(name: scrollViewCoordinateSpace)
-***REMOVED******REMOVED***.environment(\.formScroll, formScroll)
 ***REMOVED***
 ***REMOVED***
 
