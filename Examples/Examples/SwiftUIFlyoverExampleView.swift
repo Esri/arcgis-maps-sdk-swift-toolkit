@@ -32,29 +32,20 @@ struct SwiftUIFlyoverExampleView: View {
 
         return scene
     }()
-
-    private var cameraController: TransformationMatrixCameraController = {
-        let controller = TransformationMatrixCameraController()
-        controller.originCamera = Camera(
-            lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
-            distance: 1_000,
-            heading: 40,
-            pitch: 90,
-            roll: 0
-        )
-
-        controller.translationFactor = 3000
-        controller.clippingDistance = 6000
-        return controller
-    }()
-
-//    var body: some View {
-//        ARGeoView3(scene: scene, cameraController: cameraController)
-//    }
     
     var body: some View {
-        ARViewBuilder {
-            SceneView(scene: scene, cameraController: cameraController)
+        ARFlyoverView(
+            initialCamera: Camera(
+                lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
+                distance: 1_000,
+                heading: 40,
+                pitch: 90,
+                roll: 0
+            ),
+            translationFactor: 3_000,
+            clippingDistance: 60_000
+        ) {
+            SceneView(scene: scene)
         }
     }
 }

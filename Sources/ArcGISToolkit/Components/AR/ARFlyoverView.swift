@@ -10,7 +10,7 @@ import ARKit
 import SwiftUI
 import ArcGIS
 
-public struct ARViewBuilder: View {
+public struct ARFlyoverView: View {
     private let configuration: ARWorldTrackingConfiguration
     
     /// The last portrait or landscape orientation value.
@@ -21,6 +21,9 @@ public struct ARViewBuilder: View {
     private let sceneViewBuilder: () -> SceneView
     
     public init(
+        initialCamera: Camera,
+        translationFactor: Double,
+        clippingDistance: Double?,
         @ViewBuilder sceneView: @escaping () -> SceneView
     ) {
         self.sceneViewBuilder = sceneView
@@ -35,7 +38,12 @@ public struct ARViewBuilder: View {
             ARSwiftUIView(proxy: arViewProxy)
                 .onRender { _, _, _ in
                     guard let sceneViewProxy else { return }
-                    render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
+                    updateLastGoodDeviceOrientation()
+                    sceneViewProxy.draw(
+                        for: arViewProxy,
+                        cameraController: cameraController,
+                        orientation: lastGoodDeviceOrientation
+                    )
                 }
                 .onAppear {
                     arViewProxy.session?.run(configuration)
@@ -55,10 +63,23 @@ public struct ARViewBuilder: View {
             }
         }
     }
+    
+    func updateLastGoodDeviceOrientation() {
+        // Get the device orientation, but don't allow non-landscape/portrait values.
+        let deviceOrientation = UIDevice.current.orientation
+        if deviceOrientation.isValidInterfaceOrientation {
+            lastGoodDeviceOrientation = deviceOrientation
+        }
+    }
 }
 
-private extension ARViewBuilder {
-    func render(arViewProxy: ARSwiftUIViewProxy, sceneViewProxy: SceneViewProxy) {
+extension SceneViewProxy {
+    func draw(
+        for arViewProxy: ARSwiftUIViewProxy,
+        cameraController: TransformationMatrixCameraController,
+        orientation: UIDeviceOrientation
+    ) {
+        
         // Get transform from SCNView.pointOfView.
         guard let transform = arViewProxy.pointOfView?.transform else { return }
         guard let session = arViewProxy.session else { return }
@@ -77,31 +98,25 @@ private extension ARViewBuilder {
         )
         
         // Set the matrix on the camera controller.
-        //cameraController.transformationMatrix = .identity.adding(transformationMatrix)
+        cameraController.transformationMatrix = .identity.adding(transformationMatrix)
         
         // Set FOV on camera.
         if let camera = session.currentFrame?.camera {
             let intrinsics = camera.intrinsics
             let imageResolution = camera.imageResolution
             
-            // Get the device orientation, but don't allow non-landscape/portrait values.
-            let deviceOrientation = UIDevice.current.orientation
-            if deviceOrientation.isValidInterfaceOrientation {
-                lastGoodDeviceOrientation = deviceOrientation
-            }
-            
-            sceneViewProxy.setFieldOfViewFromLensIntrinsics(
+            setFieldOfViewFromLensIntrinsics(
                 xFocalLength: intrinsics[0][0],
                 yFocalLength: intrinsics[1][1],
                 xPrincipal: intrinsics[2][0],
                 yPrincipal: intrinsics[2][1],
                 xImageSize: Float(imageResolution.width),
                 yImageSize: Float(imageResolution.height),
-                deviceOrientation: lastGoodDeviceOrientation
+                deviceOrientation: orientation
             )
         }
         
         // Render the Scene with the new transformation.
-        sceneViewProxy.draw()
+        draw()
     }
 }
