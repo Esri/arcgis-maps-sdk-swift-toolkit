@@ -10,7 +10,7 @@ import ARKit
 ***REMOVED***
 ***REMOVED***
 
-public struct ARViewBuilder: View {
+public struct ARFlyoverView: View {
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
 ***REMOVED***
 ***REMOVED******REMOVED***/ The last portrait or landscape orientation value.
@@ -21,6 +21,9 @@ public struct ARViewBuilder: View {
 ***REMOVED***private let sceneViewBuilder: () -> SceneView
 ***REMOVED***
 ***REMOVED***public init(
+***REMOVED******REMOVED***initialCamera: Camera,
+***REMOVED******REMOVED***translationFactor: Double,
+***REMOVED******REMOVED***clippingDistance: Double?,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping () -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
@@ -35,7 +38,12 @@ public struct ARViewBuilder: View {
 ***REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onRender { _, _, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateLastGoodDeviceOrientation()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.draw(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: arViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
@@ -56,9 +64,22 @@ public struct ARViewBuilder: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***func updateLastGoodDeviceOrientation() {
+***REMOVED******REMOVED******REMOVED*** Get the device orientation, but don't allow non-landscape/portrait values.
+***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
+***REMOVED******REMOVED***if deviceOrientation.isValidInterfaceOrientation {
+***REMOVED******REMOVED******REMOVED***lastGoodDeviceOrientation = deviceOrientation
+***REMOVED***
+***REMOVED***
+***REMOVED***
 
-private extension ARViewBuilder {
-***REMOVED***func render(arViewProxy: ARSwiftUIViewProxy, sceneViewProxy: SceneViewProxy) {
+extension SceneViewProxy {
+***REMOVED***func draw(
+***REMOVED******REMOVED***for arViewProxy: ARSwiftUIViewProxy,
+***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
+***REMOVED******REMOVED***orientation: UIDeviceOrientation
+***REMOVED***) {
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Get transform from SCNView.pointOfView.
 ***REMOVED******REMOVED***guard let transform = arViewProxy.pointOfView?.transform else { return ***REMOVED***
 ***REMOVED******REMOVED***guard let session = arViewProxy.session else { return ***REMOVED***
@@ -77,31 +98,25 @@ private extension ARViewBuilder {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the matrix on the camera controller.
-***REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = .identity.adding(transformationMatrix)
+***REMOVED******REMOVED***cameraController.transformationMatrix = .identity.adding(transformationMatrix)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set FOV on camera.
 ***REMOVED******REMOVED***if let camera = session.currentFrame?.camera {
 ***REMOVED******REMOVED******REMOVED***let intrinsics = camera.intrinsics
 ***REMOVED******REMOVED******REMOVED***let imageResolution = camera.imageResolution
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Get the device orientation, but don't allow non-landscape/portrait values.
-***REMOVED******REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
-***REMOVED******REMOVED******REMOVED***if deviceOrientation.isValidInterfaceOrientation {
-***REMOVED******REMOVED******REMOVED******REMOVED***lastGoodDeviceOrientation = deviceOrientation
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***sceneViewProxy.setFieldOfViewFromLensIntrinsics(
+***REMOVED******REMOVED******REMOVED***setFieldOfViewFromLensIntrinsics(
 ***REMOVED******REMOVED******REMOVED******REMOVED***xFocalLength: intrinsics[0][0],
 ***REMOVED******REMOVED******REMOVED******REMOVED***yFocalLength: intrinsics[1][1],
 ***REMOVED******REMOVED******REMOVED******REMOVED***xPrincipal: intrinsics[2][0],
 ***REMOVED******REMOVED******REMOVED******REMOVED***yPrincipal: intrinsics[2][1],
 ***REMOVED******REMOVED******REMOVED******REMOVED***xImageSize: Float(imageResolution.width),
 ***REMOVED******REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
-***REMOVED******REMOVED******REMOVED******REMOVED***deviceOrientation: lastGoodDeviceOrientation
+***REMOVED******REMOVED******REMOVED******REMOVED***deviceOrientation: orientation
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.
-***REMOVED******REMOVED***sceneViewProxy.draw()
+***REMOVED******REMOVED***draw()
 ***REMOVED***
 ***REMOVED***
