@@ -58,33 +58,34 @@ extension ARSwiftUIView: UIViewRepresentable {
         proxy?.arView = arView
         return arView
     }
-    
+
     func updateUIView(_ uiView: ARSCNView, context: Context) {
+        context.coordinator.onRenderAction = onRenderAction
+        context.coordinator.onCameraTrackingStateChangeAction = onCameraTrackingStateChangeAction
+        context.coordinator.onGeoTrackingStatusChangeAction = onGeoTrackingStatusChangeAction
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(arSwiftUIView: self)
+        Coordinator()
     }
 }
 
 extension ARSwiftUIView {
     class Coordinator: NSObject, ARSCNViewDelegate {
-        private let view: ARSwiftUIView
-        
-        init(arSwiftUIView: ARSwiftUIView) {
-            self.view = arSwiftUIView
-        }
+        var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
+        var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
+        var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
         
         func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
-            view.onRenderAction?(renderer, scene, time)
+            onRenderAction?(renderer, scene, time)
         }
         
         func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-            view.onCameraTrackingStateChangeAction?(session, camera)
+            onCameraTrackingStateChangeAction?(session, camera)
         }
         
         func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
-            view.onGeoTrackingStatusChangeAction?(session, geoTrackingStatus)
+            onGeoTrackingStatusChangeAction?(session, geoTrackingStatus)
         }
     }
 }
@@ -152,6 +153,29 @@ public struct ARGeoView3: View {
                 .viewDrawingMode(.manual)
                 .atmosphereEffect(.off)
             }
+        }
+//        SceneViewReader { sceneViewProxy in
+//            ARSwiftUIView(proxy: arViewProxy)
+//                .onRender { _, _, _ in
+//                    render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
+//                }
+//                .onAppear {
+//                    arViewProxy.session?.run(configuration)
+//                }
+//                .onDisappear {
+//                    arViewProxy.session?.pause()
+//                }
+//                .overlay {
+//                    SceneView(
+//                        scene: scene,
+//                        cameraController: cameraController
+//                    )
+//                    .attributionBarHidden(true)
+//                    .spaceEffect(.transparent)
+//                    .atmosphereEffect(.off)
+//                    .viewDrawingMode(.manual)
+//                }
+//          }
         }
     }
 }
