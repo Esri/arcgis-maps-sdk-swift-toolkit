@@ -17,12 +17,15 @@ import ArcGIS
 /// A view shown at the bottom of each text input element in a form.
 struct TextInputFooter: View {
     /// An error that is present when a length constraint is not met.
-    @State private var validationError: LengthError?
+    @State private var validationError: TextValidationError?
     
     /// A Boolean value indicating whether the text input field has previously satisfied the minimum
     /// length at any point in time.
     @State private var hasPreviouslySatisfiedMinimum: Bool
     
+    /// A Boolean value indicating whether the text input field has been edited.
+    @State private var hasBeenEdited = false
+
     /// The current text in the text input field.
     private let text: String
     
@@ -47,10 +50,19 @@ struct TextInputFooter: View {
     /// The minimum allowable length of text in the text input field.
     private let minLength: Int
     
+    /// The maximum allowable value in the text input field.
+    private let maxValue: Double = 10
+    
+    /// The minimum allowable length in the text input field.
+    private let minValue: Double = 1
+
     /// The range domain for the text field input. This is used to
     /// generate messages if the numeric value is out-of-range.
-    private let rangeDomain: RangeDomain? = nil
+    private let rangeDomain: RangeDomain?
     
+    private var isNumeric: Bool
+    private var isDecimal: Bool
+
     /// Creates a footer shown at the bottom of each text input element in a form.
     /// - Parameters:
     ///   - currentLength: The current length of the text in the text input field.
@@ -63,7 +75,9 @@ struct TextInputFooter: View {
         isFocused: Bool,
         element: FieldFormElement,
         input: FormInput,
-        rangeDomain: RangeDomain? = nil
+        rangeDomain: RangeDomain? = nil,
+        isNumeric: Bool = false,
+        isDecimal: Bool = false
     ) {
         self.text = text
         self.currentLength = text.count
@@ -72,7 +86,11 @@ struct TextInputFooter: View {
         self.description = element.description
         //TODO: add `required` property to API
         self.isRequired = false//element.required
+        self.rangeDomain = rangeDomain
+        self.isNumeric = isNumeric
+        self.isDecimal = isDecimal
         
+        print("isNumeric: \(isNumeric)")
         switch input {
         case let input as TextBoxFormInput:
             self.maxLength = input.maxLength
@@ -94,7 +112,8 @@ struct TextInputFooter: View {
                     .accessibilityIdentifier("\(element.label) Footer")
             }
             Spacer()
-            if isFocused, description.isEmpty || validationError != nil {
+            if isFocused, description.isEmpty || validationError != nil,
+                isNumeric == false {
                 Text(currentLength, format: .number)
                     .accessibilityIdentifier("\(element.label) Character Indicator")
             }
@@ -102,16 +121,17 @@ struct TextInputFooter: View {
         .font(.footnote)
         .foregroundColor(validationError == nil ? .secondary : .red)
         .onChange(of: currentLength) { newLength in
-            if !hasPreviouslySatisfiedMinimum {
-                if newLength >= minLength {
-                    hasPreviouslySatisfiedMinimum = true
-                }
-            } else {
+//            if !hasPreviouslySatisfiedMinimum {
+//                if newLength >= minLength {
+//                    hasPreviouslySatisfiedMinimum = true
+//                }
+//            } else {
+            hasBeenEdited = true
                 validate(length: newLength, focused: isFocused)
-            }
+//            }
         }
         .onChange(of: isFocused) { newIsFocused in
-            if hasPreviouslySatisfiedMinimum || !newIsFocused {
+            if hasBeenEdited || !newIsFocused {
                 validate(length: currentLength, focused: newIsFocused)
             }
         }
@@ -129,8 +149,8 @@ extension TextInputFooter {
             return nil
         case (.none, false, _):
             return Text(description)
-        case (.some(let lengthError), _, _):
-            switch (lengthError, scheme) {
+        case (.some(let validationError), _, _):
+            switch (validationError, scheme) {
             case (.emptyWhenRequired, .max):
                 return requiredText
             default:
@@ -153,13 +173,18 @@ extension TextInputFooter {
     
     /// The length validation text, dependent on the length validation scheme.
     var validationText: Text {
-        switch scheme {
-        case .max:
-            return maximumText
-        case .minAndMax:
-            return minAndMaxText
-        case .exact:
-            return exactText
+        if isNumeric {
+            print("range = \(rangeDomain)")
+            return rangeDomain == nil ? Text("") : minAndMaxValue
+        } else {
+            switch scheme {
+            case .max:
+                return maximumText
+            case .minAndMax:
+                return minAndMaxText
+            case .exact:
+                return exactText
+            }
         }
     }
     
@@ -167,7 +192,9 @@ extension TextInputFooter {
     /// - Parameter length: The length of text to use for validation.
     /// - Parameter focused: The focus state to use for validation.
     func validate(length: Int, focused: Bool) {
-        if length == .zero && isRequired && !focused {
+        if isNumeric {
+            validationError = .outOfRange
+        } else if length == .zero && isRequired && !focused {
             validationError = .emptyWhenRequired
         } else if length < minLength || length > maxLength {
             validationError = .minOrMaxUnmet
@@ -212,6 +239,15 @@ extension TextInputFooter {
             "Required",
             bundle: .toolkitModule,
             comment: "Text indicating a field is required"
+        )
+    }
+    
+    /// Text indicating a field's number value is not in the correct range of acceptable values.
+    var minAndMaxValue: Text {
+        Text(
+            "Enter value from \(minValue) to \(maxValue)",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field's number value is not in the correct range of acceptable values."
         )
     }
 }
