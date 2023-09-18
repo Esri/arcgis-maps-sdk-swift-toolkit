@@ -11,21 +11,19 @@ import SwiftUI
 import ArcGIS
 
 public struct ARViewBuilder: View {
-    private let scene: ArcGIS.Scene
     private let configuration: ARWorldTrackingConfiguration
-    private let cameraController: TransformationMatrixCameraController
     
     /// The last portrait or landscape orientation value.
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     @State private var arViewProxy = ARSwiftUIViewProxy()
     @State private var sceneViewProxy: SceneViewProxy?
     
+    private let sceneViewBuilder: () -> SceneView
+    
     public init(
-        scene: ArcGIS.Scene,
-        cameraController: TransformationMatrixCameraController
+        @ViewBuilder sceneView: @escaping () -> SceneView
     ) {
-        self.cameraController = cameraController
-        self.scene = scene
+        self.sceneViewBuilder = sceneView
         
         configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
@@ -34,29 +32,26 @@ public struct ARViewBuilder: View {
     
     public var body: some View {
         ZStack {
-            SceneViewReader { readerSceneViewProxy in
-                ARSwiftUIView(proxy: arViewProxy)
-                    .onRender { _, _, _ in
-                        guard let sceneViewProxy else { return }
-                        render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
-                    }
-                    .onAppear {
-                        arViewProxy.session?.run(configuration)
-                    }
-                    .onDisappear {
-                        arViewProxy.session?.pause()
-                    }
-                SceneView(
-                    scene: scene,
-                    cameraController: cameraController
-                )
-                .attributionBarHidden(true)
-                .spaceEffect(.transparent)
-                .viewDrawingMode(.manual)
-                .atmosphereEffect(.off)
-                .onAppear {
-                    self.sceneViewProxy = readerSceneViewProxy
+            ARSwiftUIView(proxy: arViewProxy)
+                .onRender { _, _, _ in
+                    guard let sceneViewProxy else { return }
+                    render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
                 }
+                .onAppear {
+                    arViewProxy.session?.run(configuration)
+                }
+                .onDisappear {
+                    arViewProxy.session?.pause()
+                }
+            SceneViewReader { proxy in
+                sceneViewBuilder()
+                    .attributionBarHidden(true)
+                    .spaceEffect(.transparent)
+                    .viewDrawingMode(.manual)
+                    .atmosphereEffect(.off)
+                    .onAppear {
+                        self.sceneViewProxy = proxy
+                    }
             }
         }
     }
@@ -82,7 +77,7 @@ private extension ARViewBuilder {
         )
         
         // Set the matrix on the camera controller.
-        cameraController.transformationMatrix = .identity.adding(transformationMatrix)
+        //cameraController.transformationMatrix = .identity.adding(transformationMatrix)
         
         // Set FOV on camera.
         if let camera = session.currentFrame?.camera {
