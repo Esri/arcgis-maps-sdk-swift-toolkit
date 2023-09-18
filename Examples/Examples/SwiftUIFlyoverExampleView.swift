@@ -48,7 +48,13 @@ struct SwiftUIFlyoverExampleView: View {
         return controller
     }()
 
+//    var body: some View {
+//        ARGeoView3(scene: scene, cameraController: cameraController)
+//    }
+    
     var body: some View {
-        ARGeoView3(scene: scene, cameraController: cameraController)
+        ARViewBuilder {
+            SceneView(scene: scene, cameraController: cameraController)
+        }
     }
 }

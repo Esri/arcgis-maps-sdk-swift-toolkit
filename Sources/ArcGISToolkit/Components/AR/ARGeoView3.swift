@@ -34,18 +34,18 @@ public struct ARGeoView3: View {
     
     public var body: some View {
         ZStack {
-            SceneViewReader { readerSceneViewProxy in
-                ARSwiftUIView(proxy: arViewProxy)
-                    .onRender { _, _, _ in
-                        guard let sceneViewProxy else { return }
-                        render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
-                    }
-                    .onAppear {
-                        arViewProxy.session?.run(configuration)
-                    }
-                    .onDisappear {
-                        arViewProxy.session?.pause()
-                    }
+            ARSwiftUIView(proxy: arViewProxy)
+                .onRender { _, _, _ in
+                    guard let sceneViewProxy else { return }
+                    render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
+                }
+                .onAppear {
+                    arViewProxy.session?.run(configuration)
+                }
+                .onDisappear {
+                    arViewProxy.session?.pause()
+                }
+            SceneViewReader { proxy in
                 SceneView(
                     scene: scene,
                     cameraController: cameraController
@@ -55,7 +55,7 @@ public struct ARGeoView3: View {
                 .viewDrawingMode(.manual)
                 .atmosphereEffect(.off)
                 .onAppear {
-                    self.sceneViewProxy = readerSceneViewProxy
+                    self.sceneViewProxy = proxy
                 }
             }
         }
