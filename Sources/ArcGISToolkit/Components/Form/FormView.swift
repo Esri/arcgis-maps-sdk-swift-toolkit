@@ -39,7 +39,11 @@ public struct FormView: View {
                     .padding([.bottom], elementPadding)
                     .background(
                         GeometryReader { geometryProxy in
-                            Color.clear.preference(key: ScrollPreferenceKey.self, value: geometryProxy.frame(in: .named(scrollViewCoordinateSpace)).origin)
+                            Color.clear.preference(
+                                key: ScrollPreferenceKey.self,
+                                value: geometryProxy
+                                    .frame(in: .named(scrollViewCoordinateSpace)).origin
+                            )
                         }
                     )
                     .onPreferenceChange(ScrollPreferenceKey.self) { position in
