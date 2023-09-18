@@ -52,15 +52,22 @@ struct ARSwiftUIView {
 }
 
 extension ARSwiftUIView: UIViewRepresentable {
-    func makeUIView(context: Context) -> ARSCNView {
-        let arView = ARSCNView()
-        arView.delegate = context.coordinator
-        proxy?.arView = arView
-        return arView
+    func makeUIView(context: Context) -> UIButton {
+        UIButton()
+    }
+
+    func updateUIView(_ uiView: UIButton, context: Context) {
     }
     
-    func updateUIView(_ uiView: ARSCNView, context: Context) {
-    }
+//    func makeUIView(context: Context) -> ARSCNView {
+//        let arView = ARSCNView()
+//        arView.delegate = context.coordinator
+//        proxy?.arView = arView
+//        return arView
+//    }
+//
+//    func updateUIView(_ uiView: ARSCNView, context: Context) {
+//    }
     
     func makeCoordinator() -> Coordinator {
         Coordinator(arSwiftUIView: self)
@@ -131,27 +138,27 @@ public struct ARGeoView3: View {
     }
     
     public var body: some View {
-        ZStack {
-            SceneViewReader { sceneViewProxy in
-                ARSwiftUIView(proxy: arViewProxy)
-                    .onRender { _, _, _ in
-                        render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
-                    }
-                    .onAppear {
-                        arViewProxy.session?.run(configuration)
-                    }
-                    .onDisappear {
-                        arViewProxy.session?.pause()
-                    }
-                SceneView(
-                    scene: scene,
-                    cameraController: cameraController
-                )
-                .attributionBarHidden(true)
-                .spaceEffect(.transparent)
-                .viewDrawingMode(.manual)
-                .atmosphereEffect(.off)
-            }
+        SceneViewReader { sceneViewProxy in
+            ARSwiftUIView(proxy: arViewProxy)
+            //                    .onRender { _, _, _ in
+            //                        render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
+            //                    }
+            //                    .onAppear {
+            //                        arViewProxy.session?.run(configuration)
+            //                    }
+            //                    .onDisappear {
+            //                        arViewProxy.session?.pause()
+            //                    }
+                .overlay {
+                    SceneView(
+                        scene: scene,
+                        cameraController: cameraController
+                    )
+                    .attributionBarHidden(true)
+                    .spaceEffect(.transparent)
+                    .atmosphereEffect(.off)
+                    .viewDrawingMode(.manual)
+                }
         }
     }
 }
