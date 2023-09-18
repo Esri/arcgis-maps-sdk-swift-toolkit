@@ -19,6 +19,8 @@ import SwiftUI
 public struct FormView: View {
     @Environment(\.formElementPadding) var elementPadding
     
+    @State private var formScroll: CGFloat = .zero
+    
     /// <#Description#>
     private var featureForm: FeatureForm?
     
@@ -41,7 +43,7 @@ public struct FormView: View {
                         }
                     )
                     .onPreferenceChange(ScrollPreferenceKey.self) { position in
-                       print("scroll changed", position)
+                        formScroll = position.y
                     }
                 ForEach(featureForm?.elements ?? [], id: \.label) { element in
                     makeElement(element)
@@ -49,6 +51,7 @@ public struct FormView: View {
             }
         }
         .coordinateSpace(name: scrollViewCoordinateSpace)
+        .environment(\.formScroll, formScroll)
     }
 }
 
