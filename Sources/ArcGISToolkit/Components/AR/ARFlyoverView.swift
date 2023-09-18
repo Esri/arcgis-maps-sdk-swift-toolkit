@@ -65,6 +65,7 @@ public struct ARFlyoverView: View {
                 }
             SceneViewReader { proxy in
                 sceneViewBuilder()
+                    .cameraController(cameraController)
                     .attributionBarHidden(true)
                     .spaceEffect(.transparent)
                     .viewDrawingMode(.manual)
