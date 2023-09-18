@@ -60,11 +60,17 @@ struct DateTimeEntry: View {
         }
         .padding([.bottom], elementPadding)
         .onAppear {
-            if let date = featureForm?.feature.attributes[element.fieldName] as? Date {
-                self.date = date
+            if element.value.isEmpty {
+                date = nil
+            } else {
+                date = try? Date(element.value, strategy: .arcGISDateParseStrategy)
             }
         }
         .onChange(of: date) { newDate in
+            guard let currentDate = try? Date(element.value, strategy: .arcGISDateParseStrategy),
+                  newDate != currentDate else {
+                return
+            }
             //TODO: add `required` property to API
             requiredValueMissing = /*element.required && */newDate == nil
             featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
@@ -88,6 +94,7 @@ struct DateTimeEntry: View {
     @ViewBuilder var dateDisplay: some View {
         HStack {
             Text(formattedDate ?? .noValue)
+                .accessibilityIdentifier("\(element.label) Value")
                 .foregroundColor(displayColor)
             
             Spacer()
@@ -98,8 +105,10 @@ struct DateTimeEntry: View {
                 if date == nil {
                     Image(systemName: "calendar")
                         .foregroundColor(.secondary)
+                        .accessibilityIdentifier("\(element.label) Calendar Image")
                 } else {
                     ClearButton { date = nil }
+                        .accessibilityIdentifier("\(element.label) Clear Button")
                 }
             }
         }
@@ -131,6 +140,7 @@ struct DateTimeEntry: View {
             in: dateRange,
             displayedComponents: input.includeTime ? [.date, .hourAndMinute] : [.date]
         ) { }
+            .accessibilityIdentifier("\(element.label) Date Picker")
     }
     
     /// The range of dates available for selection, if applicable.
@@ -168,6 +178,7 @@ struct DateTimeEntry: View {
         }
         .font(.footnote)
         .foregroundColor(requiredValueMissing ? .red : .secondary)
+        .accessibilityIdentifier("\(element.label) Footer")
     }
     
     /// The human-readable date and time selection.
@@ -182,13 +193,30 @@ struct DateTimeEntry: View {
     /// The button to set the date to the present time.
     var todayOrNowButton: some View {
         Button {
-            date = .now
+            let now = Date.now
+            if dateRange.contains(now) {
+                date = now
+            } else if now > dateRange.upperBound {
+                date = dateRange.upperBound
+            } else {
+                date = dateRange.lowerBound
+            }
         } label: {
             input.includeTime ? Text.now : .today
         }
+        .accessibilityIdentifier("\(element.label) \(input.includeTime ? "Now" : "Today") Button")
     }
 }
 
+private extension ParseStrategy where Self == Date.ParseStrategy {
+    /// A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
+    static var arcGISDateParseStrategy: Self {
+        .fixed(
+            format: "\(year: .defaultDigits)-\(month: .defaultDigits)-\(day: .defaultDigits)T\(hour: .defaultDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .defaultDigits):\(second: .defaultDigits)",
+            timeZone: .current
+        )
+    }
+}
 
 private extension String {
     /// A string indicating that no date or time has been set for a date/time field.

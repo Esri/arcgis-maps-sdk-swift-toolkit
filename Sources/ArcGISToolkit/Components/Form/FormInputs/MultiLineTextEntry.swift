@@ -54,8 +54,6 @@ struct MultiLineTextEntry: View {
         self.input = input
     }
     
-    /// - Bug: Focus detection works as of Xcode 14.3.1 but is broken as of Xcode 15 Beta 2.
-    /// [More info](https://openradar.appspot.com/FB12432084)
     var body: some View {
         FormElementHeader(element: element)
             .padding([.top], elementPadding)
@@ -66,9 +64,7 @@ struct MultiLineTextEntry: View {
             } else {
                 TextEditor(text: $text)
             }
-            if isFocused {
-                DoneButton { isFocused = false }
-            } else if !text.isEmpty {
+            if isFocused && !text.isEmpty {
                 ClearButton { text.removeAll() }
             }
         }
@@ -97,11 +93,10 @@ struct MultiLineTextEntry: View {
         )
         .padding([.bottom], elementPadding)
         .onAppear {
-            let text = featureForm?.feature.attributes[element.fieldName] as? String
-            if let text, !text.isEmpty {
+            let text = element.value
+            if !text.isEmpty {
                 isPlaceholder = false
                 self.text = text
-                
             } else {
                 isPlaceholder = true
                 self.text = element.hint
@@ -109,6 +104,9 @@ struct MultiLineTextEntry: View {
         }
         .onChange(of: text) { newValue in
             if !isPlaceholder {
+                guard newValue != element.value else {
+                    return
+                }
                 featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
             }
         }

@@ -16,7 +16,11 @@ import SwiftUI
 /// A user presentable alert.
 struct UtilityNetworkTraceUserAlert {
     /// Title of the alert.
-    var title: String = String(localized: "Error", bundle: .toolkitModule)
+    var title: String = String(
+        localized: "Error",
+        bundle: .toolkitModule,
+        comment: "A label in reference to an error that occurred during a utility network trace."
+    )
     
     /// Description of the alert.
     var description: String
@@ -30,7 +34,11 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "Please set at least 1 starting location.",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: """
+                         A label indicating that at least one starting location is required for the
+                         chosen utility network trace configuration.
+                         """
             )
         )
     }
@@ -39,7 +47,11 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "Please set at least 2 starting locations.",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: """
+                         A label indicating that at least two starting locations are required for the
+                         chosen utility network trace configuration.
+                         """
             )
         )
     }
@@ -48,11 +60,19 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             title: String(
                 localized: "Failed to set starting point",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: """
+                         A message indicating that the chosen utility network element wasn't able
+                         to be used as a trace starting point.
+                         """
             ),
             description: String(
                 localized: "Duplicate starting points cannot be added.",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: """
+                         A message indicating that the user attempted to use a single utility
+                         network element for more than one trace starting point.
+                         """
             )
         )
     }
@@ -61,7 +81,8 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "No trace types found.",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: "A label indicating that no utility named trace configurations are available."
             )
         )
     }
@@ -70,7 +91,8 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "No utility networks found.",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: "A label indicating that no utility networks are available."
             )
         )
     }
@@ -79,7 +101,11 @@ extension UtilityNetworkTraceUserAlert {
         .init(
             description: String(
                 localized: "Element could not be identified.",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: """
+                         A label indicating an element could not be identified as a starting point
+                         for a utility network trace.
+                         """
             )
         )
     }
