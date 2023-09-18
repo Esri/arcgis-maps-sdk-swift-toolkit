@@ -45,6 +45,9 @@ struct SingleLineTextInput: View {
         self.featureForm = featureForm
         self.element = element
         self.input = input
+        
+        print("feature isloaded: \(featureForm?.feature.loadStatus); domain = \(element.domain)")
+        print("feature domain: \(featureForm?.feature.table?.field(named: element.fieldName)?.domain)")
     }
     
     var body: some View {
@@ -66,7 +69,9 @@ struct SingleLineTextInput: View {
             text: text,
             isFocused: isFocused,
             element: element,
-            input: input
+            input: input,
+            isNumeric: isNumericInput,
+            isDecimal: isDecimalInput
         )
         .padding([.bottom], elementPadding)
         .onAppear {
@@ -78,7 +83,20 @@ struct SingleLineTextInput: View {
             }
         }
         .onChange(of: text) { newValue in
-            featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+            // Note: this will be replaced by `element.updateValue()`, which will
+            // handle all the following logic internally.
+            if isDecimalInput {
+                // Note: this should handle other decimal types as well, if they exist (float?)
+                let value = Double(newValue)
+                featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
+            } else if isNumericInput {
+                // Note: this should handle more than just Int32
+                let value = Int32(newValue)
+                featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
+            } else {
+                // Text field
+                featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+            }
         }
     }
 }
@@ -97,7 +115,7 @@ private extension SingleLineTextInput {
         }
         return false
     }
-
+    
     var keyboardType: UIKeyboardType {
         isNumericInput ? (isDecimalInput ? .decimalPad : .numberPad) : .default
     }
@@ -116,7 +134,7 @@ private extension FieldType {
 extension SingleLineTextInput {
     var rangeDomain: RangeDomain? {
         if let field = featureForm?.feature.table?.field(named: element.fieldName) {
-           return field.domain as? RangeDomain
+            return field.domain as? RangeDomain
         } else {
             return nil
         }

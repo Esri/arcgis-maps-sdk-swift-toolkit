@@ -11,10 +11,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// An error that can be encountered while performing length validation.
-enum LengthError {
+/// An error that can be encountered while performing text validation.
+enum TextValidationError {
     /// The text field was left empty but a value is required.
     case emptyWhenRequired
     /// The text field has too few or too many characters.
     case minOrMaxUnmet
+    /// The text number value is out of range.
+    case outOfRange
 }
