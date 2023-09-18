@@ -31,6 +31,9 @@ public class FormViewModel: ObservableObject {
     /// The name of the current focused field, if one exists.
     @Published var focusedFieldName: String?
     
+    /// The form's vertical scroll offset.
+    @Published var formScroll: CGFloat?
+    
     /// Initializes a form view model.
     public init() {}
     
