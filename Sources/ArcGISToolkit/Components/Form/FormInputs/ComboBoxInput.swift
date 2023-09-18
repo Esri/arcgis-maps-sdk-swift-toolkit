@@ -180,7 +180,7 @@ struct ComboBoxInput: View {
 ***REMOVED***
 
 extension ComboBoxInput {
-***REMOVED******REMOVED*** The placeholder value to display.
+***REMOVED******REMOVED***/ The placeholder value to display.
 ***REMOVED***var placeholderValue: String {
 ***REMOVED******REMOVED***guard !element.isRequired else {
 ***REMOVED******REMOVED******REMOVED***return .enterValue
