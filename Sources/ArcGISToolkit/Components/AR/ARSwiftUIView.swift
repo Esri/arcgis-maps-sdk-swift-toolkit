@@ -58,33 +58,34 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED******REMOVED***proxy?.arView = arView
 ***REMOVED******REMOVED***return arView
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED***func updateUIView(_ uiView: ARSCNView, context: Context) {
+***REMOVED******REMOVED***context.coordinator.onRenderAction = onRenderAction
+***REMOVED******REMOVED***context.coordinator.onCameraTrackingStateChangeAction = onCameraTrackingStateChangeAction
+***REMOVED******REMOVED***context.coordinator.onGeoTrackingStatusChangeAction = onGeoTrackingStatusChangeAction
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCoordinator() -> Coordinator {
-***REMOVED******REMOVED***Coordinator(arSwiftUIView: self)
+***REMOVED******REMOVED***Coordinator()
 ***REMOVED***
 ***REMOVED***
 
 extension ARSwiftUIView {
 ***REMOVED***class Coordinator: NSObject, ARSCNViewDelegate {
-***REMOVED******REMOVED***private let view: ARSwiftUIView
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(arSwiftUIView: ARSwiftUIView) {
-***REMOVED******REMOVED******REMOVED***self.view = arSwiftUIView
-***REMOVED***
+***REMOVED******REMOVED***var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
+***REMOVED******REMOVED***var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
+***REMOVED******REMOVED***var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
-***REMOVED******REMOVED******REMOVED***view.onRenderAction?(renderer, scene, time)
+***REMOVED******REMOVED******REMOVED***onRenderAction?(renderer, scene, time)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-***REMOVED******REMOVED******REMOVED***view.onCameraTrackingStateChangeAction?(session, camera)
+***REMOVED******REMOVED******REMOVED***onCameraTrackingStateChangeAction?(session, camera)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
-***REMOVED******REMOVED******REMOVED***view.onGeoTrackingStatusChangeAction?(session, geoTrackingStatus)
+***REMOVED******REMOVED******REMOVED***onGeoTrackingStatusChangeAction?(session, geoTrackingStatus)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -152,6 +153,29 @@ public struct ARGeoView3: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onRender { _, _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***render(arViewProxy: arViewProxy, sceneViewProxy: sceneViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.pause()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SceneView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scene: scene,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED***  ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
