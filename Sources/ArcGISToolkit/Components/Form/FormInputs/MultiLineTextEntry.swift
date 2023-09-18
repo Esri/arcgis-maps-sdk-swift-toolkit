@@ -18,8 +18,6 @@ import ArcGIS
 struct MultiLineTextEntry: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    @Environment(\.formScroll) var formScroll
-    
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
@@ -112,8 +110,8 @@ struct MultiLineTextEntry: View {
                 featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
             }
         }
-        .onChange(of: formScroll) { _ in
-            isFocused = false
+        .onChange(of: model.formScroll) { _ in
+            if isFocused { isFocused = false }
         }
     }
 }

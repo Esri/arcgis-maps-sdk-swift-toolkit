@@ -18,8 +18,6 @@ import ArcGIS
 struct SingleLineTextEntry: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    @Environment(\.formScroll) var formScroll
-    
     /// <#Description#>
     private var featureForm: FeatureForm?
     
@@ -84,8 +82,8 @@ struct SingleLineTextEntry: View {
             }
             featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
         }
-        .onChange(of: formScroll) { _ in
-            isFocused = false
+        .onChange(of: model.formScroll) { _ in
+            if isFocused { isFocused = false }
         }
     }
 }
