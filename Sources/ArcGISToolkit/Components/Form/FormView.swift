@@ -39,7 +39,11 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeometryReader { geometryProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Color.clear.preference(key: ScrollPreferenceKey.self, value: geometryProxy.frame(in: .named(scrollViewCoordinateSpace)).origin)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Color.clear.preference(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***key: ScrollPreferenceKey.self,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: geometryProxy
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(in: .named(scrollViewCoordinateSpace)).origin
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onPreferenceChange(ScrollPreferenceKey.self) { position in
