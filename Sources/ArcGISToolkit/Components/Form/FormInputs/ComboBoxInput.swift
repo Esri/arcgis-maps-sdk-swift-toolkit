@@ -180,7 +180,7 @@ struct ComboBoxInput: View {
 }
 
 extension ComboBoxInput {
-    // The placeholder value to display.
+    /// The placeholder value to display.
     var placeholderValue: String {
         guard !element.isRequired else {
             return .enterValue
