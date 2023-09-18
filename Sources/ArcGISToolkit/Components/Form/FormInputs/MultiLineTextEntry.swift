@@ -18,6 +18,8 @@
 struct MultiLineTextEntry: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
+***REMOVED***@Environment(\.formScroll) var formScroll
+***REMOVED***
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
@@ -109,6 +111,9 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: formScroll) { _ in
+***REMOVED******REMOVED******REMOVED***isFocused = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
