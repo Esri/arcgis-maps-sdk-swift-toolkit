@@ -34,6 +34,9 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
+***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
+***REMOVED******REMOVED***/ be effectively viewed in augmented reality. Properties such as the camera controller,
+***REMOVED******REMOVED***/ and view drawing mode.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***initialCamera: Camera,
 ***REMOVED******REMOVED***translationFactor: Double,
