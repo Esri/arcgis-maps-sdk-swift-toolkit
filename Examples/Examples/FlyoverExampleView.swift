@@ -23,15 +23,17 @@ struct FlyoverExampleView: View {
         )
     )
     
+    private let initialCamera = Camera(
+        lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
+        distance: 1_000,
+        heading: 40,
+        pitch: 90,
+        roll: 0
+    )
+    
     var body: some View {
         FlyoverSceneView(
-            initialCamera: Camera(
-                lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
-                distance: 1_000,
-                heading: 40,
-                pitch: 90,
-                roll: 0
-            ),
+            initialCamera: initialCamera,
             translationFactor: 3_000,
             clippingDistance: 60_000
         ) { proxy in
