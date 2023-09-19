@@ -34,8 +34,15 @@ struct FlyoverExampleView: View {
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***translationFactor: 3_000,
 ***REMOVED******REMOVED******REMOVED***clippingDistance: 60_000
-***REMOVED******REMOVED***) {
+***REMOVED******REMOVED***) { proxy in
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("\(results.count) results")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

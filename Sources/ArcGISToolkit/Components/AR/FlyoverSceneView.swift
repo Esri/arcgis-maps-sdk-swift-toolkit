@@ -22,7 +22,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
 ***REMOVED***private let cameraController: TransformationMatrixCameraController
-***REMOVED***private let sceneViewBuilder: () -> SceneView
+***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
@@ -41,7 +41,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***initialCamera: Camera,
 ***REMOVED******REMOVED***translationFactor: Double,
 ***REMOVED******REMOVED***clippingDistance: Double?,
-***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping () -> SceneView
+***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
 ***REMOVED******REMOVED***
@@ -73,7 +73,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.pause()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder()
+***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(proxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
