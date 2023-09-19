@@ -171,7 +171,7 @@ struct ComboBoxInput: View {
                         isPresented = false
                     } label: {
                         Text.done
-                            .bold()
+                            .fontWeight(.semibold)
                     }
                 }
             }
