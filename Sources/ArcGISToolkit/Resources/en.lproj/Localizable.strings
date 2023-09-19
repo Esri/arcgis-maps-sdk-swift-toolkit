@@ -85,10 +85,10 @@ network element for more than one trace starting point. */
 for a utility network trace. */
 "Element could not be identified." = "Element could not be identified.";
 
-/* Text indicating a field's exact number of required characters. */
+/* Text indicating the user should enter a field's exact number of required characters. */
 "Enter %lld characters" = "Enter %lld characters";
 
-/* Text indicating a field's minimum and maximum number of allowed characters. */
+/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
 "Enter %lld to %lld characters" = "Enter %lld to %lld characters";
 
 /* A label for a combo box input that prompts the user to enter a value. */

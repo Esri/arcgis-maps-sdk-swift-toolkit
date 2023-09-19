@@ -173,7 +173,7 @@ extension TextInputFooter {
         Text(
             "Enter \(minLength) characters",
             bundle: .toolkitModule,
-            comment: "Text indicating a field's exact number of required characters."
+            comment: "Text indicating the user should enter a field's exact number of required characters."
         )
     }
     
@@ -186,12 +186,12 @@ extension TextInputFooter {
         )
     }
     
-    /// Text indicating a field's minimum and maximum number of allowed characters.
+    /// Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters.
     var minAndMaxText: Text {
         Text(
             "Enter \(minLength) to \(maxLength) characters",
             bundle: .toolkitModule,
-            comment: "Text indicating a field's minimum and maximum number of allowed characters."
+            comment: "Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters."
         )
     }
 }
