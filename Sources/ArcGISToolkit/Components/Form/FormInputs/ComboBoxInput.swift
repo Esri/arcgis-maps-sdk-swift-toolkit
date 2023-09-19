@@ -78,7 +78,7 @@ struct ComboBoxInput: View {
                     Image(systemName: "list.bullet")
                         .foregroundColor(.secondary)
                         .accessibilityIdentifier("\(element.label) Options Button")
-                } else {
+                } else if !element.isRequired {
                     ClearButton { selectedValue = nil }
                         .accessibilityIdentifier("\(element.label) Clear Button")
                 }
