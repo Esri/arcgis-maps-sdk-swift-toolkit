@@ -55,7 +55,7 @@ struct ComboBoxInput: View {
     /// Creates a view for a combo box input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
-    ///   - element: The field's parent element.
+    ///   - element: The input's parent element.
     ///   - input: The input configuration of the field.
     init(featureForm: FeatureForm?, element: FieldFormElement, input: ComboBoxFormInput) {
         self.featureForm = featureForm
