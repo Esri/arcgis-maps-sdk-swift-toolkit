@@ -36,7 +36,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The feature form containing the input.
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
-***REMOVED******REMOVED***/ The field's parent element.
+***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the field.
