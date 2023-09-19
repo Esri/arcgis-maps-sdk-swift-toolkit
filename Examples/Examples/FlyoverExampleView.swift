@@ -16,25 +16,15 @@
 ***REMOVED***Toolkit
 
 struct FlyoverExampleView: View {
-***REMOVED***private var scene: ArcGIS.Scene = {
-***REMOVED******REMOVED***let scene = Scene(
-***REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
-***REMOVED******REMOVED******REMOVED******REMOVED***id: PortalItem.ID("7558ee942b2547019f66885c44d4f0b1")!
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED***@State private var scene = Scene(
+***REMOVED******REMOVED***item: PortalItem(
+***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
+***REMOVED******REMOVED******REMOVED***id: PortalItem.ID("7558ee942b2547019f66885c44d4f0b1")!
 ***REMOVED******REMOVED***)
-
-***REMOVED******REMOVED***scene.initialViewpoint = Viewpoint(
-***REMOVED******REMOVED******REMOVED***latitude: 37.8651,
-***REMOVED******REMOVED******REMOVED***longitude: 119.5383,
-***REMOVED******REMOVED******REMOVED***scale: 10
-***REMOVED******REMOVED***)
-
-***REMOVED******REMOVED***return scene
-***REMOVED***()
+***REMOVED***)
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***ARFlyoverView(
+***REMOVED******REMOVED***FlyoverSceneView(
 ***REMOVED******REMOVED******REMOVED***initialCamera: Camera(
 ***REMOVED******REMOVED******REMOVED******REMOVED***lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
 ***REMOVED******REMOVED******REMOVED******REMOVED***distance: 1_000,

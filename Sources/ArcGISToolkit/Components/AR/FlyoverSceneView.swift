@@ -11,22 +11,28 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Foundation
 import ARKit
 ***REMOVED***
 ***REMOVED***
 
-public struct ARFlyoverView: View {
-***REMOVED***private let configuration: ARWorldTrackingConfiguration
-***REMOVED***
+***REMOVED***/ A scene view that provides an augmented reality fly over experience.
+public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/ The last portrait or landscape orientation value.
 ***REMOVED***@State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
-***REMOVED***@State private var cameraController: TransformationMatrixCameraController
-***REMOVED***
+***REMOVED***private let cameraController: TransformationMatrixCameraController
 ***REMOVED***private let sceneViewBuilder: () -> SceneView
+***REMOVED***private let configuration: ARWorldTrackingConfiguration
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a fly over scene view.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - initialCamera: The initial camera.
+***REMOVED******REMOVED***/   - translationFactor: The translation factor that defines how much the scene view translates
+***REMOVED******REMOVED***/   as the device moves.
+***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera.
+***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
+***REMOVED******REMOVED***/   augmented reality video feed.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***initialCamera: Camera,
 ***REMOVED******REMOVED***translationFactor: Double,
@@ -35,10 +41,9 @@ public struct ARFlyoverView: View {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+***REMOVED******REMOVED***cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
 ***REMOVED******REMOVED***cameraController.translationFactor = translationFactor
 ***REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
-***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
 ***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
@@ -77,6 +82,7 @@ public struct ARFlyoverView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Updates the last good device orientation.
 ***REMOVED***func updateLastGoodDeviceOrientation() {
 ***REMOVED******REMOVED******REMOVED*** Get the device orientation, but don't allow non-landscape/portrait values.
 ***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
@@ -87,6 +93,11 @@ public struct ARFlyoverView: View {
 ***REMOVED***
 
 extension SceneViewProxy {
+***REMOVED******REMOVED***/ Draws the scene view manually and sets the camera for a given augmented reality view.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - arViewProxy: The AR view proxy.
+***REMOVED******REMOVED***/   - cameraController: The current camera controller assigned to the scene view.
+***REMOVED******REMOVED***/   - orientation: The device orientation.
 ***REMOVED***func draw(
 ***REMOVED******REMOVED***for arViewProxy: ARSwiftUIViewProxy,
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
