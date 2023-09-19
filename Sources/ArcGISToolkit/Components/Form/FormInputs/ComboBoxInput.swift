@@ -36,7 +36,7 @@ struct ComboBoxInput: View {
     /// The feature form containing the input.
     private var featureForm: FeatureForm?
     
-    /// The field's parent element.
+    /// The input's parent element.
     private let element: FieldFormElement
     
     /// The input configuration of the field.
