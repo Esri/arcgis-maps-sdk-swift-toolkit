@@ -65,6 +65,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.videoFeedHidden()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
