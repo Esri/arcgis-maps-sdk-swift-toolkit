@@ -16,25 +16,15 @@ import ArcGIS
 import ArcGISToolkit
 
 struct FlyoverExampleView: View {
-    private var scene: ArcGIS.Scene = {
-        let scene = Scene(
-            item: PortalItem(
-                portal: .arcGISOnline(connection: .anonymous),
-                id: PortalItem.ID("7558ee942b2547019f66885c44d4f0b1")!
-            )
+    @State private var scene = Scene(
+        item: PortalItem(
+            portal: .arcGISOnline(connection: .anonymous),
+            id: PortalItem.ID("7558ee942b2547019f66885c44d4f0b1")!
         )
-
-        scene.initialViewpoint = Viewpoint(
-            latitude: 37.8651,
-            longitude: 119.5383,
-            scale: 10
-        )
-
-        return scene
-    }()
+    )
     
     var body: some View {
-        ARFlyoverView(
+        FlyoverSceneView(
             initialCamera: Camera(
                 lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
                 distance: 1_000,

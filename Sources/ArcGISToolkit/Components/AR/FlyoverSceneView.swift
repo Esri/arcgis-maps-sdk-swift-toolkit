@@ -11,22 +11,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
 import ARKit
 import SwiftUI
 import ArcGIS
 
-public struct ARFlyoverView: View {
-    private let configuration: ARWorldTrackingConfiguration
-    
+/// A scene view that provides an augmented reality fly over experience.
+public struct FlyoverSceneView: View {
     /// The last portrait or landscape orientation value.
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     @State private var arViewProxy = ARSwiftUIViewProxy()
     @State private var sceneViewProxy: SceneViewProxy?
-    @State private var cameraController: TransformationMatrixCameraController
-    
+    private let cameraController: TransformationMatrixCameraController
     private let sceneViewBuilder: () -> SceneView
+    private let configuration: ARWorldTrackingConfiguration
     
+    /// Creates a fly over scene view.
+    /// - Parameters:
+    ///   - initialCamera: The initial camera.
+    ///   - translationFactor: The translation factor that defines how much the scene view translates
+    ///   as the device moves.
+    ///   - clippingDistance: Determines the clipping distance in meters around the camera.
+    ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
+    ///   augmented reality video feed.
     public init(
         initialCamera: Camera,
         translationFactor: Double,
@@ -35,10 +41,9 @@ public struct ARFlyoverView: View {
     ) {
         self.sceneViewBuilder = sceneView
         
-        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+        cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
         cameraController.translationFactor = translationFactor
         cameraController.clippingDistance = clippingDistance
-        _cameraController = .init(initialValue: cameraController)
         
         configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
@@ -77,6 +82,7 @@ public struct ARFlyoverView: View {
         }
     }
     
+    /// Updates the last good device orientation.
     func updateLastGoodDeviceOrientation() {
         // Get the device orientation, but don't allow non-landscape/portrait values.
         let deviceOrientation = UIDevice.current.orientation
@@ -87,6 +93,11 @@ public struct ARFlyoverView: View {
 }
 
 extension SceneViewProxy {
+    /// Draws the scene view manually and sets the camera for a given augmented reality view.
+    /// - Parameters:
+    ///   - arViewProxy: The AR view proxy.
+    ///   - cameraController: The current camera controller assigned to the scene view.
+    ///   - orientation: The device orientation.
     func draw(
         for arViewProxy: ARSwiftUIViewProxy,
         cameraController: TransformationMatrixCameraController,
