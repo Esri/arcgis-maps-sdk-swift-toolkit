@@ -265,7 +265,7 @@ final class FormViewTests: XCTestCase {
         )
     }
     
-    // - MARK: Test case 2: Test case 2: DateTime picker input type
+    // - MARK: Test case 2: DateTime picker input type
     
     /// Test case 2.1: Unfocused and focused state, no value, date required
     func testCase_2_1() throws {
@@ -613,6 +613,166 @@ final class FormViewTests: XCTestCase {
         XCTAssertEqual(
             fieldValue.label,
             "No Value"
+        )
+    }
+    
+    // - MARK: Test case 3: Combo Box input type
+    
+    /// Test case 3.1: Pre-existing value, description, clear button, no value label
+    func testCase_3_1() {
+        let app = XCUIApplication()
+        let clearButton = app.buttons["Combo String Clear Button"]
+        let fieldTitle = app.staticTexts["Combo String"]
+        let fieldValue = app.staticTexts["Combo String Value"]
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let footer = app.staticTexts["Combo String Footer"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title isn't hittable."
+        )
+        
+        XCTAssertTrue(
+            fieldValue.isHittable,
+            "The field value isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "String 3"
+        )
+        
+        XCTAssertTrue(
+            clearButton.isHittable,
+            "The clear button isn't hittable."
+        )
+        
+        clearButton.tap()
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "No value"
+        )
+        
+        XCTAssertTrue(
+            footer.isHittable,
+            "The footer isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            footer.label,
+            "Combo Box of Field Type String"
+        )
+    }
+    
+    /// Test case 3.2: No pre-existing value, no value label, options button
+    func testCase_3_2() {
+        let app = XCUIApplication()
+        let fieldTitle = app.staticTexts["Combo Integer"]
+        let fieldValue = app.staticTexts["Combo Integer Value"]
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let optionsButton = app.images["Combo Integer Options Button"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title isn't hittable."
+        )
+        
+        XCTAssertTrue(
+            fieldValue.isHittable,
+            "The field value isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "No value"
+        )
+        
+        XCTAssertTrue(
+            optionsButton.isHittable,
+            "The options button isn't hittable."
+        )
+    }
+    
+    /// Test case 3.3: Pick a value
+    func testCase_3_3() {
+        let app = XCUIApplication()
+        let doneButton = app.buttons["Done"]
+        let fieldTitle = app.staticTexts["Combo String"]
+        let fieldValue = app.staticTexts["Combo String Value"]
+        let firstOptionButton = app.buttons["String 1"]
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title isn't hittable."
+        )
+        
+        XCTAssertTrue(
+            fieldValue.isHittable,
+            "The field value isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "String 3"
+        )
+        
+        fieldValue.tap()
+        
+        XCTAssertTrue(
+            firstOptionButton.isHittable,
+            "The first option (String 1) isn't hittable."
+        )
+        
+        firstOptionButton.tap()
+        
+        XCTAssertTrue(
+            doneButton.isHittable,
+            "The done button isn't hittable."
+        )
+        
+        doneButton.tap()
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "String 1"
         )
     }
 }

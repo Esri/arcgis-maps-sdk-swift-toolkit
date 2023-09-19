@@ -22,11 +22,11 @@ public struct FormView: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// <#Description#>
+    /// The form's configuration.
     private var featureForm: FeatureForm?
     
     /// Initializes a form view.
-    /// - Parameter featureForm: <#featureForm description#>
+    /// - Parameter featureForm: The form's configuration.
     public init(featureForm: FeatureForm?) {
         self.featureForm = featureForm
     }
@@ -68,12 +68,14 @@ extension FormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
         switch element.input {
+        case let `input` as ComboBoxFormInput:
+            ComboBoxInput(featureForm: featureForm, element: element, input: `input`)
         case let `input` as DateTimePickerFormInput:
-            DateTimeEntry(featureForm: featureForm, element: element, input: `input`)
+            DateTimeInput(featureForm: featureForm, element: element, input: `input`)
         case let `input` as TextAreaFormInput:
-            MultiLineTextEntry(featureForm: featureForm, element: element, input: `input`)
+            MultiLineTextInput(featureForm: featureForm, element: element, input: `input`)
         case let `input` as TextBoxFormInput:
-            SingleLineTextEntry(featureForm: featureForm, element: element, input: `input`)
+            SingleLineTextInput(featureForm: featureForm, element: element, input: `input`)
         default:
             EmptyView()
         }
