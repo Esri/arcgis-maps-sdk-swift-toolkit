@@ -1,294 +1,294 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
-"%lld selected" = "ä_%lld selected______________Ü";
+"%lld selected" = "%lld ausgewählt";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
-"A certificate is required to access content on %@." = "ä_A certificate is required to access content on %@__________________________Ü.";
+"A certificate is required to access content on %@." = "Für den Zugriff auf Inhalte in %@ ist ein Zertifikat erforderlich.";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "ä_Add new_______________Ü";
+"Add new" = "Neue hinzufügen";
 
 /* A section header for advanced options. */
-"Advanced Options" = "ä_Advanced Options_________________Ü";
+"Advanced Options" = "Erweiterte Optionen";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "ä_All sites___________________Ü";
+"All sites" = "Alle Sites";
 
 /* A message describing the outcome of clearing all utility network trace results. */
-"All the trace inputs and results will be lost." = "ä_All the trace inputs and results will be lost________________________Ü.";
+"All the trace inputs and results will be lost." = "Alle Verfolgungseingaben und -ergebnisse gehen verloren.";
 
 /* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "ä_Allow___________Ü";
+"Allow" = "Zulassen";
 
 /* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "ä_An error occurred loading the image: %@_____________________Ü.";
+"An error occurred loading the image: %@." = "Beim Laden des Bildes ist ein Fehler aufgetreten: %@.";
 
 /* A label in reference to attachments in a popup. */
-"Attachments" = "ä_Attachments____________Ü";
+"Attachments" = "Anlagen";
 
 /* A label in reference to the attributes of a geo element. */
-"Attributes" = "ä_Attributes_____________________Ü";
+"Attributes" = "Attribute";
 
 /* A label indicating authentication is required to proceed. */
-"Authentication Required" = "ä_Authentication Required________________________Ü";
+"Authentication Required" = "Authentifizierung erforderlich";
 
 /* A label in reference to bookmarks contained in a map or scene. */
-"Bookmarks" = "ä_Bookmarks___________________Ü";
+"Bookmarks" = "Lesezeichen";
 
 /* A label for a button to open the system file browser. */
-"Browse" = "ä_Browse_____________Ü";
+"Browse" = "Durchsuchen";
 
 /* A label for a button to cancel an operation. */
-"Cancel" = "ä_Cancel_____________Ü";
+"Cancel" = "Abbrechen";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "ä_Cancel starting point selection_________________Ü";
+"Cancel starting point selection" = "Startpunkt-Auswahl abbrechen";
 
 /* A label indicating that a certificate is required to proceed. */
-"Certificate Required" = "ä_Certificate Required_____________________Ü";
+"Certificate Required" = "Zertifikat erforderlich";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "ä_Certificate Trust Warning__________________________Ü";
+"Certificate Trust Warning" = "Warnung zur Vertrauenswürdigkeit des Zertifikats";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "ä_Clear all results__________________Ü";
+"Clear all results" = "Alle Ergebnisse löschen";
 
 /* A label in reference to the color used to display utility trace result graphics. */
-"Color" = "ä_Color___________Ü";
+"Color" = "Farbe";
 
 /* An compass description to be read by a screen reader describing the
 current heading. The first variable being a degree value and the
 second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
-"Compass, heading %lld degrees %@" = "ä_Compass, heading %lld degrees %@_________________Ü";
+"Compass, heading %lld degrees %@" = "Kompass, Kurs %lld Grad %@";
 
 /* A label for a button used to continue the authentication operation. */
-"Continue" = "ä_Continue_________________Ü";
+"Continue" = "Weiter";
 
 /* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "ä_Could not access the certificate file____________________Ü.";
+"Could not access the certificate file." = "Zugriff auf die Zertifikatsdatei nicht möglich.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "ä_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________Ü.";
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Warnung: Das von \"%@\" bereitgestellte Zertifikat wurde nicht von einer vertrauenswürdigen Stelle unterzeichnet.";
 
 /* A label for a button used to delete a utility network trace input component or result. */
-"Delete" = "ä_Delete_____________Ü";
+"Delete" = "Löschen";
 
 /* A button to close the bookmark selection menu. */
-"Done" = "ä_Done_________Ü";
+"Done" = "Fertig";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
-"Duplicate starting points cannot be added." = "ä_Duplicate starting points cannot be added______________________Ü.";
+"Duplicate starting points cannot be added." = "Doppelte Startpunkte können nicht hinzugefügt werden.";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
-"Element could not be identified." = "ä_Element could not be identified_________________Ü.";
+"Element could not be identified." = "Das Element konnte nicht identifiziert werden.";
 
 /* A label in reference to an error that occurred during a utility network trace. */
-"Error" = "ä_Error___________Ü";
+"Error" = "Fehler";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
-"Error importing certificate" = "ä_Error importing certificate____________________________Ü";
+"Error importing certificate" = "Fehler beim Importieren des Zertifikats";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
-"Error loading basemap." = "ä_Error loading basemap_______________________Ü.";
+"Error loading basemap." = "Fehler beim Laden der Grundkarte.";
 
 /* A label indicating popup expressions are being evaluated. */
-"Evaluating popup expressions" = "ä_Evaluating popup expressions_____________________________Ü";
+"Evaluating popup expressions" = "Pop-up-Ausdrücke werden ausgewertet";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
-"Failed to set starting point" = "ä_Failed to set starting point_____________________________Ü";
+"Failed to set starting point" = "Fehler beim Festlegen des Startpunkts";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
-"Feature Results" = "ä_Feature Results________________Ü";
+"Feature Results" = "Feature-Ergebnisse";
 
 /* A field in a set of data contained in a popup. */
-"Field" = "ä_Field___________Ü";
+"Field" = "Feld";
 
 /* A label in reference to fields in a set of data contained in a popup. */
-"Fields" = "ä_Fields_____________Ü";
+"Fields" = "Felder";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
-"Filter facilities" = "ä_Filter facilities__________________Ü";
+"Filter facilities" = "Einrichtungen filtern";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
-"Filter sites" = "ä_Filter sites_____________Ü";
+"Filter sites" = "Sites filtern";
 
 /* A hint for the user on what to search for in a search bar. */
-"Find a place or address" = "ä_Find a place or address________________________Ü";
+"Find a place or address" = "Ort oder Adresse suchen";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
-"Fraction Along Edge" = "ä_Fraction Along Edge____________________Ü";
+"Fraction Along Edge" = "Bruch entlang der Kante";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
-"Function Results" = "ä_Function Results_________________Ü";
+"Function Results" = "Funktionsergebnisse";
 
 /* A label in reference to media elements contained within a popup. */
-"Media" = "ä_Media___________Ü";
+"Media" = "Medien";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
-"Mode" = "ä_Mode_________Ü";
+"Mode" = "Modalwert";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
-"Name" = "ä_Name_________Ü";
+"Name" = "Name";
 
 /* A label in reference to a specific utility network. */
-"Network" = "ä_Network_______________Ü";
+"Network" = "Netzwerk";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "ä_New trace___________________Ü";
+"New trace" = "Neue Netzverfolgung";
 
 /* A label indicating that no bookmarks are available for selection. */
-"No bookmarks" = "ä_No bookmarks_____________Ü";
+"No bookmarks" = "Keine Lesezeichen";
 
 /* A statement that no utility trace configurations are available. */
-"No configurations available." = "ä_No configurations available_____________________________Ü.";
+"No configurations available." = "Keine Konfigurationen verfügbar.";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
-"No matches found." = "ä_No matches found__________________Ü.";
+"No matches found." = "Keine Übereinstimmungen gefunden.";
 
 /* A message to show when there are no results or suggestions. */
-"No results found" = "ä_No results found_________________Ü";
+"No results found" = "Keine Ergebnisse gefunden";
 
 /* A label indicating that no utility named trace configurations are available. */
-"No trace types found." = "ä_No trace types found______________________Ü.";
+"No trace types found." = "Keine Verfolgungstypen gefunden";
 
 /* A label indicating that no utility networks are available. */
-"No utility networks found." = "ä_No utility networks found___________________________Ü.";
+"No utility networks found." = "Keine Versorgungsnetze gefunden";
 
 /* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "ä_None selected______________Ü";
+"None selected" = "Keine(s) ausgewählt";
 
 /* A trace function output result was not provided. */
-"Not Available" = "ä_Not Available______________Ü";
+"Not Available" = "Nicht verfügbar";
 
 /* A string identifying a utility network object. */
-"Object ID: %@" = "ä_Object ID: %@______________Ü";
+"Object ID: %@" = "Objekt-ID: %@";
 
 /* A label for button to proceed with an operation. */
-"OK" = "ä_OK_____Ü";
+"OK" = "OK";
 
 /* A label in reference to a credential password. */
-"Password" = "ä_Password_________________Ü";
+"Password" = "Kennwort";
 
 /* A label indicating that a password is required to proceed with an operation. */
-"Password Required" = "ä_Password Required__________________Ü";
+"Password Required" = "Kennwort erforderlich";
 
 /* A label requesting the password associated with the chosen certificate. */
-"Please enter a password for the chosen certificate." = "ä_Please enter a password for the chosen certificate___________________________Ü.";
+"Please enter a password for the chosen certificate." = "Geben Sie ein Kennwort für das ausgewählte Zertifikat ein.";
 
 /* A label indicating that at least one starting location is required for the
 chosen utility network trace configuration. */
-"Please set at least 1 starting location." = "ä_Please set at least 1 starting location_____________________Ü.";
+"Please set at least 1 starting location." = "Legen Sie mindestens 1 Startposition fest.";
 
 /* A label indicating that at least two starting locations are required for the
 chosen utility network trace configuration. */
-"Please set at least 2 starting locations." = "ä_Please set at least 2 starting locations______________________Ü.";
+"Please set at least 2 starting locations." = "Legen Sie mindestens 2 Startpositionen fest.";
 
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
-"Popup evaluation failed: %@" = "ä_Popup evaluation failed: %@____________________________Ü";
+"Popup evaluation failed: %@" = "Pop-up-Auswertung fehlgeschlagen: %@";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
-"Repeat Search Here" = "ä_Repeat Search Here___________________Ü";
+"Repeat Search Here" = "Suche hier wiederholen";
 
 /* A label for a button to show utility network trace results. */
-"Results" = "ä_Results_______________Ü";
+"Results" = "Ergebnisse";
 
 /* A label in reference to a search query entered by the user. */
-"Search Query" = "ä_Search Query_____________Ü";
+"Search Query" = "Suchabfrage";
 
 /* A label prompting the user to make a selection from the available bookmarks. */
-"Select a bookmark" = "ä_Select a bookmark__________________Ü";
+"Select a bookmark" = "Lesezeichen auswählen";
 
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
-"Select a facility" = "ä_Select a facility__________________Ü";
+"Select a facility" = "Einrichtung auswählen";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
-"Sites" = "ä_Sites___________Ü";
+"Sites" = "Sites";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
-"Spatial reference mismatch." = "ä_Spatial reference mismatch____________________________Ü.";
+"Spatial reference mismatch." = "Nicht übereinstimmender Raumbezug.";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
-"Starting Points" = "ä_Starting Points________________Ü";
+"Starting Points" = "Startpunkte";
 
 /* A label indicating that tapping an image will reveal
 additional information. */
-"Tap on the image for more information." = "ä_Tap on the image for more information____________________Ü.";
+"Tap on the image for more information." = "Für weitere Informationen auf das Bild tippen.";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
-"Terminal Configuration" = "ä_Terminal Configuration_______________________Ü";
+"Terminal Configuration" = "Anschlusspunktkonfiguration";
 
 /* A label for development purposes only. This is not user visible. */
-"test" = "ä_test_________Ü";
+"test" = "Test";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
-"The basemap does not have a spatial reference." = "ä_The basemap does not have a spatial reference________________________Ü.";
+"The basemap does not have a spatial reference." = "Die Grundkarte weist keinen Raumbezug auf.";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to
 load for an unknown reason. */
-"The basemap failed to load for an unknown reason." = "ä_The basemap failed to load for an unknown reason__________________________Ü.";
+"The basemap failed to load for an unknown reason." = "Die Grundkarte konnte aus nicht bekannten Gründen nicht geladen werden.";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map. */
-"The basemap has a spatial reference that is incompatible with the map." = "ä_The basemap has a spatial reference that is incompatible with the map____________________________________Ü.";
+"The basemap has a spatial reference that is incompatible with the map." = "Der Raumbezug der Grundkarte ist nicht mit der Karte kompatibel.";
 
 /* A label indicating the chosen file or given password was invalid. */
-"The certificate file or password was invalid." = "ä_The certificate file or password was invalid________________________Ü.";
+"The certificate file or password was invalid." = "Die Zertifikatdatei oder das Kennwort war ungültig.";
 
 /* A label indicating the chosen file was invalid. */
-"The certificate file was invalid." = "ä_The certificate file was invalid__________________Ü.";
+"The certificate file was invalid." = "Die Zertifikatdatei war ungültig.";
 
 /* A label indicating the map doesn't have a spatial reference. */
-"The map does not have a spatial reference." = "ä_The map does not have a spatial reference______________________Ü.";
+"The map does not have a spatial reference." = "Die Karte weist keinen Raumbezug auf.";
 
 /* A label indicating the given password was invalid. */
-"The password was invalid." = "ä_The password was invalid__________________________Ü.";
+"The password was invalid." = "Das Kennwort war ungültig.";
 
 /* Description of error thrown when a remote image could not be loaded. */
-"The URL could not be reached or did not contain image data." = "ä_The URL could not be reached or did not contain image data_______________________________Ü.";
+"The URL could not be reached or did not contain image data." = "Die URL war nicht erreichbar oder beinhaltete keine Bilddaten.";
 
 /* A label for a button to begin a utility network trace operation. */
-"Trace" = "ä_Trace___________Ü";
+"Trace" = "Verfolgung";
 
 /* A label indicating the index of the trace being viewed out of the total number of traces completed. */
-"Trace %1$lld of %2$lld" = "ä_Trace %1$lld of %2$lld_______________________Ü";
+"Trace %1$lld of %2$lld" = "%1$lld von %2$lld verfolgen";
 
 /* A label in reference to a utility network trace configuration. */
-"Trace Configuration" = "ä_Trace Configuration____________________Ü";
+"Trace Configuration" = "Verfolgungskonfiguration";
 
 /* A label for a button allowing the user to retry an operation. */
-"Try Again" = "ä_Try Again___________________Ü";
+"Try Again" = "Erneut versuchen";
 
 /* A label to use in place of a utility element asset type name. */
-"Unnamed Asset Type" = "ä_Unnamed Asset Type___________________Ü";
+"Unnamed Asset Type" = "Unbenannter Asset-Typ";
 
 /* A label in reference to a credential username. */
-"Username" = "ä_Username_________________Ü";
+"Username" = "Benutzername";
 
 /* A value in a set of data contained in a popup. */
-"Value" = "ä_Value___________Ü";
+"Value" = "Wert";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
-"You must sign in to access '%@'" = "ä_You must sign in to access '%@'_________________Ü";
+"You must sign in to access '%@'" = "Sie müssen sich anmelden, um auf \"%@\" zugreifen zu können.";
 
 /* A button to change the map to the extent of the selected trace. */
-"Zoom To" = "ä_Zoom To_______________Ü";
+"Zoom To" = "Zoomen auf";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "ä_Zoom to result_______________Ü";
+"Zoom to result" = "Auf Ergebnis zoomen";
 

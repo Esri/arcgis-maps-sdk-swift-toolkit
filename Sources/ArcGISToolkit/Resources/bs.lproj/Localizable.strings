@@ -1,294 +1,294 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
-"%lld selected" = "Č_%lld selected______________ž";
+"%lld selected" = "%lld odabrano";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
-"A certificate is required to access content on %@." = "Č_A certificate is required to access content on %@__________________________ž.";
+"A certificate is required to access content on %@." = "Potreban je certifikat za pristup sadržaju na %@.";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "Č_Add new_______________ž";
+"Add new" = "Dodaj novi";
 
 /* A section header for advanced options. */
-"Advanced Options" = "Č_Advanced Options_________________ž";
+"Advanced Options" = "Napredne opcije";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "Č_All sites___________________ž";
+"All sites" = "Sva mjesta";
 
 /* A message describing the outcome of clearing all utility network trace results. */
-"All the trace inputs and results will be lost." = "Č_All the trace inputs and results will be lost________________________ž.";
+"All the trace inputs and results will be lost." = "Svi unosi i rezultati praćenja bit će izgubljeni.";
 
 /* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "Č_Allow___________ž";
+"Allow" = "Dopusti";
 
 /* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "Č_An error occurred loading the image: %@_____________________ž.";
+"An error occurred loading the image: %@." = "Došlo je do pogreške prilikom učitavanja slike: %@.";
 
 /* A label in reference to attachments in a popup. */
-"Attachments" = "Č_Attachments____________ž";
+"Attachments" = "Privici";
 
 /* A label in reference to the attributes of a geo element. */
-"Attributes" = "Č_Attributes_____________________ž";
+"Attributes" = "Atributi";
 
 /* A label indicating authentication is required to proceed. */
-"Authentication Required" = "Č_Authentication Required________________________ž";
+"Authentication Required" = "Potrebna je provjera autentičnosti";
 
 /* A label in reference to bookmarks contained in a map or scene. */
-"Bookmarks" = "Č_Bookmarks___________________ž";
+"Bookmarks" = "Knjižne oznake";
 
 /* A label for a button to open the system file browser. */
-"Browse" = "Č_Browse_____________ž";
+"Browse" = "Pregledaj";
 
 /* A label for a button to cancel an operation. */
-"Cancel" = "Č_Cancel_____________ž";
+"Cancel" = "Odustani";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "Č_Cancel starting point selection_________________ž";
+"Cancel starting point selection" = "Poništi odabir početne točke";
 
 /* A label indicating that a certificate is required to proceed. */
-"Certificate Required" = "Č_Certificate Required_____________________ž";
+"Certificate Required" = "Potreban certifikat";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "Č_Certificate Trust Warning__________________________ž";
+"Certificate Trust Warning" = "Upozorenje o povjerenju certifikata";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "Č_Clear all results__________________ž";
+"Clear all results" = "Očisti sve rezultate";
 
 /* A label in reference to the color used to display utility trace result graphics. */
-"Color" = "Č_Color___________ž";
+"Color" = "Boja";
 
 /* An compass description to be read by a screen reader describing the
 current heading. The first variable being a degree value and the
 second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
-"Compass, heading %lld degrees %@" = "Č_Compass, heading %lld degrees %@_________________ž";
+"Compass, heading %lld degrees %@" = "Kompas, smjer %lld stupnjeva %@";
 
 /* A label for a button used to continue the authentication operation. */
-"Continue" = "Č_Continue_________________ž";
+"Continue" = "Nastavak";
 
 /* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "Č_Could not access the certificate file____________________ž.";
+"Could not access the certificate file." = "Nije moguće pristupiti datoteci certifikata.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Č_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________ž.";
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Opasno: Certifikat koji daje '%@' nije potpisan od strane pouzdanog autoriteta.";
 
 /* A label for a button used to delete a utility network trace input component or result. */
-"Delete" = "Č_Delete_____________ž";
+"Delete" = "Izbriši";
 
 /* A button to close the bookmark selection menu. */
-"Done" = "Č_Done_________ž";
+"Done" = "Gotovo";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
-"Duplicate starting points cannot be added." = "Č_Duplicate starting points cannot be added______________________ž.";
+"Duplicate starting points cannot be added." = "Dvostruke početne točke ne mogu se dodati.";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
-"Element could not be identified." = "Č_Element could not be identified_________________ž.";
+"Element could not be identified." = "Element nije bilo moguće identificirati.";
 
 /* A label in reference to an error that occurred during a utility network trace. */
-"Error" = "Č_Error___________ž";
+"Error" = "Pogreška";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
-"Error importing certificate" = "Č_Error importing certificate____________________________ž";
+"Error importing certificate" = "Pogreška pri uvozu certifikata";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
-"Error loading basemap." = "Č_Error loading basemap_______________________ž.";
+"Error loading basemap." = "Pogreška pri učitavanju kartografske podloge.";
 
 /* A label indicating popup expressions are being evaluated. */
-"Evaluating popup expressions" = "Č_Evaluating popup expressions_____________________________ž";
+"Evaluating popup expressions" = "Procjena skočnih izraza";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
-"Failed to set starting point" = "Č_Failed to set starting point_____________________________ž";
+"Failed to set starting point" = "Postavljanje početne točke nije uspjelo";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
-"Feature Results" = "Č_Feature Results________________ž";
+"Feature Results" = "Rezultati geoobjekata";
 
 /* A field in a set of data contained in a popup. */
-"Field" = "Č_Field___________ž";
+"Field" = "Polje";
 
 /* A label in reference to fields in a set of data contained in a popup. */
-"Fields" = "Č_Fields_____________ž";
+"Fields" = "Polja";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
-"Filter facilities" = "Č_Filter facilities__________________ž";
+"Filter facilities" = "Filtriraj mjesta usluge";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
-"Filter sites" = "Č_Filter sites_____________ž";
+"Filter sites" = "Filtriraj mjesta";
 
 /* A hint for the user on what to search for in a search bar. */
-"Find a place or address" = "Č_Find a place or address________________________ž";
+"Find a place or address" = "Pronađi mjesto ili adresu";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
-"Fraction Along Edge" = "Č_Fraction Along Edge____________________ž";
+"Fraction Along Edge" = "Frakcija uz rub";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
-"Function Results" = "Č_Function Results_________________ž";
+"Function Results" = "Rezultati funkcije";
 
 /* A label in reference to media elements contained within a popup. */
-"Media" = "Č_Media___________ž";
+"Media" = "Mediji";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
-"Mode" = "Č_Mode_________ž";
+"Mode" = "Način";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
-"Name" = "Č_Name_________ž";
+"Name" = "Naziv";
 
 /* A label in reference to a specific utility network. */
-"Network" = "Č_Network_______________ž";
+"Network" = "Mreža";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "Č_New trace___________________ž";
+"New trace" = "Novo praćenje";
 
 /* A label indicating that no bookmarks are available for selection. */
-"No bookmarks" = "Č_No bookmarks_____________ž";
+"No bookmarks" = "Nema knjižnih oznaka";
 
 /* A statement that no utility trace configurations are available. */
-"No configurations available." = "Č_No configurations available_____________________________ž.";
+"No configurations available." = "Nema dostupnih konfiguracija.";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
-"No matches found." = "Č_No matches found__________________ž.";
+"No matches found." = "Nema podudaranja.";
 
 /* A message to show when there are no results or suggestions. */
-"No results found" = "Č_No results found_________________ž";
+"No results found" = "Nema rezultata";
 
 /* A label indicating that no utility named trace configurations are available. */
-"No trace types found." = "Č_No trace types found______________________ž.";
+"No trace types found." = "Nema pronađenih vrsta praćenja.";
 
 /* A label indicating that no utility networks are available. */
-"No utility networks found." = "Č_No utility networks found___________________________ž.";
+"No utility networks found." = "Nisu pronađene uslu\\ne mreže.";
 
 /* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "Č_None selected______________ž";
+"None selected" = "Ništa nije odabrano";
 
 /* A trace function output result was not provided. */
-"Not Available" = "Č_Not Available______________ž";
+"Not Available" = "Nije dostupno";
 
 /* A string identifying a utility network object. */
-"Object ID: %@" = "Č_Object ID: %@______________ž";
+"Object ID: %@" = "ID objekta: %@";
 
 /* A label for button to proceed with an operation. */
-"OK" = "Č_OK_____ž";
+"OK" = "U redu";
 
 /* A label in reference to a credential password. */
-"Password" = "Č_Password_________________ž";
+"Password" = "Lozinka";
 
 /* A label indicating that a password is required to proceed with an operation. */
-"Password Required" = "Č_Password Required__________________ž";
+"Password Required" = "Potrebna lozinka";
 
 /* A label requesting the password associated with the chosen certificate. */
-"Please enter a password for the chosen certificate." = "Č_Please enter a password for the chosen certificate___________________________ž.";
+"Please enter a password for the chosen certificate." = "Unesite lozinku za odabrani certifikat.";
 
 /* A label indicating that at least one starting location is required for the
 chosen utility network trace configuration. */
-"Please set at least 1 starting location." = "Č_Please set at least 1 starting location_____________________ž.";
+"Please set at least 1 starting location." = "Postavite barem 1 početnu lokaciju.";
 
 /* A label indicating that at least two starting locations are required for the
 chosen utility network trace configuration. */
-"Please set at least 2 starting locations." = "Č_Please set at least 2 starting locations______________________ž.";
+"Please set at least 2 starting locations." = "Postavite barem 2 početne lokacije.";
 
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
-"Popup evaluation failed: %@" = "Č_Popup evaluation failed: %@____________________________ž";
+"Popup evaluation failed: %@" = "Evaluacija skočnog prozora nije uspjela: %@";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
-"Repeat Search Here" = "Č_Repeat Search Here___________________ž";
+"Repeat Search Here" = "Ponovi pretraživanje ovdje";
 
 /* A label for a button to show utility network trace results. */
-"Results" = "Č_Results_______________ž";
+"Results" = "Rezultati";
 
 /* A label in reference to a search query entered by the user. */
-"Search Query" = "Č_Search Query_____________ž";
+"Search Query" = "Upit za pretraživanje";
 
 /* A label prompting the user to make a selection from the available bookmarks. */
-"Select a bookmark" = "Č_Select a bookmark__________________ž";
+"Select a bookmark" = "Odaberi knjižnu oznaku";
 
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
-"Select a facility" = "Č_Select a facility__________________ž";
+"Select a facility" = "Odaberi mjesto usluge";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
-"Sites" = "Č_Sites___________ž";
+"Sites" = "Web-mjesta";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
-"Spatial reference mismatch." = "Č_Spatial reference mismatch____________________________ž.";
+"Spatial reference mismatch." = "Nepodudaranje prostorne reference.";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
-"Starting Points" = "Č_Starting Points________________ž";
+"Starting Points" = "Početne točke";
 
 /* A label indicating that tapping an image will reveal
 additional information. */
-"Tap on the image for more information." = "Č_Tap on the image for more information____________________ž.";
+"Tap on the image for more information." = "Dodirnite sliku za više informacija.";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
-"Terminal Configuration" = "Č_Terminal Configuration_______________________ž";
+"Terminal Configuration" = "Konfiguracija terminala";
 
 /* A label for development purposes only. This is not user visible. */
-"test" = "Č_test_________ž";
+"test" = "test";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
-"The basemap does not have a spatial reference." = "Č_The basemap does not have a spatial reference________________________ž.";
+"The basemap does not have a spatial reference." = "Kartografska podloga nema prostornu referencu";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to
 load for an unknown reason. */
-"The basemap failed to load for an unknown reason." = "Č_The basemap failed to load for an unknown reason__________________________ž.";
+"The basemap failed to load for an unknown reason." = "Učitavanje kartografske podloge nije uspjelo iz nepoznatog razloga.";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map. */
-"The basemap has a spatial reference that is incompatible with the map." = "Č_The basemap has a spatial reference that is incompatible with the map____________________________________ž.";
+"The basemap has a spatial reference that is incompatible with the map." = "Kartografska podloga ima prostornu referencu koja nije kompatibilna s kartom.";
 
 /* A label indicating the chosen file or given password was invalid. */
-"The certificate file or password was invalid." = "Č_The certificate file or password was invalid________________________ž.";
+"The certificate file or password was invalid." = "Datoteka certifikata ili lozinka nisu važeći.";
 
 /* A label indicating the chosen file was invalid. */
-"The certificate file was invalid." = "Č_The certificate file was invalid__________________ž.";
+"The certificate file was invalid." = "Datoteka certifikata nije važeća.";
 
 /* A label indicating the map doesn't have a spatial reference. */
-"The map does not have a spatial reference." = "Č_The map does not have a spatial reference______________________ž.";
+"The map does not have a spatial reference." = "Karta nema prostornu referencu";
 
 /* A label indicating the given password was invalid. */
-"The password was invalid." = "Č_The password was invalid__________________________ž.";
+"The password was invalid." = "Lozinka je nevažeća.";
 
 /* Description of error thrown when a remote image could not be loaded. */
-"The URL could not be reached or did not contain image data." = "Č_The URL could not be reached or did not contain image data_______________________________ž.";
+"The URL could not be reached or did not contain image data." = "Nije bilo moguće doći do URL-a ili nije sadržavao slikovne podatke.";
 
 /* A label for a button to begin a utility network trace operation. */
-"Trace" = "Č_Trace___________ž";
+"Trace" = "Prati";
 
 /* A label indicating the index of the trace being viewed out of the total number of traces completed. */
-"Trace %1$lld of %2$lld" = "Č_Trace %1$lld of %2$lld_______________________ž";
+"Trace %1$lld of %2$lld" = "Prati %1$lld od %2$lld";
 
 /* A label in reference to a utility network trace configuration. */
-"Trace Configuration" = "Č_Trace Configuration____________________ž";
+"Trace Configuration" = "Konfiguracija praćenja";
 
 /* A label for a button allowing the user to retry an operation. */
-"Try Again" = "Č_Try Again___________________ž";
+"Try Again" = "Pokušaj ponovno";
 
 /* A label to use in place of a utility element asset type name. */
-"Unnamed Asset Type" = "Č_Unnamed Asset Type___________________ž";
+"Unnamed Asset Type" = "Neimenovana vrsta sredstva";
 
 /* A label in reference to a credential username. */
-"Username" = "Č_Username_________________ž";
+"Username" = "Korisničko ime";
 
 /* A value in a set of data contained in a popup. */
-"Value" = "Č_Value___________ž";
+"Value" = "Vrijednost";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
-"You must sign in to access '%@'" = "Č_You must sign in to access '%@'_________________ž";
+"You must sign in to access '%@'" = "Morate se prijaviti za pristup '%@'";
 
 /* A button to change the map to the extent of the selected trace. */
-"Zoom To" = "Č_Zoom To_______________ž";
+"Zoom To" = "Povećaj na";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "Č_Zoom to result_______________ž";
+"Zoom to result" = "Povećaj na rezultat";
 
