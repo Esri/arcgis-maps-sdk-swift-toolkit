@@ -38,7 +38,7 @@ struct ARSwiftUIView {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Hides the video feed for the view.
+***REMOVED******REMOVED***/ Hides the video feed for the AR view.
 ***REMOVED***func videoFeedHidden() -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.videoFeedIsHidden = true
