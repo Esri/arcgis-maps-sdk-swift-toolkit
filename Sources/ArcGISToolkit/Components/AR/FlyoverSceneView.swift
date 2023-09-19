@@ -20,7 +20,6 @@ public struct FlyoverSceneView: View {
     /// The last portrait or landscape orientation value.
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     @State private var arViewProxy = ARSwiftUIViewProxy()
-    @State private var sceneViewProxy: SceneViewProxy?
     private let cameraController: TransformationMatrixCameraController
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     private let configuration: ARWorldTrackingConfiguration
@@ -56,32 +55,27 @@ public struct FlyoverSceneView: View {
     
     public var body: some View {
         ZStack {
-            ARSwiftUIView(proxy: arViewProxy)
-                .onRender { _, _, _ in
-                    guard let sceneViewProxy else { return }
-                    updateLastGoodDeviceOrientation()
-                    sceneViewProxy.draw(
-                        for: arViewProxy,
-                        cameraController: cameraController,
-                        orientation: lastGoodDeviceOrientation
-                    )
-                }
-                .onAppear {
-                    arViewProxy.session?.run(configuration)
-                }
-                .onDisappear {
-                    arViewProxy.session?.pause()
-                }
-            SceneViewReader { proxy in
-                sceneViewBuilder(proxy)
+            SceneViewReader { sceneViewProxy in
+                sceneViewBuilder(sceneViewProxy)
                     .cameraController(cameraController)
-                    .attributionBarHidden(true)
-                    .spaceEffect(.transparent)
                     .viewDrawingMode(.manual)
-                    .atmosphereEffect(.off)
-                    .onAppear {
-                        self.sceneViewProxy = proxy
+                
+                ARSwiftUIView(proxy: arViewProxy)
+                    .onRender { _, _, _ in
+                        updateLastGoodDeviceOrientation()
+                        sceneViewProxy.draw(
+                            for: arViewProxy,
+                            cameraController: cameraController,
+                            orientation: lastGoodDeviceOrientation
+                        )
                     }
+                    .onAppear {
+                        arViewProxy.session?.run(configuration)
+                    }
+                    .onDisappear {
+                        arViewProxy.session?.pause()
+                    }
+                    .opacity(0.0)
             }
         }
     }
