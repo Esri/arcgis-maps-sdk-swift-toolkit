@@ -14,11 +14,11 @@
 import SwiftUI
 import ArcGIS
 
-/// A view for single line text entry.
-struct SingleLineTextEntry: View {
+/// A view for single line text input.
+struct SingleLineTextInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// <#Description#>
+    /// The feature form containing the input.
     private var featureForm: FeatureForm?
     
     /// The model for the ancestral form view.
@@ -30,17 +30,17 @@ struct SingleLineTextEntry: View {
     /// The current text value.
     @State private var text = ""
     
-    /// The field's parent element.
+    /// The input's parent element.
     private let element: FieldFormElement
     
-    /// The input configuration of the field.
+    /// The input configuration of the view.
     private let input: TextBoxFormInput
     
-    /// Creates a view for single line text entry.
+    /// Creates a view for single line text input.
     /// - Parameters:
-    ///   - featureForm: <#featureForm description#>
-    ///   - element: The field's parent element.
-    ///   - input: The input configuration of the field.
+    ///   - featureForm: The feature form containing the input.
+    ///   - element: The input's parent element.
+    ///   - input: The input configuration of the view.
     init(featureForm: FeatureForm?, element: FieldFormElement, input: TextBoxFormInput) {
         self.featureForm = featureForm
         self.element = element
@@ -48,9 +48,9 @@ struct SingleLineTextEntry: View {
     }
     
     var body: some View {
-        FormElementHeader(element: element)
+        InputHeader(element: element)
             .padding([.top], elementPadding)
-        // Secondary foreground color is used across entry views for consistency.
+        // Secondary foreground color is used across input views for consistency.
         HStack {
             TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
                 .focused($isFocused)
@@ -60,8 +60,8 @@ struct SingleLineTextEntry: View {
                     .accessibilityIdentifier("\(element.label) Clear Button")
             }
         }
-        .formTextEntryStyle()
-        TextEntryFooter(
+        .formTextInputStyle()
+        TextInputFooter(
             currentLength: text.count,
             isFocused: isFocused,
             element: element,

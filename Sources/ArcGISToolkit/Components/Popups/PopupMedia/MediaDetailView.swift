@@ -29,7 +29,7 @@ struct MediaDetailView : View {
                 Button {
                     isShowingDetailView.wrappedValue = false
                 } label: {
-                    Text("Done", bundle: .toolkitModule)
+                    Text.done
                         .fontWeight(.semibold)
                 }
                 .padding([.bottom], 4)
