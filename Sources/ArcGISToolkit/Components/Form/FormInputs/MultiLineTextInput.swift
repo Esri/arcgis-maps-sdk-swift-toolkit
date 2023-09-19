@@ -40,14 +40,14 @@ struct MultiLineTextInput: View {
     /// The input's parent element.
     private let element: FieldFormElement
     
-    /// The input configuration of the field.
+    /// The input configuration of the view.
     private let input: TextAreaFormInput
     
     /// Creates a view for text input spanning multiple lines.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
     ///   - element: The input's parent element.
-    ///   - input: The input configuration of the field.
+    ///   - input: The input configuration of the view.
     init(featureForm: FeatureForm?, element: FieldFormElement, input: TextAreaFormInput) {
         self.featureForm = featureForm
         self.element =  element
