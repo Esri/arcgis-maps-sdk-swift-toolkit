@@ -30,7 +30,7 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ The field's parent element.
+***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the field.
@@ -39,7 +39,7 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED***/ Creates a view for single line text input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
-***REMOVED******REMOVED***/   - element: The field's parent element.
+***REMOVED******REMOVED***/   - element: The input's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
 ***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: TextBoxFormInput) {
 ***REMOVED******REMOVED***self.featureForm = featureForm

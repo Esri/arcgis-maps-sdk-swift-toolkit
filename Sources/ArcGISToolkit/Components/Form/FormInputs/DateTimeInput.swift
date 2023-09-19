@@ -32,7 +32,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the date selection was cleared when a value is required.
 ***REMOVED***@State private var requiredValueMissing = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The field's parent element.
+***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the field.
@@ -41,7 +41,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***/ Creates a view for a date (and time if applicable) input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
-***REMOVED******REMOVED***/   - element: The field's parent element.
+***REMOVED******REMOVED***/   - element: The input's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
 ***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: DateTimePickerFormInput) {
 ***REMOVED******REMOVED***self.featureForm = featureForm

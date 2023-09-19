@@ -55,7 +55,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ Creates a view for a combo box input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
-***REMOVED******REMOVED***/   - element: The field's parent element.
+***REMOVED******REMOVED***/   - element: The input's parent element.
 ***REMOVED******REMOVED***/   - input: The input configuration of the field.
 ***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: ComboBoxFormInput) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
