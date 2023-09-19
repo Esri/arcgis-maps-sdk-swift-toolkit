@@ -23,15 +23,17 @@ struct FlyoverExampleView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***)
 ***REMOVED***
+***REMOVED***private let initialCamera = Camera(
+***REMOVED******REMOVED***lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
+***REMOVED******REMOVED***distance: 1_000,
+***REMOVED******REMOVED***heading: 40,
+***REMOVED******REMOVED***pitch: 90,
+***REMOVED******REMOVED***roll: 0
+***REMOVED***)
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FlyoverSceneView(
-***REMOVED******REMOVED******REMOVED***initialCamera: Camera(
-***REMOVED******REMOVED******REMOVED******REMOVED***lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
-***REMOVED******REMOVED******REMOVED******REMOVED***distance: 1_000,
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: 40,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
-***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***initialCamera: initialCamera,
 ***REMOVED******REMOVED******REMOVED***translationFactor: 3_000,
 ***REMOVED******REMOVED******REMOVED***clippingDistance: 60_000
 ***REMOVED******REMOVED***) { proxy in
