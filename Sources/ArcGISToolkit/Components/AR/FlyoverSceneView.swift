@@ -34,6 +34,9 @@ public struct FlyoverSceneView: View {
     ///   of `nil` means that no data will be clipped.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
+    /// - Remark: The provided scene view will have certain properties overridden in order to
+    /// be effectively viewed in augmented reality. Properties such as the camera controller,
+    /// and view drawing mode.
     public init(
         initialCamera: Camera,
         translationFactor: Double,
