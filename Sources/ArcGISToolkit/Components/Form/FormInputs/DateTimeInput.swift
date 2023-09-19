@@ -14,15 +14,15 @@
 ***REMOVED***
 ***REMOVED***
 
-struct DateTimeEntry: View {
+struct DateTimeInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ The feature form containing the input.
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
-
 ***REMOVED******REMOVED***/ The current date selection.
 ***REMOVED***@State private var date: Date?
 ***REMOVED***
@@ -32,17 +32,17 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the date selection was cleared when a value is required.
 ***REMOVED***@State private var requiredValueMissing = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The field's parent element.
+***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/ The input configuration of the field.
+***REMOVED******REMOVED***/ The input configuration of the view.
 ***REMOVED***private let input: DateTimePickerFormInput
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a view for a date and time (if applicable) entry.
+***REMOVED******REMOVED***/ Creates a view for a date (and time if applicable) input.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - featureForm: <#featureForm description#>
-***REMOVED******REMOVED***/   - element: The field's parent element.
-***REMOVED******REMOVED***/   - input: The input configuration of the field.
+***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
+***REMOVED******REMOVED***/   - element: The input's parent element.
+***REMOVED******REMOVED***/   - input: The input configuration of the view.
 ***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: DateTimePickerFormInput) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
@@ -51,12 +51,12 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***dateEditor
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***footer
+***REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
@@ -71,8 +71,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***  newDate != currentDate else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
-***REMOVED******REMOVED******REMOVED***requiredValueMissing = /*element.required && */newDate == nil
+***REMOVED******REMOVED******REMOVED***requiredValueMissing = element.isRequired && newDate == nil
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.focusedFieldName) { newFocusedFieldName in
@@ -90,7 +89,7 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Elements for display the date selection.
-***REMOVED******REMOVED***/ - Note: Secondary foreground color is used across entry views for consistency.
+***REMOVED******REMOVED***/ - Note: Secondary foreground color is used across input views for consistency.
 ***REMOVED***@ViewBuilder var dateDisplay: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Text(formattedDate ?? .noValue)
@@ -113,7 +112,7 @@ struct DateTimeEntry: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.vertical], 1.5)
-***REMOVED******REMOVED***.formTextEntryStyle()
+***REMOVED******REMOVED***.formTextInputStyle()
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
@@ -167,20 +166,6 @@ struct DateTimeEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The message shown below the date editor and viewer.
-***REMOVED***@ViewBuilder var footer: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if requiredValueMissing {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text.required
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED***.foregroundColor(requiredValueMissing ? .red : .secondary)
-***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The human-readable date and time selection.
 ***REMOVED***var formattedDate: String? {
 ***REMOVED******REMOVED***if input.includeTime {
@@ -218,17 +203,6 @@ private extension ParseStrategy where Self == Date.ParseStrategy {
 ***REMOVED***
 ***REMOVED***
 
-private extension String {
-***REMOVED******REMOVED***/ A string indicating that no date or time has been set for a date/time field.
-***REMOVED***static var noValue: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "No Value",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A string indicating that no date or time has been set for a date/time field."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-
 private extension Text {
 ***REMOVED******REMOVED***/ A label for a button to choose the current time and date for a field.
 ***REMOVED***static var now: Self {
@@ -236,15 +210,6 @@ private extension Text {
 ***REMOVED******REMOVED******REMOVED***"Now",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose the current time and date for a field."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A label indicating a required field was left blank.
-***REMOVED***static var required: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***"Required",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label indicating a required field was left blank."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
