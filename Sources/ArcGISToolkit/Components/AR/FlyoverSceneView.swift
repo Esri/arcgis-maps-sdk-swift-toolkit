@@ -65,6 +65,7 @@ public struct FlyoverSceneView: View {
                         )
                     }
                     .videoFeedHidden()
+                    .disabled(true)
                     .onAppear {
                         arViewProxy.session?.run(configuration)
                     }
