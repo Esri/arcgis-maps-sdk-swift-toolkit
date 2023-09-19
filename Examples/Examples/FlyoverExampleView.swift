@@ -42,7 +42,7 @@ struct FlyoverExampleView: View {
                     print("Identifying...")
                     Task {
                         let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
-                        print("\(results.count) identify result(s)")
+                        print("\(results.count) identify result(s).")
                     }
                 }
         }
