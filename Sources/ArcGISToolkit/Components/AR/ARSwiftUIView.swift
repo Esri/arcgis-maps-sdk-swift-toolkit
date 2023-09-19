@@ -11,10 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
 import ARKit
 import SwiftUI
-import ArcGIS
 
 /// A SwiftUI version of ARSCNView.
 struct ARSwiftUIView {
