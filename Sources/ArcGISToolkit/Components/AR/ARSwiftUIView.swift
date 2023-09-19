@@ -18,6 +18,7 @@ import SwiftUI
 struct ARSwiftUIView {
     /// The closure to call when the ARSCNView renders.
     private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
+    private(set) var videoFeedIsHidden: Bool = false
     /// The proxy.
     private let proxy: ARSwiftUIViewProxy?
     
@@ -28,11 +29,19 @@ struct ARSwiftUIView {
         self.proxy = proxy
     }
     
+    /// Sets the closure to call when underlying scene renders.
     func onRender(
         perform action: @escaping (SCNSceneRenderer, SCNScene, TimeInterval) -> Void
     ) -> Self {
         var view = self
         view.onRenderAction = action
+        return view
+    }
+    
+    /// Hides the video feed for the view.
+    func videoFeedHidden() -> Self {
+        var view = self
+        view.videoFeedIsHidden = true
         return view
     }
 }
@@ -47,6 +56,7 @@ extension ARSwiftUIView: UIViewRepresentable {
 
     func updateUIView(_ uiView: ARSCNView, context: Context) {
         context.coordinator.onRenderAction = onRenderAction
+        uiView.isHidden = videoFeedIsHidden
     }
     
     func makeCoordinator() -> Coordinator {

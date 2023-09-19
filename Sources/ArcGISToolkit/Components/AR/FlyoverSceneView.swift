@@ -55,7 +55,6 @@ public struct FlyoverSceneView: View {
                 sceneViewBuilder(sceneViewProxy)
                     .cameraController(cameraController)
                     .viewDrawingMode(.manual)
-                
                 ARSwiftUIView(proxy: arViewProxy)
                     .onRender { _, _, _ in
                         updateLastGoodDeviceOrientation()
@@ -65,13 +64,13 @@ public struct FlyoverSceneView: View {
                             orientation: lastGoodDeviceOrientation
                         )
                     }
+                    .videoFeedHidden()
                     .onAppear {
                         arViewProxy.session?.run(configuration)
                     }
                     .onDisappear {
                         arViewProxy.session?.pause()
                     }
-                    .opacity(0.0)
             }
         }
     }
