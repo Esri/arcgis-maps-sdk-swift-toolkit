@@ -22,11 +22,11 @@ public struct FormView: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The form's configuration.
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
-***REMOVED******REMOVED***/ - Parameter featureForm: <#featureForm description#>
+***REMOVED******REMOVED***/ - Parameter featureForm: The form's configuration.
 ***REMOVED***public init(featureForm: FeatureForm?) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED***
@@ -68,12 +68,14 @@ extension FormView {
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
 ***REMOVED******REMOVED***switch element.input {
+***REMOVED******REMOVED***case let `input` as ComboBoxFormInput:
+***REMOVED******REMOVED******REMOVED***ComboBoxInput(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***case let `input` as DateTimePickerFormInput:
-***REMOVED******REMOVED******REMOVED***DateTimeEntry(featureForm: featureForm, element: element, input: `input`)
+***REMOVED******REMOVED******REMOVED***DateTimeInput(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***case let `input` as TextAreaFormInput:
-***REMOVED******REMOVED******REMOVED***MultiLineTextEntry(featureForm: featureForm, element: element, input: `input`)
+***REMOVED******REMOVED******REMOVED***MultiLineTextInput(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***case let `input` as TextBoxFormInput:
-***REMOVED******REMOVED******REMOVED***SingleLineTextEntry(featureForm: featureForm, element: element, input: `input`)
+***REMOVED******REMOVED******REMOVED***SingleLineTextInput(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***

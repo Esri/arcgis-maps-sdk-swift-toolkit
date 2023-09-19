@@ -14,43 +14,42 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view shown at the bottom of each text entry element in a form.
-struct TextEntryFooter: View {
+***REMOVED***/ A view shown at the bottom of each text input element in a form.
+struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ An error that is present when a length constraint is not met.
 ***REMOVED***@State private var validationError: LengthError?
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the text entry field has previously satisfied the minimum
+***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field has previously satisfied the minimum
 ***REMOVED******REMOVED***/ length at any point in time.
 ***REMOVED***@State private var hasPreviouslySatisfiedMinimum: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ The current length of the text in the text entry field.
+***REMOVED******REMOVED***/ The current length of the text in the text input field.
 ***REMOVED***private let currentLength: Int
 ***REMOVED***
-***REMOVED******REMOVED***/ The field's parent element.
+***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the text entry field is focused.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field is focused.
 ***REMOVED***private let isFocused: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ The description of the text entry field.
+***REMOVED******REMOVED***/ The description of the text input field.
 ***REMOVED***private let description: String
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the text entry field is required.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field is required.
 ***REMOVED***private let isRequired: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ The maximum allowable length of text in the text entry field.
+***REMOVED******REMOVED***/ The maximum allowable length of text in the text input field.
 ***REMOVED***private let maxLength: Int
 ***REMOVED***
-***REMOVED******REMOVED***/ The minimum allowable length of text in the text entry field.
+***REMOVED******REMOVED***/ The minimum allowable length of text in the text input field.
 ***REMOVED***private let minLength: Int
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a footer shown at the bottom of each text entry element in a form.
+***REMOVED******REMOVED***/ Creates a footer shown at the bottom of each text input element in a form.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - currentLength: The current length of the text in the text entry field.
-***REMOVED******REMOVED***/   - isFocused: A Boolean value indicating whether the text entry field is focused.
-***REMOVED******REMOVED***/   - element: A field element that provides a description for the text entry and whether
-***REMOVED******REMOVED***/  or not text is required for this entry.
-***REMOVED******REMOVED***/   - input: A form input that provides length constraints for the text entry.
+***REMOVED******REMOVED***/   - currentLength: The current length of the text in the text input field.
+***REMOVED******REMOVED***/   - isFocused: A Boolean value indicating whether the text input field is focused.
+***REMOVED******REMOVED***/   - element: The input's parent element.
+***REMOVED******REMOVED***/   - input: A form input that provides length constraints for the text input.
 ***REMOVED***init(
 ***REMOVED******REMOVED***currentLength: Int,
 ***REMOVED******REMOVED***isFocused: Bool,
@@ -61,8 +60,7 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.isFocused = isFocused
 ***REMOVED******REMOVED***self.description = element.description
-***REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
-***REMOVED******REMOVED***self.isRequired = false***REMOVED***element.required
+***REMOVED******REMOVED***self.isRequired = element.isRequired
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch input {
 ***REMOVED******REMOVED***case let input as TextBoxFormInput:
@@ -74,7 +72,7 @@ struct TextEntryFooter: View {
 ***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
 ***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
 ***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***fatalError("TextEntryFooter can only be used with TextAreaFormInput or TextBoxFormInput")
+***REMOVED******REMOVED******REMOVED***fatalError("TextInputFooter can only be used with TextAreaFormInput or TextBoxFormInput")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -109,7 +107,7 @@ struct TextEntryFooter: View {
 ***REMOVED***
 ***REMOVED***
 
-extension TextEntryFooter {
+extension TextInputFooter {
 ***REMOVED******REMOVED***/ The primary message to be shown in the footer, if any, dependent on the presence of a
 ***REMOVED******REMOVED***/ validation error, description, and focus state.
 ***REMOVED***var primaryMessage: Text? {
@@ -123,14 +121,14 @@ extension TextEntryFooter {
 ***REMOVED******REMOVED***case (.some(let lengthError), _, _):
 ***REMOVED******REMOVED******REMOVED***switch (lengthError, scheme) {
 ***REMOVED******REMOVED******REMOVED***case (.emptyWhenRequired, .max):
-***REMOVED******REMOVED******REMOVED******REMOVED***return requiredText
+***REMOVED******REMOVED******REMOVED******REMOVED***return .required
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***return validationText
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The length validation scheme performed on the text entry, determined by the minimum and
+***REMOVED******REMOVED***/ The length validation scheme performed on the text input, determined by the minimum and
 ***REMOVED******REMOVED***/ maximum lengths.
 ***REMOVED***var scheme: LengthValidationScheme {
 ***REMOVED******REMOVED***if minLength == 0 {
@@ -175,7 +173,7 @@ extension TextEntryFooter {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Enter \(minLength) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's exact number of required characters."
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating the user should enter a field's exact number of required characters."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -188,21 +186,12 @@ extension TextEntryFooter {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Text indicating a field's minimum and maximum number of allowed characters.
+***REMOVED******REMOVED***/ Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters.
 ***REMOVED***var minAndMaxText: Text {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Enter \(minLength) to \(maxLength) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's minimum and maximum number of allowed characters."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Text indicating a field is required.
-***REMOVED***var requiredText: Text {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Required",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field is required"
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

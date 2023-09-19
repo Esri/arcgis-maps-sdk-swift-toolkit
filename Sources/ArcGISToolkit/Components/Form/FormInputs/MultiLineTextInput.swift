@@ -14,14 +14,14 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view for text entry spanning multiple lines.
-struct MultiLineTextEntry: View {
+***REMOVED***/ A view for text input spanning multiple lines.
+struct MultiLineTextInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The feature form containing the input.
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
@@ -37,17 +37,17 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED***/ so it must be implemented manually.
 ***REMOVED***@State private var isPlaceholder = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The field's parent element.
+***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/ The input configuration of the field.
+***REMOVED******REMOVED***/ The input configuration of the view.
 ***REMOVED***private let input: TextAreaFormInput
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a view for text entry spanning multiple lines.
+***REMOVED******REMOVED***/ Creates a view for text input spanning multiple lines.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - featureForm: <#featureForm description#>
-***REMOVED******REMOVED***/   - element: The field's parent element.
-***REMOVED******REMOVED***/   - input: The input configuration of the field.
+***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
+***REMOVED******REMOVED***/   - element: The input's parent element.
+***REMOVED******REMOVED***/   - input: The input configuration of the view.
 ***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: TextAreaFormInput) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element =  element
@@ -55,7 +55,7 @@ struct MultiLineTextEntry: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED***InputHeader(element: element)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
 ***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
@@ -84,8 +84,8 @@ struct MultiLineTextEntry: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = element.fieldName
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.formTextEntryStyle()
-***REMOVED******REMOVED***TextEntryFooter(
+***REMOVED******REMOVED***.formTextInputStyle()
+***REMOVED******REMOVED***TextInputFooter(
 ***REMOVED******REMOVED******REMOVED***currentLength: isPlaceholder ? .zero : text.count,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
 ***REMOVED******REMOVED******REMOVED***element: element,
