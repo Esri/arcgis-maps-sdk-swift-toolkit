@@ -31,8 +31,6 @@ public struct FormView: View {
         self.featureForm = featureForm
     }
     
-    private let scrollViewCoordinateSpace = UUID()
-    
     public var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
