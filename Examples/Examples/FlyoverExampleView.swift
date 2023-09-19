@@ -34,8 +34,7 @@ struct FlyoverExampleView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FlyoverSceneView(
 ***REMOVED******REMOVED******REMOVED***initialCamera: initialCamera,
-***REMOVED******REMOVED******REMOVED***translationFactor: 3_000,
-***REMOVED******REMOVED******REMOVED***clippingDistance: 60_000
+***REMOVED******REMOVED******REMOVED***translationFactor: 3_000
 ***REMOVED******REMOVED***) { proxy in
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
