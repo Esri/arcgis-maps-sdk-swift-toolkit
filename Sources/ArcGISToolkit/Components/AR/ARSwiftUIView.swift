@@ -18,6 +18,7 @@ import ARKit
 struct ARSwiftUIView {
 ***REMOVED******REMOVED***/ The closure to call when the ARSCNView renders.
 ***REMOVED***private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
+***REMOVED***private(set) var videoFeedIsHidden: Bool = false
 ***REMOVED******REMOVED***/ The proxy.
 ***REMOVED***private let proxy: ARSwiftUIViewProxy?
 ***REMOVED***
@@ -28,11 +29,19 @@ struct ARSwiftUIView {
 ***REMOVED******REMOVED***self.proxy = proxy
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Sets the closure to call when underlying scene renders.
 ***REMOVED***func onRender(
 ***REMOVED******REMOVED***perform action: @escaping (SCNSceneRenderer, SCNScene, TimeInterval) -> Void
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.onRenderAction = action
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Hides the video feed for the view.
+***REMOVED***func videoFeedHidden() -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.videoFeedIsHidden = true
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
@@ -47,6 +56,7 @@ extension ARSwiftUIView: UIViewRepresentable {
 
 ***REMOVED***func updateUIView(_ uiView: ARSCNView, context: Context) {
 ***REMOVED******REMOVED***context.coordinator.onRenderAction = onRenderAction
+***REMOVED******REMOVED***uiView.isHidden = videoFeedIsHidden
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCoordinator() -> Coordinator {
