@@ -39,7 +39,7 @@ struct ComboBoxInput: View {
     /// The input's parent element.
     private let element: FieldFormElement
     
-    /// The input configuration of the field.
+    /// The input configuration of the view.
     private let input: ComboBoxFormInput
     
     /// A subset of coded values with names containing `filterPhrase` or all of the coded values
