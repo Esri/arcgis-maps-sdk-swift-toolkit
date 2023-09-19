@@ -71,7 +71,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.pause()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(0.0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(0)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
