@@ -14,15 +14,15 @@
 import SwiftUI
 import ArcGIS
 
-struct DateTimeEntry: View {
+struct DateTimeInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
+    /// The feature form containing the input.
     private var featureForm: FeatureForm?
     
-
     /// The current date selection.
     @State private var date: Date?
     
@@ -32,17 +32,17 @@ struct DateTimeEntry: View {
     /// A Boolean value indicating whether the date selection was cleared when a value is required.
     @State private var requiredValueMissing = false
     
-    /// The field's parent element.
+    /// The input's parent element.
     private let element: FieldFormElement
     
-    /// The input configuration of the field.
+    /// The input configuration of the view.
     private let input: DateTimePickerFormInput
     
-    /// Creates a view for a date and time (if applicable) entry.
+    /// Creates a view for a date (and time if applicable) input.
     /// - Parameters:
-    ///   - featureForm: <#featureForm description#>
-    ///   - element: The field's parent element.
-    ///   - input: The input configuration of the field.
+    ///   - featureForm: The feature form containing the input.
+    ///   - element: The input's parent element.
+    ///   - input: The input configuration of the view.
     init(featureForm: FeatureForm?, element: FieldFormElement, input: DateTimePickerFormInput) {
         self.featureForm = featureForm
         self.element = element
@@ -51,12 +51,12 @@ struct DateTimeEntry: View {
     
     var body: some View {
         Group {
-            FormElementHeader(element: element)
+            InputHeader(element: element)
                 .padding([.top], elementPadding)
             
             dateEditor
             
-            footer
+            InputFooter(element: element, requiredValueMissing: requiredValueMissing)
         }
         .padding([.bottom], elementPadding)
         .onAppear {
@@ -71,8 +71,7 @@ struct DateTimeEntry: View {
                   newDate != currentDate else {
                 return
             }
-            //TODO: add `required` property to API
-            requiredValueMissing = /*element.required && */newDate == nil
+            requiredValueMissing = element.isRequired && newDate == nil
             featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
         }
         .onChange(of: model.focusedFieldName) { newFocusedFieldName in
@@ -90,7 +89,7 @@ struct DateTimeEntry: View {
     }
     
     /// Elements for display the date selection.
-    /// - Note: Secondary foreground color is used across entry views for consistency.
+    /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
         HStack {
             Text(formattedDate ?? .noValue)
@@ -113,7 +112,7 @@ struct DateTimeEntry: View {
             }
         }
         .padding([.vertical], 1.5)
-        .formTextEntryStyle()
+        .formTextInputStyle()
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {
@@ -167,20 +166,6 @@ struct DateTimeEntry: View {
         }
     }
     
-    /// The message shown below the date editor and viewer.
-    @ViewBuilder var footer: some View {
-        Group {
-            if requiredValueMissing {
-                Text.required
-            } else {
-                Text(element.description)
-            }
-        }
-        .font(.footnote)
-        .foregroundColor(requiredValueMissing ? .red : .secondary)
-        .accessibilityIdentifier("\(element.label) Footer")
-    }
-    
     /// The human-readable date and time selection.
     var formattedDate: String? {
         if input.includeTime {
@@ -218,17 +203,6 @@ private extension ParseStrategy where Self == Date.ParseStrategy {
     }
 }
 
-private extension String {
-    /// A string indicating that no date or time has been set for a date/time field.
-    static var noValue: Self {
-        .init(
-            localized: "No Value",
-            bundle: .toolkitModule,
-            comment: "A string indicating that no date or time has been set for a date/time field."
-        )
-    }
-}
-
 private extension Text {
     /// A label for a button to choose the current time and date for a field.
     static var now: Self {
@@ -236,15 +210,6 @@ private extension Text {
             "Now",
             bundle: .toolkitModule,
             comment: "A label for a button to choose the current time and date for a field."
-        )
-    }
-    
-    /// A label indicating a required field was left blank.
-    static var required: Self {
-        .init(
-            "Required",
-            bundle: .toolkitModule,
-            comment: "A label indicating a required field was left blank."
         )
     }
     
