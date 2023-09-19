@@ -137,8 +137,12 @@ struct ComboBoxInput: View {
                 if element.value.isEmpty && !element.isRequired {
                     if input.noValueOption == .show {
                         HStack {
-                            Button(input.noValueLabel.isEmpty ? String.noValue : input.noValueLabel) {
+                            Button {
                                 selectedValue = nil
+                            } label: {
+                                Text(input.noValueLabel.isEmpty ? String.noValue : input.noValueLabel)
+                                    .italic()
+                                    .foregroundStyle(.secondary)
                             }
                             Spacer()
                             if selectedValue == nil {
