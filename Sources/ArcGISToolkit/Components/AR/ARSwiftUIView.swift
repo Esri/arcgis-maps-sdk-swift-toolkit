@@ -38,7 +38,7 @@ struct ARSwiftUIView {
         return view
     }
     
-    /// Hides the video feed for the view.
+    /// Hides the video feed for the AR view.
     func videoFeedHidden() -> Self {
         var view = self
         view.videoFeedIsHidden = true
