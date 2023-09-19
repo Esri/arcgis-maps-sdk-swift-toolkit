@@ -57,12 +57,8 @@ struct BookmarksHeader: View {
                 Button {
                     isPresented.toggle()
                 } label: {
-                    Text(
-                        "Done",
-                        bundle: .toolkitModule,
-                        comment: "A button to close the bookmark selection menu."
-                    )
-                    .fontWeight(.semibold)
+                    Text.done
+                        .fontWeight(.semibold)
                 }
             }
         }

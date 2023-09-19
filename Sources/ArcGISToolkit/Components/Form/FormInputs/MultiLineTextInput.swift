@@ -14,14 +14,14 @@
 import SwiftUI
 import ArcGIS
 
-/// A view for text entry spanning multiple lines.
-struct MultiLineTextEntry: View {
+/// A view for text input spanning multiple lines.
+struct MultiLineTextInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// <#Description#>
+    /// The feature form containing the input.
     private var featureForm: FeatureForm?
     
     /// A Boolean value indicating whether or not the field is focused.
@@ -37,17 +37,17 @@ struct MultiLineTextEntry: View {
     /// so it must be implemented manually.
     @State private var isPlaceholder = false
     
-    /// The field's parent element.
+    /// The input's parent element.
     private let element: FieldFormElement
     
-    /// The input configuration of the field.
+    /// The input configuration of the view.
     private let input: TextAreaFormInput
     
-    /// Creates a view for text entry spanning multiple lines.
+    /// Creates a view for text input spanning multiple lines.
     /// - Parameters:
-    ///   - featureForm: <#featureForm description#>
-    ///   - element: The field's parent element.
-    ///   - input: The input configuration of the field.
+    ///   - featureForm: The feature form containing the input.
+    ///   - element: The input's parent element.
+    ///   - input: The input configuration of the view.
     init(featureForm: FeatureForm?, element: FieldFormElement, input: TextAreaFormInput) {
         self.featureForm = featureForm
         self.element =  element
@@ -55,7 +55,7 @@ struct MultiLineTextEntry: View {
     }
     
     var body: some View {
-        FormElementHeader(element: element)
+        InputHeader(element: element)
             .padding([.top], elementPadding)
         HStack(alignment: .bottom) {
             if #available(iOS 16.0, *) {
@@ -84,8 +84,8 @@ struct MultiLineTextEntry: View {
                 model.focusedFieldName = element.fieldName
             }
         }
-        .formTextEntryStyle()
-        TextEntryFooter(
+        .formTextInputStyle()
+        TextInputFooter(
             currentLength: isPlaceholder ? .zero : text.count,
             isFocused: isFocused,
             element: element,

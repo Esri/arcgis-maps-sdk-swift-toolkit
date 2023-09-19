@@ -12,18 +12,21 @@
 // limitations under the License.
 
 import SwiftUI
-import ArcGIS
 
-/// A view shown at the top of each field element in a form.
-struct FormElementHeader: View {
-    /// The form element the header is for.
-    let element: FieldFormElement
-    
-    var body: some View {
-        //TODO: add `required` property to API
-//        Text(verbatim: "\(element.label + (element.required ? " *" : ""))")
-        Text(verbatim: "\(element.label)")
-        .font(.subheadline)
-        .foregroundColor(.secondary)
+/// SwiftUI `TextEditor` and `TextField` views have different styling. `TextField`s have
+/// `textFieldStyle` and `TextEditor`s do not. This modifier allows for common styling.
+struct FormTextInputStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(4)
+            .background(Color(uiColor: .tertiarySystemFill))
+            .cornerRadius(10)
+    }
+}
+
+extension View {
+    /// Adds a common padding and background around form field text elements.
+    func formTextInputStyle() -> some View {
+        modifier(FormTextInputStyle())
     }
 }
