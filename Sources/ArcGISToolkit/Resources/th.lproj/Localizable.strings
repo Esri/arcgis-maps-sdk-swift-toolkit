@@ -1,294 +1,294 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
-"%lld selected" = "ก้_%lld selected______________ษฺ";
+"%lld selected" = "%lld ที่เลือก";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
-"A certificate is required to access content on %@." = "ก้_A certificate is required to access content on %@__________________________ษฺ.";
+"A certificate is required to access content on %@." = "จำเป็นต้องใช้ใบรับรองในการเข้าถึงเนื้อหาบน %@";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "ก้_Add new_______________ษฺ";
+"Add new" = "เพิ่มรายการใหม่";
 
 /* A section header for advanced options. */
-"Advanced Options" = "ก้_Advanced Options_________________ษฺ";
+"Advanced Options" = "ตัวเลือกขั้นสูง";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "ก้_All sites___________________ษฺ";
+"All sites" = "ไซต์ทั้งหมด";
 
 /* A message describing the outcome of clearing all utility network trace results. */
-"All the trace inputs and results will be lost." = "ก้_All the trace inputs and results will be lost________________________ษฺ.";
+"All the trace inputs and results will be lost." = "อินพุทและผลลัพธ์การติดตามทั้งหมดจะสูญหาย";
 
 /* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "ก้_Allow___________ษฺ";
+"Allow" = "อนุญาต";
 
 /* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "ก้_An error occurred loading the image: %@_____________________ษฺ.";
+"An error occurred loading the image: %@." = "เกิดข้อผิดพลาดขณะโหลดภาพ: %@";
 
 /* A label in reference to attachments in a popup. */
-"Attachments" = "ก้_Attachments____________ษฺ";
+"Attachments" = "เอกสารแนบ";
 
 /* A label in reference to the attributes of a geo element. */
-"Attributes" = "ก้_Attributes_____________________ษฺ";
+"Attributes" = "ข้อมูลคุณลักษณะ";
 
 /* A label indicating authentication is required to proceed. */
-"Authentication Required" = "ก้_Authentication Required________________________ษฺ";
+"Authentication Required" = "จำเป็นต้องรับรองความถูกต้อง";
 
 /* A label in reference to bookmarks contained in a map or scene. */
-"Bookmarks" = "ก้_Bookmarks___________________ษฺ";
+"Bookmarks" = "บุ๊คมาร์ค";
 
 /* A label for a button to open the system file browser. */
-"Browse" = "ก้_Browse_____________ษฺ";
+"Browse" = "เรียกดู";
 
 /* A label for a button to cancel an operation. */
-"Cancel" = "ก้_Cancel_____________ษฺ";
+"Cancel" = "ยกเลิก";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "ก้_Cancel starting point selection_________________ษฺ";
+"Cancel starting point selection" = "ยกเลิกการเลือกจุดเริ่มต้น";
 
 /* A label indicating that a certificate is required to proceed. */
-"Certificate Required" = "ก้_Certificate Required_____________________ษฺ";
+"Certificate Required" = "จำเป็นต้องใช้ใบรับรอง";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "ก้_Certificate Trust Warning__________________________ษฺ";
+"Certificate Trust Warning" = "คำเตือนการเชื่อถือใบรับรอง";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "ก้_Clear all results__________________ษฺ";
+"Clear all results" = "ล้างผลลัพธ์ทั้งหมด";
 
 /* A label in reference to the color used to display utility trace result graphics. */
-"Color" = "ก้_Color___________ษฺ";
+"Color" = "สี";
 
 /* An compass description to be read by a screen reader describing the
 current heading. The first variable being a degree value and the
 second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
-"Compass, heading %lld degrees %@" = "ก้_Compass, heading %lld degrees %@_________________ษฺ";
+"Compass, heading %lld degrees %@" = "เข็มทิศ, ทิศทาง %lld องศา %@";
 
 /* A label for a button used to continue the authentication operation. */
-"Continue" = "ก้_Continue_________________ษฺ";
+"Continue" = "ดำเนินการต่อ";
 
 /* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "ก้_Could not access the certificate file____________________ษฺ.";
+"Could not access the certificate file." = "ไม่สามารถเข้าถึงไฟล์ใบรับรองได้";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "ก้_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________ษฺ.";
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "อันตราย: ใบรับรองที่ระบุโดย '%@' ไม่มีลายเซ็นของหน่วยงานที่เชื่อถือได้";
 
 /* A label for a button used to delete a utility network trace input component or result. */
-"Delete" = "ก้_Delete_____________ษฺ";
+"Delete" = "ลบ";
 
 /* A button to close the bookmark selection menu. */
-"Done" = "ก้_Done_________ษฺ";
+"Done" = "สำเร็จ";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
-"Duplicate starting points cannot be added." = "ก้_Duplicate starting points cannot be added______________________ษฺ.";
+"Duplicate starting points cannot be added." = "ไม่สามารถเพิ่มจุดเริ่มต้นซ้ำได้";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
-"Element could not be identified." = "ก้_Element could not be identified_________________ษฺ.";
+"Element could not be identified." = "ไม่สามารถระบุองค์ประกอบได้";
 
 /* A label in reference to an error that occurred during a utility network trace. */
-"Error" = "ก้_Error___________ษฺ";
+"Error" = "ข้อผิดพลาด";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
-"Error importing certificate" = "ก้_Error importing certificate____________________________ษฺ";
+"Error importing certificate" = "เกิดข้อผิดพลาดขณะนำเข้าใบรับรอง";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
-"Error loading basemap." = "ก้_Error loading basemap_______________________ษฺ.";
+"Error loading basemap." = "เกิดข้อผิดพลาดขณะโหลดแผนที่ฐาน";
 
 /* A label indicating popup expressions are being evaluated. */
-"Evaluating popup expressions" = "ก้_Evaluating popup expressions_____________________________ษฺ";
+"Evaluating popup expressions" = "กำลังประเมินนิพจน์ป็อปอัพ";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
-"Failed to set starting point" = "ก้_Failed to set starting point_____________________________ษฺ";
+"Failed to set starting point" = "ตั้งค่าจุดเริ่มต้นไม่สำเร็จ";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
-"Feature Results" = "ก้_Feature Results________________ษฺ";
+"Feature Results" = "ผลลัพธ์ฟีเจอร์";
 
 /* A field in a set of data contained in a popup. */
-"Field" = "ก้_Field___________ษฺ";
+"Field" = "ฟิลด์";
 
 /* A label in reference to fields in a set of data contained in a popup. */
-"Fields" = "ก้_Fields_____________ษฺ";
+"Fields" = "ฟิลด์";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
-"Filter facilities" = "ก้_Filter facilities__________________ษฺ";
+"Filter facilities" = "กรองสิ่งอำนวยความสะดวก";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
-"Filter sites" = "ก้_Filter sites_____________ษฺ";
+"Filter sites" = "กรองไซต์";
 
 /* A hint for the user on what to search for in a search bar. */
-"Find a place or address" = "ก้_Find a place or address________________________ษฺ";
+"Find a place or address" = "ค้นหาสถานที่หรือที่อยู่";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
-"Fraction Along Edge" = "ก้_Fraction Along Edge____________________ษฺ";
+"Fraction Along Edge" = "เศษส่วนตามแนวขอบ";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
-"Function Results" = "ก้_Function Results_________________ษฺ";
+"Function Results" = "ผลลัพธ์ฟังก์ชัน";
 
 /* A label in reference to media elements contained within a popup. */
-"Media" = "ก้_Media___________ษฺ";
+"Media" = "มีเดีย";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
-"Mode" = "ก้_Mode_________ษฺ";
+"Mode" = "โหมด";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
-"Name" = "ก้_Name_________ษฺ";
+"Name" = "ชื่อ";
 
 /* A label in reference to a specific utility network. */
-"Network" = "ก้_Network_______________ษฺ";
+"Network" = "เครือข่าย";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "ก้_New trace___________________ษฺ";
+"New trace" = "การติดตามใหม่";
 
 /* A label indicating that no bookmarks are available for selection. */
-"No bookmarks" = "ก้_No bookmarks_____________ษฺ";
+"No bookmarks" = "ไม่มีบุ๊กมาร์ก";
 
 /* A statement that no utility trace configurations are available. */
-"No configurations available." = "ก้_No configurations available_____________________________ษฺ.";
+"No configurations available." = "ไม่มีการกำหนดค่าที่พร้อมใช้งาน";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
-"No matches found." = "ก้_No matches found__________________ษฺ.";
+"No matches found." = "ไม่พบการจับคู่ที่ตรงกัน";
 
 /* A message to show when there are no results or suggestions. */
-"No results found" = "ก้_No results found_________________ษฺ";
+"No results found" = "ไม่พบผลลัพธ์";
 
 /* A label indicating that no utility named trace configurations are available. */
-"No trace types found." = "ก้_No trace types found______________________ษฺ.";
+"No trace types found." = "ไม่พบประเภทการติดตาม";
 
 /* A label indicating that no utility networks are available. */
-"No utility networks found." = "ก้_No utility networks found___________________________ษฺ.";
+"No utility networks found." = "ไม่พบเครือข่ายสาธารณูปโภค";
 
 /* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "ก้_None selected______________ษฺ";
+"None selected" = "ไม่ได้เลือก";
 
 /* A trace function output result was not provided. */
-"Not Available" = "ก้_Not Available______________ษฺ";
+"Not Available" = "ไม่พร้อมใช้งาน";
 
 /* A string identifying a utility network object. */
-"Object ID: %@" = "ก้_Object ID: %@______________ษฺ";
+"Object ID: %@" = "ID วัตถุ: %@";
 
 /* A label for button to proceed with an operation. */
-"OK" = "ก้_OK_____ษฺ";
+"OK" = "ตกลง";
 
 /* A label in reference to a credential password. */
-"Password" = "ก้_Password_________________ษฺ";
+"Password" = "รหัสผ่าน";
 
 /* A label indicating that a password is required to proceed with an operation. */
-"Password Required" = "ก้_Password Required__________________ษฺ";
+"Password Required" = "จำเป็นต้องใช้รหัสผ่าน";
 
 /* A label requesting the password associated with the chosen certificate. */
-"Please enter a password for the chosen certificate." = "ก้_Please enter a password for the chosen certificate___________________________ษฺ.";
+"Please enter a password for the chosen certificate." = "โปรดป้อนรหัสผ่านสำหรับใบรับรองที่เลือก";
 
 /* A label indicating that at least one starting location is required for the
 chosen utility network trace configuration. */
-"Please set at least 1 starting location." = "ก้_Please set at least 1 starting location_____________________ษฺ.";
+"Please set at least 1 starting location." = "โปรดตั้งค่าอย่างน้อย 1 ตำแหน่งเริ่มต้น";
 
 /* A label indicating that at least two starting locations are required for the
 chosen utility network trace configuration. */
-"Please set at least 2 starting locations." = "ก้_Please set at least 2 starting locations______________________ษฺ.";
+"Please set at least 2 starting locations." = "โปรดตั้งค่าอย่างน้อย 2 ตำแหน่งเริ่มต้น";
 
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
-"Popup evaluation failed: %@" = "ก้_Popup evaluation failed: %@____________________________ษฺ";
+"Popup evaluation failed: %@" = "ประเมินผลป็อปอัพไม่สำเร็จ: %@";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
-"Repeat Search Here" = "ก้_Repeat Search Here___________________ษฺ";
+"Repeat Search Here" = "ทำซ้ำการค้นหาที่นี่";
 
 /* A label for a button to show utility network trace results. */
-"Results" = "ก้_Results_______________ษฺ";
+"Results" = "ผลลัพธ์";
 
 /* A label in reference to a search query entered by the user. */
-"Search Query" = "ก้_Search Query_____________ษฺ";
+"Search Query" = "คิวรีการค้นหา";
 
 /* A label prompting the user to make a selection from the available bookmarks. */
-"Select a bookmark" = "ก้_Select a bookmark__________________ษฺ";
+"Select a bookmark" = "เลือกบุ๊กมาร์ก";
 
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
-"Select a facility" = "ก้_Select a facility__________________ษฺ";
+"Select a facility" = "เลือกสิ่งอำนวยความสะดวก";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
-"Sites" = "ก้_Sites___________ษฺ";
+"Sites" = "เว็บไซต์";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
-"Spatial reference mismatch." = "ก้_Spatial reference mismatch____________________________ษฺ.";
+"Spatial reference mismatch." = "การอ้างอิงเชิงพื้นที่ไม่ตรงกัน";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
-"Starting Points" = "ก้_Starting Points________________ษฺ";
+"Starting Points" = "จุดเริ่มต้น";
 
 /* A label indicating that tapping an image will reveal
 additional information. */
-"Tap on the image for more information." = "ก้_Tap on the image for more information____________________ษฺ.";
+"Tap on the image for more information." = "แตะบนภาพเพื่อดูข้อมูลเพิ่มเติม";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
-"Terminal Configuration" = "ก้_Terminal Configuration_______________________ษฺ";
+"Terminal Configuration" = "การกำหนดค่าเทอร์มินัล";
 
 /* A label for development purposes only. This is not user visible. */
-"test" = "ก้_test_________ษฺ";
+"test" = "ทดสอบ";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
-"The basemap does not have a spatial reference." = "ก้_The basemap does not have a spatial reference________________________ษฺ.";
+"The basemap does not have a spatial reference." = "แผนที่ฐานไม่มีการอ้างอิงเชิงพื้นที่";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to
 load for an unknown reason. */
-"The basemap failed to load for an unknown reason." = "ก้_The basemap failed to load for an unknown reason__________________________ษฺ.";
+"The basemap failed to load for an unknown reason." = "โหลดแผนที่ฐานไม่สำเร็จเนื่องจากเหตุผลที่ไม่ทราบ";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map. */
-"The basemap has a spatial reference that is incompatible with the map." = "ก้_The basemap has a spatial reference that is incompatible with the map____________________________________ษฺ.";
+"The basemap has a spatial reference that is incompatible with the map." = "แผนที่ฐานมีการอ้างอิงเชิงพื้นที่ซึ่งเข้ากันไม่ได้กับแผนที่";
 
 /* A label indicating the chosen file or given password was invalid. */
-"The certificate file or password was invalid." = "ก้_The certificate file or password was invalid________________________ษฺ.";
+"The certificate file or password was invalid." = "ไฟล์ใบรับรองหรือรหัสผ่านใช้งานไม่ได้";
 
 /* A label indicating the chosen file was invalid. */
-"The certificate file was invalid." = "ก้_The certificate file was invalid__________________ษฺ.";
+"The certificate file was invalid." = "ไฟล์ใบรับรองใช้งานไม่ได้";
 
 /* A label indicating the map doesn't have a spatial reference. */
-"The map does not have a spatial reference." = "ก้_The map does not have a spatial reference______________________ษฺ.";
+"The map does not have a spatial reference." = "แผนที่ไม่มีการอ้างอิงเชิงพื้นที่";
 
 /* A label indicating the given password was invalid. */
-"The password was invalid." = "ก้_The password was invalid__________________________ษฺ.";
+"The password was invalid." = "รหัสผ่านใช้งานไม่ได้";
 
 /* Description of error thrown when a remote image could not be loaded. */
-"The URL could not be reached or did not contain image data." = "ก้_The URL could not be reached or did not contain image data_______________________________ษฺ.";
+"The URL could not be reached or did not contain image data." = "ไม่สามารถเข้าถึง URL ได้ หรือไม่มีข้อมูลภาพ";
 
 /* A label for a button to begin a utility network trace operation. */
-"Trace" = "ก้_Trace___________ษฺ";
+"Trace" = "การติดตาม";
 
 /* A label indicating the index of the trace being viewed out of the total number of traces completed. */
-"Trace %1$lld of %2$lld" = "ก้_Trace %1$lld of %2$lld_______________________ษฺ";
+"Trace %1$lld of %2$lld" = "ติดตาม %1$lld จาก %2$lld";
 
 /* A label in reference to a utility network trace configuration. */
-"Trace Configuration" = "ก้_Trace Configuration____________________ษฺ";
+"Trace Configuration" = "การกำหนดค่าการติดตาม";
 
 /* A label for a button allowing the user to retry an operation. */
-"Try Again" = "ก้_Try Again___________________ษฺ";
+"Try Again" = "ลองอีกครั้ง";
 
 /* A label to use in place of a utility element asset type name. */
-"Unnamed Asset Type" = "ก้_Unnamed Asset Type___________________ษฺ";
+"Unnamed Asset Type" = "ประเภทแอสเซ็ทที่ไม่มีชื่อ";
 
 /* A label in reference to a credential username. */
-"Username" = "ก้_Username_________________ษฺ";
+"Username" = "ชื่อผู้ใช้";
 
 /* A value in a set of data contained in a popup. */
-"Value" = "ก้_Value___________ษฺ";
+"Value" = "ค่า";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
-"You must sign in to access '%@'" = "ก้_You must sign in to access '%@'_________________ษฺ";
+"You must sign in to access '%@'" = "คุณต้องลงชื่อเข้าใช้เพื่อเข้าถึง '%@'";
 
 /* A button to change the map to the extent of the selected trace. */
-"Zoom To" = "ก้_Zoom To_______________ษฺ";
+"Zoom To" = "ซูมไปยัง";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "ก้_Zoom to result_______________ษฺ";
+"Zoom to result" = "ซูมไปยังผลลัพธ์";
 
