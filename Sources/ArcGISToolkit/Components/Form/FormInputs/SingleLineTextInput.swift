@@ -33,14 +33,14 @@ struct SingleLineTextInput: View {
     /// The input's parent element.
     private let element: FieldFormElement
     
-    /// The input configuration of the field.
+    /// The input configuration of the view.
     private let input: TextBoxFormInput
     
     /// Creates a view for single line text input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
     ///   - element: The input's parent element.
-    ///   - input: The input configuration of the field.
+    ///   - input: The input configuration of the view.
     init(featureForm: FeatureForm?, element: FieldFormElement, input: TextBoxFormInput) {
         self.featureForm = featureForm
         self.element = element

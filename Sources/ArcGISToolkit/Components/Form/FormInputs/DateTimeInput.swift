@@ -35,14 +35,14 @@ struct DateTimeInput: View {
     /// The input's parent element.
     private let element: FieldFormElement
     
-    /// The input configuration of the field.
+    /// The input configuration of the view.
     private let input: DateTimePickerFormInput
     
     /// Creates a view for a date (and time if applicable) input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
     ///   - element: The input's parent element.
-    ///   - input: The input configuration of the field.
+    ///   - input: The input configuration of the view.
     init(featureForm: FeatureForm?, element: FieldFormElement, input: DateTimePickerFormInput) {
         self.featureForm = featureForm
         self.element = element
