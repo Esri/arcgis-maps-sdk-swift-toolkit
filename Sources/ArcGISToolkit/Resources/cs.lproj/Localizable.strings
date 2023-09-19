@@ -1,294 +1,294 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
-"%lld selected" = "Ř_%lld selected______________ů";
+"%lld selected" = "%lld vybráno";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
-"A certificate is required to access content on %@." = "Ř_A certificate is required to access content on %@__________________________ů.";
+"A certificate is required to access content on %@." = "Pro přístup k obsahu na %@ je vyžadován certifikát.";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "Ř_Add new_______________ů";
+"Add new" = "Přidat nový kontakt";
 
 /* A section header for advanced options. */
-"Advanced Options" = "Ř_Advanced Options_________________ů";
+"Advanced Options" = "Pokročilé možnosti";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "Ř_All sites___________________ů";
+"All sites" = "Všechna místa";
 
 /* A message describing the outcome of clearing all utility network trace results. */
-"All the trace inputs and results will be lost." = "Ř_All the trace inputs and results will be lost________________________ů.";
+"All the trace inputs and results will be lost." = "Všechny vstupy a výsledky trasování budou ztraceny.";
 
 /* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "Ř_Allow___________ů";
+"Allow" = "Povolit";
 
 /* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "Ř_An error occurred loading the image: %@_____________________ů.";
+"An error occurred loading the image: %@." = "Došlo k chybě při načítání obrázku: %@.";
 
 /* A label in reference to attachments in a popup. */
-"Attachments" = "Ř_Attachments____________ů";
+"Attachments" = "Přílohy";
 
 /* A label in reference to the attributes of a geo element. */
-"Attributes" = "Ř_Attributes_____________________ů";
+"Attributes" = "Atributy";
 
 /* A label indicating authentication is required to proceed. */
-"Authentication Required" = "Ř_Authentication Required________________________ů";
+"Authentication Required" = "Požadováno ověření";
 
 /* A label in reference to bookmarks contained in a map or scene. */
-"Bookmarks" = "Ř_Bookmarks___________________ů";
+"Bookmarks" = "Záložky";
 
 /* A label for a button to open the system file browser. */
-"Browse" = "Ř_Browse_____________ů";
+"Browse" = "Procházet";
 
 /* A label for a button to cancel an operation. */
-"Cancel" = "Ř_Cancel_____________ů";
+"Cancel" = "Storno";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "Ř_Cancel starting point selection_________________ů";
+"Cancel starting point selection" = "Zrušit výběr výchozího bodu";
 
 /* A label indicating that a certificate is required to proceed. */
-"Certificate Required" = "Ř_Certificate Required_____________________ů";
+"Certificate Required" = "Vyžadován certifikát";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "Ř_Certificate Trust Warning__________________________ů";
+"Certificate Trust Warning" = "Upozornění na důvěryhodnost certifikátu";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "Ř_Clear all results__________________ů";
+"Clear all results" = "Vymazat všechny výsledky";
 
 /* A label in reference to the color used to display utility trace result graphics. */
-"Color" = "Ř_Color___________ů";
+"Color" = "Barva";
 
 /* An compass description to be read by a screen reader describing the
 current heading. The first variable being a degree value and the
 second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
-"Compass, heading %lld degrees %@" = "Ř_Compass, heading %lld degrees %@_________________ů";
+"Compass, heading %lld degrees %@" = "Kompas, směr %lld stupňů %@";
 
 /* A label for a button used to continue the authentication operation. */
-"Continue" = "Ř_Continue_________________ů";
+"Continue" = "Pokračovat";
 
 /* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "Ř_Could not access the certificate file____________________ů.";
+"Could not access the certificate file." = "Nepodařilo se získat přístup k souboru certifikátu.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Ř_Dangerous: The certificate provided by '%@' is not signed by a trusted authority__________________________________________ů.";
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Nebezpečné: Certifikát poskytnutý ‚%@‘ není podepsán důvěryhodnou autoritou.";
 
 /* A label for a button used to delete a utility network trace input component or result. */
-"Delete" = "Ř_Delete_____________ů";
+"Delete" = "Odstranit";
 
 /* A button to close the bookmark selection menu. */
-"Done" = "Ř_Done_________ů";
+"Done" = "Hotovo";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
-"Duplicate starting points cannot be added." = "Ř_Duplicate starting points cannot be added______________________ů.";
+"Duplicate starting points cannot be added." = "Duplicitní výchozí body nelze přidat.";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
-"Element could not be identified." = "Ř_Element could not be identified_________________ů.";
+"Element could not be identified." = "Element se nepodařilo identifikovat.";
 
 /* A label in reference to an error that occurred during a utility network trace. */
-"Error" = "Ř_Error___________ů";
+"Error" = "Chyba";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
-"Error importing certificate" = "Ř_Error importing certificate____________________________ů";
+"Error importing certificate" = "Chyba při importu certifikátu";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
-"Error loading basemap." = "Ř_Error loading basemap_______________________ů.";
+"Error loading basemap." = "Chyba při načítání podkladové mapy.";
 
 /* A label indicating popup expressions are being evaluated. */
-"Evaluating popup expressions" = "Ř_Evaluating popup expressions_____________________________ů";
+"Evaluating popup expressions" = "Vyhodnocování výrazů vyskakovacího okna";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
-"Failed to set starting point" = "Ř_Failed to set starting point_____________________________ů";
+"Failed to set starting point" = "Nepodařilo se nastavit výchozí bod";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
-"Feature Results" = "Ř_Feature Results________________ů";
+"Feature Results" = "Výsledky prvků";
 
 /* A field in a set of data contained in a popup. */
-"Field" = "Ř_Field___________ů";
+"Field" = "Pole";
 
 /* A label in reference to fields in a set of data contained in a popup. */
-"Fields" = "Ř_Fields_____________ů";
+"Fields" = "Pole";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
-"Filter facilities" = "Ř_Filter facilities__________________ů";
+"Filter facilities" = "Filtrovat zařízení";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
-"Filter sites" = "Ř_Filter sites_____________ů";
+"Filter sites" = "Filtrovat místa";
 
 /* A hint for the user on what to search for in a search bar. */
-"Find a place or address" = "Ř_Find a place or address________________________ů";
+"Find a place or address" = "Vyhledat místo nebo adresu";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
-"Fraction Along Edge" = "Ř_Fraction Along Edge____________________ů";
+"Fraction Along Edge" = "Zlomek podél hrany";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
-"Function Results" = "Ř_Function Results_________________ů";
+"Function Results" = "Výsledky funkce";
 
 /* A label in reference to media elements contained within a popup. */
-"Media" = "Ř_Media___________ů";
+"Media" = "Multimédia";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
-"Mode" = "Ř_Mode_________ů";
+"Mode" = "Režim";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
-"Name" = "Ř_Name_________ů";
+"Name" = "Název";
 
 /* A label in reference to a specific utility network. */
-"Network" = "Ř_Network_______________ů";
+"Network" = "Síť";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "Ř_New trace___________________ů";
+"New trace" = "Nové trasování";
 
 /* A label indicating that no bookmarks are available for selection. */
-"No bookmarks" = "Ř_No bookmarks_____________ů";
+"No bookmarks" = "Žádné záložky";
 
 /* A statement that no utility trace configurations are available. */
-"No configurations available." = "Ř_No configurations available_____________________________ů.";
+"No configurations available." = "Žádné konfigurace k dispozici.";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
-"No matches found." = "Ř_No matches found__________________ů.";
+"No matches found." = "Nebyly nalezeny žádné shody.";
 
 /* A message to show when there are no results or suggestions. */
-"No results found" = "Ř_No results found_________________ů";
+"No results found" = "Nebyly nalezeny žádné výsledky";
 
 /* A label indicating that no utility named trace configurations are available. */
-"No trace types found." = "Ř_No trace types found______________________ů.";
+"No trace types found." = "Nebyly nalezeny žádné typy trasování.";
 
 /* A label indicating that no utility networks are available. */
-"No utility networks found." = "Ř_No utility networks found___________________________ů.";
+"No utility networks found." = "Nebyly nalezeny žádné inženýrské sítě.";
 
 /* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "Ř_None selected______________ů";
+"None selected" = "Nevybráno nic";
 
 /* A trace function output result was not provided. */
-"Not Available" = "Ř_Not Available______________ů";
+"Not Available" = "Není k dispozici";
 
 /* A string identifying a utility network object. */
-"Object ID: %@" = "Ř_Object ID: %@______________ů";
+"Object ID: %@" = "ID objektu: %@";
 
 /* A label for button to proceed with an operation. */
-"OK" = "Ř_OK_____ů";
+"OK" = "OK";
 
 /* A label in reference to a credential password. */
-"Password" = "Ř_Password_________________ů";
+"Password" = "Heslo";
 
 /* A label indicating that a password is required to proceed with an operation. */
-"Password Required" = "Ř_Password Required__________________ů";
+"Password Required" = "Je vyžadováno heslo";
 
 /* A label requesting the password associated with the chosen certificate. */
-"Please enter a password for the chosen certificate." = "Ř_Please enter a password for the chosen certificate___________________________ů.";
+"Please enter a password for the chosen certificate." = "Zadejte prosím heslo pro zvolený certifikát.";
 
 /* A label indicating that at least one starting location is required for the
 chosen utility network trace configuration. */
-"Please set at least 1 starting location." = "Ř_Please set at least 1 starting location_____________________ů.";
+"Please set at least 1 starting location." = "Nastavte alespoň 1 výchozí umístění.";
 
 /* A label indicating that at least two starting locations are required for the
 chosen utility network trace configuration. */
-"Please set at least 2 starting locations." = "Ř_Please set at least 2 starting locations______________________ů.";
+"Please set at least 2 starting locations." = "Nastavte alespoň 2 výchozí umístění.";
 
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
-"Popup evaluation failed: %@" = "Ř_Popup evaluation failed: %@____________________________ů";
+"Popup evaluation failed: %@" = "Vyhodnocení vyskakovacího okna se nezdařilo: %@";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
-"Repeat Search Here" = "Ř_Repeat Search Here___________________ů";
+"Repeat Search Here" = "Opakujte hledání zde";
 
 /* A label for a button to show utility network trace results. */
-"Results" = "Ř_Results_______________ů";
+"Results" = "Výsledky";
 
 /* A label in reference to a search query entered by the user. */
-"Search Query" = "Ř_Search Query_____________ů";
+"Search Query" = "Vyhledávací dotaz";
 
 /* A label prompting the user to make a selection from the available bookmarks. */
-"Select a bookmark" = "Ř_Select a bookmark__________________ů";
+"Select a bookmark" = "Vybrat záložku";
 
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
-"Select a facility" = "Ř_Select a facility__________________ů";
+"Select a facility" = "Vybrat zařízení";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
-"Sites" = "Ř_Sites___________ů";
+"Sites" = "Místa";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
-"Spatial reference mismatch." = "Ř_Spatial reference mismatch____________________________ů.";
+"Spatial reference mismatch." = "Nesprávný souřadnicový systém.";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
-"Starting Points" = "Ř_Starting Points________________ů";
+"Starting Points" = "Výchozí body";
 
 /* A label indicating that tapping an image will reveal
 additional information. */
-"Tap on the image for more information." = "Ř_Tap on the image for more information____________________ů.";
+"Tap on the image for more information." = "Klepnutím na obrázek získáte další informace.";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
-"Terminal Configuration" = "Ř_Terminal Configuration_______________________ů";
+"Terminal Configuration" = "Konfigurace terminálu";
 
 /* A label for development purposes only. This is not user visible. */
-"test" = "Ř_test_________ů";
+"test" = "test";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
-"The basemap does not have a spatial reference." = "Ř_The basemap does not have a spatial reference________________________ů.";
+"The basemap does not have a spatial reference." = "Podkladová mapa nemá zadán souřadnicový systém.";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to
 load for an unknown reason. */
-"The basemap failed to load for an unknown reason." = "Ř_The basemap failed to load for an unknown reason__________________________ů.";
+"The basemap failed to load for an unknown reason." = "Podkladovou mapu se z neznámého důvodu nepodařilo načíst.";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map. */
-"The basemap has a spatial reference that is incompatible with the map." = "Ř_The basemap has a spatial reference that is incompatible with the map____________________________________ů.";
+"The basemap has a spatial reference that is incompatible with the map." = "Podkladová mapa má zadán souřadnicový systém, který není kompatibilní s mapou.";
 
 /* A label indicating the chosen file or given password was invalid. */
-"The certificate file or password was invalid." = "Ř_The certificate file or password was invalid________________________ů.";
+"The certificate file or password was invalid." = "Soubor certifikátu nebo heslo je neplatné.";
 
 /* A label indicating the chosen file was invalid. */
-"The certificate file was invalid." = "Ř_The certificate file was invalid__________________ů.";
+"The certificate file was invalid." = "Soubor certifikátu je neplatný.";
 
 /* A label indicating the map doesn't have a spatial reference. */
-"The map does not have a spatial reference." = "Ř_The map does not have a spatial reference______________________ů.";
+"The map does not have a spatial reference." = "Mapa nemá zadán souřadnicový systém.";
 
 /* A label indicating the given password was invalid. */
-"The password was invalid." = "Ř_The password was invalid__________________________ů.";
+"The password was invalid." = "Heslo je neplatné.";
 
 /* Description of error thrown when a remote image could not be loaded. */
-"The URL could not be reached or did not contain image data." = "Ř_The URL could not be reached or did not contain image data_______________________________ů.";
+"The URL could not be reached or did not contain image data." = "Adresa URL není dostupná nebo neobsahuje obrazová data.";
 
 /* A label for a button to begin a utility network trace operation. */
-"Trace" = "Ř_Trace___________ů";
+"Trace" = "Trasování";
 
 /* A label indicating the index of the trace being viewed out of the total number of traces completed. */
-"Trace %1$lld of %2$lld" = "Ř_Trace %1$lld of %2$lld_______________________ů";
+"Trace %1$lld of %2$lld" = "Trasování %1$lld z %2$lld";
 
 /* A label in reference to a utility network trace configuration. */
-"Trace Configuration" = "Ř_Trace Configuration____________________ů";
+"Trace Configuration" = "Konfigurace trasování";
 
 /* A label for a button allowing the user to retry an operation. */
-"Try Again" = "Ř_Try Again___________________ů";
+"Try Again" = "Zkusit znovu";
 
 /* A label to use in place of a utility element asset type name. */
-"Unnamed Asset Type" = "Ř_Unnamed Asset Type___________________ů";
+"Unnamed Asset Type" = "Nepojmenovaný typ majetku";
 
 /* A label in reference to a credential username. */
-"Username" = "Ř_Username_________________ů";
+"Username" = "Uživatelské jméno";
 
 /* A value in a set of data contained in a popup. */
-"Value" = "Ř_Value___________ů";
+"Value" = "Hodnota";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
-"You must sign in to access '%@'" = "Ř_You must sign in to access '%@'_________________ů";
+"You must sign in to access '%@'" = "Pro přístup k ‚%@‘ se musíte přihlásit";
 
 /* A button to change the map to the extent of the selected trace. */
-"Zoom To" = "Ř_Zoom To_______________ů";
+"Zoom To" = "Přiblížit na";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "Ř_Zoom to result_______________ů";
+"Zoom to result" = "Příblížit na výsledek";
 
