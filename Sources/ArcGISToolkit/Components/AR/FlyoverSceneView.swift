@@ -71,7 +71,7 @@ public struct FlyoverSceneView: View {
                     .onDisappear {
                         arViewProxy.session?.pause()
                     }
-                    .opacity(0.0)
+                    .opacity(0)
             }
         }
     }
