@@ -16,12 +16,16 @@ import ARKit
 import SwiftUI
 import ArcGIS
 
+/// A SwiftUI version of ARSCNView.
 struct ARSwiftUIView {
+    /// The closure to call when the ARSCNView renders.
     private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
-    private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
-    private(set) var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
+    /// The proxy.
     private let proxy: ARSwiftUIViewProxy?
     
+    /// Creates an ARSwiftUIView.
+    /// - Parameter proxy: The provided proxy which will have it's state filled out
+    /// when available by the underlying view.
     init(proxy: ARSwiftUIViewProxy? = nil) {
         self.proxy = proxy
     }
@@ -31,22 +35,6 @@ struct ARSwiftUIView {
     ) -> Self {
         var view = self
         view.onRenderAction = action
-        return view
-    }
-    
-    func onCameraTrackingStateChange(
-        perform action: @escaping (ARSession, ARCamera) -> Void
-    ) -> Self {
-        var view = self
-        view.onCameraTrackingStateChangeAction = action
-        return view
-    }
-    
-    func onGeoTrackingStatusChange(
-        perform action: @escaping (ARSession, ARGeoTrackingStatus) -> Void
-    ) -> Self {
-        var view = self
-        view.onGeoTrackingStatusChangeAction = action
         return view
     }
 }
@@ -61,8 +49,6 @@ extension ARSwiftUIView: UIViewRepresentable {
 
     func updateUIView(_ uiView: ARSCNView, context: Context) {
         context.coordinator.onRenderAction = onRenderAction
-        context.coordinator.onCameraTrackingStateChangeAction = onCameraTrackingStateChangeAction
-        context.coordinator.onGeoTrackingStatusChangeAction = onGeoTrackingStatusChangeAction
     }
     
     func makeCoordinator() -> Coordinator {
@@ -73,39 +59,26 @@ extension ARSwiftUIView: UIViewRepresentable {
 extension ARSwiftUIView {
     class Coordinator: NSObject, ARSCNViewDelegate {
         var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
-        var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
-        var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
         
         func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
             onRenderAction?(renderer, scene, time)
         }
-        
-        func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-            onCameraTrackingStateChangeAction?(session, camera)
-        }
-        
-        func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
-            onGeoTrackingStatusChangeAction?(session, geoTrackingStatus)
-        }
     }
 }
 
+/// A proxy for the ARSwiftUIView.
 class ARSwiftUIViewProxy {
-    var arView: ARSCNView?
+    /// The underlying ARSCNView.
+    /// This is set by the ARSwiftUIView when it is available.
+    fileprivate var arView: ARSCNView?
     
+    /// The AR session.
     var session: ARSession? {
         arView?.session
     }
     
+    /// The current point of view of the AR view.
     var pointOfView: SCNNode? {
         arView?.pointOfView
-    }
-}
-
-class ValueWrapper<Value> {
-    var value: Value
-    
-    init(value: Value) {
-        self.value = value
     }
 }
