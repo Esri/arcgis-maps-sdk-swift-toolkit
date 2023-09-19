@@ -34,8 +34,15 @@ struct FlyoverExampleView: View {
             ),
             translationFactor: 3_000,
             clippingDistance: 60_000
-        ) {
+        ) { proxy in
             SceneView(scene: scene)
+                .onSingleTapGesture { screen, _ in
+                    print("Identifying...")
+                    Task {
+                        let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
+                        print("\(results.count) results")
+                    }
+                }
         }
     }
 }
