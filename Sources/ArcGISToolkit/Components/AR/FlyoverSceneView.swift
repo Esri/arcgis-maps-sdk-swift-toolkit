@@ -30,7 +30,8 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/   - initialCamera: The initial camera.
 ***REMOVED******REMOVED***/   - translationFactor: The translation factor that defines how much the scene view translates
 ***REMOVED******REMOVED***/   as the device moves.
-***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera.
+***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera. A value
+***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
 ***REMOVED***public init(

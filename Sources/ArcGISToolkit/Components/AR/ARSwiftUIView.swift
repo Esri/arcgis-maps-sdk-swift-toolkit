@@ -16,12 +16,16 @@ import ARKit
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A SwiftUI version of ARSCNView.
 struct ARSwiftUIView {
+***REMOVED******REMOVED***/ The closure to call when the ARSCNView renders.
 ***REMOVED***private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
-***REMOVED***private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
-***REMOVED***private(set) var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
+***REMOVED******REMOVED***/ The proxy.
 ***REMOVED***private let proxy: ARSwiftUIViewProxy?
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates an ARSwiftUIView.
+***REMOVED******REMOVED***/ - Parameter proxy: The provided proxy which will have it's state filled out
+***REMOVED******REMOVED***/ when available by the underlying view.
 ***REMOVED***init(proxy: ARSwiftUIViewProxy? = nil) {
 ***REMOVED******REMOVED***self.proxy = proxy
 ***REMOVED***
@@ -31,22 +35,6 @@ struct ARSwiftUIView {
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.onRenderAction = action
-***REMOVED******REMOVED***return view
-***REMOVED***
-***REMOVED***
-***REMOVED***func onCameraTrackingStateChange(
-***REMOVED******REMOVED***perform action: @escaping (ARSession, ARCamera) -> Void
-***REMOVED***) -> Self {
-***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.onCameraTrackingStateChangeAction = action
-***REMOVED******REMOVED***return view
-***REMOVED***
-***REMOVED***
-***REMOVED***func onGeoTrackingStatusChange(
-***REMOVED******REMOVED***perform action: @escaping (ARSession, ARGeoTrackingStatus) -> Void
-***REMOVED***) -> Self {
-***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.onGeoTrackingStatusChangeAction = action
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
@@ -61,8 +49,6 @@ extension ARSwiftUIView: UIViewRepresentable {
 
 ***REMOVED***func updateUIView(_ uiView: ARSCNView, context: Context) {
 ***REMOVED******REMOVED***context.coordinator.onRenderAction = onRenderAction
-***REMOVED******REMOVED***context.coordinator.onCameraTrackingStateChangeAction = onCameraTrackingStateChangeAction
-***REMOVED******REMOVED***context.coordinator.onGeoTrackingStatusChangeAction = onGeoTrackingStatusChangeAction
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCoordinator() -> Coordinator {
@@ -73,39 +59,26 @@ extension ARSwiftUIView: UIViewRepresentable {
 extension ARSwiftUIView {
 ***REMOVED***class Coordinator: NSObject, ARSCNViewDelegate {
 ***REMOVED******REMOVED***var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
-***REMOVED******REMOVED***var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
-***REMOVED******REMOVED***var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
 ***REMOVED******REMOVED******REMOVED***onRenderAction?(renderer, scene, time)
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-***REMOVED******REMOVED******REMOVED***onCameraTrackingStateChangeAction?(session, camera)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
-***REMOVED******REMOVED******REMOVED***onGeoTrackingStatusChangeAction?(session, geoTrackingStatus)
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A proxy for the ARSwiftUIView.
 class ARSwiftUIViewProxy {
-***REMOVED***var arView: ARSCNView?
+***REMOVED******REMOVED***/ The underlying ARSCNView.
+***REMOVED******REMOVED***/ This is set by the ARSwiftUIView when it is available.
+***REMOVED***fileprivate var arView: ARSCNView?
 ***REMOVED***
+***REMOVED******REMOVED***/ The AR session.
 ***REMOVED***var session: ARSession? {
 ***REMOVED******REMOVED***arView?.session
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The current point of view of the AR view.
 ***REMOVED***var pointOfView: SCNNode? {
 ***REMOVED******REMOVED***arView?.pointOfView
-***REMOVED***
-***REMOVED***
-
-class ValueWrapper<Value> {
-***REMOVED***var value: Value
-***REMOVED***
-***REMOVED***init(value: Value) {
-***REMOVED******REMOVED***self.value = value
 ***REMOVED***
 ***REMOVED***
