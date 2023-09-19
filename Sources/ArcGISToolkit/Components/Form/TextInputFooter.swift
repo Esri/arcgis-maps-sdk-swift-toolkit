@@ -26,7 +26,7 @@ struct TextInputFooter: View {
     /// The current length of the text in the text input field.
     private let currentLength: Int
     
-    /// The field's parent element.
+    /// The input's parent element.
     private let element: FieldFormElement
     
     /// A Boolean value indicating whether the text input field is focused.
@@ -48,8 +48,7 @@ struct TextInputFooter: View {
     /// - Parameters:
     ///   - currentLength: The current length of the text in the text input field.
     ///   - isFocused: A Boolean value indicating whether the text input field is focused.
-    ///   - element: A field element that provides a description for the text input and whether
-    ///  or not text is required for this input.
+    ///   - element: The input's parent element.
     ///   - input: A form input that provides length constraints for the text input.
     init(
         currentLength: Int,
