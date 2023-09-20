@@ -16,6 +16,15 @@ import ArcGIS
 import SwiftUI
 
 struct RadioButtonsInput: View {
+    @Environment(\.formElementPadding) var elementPadding
+    
+    /// The set of options in the input.
+    @State private var codedValues = [CodedValue]()
+    
+    
+    /// The selected option.
+    @State private var selectedValue: CodedValue?
+    
     /// The field's parent element.
     private let element: FieldFormElement
     
@@ -34,5 +43,25 @@ struct RadioButtonsInput: View {
         self.featureForm = featureForm
         self.element = element
         self.input = input
+    }
+    
+    var body: some View {
+        Group {
+            InputHeader(element: element)
+                .padding([.top], elementPadding)
+            
+            Picker(element.label, selection: $selectedValue) {
+                ForEach(codedValues, id: \.self) { codedValue in
+                    Text(codedValue.name)
+                }
+            }
+            
+            InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+        }
+        .padding([.bottom], elementPadding)
+        .onAppear {
+            codedValues = featureForm!.codedValues(fieldName: element.fieldName)
+            selectedValue = codedValues.first { $0.name == element.value }
+        }
     }
 }
