@@ -16,4 +16,23 @@
 ***REMOVED***
 
 struct RadioButtonsInput: View {
+***REMOVED******REMOVED***/ The field's parent element.
+***REMOVED***private let element: FieldFormElement
+***REMOVED***
+***REMOVED******REMOVED***/ The feature form containing the input.
+***REMOVED***private var featureForm: FeatureForm?
+***REMOVED***
+***REMOVED******REMOVED***/ The input configuration of the field.
+***REMOVED***private let input: RadioButtonsFormInput
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a view for a date (and time if applicable) input.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
+***REMOVED******REMOVED***/   - element: The field's parent element.
+***REMOVED******REMOVED***/   - input: The input configuration of the field.
+***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: RadioButtonsFormInput) {
+***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED******REMOVED***self.element = element
+***REMOVED******REMOVED***self.input = input
+***REMOVED***
 ***REMOVED***
