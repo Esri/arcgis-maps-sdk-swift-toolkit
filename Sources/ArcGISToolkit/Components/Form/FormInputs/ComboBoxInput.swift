@@ -39,8 +39,11 @@ struct ComboBoxInput: View {
     /// The input's parent element.
     private let element: FieldFormElement
     
-    /// The input configuration of the view.
-    private let input: ComboBoxFormInput
+    /// The text used to represent a `nil` value.
+    private let noValueLabel: String
+    
+    /// The display state value for `nil` value options.
+    private let noValueOption: FormInputNoValueOption
     
     /// A subset of coded values with names containing `filterPhrase` or all of the coded values
     /// if `filterPhrase` is empty.
@@ -60,7 +63,21 @@ struct ComboBoxInput: View {
     init(featureForm: FeatureForm?, element: FieldFormElement, input: ComboBoxFormInput) {
         self.featureForm = featureForm
         self.element = element
-        self.input = input
+        self.noValueLabel = input.noValueLabel
+        self.noValueOption = input.noValueOption
+    }
+    
+    /// Creates a view for a combo box input.
+    /// - Parameters:
+    ///   - featureForm: The feature form containing the input.
+    ///   - element: The input's parent element.
+    ///   - noValueLabel: The text used to represent a `nil` value.
+    ///   - noValueOption: The display state value for `nil` value options.
+    init(featureForm: FeatureForm?, element: FieldFormElement, noValueLabel: String, noValueOption: FormInputNoValueOption) {
+        self.featureForm = featureForm
+        self.element = element
+        self.noValueLabel = noValueLabel
+        self.noValueOption = noValueOption
     }
     
     var body: some View {
@@ -135,12 +152,12 @@ struct ComboBoxInput: View {
             Divider()
             List {
                 if element.value.isEmpty && !element.isRequired {
-                    if input.noValueOption == .show {
+                    if noValueOption == .show {
                         HStack {
                             Button {
                                 selectedValue = nil
                             } label: {
-                                Text(input.noValueLabel.isEmpty ? String.noValue : input.noValueLabel)
+                                Text(noValueLabel.isEmpty ? String.noValue : noValueLabel)
                                     .italic()
                                     .foregroundStyle(.secondary)
                             }
@@ -189,11 +206,11 @@ extension ComboBoxInput {
         guard !element.isRequired else {
             return .enterValue
         }
-        switch (input.noValueOption, input.noValueLabel.isEmpty) {
+        switch (noValueOption, noValueLabel.isEmpty) {
         case (.show, true):
             return .noValue
         case (.show, false):
-            return input.noValueLabel
+            return noValueLabel
         case (.hide, _):
             return ""
         }
