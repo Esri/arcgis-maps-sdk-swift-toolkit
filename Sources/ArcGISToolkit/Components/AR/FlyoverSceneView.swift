@@ -98,22 +98,22 @@ extension SceneViewProxy {
         cameraController: TransformationMatrixCameraController,
         orientation: UIDeviceOrientation
     ) {
-        guard let session = arViewProxy.session, let cameraTransform = arViewProxy.cameraTransform else {
+        guard let session = arViewProxy.session, let pov = arViewProxy.pointOfView else {
             return
         }
         
-        let cameraMatrix = cameraTransform.matrix
+        let cameraTransform = simd_double4x4(pov.transform)
         
-        let cameraQuat = simd_quatf(cameraMatrix)
+        let cameraQuat = simd_quatd(cameraTransform)
         
         let transformationMatrix = TransformationMatrix.normalized(
             quaternionX: Double(cameraQuat.vector.x),
             quaternionY: Double(cameraQuat.vector.y),
             quaternionZ: Double(cameraQuat.vector.z),
             quaternionW: Double(cameraQuat.vector.w),
-            translationX: Double(cameraMatrix.columns.3.x),
-            translationY: Double(cameraMatrix.columns.3.y),
-            translationZ: Double(cameraMatrix.columns.3.z)
+            translationX: Double(cameraTransform.columns.3.x),
+            translationY: Double(cameraTransform.columns.3.y),
+            translationZ: Double(cameraTransform.columns.3.z)
         )
         
         // Set the matrix on the camera controller.

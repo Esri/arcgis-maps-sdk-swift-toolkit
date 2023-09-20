@@ -48,14 +48,14 @@ struct ARSwiftUIView {
 }
 
 extension ARSwiftUIView: UIViewRepresentable {
-    func makeUIView(context: Context) -> ARView {
-        let arView = ARView()
+    func makeUIView(context: Context) -> ARSCNView {
+        let arView = ARSCNView()
         arView.session.delegate = context.coordinator
         proxy?.arView = arView
         return arView
     }
 
-    func updateUIView(_ uiView: ARView, context: Context) {
+    func updateUIView(_ uiView: ARSCNView, context: Context) {
         context.coordinator.onAnchorsDidUpdateAction = onAnchorsDidUpdateAction
         uiView.isHidden = videoFeedIsHidden
     }
@@ -79,7 +79,7 @@ extension ARSwiftUIView {
 class ARSwiftUIViewProxy {
     /// The underlying ARSCNView.
     /// This is set by the ARSwiftUIView when it is available.
-    fileprivate var arView: ARView?
+    fileprivate var arView: ARSCNView?
     
     /// The AR session.
     var session: ARSession? {
@@ -87,7 +87,7 @@ class ARSwiftUIViewProxy {
     }
     
     /// The current camera transform of the AR view.
-    var cameraTransform: Transform? {
-        arView?.cameraTransform
+    var pointOfView: SCNNode? {
+        arView?.pointOfView
     }
 }
