@@ -24,17 +24,13 @@ struct FlyoverExampleView: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***private let initialCamera = Camera(
-***REMOVED******REMOVED***lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
-***REMOVED******REMOVED***distance: 1_000,
-***REMOVED******REMOVED***heading: 40,
-***REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED***roll: 0
+***REMOVED******REMOVED***latitude: 51.9244, longitude: 4.4777, altitude: 1_000, heading: 0, pitch: 120, roll: 0
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FlyoverSceneView(
 ***REMOVED******REMOVED******REMOVED***initialCamera: initialCamera,
-***REMOVED******REMOVED******REMOVED***translationFactor: 3_000
+***REMOVED******REMOVED******REMOVED***translationFactor: 2_000
 ***REMOVED******REMOVED***) { proxy in
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
