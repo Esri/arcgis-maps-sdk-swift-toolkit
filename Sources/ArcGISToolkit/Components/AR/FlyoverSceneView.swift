@@ -20,7 +20,7 @@ public struct FlyoverSceneView: View {
     /// The last portrait or landscape orientation value.
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     @State private var arViewProxy = ARSwiftUIViewProxy()
-    private let cameraController: TransformationMatrixCameraController
+    @State private var cameraController: TransformationMatrixCameraController
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     private let configuration: ARWorldTrackingConfiguration
     
@@ -41,8 +41,9 @@ public struct FlyoverSceneView: View {
     ) {
         self.sceneViewBuilder = sceneView
         
-        cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
         cameraController.translationFactor = translationFactor
+        _cameraController = .init(initialValue: cameraController)
         
         configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
