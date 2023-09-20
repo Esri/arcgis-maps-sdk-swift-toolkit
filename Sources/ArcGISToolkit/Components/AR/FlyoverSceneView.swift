@@ -47,7 +47,6 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
 ***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
-***REMOVED******REMOVED***configuration.planeDetection = [.horizontal]
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -57,7 +56,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAnchorsDidUpdate { session, anchors in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateLastGoodDeviceOrientation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.draw(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: arViewProxy,

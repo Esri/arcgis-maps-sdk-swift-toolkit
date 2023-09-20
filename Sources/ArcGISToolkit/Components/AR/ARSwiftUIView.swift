@@ -18,7 +18,7 @@ import RealityKit
 ***REMOVED***/ A SwiftUI version of ARSCNView.
 struct ARSwiftUIView {
 ***REMOVED******REMOVED***/ The closure to call when the ARSCNView renders.
-***REMOVED***private(set) var onAnchorsDidUpdateAction: ((ARSession, [ARAnchor]) -> Void)?
+***REMOVED***private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
 ***REMOVED***private(set) var videoFeedIsHidden: Bool = false
 ***REMOVED******REMOVED***/ The proxy.
 ***REMOVED***private let proxy: ARSwiftUIViewProxy?
@@ -31,11 +31,11 @@ struct ARSwiftUIView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the closure to call when underlying scene renders.
-***REMOVED***func onAnchorsDidUpdate(
-***REMOVED******REMOVED***perform action: @escaping (ARSession, [ARAnchor]) -> Void
+***REMOVED***func onDidUpdateFrame(
+***REMOVED******REMOVED***perform action: @escaping (ARSession, ARFrame) -> Void
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.onAnchorsDidUpdateAction = action
+***REMOVED******REMOVED***view.onDidUpdateFrameAction = action
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
@@ -56,7 +56,7 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***
 
 ***REMOVED***func updateUIView(_ uiView: ARView, context: Context) {
-***REMOVED******REMOVED***context.coordinator.onAnchorsDidUpdateAction = onAnchorsDidUpdateAction
+***REMOVED******REMOVED***context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
 ***REMOVED******REMOVED***uiView.isHidden = videoFeedIsHidden
 ***REMOVED***
 ***REMOVED***
@@ -67,10 +67,10 @@ extension ARSwiftUIView: UIViewRepresentable {
 
 extension ARSwiftUIView {
 ***REMOVED***class Coordinator: NSObject, ARSessionDelegate {
-***REMOVED******REMOVED***var onAnchorsDidUpdateAction: ((ARSession, [ARAnchor]) -> Void)?
+***REMOVED******REMOVED***var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
-***REMOVED******REMOVED******REMOVED***onAnchorsDidUpdateAction?(session, anchors)
+***REMOVED******REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
+***REMOVED******REMOVED******REMOVED***onDidUpdateFrameAction?(session, frame)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
