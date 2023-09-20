@@ -47,7 +47,6 @@ public struct FlyoverSceneView: View {
         
         configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
-        configuration.planeDetection = [.horizontal]
     }
     
     public var body: some View {
@@ -57,7 +56,7 @@ public struct FlyoverSceneView: View {
                     .cameraController(cameraController)
                     .viewDrawingMode(.manual)
                 ARSwiftUIView(proxy: arViewProxy)
-                    .onAnchorsDidUpdate { session, anchors in
+                    .onDidUpdateFrame { _, _ in
                         updateLastGoodDeviceOrientation()
                         sceneViewProxy.draw(
                             for: arViewProxy,
