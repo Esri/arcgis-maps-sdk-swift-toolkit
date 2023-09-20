@@ -57,7 +57,7 @@ public struct FlyoverSceneView: View {
                     .cameraController(cameraController)
                     .viewDrawingMode(.manual)
                 ARSwiftUIView(proxy: arViewProxy)
-                    .onAnchorsDidUpdate { session, anchors in
+                    .onDidUpdateFrame { _, _ in
                         updateLastGoodDeviceOrientation()
                         sceneViewProxy.draw(
                             for: arViewProxy,
