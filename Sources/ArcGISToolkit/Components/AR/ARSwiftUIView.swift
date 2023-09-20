@@ -12,12 +12,13 @@
 ***REMOVED*** limitations under the License.
 
 import ARKit
+import RealityKit
 ***REMOVED***
 
 ***REMOVED***/ A SwiftUI version of ARSCNView.
 struct ARSwiftUIView {
 ***REMOVED******REMOVED***/ The closure to call when the ARSCNView renders.
-***REMOVED***private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
+***REMOVED***private(set) var onAnchorsDidUpdateAction: ((ARSession, [ARAnchor]) -> Void)?
 ***REMOVED***private(set) var videoFeedIsHidden: Bool = false
 ***REMOVED******REMOVED***/ The proxy.
 ***REMOVED***private let proxy: ARSwiftUIViewProxy?
@@ -30,11 +31,11 @@ struct ARSwiftUIView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the closure to call when underlying scene renders.
-***REMOVED***func onRender(
-***REMOVED******REMOVED***perform action: @escaping (SCNSceneRenderer, SCNScene, TimeInterval) -> Void
+***REMOVED***func onAnchorsDidUpdate(
+***REMOVED******REMOVED***perform action: @escaping (ARSession, [ARAnchor]) -> Void
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.onRenderAction = action
+***REMOVED******REMOVED***view.onAnchorsDidUpdateAction = action
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
@@ -47,15 +48,15 @@ struct ARSwiftUIView {
 ***REMOVED***
 
 extension ARSwiftUIView: UIViewRepresentable {
-***REMOVED***func makeUIView(context: Context) -> ARSCNView {
-***REMOVED******REMOVED***let arView = ARSCNView()
-***REMOVED******REMOVED***arView.delegate = context.coordinator
+***REMOVED***func makeUIView(context: Context) -> ARView {
+***REMOVED******REMOVED***let arView = ARView()
+***REMOVED******REMOVED***arView.session.delegate = context.coordinator
 ***REMOVED******REMOVED***proxy?.arView = arView
 ***REMOVED******REMOVED***return arView
 ***REMOVED***
 
-***REMOVED***func updateUIView(_ uiView: ARSCNView, context: Context) {
-***REMOVED******REMOVED***context.coordinator.onRenderAction = onRenderAction
+***REMOVED***func updateUIView(_ uiView: ARView, context: Context) {
+***REMOVED******REMOVED***context.coordinator.onAnchorsDidUpdateAction = onAnchorsDidUpdateAction
 ***REMOVED******REMOVED***uiView.isHidden = videoFeedIsHidden
 ***REMOVED***
 ***REMOVED***
@@ -65,11 +66,11 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***
 
 extension ARSwiftUIView {
-***REMOVED***class Coordinator: NSObject, ARSCNViewDelegate {
-***REMOVED******REMOVED***var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
+***REMOVED***class Coordinator: NSObject, ARSessionDelegate {
+***REMOVED******REMOVED***var onAnchorsDidUpdateAction: ((ARSession, [ARAnchor]) -> Void)?
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
-***REMOVED******REMOVED******REMOVED***onRenderAction?(renderer, scene, time)
+***REMOVED******REMOVED***func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
+***REMOVED******REMOVED******REMOVED***onAnchorsDidUpdateAction?(session, anchors)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -78,15 +79,15 @@ extension ARSwiftUIView {
 class ARSwiftUIViewProxy {
 ***REMOVED******REMOVED***/ The underlying ARSCNView.
 ***REMOVED******REMOVED***/ This is set by the ARSwiftUIView when it is available.
-***REMOVED***fileprivate var arView: ARSCNView?
+***REMOVED***fileprivate var arView: ARView?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The AR session.
 ***REMOVED***var session: ARSession? {
 ***REMOVED******REMOVED***arView?.session
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The current point of view of the AR view.
-***REMOVED***var pointOfView: SCNNode? {
-***REMOVED******REMOVED***arView?.pointOfView
+***REMOVED******REMOVED***/ The current camera transform of the AR view.
+***REMOVED***var cameraTransform: Transform? {
+***REMOVED******REMOVED***arView?.cameraTransform
 ***REMOVED***
 ***REMOVED***

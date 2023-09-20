@@ -57,7 +57,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onRender { _, _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAnchorsDidUpdate { session, anchors in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateLastGoodDeviceOrientation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.draw(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: arViewProxy,
@@ -98,22 +98,22 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
 ***REMOVED******REMOVED***orientation: UIDeviceOrientation
 ***REMOVED***) {
+***REMOVED******REMOVED***guard let session = arViewProxy.session, let cameraTransform = arViewProxy.cameraTransform else {
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Get transform from SCNView.pointOfView.
-***REMOVED******REMOVED***guard let transform = arViewProxy.pointOfView?.transform else { return ***REMOVED***
-***REMOVED******REMOVED***guard let session = arViewProxy.session else { return ***REMOVED***
+***REMOVED******REMOVED***let cameraMatrix = cameraTransform.matrix
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraTransform = simd_double4x4(transform)
+***REMOVED******REMOVED***let cameraQuat = simd_quatf(cameraMatrix)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraQuat = simd_quatd(cameraTransform)
 ***REMOVED******REMOVED***let transformationMatrix = TransformationMatrix.normalized(
-***REMOVED******REMOVED******REMOVED***quaternionX: cameraQuat.vector.x,
-***REMOVED******REMOVED******REMOVED***quaternionY: cameraQuat.vector.y,
-***REMOVED******REMOVED******REMOVED***quaternionZ: cameraQuat.vector.z,
-***REMOVED******REMOVED******REMOVED***quaternionW: cameraQuat.vector.w,
-***REMOVED******REMOVED******REMOVED***translationX: cameraTransform.columns.3.x,
-***REMOVED******REMOVED******REMOVED***translationY: cameraTransform.columns.3.y,
-***REMOVED******REMOVED******REMOVED***translationZ: cameraTransform.columns.3.z
+***REMOVED******REMOVED******REMOVED***quaternionX: Double(cameraQuat.vector.x),
+***REMOVED******REMOVED******REMOVED***quaternionY: Double(cameraQuat.vector.y),
+***REMOVED******REMOVED******REMOVED***quaternionZ: Double(cameraQuat.vector.z),
+***REMOVED******REMOVED******REMOVED***quaternionW: Double(cameraQuat.vector.w),
+***REMOVED******REMOVED******REMOVED***translationX: Double(cameraMatrix.columns.3.x),
+***REMOVED******REMOVED******REMOVED***translationY: Double(cameraMatrix.columns.3.y),
+***REMOVED******REMOVED******REMOVED***translationZ: Double(cameraMatrix.columns.3.z)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the matrix on the camera controller.
@@ -133,9 +133,9 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
 ***REMOVED******REMOVED******REMOVED******REMOVED***deviceOrientation: orientation
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.
+***REMOVED******REMOVED******REMOVED***draw()
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.
-***REMOVED******REMOVED***draw()
 ***REMOVED***
 ***REMOVED***
