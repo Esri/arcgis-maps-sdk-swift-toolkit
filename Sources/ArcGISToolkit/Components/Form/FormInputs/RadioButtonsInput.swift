@@ -16,6 +16,15 @@
 ***REMOVED***
 
 struct RadioButtonsInput: View {
+***REMOVED***@Environment(\.formElementPadding) var elementPadding
+***REMOVED***
+***REMOVED******REMOVED***/ The set of options in the input.
+***REMOVED***@State private var codedValues = [CodedValue]()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The selected option.
+***REMOVED***@State private var selectedValue: CodedValue?
+***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
@@ -34,5 +43,25 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
+***REMOVED***
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Picker(element.label, selection: $selectedValue) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(codedValues, id: \.self) { codedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(codedValue.name)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+***REMOVED***
+***REMOVED******REMOVED***.padding([.bottom], elementPadding)
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***codedValues = featureForm!.codedValues(fieldName: element.fieldName)
+***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == element.value ***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
