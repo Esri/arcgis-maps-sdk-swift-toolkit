@@ -25,6 +25,11 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the current value doesn't exist as an option in the domain.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ In this scenario a ``ComboBoxInput`` should be used instead.
+***REMOVED***@State private var fallbackToComboBox = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
@@ -46,24 +51,38 @@ struct RadioButtonsInput: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
+***REMOVED******REMOVED***if fallbackToComboBox {
+***REMOVED******REMOVED******REMOVED***ComboBoxInput(
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm: featureForm,
+***REMOVED******REMOVED******REMOVED******REMOVED***element: element,
+***REMOVED******REMOVED******REMOVED******REMOVED***noValueLabel: input.noValueLabel,
+***REMOVED******REMOVED******REMOVED******REMOVED***noValueOption: input.noValueOption
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Picker(element.label, selection: $selectedValue) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.noValue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(nil as CodedValue?)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(codedValues, id: \.self) { codedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(codedValue.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(Optional(codedValue))
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Picker(element.label, selection: $selectedValue) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(String.noValue).tag(nil as CodedValue?)
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(codedValues, id: \.self) { codedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(codedValue.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(Optional(codedValue))
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***codedValues = featureForm!.codedValues(fieldName: element.fieldName)
+***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = codedValues.first(where: { $0.name == element.value ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.selectedValue = selectedValue
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
-***REMOVED***
-***REMOVED******REMOVED***.padding([.bottom], elementPadding)
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == element.value ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
