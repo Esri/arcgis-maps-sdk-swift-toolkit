@@ -47,7 +47,6 @@ public struct FlyoverSceneView: View {
         
         configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
-        configuration.planeDetection = [.horizontal]
     }
     
     public var body: some View {
