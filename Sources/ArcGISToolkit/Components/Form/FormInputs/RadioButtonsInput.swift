@@ -16,4 +16,23 @@ import ArcGIS
 import SwiftUI
 
 struct RadioButtonsInput: View {
+    /// The field's parent element.
+    private let element: FieldFormElement
+    
+    /// The feature form containing the input.
+    private var featureForm: FeatureForm?
+    
+    /// The input configuration of the field.
+    private let input: RadioButtonsFormInput
+    
+    /// Creates a view for a date (and time if applicable) input.
+    /// - Parameters:
+    ///   - featureForm: The feature form containing the input.
+    ///   - element: The field's parent element.
+    ///   - input: The input configuration of the field.
+    init(featureForm: FeatureForm?, element: FieldFormElement, input: RadioButtonsFormInput) {
+        self.featureForm = featureForm
+        self.element = element
+        self.input = input
+    }
 }
