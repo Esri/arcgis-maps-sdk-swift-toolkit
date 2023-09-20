@@ -51,8 +51,10 @@ struct RadioButtonsInput: View {
                 .padding([.top], elementPadding)
             
             Picker(element.label, selection: $selectedValue) {
+                Text(String.noValue).tag(nil as CodedValue?)
                 ForEach(codedValues, id: \.self) { codedValue in
                     Text(codedValue.name)
+                        .tag(Optional(codedValue))
                 }
             }
             
