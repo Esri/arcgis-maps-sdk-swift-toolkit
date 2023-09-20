@@ -39,8 +39,11 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/ The input configuration of the view.
-***REMOVED***private let input: ComboBoxFormInput
+***REMOVED******REMOVED***/ The text used to represent a `nil` value.
+***REMOVED***private let noValueLabel: String
+***REMOVED***
+***REMOVED******REMOVED***/ The display state value for `nil` value options.
+***REMOVED***private let noValueOption: FormInputNoValueOption
 ***REMOVED***
 ***REMOVED******REMOVED***/ A subset of coded values with names containing `filterPhrase` or all of the coded values
 ***REMOVED******REMOVED***/ if `filterPhrase` is empty.
@@ -60,7 +63,21 @@ struct ComboBoxInput: View {
 ***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: ComboBoxFormInput) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
-***REMOVED******REMOVED***self.input = input
+***REMOVED******REMOVED***self.noValueLabel = input.noValueLabel
+***REMOVED******REMOVED***self.noValueOption = input.noValueOption
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a view for a combo box input.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
+***REMOVED******REMOVED***/   - element: The input's parent element.
+***REMOVED******REMOVED***/   - noValueLabel: The text used to represent a `nil` value.
+***REMOVED******REMOVED***/   - noValueOption: The display state value for `nil` value options.
+***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, noValueLabel: String, noValueOption: FormInputNoValueOption) {
+***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED******REMOVED***self.element = element
+***REMOVED******REMOVED***self.noValueLabel = noValueLabel
+***REMOVED******REMOVED***self.noValueOption = noValueOption
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -135,12 +152,12 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.value.isEmpty && !element.isRequired {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if input.noValueOption == .show {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if noValueOption == .show {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(input.noValueLabel.isEmpty ? String.noValue : input.noValueLabel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(noValueLabel.isEmpty ? String.noValue : noValueLabel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.italic()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -189,11 +206,11 @@ extension ComboBoxInput {
 ***REMOVED******REMOVED***guard !element.isRequired else {
 ***REMOVED******REMOVED******REMOVED***return .enterValue
 ***REMOVED***
-***REMOVED******REMOVED***switch (input.noValueOption, input.noValueLabel.isEmpty) {
+***REMOVED******REMOVED***switch (noValueOption, noValueLabel.isEmpty) {
 ***REMOVED******REMOVED***case (.show, true):
 ***REMOVED******REMOVED******REMOVED***return .noValue
 ***REMOVED******REMOVED***case (.show, false):
-***REMOVED******REMOVED******REMOVED***return input.noValueLabel
+***REMOVED******REMOVED******REMOVED***return noValueLabel
 ***REMOVED******REMOVED***case (.hide, _):
 ***REMOVED******REMOVED******REMOVED***return ""
 ***REMOVED***
