@@ -25,6 +25,11 @@ struct RadioButtonsInput: View {
     /// The selected option.
     @State private var selectedValue: CodedValue?
     
+    /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
+    ///
+    /// In this scenario a ``ComboBoxInput`` should be used instead.
+    @State private var fallbackToComboBox = false
+    
     /// The field's parent element.
     private let element: FieldFormElement
     
@@ -46,24 +51,38 @@ struct RadioButtonsInput: View {
     }
     
     var body: some View {
-        Group {
-            InputHeader(element: element)
-                .padding([.top], elementPadding)
-            
-            Picker(element.label, selection: $selectedValue) {
-                Text(String.noValue).tag(nil as CodedValue?)
-                ForEach(codedValues, id: \.self) { codedValue in
-                    Text(codedValue.name)
-                        .tag(Optional(codedValue))
+        if fallbackToComboBox {
+            ComboBoxInput(
+                featureForm: featureForm,
+                element: element,
+                noValueLabel: input.noValueLabel,
+                noValueOption: input.noValueOption
+            )
+        } else {
+            Group {
+                InputHeader(element: element)
+                    .padding([.top], elementPadding)
+                
+                Picker(element.label, selection: $selectedValue) {
+                    Text(String.noValue)
+                        .tag(nil as CodedValue?)
+                    ForEach(codedValues, id: \.self) { codedValue in
+                        Text(codedValue.name)
+                            .tag(Optional(codedValue))
+                    }
+                }
+                
+                InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+            }
+            .padding([.bottom], elementPadding)
+            .onAppear {
+                codedValues = featureForm!.codedValues(fieldName: element.fieldName)
+                if let selectedValue = codedValues.first(where: { $0.name == element.value }) {
+                    self.selectedValue = selectedValue
+                } else {
+                    fallbackToComboBox = true
                 }
             }
-            
-            InputFooter(element: element, requiredValueMissing: requiredValueMissing)
-        }
-        .padding([.bottom], elementPadding)
-        .onAppear {
-            codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-            selectedValue = codedValues.first { $0.name == element.value }
         }
     }
 }
