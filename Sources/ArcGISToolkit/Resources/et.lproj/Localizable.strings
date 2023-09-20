@@ -1,294 +1,294 @@
 /* A label declaring the number of starting points selected for a utility network trace. */
-"%lld selected" = "%lld επιλεγμένο";
+"%lld selected" = "%lld on valitud";
 
 /* An alert message indicating that a certificate is required to access
 content on a remote host. The variable is the host that prompted the challenge. */
-"A certificate is required to access content on %@." = "Απαιτείται πιστοποιητικό για την πρόσβαση σε περιεχόμενο στο %@.";
+"A certificate is required to access content on %@." = "Sisule juurdepääsuks kohas %@ on vaja serti.";
 
 /* A button to add new utility trace starting points. */
-"Add new" = "Προσθήκη νέου";
+"Add new" = "Lisa uus";
 
 /* A section header for advanced options. */
-"Advanced Options" = "Επιλογές για προχωρημένους";
+"Advanced Options" = "Täpsemad valikud";
 
 /* A reference to all of the sites defined in a floor aware map. */
-"All sites" = "Όλα τα sites";
+"All sites" = "Kõik kohad";
 
 /* A message describing the outcome of clearing all utility network trace results. */
-"All the trace inputs and results will be lost." = "Όλες οι εισαγωγές ιχνών και αποτελεσμάτων θα χαθούν.";
+"All the trace inputs and results will be lost." = "Kõik jälgimissisendid ja tulemused lähevad kaotsi.";
 
 /* A button indicating the user accepts a potentially dangerous action. */
-"Allow" = "Να επιτραπεί.";
+"Allow" = "Luba";
 
 /* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "Παρουσιάστηκε σφάλμα κατά τη φόρτωση της εικόνας: %@.";
+"An error occurred loading the image: %@." = "Pildi laadimisel ilmnes tõrge: %@.";
 
 /* A label in reference to attachments in a popup. */
-"Attachments" = "Συνημμένα";
+"Attachments" = "Manused";
 
 /* A label in reference to the attributes of a geo element. */
-"Attributes" = "Γνωρίσματα";
+"Attributes" = "Atribuudid";
 
 /* A label indicating authentication is required to proceed. */
-"Authentication Required" = "Απαιτείται Έλεγχος Ταυτότητας";
+"Authentication Required" = "Vajalik on autentimine";
 
 /* A label in reference to bookmarks contained in a map or scene. */
-"Bookmarks" = "Σελιδοδείκτες";
+"Bookmarks" = "Järjehoidjad";
 
 /* A label for a button to open the system file browser. */
-"Browse" = "Περιήγηση για αναζήτηση";
+"Browse" = "Sirvi";
 
 /* A label for a button to cancel an operation. */
-"Cancel" = "Ακύρωση";
+"Cancel" = "Tühista";
 
 /* A label for a button to cancel the starting point selection operation. */
-"Cancel starting point selection" = "Ακύρωση επιλογής σημείου έναρξης";
+"Cancel starting point selection" = "Tühista alguspunkti valik";
 
 /* A label indicating that a certificate is required to proceed. */
-"Certificate Required" = "Απαιτείται Πιστοποιητικό";
+"Certificate Required" = "Sert on nõutav";
 
 /* A label indicating that the remote host's certificate is not trusted. */
-"Certificate Trust Warning" = "Προειδοποίηση Αξιοπιστίας Πιστοποιητικού";
+"Certificate Trust Warning" = "Serdi usaldusväärsuse hoiatus";
 
 /* A directive to clear all of the completed utility network traces. */
-"Clear all results" = "Απαλοιφή όλων των αποτελεσμάτων";
+"Clear all results" = "Kustuta kõik tulemused";
 
 /* A label in reference to the color used to display utility trace result graphics. */
-"Color" = "Χρώμα";
+"Color" = "Värv";
 
 /* An compass description to be read by a screen reader describing the
 current heading. The first variable being a degree value and the
 second being a corresponding cardinal direction (north, northeast,
 east, etc.). */
-"Compass, heading %lld degrees %@" = "Πυξίδα, πορεία %lld μοίρες %@";
+"Compass, heading %lld degrees %@" = "Kompass, suund %lld kraadi %@";
 
 /* A label for a button used to continue the authentication operation. */
-"Continue" = "Συνέχεια";
+"Continue" = "Jätka";
 
 /* A label indicating a certificate file was inaccessible. */
-"Could not access the certificate file." = "Η πρόσβαση στο αρχείο του πιστοποιητικού δεν ήταν δυνατή.";
+"Could not access the certificate file." = "Serdifailile ei pääsenud juurde.";
 
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
-"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Κίνδυνος: Το παρεχόμενο πιστοποιητικό από το '%@' δεν έχει υπογραφεί από αξιόπιστη αρχή.";
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Ohtlik: serdil, mida pakub '%@', pole usaldusväärse sertimiskeskuse allkirja.";
 
 /* A label for a button used to delete a utility network trace input component or result. */
-"Delete" = "Διαγραφή";
+"Delete" = "Kustuta";
 
 /* A button to close the bookmark selection menu. */
-"Done" = "Τέλος";
+"Done" = "Valmis";
 
 /* A message indicating that the user attempted to use a single utility
 network element for more than one trace starting point. */
-"Duplicate starting points cannot be added." = "Δεν μπορούν να προστεθούν διπλότυπα σημεία έναρξης.";
+"Duplicate starting points cannot be added." = "Korduvaid alguspunkte ei saa lisada.";
 
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
-"Element could not be identified." = "Δεν ήταν δυνατή η αναγνώριση του αντικειμένου.";
+"Element could not be identified." = "Elementi ei tuvastatud.";
 
 /* A label in reference to an error that occurred during a utility network trace. */
-"Error" = "Σφάλμα";
+"Error" = "Viga";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
-"Error importing certificate" = "Σφάλμα κατά την εισαγωγή του πιστοποιητικού";
+"Error importing certificate" = "Tõrge serdi importimisel";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
-"Error loading basemap." = "Σφάλμα κατά τη φόρτωση υποβάθρου.";
+"Error loading basemap." = "Tõrge aluskaardi laadimisel.";
 
 /* A label indicating popup expressions are being evaluated. */
-"Evaluating popup expressions" = "Αξιολόγηση αναδυόμενων εκφράσεων";
+"Evaluating popup expressions" = "Hüpikavaldiste hindamine";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
-"Failed to set starting point" = "Αδυναμία προσδιορισμού σημείου έναρξης";
+"Failed to set starting point" = "Alguspunkti määramine nurjus";
 
 /* A label in reference to utility elements returned as results of a utility network
 trace operation. */
-"Feature Results" = "Αποτελέσματα Στοιχείου";
+"Feature Results" = "Objekti tulemused";
 
 /* A field in a set of data contained in a popup. */
-"Field" = "Πεδίο";
+"Field" = "Veerg";
 
 /* A label in reference to fields in a set of data contained in a popup. */
-"Fields" = "Πεδία";
+"Fields" = "Väljad";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
-"Filter facilities" = "Φιλτράρισμα εγκαταστάσεων";
+"Filter facilities" = "Filtreeri rajatised";
 
 /* A field allowing the user to filter a list of sites by name. A site
 contains one or more facilities in a floor-aware map or scene. */
-"Filter sites" = "Φιλτράρισμα sites";
+"Filter sites" = "Filtreeri kohad";
 
 /* A hint for the user on what to search for in a search bar. */
-"Find a place or address" = "Αναζήτηση τόπου ή διεύθυνσης";
+"Find a place or address" = "Otsi kohta või aadressi";
 
 /* A label in reference to a fractional distance along an edge style utility network element. */
-"Fraction Along Edge" = "Κλάσμα κατά μήκος της ακμής";
+"Fraction Along Edge" = "Murdosa mööda serva";
 
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
-"Function Results" = "Αποτελέσματα Λειτουργίας";
+"Function Results" = "Funktsiooni tulemused";
 
 /* A label in reference to media elements contained within a popup. */
-"Media" = "Πολυμέσα";
+"Media" = "Meedia";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
-"Mode" = "Λειτουργία";
+"Mode" = "Režiim";
 
 /* A label in reference to the user defined name for an individual utility network trace. */
-"Name" = "Όνομα";
+"Name" = "Nimi";
 
 /* A label in reference to a specific utility network. */
-"Network" = "Δίκτυο";
+"Network" = "Võrk";
 
 /* A label for a button to show new utility network trace configuration options. */
-"New trace" = "Νέα ιχνηλάτηση";
+"New trace" = "Uus jälgimisfail";
 
 /* A label indicating that no bookmarks are available for selection. */
-"No bookmarks" = "Δεν υπάρχουν σελιδοδείκτες";
+"No bookmarks" = "Järjehoidjaid pole";
 
 /* A statement that no utility trace configurations are available. */
-"No configurations available." = "Δεν υπάρχουν διαθέσιμες παραμετροποιήσεις.";
+"No configurations available." = "Konfiguratsioone pole saadaval.";
 
 /* A statement that no sites or facilities with names matching a filter phrase were found. */
-"No matches found." = "Δεν βρέθηκαν αντιστοιχίσεις.";
+"No matches found." = "Vasteid ei leitud.";
 
 /* A message to show when there are no results or suggestions. */
-"No results found" = "Δεν βρέθηκαν αποτελέσματα";
+"No results found" = "Tulemusi ei leitud";
 
 /* A label indicating that no utility named trace configurations are available. */
-"No trace types found." = "Δεν βρέθηκαν τύποι ιχνηλάτησης";
+"No trace types found." = "Jälgimistüüpe ei leitud.";
 
 /* A label indicating that no utility networks are available. */
-"No utility networks found." = "Δεν βρέθηκαν utility networks.";
+"No utility networks found." = "Kommunaalvõrke ei leitud.";
 
 /* A label indicating that no utility network trace configuration has been selected. */
-"None selected" = "Καμία επιλογή";
+"None selected" = "Midagi pole valitud";
 
 /* A trace function output result was not provided. */
-"Not Available" = "Μη διαθέσιμο";
+"Not Available" = "Pole saadaval";
 
 /* A string identifying a utility network object. */
-"Object ID: %@" = "Αναγνωριστικό αντικειμένου: %@";
+"Object ID: %@" = "Objekti ID: %@";
 
 /* A label for button to proceed with an operation. */
 "OK" = "OK";
 
 /* A label in reference to a credential password. */
-"Password" = "Κωδικός πρόσβασης";
+"Password" = "Parool";
 
 /* A label indicating that a password is required to proceed with an operation. */
-"Password Required" = "Απαιτείται κωδικός πρόσβασης";
+"Password Required" = "Parool on nõutav";
 
 /* A label requesting the password associated with the chosen certificate. */
-"Please enter a password for the chosen certificate." = "Πληκτρολογήστε ξανά τον κωδικό πρόσβασης για το επιλεγμένο πιστοποιητικό.";
+"Please enter a password for the chosen certificate." = "Sisestage valitud serdi jaoks parool.";
 
 /* A label indicating that at least one starting location is required for the
 chosen utility network trace configuration. */
-"Please set at least 1 starting location." = "Καθορίστε τουλάχιστον μια τοποθεσία έναρξης.";
+"Please set at least 1 starting location." = "Valige vähemalt üks alguskoht.";
 
 /* A label indicating that at least two starting locations are required for the
 chosen utility network trace configuration. */
-"Please set at least 2 starting locations." = "Καθορίστε τουλάχιστον δυο τοποθεσίες έναρξης.";
+"Please set at least 2 starting locations." = "Valige vähemalt kaks alguskohta.";
 
 /* An error message shown when a popup cannot be displayed. The
 variable provides additional data. */
-"Popup evaluation failed: %@" = "Αποτυχία αξιολόγησης αναδυόμενων: %@";
+"Popup evaluation failed: %@" = "Hüpiku hindamine nurjus: %@";
 
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
-"Repeat Search Here" = "Επανάληψη Αναζήτησης Εδώ";
+"Repeat Search Here" = "Korda otsingut siin";
 
 /* A label for a button to show utility network trace results. */
-"Results" = "Αποτελέσματα";
+"Results" = "Tulemused";
 
 /* A label in reference to a search query entered by the user. */
-"Search Query" = "Ερώτημα Αναζήτησης";
+"Search Query" = "Otsingupäring";
 
 /* A label prompting the user to make a selection from the available bookmarks. */
-"Select a bookmark" = "Επιλογή Σελιδοδείκτη";
+"Select a bookmark" = "Vali järjehoidja";
 
 /* A label directing the user to select a facility. A facility contains one
 or more levels in a floor-aware map or scene. */
-"Select a facility" = "Επιλέξτε εγκατάσταση";
+"Select a facility" = "Vali rajatis";
 
 /* A label in reference to all of the sites in a floor-aware map or scene. */
-"Sites" = "Ιστότοποι";
+"Sites" = "Saidid";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map or scene. */
-"Spatial reference mismatch." = "Αναντιστοιχία χωρικής αναφοράς.";
+"Spatial reference mismatch." = "Koordinaatsüsteemi mittevastavus.";
 
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
-"Starting Points" = "Σημεία Έναρξης";
+"Starting Points" = "Algspunktid";
 
 /* A label indicating that tapping an image will reveal
 additional information. */
-"Tap on the image for more information." = "Πατήστε στην εικόνα για περισσότερες πληροφορίες.";
+"Tap on the image for more information." = "Lisateabe saamiseks puudutage pilti.";
 
 /* A label in reference to the chosen terminal configuration of a utility network element. */
-"Terminal Configuration" = "Παραμετροποίηση Τερματικού";
+"Terminal Configuration" = "Terminali konfiguratsioon";
 
 /* A label for development purposes only. This is not user visible. */
 "test" = "test";
 
 /* A label indicating the chosen basemap doesn't have a spatial reference. */
-"The basemap does not have a spatial reference." = "Το υπόβαθρο δεν έχει χωρική αναφορά.";
+"The basemap does not have a spatial reference." = "Aluskaardil ei ole ruumilist referentsi.";
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to
 load for an unknown reason. */
-"The basemap failed to load for an unknown reason." = "Απέτυχε η φόρτωση του υποβάθρου για άγνωστο λόγο.";
+"The basemap failed to load for an unknown reason." = "Aluskaardi laadimine nurjus tundmatul põhjusel.";
 
 /* A label indicating the spatial reference of the chosen basemap doesn't
 match the spatial reference of the map. */
-"The basemap has a spatial reference that is incompatible with the map." = "Η χωρική αναφορά του υποβάθρου δεν είναι συμβατή με το χάρτη.";
+"The basemap has a spatial reference that is incompatible with the map." = "Aluskaardil on ruumiline referents, mis ei ühildu kaardiga.";
 
 /* A label indicating the chosen file or given password was invalid. */
-"The certificate file or password was invalid." = "Το αρχείο του πιστοποιητικού ή ο κωδικός πρόσβασης ήταν άκυρος.";
+"The certificate file or password was invalid." = "Serdifail või parool ei sobi.";
 
 /* A label indicating the chosen file was invalid. */
-"The certificate file was invalid." = "Το αρχείο του πιστοποιητικού ήταν άκυρο.";
+"The certificate file was invalid." = "Serdifail ei sobinud.";
 
 /* A label indicating the map doesn't have a spatial reference. */
-"The map does not have a spatial reference." = "Ο χάρτης δεν έχει χωρική αναφορά.";
+"The map does not have a spatial reference." = "Kaardil pole ruumilist referentsi.";
 
 /* A label indicating the given password was invalid. */
-"The password was invalid." = "Ο κωδικός πρόσβασης ήταν άκυρος.";
+"The password was invalid." = "Parool ei sobinud.";
 
 /* Description of error thrown when a remote image could not be loaded. */
-"The URL could not be reached or did not contain image data." = "Η διεύθυνση URL δεν ήταν προσβάσιμη ή δεν περιείχε δεδομένα εικόνας.";
+"The URL could not be reached or did not contain image data." = "URL-ile ei pääsenud juurde või see ei sisaldanud pildiandmeid.";
 
 /* A label for a button to begin a utility network trace operation. */
-"Trace" = "Ιχνηλάτηση";
+"Trace" = "Jälgimisfail";
 
 /* A label indicating the index of the trace being viewed out of the total number of traces completed. */
-"Trace %1$lld of %2$lld" = "Ιχνηλάτηση %1$lld από %2$lld";
+"Trace %1$lld of %2$lld" = "Jälgimisfail %1$lld/%2$lld";
 
 /* A label in reference to a utility network trace configuration. */
-"Trace Configuration" = "Παραμετροποίηση Ιχνηλάτησης";
+"Trace Configuration" = "Jälgimise konfiguratsioon";
 
 /* A label for a button allowing the user to retry an operation. */
-"Try Again" = "Δοκιμάστε Ξανά";
+"Try Again" = "Proovige uuesti";
 
 /* A label to use in place of a utility element asset type name. */
-"Unnamed Asset Type" = "Τύπος Στοιχείου Χωρίς Όνομα";
+"Unnamed Asset Type" = "Nimetu varatüüp";
 
 /* A label in reference to a credential username. */
-"Username" = "Όνομα χρήστη";
+"Username" = "Kasutajanimi";
 
 /* A value in a set of data contained in a popup. */
-"Value" = "Αξία";
+"Value" = "Väärtus";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
-"You must sign in to access '%@'" = "Χρειάζεται να πραγματοποιήσετε είσοδο για να αποκτήσετε πρόσβαση '%@'";
+"You must sign in to access '%@'" = "Üksusele '%@' juurdepääsuks peate sisse logima";
 
 /* A button to change the map to the extent of the selected trace. */
-"Zoom To" = "Εστίαση σε";
+"Zoom To" = "Suumi:";
 
 /* A user option specifying that a map should automatically change to show completed trace results. */
-"Zoom to result" = "Εστίαση στο αποτέλεσμα";
+"Zoom to result" = "Suumi tulemini";
 
