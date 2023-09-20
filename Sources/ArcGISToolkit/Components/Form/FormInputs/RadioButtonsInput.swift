@@ -51,8 +51,10 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Picker(element.label, selection: $selectedValue) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(String.noValue).tag(nil as CodedValue?)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(codedValues, id: \.self) { codedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(codedValue.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(Optional(codedValue))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
