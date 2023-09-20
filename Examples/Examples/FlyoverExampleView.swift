@@ -23,20 +23,23 @@ struct FlyoverExampleView: View {
         )
     )
     
-    private let initialCamera = Camera(
-        lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
-        distance: 1_000,
-        heading: 40,
-        pitch: 90,
-        roll: 0
-    )
+    private let cameraController: TransformationMatrixCameraController = {
+        let cameraController = TransformationMatrixCameraController(
+            originCamera: Camera(
+                lookingAt: Point(x: 4.4777, y: 51.9244, spatialReference: .wgs84),
+                distance: 1_000,
+                heading: 40,
+                pitch: 90,
+                roll: 0
+            )
+        )
+        cameraController.translationFactor = 3_000
+        return cameraController
+    }()
     
     var body: some View {
-        FlyoverSceneView(
-            initialCamera: initialCamera,
-            translationFactor: 3_000
-        ) { proxy in
-            SceneView(scene: scene)
+        FlyoverSceneView { proxy in
+            SceneView(scene: scene, cameraController: cameraController)
                 .onSingleTapGesture { screen, _ in
                     print("Identifying...")
                     Task.detached {

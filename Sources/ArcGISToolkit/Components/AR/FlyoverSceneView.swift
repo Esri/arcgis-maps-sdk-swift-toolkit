@@ -20,29 +20,22 @@ public struct FlyoverSceneView: View {
     /// The last portrait or landscape orientation value.
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     @State private var arViewProxy = ARSwiftUIViewProxy()
-    private let cameraController: TransformationMatrixCameraController
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     private let configuration: ARWorldTrackingConfiguration
     
     /// Creates a fly over scene view.
     /// - Parameters:
-    ///   - initialCamera: The initial camera.
-    ///   - translationFactor: The translation factor that defines how much the scene view translates
-    ///   as the device moves.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     /// - Remark: The provided scene view will have certain properties overridden in order to
     /// be effectively viewed in augmented reality. Properties such as the camera controller,
     /// and view drawing mode.
+    /// - Precondition: The scene view returned in the closure must be initialized with a
+    /// `TransformationMatrixCameraController`.
     public init(
-        initialCamera: Camera,
-        translationFactor: Double,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         self.sceneViewBuilder = sceneView
-        
-        cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
-        cameraController.translationFactor = translationFactor
         
         configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
@@ -53,14 +46,12 @@ public struct FlyoverSceneView: View {
         ZStack {
             SceneViewReader { sceneViewProxy in
                 sceneViewBuilder(sceneViewProxy)
-                    .cameraController(cameraController)
                     .viewDrawingMode(.manual)
                 ARSwiftUIView(proxy: arViewProxy)
                     .onRender { _, _, _ in
                         updateLastGoodDeviceOrientation()
                         sceneViewProxy.draw(
                             for: arViewProxy,
-                            cameraController: cameraController,
                             orientation: lastGoodDeviceOrientation
                         )
                     }
@@ -94,9 +85,11 @@ extension SceneViewProxy {
     ///   - orientation: The device orientation.
     func draw(
         for arViewProxy: ARSwiftUIViewProxy,
-        cameraController: TransformationMatrixCameraController,
         orientation: UIDeviceOrientation
     ) {
+        guard let cameraController = cameraController as? TransformationMatrixCameraController else {
+            preconditionFailure("The provided scene view must be initialized with a 'TransformationMatrixCameraController'.")
+        }
         
         // Get transform from SCNView.pointOfView.
         guard let transform = arViewProxy.pointOfView?.transform else { return }
