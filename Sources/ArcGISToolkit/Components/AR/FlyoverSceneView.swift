@@ -57,7 +57,7 @@ public struct FlyoverSceneView: View {
                     .cameraController(cameraController)
                     .viewDrawingMode(.manual)
                 ARSwiftUIView(proxy: arViewProxy)
-                    .onRender { _, _, _ in
+                    .onAnchorsDidUpdate { session, anchors in
                         updateLastGoodDeviceOrientation()
                         sceneViewProxy.draw(
                             for: arViewProxy,
@@ -98,22 +98,22 @@ extension SceneViewProxy {
         cameraController: TransformationMatrixCameraController,
         orientation: UIDeviceOrientation
     ) {
+        guard let session = arViewProxy.session, let cameraTransform = arViewProxy.cameraTransform else {
+            return
+        }
         
-        // Get transform from SCNView.pointOfView.
-        guard let transform = arViewProxy.pointOfView?.transform else { return }
-        guard let session = arViewProxy.session else { return }
+        let cameraMatrix = cameraTransform.matrix
         
-        let cameraTransform = simd_double4x4(transform)
+        let cameraQuat = simd_quatf(cameraMatrix)
         
-        let cameraQuat = simd_quatd(cameraTransform)
         let transformationMatrix = TransformationMatrix.normalized(
-            quaternionX: cameraQuat.vector.x,
-            quaternionY: cameraQuat.vector.y,
-            quaternionZ: cameraQuat.vector.z,
-            quaternionW: cameraQuat.vector.w,
-            translationX: cameraTransform.columns.3.x,
-            translationY: cameraTransform.columns.3.y,
-            translationZ: cameraTransform.columns.3.z
+            quaternionX: Double(cameraQuat.vector.x),
+            quaternionY: Double(cameraQuat.vector.y),
+            quaternionZ: Double(cameraQuat.vector.z),
+            quaternionW: Double(cameraQuat.vector.w),
+            translationX: Double(cameraMatrix.columns.3.x),
+            translationY: Double(cameraMatrix.columns.3.y),
+            translationZ: Double(cameraMatrix.columns.3.z)
         )
         
         // Set the matrix on the camera controller.
@@ -133,9 +133,9 @@ extension SceneViewProxy {
                 yImageSize: Float(imageResolution.height),
                 deviceOrientation: orientation
             )
+            
+            // Render the Scene with the new transformation.
+            draw()
         }
-        
-        // Render the Scene with the new transformation.
-        draw()
     }
 }
