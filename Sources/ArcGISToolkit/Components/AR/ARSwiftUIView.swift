@@ -18,7 +18,7 @@ import SwiftUI
 /// A SwiftUI version of ARSCNView.
 struct ARSwiftUIView {
     /// The closure to call when the ARSCNView renders.
-    private(set) var onAnchorsDidUpdateAction: ((ARSession, [ARAnchor]) -> Void)?
+    private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
     private(set) var videoFeedIsHidden: Bool = false
     /// The proxy.
     private let proxy: ARSwiftUIViewProxy?
@@ -31,11 +31,11 @@ struct ARSwiftUIView {
     }
     
     /// Sets the closure to call when underlying scene renders.
-    func onAnchorsDidUpdate(
-        perform action: @escaping (ARSession, [ARAnchor]) -> Void
+    func onDidUpdateFrame(
+        perform action: @escaping (ARSession, ARFrame) -> Void
     ) -> Self {
         var view = self
-        view.onAnchorsDidUpdateAction = action
+        view.onDidUpdateFrameAction = action
         return view
     }
     
@@ -56,7 +56,7 @@ extension ARSwiftUIView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: ARView, context: Context) {
-        context.coordinator.onAnchorsDidUpdateAction = onAnchorsDidUpdateAction
+        context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
         uiView.isHidden = videoFeedIsHidden
     }
     
@@ -67,10 +67,10 @@ extension ARSwiftUIView: UIViewRepresentable {
 
 extension ARSwiftUIView {
     class Coordinator: NSObject, ARSessionDelegate {
-        var onAnchorsDidUpdateAction: ((ARSession, [ARAnchor]) -> Void)?
+        var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
         
-        func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
-            onAnchorsDidUpdateAction?(session, anchors)
+        func session(_ session: ARSession, didUpdate frame: ARFrame) {
+            onDidUpdateFrameAction?(session, frame)
         }
     }
 }
