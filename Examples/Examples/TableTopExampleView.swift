@@ -25,7 +25,7 @@ struct TableTopExampleView: View {
         let elevationSource = ArcGISTiledElevationSource(url: elevationServiceURL)
         let surface = Surface()
         surface.addElevationSource(elevationSource)
-        let scene = Scene(basemapStyle: .arcGISTopographic)
+        let scene = Scene()
         scene.baseSurface = surface
         scene.addOperationalLayer(buildingsLayer)
         
