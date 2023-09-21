@@ -13,7 +13,6 @@
 
 import ARKit
 import SwiftUI
-import ArcGIS
 
 /// A SwiftUI version of ARSCNView.
 struct ARSwiftUIView {
@@ -110,8 +109,6 @@ class ARSwiftUIViewProxy {
     /// The underlying ARSCNView.
     /// This is set by the ARSwiftUIView when it is available.
     fileprivate var arView: ARSCNView?
-    
-    var initialTransformation: TransformationMatrix = .identity
     
     /// The AR session.
     var session: ARSession? {
