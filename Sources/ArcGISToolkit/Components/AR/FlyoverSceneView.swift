@@ -56,10 +56,11 @@ public struct FlyoverSceneView: View {
                     .cameraController(cameraController)
                     .viewDrawingMode(.manual)
                 ARSwiftUIView(proxy: arViewProxy)
-                    .onDidUpdateFrame { _, _ in
+                    .onDidUpdateFrame { session, frame in
                         updateLastGoodDeviceOrientation()
                         sceneViewProxy.draw(
-                            for: arViewProxy,
+                            frame: frame,
+                            for: session,
                             cameraController: cameraController,
                             orientation: lastGoodDeviceOrientation
                         )
@@ -93,16 +94,14 @@ extension SceneViewProxy {
     ///   - cameraController: The current camera controller assigned to the scene view.
     ///   - orientation: The device orientation.
     func draw(
-        for arViewProxy: ARSwiftUIViewProxy,
+        frame: ARFrame,
+        for: ARSession,
         cameraController: TransformationMatrixCameraController,
         orientation: UIDeviceOrientation
     ) {
-        guard let session = arViewProxy.session, let cameraTransform = arViewProxy.cameraTransform else {
-            return
-        }
+        //let cameraMatrix = frame.camera.viewMatrix(for: .portrait)
         
-        let cameraMatrix = cameraTransform.matrix
-        
+        let cameraMatrix = frame.camera.transform
         let cameraQuat = simd_quatf(cameraMatrix)
         
         let transformationMatrix = TransformationMatrix.normalized(
@@ -118,23 +117,21 @@ extension SceneViewProxy {
         // Set the matrix on the camera controller.
         cameraController.transformationMatrix = .identity.adding(transformationMatrix)
         
-        // Set FOV on camera.
-        if let camera = session.currentFrame?.camera {
-            let intrinsics = camera.intrinsics
-            let imageResolution = camera.imageResolution
-            
-            setFieldOfViewFromLensIntrinsics(
-                xFocalLength: intrinsics[0][0],
-                yFocalLength: intrinsics[1][1],
-                xPrincipal: intrinsics[2][0],
-                yPrincipal: intrinsics[2][1],
-                xImageSize: Float(imageResolution.width),
-                yImageSize: Float(imageResolution.height),
-                deviceOrientation: orientation
-            )
-            
-            // Render the Scene with the new transformation.
-            draw()
-        }
+        // Set FOV on scene view.
+        let intrinsics = frame.camera.intrinsics
+        let imageResolution = frame.camera.imageResolution
+        
+        setFieldOfViewFromLensIntrinsics(
+            xFocalLength: intrinsics[0][0],
+            yFocalLength: intrinsics[1][1],
+            xPrincipal: intrinsics[2][0],
+            yPrincipal: intrinsics[2][1],
+            xImageSize: Float(imageResolution.width),
+            yImageSize: Float(imageResolution.height),
+            deviceOrientation: .portrait
+        )
+        
+        // Render the Scene with the new transformation.
+        draw()
     }
 }
