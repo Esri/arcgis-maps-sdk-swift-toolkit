@@ -83,6 +83,13 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: selectedValue) { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard codedValues.first(where: { $0.name == element.value ***REMOVED***) != newValue else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***requiredValueMissing = element.isRequired && newValue == nil
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue?.code ?? "", forKey: element.fieldName)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
