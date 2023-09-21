@@ -79,7 +79,7 @@ struct RadioButtonsInput: View {
                 codedValues = featureForm!.codedValues(fieldName: element.fieldName)
                 if let selectedValue = codedValues.first(where: { $0.name == element.value }) {
                     self.selectedValue = selectedValue
-                } else {
+                } else if !element.value.isEmpty {
                     fallbackToComboBox = true
                 }
             }
