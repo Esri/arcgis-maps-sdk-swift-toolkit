@@ -21,11 +21,14 @@ public struct TableTopSceneView: View {
 ***REMOVED***@State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
-***REMOVED***@State private var didSetTransforamtion = false
+***REMOVED***@State private var initialTransformation: TransformationMatrix? = nil
 ***REMOVED***
 ***REMOVED***private let cameraController: TransformationMatrixCameraController
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
+***REMOVED***private var didSetTransforamtion: Bool {
+***REMOVED******REMOVED***initialTransformation != nil
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -67,7 +70,8 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.draw(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: arViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation: initialTransformation ?? .identity
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
@@ -86,12 +90,12 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  !didSetTransforamtion else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if sceneViewProxy.setInitialTransformation(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let transformation = sceneViewProxy.setInitialTransformation(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: arViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***using: screenPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***didSetTransforamtion = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation = transformation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -185,20 +189,20 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED***/ Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ - Parameter screenPoint: The screen point to determine the `initialTransformation` from.
-***REMOVED******REMOVED***/ - Returns: Whether setting the `initialTransformation` succeeded or failed.
+***REMOVED******REMOVED***/ - Returns: The `initialTransformation`.
 ***REMOVED******REMOVED***/ - Since: 200.3
 ***REMOVED***func setInitialTransformation(
 ***REMOVED******REMOVED***for arViewProxy: ARSwiftUIViewProxy,
 ***REMOVED******REMOVED***using screenPoint: CGPoint,
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController
-***REMOVED***) -> Bool {
+***REMOVED***) -> TransformationMatrix? {
 ***REMOVED******REMOVED******REMOVED*** Use the `internalHitTest` method to get the matrix of `screenPoint`.
-***REMOVED******REMOVED***guard let matrix = internalHitTest(using: screenPoint, for: arViewProxy) else { return false ***REMOVED***
+***REMOVED******REMOVED***guard let matrix = internalHitTest(using: screenPoint, for: arViewProxy) else { return nil ***REMOVED***
 
 ***REMOVED******REMOVED******REMOVED*** Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
-***REMOVED******REMOVED***arViewProxy.initialTransformation = TransformationMatrix.identity.subtracting(matrix)
+***REMOVED******REMOVED***let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
 
-***REMOVED******REMOVED***return true
+***REMOVED******REMOVED***return initialTransformation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Internal method to perform a hit test operation to get the transformation matrix representing the corresponding real-world point for `screenPoint`.
