@@ -62,8 +62,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: session,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***transform: arViewProxy.transform!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.videoFeedHidden()
@@ -98,8 +97,7 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***frame: ARFrame,
 ***REMOVED******REMOVED***for: ARSession,
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
-***REMOVED******REMOVED***orientation: UIDeviceOrientation,
-***REMOVED******REMOVED***transform: SCNMatrix4
+***REMOVED******REMOVED***orientation: UIDeviceOrientation
 ***REMOVED***) {
 ***REMOVED******REMOVED***let cameraTransform = frame.camera.transform
 ***REMOVED******REMOVED***let povTransform = simd_float4x4.init(
@@ -108,9 +106,6 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED******REMOVED***cameraTransform.columns.2,
 ***REMOVED******REMOVED******REMOVED***cameraTransform.columns.3
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***print("-- pov: \(transform)")
-***REMOVED******REMOVED******REMOVED***print("-- cam: \(cameraMatrix)")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let quaternion = simd_quatf(povTransform)
 ***REMOVED******REMOVED***
@@ -138,7 +133,7 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED******REMOVED***yPrincipal: intrinsics[2][1],
 ***REMOVED******REMOVED******REMOVED***xImageSize: Float(imageResolution.width),
 ***REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
-***REMOVED******REMOVED******REMOVED***deviceOrientation: .portrait
+***REMOVED******REMOVED******REMOVED***deviceOrientation: orientation
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.

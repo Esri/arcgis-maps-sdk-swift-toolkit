@@ -17,9 +17,9 @@ import RealityKit
 
 typealias ARViewType = ARSCNView
 
-***REMOVED***/ A SwiftUI version of ARSCNView.
+***REMOVED***/ A SwiftUI version of an AR view.
 struct ARSwiftUIView {
-***REMOVED******REMOVED***/ The closure to call when the ARSCNView renders.
+***REMOVED******REMOVED***/ The closure to call when the AR view renders.
 ***REMOVED***private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
 ***REMOVED***private(set) var videoFeedIsHidden: Bool = false
 ***REMOVED******REMOVED***/ The proxy.
@@ -52,10 +52,7 @@ struct ARSwiftUIView {
 extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***func makeUIView(context: Context) -> ARViewType {
 ***REMOVED******REMOVED***let arView = ARViewType()
-***REMOVED******REMOVED******REMOVED***arView.layer.isHidden = true
-***REMOVED******REMOVED******REMOVED***arView.contentScaleFactor = 0.1
 ***REMOVED******REMOVED******REMOVED***arView.debugOptions.insert(.showStatistics)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***arView.session.delegate = context.coordinator
 ***REMOVED******REMOVED***proxy?.arView = arView
 ***REMOVED******REMOVED***return arView
@@ -83,16 +80,12 @@ extension ARSwiftUIView {
 
 ***REMOVED***/ A proxy for the ARSwiftUIView.
 class ARSwiftUIViewProxy {
-***REMOVED******REMOVED***/ The underlying ARSCNView.
+***REMOVED******REMOVED***/ The underlying AR view.
 ***REMOVED******REMOVED***/ This is set by the ARSwiftUIView when it is available.
 ***REMOVED***fileprivate var arView: ARViewType?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The AR session.
 ***REMOVED***var session: ARSession? {
 ***REMOVED******REMOVED***arView?.session
-***REMOVED***
-***REMOVED***
-***REMOVED***var transform: SCNMatrix4? {
-***REMOVED******REMOVED***arView?.pointOfView?.transform
 ***REMOVED***
 ***REMOVED***
