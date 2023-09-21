@@ -21,6 +21,8 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ The set of options in the input.
 ***REMOVED***@State private var codedValues = [CodedValue]()
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the date selection was cleared when a value is required.
+***REMOVED***@State private var requiredValueMissing = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
@@ -64,7 +66,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Picker(element.label, selection: $selectedValue) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String.noValue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(placeholderValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tag(nil as CodedValue?)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(codedValues, id: \.self) { codedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(codedValue.name)
@@ -92,6 +94,17 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***requiredValueMissing = element.isRequired && newValue == nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue?.code ?? "", forKey: element.fieldName)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension RadioButtonsInput {
+***REMOVED******REMOVED***/ The placeholder value to display.
+***REMOVED***var placeholderValue: String {
+***REMOVED******REMOVED***if input.noValueOption == .show && !input.noValueLabel.isEmpty {
+***REMOVED******REMOVED******REMOVED***return input.noValueLabel
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return .noValue
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
