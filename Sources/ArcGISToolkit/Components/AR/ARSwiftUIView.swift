@@ -13,7 +13,6 @@
 
 import ARKit
 ***REMOVED***
-***REMOVED***
 
 ***REMOVED***/ A SwiftUI version of ARSCNView.
 struct ARSwiftUIView {
@@ -110,8 +109,6 @@ class ARSwiftUIViewProxy {
 ***REMOVED******REMOVED***/ The underlying ARSCNView.
 ***REMOVED******REMOVED***/ This is set by the ARSwiftUIView when it is available.
 ***REMOVED***fileprivate var arView: ARSCNView?
-***REMOVED***
-***REMOVED***var initialTransformation: TransformationMatrix = .identity
 ***REMOVED***
 ***REMOVED******REMOVED***/ The AR session.
 ***REMOVED***var session: ARSession? {
