@@ -26,7 +26,7 @@ public struct TableTopSceneView: View {
 ***REMOVED***private let cameraController: TransformationMatrixCameraController
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
-***REMOVED***private var didSetTransforamtion: Bool {
+***REMOVED***private var initialTransformationIsSet: Bool {
 ***REMOVED******REMOVED***initialTransformation != nil
 ***REMOVED***
 ***REMOVED***
@@ -74,11 +74,11 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation: initialTransformation ?? .identity
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visualizePlane(renderer, didAdd: node, for: anchor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { _, node, anchor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addPlane(with: node, for: anchor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { renderer, node, anchor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updatePlane(renderer, didUpdate: node, for: anchor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { _, node, anchor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updatePlane(with: node, for: anchor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
@@ -88,12 +88,11 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture { screenPoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  !didSetTransforamtion else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  !initialTransformationIsSet else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let transformation = sceneViewProxy.setInitialTransformation(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let transformation = sceneViewProxy.initialTransformation(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: arViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***using: screenPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***using: screenPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation = transformation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -109,7 +108,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.sceneViewProxy = proxy
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(didSetTransforamtion ? 1 : 0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(initialTransformationIsSet ? 1 : 0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -124,26 +123,32 @@ public struct TableTopSceneView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func visualizePlane(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+***REMOVED******REMOVED***/ Visualizes a new node added to the scene as an AR Plane.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - node: The node to be added to the scene.
+***REMOVED******REMOVED***/   - anchor: The anchor position of the node.
+***REMOVED***func addPlane(with node: SCNNode, for anchor: ARAnchor) {
 ***REMOVED******REMOVED******REMOVED*** Place content only for anchors found by plane detection.
-***REMOVED******REMOVED***guard let planeAnchor = anchor as? ARPlaneAnchor else { return ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Create a custom object to visualize the plane geometry and extent.
-***REMOVED******REMOVED***let plane = Plane(anchor: planeAnchor)
+***REMOVED******REMOVED***guard let planeAnchor = anchor as? ARPlaneAnchor,
+***REMOVED******REMOVED******REMOVED***  ***REMOVED*** Create a custom object to visualize the plane geometry and extent.
+***REMOVED******REMOVED******REMOVED***  let plane = Plane(anchor: planeAnchor) else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Add the visualization to the ARKit-managed node so that it tracks
 ***REMOVED******REMOVED******REMOVED*** changes in the plane anchor as plane estimation continues.
 ***REMOVED******REMOVED***node.addChildNode(plane)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func updatePlane(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-***REMOVED******REMOVED***if didSetTransforamtion {
-***REMOVED******REMOVED***   node.removeFromParentNode()
+***REMOVED******REMOVED***/ Visualizes a node updated in scene as an AR Plane.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - node: The node to be updated in the scene.
+***REMOVED******REMOVED***/   - anchor: The anchor position of the node.
+***REMOVED***func updatePlane(with node: SCNNode, for anchor: ARAnchor) {
+***REMOVED******REMOVED***if initialTransformationIsSet {
+***REMOVED******REMOVED******REMOVED***node.removeFromParentNode()
 ***REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let planeAnchor = anchor as? ARPlaneAnchor,
-***REMOVED******REMOVED******REMOVED***  let plane = node.childNodes.first as? Plane
-***REMOVED******REMOVED***else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***  let plane = node.childNodes.first as? Plane else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Update extent visualization to the anchor's new bounding rectangle.
 ***REMOVED******REMOVED***if let extentGeometry = plane.node.geometry as? SCNPlane {
@@ -154,11 +159,11 @@ public struct TableTopSceneView: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ Helper class to visualize a plane found by ARKit
+***REMOVED***/ A helper class to visualize a plane found by ARKit.
 class Plane: SCNNode {
 ***REMOVED***let node: SCNNode
 ***REMOVED***
-***REMOVED***init(anchor: ARPlaneAnchor) {
+***REMOVED***init?(anchor: ARPlaneAnchor) {
 ***REMOVED******REMOVED******REMOVED*** Create a node to visualize the plane's bounding rectangle.
 ***REMOVED******REMOVED***let extent = SCNPlane(width: CGFloat(anchor.extent.x), height: CGFloat(anchor.extent.z))
 ***REMOVED******REMOVED***node = SCNNode(geometry: extent)
@@ -167,15 +172,14 @@ class Plane: SCNNode {
 ***REMOVED******REMOVED******REMOVED*** `SCNPlane` is vertically oriented in its local coordinate space, so
 ***REMOVED******REMOVED******REMOVED*** rotate it to match the orientation of `ARPlaneAnchor`.
 ***REMOVED******REMOVED***node.eulerAngles.x = -.pi / 2
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***super.init()
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***node.opacity = 0.25
-***REMOVED******REMOVED***guard let material = node.geometry?.firstMaterial
-***REMOVED******REMOVED******REMOVED***else { fatalError("SCNPlane always has one material") ***REMOVED***
+***REMOVED******REMOVED***guard let material = node.geometry?.firstMaterial else { return nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***material.diffuse.contents = UIColor.white
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Add the plane node as child node so they appear in the scene.
 ***REMOVED******REMOVED***addChildNode(node)
 ***REMOVED***
@@ -185,43 +189,23 @@ class Plane: SCNNode {
 ***REMOVED***
 ***REMOVED***
 
-private extension SceneViewProxy {
-***REMOVED******REMOVED***/ Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ - Parameter screenPoint: The screen point to determine the `initialTransformation` from.
-***REMOVED******REMOVED***/ - Returns: The `initialTransformation`.
-***REMOVED******REMOVED***/ - Since: 200.3
-***REMOVED***func setInitialTransformation(
-***REMOVED******REMOVED***for arViewProxy: ARSwiftUIViewProxy,
-***REMOVED******REMOVED***using screenPoint: CGPoint,
-***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController
-***REMOVED***) -> TransformationMatrix? {
-***REMOVED******REMOVED******REMOVED*** Use the `internalHitTest` method to get the matrix of `screenPoint`.
-***REMOVED******REMOVED***guard let matrix = internalHitTest(using: screenPoint, for: arViewProxy) else { return nil ***REMOVED***
-
-***REMOVED******REMOVED******REMOVED*** Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
-***REMOVED******REMOVED***let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
-
-***REMOVED******REMOVED***return initialTransformation
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Internal method to perform a hit test operation to get the transformation matrix representing the corresponding real-world point for `screenPoint`.
-***REMOVED******REMOVED***/
+private extension ARSwiftUIViewProxy {
+***REMOVED******REMOVED***/ Performs a hit test operation to get the transformation matrix representing the corresponding real-world point for `screenPoint`.
 ***REMOVED******REMOVED***/ - Parameter screenPoint: The screen point to determine the real world transformation matrix from.
-***REMOVED******REMOVED***/ - Returns: An `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
-***REMOVED***func internalHitTest(using screenPoint: CGPoint, for arViewProxy: ARSwiftUIViewProxy) -> TransformationMatrix? {
+***REMOVED******REMOVED***/ - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
+***REMOVED***func hitTest(using screenPoint: CGPoint) -> TransformationMatrix? {
 ***REMOVED******REMOVED******REMOVED*** Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
-***REMOVED******REMOVED***guard let query = arViewProxy.raycastQuery(
+***REMOVED******REMOVED***guard let query = raycastQuery(
 ***REMOVED******REMOVED******REMOVED***from: screenPoint,
 ***REMOVED******REMOVED******REMOVED***allowing: .existingPlaneGeometry,
 ***REMOVED******REMOVED******REMOVED***alignment: .any
 ***REMOVED******REMOVED***) else { return nil ***REMOVED***
-
-***REMOVED******REMOVED***let results = arViewProxy.session?.raycast(query)
-
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let results = session?.raycast(query)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Get the worldTransform from the first result; if there's no worldTransform, return nil.
 ***REMOVED******REMOVED***guard let worldTransform = results?.first?.worldTransform else { return nil ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create our hit test matrix based on the worldTransform location.
 ***REMOVED******REMOVED******REMOVED*** right now we ignore the orientation of the plane that was hit to find the point
 ***REMOVED******REMOVED******REMOVED*** since we only use horizontal planes, when we will start using vertical planes
@@ -235,7 +219,28 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED******REMOVED***translationY: Double(worldTransform.columns.3.y),
 ***REMOVED******REMOVED******REMOVED***translationZ: Double(worldTransform.columns.3.z)
 ***REMOVED******REMOVED***)
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return hitTestMatrix
+***REMOVED***
+***REMOVED***
+
+private extension SceneViewProxy {
+***REMOVED******REMOVED***/ Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined
+***REMOVED******REMOVED***/ via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - arViewProxy: The AR view proxy.
+***REMOVED******REMOVED***/   - screenPoint: The screen point to determine the `initialTransformation` from.
+***REMOVED******REMOVED***/ - Returns: The `initialTransformation`.
+***REMOVED***func initialTransformation(
+***REMOVED******REMOVED***for arViewProxy: ARSwiftUIViewProxy,
+***REMOVED******REMOVED***using screenPoint: CGPoint
+***REMOVED***) -> TransformationMatrix? {
+***REMOVED******REMOVED******REMOVED*** Use the `hitTest` method to get the matrix of `screenPoint`.
+***REMOVED******REMOVED***guard let matrix = arViewProxy.hitTest(using: screenPoint) else { return nil ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
+***REMOVED******REMOVED***let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return initialTransformation
 ***REMOVED***
 ***REMOVED***
