@@ -62,8 +62,7 @@ public struct FlyoverSceneView: View {
                             frame: frame,
                             for: session,
                             cameraController: cameraController,
-                            orientation: lastGoodDeviceOrientation,
-                            transform: arViewProxy.transform!
+                            orientation: lastGoodDeviceOrientation
                         )
                     }
                     .videoFeedHidden()
@@ -98,8 +97,7 @@ extension SceneViewProxy {
         frame: ARFrame,
         for: ARSession,
         cameraController: TransformationMatrixCameraController,
-        orientation: UIDeviceOrientation,
-        transform: SCNMatrix4
+        orientation: UIDeviceOrientation
     ) {
         let cameraTransform = frame.camera.transform
         let povTransform = simd_float4x4.init(
@@ -108,9 +106,6 @@ extension SceneViewProxy {
             cameraTransform.columns.2,
             cameraTransform.columns.3
         )
-        
-//        print("-- pov: \(transform)")
-//        print("-- cam: \(cameraMatrix)")
         
         let quaternion = simd_quatf(povTransform)
         
@@ -138,7 +133,7 @@ extension SceneViewProxy {
             yPrincipal: intrinsics[2][1],
             xImageSize: Float(imageResolution.width),
             yImageSize: Float(imageResolution.height),
-            deviceOrientation: .portrait
+            deviceOrientation: orientation
         )
         
         // Render the Scene with the new transformation.
