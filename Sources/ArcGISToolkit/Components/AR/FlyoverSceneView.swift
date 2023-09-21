@@ -95,7 +95,8 @@ extension SceneViewProxy {
     func draw(
         for arViewProxy: ARSwiftUIViewProxy,
         cameraController: TransformationMatrixCameraController,
-        orientation: UIDeviceOrientation
+        orientation: UIDeviceOrientation,
+        initialTransformation: TransformationMatrix = .identity
     ) {
         
         // Get transform from SCNView.pointOfView.
@@ -116,7 +117,7 @@ extension SceneViewProxy {
         )
         
         // Set the matrix on the camera controller.
-        cameraController.transformationMatrix = arViewProxy.initialTransformation.adding(transformationMatrix)
+        cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
         
         // Set FOV on camera.
         if let camera = session.currentFrame?.camera {
