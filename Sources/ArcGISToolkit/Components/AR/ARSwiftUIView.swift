@@ -47,6 +47,7 @@ struct ARSwiftUIView {
         return view
     }
     
+    /// Sets the closure to call when a new node has been added to the scene.
     func onAddNode(
         perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
     ) -> Self {
@@ -55,6 +56,7 @@ struct ARSwiftUIView {
         return view
     }
     
+    /// Sets the closure to call when the scene's nodes are update.
     func onUpdateNode(
         perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
     ) -> Self {
