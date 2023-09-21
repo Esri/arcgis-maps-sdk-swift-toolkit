@@ -21,11 +21,14 @@ public struct TableTopSceneView: View {
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     @State private var arViewProxy = ARSwiftUIViewProxy()
     @State private var sceneViewProxy: SceneViewProxy?
-    @State private var didSetTransforamtion = false
+    @State private var initialTransformation: TransformationMatrix? = nil
     
     private let cameraController: TransformationMatrixCameraController
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     private let configuration: ARWorldTrackingConfiguration
+    private var didSetTransforamtion: Bool {
+        initialTransformation != nil
+    }
     
     /// Creates a fly over scene view.
     /// - Parameters:
@@ -67,7 +70,8 @@ public struct TableTopSceneView: View {
                         sceneViewProxy.draw(
                             for: arViewProxy,
                             cameraController: cameraController,
-                            orientation: lastGoodDeviceOrientation
+                            orientation: lastGoodDeviceOrientation,
+                            initialTransformation: initialTransformation ?? .identity
                         )
                     }
                     .onAddNode { renderer, node, anchor in
@@ -86,12 +90,12 @@ public struct TableTopSceneView: View {
                         guard let sceneViewProxy,
                               !didSetTransforamtion else { return }
                         
-                        if sceneViewProxy.setInitialTransformation(
+                        if let transformation = sceneViewProxy.setInitialTransformation(
                             for: arViewProxy,
                             using: screenPoint,
                             cameraController: cameraController
                         ) {
-                            didSetTransforamtion = true
+                            initialTransformation = transformation
                         }
                     }
                 
@@ -185,20 +189,20 @@ private extension SceneViewProxy {
     /// Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.
     ///
     /// - Parameter screenPoint: The screen point to determine the `initialTransformation` from.
-    /// - Returns: Whether setting the `initialTransformation` succeeded or failed.
+    /// - Returns: The `initialTransformation`.
     /// - Since: 200.3
     func setInitialTransformation(
         for arViewProxy: ARSwiftUIViewProxy,
         using screenPoint: CGPoint,
         cameraController: TransformationMatrixCameraController
-    ) -> Bool {
+    ) -> TransformationMatrix? {
         // Use the `internalHitTest` method to get the matrix of `screenPoint`.
-        guard let matrix = internalHitTest(using: screenPoint, for: arViewProxy) else { return false }
+        guard let matrix = internalHitTest(using: screenPoint, for: arViewProxy) else { return nil }
 
         // Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
-        arViewProxy.initialTransformation = TransformationMatrix.identity.subtracting(matrix)
+        let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
 
-        return true
+        return initialTransformation
     }
     
     /// Internal method to perform a hit test operation to get the transformation matrix representing the corresponding real-world point for `screenPoint`.
