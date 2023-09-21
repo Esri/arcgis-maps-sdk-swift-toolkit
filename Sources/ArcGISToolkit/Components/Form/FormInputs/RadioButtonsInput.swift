@@ -83,6 +83,13 @@ struct RadioButtonsInput: View {
                     fallbackToComboBox = true
                 }
             }
+            .onChange(of: selectedValue) { newValue in
+                guard codedValues.first(where: { $0.name == element.value }) != newValue else {
+                    return
+                }
+                requiredValueMissing = element.isRequired && newValue == nil
+                featureForm?.feature.setAttributeValue(newValue?.code ?? "", forKey: element.fieldName)
+            }
         }
     }
 }
