@@ -13,6 +13,7 @@
 
 ***REMOVED***
 ***REMOVED***
+import Combine
 
 ***REMOVED***/ A view for single line text input.
 struct SingleLineTextInput: View {
@@ -36,6 +37,8 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED***/ The input configuration of the field.
 ***REMOVED***private let input: TextBoxFormInput
 ***REMOVED***
+***REMOVED***@StateObject var inputModel: FormInputModel
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for single line text input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
@@ -45,29 +48,37 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_inputModel = StateObject(
+***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***InputHeader(element: element)
-***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across input views for consistency.
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
-***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isFocused)
-***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Field")
-***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across input views for consistency.
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($isFocused)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Field")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
+***REMOVED******REMOVED******REMOVED******REMOVED***if !text.isEmpty && inputModel.isEditable {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.formTextInputStyle()
+***REMOVED******REMOVED******REMOVED***TextInputFooter(
+***REMOVED******REMOVED******REMOVED******REMOVED***currentLength: text.count,
+***REMOVED******REMOVED******REMOVED******REMOVED***isFocused: isFocused,
+***REMOVED******REMOVED******REMOVED******REMOVED***element: element,
+***REMOVED******REMOVED******REMOVED******REMOVED***input: input,
+***REMOVED******REMOVED******REMOVED******REMOVED***isRequired: inputModel.isRequired
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED***
-***REMOVED******REMOVED***.formTextInputStyle()
-***REMOVED******REMOVED***TextInputFooter(
-***REMOVED******REMOVED******REMOVED***currentLength: text.count,
-***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
-***REMOVED******REMOVED******REMOVED***element: element,
-***REMOVED******REMOVED******REMOVED***input: input
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***text = element.value
 ***REMOVED***
@@ -81,6 +92,18 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED***model.evalutateTask?.cancel()
+***REMOVED******REMOVED******REMOVED***model.evalutateTask = Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await featureForm?.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.outputIsVisible(featureForm: featureForm!)
+***REMOVED******REMOVED******REMOVED******REMOVED***print("evaluation completed; element.isVisible = \(element.isVisible)")
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(element.$isVisible) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("isVisible changed: \($0)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isVisible = $0
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

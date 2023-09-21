@@ -36,7 +36,7 @@ struct TextInputFooter: View {
 ***REMOVED***private let description: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field is required.
-***REMOVED***private let isRequired: Bool
+***REMOVED***@State private var isRequired: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum allowable length of text in the text input field.
 ***REMOVED***private let maxLength: Int
@@ -55,13 +55,15 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***currentLength: Int,
 ***REMOVED******REMOVED***isFocused: Bool,
 ***REMOVED******REMOVED***element: FieldFormElement,
-***REMOVED******REMOVED***input: FormInput
+***REMOVED******REMOVED***input: FormInput,
+***REMOVED******REMOVED***isRequired: Bool? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.currentLength = currentLength
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.isFocused = isFocused
 ***REMOVED******REMOVED***self.description = element.description
-***REMOVED******REMOVED***self.isRequired = element.isRequired
+***REMOVED******REMOVED***self.isRequired = (isRequired == nil ? element.isRequired : isRequired!)
+***REMOVED******REMOVED***print("isRequired: \(isRequired); self.isRequired: \(isRequired == nil ? element.isRequired : isRequired) for \(element.label)")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch input {
 ***REMOVED******REMOVED***case let input as TextBoxFormInput:
@@ -75,6 +77,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***fatalError("TextInputFooter can only be used with TextAreaFormInput or TextBoxFormInput")
 ***REMOVED***
+***REMOVED******REMOVED***validate(length: currentLength, focused: isFocused, isRequired: self.isRequired)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -97,12 +100,12 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***hasPreviouslySatisfiedMinimum = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: newLength, focused: isFocused)
+***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: newLength, focused: isFocused, isRequired: isRequired)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { newIsFocused in
 ***REMOVED******REMOVED******REMOVED***if hasPreviouslySatisfiedMinimum || !newIsFocused {
-***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: currentLength, focused: newIsFocused)
+***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: currentLength, focused: newIsFocused, isRequired: isRequired)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -156,7 +159,8 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ Checks for any validation errors and updates the value of `validationError`.
 ***REMOVED******REMOVED***/ - Parameter length: The length of text to use for validation.
 ***REMOVED******REMOVED***/ - Parameter focused: The focus state to use for validation.
-***REMOVED***func validate(length: Int, focused: Bool) {
+***REMOVED***func validate(length: Int, focused: Bool, isRequired: Bool) {
+***REMOVED******REMOVED***print("validate: focused: \(focused) isRequired: \(isRequired) for \(element.label)")
 ***REMOVED******REMOVED***if length == .zero && isRequired && !focused {
 ***REMOVED******REMOVED******REMOVED***validationError = .emptyWhenRequired
 ***REMOVED*** else if length < minLength || length > maxLength {

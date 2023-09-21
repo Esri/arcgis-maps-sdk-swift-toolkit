@@ -16,7 +16,7 @@
 
 extension FieldFormElement {
 ***REMOVED******REMOVED***/ - Note: This property added temporarily in lieu of finalized API.
-***REMOVED***var isRequired: Bool {
-***REMOVED******REMOVED***requiredExpressionName.contains("true")
-***REMOVED***
+***REMOVED******REMOVED***var isRequired: Bool {
+***REMOVED******REMOVED******REMOVED***requiredExpressionName.contains("true")
+***REMOVED******REMOVED***
 ***REMOVED***
