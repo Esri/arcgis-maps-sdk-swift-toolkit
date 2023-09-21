@@ -37,7 +37,8 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the field.
 ***REMOVED***private let input: DateTimePickerFormInput
-***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED*** The model for the input.
 ***REMOVED***@StateObject var inputModel: FormInputModel
 
 ***REMOVED******REMOVED***/ Creates a view for a date (and time if applicable) input.
@@ -66,22 +67,31 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***if element.value.isEmpty {
+***REMOVED******REMOVED******REMOVED***if inputModel.value.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***date = try? Date(element.value, strategy: .arcGISDateParseStrategy)
+***REMOVED******REMOVED******REMOVED******REMOVED***date = try? Date(inputModel.value, strategy: .arcGISDateParseStrategy)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
-***REMOVED******REMOVED******REMOVED***guard let currentDate = try? Date(element.value, strategy: .arcGISDateParseStrategy),
+***REMOVED******REMOVED******REMOVED***guard let currentDate = try? Date(inputModel.value, strategy: .arcGISDateParseStrategy),
 ***REMOVED******REMOVED******REMOVED******REMOVED***  newDate != currentDate else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***requiredValueMissing = inputModel.isRequired && newDate == nil
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED***inputModel.evaluateExpressions(model: model, featureForm: featureForm!)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.focusedFieldName) { newFocusedFieldName in
 ***REMOVED******REMOVED******REMOVED***isEditing = newFocusedFieldName == element.fieldName
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
+***REMOVED******REMOVED******REMOVED***if newValue.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = try? Date(newValue, strategy: .arcGISDateParseStrategy)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** TODO: make sure this triggers `.onChange(of: date)`
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

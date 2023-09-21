@@ -60,7 +60,7 @@ public class FormInputModel: ObservableObject {
 ***REMOVED***private var observeIsRequiredTask: Task<Void, Never> {
 ***REMOVED******REMOVED***Task.detached { [unowned self] in
 ***REMOVED******REMOVED******REMOVED***for await isRequired in element.$isRequired {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("isRequired changed: \(isRequired) for \(element.label)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("isRequired changed: \(isRequired) for \(element.label)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isRequired = isRequired
 ***REMOVED******REMOVED******REMOVED***
@@ -72,7 +72,7 @@ public class FormInputModel: ObservableObject {
 ***REMOVED***private var observeIsEditableTask: Task<Void, Never> {
 ***REMOVED******REMOVED***Task.detached { [unowned self] in
 ***REMOVED******REMOVED******REMOVED***for await isEditable in element.$isEditable {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("isRequired changed: \(isEditable) for \(element.label)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("isEditable changed: \(isEditable) (oldvalue: \(element.isEditable)) for \(element.label)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isEditable = isEditable
 ***REMOVED******REMOVED******REMOVED***
@@ -84,7 +84,7 @@ public class FormInputModel: ObservableObject {
 ***REMOVED***private var observeValueTask: Task<Void, Never> {
 ***REMOVED******REMOVED***Task.detached { [unowned self] in
 ***REMOVED******REMOVED******REMOVED***for await value in element.$value {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("value changed: \(value) for \(element.label)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("value changed: \(value) for \(element.label)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.value = value
 ***REMOVED******REMOVED******REMOVED***
@@ -107,5 +107,15 @@ public class FormInputModel: ObservableObject {
 ***REMOVED******REMOVED***featureForm.elements.forEach { element in
 ***REMOVED******REMOVED******REMOVED***print("element: \(element.label) isVisible = \(element.isVisible)")
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***internal func evaluateExpressions(model: FormViewModel, featureForm: FeatureForm) {
+***REMOVED******REMOVED***model.evalutateTask?.cancel()
+***REMOVED******REMOVED***model.evalutateTask = Task {
+***REMOVED******REMOVED******REMOVED***try? await featureForm.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.outputIsVisible(featureForm: featureForm!)
+***REMOVED******REMOVED******REMOVED******REMOVED***print("evaluation completed; element.isVisible = \(element.isVisible)")
+***REMOVED***
+
 ***REMOVED***
 ***REMOVED***

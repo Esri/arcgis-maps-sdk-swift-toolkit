@@ -43,6 +43,9 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED***/ The input configuration of the field.
 ***REMOVED***private let input: TextAreaFormInput
 ***REMOVED***
+***REMOVED******REMOVED*** The model for the input.
+***REMOVED***@StateObject var inputModel: FormInputModel
+
 ***REMOVED******REMOVED***/ Creates a view for text input spanning multiple lines.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
@@ -52,19 +55,25 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element =  element
 ***REMOVED******REMOVED***self.input = input
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_inputModel = StateObject(
+***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***InputHeader(element: element)
+***REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
 ***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if isFocused && !text.isEmpty {
+***REMOVED******REMOVED******REMOVED***if isFocused && !text.isEmpty && inputModel.isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -108,7 +117,18 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED******REMOVED***inputModel.evaluateExpressions(model: model, featureForm: featureForm!)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
+***REMOVED******REMOVED******REMOVED***text = newValue
+***REMOVED******REMOVED******REMOVED******REMOVED***if !isPlaceholder {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard newValue != element.value else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***inputModel.evaluateExpressions(model: model, featureForm: featureForm!)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
