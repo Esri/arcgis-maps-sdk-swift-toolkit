@@ -71,6 +71,8 @@ struct RadioButtonsInput: View {
                             .tag(Optional(codedValue))
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .formTextInputStyle()
                 
                 InputFooter(element: element, requiredValueMissing: requiredValueMissing)
             }
