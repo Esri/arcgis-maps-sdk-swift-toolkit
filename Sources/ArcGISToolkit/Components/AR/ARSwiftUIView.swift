@@ -15,6 +15,7 @@ import ARKit
 import RealityKit
 import SwiftUI
 
+//typealias ARViewType = RealityKit.ARView
 typealias ARViewType = ARSCNView
 
 /// A SwiftUI version of an AR view.
