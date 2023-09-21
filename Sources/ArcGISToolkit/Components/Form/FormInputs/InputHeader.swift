@@ -17,10 +17,21 @@ import ArcGIS
 /// A view shown at the top of a field element in a form.
 struct InputHeader: View {
     /// The form element the header is for.
-    let element: FieldFormElement
+    let label: String
+    let isRequired: Bool
     
+    init(element: FieldFormElement) {
+        self.label = element.label
+        self.isRequired = element.isRequired
+    }
+    
+    init(label: String, isRequired: Bool) {
+        self.label = label
+        self.isRequired = isRequired
+    }
+
     var body: some View {
-        Text(verbatim: "\(element.label + (element.isRequired ? " *" : ""))")
+        Text(verbatim: "\(label + (isRequired ? " *" : ""))")
             .font(.subheadline)
             .foregroundColor(.secondary)
     }

@@ -36,7 +36,7 @@ struct TextInputFooter: View {
     private let description: String
     
     /// A Boolean value indicating whether the text input field is required.
-    private let isRequired: Bool
+    @State private var isRequired: Bool
     
     /// The maximum allowable length of text in the text input field.
     private let maxLength: Int
@@ -55,13 +55,15 @@ struct TextInputFooter: View {
         currentLength: Int,
         isFocused: Bool,
         element: FieldFormElement,
-        input: FormInput
+        input: FormInput,
+        isRequired: Bool? = nil
     ) {
         self.currentLength = currentLength
         self.element = element
         self.isFocused = isFocused
         self.description = element.description
-        self.isRequired = element.isRequired
+        self.isRequired = (isRequired == nil ? element.isRequired : isRequired!)
+        print("isRequired: \(isRequired); self.isRequired: \(isRequired == nil ? element.isRequired : isRequired) for \(element.label)")
         
         switch input {
         case let input as TextBoxFormInput:
@@ -75,6 +77,7 @@ struct TextInputFooter: View {
         default:
             fatalError("TextInputFooter can only be used with TextAreaFormInput or TextBoxFormInput")
         }
+        validate(length: currentLength, focused: isFocused, isRequired: self.isRequired)
     }
     
     var body: some View {
@@ -97,12 +100,12 @@ struct TextInputFooter: View {
                     hasPreviouslySatisfiedMinimum = true
                 }
             } else {
-                validate(length: newLength, focused: isFocused)
+                validate(length: newLength, focused: isFocused, isRequired: isRequired)
             }
         }
         .onChange(of: isFocused) { newIsFocused in
             if hasPreviouslySatisfiedMinimum || !newIsFocused {
-                validate(length: currentLength, focused: newIsFocused)
+                validate(length: currentLength, focused: newIsFocused, isRequired: isRequired)
             }
         }
     }
@@ -156,7 +159,8 @@ extension TextInputFooter {
     /// Checks for any validation errors and updates the value of `validationError`.
     /// - Parameter length: The length of text to use for validation.
     /// - Parameter focused: The focus state to use for validation.
-    func validate(length: Int, focused: Bool) {
+    func validate(length: Int, focused: Bool, isRequired: Bool) {
+        print("validate: focused: \(focused) isRequired: \(isRequired) for \(element.label)")
         if length == .zero && isRequired && !focused {
             validationError = .emptyWhenRequired
         } else if length < minLength || length > maxLength {

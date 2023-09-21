@@ -16,7 +16,7 @@ import ArcGIS
 
 struct DateTimeInput: View {
     @Environment(\.formElementPadding) var elementPadding
-    
+
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
@@ -38,6 +38,8 @@ struct DateTimeInput: View {
     /// The input configuration of the field.
     private let input: DateTimePickerFormInput
     
+    @StateObject var inputModel: FormInputModel
+
     /// Creates a view for a date (and time if applicable) input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
@@ -47,6 +49,10 @@ struct DateTimeInput: View {
         self.featureForm = featureForm
         self.element = element
         self.input = input
+        print("date init")
+        _inputModel = StateObject(
+            wrappedValue: FormInputModel(fieldFormElement: element)
+        )
     }
     
     var body: some View {
@@ -71,7 +77,7 @@ struct DateTimeInput: View {
                   newDate != currentDate else {
                 return
             }
-            requiredValueMissing = element.isRequired && newDate == nil
+            requiredValueMissing = inputModel.isRequired && newDate == nil
             featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
         }
         .onChange(of: model.focusedFieldName) { newFocusedFieldName in
@@ -100,7 +106,7 @@ struct DateTimeInput: View {
             
             if isEditing {
                 todayOrNowButton
-            } else if true/*element.editable*/ {
+            } else if inputModel.isEditable {
                 if date == nil {
                     Image(systemName: "calendar")
                         .foregroundColor(.secondary)
@@ -116,7 +122,7 @@ struct DateTimeInput: View {
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {
-//                guard element.editable else { return }
+                guard inputModel.isEditable else { return }
                 if date == nil {
                     if dateRange.contains(.now) {
                         date = .now

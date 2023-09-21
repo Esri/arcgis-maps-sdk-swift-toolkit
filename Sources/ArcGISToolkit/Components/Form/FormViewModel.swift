@@ -17,23 +17,82 @@ import SwiftUI
 /// - Since: 200.2
 public class FormViewModel: ObservableObject {
     /// The geodatabase which holds the table and feature being edited in the form.
-    @Published private var database: ServiceGeodatabase?
+    @Published private var database: ServiceGeodatabase? = nil
     
     /// The featured being edited in the form.
-    @Published private(set) var feature: ArcGISFeature?
+    @Published private(set) var feature: ArcGISFeature? = nil
     
     /// The service feature table which holds the feature being edited in the form.
-    @Published private var table: ServiceFeatureTable?
+    @Published private var table: ServiceFeatureTable? = nil
     
     /// The structure of the form.
-    @Published var formDefinition: FeatureFormDefinition?
+    @Published var formDefinition: FeatureFormDefinition? = nil
     
+    /// The structure of the form.
+    public var formElements = [FormElement]() {
+        didSet {
+            print("formElements: \(formElements)")
+//            clearTasks()
+            print("model.formElements.didSet")
+            Task {
+                await MainActor.run {
+                    visibleElements.removeAll()
+                    visibleElements.append(contentsOf: formElements.filter { $0.isVisible })
+                }
+//                formElements.forEach { element in
+//                    tasks.append(
+//                        Task.detached { [unowned self] in
+//                            for await isVisible in element.$isVisible {
+//                                print("isVisible changed: \(isVisible) for \(element.label)")
+//                                await MainActor.run {
+//                                    visibleElements.removeAll()
+//                                    visibleElements.append(contentsOf: formElements.filter { $0.isVisible })
+//                                    print("visibleElements: \(visibleElements)")
+//                                }
+//                            }
+//                        })
+//                }
+            }
+        }
+    }
+
     /// The name of the current focused field, if one exists.
     @Published var focusedFieldName: String?
     
+    @Published var visibleElements = [FormElement]()
+
+    var evalutateTask: Task<Void, Never>? = nil
+    
+    private var tasks = [Task<Void, Never>]()
+    
+    deinit {
+        clearTasks()
+    }
+    
+    /// Cancels and removes tasks.
+    private func clearTasks() {
+        tasks.forEach { task in
+            task.cancel()
+        }
+        tasks.removeAll()
+    }
+
     /// Initializes a form view model.
     public init() {}
     
+    //    public func monitorIsVisible() async {
+
+//        await withTaskGroup(of: Void.self) { group in
+//            for element in featureForm.elements {
+//                group.addTask {
+//                    for await isVisible in $0.$isVisible {
+//                        elements = featureForm.elements.filter { $0.isVisible }
+//                    }
+//                }
+//            }
+//        }
+//    }
+
     /// Prepares the feature for editing in the form.
     /// - Parameter feature: The feature to be edited in the form.
     public func startEditing(_ feature: ArcGISFeature) {
@@ -67,6 +126,12 @@ public class FormViewModel: ObservableObject {
         
         if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
             print("An error occurred while submitting the changes.")
+        }
+    }
+    
+    public func outputIsVisible(featureForm: FeatureForm) {
+        featureForm.elements.forEach { element in
+            print("element: \(element.label) isVisible = \(element.isVisible)")
         }
     }
 }
