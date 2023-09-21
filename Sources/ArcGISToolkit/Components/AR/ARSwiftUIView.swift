@@ -13,12 +13,15 @@
 
 import ARKit
 ***REMOVED***
+***REMOVED***
 
 ***REMOVED***/ A SwiftUI version of ARSCNView.
 struct ARSwiftUIView {
 ***REMOVED******REMOVED***/ The closure to call when the ARSCNView renders.
 ***REMOVED***private(set) var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
 ***REMOVED***private(set) var videoFeedIsHidden: Bool = false
+***REMOVED***private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+***REMOVED***private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED******REMOVED***/ The proxy.
 ***REMOVED***private let proxy: ARSwiftUIViewProxy?
 ***REMOVED***
@@ -42,6 +45,21 @@ struct ARSwiftUIView {
 ***REMOVED***func videoFeedHidden() -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.videoFeedIsHidden = true
+***REMOVED***
+***REMOVED***
+***REMOVED***func onAddNode(
+***REMOVED******REMOVED***perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onAddNodeAction = action
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED***func onUpdateNode(
+***REMOVED******REMOVED***perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onUpdateNodeAction = action
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
@@ -55,8 +73,10 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***
 
 ***REMOVED***func updateUIView(_ uiView: ARSCNView, context: Context) {
-***REMOVED******REMOVED***context.coordinator.onRenderAction = onRenderAction
 ***REMOVED******REMOVED***uiView.isHidden = videoFeedIsHidden
+***REMOVED******REMOVED***context.coordinator.onRenderAction = onRenderAction
+***REMOVED******REMOVED***context.coordinator.onAddNodeAction = onAddNodeAction
+***REMOVED******REMOVED***context.coordinator.onUpdateNodeAction = onUpdateNodeAction
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCoordinator() -> Coordinator {
@@ -67,10 +87,21 @@ extension ARSwiftUIView: UIViewRepresentable {
 extension ARSwiftUIView {
 ***REMOVED***class Coordinator: NSObject, ARSCNViewDelegate {
 ***REMOVED******REMOVED***var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
+***REMOVED******REMOVED***var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+***REMOVED******REMOVED***var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
 ***REMOVED******REMOVED******REMOVED***onRenderAction?(renderer, scene, time)
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+***REMOVED******REMOVED******REMOVED***onAddNodeAction?(renderer, node, anchor)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+***REMOVED******REMOVED******REMOVED***onUpdateNodeAction?(renderer, node, anchor)
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -80,6 +111,8 @@ class ARSwiftUIViewProxy {
 ***REMOVED******REMOVED***/ This is set by the ARSwiftUIView when it is available.
 ***REMOVED***fileprivate var arView: ARSCNView?
 ***REMOVED***
+***REMOVED***var initialTransformation: TransformationMatrix = .identity
+***REMOVED***
 ***REMOVED******REMOVED***/ The AR session.
 ***REMOVED***var session: ARSession? {
 ***REMOVED******REMOVED***arView?.session
@@ -88,5 +121,23 @@ class ARSwiftUIViewProxy {
 ***REMOVED******REMOVED***/ The current point of view of the AR view.
 ***REMOVED***var pointOfView: SCNNode? {
 ***REMOVED******REMOVED***arView?.pointOfView
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a raycast query that originates from a point on the view, aligned with the center of the camera's field of view.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - point: The point on the view to extend the raycast from.
+***REMOVED******REMOVED***/   - target: The type of surface the raycast can interact with.
+***REMOVED******REMOVED***/   - alignment: The target's alignment with respect to gravity.
+***REMOVED******REMOVED***/ - Returns: An `ARRaycastQuery`.
+***REMOVED***func raycastQuery(
+***REMOVED******REMOVED***from point: CGPoint,
+***REMOVED******REMOVED***allowing target: ARRaycastQuery.Target,
+***REMOVED******REMOVED***alignment: ARRaycastQuery.TargetAlignment
+***REMOVED***) -> ARRaycastQuery? {
+***REMOVED******REMOVED***return arView?.raycastQuery(
+***REMOVED******REMOVED******REMOVED***from: point,
+***REMOVED******REMOVED******REMOVED***allowing: target,
+***REMOVED******REMOVED******REMOVED***alignment: alignment
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
