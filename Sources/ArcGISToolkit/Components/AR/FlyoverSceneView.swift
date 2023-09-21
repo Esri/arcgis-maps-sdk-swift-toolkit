@@ -56,10 +56,11 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { session, frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateLastGoodDeviceOrientation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.draw(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: arViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: session,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -93,16 +94,14 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***/   - cameraController: The current camera controller assigned to the scene view.
 ***REMOVED******REMOVED***/   - orientation: The device orientation.
 ***REMOVED***func draw(
-***REMOVED******REMOVED***for arViewProxy: ARSwiftUIViewProxy,
+***REMOVED******REMOVED***frame: ARFrame,
+***REMOVED******REMOVED***for: ARSession,
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
 ***REMOVED******REMOVED***orientation: UIDeviceOrientation
 ***REMOVED***) {
-***REMOVED******REMOVED***guard let session = arViewProxy.session, let cameraTransform = arViewProxy.cameraTransform else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***let cameraMatrix = frame.camera.viewMatrix(for: .portrait)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraMatrix = cameraTransform.matrix
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***let cameraMatrix = frame.camera.transform
 ***REMOVED******REMOVED***let cameraQuat = simd_quatf(cameraMatrix)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let transformationMatrix = TransformationMatrix.normalized(
@@ -118,23 +117,21 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED******REMOVED*** Set the matrix on the camera controller.
 ***REMOVED******REMOVED***cameraController.transformationMatrix = .identity.adding(transformationMatrix)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Set FOV on camera.
-***REMOVED******REMOVED***if let camera = session.currentFrame?.camera {
-***REMOVED******REMOVED******REMOVED***let intrinsics = camera.intrinsics
-***REMOVED******REMOVED******REMOVED***let imageResolution = camera.imageResolution
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***setFieldOfViewFromLensIntrinsics(
-***REMOVED******REMOVED******REMOVED******REMOVED***xFocalLength: intrinsics[0][0],
-***REMOVED******REMOVED******REMOVED******REMOVED***yFocalLength: intrinsics[1][1],
-***REMOVED******REMOVED******REMOVED******REMOVED***xPrincipal: intrinsics[2][0],
-***REMOVED******REMOVED******REMOVED******REMOVED***yPrincipal: intrinsics[2][1],
-***REMOVED******REMOVED******REMOVED******REMOVED***xImageSize: Float(imageResolution.width),
-***REMOVED******REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
-***REMOVED******REMOVED******REMOVED******REMOVED***deviceOrientation: orientation
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.
-***REMOVED******REMOVED******REMOVED***draw()
-***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set FOV on scene view.
+***REMOVED******REMOVED***let intrinsics = frame.camera.intrinsics
+***REMOVED******REMOVED***let imageResolution = frame.camera.imageResolution
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***setFieldOfViewFromLensIntrinsics(
+***REMOVED******REMOVED******REMOVED***xFocalLength: intrinsics[0][0],
+***REMOVED******REMOVED******REMOVED***yFocalLength: intrinsics[1][1],
+***REMOVED******REMOVED******REMOVED***xPrincipal: intrinsics[2][0],
+***REMOVED******REMOVED******REMOVED***yPrincipal: intrinsics[2][1],
+***REMOVED******REMOVED******REMOVED***xImageSize: Float(imageResolution.width),
+***REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
+***REMOVED******REMOVED******REMOVED***deviceOrientation: .portrait
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.
+***REMOVED******REMOVED***draw()
 ***REMOVED***
 ***REMOVED***
