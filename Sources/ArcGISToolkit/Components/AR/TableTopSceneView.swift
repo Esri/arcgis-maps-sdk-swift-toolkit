@@ -61,57 +61,60 @@ public struct TableTopSceneView: View {
     }
     
     public var body: some View {
-        if #available(iOS 16.0, *) {
-            ZStack {
-                ARSwiftUIView(proxy: arViewProxy)
-                    .onRender { _, _, _ in
-                        guard let sceneViewProxy else { return }
-                        updateLastGoodDeviceOrientation()
-                        sceneViewProxy.draw(
-                            for: arViewProxy,
-                            cameraController: cameraController,
-                            orientation: lastGoodDeviceOrientation,
-                            initialTransformation: initialTransformation ?? .identity
-                        )
-                    }
-                    .onAddNode { _, node, anchor in
-                        addPlane(with: node, for: anchor)
-                    }
-                    .onUpdateNode { _, node, anchor in
-                        updatePlane(with: node, for: anchor)
-                    }
-                    .onAppear {
-                        arViewProxy.session?.run(configuration)
-                    }
-                    .onDisappear {
-                        arViewProxy.session?.pause()
-                    }
-                    .onTapGesture { screenPoint in
-                        guard let sceneViewProxy,
-                              !initialTransformationIsSet else { return }
-                        
-                        if let transformation = sceneViewProxy.initialTransformation(
-                            for: arViewProxy,
-                            using: screenPoint
-                        ) {
-                            initialTransformation = transformation
-                        }
-                    }
-                
-                    SceneViewReader { proxy in
-                        sceneViewBuilder(proxy)
-                            .cameraController(cameraController)
-                            .attributionBarHidden(true)
-                            .spaceEffect(.transparent)
-                            .viewDrawingMode(.manual)
-                            .atmosphereEffect(.off)
-                            .onAppear {
-                                self.sceneViewProxy = proxy
-                            }
-                            .opacity(initialTransformationIsSet ? 1 : 0)
-                    }
+        ZStack {
+            ARSwiftUIView(proxy: arViewProxy)
+                .onRender { _, _, _ in
+                    guard let sceneViewProxy else { return }
+                    updateLastGoodDeviceOrientation()
+                    sceneViewProxy.draw(
+                        for: arViewProxy,
+                        cameraController: cameraController,
+                        orientation: lastGoodDeviceOrientation,
+                        initialTransformation: initialTransformation ?? .identity
+                    )
                 }
+                .onAddNode { _, node, anchor in
+                    addPlane(with: node, for: anchor)
+                }
+                .onUpdateNode { _, node, anchor in
+                    updatePlane(with: node, for: anchor)
+                }
+                .onAppear {
+                    arViewProxy.session?.run(configuration)
+                }
+                .onDisappear {
+                    arViewProxy.session?.pause()
+                }
+                .gesture(
+                    DragGesture(minimumDistance: 0, coordinateSpace: .global)
+                        .onEnded { value in
+                            guard let sceneViewProxy,
+                                  !initialTransformationIsSet else { return }
+                            
+                            let screenPoint = value.location
+                            
+                            if let transformation = sceneViewProxy.initialTransformation(
+                                for: arViewProxy,
+                                using: screenPoint
+                            ) {
+                                initialTransformation = transformation
+                            }
+                        }
+                )
+            
+            SceneViewReader { proxy in
+                sceneViewBuilder(proxy)
+                    .cameraController(cameraController)
+                    .attributionBarHidden(true)
+                    .spaceEffect(.transparent)
+                    .viewDrawingMode(.manual)
+                    .atmosphereEffect(.off)
+                    .onAppear {
+                        self.sceneViewProxy = proxy
+                    }
+                    .opacity(initialTransformationIsSet ? 1 : 0)
             }
+        }
     }
     
     /// Updates the last good device orientation.
