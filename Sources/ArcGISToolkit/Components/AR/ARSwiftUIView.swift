@@ -50,6 +50,10 @@ struct ARSwiftUIView {
 extension ARSwiftUIView: UIViewRepresentable {
     func makeUIView(context: Context) -> ARView {
         let arView = ARView()
+//        arView.layer.isHidden = true
+        //arView.contentScaleFactor = 0.1
+        //arView.debugOptions.insert(.showStatistics)
+        
         arView.session.delegate = context.coordinator
         proxy?.arView = arView
         return arView
@@ -57,7 +61,7 @@ extension ARSwiftUIView: UIViewRepresentable {
 
     func updateUIView(_ uiView: ARView, context: Context) {
         context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
-        uiView.isHidden = videoFeedIsHidden
+        //uiView.isHidden = videoFeedIsHidden
     }
     
     func makeCoordinator() -> Coordinator {
@@ -84,10 +88,5 @@ class ARSwiftUIViewProxy {
     /// The AR session.
     var session: ARSession? {
         arView?.session
-    }
-    
-    /// The current camera transform of the AR view.
-    var cameraTransform: Transform? {
-        arView?.cameraTransform
     }
 }
