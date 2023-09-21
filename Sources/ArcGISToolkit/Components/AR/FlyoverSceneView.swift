@@ -62,7 +62,8 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: session,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***transform: arViewProxy.transform!
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.videoFeedHidden()
@@ -97,20 +98,30 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***frame: ARFrame,
 ***REMOVED******REMOVED***for: ARSession,
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
-***REMOVED******REMOVED***orientation: UIDeviceOrientation
+***REMOVED******REMOVED***orientation: UIDeviceOrientation,
+***REMOVED******REMOVED***transform: SCNMatrix4
 ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED***let cameraMatrix = frame.camera.viewMatrix(for: .portrait)
-***REMOVED******REMOVED***let cameraMatrix = frame.camera.transform
-***REMOVED******REMOVED***let cameraQuat = simd_quatf(cameraMatrix)
+***REMOVED******REMOVED***let cameraTransform = frame.camera.transform
+***REMOVED******REMOVED***let povTransform = simd_float4x4.init(
+***REMOVED******REMOVED******REMOVED***cameraTransform.columns.1,
+***REMOVED******REMOVED******REMOVED***-cameraTransform.columns.0,
+***REMOVED******REMOVED******REMOVED***cameraTransform.columns.2,
+***REMOVED******REMOVED******REMOVED***cameraTransform.columns.3
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***print("-- pov: \(transform)")
+***REMOVED******REMOVED******REMOVED***print("-- cam: \(cameraMatrix)")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let quaternion = simd_quatf(povTransform)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let transformationMatrix = TransformationMatrix.normalized(
-***REMOVED******REMOVED******REMOVED***quaternionX: Double(cameraQuat.vector.x),
-***REMOVED******REMOVED******REMOVED***quaternionY: Double(cameraQuat.vector.y),
-***REMOVED******REMOVED******REMOVED***quaternionZ: Double(cameraQuat.vector.z),
-***REMOVED******REMOVED******REMOVED***quaternionW: Double(cameraQuat.vector.w),
-***REMOVED******REMOVED******REMOVED***translationX: Double(cameraMatrix.columns.3.x),
-***REMOVED******REMOVED******REMOVED***translationY: Double(cameraMatrix.columns.3.y),
-***REMOVED******REMOVED******REMOVED***translationZ: Double(cameraMatrix.columns.3.z)
+***REMOVED******REMOVED******REMOVED***quaternionX: Double(quaternion.vector.x),
+***REMOVED******REMOVED******REMOVED***quaternionY: Double(quaternion.vector.y),
+***REMOVED******REMOVED******REMOVED***quaternionZ: Double(quaternion.vector.z),
+***REMOVED******REMOVED******REMOVED***quaternionW: Double(quaternion.vector.w),
+***REMOVED******REMOVED******REMOVED***translationX: Double(povTransform.columns.3.x),
+***REMOVED******REMOVED******REMOVED***translationY: Double(povTransform.columns.3.y),
+***REMOVED******REMOVED******REMOVED***translationZ: Double(povTransform.columns.3.z)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the matrix on the camera controller.
