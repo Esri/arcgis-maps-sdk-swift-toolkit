@@ -116,7 +116,7 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the matrix on the camera controller.
-***REMOVED******REMOVED***cameraController.transformationMatrix = .identity.adding(transformationMatrix)
+***REMOVED******REMOVED***cameraController.transformationMatrix = arViewProxy.initialTransformation.adding(transformationMatrix)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set FOV on camera.
 ***REMOVED******REMOVED***if let camera = session.currentFrame?.camera {
