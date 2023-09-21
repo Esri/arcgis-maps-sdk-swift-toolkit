@@ -100,7 +100,6 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***orientation: UIDeviceOrientation
 ***REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***let cameraMatrix = frame.camera.viewMatrix(for: .portrait)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraMatrix = frame.camera.transform
 ***REMOVED******REMOVED***let cameraQuat = simd_quatf(cameraMatrix)
 ***REMOVED******REMOVED***
