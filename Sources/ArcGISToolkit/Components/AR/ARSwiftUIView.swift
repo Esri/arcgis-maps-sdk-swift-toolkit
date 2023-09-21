@@ -44,6 +44,7 @@ struct ARSwiftUIView {
     func videoFeedHidden() -> Self {
         var view = self
         view.videoFeedIsHidden = true
+        return view
     }
     
     func onAddNode(
