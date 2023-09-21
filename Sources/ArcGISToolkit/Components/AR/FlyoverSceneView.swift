@@ -62,7 +62,8 @@ public struct FlyoverSceneView: View {
                             frame: frame,
                             for: session,
                             cameraController: cameraController,
-                            orientation: lastGoodDeviceOrientation
+                            orientation: lastGoodDeviceOrientation,
+                            transform: arViewProxy.transform!
                         )
                     }
                     .videoFeedHidden()
@@ -97,20 +98,30 @@ extension SceneViewProxy {
         frame: ARFrame,
         for: ARSession,
         cameraController: TransformationMatrixCameraController,
-        orientation: UIDeviceOrientation
+        orientation: UIDeviceOrientation,
+        transform: SCNMatrix4
     ) {
-        //let cameraMatrix = frame.camera.viewMatrix(for: .portrait)
-        let cameraMatrix = frame.camera.transform
-        let cameraQuat = simd_quatf(cameraMatrix)
+        let cameraTransform = frame.camera.transform
+        let povTransform = simd_float4x4.init(
+            cameraTransform.columns.1,
+            -cameraTransform.columns.0,
+            cameraTransform.columns.2,
+            cameraTransform.columns.3
+        )
+        
+//        print("-- pov: \(transform)")
+//        print("-- cam: \(cameraMatrix)")
+        
+        let quaternion = simd_quatf(povTransform)
         
         let transformationMatrix = TransformationMatrix.normalized(
-            quaternionX: Double(cameraQuat.vector.x),
-            quaternionY: Double(cameraQuat.vector.y),
-            quaternionZ: Double(cameraQuat.vector.z),
-            quaternionW: Double(cameraQuat.vector.w),
-            translationX: Double(cameraMatrix.columns.3.x),
-            translationY: Double(cameraMatrix.columns.3.y),
-            translationZ: Double(cameraMatrix.columns.3.z)
+            quaternionX: Double(quaternion.vector.x),
+            quaternionY: Double(quaternion.vector.y),
+            quaternionZ: Double(quaternion.vector.z),
+            quaternionW: Double(quaternion.vector.w),
+            translationX: Double(povTransform.columns.3.x),
+            translationY: Double(povTransform.columns.3.y),
+            translationZ: Double(povTransform.columns.3.z)
         )
         
         // Set the matrix on the camera controller.
