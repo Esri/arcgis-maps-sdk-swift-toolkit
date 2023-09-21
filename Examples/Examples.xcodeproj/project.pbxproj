@@ -14,6 +14,7 @@
 		75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75657E4727ABAC8400EE865B /* CompassExampleView.swift */; };
 		75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */; };
 		75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */; };
+		882899FD2AB5099300A0BDC1 /* FlyoverExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */; };
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; };
 		E4624A25278CE815000D2A38 /* FloorFilterExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */; };
 		E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */; };
@@ -51,6 +52,7 @@
 		75657E4727ABAC8400EE865B /* CompassExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassExampleView.swift; sourceTree = "<group>"; };
 		75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksExampleView.swift; sourceTree = "<group>"; };
 		75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalebarExampleView.swift; sourceTree = "<group>"; };
+		882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyoverExampleView.swift; sourceTree = "<group>"; };
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; };
 		E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterExampleView.swift; sourceTree = "<group>"; };
 		E47ABE402652FE0900FD2FE3 /* Toolkit Examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Toolkit Examples.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,16 +96,17 @@
 		E40F58042656E509006F5CB9 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
-				4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */,
 				E4C389D426B8A12C002BC255 /* BasemapGalleryExampleView.swift */,
 				75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */,
+				75657E4727ABAC8400EE865B /* CompassExampleView.swift */,
+				E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */,
+				E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */,
 				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */,
+				4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */,
 				75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */,
 				E42BFBE82672BF9500159107 /* SearchExampleView.swift */,
-				E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */,
-				75657E4727ABAC8400EE865B /* CompassExampleView.swift */,
-				E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */,
 				75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */,
+				882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */,
 			);
 			name = Examples;
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 				E48A73472658227100F5C118 /* ExampleList.swift in Sources */,
 				E4624A25278CE815000D2A38 /* FloorFilterExampleView.swift in Sources */,
 				4D19FCB52881C8F3002601E8 /* PopupExampleView.swift in Sources */,
+				882899FD2AB5099300A0BDC1 /* FlyoverExampleView.swift in Sources */,
 				E48A73462658227100F5C118 /* ExampleView.swift in Sources */,
 				E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */,
 				E4C389D526B8A12C002BC255 /* BasemapGalleryExampleView.swift in Sources */,

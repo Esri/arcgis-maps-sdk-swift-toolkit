@@ -16,6 +16,7 @@ import SwiftUI
 struct Examples: View {
     /// The list of example lists.  Allows for a hierarchical navigation model for examples.
     let lists: [ExampleList] = [
+        .augmentedReality,
         .geoview,
         .views
     ]
@@ -32,6 +33,13 @@ struct Examples: View {
 }
 
 extension ExampleList {
+    static let augmentedReality = Self(
+        name: "Augmented Reality",
+        examples: [
+            AnyExample("Flyover", content: FlyoverExampleView())
+        ]
+    )
+    
     static let geoview = Self(
         name: "GeoView",
         examples: [
