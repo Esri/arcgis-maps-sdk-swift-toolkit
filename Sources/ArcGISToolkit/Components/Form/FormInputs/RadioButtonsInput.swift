@@ -21,6 +21,8 @@ struct RadioButtonsInput: View {
     /// The set of options in the input.
     @State private var codedValues = [CodedValue]()
     
+    /// A Boolean value indicating whether the date selection was cleared when a value is required.
+    @State private var requiredValueMissing = false
     
     /// The selected option.
     @State private var selectedValue: CodedValue?
@@ -64,7 +66,7 @@ struct RadioButtonsInput: View {
                     .padding([.top], elementPadding)
                 
                 Picker(element.label, selection: $selectedValue) {
-                    Text(String.noValue)
+                    Text(placeholderValue)
                         .tag(nil as CodedValue?)
                     ForEach(codedValues, id: \.self) { codedValue in
                         Text(codedValue.name)
@@ -92,6 +94,17 @@ struct RadioButtonsInput: View {
                 requiredValueMissing = element.isRequired && newValue == nil
                 featureForm?.feature.setAttributeValue(newValue?.code ?? "", forKey: element.fieldName)
             }
+        }
+    }
+}
+
+extension RadioButtonsInput {
+    /// The placeholder value to display.
+    var placeholderValue: String {
+        if input.noValueOption == .show && !input.noValueLabel.isEmpty {
+            return input.noValueLabel
+        } else {
+            return .noValue
         }
     }
 }
