@@ -44,6 +44,7 @@ struct ARSwiftUIView {
 ***REMOVED***func videoFeedHidden() -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.videoFeedIsHidden = true
+***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func onAddNode(
