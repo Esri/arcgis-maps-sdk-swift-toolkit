@@ -100,7 +100,6 @@ extension SceneViewProxy {
         orientation: UIDeviceOrientation
     ) {
         //let cameraMatrix = frame.camera.viewMatrix(for: .portrait)
-        
         let cameraMatrix = frame.camera.transform
         let cameraQuat = simd_quatf(cameraMatrix)
         
