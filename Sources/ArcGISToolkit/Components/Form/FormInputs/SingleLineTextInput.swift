@@ -13,6 +13,7 @@
 
 import SwiftUI
 import ArcGIS
+import Combine
 
 /// A view for single line text input.
 struct SingleLineTextInput: View {
@@ -36,6 +37,8 @@ struct SingleLineTextInput: View {
     /// The input configuration of the field.
     private let input: TextBoxFormInput
     
+    @StateObject var inputModel: FormInputModel
+    
     /// Creates a view for single line text input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
@@ -45,29 +48,37 @@ struct SingleLineTextInput: View {
         self.featureForm = featureForm
         self.element = element
         self.input = input
+        
+        _inputModel = StateObject(
+            wrappedValue: FormInputModel(fieldFormElement: element)
+        )
     }
     
     var body: some View {
-        InputHeader(element: element)
-            .padding([.top], elementPadding)
-        // Secondary foreground color is used across input views for consistency.
-        HStack {
-            TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
-                .focused($isFocused)
-                .accessibilityIdentifier("\(element.label) Text Field")
-            if !text.isEmpty {
-                ClearButton { text.removeAll() }
-                    .accessibilityIdentifier("\(element.label) Clear Button")
+        Group {
+            InputHeader(label: element.label, isRequired: inputModel.isRequired)
+                .padding([.top], elementPadding)
+            // Secondary foreground color is used across input views for consistency.
+            HStack {
+                TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
+                    .focused($isFocused)
+                    .accessibilityIdentifier("\(element.label) Text Field")
+                    .disabled(!inputModel.isEditable)
+                if !text.isEmpty && inputModel.isEditable {
+                    ClearButton { text.removeAll() }
+                        .accessibilityIdentifier("\(element.label) Clear Button")
+                }
             }
+            .formTextInputStyle()
+            TextInputFooter(
+                currentLength: text.count,
+                isFocused: isFocused,
+                element: element,
+                input: input,
+                isRequired: inputModel.isRequired
+            )
+            .padding([.bottom], elementPadding)
         }
-        .formTextInputStyle()
-        TextInputFooter(
-            currentLength: text.count,
-            isFocused: isFocused,
-            element: element,
-            input: input
-        )
-        .padding([.bottom], elementPadding)
         .onAppear {
             text = element.value
         }
@@ -81,6 +92,18 @@ struct SingleLineTextInput: View {
                 return
             }
             featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+            model.evalutateTask?.cancel()
+            model.evalutateTask = Task {
+                try? await featureForm?.evaluateExpressions()
+                //                model.outputIsVisible(featureForm: featureForm!)
+                print("evaluation completed; element.isVisible = \(element.isVisible)")
+            }
         }
+        //        .onReceive(element.$isVisible) {
+        //            print("isVisible changed: \($0)")
+        //            isVisible = $0
+        //        }
     }
+    
+    
 }

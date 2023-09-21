@@ -16,7 +16,7 @@ import ArcGIS
 
 extension FieldFormElement {
     /// - Note: This property added temporarily in lieu of finalized API.
-    var isRequired: Bool {
-        requiredExpressionName.contains("true")
-    }
+//    var isRequired: Bool {
+//        requiredExpressionName.contains("true")
+//    }
 }
