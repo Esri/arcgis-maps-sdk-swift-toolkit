@@ -37,7 +37,8 @@ struct DateTimeInput: View {
     
     /// The input configuration of the field.
     private let input: DateTimePickerFormInput
-    
+        
+    // The model for the input.
     @StateObject var inputModel: FormInputModel
 
     /// Creates a view for a date (and time if applicable) input.
@@ -66,22 +67,31 @@ struct DateTimeInput: View {
         }
         .padding([.bottom], elementPadding)
         .onAppear {
-            if element.value.isEmpty {
+            if inputModel.value.isEmpty {
                 date = nil
             } else {
-                date = try? Date(element.value, strategy: .arcGISDateParseStrategy)
+                date = try? Date(inputModel.value, strategy: .arcGISDateParseStrategy)
             }
         }
         .onChange(of: date) { newDate in
-            guard let currentDate = try? Date(element.value, strategy: .arcGISDateParseStrategy),
+            guard let currentDate = try? Date(inputModel.value, strategy: .arcGISDateParseStrategy),
                   newDate != currentDate else {
                 return
             }
             requiredValueMissing = inputModel.isRequired && newDate == nil
             featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
+            inputModel.evaluateExpressions(model: model, featureForm: featureForm!)
         }
         .onChange(of: model.focusedFieldName) { newFocusedFieldName in
             isEditing = newFocusedFieldName == element.fieldName
+        }
+        .onChange(of: inputModel.value) { newValue in
+            if newValue.isEmpty {
+                date = nil
+            } else {
+                date = try? Date(newValue, strategy: .arcGISDateParseStrategy)
+            }
+            // TODO: make sure this triggers `.onChange(of: date)`
         }
     }
     

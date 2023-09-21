@@ -60,7 +60,7 @@ public class FormInputModel: ObservableObject {
     private var observeIsRequiredTask: Task<Void, Never> {
         Task.detached { [unowned self] in
             for await isRequired in element.$isRequired {
-                print("isRequired changed: \(isRequired) for \(element.label)")
+//                print("isRequired changed: \(isRequired) for \(element.label)")
                 await MainActor.run {
                     self.isRequired = isRequired
                 }
@@ -72,7 +72,7 @@ public class FormInputModel: ObservableObject {
     private var observeIsEditableTask: Task<Void, Never> {
         Task.detached { [unowned self] in
             for await isEditable in element.$isEditable {
-                print("isRequired changed: \(isEditable) for \(element.label)")
+//                print("isEditable changed: \(isEditable) (oldvalue: \(element.isEditable)) for \(element.label)")
                 await MainActor.run {
                     self.isEditable = isEditable
                 }
@@ -84,7 +84,7 @@ public class FormInputModel: ObservableObject {
     private var observeValueTask: Task<Void, Never> {
         Task.detached { [unowned self] in
             for await value in element.$value {
-                print("value changed: \(value) for \(element.label)")
+//                print("value changed: \(value) for \(element.label)")
                 await MainActor.run {
                     self.value = value
                 }
@@ -107,5 +107,15 @@ public class FormInputModel: ObservableObject {
         featureForm.elements.forEach { element in
             print("element: \(element.label) isVisible = \(element.isVisible)")
         }
+    }
+    
+    internal func evaluateExpressions(model: FormViewModel, featureForm: FeatureForm) {
+        model.evalutateTask?.cancel()
+        model.evalutateTask = Task {
+            try? await featureForm.evaluateExpressions()
+            //                model.outputIsVisible(featureForm: featureForm!)
+//            print("evaluation completed; element.isVisible = \(element.isVisible)")
+        }
+
     }
 }
