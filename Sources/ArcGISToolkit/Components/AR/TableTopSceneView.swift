@@ -26,7 +26,7 @@ public struct TableTopSceneView: View {
     private let cameraController: TransformationMatrixCameraController
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     private let configuration: ARWorldTrackingConfiguration
-    private var didSetTransforamtion: Bool {
+    private var didSetTransformation: Bool {
         initialTransformation != nil
     }
     
@@ -88,7 +88,7 @@ public struct TableTopSceneView: View {
                     }
                     .onTapGesture { screenPoint in
                         guard let sceneViewProxy,
-                              !didSetTransforamtion else { return }
+                              !didSetTransformation else { return }
                         
                         if let transformation = sceneViewProxy.setInitialTransformation(
                             for: arViewProxy,
@@ -109,7 +109,7 @@ public struct TableTopSceneView: View {
                             .onAppear {
                                 self.sceneViewProxy = proxy
                             }
-                            .opacity(didSetTransforamtion ? 1 : 0)
+                            .opacity(didSetTransformation ? 1 : 0)
                     }
                 }
             }
@@ -137,7 +137,7 @@ public struct TableTopSceneView: View {
     }
     
     func updatePlane(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-        if didSetTransforamtion {
+        if didSetTransformation {
            node.removeFromParentNode()
         }
     
