@@ -15,6 +15,8 @@ import ARKit
 import RealityKit
 import SwiftUI
 
+typealias ARViewType = ARSCNView
+
 /// A SwiftUI version of ARSCNView.
 struct ARSwiftUIView {
     /// The closure to call when the ARSCNView renders.
@@ -48,8 +50,8 @@ struct ARSwiftUIView {
 }
 
 extension ARSwiftUIView: UIViewRepresentable {
-    func makeUIView(context: Context) -> ARView {
-        let arView = ARView()
+    func makeUIView(context: Context) -> ARViewType {
+        let arView = ARViewType()
 //        arView.layer.isHidden = true
         //arView.contentScaleFactor = 0.1
         //arView.debugOptions.insert(.showStatistics)
@@ -59,7 +61,7 @@ extension ARSwiftUIView: UIViewRepresentable {
         return arView
     }
 
-    func updateUIView(_ uiView: ARView, context: Context) {
+    func updateUIView(_ uiView: ARViewType, context: Context) {
         context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
         uiView.isHidden = videoFeedIsHidden
     }
@@ -83,10 +85,14 @@ extension ARSwiftUIView {
 class ARSwiftUIViewProxy {
     /// The underlying ARSCNView.
     /// This is set by the ARSwiftUIView when it is available.
-    fileprivate var arView: ARView?
+    fileprivate var arView: ARViewType?
     
     /// The AR session.
     var session: ARSession? {
         arView?.session
+    }
+    
+    var transform: SCNMatrix4? {
+        arView?.pointOfView?.transform
     }
 }
