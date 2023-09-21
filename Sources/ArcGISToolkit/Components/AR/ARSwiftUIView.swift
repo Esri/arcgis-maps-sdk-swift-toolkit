@@ -61,7 +61,7 @@ extension ARSwiftUIView: UIViewRepresentable {
 
     func updateUIView(_ uiView: ARView, context: Context) {
         context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
-        //uiView.isHidden = videoFeedIsHidden
+        uiView.isHidden = videoFeedIsHidden
     }
     
     func makeCoordinator() -> Coordinator {
