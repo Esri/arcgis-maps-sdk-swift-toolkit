@@ -26,7 +26,7 @@ public struct TableTopSceneView: View {
     private let cameraController: TransformationMatrixCameraController
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     private let configuration: ARWorldTrackingConfiguration
-    private var didSetTransforamtion: Bool {
+    private var initialTransformationIsSet: Bool {
         initialTransformation != nil
     }
     
@@ -74,11 +74,11 @@ public struct TableTopSceneView: View {
                             initialTransformation: initialTransformation ?? .identity
                         )
                     }
-                    .onAddNode { renderer, node, anchor in
-                        visualizePlane(renderer, didAdd: node, for: anchor)
+                    .onAddNode { _, node, anchor in
+                        addPlane(with: node, for: anchor)
                     }
-                    .onUpdateNode { renderer, node, anchor in
-                        updatePlane(renderer, didUpdate: node, for: anchor)
+                    .onUpdateNode { _, node, anchor in
+                        updatePlane(with: node, for: anchor)
                     }
                     .onAppear {
                         arViewProxy.session?.run(configuration)
@@ -88,12 +88,11 @@ public struct TableTopSceneView: View {
                     }
                     .onTapGesture { screenPoint in
                         guard let sceneViewProxy,
-                              !didSetTransforamtion else { return }
+                              !initialTransformationIsSet else { return }
                         
-                        if let transformation = sceneViewProxy.setInitialTransformation(
+                        if let transformation = sceneViewProxy.initialTransformation(
                             for: arViewProxy,
-                            using: screenPoint,
-                            cameraController: cameraController
+                            using: screenPoint
                         ) {
                             initialTransformation = transformation
                         }
@@ -109,7 +108,7 @@ public struct TableTopSceneView: View {
                             .onAppear {
                                 self.sceneViewProxy = proxy
                             }
-                            .opacity(didSetTransforamtion ? 1 : 0)
+                            .opacity(initialTransformationIsSet ? 1 : 0)
                     }
                 }
             }
@@ -124,26 +123,32 @@ public struct TableTopSceneView: View {
         }
     }
     
-    func visualizePlane(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+    /// Visualizes a new node added to the scene as an AR Plane.
+    /// - Parameters:
+    ///   - node: The node to be added to the scene.
+    ///   - anchor: The anchor position of the node.
+    func addPlane(with node: SCNNode, for anchor: ARAnchor) {
         // Place content only for anchors found by plane detection.
-        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
-        
-        // Create a custom object to visualize the plane geometry and extent.
-        let plane = Plane(anchor: planeAnchor)
+        guard let planeAnchor = anchor as? ARPlaneAnchor,
+              // Create a custom object to visualize the plane geometry and extent.
+              let plane = Plane(anchor: planeAnchor) else { return }
         
         // Add the visualization to the ARKit-managed node so that it tracks
         // changes in the plane anchor as plane estimation continues.
         node.addChildNode(plane)
     }
     
-    func updatePlane(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-        if didSetTransforamtion {
-           node.removeFromParentNode()
+    /// Visualizes a node updated in scene as an AR Plane.
+    /// - Parameters:
+    ///   - node: The node to be updated in the scene.
+    ///   - anchor: The anchor position of the node.
+    func updatePlane(with node: SCNNode, for anchor: ARAnchor) {
+        if initialTransformationIsSet {
+            node.removeFromParentNode()
         }
-    
+        
         guard let planeAnchor = anchor as? ARPlaneAnchor,
-              let plane = node.childNodes.first as? Plane
-        else { return }
+              let plane = node.childNodes.first as? Plane else { return }
         
         // Update extent visualization to the anchor's new bounding rectangle.
         if let extentGeometry = plane.node.geometry as? SCNPlane {
@@ -154,11 +159,11 @@ public struct TableTopSceneView: View {
     }
 }
 
-/// Helper class to visualize a plane found by ARKit
+/// A helper class to visualize a plane found by ARKit.
 class Plane: SCNNode {
     let node: SCNNode
     
-    init(anchor: ARPlaneAnchor) {
+    init?(anchor: ARPlaneAnchor) {
         // Create a node to visualize the plane's bounding rectangle.
         let extent = SCNPlane(width: CGFloat(anchor.extent.x), height: CGFloat(anchor.extent.z))
         node = SCNNode(geometry: extent)
@@ -167,15 +172,14 @@ class Plane: SCNNode {
         // `SCNPlane` is vertically oriented in its local coordinate space, so
         // rotate it to match the orientation of `ARPlaneAnchor`.
         node.eulerAngles.x = -.pi / 2
-
+        
         super.init()
-
+        
         node.opacity = 0.25
-        guard let material = node.geometry?.firstMaterial
-            else { fatalError("SCNPlane always has one material") }
+        guard let material = node.geometry?.firstMaterial else { return nil }
         
         material.diffuse.contents = UIColor.white
-
+        
         // Add the plane node as child node so they appear in the scene.
         addChildNode(node)
     }
@@ -185,43 +189,23 @@ class Plane: SCNNode {
     }
 }
 
-private extension SceneViewProxy {
-    /// Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.
-    ///
-    /// - Parameter screenPoint: The screen point to determine the `initialTransformation` from.
-    /// - Returns: The `initialTransformation`.
-    /// - Since: 200.3
-    func setInitialTransformation(
-        for arViewProxy: ARSwiftUIViewProxy,
-        using screenPoint: CGPoint,
-        cameraController: TransformationMatrixCameraController
-    ) -> TransformationMatrix? {
-        // Use the `internalHitTest` method to get the matrix of `screenPoint`.
-        guard let matrix = internalHitTest(using: screenPoint, for: arViewProxy) else { return nil }
-
-        // Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
-        let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
-
-        return initialTransformation
-    }
-    
-    /// Internal method to perform a hit test operation to get the transformation matrix representing the corresponding real-world point for `screenPoint`.
-    ///
+private extension ARSwiftUIViewProxy {
+    /// Performs a hit test operation to get the transformation matrix representing the corresponding real-world point for `screenPoint`.
     /// - Parameter screenPoint: The screen point to determine the real world transformation matrix from.
-    /// - Returns: An `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
-    func internalHitTest(using screenPoint: CGPoint, for arViewProxy: ARSwiftUIViewProxy) -> TransformationMatrix? {
+    /// - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
+    func hitTest(using screenPoint: CGPoint) -> TransformationMatrix? {
         // Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
-        guard let query = arViewProxy.raycastQuery(
+        guard let query = raycastQuery(
             from: screenPoint,
             allowing: .existingPlaneGeometry,
             alignment: .any
         ) else { return nil }
-
-        let results = arViewProxy.session?.raycast(query)
-
+        
+        let results = session?.raycast(query)
+        
         // Get the worldTransform from the first result; if there's no worldTransform, return nil.
         guard let worldTransform = results?.first?.worldTransform else { return nil }
-
+        
         // Create our hit test matrix based on the worldTransform location.
         // right now we ignore the orientation of the plane that was hit to find the point
         // since we only use horizontal planes, when we will start using vertical planes
@@ -235,7 +219,28 @@ private extension SceneViewProxy {
             translationY: Double(worldTransform.columns.3.y),
             translationZ: Double(worldTransform.columns.3.z)
         )
-
+        
         return hitTestMatrix
+    }
+}
+
+private extension SceneViewProxy {
+    /// Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined
+    /// via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.
+    /// - Parameters:
+    ///   - arViewProxy: The AR view proxy.
+    ///   - screenPoint: The screen point to determine the `initialTransformation` from.
+    /// - Returns: The `initialTransformation`.
+    func initialTransformation(
+        for arViewProxy: ARSwiftUIViewProxy,
+        using screenPoint: CGPoint
+    ) -> TransformationMatrix? {
+        // Use the `hitTest` method to get the matrix of `screenPoint`.
+        guard let matrix = arViewProxy.hitTest(using: screenPoint) else { return nil }
+        
+        // Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
+        let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
+        
+        return initialTransformation
     }
 }
