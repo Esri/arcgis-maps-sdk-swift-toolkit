@@ -32,7 +32,7 @@ public struct TableTopSceneView: View {
     
     /// Creates a fly over scene view.
     /// - Parameters:
-    ///   - anchorPoint: The anchor point of the ArcGIS Scene.
+    ///   - anchorPoint: The location point of the ArcGIS Scene that is anchored on a physical surface.
     ///   - translationFactor: The translation factor that defines how much the scene view translates
     ///   as the device moves.
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
