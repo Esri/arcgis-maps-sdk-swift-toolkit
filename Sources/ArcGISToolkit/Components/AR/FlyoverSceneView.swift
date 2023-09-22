@@ -56,11 +56,10 @@ public struct FlyoverSceneView: View {
                     .cameraController(cameraController)
                     .viewDrawingMode(.manual)
                 ARSwiftUIView(proxy: arViewProxy)
-                    .onDidUpdateFrame { session, frame in
+                    .onDidUpdateFrame { _, frame in
                         updateLastGoodDeviceOrientation()
                         sceneViewProxy.draw(
                             frame: frame,
-                            for: session,
                             cameraController: cameraController,
                             orientation: lastGoodDeviceOrientation
                         )
@@ -90,12 +89,11 @@ public struct FlyoverSceneView: View {
 extension SceneViewProxy {
     /// Draws the scene view manually and sets the camera for a given augmented reality view.
     /// - Parameters:
-    ///   - arViewProxy: The AR view proxy.
+    ///   - frame: The current AR frame.
     ///   - cameraController: The current camera controller assigned to the scene view.
     ///   - orientation: The device orientation.
     func draw(
         frame: ARFrame,
-        for: ARSession,
         cameraController: TransformationMatrixCameraController,
         orientation: UIDeviceOrientation
     ) {
