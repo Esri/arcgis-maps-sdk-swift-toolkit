@@ -778,12 +778,16 @@ final class FormViewTests: XCTestCase {
     
     // - MARK: Test case 4: Radio Buttons input type
     
-    /// Test case 4.1:
+    /// Test case 4.1: Test regular selection
     func testCase_4_1() {
         let app = XCUIApplication()
         let fieldTitle = app.staticTexts["Radio Button Text"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["FormView Tests"]
+        let dogOption = app.buttons["Radio Button Text dog"]
+        let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
+        let birdOption = app.buttons["Radio Button Text bird"]
+        let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
         
         app.launch()
         
@@ -797,31 +801,36 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The field title isn't hittable."
+            fieldTitle.exists,
+            "The field title doesn't exist."
+        )
+        
+        
+        XCTAssertTrue(
+            birdOptionCheckmark.isHittable,
+            "The bird option isn't selected."
+        )
+        
+        XCTAssertFalse(
+            dogOptionCheckmark.isHittable,
+            "The dog option is selected."
+        )
+        
+        dogOption.tap()
+        
+        XCTAssertTrue(
+            dogOptionCheckmark.isHittable,
+            "The dog option isn't selected."
+        )
+        
+        XCTAssertFalse(
+            birdOptionCheckmark.isHittable,
+            "The bird option is selected."
         )
     }
     
     /// Test case 4.2:
     func testCase_4_2() {
-        let app = XCUIApplication()
-        let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
-        
-        app.launch()
-        
-        // Open the FormView component test view.
-        formViewTestsButton.tap()
-        
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
-        )
-    }
-    
-    /// Test case 4.3:
-    func testCase_4_3() {
         let app = XCUIApplication()
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["FormView Tests"]
