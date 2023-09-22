@@ -100,23 +100,25 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***orientation: UIDeviceOrientation
 ***REMOVED***) {
 ***REMOVED******REMOVED***let cameraTransform = frame.camera.transform
-***REMOVED******REMOVED***let povTransform = simd_float4x4.init(
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees in the XY plane.
+***REMOVED******REMOVED***let transform = simd_float4x4.init(
 ***REMOVED******REMOVED******REMOVED***cameraTransform.columns.1,
 ***REMOVED******REMOVED******REMOVED***-cameraTransform.columns.0,
 ***REMOVED******REMOVED******REMOVED***cameraTransform.columns.2,
 ***REMOVED******REMOVED******REMOVED***cameraTransform.columns.3
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let quaternion = simd_quatf(povTransform)
+***REMOVED******REMOVED***let quaternion = simd_quatf(transform)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let transformationMatrix = TransformationMatrix.normalized(
 ***REMOVED******REMOVED******REMOVED***quaternionX: Double(quaternion.vector.x),
 ***REMOVED******REMOVED******REMOVED***quaternionY: Double(quaternion.vector.y),
 ***REMOVED******REMOVED******REMOVED***quaternionZ: Double(quaternion.vector.z),
 ***REMOVED******REMOVED******REMOVED***quaternionW: Double(quaternion.vector.w),
-***REMOVED******REMOVED******REMOVED***translationX: Double(povTransform.columns.3.x),
-***REMOVED******REMOVED******REMOVED***translationY: Double(povTransform.columns.3.y),
-***REMOVED******REMOVED******REMOVED***translationZ: Double(povTransform.columns.3.z)
+***REMOVED******REMOVED******REMOVED***translationX: Double(transform.columns.3.x),
+***REMOVED******REMOVED******REMOVED***translationY: Double(transform.columns.3.y),
+***REMOVED******REMOVED******REMOVED***translationZ: Double(transform.columns.3.z)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the matrix on the camera controller.
