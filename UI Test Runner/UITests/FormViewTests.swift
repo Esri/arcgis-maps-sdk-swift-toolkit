@@ -778,12 +778,16 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Test case 4: Radio Buttons input type
 ***REMOVED***
-***REMOVED******REMOVED***/ Test case 4.1:
+***REMOVED******REMOVED***/ Test case 4.1: Test regular selection
 ***REMOVED***func testCase_4_1() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Radio Button Text"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let dogOption = app.buttons["Radio Button Text dog"]
+***REMOVED******REMOVED***let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
+***REMOVED******REMOVED***let birdOption = app.buttons["Radio Button Text bird"]
+***REMOVED******REMOVED***let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -797,31 +801,36 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
-***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***birdOptionCheckmark.isHittable,
+***REMOVED******REMOVED******REMOVED***"The bird option isn't selected."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***dogOptionCheckmark.isHittable,
+***REMOVED******REMOVED******REMOVED***"The dog option is selected."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***dogOption.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***dogOptionCheckmark.isHittable,
+***REMOVED******REMOVED******REMOVED***"The dog option isn't selected."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***birdOptionCheckmark.isHittable,
+***REMOVED******REMOVED******REMOVED***"The bird option is selected."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 4.2:
 ***REMOVED***func testCase_4_2() {
-***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
-***REMOVED******REMOVED***formViewTestsButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
-***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Test case 4.3:
-***REMOVED***func testCase_4_3() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
