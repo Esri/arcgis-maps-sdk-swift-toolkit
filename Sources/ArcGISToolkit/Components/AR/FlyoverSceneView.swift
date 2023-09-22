@@ -108,46 +108,8 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
 ***REMOVED******REMOVED***orientation: UIDeviceOrientation
 ***REMOVED***) {
-***REMOVED******REMOVED***let cameraTransform = frame.camera.transform
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let transform: simd_float4x4
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees counter-clockwise in the XY plane.
-***REMOVED******REMOVED***switch orientation {
-***REMOVED******REMOVED***case .portrait:
-***REMOVED******REMOVED******REMOVED***transform = simd_float4x4(
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.1,
-***REMOVED******REMOVED******REMOVED******REMOVED***-cameraTransform.columns.0,
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.2,
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.3
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***case .landscapeLeft:
-***REMOVED******REMOVED******REMOVED***transform = simd_float4x4(
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.0,
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.1,
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.2,
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.3
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***case .landscapeRight:
-***REMOVED******REMOVED******REMOVED***transform = simd_float4x4(
-***REMOVED******REMOVED******REMOVED******REMOVED***-cameraTransform.columns.0,
-***REMOVED******REMOVED******REMOVED******REMOVED***-cameraTransform.columns.1,
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.2,
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.3
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***case .portraitUpsideDown:
-***REMOVED******REMOVED******REMOVED***transform = simd_float4x4(
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.1,
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.0,
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.2,
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.3
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***let transform = frame.camera.transform(for: orientation)
 ***REMOVED******REMOVED***let quaternion = simd_quatf(transform)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let transformationMatrix = TransformationMatrix.normalized(
 ***REMOVED******REMOVED******REMOVED***quaternionX: Double(quaternion.vector.x),
 ***REMOVED******REMOVED******REMOVED***quaternionY: Double(quaternion.vector.y),
@@ -174,5 +136,45 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
 ***REMOVED******REMOVED******REMOVED***deviceOrientation: orientation
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.
+***REMOVED******REMOVED***draw()
+***REMOVED***
+***REMOVED***
+
+private extension ARCamera {
+***REMOVED******REMOVED***/ The transform rotated for a particular device orientation.
+***REMOVED******REMOVED***/ - Parameter orientation: The device orientation that the transform is appropriate for.
+***REMOVED******REMOVED***/ - Precondition: 'orientation.isValidInterfaceOrientation'
+***REMOVED***func transform(for orientation: UIDeviceOrientation) -> simd_float4x4 {
+***REMOVED******REMOVED***precondition(orientation.isValidInterfaceOrientation)
+***REMOVED******REMOVED***switch orientation {
+***REMOVED******REMOVED***case .portrait:
+***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees counter-clockwise in the XY plane.
+***REMOVED******REMOVED******REMOVED***return simd_float4x4(
+***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.1,
+***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.0,
+***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.2,
+***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case .landscapeLeft:
+***REMOVED******REMOVED******REMOVED***return transform
+***REMOVED******REMOVED***case .landscapeRight:
+***REMOVED******REMOVED******REMOVED***return simd_float4x4(
+***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.0,
+***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.1,
+***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.2,
+***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case .portraitUpsideDown:
+***REMOVED******REMOVED******REMOVED***return simd_float4x4(
+***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.1,
+***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.0,
+***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.2,
+***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***preconditionFailure()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
