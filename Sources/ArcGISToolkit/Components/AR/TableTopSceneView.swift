@@ -77,28 +77,23 @@ public struct TableTopSceneView: View {
                 .onUpdateNode { _, node, anchor in
                     updatePlane(with: node, for: anchor)
                 }
+                .onSingleTapGesture { screenPoint in
+                    guard let sceneViewProxy,
+                          !initialTransformationIsSet else { return }
+                    
+                    if let transformation = sceneViewProxy.initialTransformation(
+                        for: arViewProxy,
+                        using: screenPoint
+                    ) {
+                        initialTransformation = transformation
+                    }
+                }
                 .onAppear {
                     arViewProxy.session?.run(configuration)
                 }
                 .onDisappear {
                     arViewProxy.session?.pause()
                 }
-                .gesture(
-                    DragGesture(minimumDistance: 0, coordinateSpace: .global)
-                        .onEnded { value in
-                            guard let sceneViewProxy,
-                                  !initialTransformationIsSet else { return }
-                            
-                            let screenPoint = value.location
-                            
-                            if let transformation = sceneViewProxy.initialTransformation(
-                                for: arViewProxy,
-                                using: screenPoint
-                            ) {
-                                initialTransformation = transformation
-                            }
-                        }
-                )
             
             SceneViewReader { proxy in
                 sceneViewBuilder(proxy)
