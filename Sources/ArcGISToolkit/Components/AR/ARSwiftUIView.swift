@@ -21,6 +21,8 @@ struct ARSwiftUIView {
     private(set) var videoFeedIsHidden: Bool = false
     private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
     private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+    private(set) var onSingleTapGesture: ((CGPoint) -> Void)?
+    
     /// The proxy.
     private let proxy: ARSwiftUIViewProxy?
     
@@ -64,12 +66,22 @@ struct ARSwiftUIView {
         view.onUpdateNodeAction = action
         return view
     }
+    
+    /// Sets a closure to perform when a single tap occurs on the AR view.
+    func onSingleTapGesture(
+        perform action: @escaping (CGPoint) -> Void
+    ) -> Self {
+        var view = self
+        view.onSingleTapGesture = action
+        return view
+    }
 }
 
 extension ARSwiftUIView: UIViewRepresentable {
     func makeUIView(context: Context) -> ARSCNView {
         let arView = ARSCNView()
         arView.delegate = context.coordinator
+        arView.addGestureRecognizer(context.coordinator.makeGestureRecognizer())
         proxy?.arView = arView
         return arView
     }
@@ -79,6 +91,7 @@ extension ARSwiftUIView: UIViewRepresentable {
         context.coordinator.onRenderAction = onRenderAction
         context.coordinator.onAddNodeAction = onAddNodeAction
         context.coordinator.onUpdateNodeAction = onUpdateNodeAction
+        context.coordinator.onSingleTapGesture = onSingleTapGesture
     }
     
     func makeCoordinator() -> Coordinator {
@@ -91,6 +104,7 @@ extension ARSwiftUIView {
         var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
         var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
         var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+        var onSingleTapGesture: ((CGPoint) -> Void)?
         
         func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
             onRenderAction?(renderer, scene, time)
@@ -104,6 +118,16 @@ extension ARSwiftUIView {
             onUpdateNodeAction?(renderer, node, anchor)
         }
         
+        func makeGestureRecognizer() -> UITapGestureRecognizer {
+            let tapGestureRecognizer = UITapGestureRecognizer()
+            tapGestureRecognizer.addTarget(self, action: #selector(handleTap))
+            return tapGestureRecognizer
+        }
+        
+        @objc private func handleTap(_ sender: UIGestureRecognizer) {
+            guard let view = sender.view else { return }
+            onSingleTapGesture?(sender.location(in: view))
+        }
     }
 }
 
