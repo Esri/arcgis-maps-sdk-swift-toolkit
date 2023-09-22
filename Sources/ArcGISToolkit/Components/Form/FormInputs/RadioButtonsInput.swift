@@ -65,16 +65,32 @@ struct RadioButtonsInput: View {
                 InputHeader(element: element)
                     .padding([.top], elementPadding)
                 
-                Picker(element.label, selection: $selectedValue) {
-                    Text(placeholderValue)
-                        .tag(nil as CodedValue?)
+                VStack(alignment: .leading) {
                     ForEach(codedValues, id: \.self) { codedValue in
-                        Text(codedValue.name)
-                            .tag(Optional(codedValue))
+                        Button {
+                            selectedValue = codedValue
+                        } label: {
+                            HStack {
+                                Text(codedValue.name)
+                                    .contentShape(Rectangle())
+                                Spacer()
+                                if codedValue == selectedValue {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.accentColor)
+                                }
+                            }
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 12)
+                        }
+                        .foregroundColor(.primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        if codedValue != codedValues.last {
+                            Divider()
+                        }
                     }
                 }
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color(uiColor: .tertiarySystemFill)))
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .formTextInputStyle()
                 
                 InputFooter(element: element, requiredValueMissing: requiredValueMissing)
             }
