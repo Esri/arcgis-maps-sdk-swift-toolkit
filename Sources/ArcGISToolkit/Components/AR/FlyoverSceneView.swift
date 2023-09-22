@@ -15,14 +15,50 @@ import ARKit
 import SwiftUI
 import ArcGIS
 
+extension FlyoverSceneView {
+    class Model: NSObject, ObservableObject, ARSessionDelegate {
+        var sceneViewProxy: SceneViewProxy?
+        let configuration: ARWorldTrackingConfiguration
+        let session = ARSession()
+        let cameraController: TransformationMatrixCameraController
+        
+        init(initialCamera: Camera, translationFactor: Double) {
+            configuration = ARWorldTrackingConfiguration()
+            configuration.worldAlignment = .gravityAndHeading
+            
+            let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+            cameraController.translationFactor = translationFactor
+            self.cameraController = cameraController
+            
+            super.init()
+            
+            session.delegate = self
+        }
+        
+        func session(_ session: ARSession, didUpdate frame: ARFrame) {
+            updateLastGoodDeviceOrientation()
+            sceneViewProxy?.updateCameraAndFieldOfView(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
+        }
+        
+        /// The last portrait or landscape orientation value.
+        private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
+        
+        /// Updates the last good device orientation.
+        func updateLastGoodDeviceOrientation() {
+            // Get the device orientation, but don't allow non-landscape/portrait values.
+            let deviceOrientation = UIDevice.current.orientation
+            if deviceOrientation.isValidInterfaceOrientation {
+                lastGoodDeviceOrientation = deviceOrientation
+            }
+        }
+    }
+}
+
 /// A scene view that provides an augmented reality fly over experience.
 public struct FlyoverSceneView: View {
-    /// The last portrait or landscape orientation value.
-    @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     @State private var arViewProxy = ARSwiftUIViewProxy()
-    @State private var cameraController: TransformationMatrixCameraController
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-    private let configuration: ARWorldTrackingConfiguration
+    @StateObject var model: Model
     
     /// Creates a fly over scene view.
     /// - Parameters:
@@ -40,47 +76,22 @@ public struct FlyoverSceneView: View {
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         self.sceneViewBuilder = sceneView
-        
-        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
-        cameraController.translationFactor = translationFactor
-        _cameraController = .init(initialValue: cameraController)
-        
-        configuration = ARWorldTrackingConfiguration()
-        configuration.worldAlignment = .gravityAndHeading
+        _model = StateObject(wrappedValue: Model(initialCamera: initialCamera, translationFactor: translationFactor))
     }
     
     public var body: some View {
         ZStack {
             SceneViewReader { sceneViewProxy in
                 sceneViewBuilder(sceneViewProxy)
-                    .cameraController(cameraController)
-                ARSwiftUIView(proxy: arViewProxy)
-                    .onDidUpdateFrame { _, frame in
-                        updateLastGoodDeviceOrientation()
-                        sceneViewProxy.updateCameraAndFieldOfView(
-                            frame: frame,
-                            cameraController: cameraController,
-                            orientation: lastGoodDeviceOrientation
-                        )
-                    }
-                    .videoFeedHidden()
-                    .disabled(true)
+                    .cameraController(model.cameraController)
                     .onAppear {
-                        arViewProxy.session?.run(configuration)
+                        model.sceneViewProxy = sceneViewProxy
+                        model.session.run(model.configuration)
                     }
                     .onDisappear {
-                        arViewProxy.session?.pause()
+                        model.session.pause()
                     }
             }
-        }
-    }
-    
-    /// Updates the last good device orientation.
-    func updateLastGoodDeviceOrientation() {
-        // Get the device orientation, but don't allow non-landscape/portrait values.
-        let deviceOrientation = UIDevice.current.orientation
-        if deviceOrientation.isValidInterfaceOrientation {
-            lastGoodDeviceOrientation = deviceOrientation
         }
     }
 }
