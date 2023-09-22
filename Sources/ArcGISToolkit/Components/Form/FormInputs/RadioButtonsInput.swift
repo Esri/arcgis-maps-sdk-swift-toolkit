@@ -67,19 +67,22 @@ struct RadioButtonsInput: View {
                 
                 VStack(alignment: .leading, spacing: .zero) {
                     if input.noValueOption == .show {
-                        makeRadioButtonRow(placeholderValue, selectedValue == nil) {
+                        makeRadioButtonRow(
+                            placeholderValue,
+                            selectedValue == nil,
+                            !codedValues.isEmpty,
+                            useNoValueStyle: true
+                        ) {
                             selectedValue = nil
-                        }
-                        if !codedValues.isEmpty {
-                            Divider()
                         }
                     }
                     ForEach(codedValues, id: \.self) { codedValue in
-                        makeRadioButtonRow(codedValue.name, codedValue == selectedValue) {
+                        makeRadioButtonRow(
+                            codedValue.name,
+                            codedValue == selectedValue,
+                            codedValue != codedValues.last
+                        ) {
                             selectedValue = codedValue
-                        }
-                        if codedValue != codedValues.last {
-                            Divider()
                         }
                     }
                 }
@@ -125,17 +128,27 @@ extension RadioButtonsInput {
     /// - Parameters:
     ///   - label: The label for the radio button.
     ///   - selected: A Boolean value indicating whether the button is selected.
+    ///   - addDivider: A Boolean value indicating whether a divider should be included under the row.
+    ///   - useNoValueStyle: A Boolean value indicating whether the button represents a no value option.
     ///   - action: The action to perform when the user triggers the button.
     @ViewBuilder func makeRadioButtonRow(
         _ label: String,
         _ selected: Bool,
+        _ addDivider: Bool,
+        useNoValueStyle: Bool = false,
         _ action: @escaping () -> Void
     ) -> some View {
         Button {
             action()
         } label: {
             HStack {
-                Text(label)
+                if useNoValueStyle {
+                    Text(label)
+                        .italic()
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text(label)
+                }
                 Spacer()
                 if selected {
                     Image(systemName: "checkmark")
@@ -147,6 +160,9 @@ extension RadioButtonsInput {
         }
         .buttonStyle(.plain)
         .foregroundColor(.primary)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        if addDivider {
+            Divider()
+                .padding(.leading, 10)
+        }
     }
 }
