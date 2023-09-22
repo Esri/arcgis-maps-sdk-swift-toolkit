@@ -89,7 +89,10 @@ struct RadioButtonsInput: View {
                         }
                     }
                 }
-                .background(RoundedRectangle(cornerRadius: 10).fill(Color(uiColor: .tertiarySystemFill)))
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(uiColor: .tertiarySystemFill))
+                )
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 InputFooter(element: element, requiredValueMissing: requiredValueMissing)
