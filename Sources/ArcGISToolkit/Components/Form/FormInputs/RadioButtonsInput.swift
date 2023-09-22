@@ -52,35 +52,6 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***self.input = input
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Makes a radio button row.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - label: The label for the radio button.
-***REMOVED******REMOVED***/   - selected: A Boolean value indicating whether the button is selected.
-***REMOVED******REMOVED***/   - action: The action to perform when the user triggers the button.
-***REMOVED***@ViewBuilder func makeRadioButtonRow(
-***REMOVED******REMOVED***_ label: String,
-***REMOVED******REMOVED***_ selected: Bool,
-***REMOVED******REMOVED***_ action: @escaping () -> Void
-***REMOVED***) -> some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***action()
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(label)
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***if selected {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding(10)
-***REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
-***REMOVED***
-***REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED***.foregroundColor(.primary)
-***REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED***
-***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if fallbackToComboBox {
 ***REMOVED******REMOVED******REMOVED***ComboBoxInput(
@@ -148,5 +119,34 @@ extension RadioButtonsInput {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return .noValue
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Makes a radio button row.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - label: The label for the radio button.
+***REMOVED******REMOVED***/   - selected: A Boolean value indicating whether the button is selected.
+***REMOVED******REMOVED***/   - action: The action to perform when the user triggers the button.
+***REMOVED***@ViewBuilder func makeRadioButtonRow(
+***REMOVED******REMOVED***_ label: String,
+***REMOVED******REMOVED***_ selected: Bool,
+***REMOVED******REMOVED***_ action: @escaping () -> Void
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***action()
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(label)
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***if selected {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding(10)
+***REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED***.foregroundColor(.primary)
+***REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED***
 ***REMOVED***
