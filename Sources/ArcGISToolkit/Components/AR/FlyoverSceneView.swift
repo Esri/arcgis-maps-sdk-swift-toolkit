@@ -101,7 +101,7 @@ extension SceneViewProxy {
     ) {
         let cameraTransform = frame.camera.transform
         
-        // Rotate camera transform 90 degrees in the XY plane.
+        // Rotate camera transform 90 degrees counter-clockwise in the XY plane.
         let transform = simd_float4x4.init(
             cameraTransform.columns.1,
             -cameraTransform.columns.0,
