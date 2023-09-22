@@ -16,11 +16,13 @@ import SwiftUI
 import ArcGIS
 
 extension FlyoverSceneView {
-    class Model: NSObject, ObservableObject, ARSessionDelegate {
+    class Model: NSObject, ObservableObject {
         var sceneViewProxy: SceneViewProxy?
         let configuration: ARWorldTrackingConfiguration
         let session = ARSession()
         let cameraController: TransformationMatrixCameraController
+        /// The last portrait or landscape orientation value.
+        private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
         
         init(initialCamera: Camera, translationFactor: Double) {
             configuration = ARWorldTrackingConfiguration()
@@ -35,14 +37,6 @@ extension FlyoverSceneView {
             session.delegate = self
         }
         
-        func session(_ session: ARSession, didUpdate frame: ARFrame) {
-            updateLastGoodDeviceOrientation()
-            sceneViewProxy?.updateCameraAndFieldOfView(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
-        }
-        
-        /// The last portrait or landscape orientation value.
-        private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
-        
         /// Updates the last good device orientation.
         func updateLastGoodDeviceOrientation() {
             // Get the device orientation, but don't allow non-landscape/portrait values.
@@ -54,11 +48,18 @@ extension FlyoverSceneView {
     }
 }
 
+extension FlyoverSceneView.Model: ARSessionDelegate {
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        updateLastGoodDeviceOrientation()
+        sceneViewProxy?.updateCameraAndFieldOfView(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
+    }
+}
+
 /// A scene view that provides an augmented reality fly over experience.
 public struct FlyoverSceneView: View {
     @State private var arViewProxy = ARSwiftUIViewProxy()
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-    @StateObject var model: Model
+    @StateObject private var model: Model
     
     /// Creates a fly over scene view.
     /// - Parameters:
