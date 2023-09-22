@@ -52,6 +52,35 @@ struct RadioButtonsInput: View {
         self.input = input
     }
     
+    /// Makes a radio button row.
+    /// - Parameters:
+    ///   - label: The label for the radio button.
+    ///   - selected: A Boolean value indicating whether the button is selected.
+    ///   - action: The action to perform when the user triggers the button.
+    @ViewBuilder func makeRadioButtonRow(
+        _ label: String,
+        _ selected: Bool,
+        _ action: @escaping () -> Void
+    ) -> some View {
+        Button {
+            action()
+        } label: {
+            HStack {
+                Text(label)
+                Spacer()
+                if selected {
+                    Image(systemName: "checkmark")
+                        .foregroundColor(.accentColor)
+                }
+            }
+            .padding(10)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .foregroundColor(.primary)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
     var body: some View {
         if fallbackToComboBox {
             ComboBoxInput(
@@ -66,24 +95,18 @@ struct RadioButtonsInput: View {
                     .padding([.top], elementPadding)
                 
                 VStack(alignment: .leading, spacing: .zero) {
-                    ForEach(codedValues, id: \.self) { codedValue in
-                        Button {
-                            selectedValue = codedValue
-                        } label: {
-                            HStack {
-                                Text(codedValue.name)
-                                Spacer()
-                                if codedValue == selectedValue {
-                                    Image(systemName: "checkmark")
-                                        .foregroundColor(.accentColor)
-                                }
-                            }
-                            .padding(10)
-                            .contentShape(Rectangle())
+                    if input.noValueOption == .show {
+                        makeRadioButtonRow(placeholderValue, selectedValue == nil) {
+                            selectedValue = nil
                         }
-                        .buttonStyle(.plain)
-                        .foregroundColor(.primary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        if !codedValues.isEmpty {
+                            Divider()
+                        }
+                    }
+                    ForEach(codedValues, id: \.self) { codedValue in
+                        makeRadioButtonRow(codedValue.name, codedValue == selectedValue) {
+                            selectedValue = codedValue
+                        }
                         if codedValue != codedValues.last {
                             Divider()
                         }
