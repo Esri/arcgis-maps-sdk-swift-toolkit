@@ -110,13 +110,41 @@ extension SceneViewProxy {
 ***REMOVED***) {
 ***REMOVED******REMOVED***let cameraTransform = frame.camera.transform
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let transform: simd_float4x4
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees counter-clockwise in the XY plane.
-***REMOVED******REMOVED***let transform = simd_float4x4.init(
-***REMOVED******REMOVED******REMOVED***cameraTransform.columns.1,
-***REMOVED******REMOVED******REMOVED***-cameraTransform.columns.0,
-***REMOVED******REMOVED******REMOVED***cameraTransform.columns.2,
-***REMOVED******REMOVED******REMOVED***cameraTransform.columns.3
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***switch orientation {
+***REMOVED******REMOVED***case .portrait:
+***REMOVED******REMOVED******REMOVED***transform = simd_float4x4(
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.1,
+***REMOVED******REMOVED******REMOVED******REMOVED***-cameraTransform.columns.0,
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.2,
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.3
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case .landscapeLeft:
+***REMOVED******REMOVED******REMOVED***transform = simd_float4x4(
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.0,
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.1,
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.2,
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.3
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case .landscapeRight:
+***REMOVED******REMOVED******REMOVED***transform = simd_float4x4(
+***REMOVED******REMOVED******REMOVED******REMOVED***-cameraTransform.columns.0,
+***REMOVED******REMOVED******REMOVED******REMOVED***-cameraTransform.columns.1,
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.2,
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.3
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case .portraitUpsideDown:
+***REMOVED******REMOVED******REMOVED***transform = simd_float4x4(
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.1,
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.0,
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.2,
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraTransform.columns.3
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let quaternion = simd_quatf(transform)
 ***REMOVED******REMOVED***
