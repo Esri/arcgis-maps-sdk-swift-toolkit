@@ -116,11 +116,12 @@ struct ComboBoxInput: View {
             selectedValue = codedValues.first { $0.name == element.value }
         }
         .onChange(of: selectedValue) { newValue in
-            guard codedValues.first(where: { $0.name == element.value }) != newValue else {
+            guard let current = codedValues.first(where: { $0.name == element.value }),
+                  current != newValue else {
                 return
             }
             requiredValueMissing = element.isRequired && newValue == nil
-            featureForm?.feature.setAttributeValue(newValue?.code ?? "", forKey: element.fieldName)
+            featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
         }
     }
     
