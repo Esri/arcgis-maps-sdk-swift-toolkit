@@ -21,6 +21,8 @@ struct ARSwiftUIView {
 ***REMOVED***private(set) var videoFeedIsHidden: Bool = false
 ***REMOVED***private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED***private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+***REMOVED***private(set) var onSingleTapGesture: ((CGPoint) -> Void)?
+***REMOVED***
 ***REMOVED******REMOVED***/ The proxy.
 ***REMOVED***private let proxy: ARSwiftUIViewProxy?
 ***REMOVED***
@@ -65,11 +67,21 @@ struct ARSwiftUIView {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when a single tap occurs on the AR view.
+***REMOVED***func onSingleTapGesture(
+***REMOVED******REMOVED***perform action: @escaping (CGPoint) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onSingleTapGesture = action
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
 
 extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***func makeUIView(context: Context) -> ARSCNView {
 ***REMOVED******REMOVED***let arView = ARSCNView()
 ***REMOVED******REMOVED***arView.delegate = context.coordinator
+***REMOVED******REMOVED***arView.addGestureRecognizer(context.coordinator.makeGestureRecognizer())
 ***REMOVED******REMOVED***proxy?.arView = arView
 ***REMOVED******REMOVED***return arView
 ***REMOVED***
@@ -79,6 +91,7 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED******REMOVED***context.coordinator.onRenderAction = onRenderAction
 ***REMOVED******REMOVED***context.coordinator.onAddNodeAction = onAddNodeAction
 ***REMOVED******REMOVED***context.coordinator.onUpdateNodeAction = onUpdateNodeAction
+***REMOVED******REMOVED***context.coordinator.onSingleTapGesture = onSingleTapGesture
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCoordinator() -> Coordinator {
@@ -91,6 +104,7 @@ extension ARSwiftUIView {
 ***REMOVED******REMOVED***var onRenderAction: ((SCNSceneRenderer, SCNScene, TimeInterval) -> Void)?
 ***REMOVED******REMOVED***var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED******REMOVED***var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+***REMOVED******REMOVED***var onSingleTapGesture: ((CGPoint) -> Void)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, willRenderScene scene: SCNScene, atTime time: TimeInterval) {
 ***REMOVED******REMOVED******REMOVED***onRenderAction?(renderer, scene, time)
@@ -104,6 +118,16 @@ extension ARSwiftUIView {
 ***REMOVED******REMOVED******REMOVED***onUpdateNodeAction?(renderer, node, anchor)
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***func makeGestureRecognizer() -> UITapGestureRecognizer {
+***REMOVED******REMOVED******REMOVED***let tapGestureRecognizer = UITapGestureRecognizer()
+***REMOVED******REMOVED******REMOVED***tapGestureRecognizer.addTarget(self, action: #selector(handleTap))
+***REMOVED******REMOVED******REMOVED***return tapGestureRecognizer
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@objc private func handleTap(_ sender: UIGestureRecognizer) {
+***REMOVED******REMOVED******REMOVED***guard let view = sender.view else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***onSingleTapGesture?(sender.location(in: view))
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
