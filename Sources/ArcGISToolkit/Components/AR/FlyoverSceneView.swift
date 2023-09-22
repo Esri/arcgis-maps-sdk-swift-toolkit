@@ -100,23 +100,25 @@ extension SceneViewProxy {
         orientation: UIDeviceOrientation
     ) {
         let cameraTransform = frame.camera.transform
-        let povTransform = simd_float4x4.init(
+        
+        // Rotate camera transform 90 degrees in the XY plane.
+        let transform = simd_float4x4.init(
             cameraTransform.columns.1,
             -cameraTransform.columns.0,
             cameraTransform.columns.2,
             cameraTransform.columns.3
         )
         
-        let quaternion = simd_quatf(povTransform)
+        let quaternion = simd_quatf(transform)
         
         let transformationMatrix = TransformationMatrix.normalized(
             quaternionX: Double(quaternion.vector.x),
             quaternionY: Double(quaternion.vector.y),
             quaternionZ: Double(quaternion.vector.z),
             quaternionW: Double(quaternion.vector.w),
-            translationX: Double(povTransform.columns.3.x),
-            translationY: Double(povTransform.columns.3.y),
-            translationZ: Double(povTransform.columns.3.z)
+            translationX: Double(transform.columns.3.x),
+            translationY: Double(transform.columns.3.y),
+            translationZ: Double(transform.columns.3.z)
         )
         
         // Set the matrix on the camera controller.
