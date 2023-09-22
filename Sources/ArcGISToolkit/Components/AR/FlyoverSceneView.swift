@@ -108,46 +108,8 @@ extension SceneViewProxy {
         cameraController: TransformationMatrixCameraController,
         orientation: UIDeviceOrientation
     ) {
-        let cameraTransform = frame.camera.transform
-        
-        let transform: simd_float4x4
-        
-        // Rotate camera transform 90 degrees counter-clockwise in the XY plane.
-        switch orientation {
-        case .portrait:
-            transform = simd_float4x4(
-                cameraTransform.columns.1,
-                -cameraTransform.columns.0,
-                cameraTransform.columns.2,
-                cameraTransform.columns.3
-            )
-        case .landscapeLeft:
-            transform = simd_float4x4(
-                cameraTransform.columns.0,
-                cameraTransform.columns.1,
-                cameraTransform.columns.2,
-                cameraTransform.columns.3
-            )
-        case .landscapeRight:
-            transform = simd_float4x4(
-                -cameraTransform.columns.0,
-                -cameraTransform.columns.1,
-                cameraTransform.columns.2,
-                cameraTransform.columns.3
-            )
-        case .portraitUpsideDown:
-            transform = simd_float4x4(
-                cameraTransform.columns.1,
-                cameraTransform.columns.0,
-                cameraTransform.columns.2,
-                cameraTransform.columns.3
-            )
-        default:
-            fatalError()
-        }
-        
+        let transform = frame.camera.transform(for: orientation)
         let quaternion = simd_quatf(transform)
-        
         let transformationMatrix = TransformationMatrix.normalized(
             quaternionX: Double(quaternion.vector.x),
             quaternionY: Double(quaternion.vector.y),
@@ -174,5 +136,45 @@ extension SceneViewProxy {
             yImageSize: Float(imageResolution.height),
             deviceOrientation: orientation
         )
+        
+        // Render the Scene with the new transformation.
+        draw()
+    }
+}
+
+private extension ARCamera {
+    /// The transform rotated for a particular device orientation.
+    /// - Parameter orientation: The device orientation that the transform is appropriate for.
+    /// - Precondition: 'orientation.isValidInterfaceOrientation'
+    func transform(for orientation: UIDeviceOrientation) -> simd_float4x4 {
+        precondition(orientation.isValidInterfaceOrientation)
+        switch orientation {
+        case .portrait:
+            // Rotate camera transform 90 degrees counter-clockwise in the XY plane.
+            return simd_float4x4(
+                transform.columns.1,
+                -transform.columns.0,
+                transform.columns.2,
+                transform.columns.3
+            )
+        case .landscapeLeft:
+            return transform
+        case .landscapeRight:
+            return simd_float4x4(
+                -transform.columns.0,
+                -transform.columns.1,
+                transform.columns.2,
+                transform.columns.3
+            )
+        case .portraitUpsideDown:
+            return simd_float4x4(
+                -transform.columns.1,
+                transform.columns.0,
+                transform.columns.2,
+                transform.columns.3
+            )
+        default:
+            preconditionFailure()
+        }
     }
 }
