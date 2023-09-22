@@ -111,49 +111,6 @@ extension FormViewExampleView {
 
 private extension URL {
 ***REMOVED***static var sampleData: Self {
-***REMOVED******REMOVED******REMOVED*** David
-***REMOVED******REMOVED******REMOVED***.init(string: <#URL#>)!
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Wind turbines
-***REMOVED******REMOVED******REMOVED***/ on: map.operationalLayers.first(where: { $0.name == "windturbine" ***REMOVED***)!,
-***REMOVED******REMOVED******REMOVED***.init(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=f4cdb74cb4164d68b6b48ca2d4d02dba")!
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Dates
-***REMOVED******REMOVED******REMOVED***.init(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/home/item.html?id=ec09090060664cbda8d814e017337837")!
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** 0
-***REMOVED******REMOVED******REMOVED***.init(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/home/item.html?id=df0f27f83eee41b0afe4b6216f80b541")!
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Form validation
-***REMOVED******REMOVED******REMOVED***.init(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/home/item.html?id=5d69e2301ad14ec8a73b568dfc29450a")!
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Water lines
-***REMOVED******REMOVED******REMOVED***/ on: map.operationalLayers.first(where: { $0.name == "CityworksDynamic - Water Hydrants" ***REMOVED***)!,
-***REMOVED******REMOVED******REMOVED***.init(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/home/item.html?id=0f6864ddc35241649e5ad2ee61a3abe4")!
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** 1
-***REMOVED******REMOVED******REMOVED***.init(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/home/item.html?id=454422bdf7e24fb0ba4ffe0a22f6bf37")!
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** 2
-***REMOVED******REMOVED******REMOVED***.init(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=c606b1f345044d71881f99d00583f8f7")!
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** 3
-***REMOVED******REMOVED******REMOVED***.init(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=622c4674d6f64114a1de2e0b8382fcf3")!
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** 4
-***REMOVED******REMOVED******REMOVED***.init(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=a81d90609e4549479d1f214f28335af2")!
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** 5
-***REMOVED******REMOVED******REMOVED***.init(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/home/item.html?id=bb4c5e81740e4e7296943988c78a7ea6")!
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Text and Date Time form element sanity
-***REMOVED******REMOVED******REMOVED***/ Uses publisher1 credentials
-***REMOVED******REMOVED******REMOVED***.init(string: "https:***REMOVED***rt-server11.esri.com/portal/apps/mapviewer/index.html?webmap=b6fd63002fcb4ec2b04029440f24d43c")!
-***REMOVED******REMOVED***
-***REMOVED******REMOVED*** Combo Box
-***REMOVED******REMOVED******REMOVED***.init(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=ed930cf0eb724ea49c6bccd8fd3dd9af")!
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Radio Button
-***REMOVED******REMOVED***.init(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=476e9b4180234961809485c8eff83d5d")!
+***REMOVED******REMOVED***.init(string: <#URL#>)!
 ***REMOVED***
 ***REMOVED***
