@@ -87,7 +87,7 @@ public struct FlyoverSceneView: View {
 }
 
 extension SceneViewProxy {
-    /// Draws the scene view manually and sets the camera for a given augmented reality view.
+    /// Draws the scene view manually and sets the camera for a given augmented reality frame.
     /// - Parameters:
     ///   - frame: The current AR frame.
     ///   - cameraController: The current camera controller assigned to the scene view.
