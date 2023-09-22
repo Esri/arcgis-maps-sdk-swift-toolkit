@@ -54,11 +54,10 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateLastGoodDeviceOrientation()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.draw(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.updateCameraAndFieldOfView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation
@@ -87,12 +86,12 @@ public struct FlyoverSceneView: View {
 ***REMOVED***
 
 extension SceneViewProxy {
-***REMOVED******REMOVED***/ Draws the scene view manually and sets the camera for a given augmented reality frame.
+***REMOVED******REMOVED***/ Updates the scene view's camera and field of view for a given augmented reality frame.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - frame: The current AR frame.
 ***REMOVED******REMOVED***/   - cameraController: The current camera controller assigned to the scene view.
 ***REMOVED******REMOVED***/   - orientation: The device orientation.
-***REMOVED***func draw(
+***REMOVED***func updateCameraAndFieldOfView(
 ***REMOVED******REMOVED***frame: ARFrame,
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
 ***REMOVED******REMOVED***orientation: UIDeviceOrientation
@@ -135,8 +134,5 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
 ***REMOVED******REMOVED******REMOVED***deviceOrientation: orientation
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.
-***REMOVED******REMOVED***draw()
 ***REMOVED***
 ***REMOVED***
