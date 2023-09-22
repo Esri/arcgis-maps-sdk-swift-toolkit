@@ -16,11 +16,13 @@ import ARKit
 ***REMOVED***
 
 extension FlyoverSceneView {
-***REMOVED***class Model: NSObject, ObservableObject, ARSessionDelegate {
+***REMOVED***class Model: NSObject, ObservableObject {
 ***REMOVED******REMOVED***var sceneViewProxy: SceneViewProxy?
 ***REMOVED******REMOVED***let configuration: ARWorldTrackingConfiguration
 ***REMOVED******REMOVED***let session = ARSession()
 ***REMOVED******REMOVED***let cameraController: TransformationMatrixCameraController
+***REMOVED******REMOVED******REMOVED***/ The last portrait or landscape orientation value.
+***REMOVED******REMOVED***private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(initialCamera: Camera, translationFactor: Double) {
 ***REMOVED******REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
@@ -35,14 +37,6 @@ extension FlyoverSceneView {
 ***REMOVED******REMOVED******REMOVED***session.delegate = self
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
-***REMOVED******REMOVED******REMOVED***updateLastGoodDeviceOrientation()
-***REMOVED******REMOVED******REMOVED***sceneViewProxy?.updateCameraAndFieldOfView(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The last portrait or landscape orientation value.
-***REMOVED******REMOVED***private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Updates the last good device orientation.
 ***REMOVED******REMOVED***func updateLastGoodDeviceOrientation() {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Get the device orientation, but don't allow non-landscape/portrait values.
@@ -54,11 +48,18 @@ extension FlyoverSceneView {
 ***REMOVED***
 ***REMOVED***
 
+extension FlyoverSceneView.Model: ARSessionDelegate {
+***REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
+***REMOVED******REMOVED***updateLastGoodDeviceOrientation()
+***REMOVED******REMOVED***sceneViewProxy?.updateCameraAndFieldOfView(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***/ A scene view that provides an augmented reality fly over experience.
 public struct FlyoverSceneView: View {
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-***REMOVED***@StateObject var model: Model
+***REMOVED***@StateObject private var model: Model
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
 ***REMOVED******REMOVED***/ - Parameters:
