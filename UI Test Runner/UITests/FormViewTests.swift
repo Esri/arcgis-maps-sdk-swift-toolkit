@@ -775,6 +775,68 @@ final class FormViewTests: XCTestCase {
             "String 1"
         )
     }
+    
+    // - MARK: Test case 4: Radio Buttons input type
+    
+    /// Test case 4.1:
+    func testCase_4_1() {
+        let app = XCUIApplication()
+        let fieldTitle = app.staticTexts["Radio Button Text"]
+        let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        
+        app.launch()
+        
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title isn't hittable."
+        )
+    }
+    
+    /// Test case 4.2:
+    func testCase_4_2() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        
+        app.launch()
+        
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+    }
+    
+    /// Test case 4.3:
+    func testCase_4_3() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        
+        app.launch()
+        
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+    }
 }
 
 private extension String {
