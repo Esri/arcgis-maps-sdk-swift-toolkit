@@ -72,7 +72,6 @@ struct RadioButtonsInput: View {
                         } label: {
                             HStack {
                                 Text(codedValue.name)
-                                    .contentShape(Rectangle())
                                 Spacer()
                                 if codedValue == selectedValue {
                                     Image(systemName: "checkmark")
