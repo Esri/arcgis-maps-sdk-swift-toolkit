@@ -158,7 +158,7 @@ private extension ARCamera {
             )
         case .portraitUpsideDown:
             return simd_float4x4(
-                transform.columns.1,
+                -transform.columns.1,
                 transform.columns.0,
                 transform.columns.2,
                 transform.columns.3
