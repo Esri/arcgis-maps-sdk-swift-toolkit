@@ -28,17 +28,14 @@ struct TableTopExampleView: View {
         let scene = Scene()
         scene.baseSurface = surface
         scene.addOperationalLayer(buildingsLayer)
-        
         scene.baseSurface.navigationConstraint = .unconstrained
         scene.baseSurface.opacity = 0
-        
         return scene
     }()
     
     private let anchorPoint = Point(
         x: -122.68350326165559,
         y: 45.53257485106716,
-        z: 10.189046687446535,
         spatialReference: .wgs84
     )
     
