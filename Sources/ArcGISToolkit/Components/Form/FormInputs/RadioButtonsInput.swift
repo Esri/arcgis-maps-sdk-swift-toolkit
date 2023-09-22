@@ -79,7 +79,9 @@ struct RadioButtonsInput: View {
                                 }
                             }
                             .padding(10)
+                            .contentShape(Rectangle())
                         }
+                        .buttonStyle(.plain)
                         .foregroundColor(.primary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         if codedValue != codedValues.last {
