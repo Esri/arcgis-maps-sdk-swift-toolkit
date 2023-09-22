@@ -101,7 +101,7 @@ extension SceneViewProxy {
 ***REMOVED***) {
 ***REMOVED******REMOVED***let cameraTransform = frame.camera.transform
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees in the XY plane.
+***REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees counter-clockwise in the XY plane.
 ***REMOVED******REMOVED***let transform = simd_float4x4.init(
 ***REMOVED******REMOVED******REMOVED***cameraTransform.columns.1,
 ***REMOVED******REMOVED******REMOVED***-cameraTransform.columns.0,
