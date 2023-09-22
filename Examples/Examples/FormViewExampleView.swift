@@ -15,7 +15,7 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-struct FormExampleView: View {
+struct FormViewExampleView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
     /// The `Map` displayed in the `MapView`.
@@ -86,7 +86,7 @@ struct FormExampleView: View {
     }
 }
 
-extension FormExampleView {
+extension FormViewExampleView {
     /// Identifies features, if any, at the current screen point.
     /// - Parameter proxy: The proxy to use for identification.
     /// - Returns: The first identified feature.
@@ -111,6 +111,49 @@ extension FormExampleView {
 
 private extension URL {
     static var sampleData: Self {
-        .init(string: <#URL#>)!
+        // David
+//        .init(string: <#URL#>)!
+        
+        /// Wind turbines
+        /// on: map.operationalLayers.first(where: { $0.name == "windturbine" })!,
+//        .init(string: "https://runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=f4cdb74cb4164d68b6b48ca2d4d02dba")!
+        
+        // Dates
+//        .init(string: "https://runtimecoretest.maps.arcgis.com/home/item.html?id=ec09090060664cbda8d814e017337837")!
+        
+        // 0
+//        .init(string: "https://runtimecoretest.maps.arcgis.com/home/item.html?id=df0f27f83eee41b0afe4b6216f80b541")!
+        
+        // Form validation
+//        .init(string: "https://runtimecoretest.maps.arcgis.com/home/item.html?id=5d69e2301ad14ec8a73b568dfc29450a")!
+        
+        /// Water lines
+        /// on: map.operationalLayers.first(where: { $0.name == "CityworksDynamic - Water Hydrants" })!,
+//        .init(string: "https://runtimecoretest.maps.arcgis.com/home/item.html?id=0f6864ddc35241649e5ad2ee61a3abe4")!
+        
+        // 1
+//        .init(string: "https://runtimecoretest.maps.arcgis.com/home/item.html?id=454422bdf7e24fb0ba4ffe0a22f6bf37")!
+        
+        // 2
+//        .init(string: "https://runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=c606b1f345044d71881f99d00583f8f7")!
+        
+        // 3
+//        .init(string: "https://runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=622c4674d6f64114a1de2e0b8382fcf3")!
+        
+        // 4
+//        .init(string: "https://runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=a81d90609e4549479d1f214f28335af2")!
+        
+        // 5
+//        .init(string: "https://runtimecoretest.maps.arcgis.com/home/item.html?id=bb4c5e81740e4e7296943988c78a7ea6")!
+        
+        /// Text and Date Time form element sanity
+        /// Uses publisher1 credentials
+//        .init(string: "https://rt-server11.esri.com/portal/apps/mapviewer/index.html?webmap=b6fd63002fcb4ec2b04029440f24d43c")!
+        
+    // Combo Box
+//        .init(string: "https://runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=ed930cf0eb724ea49c6bccd8fd3dd9af")!
+        
+        // Radio Button
+        .init(string: "https://runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=476e9b4180234961809485c8eff83d5d")!
     }
 }
