@@ -15,22 +15,19 @@ import ARKit
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A scene view that provides an augmented reality fly over experience.
+***REMOVED***/ A scene view that provides an augmented reality table top experience.
 public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/ The last portrait or landscape orientation value.
 ***REMOVED***@State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
 ***REMOVED***@State private var initialTransformation: TransformationMatrix? = nil
-***REMOVED***
-***REMOVED***private let cameraController: TransformationMatrixCameraController
+***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
-***REMOVED***private var initialTransformationIsSet: Bool {
-***REMOVED******REMOVED***initialTransformation != nil
+***REMOVED***private var initialTransformationIsSet: Bool { initialTransformation != nil ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Creates a fly over scene view.
+***REMOVED******REMOVED***/ Creates a table top scene view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - anchorPoint: The location point of the ArcGIS Scene that is anchored on a physical surface.
 ***REMOVED******REMOVED***/   - translationFactor: The translation factor that defines how much the scene view translates
@@ -51,9 +48,10 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let initialCamera = Camera(location: anchorPoint, heading: 0, pitch: 90, roll: 0)
-***REMOVED******REMOVED***cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
 ***REMOVED******REMOVED***cameraController.translationFactor = translationFactor
 ***REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
+***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
 ***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
