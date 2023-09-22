@@ -16,6 +16,10 @@ import SwiftUI
 
 typealias ARViewType = ARSCNView
 
+class WrappedView: ARViewType {
+    over
+}
+
 /// A SwiftUI version of an AR view.
 struct ARSwiftUIView {
     /// The closure to call when the AR view renders.
@@ -23,11 +27,13 @@ struct ARSwiftUIView {
     private(set) var videoFeedIsHidden: Bool = false
     /// The proxy.
     private let proxy: ARSwiftUIViewProxy?
+    private let configuration: ARConfiguration
     
     /// Creates an ARSwiftUIView.
     /// - Parameter proxy: The provided proxy which will have it's state filled out
     /// when available by the underlying view.
-    init(proxy: ARSwiftUIViewProxy? = nil) {
+    init(configuration: ARConfiguration, proxy: ARSwiftUIViewProxy? = nil) {
+        self.configuration = configuration
         self.proxy = proxy
     }
     
@@ -52,6 +58,7 @@ extension ARSwiftUIView: UIViewRepresentable {
     func makeUIView(context: Context) -> ARViewType {
         let arView = ARViewType()
         arView.session.delegate = context.coordinator
+        arView.session.run(configuration)
         proxy?.arView = arView
         return arView
     }
