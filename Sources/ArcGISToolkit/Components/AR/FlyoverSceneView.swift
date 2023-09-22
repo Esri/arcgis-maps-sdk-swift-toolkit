@@ -110,13 +110,41 @@ extension SceneViewProxy {
     ) {
         let cameraTransform = frame.camera.transform
         
+        let transform: simd_float4x4
+        
         // Rotate camera transform 90 degrees counter-clockwise in the XY plane.
-        let transform = simd_float4x4.init(
-            cameraTransform.columns.1,
-            -cameraTransform.columns.0,
-            cameraTransform.columns.2,
-            cameraTransform.columns.3
-        )
+        switch orientation {
+        case .portrait:
+            transform = simd_float4x4(
+                cameraTransform.columns.1,
+                -cameraTransform.columns.0,
+                cameraTransform.columns.2,
+                cameraTransform.columns.3
+            )
+        case .landscapeLeft:
+            transform = simd_float4x4(
+                cameraTransform.columns.0,
+                cameraTransform.columns.1,
+                cameraTransform.columns.2,
+                cameraTransform.columns.3
+            )
+        case .landscapeRight:
+            transform = simd_float4x4(
+                -cameraTransform.columns.0,
+                -cameraTransform.columns.1,
+                cameraTransform.columns.2,
+                cameraTransform.columns.3
+            )
+        case .portraitUpsideDown:
+            transform = simd_float4x4(
+                cameraTransform.columns.1,
+                cameraTransform.columns.0,
+                cameraTransform.columns.2,
+                cameraTransform.columns.3
+            )
+        default:
+            fatalError()
+        }
         
         let quaternion = simd_quatf(transform)
         
