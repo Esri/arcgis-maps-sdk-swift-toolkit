@@ -12,10 +12,8 @@
 ***REMOVED*** limitations under the License.
 
 import ARKit
-import RealityKit
 ***REMOVED***
 
-***REMOVED***typealias ARViewType = RealityKit.ARView
 typealias ARViewType = ARSCNView
 
 ***REMOVED***/ A SwiftUI version of an AR view.
@@ -53,7 +51,6 @@ struct ARSwiftUIView {
 extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***func makeUIView(context: Context) -> ARViewType {
 ***REMOVED******REMOVED***let arView = ARViewType()
-***REMOVED******REMOVED******REMOVED***arView.debugOptions.insert(.showStatistics)
 ***REMOVED******REMOVED***arView.session.delegate = context.coordinator
 ***REMOVED******REMOVED***proxy?.arView = arView
 ***REMOVED******REMOVED***return arView

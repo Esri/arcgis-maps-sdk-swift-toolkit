@@ -56,11 +56,10 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { session, frame in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateLastGoodDeviceOrientation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.draw(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: session,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -90,12 +89,11 @@ public struct FlyoverSceneView: View {
 extension SceneViewProxy {
 ***REMOVED******REMOVED***/ Draws the scene view manually and sets the camera for a given augmented reality view.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - arViewProxy: The AR view proxy.
+***REMOVED******REMOVED***/   - frame: The current AR frame.
 ***REMOVED******REMOVED***/   - cameraController: The current camera controller assigned to the scene view.
 ***REMOVED******REMOVED***/   - orientation: The device orientation.
 ***REMOVED***func draw(
 ***REMOVED******REMOVED***frame: ARFrame,
-***REMOVED******REMOVED***for: ARSession,
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
 ***REMOVED******REMOVED***orientation: UIDeviceOrientation
 ***REMOVED***) {
