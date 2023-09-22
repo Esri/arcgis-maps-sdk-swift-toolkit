@@ -158,7 +158,7 @@ private extension ARCamera {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .portraitUpsideDown:
 ***REMOVED******REMOVED******REMOVED***return simd_float4x4(
-***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.1,
+***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.1,
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.0,
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.2,
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
