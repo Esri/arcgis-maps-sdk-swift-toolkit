@@ -15,22 +15,19 @@ import ARKit
 import SwiftUI
 import ArcGIS
 
-/// A scene view that provides an augmented reality fly over experience.
+/// A scene view that provides an augmented reality table top experience.
 public struct TableTopSceneView: View {
     /// The last portrait or landscape orientation value.
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     @State private var arViewProxy = ARSwiftUIViewProxy()
     @State private var sceneViewProxy: SceneViewProxy?
     @State private var initialTransformation: TransformationMatrix? = nil
-    
-    private let cameraController: TransformationMatrixCameraController
+    @State private var cameraController: TransformationMatrixCameraController
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     private let configuration: ARWorldTrackingConfiguration
-    private var initialTransformationIsSet: Bool {
-        initialTransformation != nil
-    }
+    private var initialTransformationIsSet: Bool { initialTransformation != nil }
     
-    /// Creates a fly over scene view.
+    /// Creates a table top scene view.
     /// - Parameters:
     ///   - anchorPoint: The location point of the ArcGIS Scene that is anchored on a physical surface.
     ///   - translationFactor: The translation factor that defines how much the scene view translates
@@ -51,9 +48,10 @@ public struct TableTopSceneView: View {
         self.sceneViewBuilder = sceneView
         
         let initialCamera = Camera(location: anchorPoint, heading: 0, pitch: 90, roll: 0)
-        cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
         cameraController.translationFactor = translationFactor
         cameraController.clippingDistance = clippingDistance
+        _cameraController = .init(initialValue: cameraController)
         
         configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
