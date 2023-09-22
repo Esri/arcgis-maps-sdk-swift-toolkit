@@ -67,19 +67,22 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: .zero) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if input.noValueOption == .show {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeRadioButtonRow(placeholderValue, selectedValue == nil) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeRadioButtonRow(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***placeholderValue,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue == nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***!codedValues.isEmpty,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***useNoValueStyle: true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !codedValues.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(codedValues, id: \.self) { codedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeRadioButtonRow(codedValue.name, codedValue == selectedValue) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeRadioButtonRow(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue.name,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue == selectedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue != codedValues.last
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValue
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if codedValue != codedValues.last {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -125,17 +128,27 @@ extension RadioButtonsInput {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - label: The label for the radio button.
 ***REMOVED******REMOVED***/   - selected: A Boolean value indicating whether the button is selected.
+***REMOVED******REMOVED***/   - addDivider: A Boolean value indicating whether a divider should be included under the row.
+***REMOVED******REMOVED***/   - useNoValueStyle: A Boolean value indicating whether the button represents a no value option.
 ***REMOVED******REMOVED***/   - action: The action to perform when the user triggers the button.
 ***REMOVED***@ViewBuilder func makeRadioButtonRow(
 ***REMOVED******REMOVED***_ label: String,
 ***REMOVED******REMOVED***_ selected: Bool,
+***REMOVED******REMOVED***_ addDivider: Bool,
+***REMOVED******REMOVED***useNoValueStyle: Bool = false,
 ***REMOVED******REMOVED***_ action: @escaping () -> Void
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***action()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(label)
+***REMOVED******REMOVED******REMOVED******REMOVED***if useNoValueStyle {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(label)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.italic()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(label)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if selected {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark")
@@ -147,6 +160,9 @@ extension RadioButtonsInput {
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.foregroundColor(.primary)
-***REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED***if addDivider {
+***REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, 10)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
