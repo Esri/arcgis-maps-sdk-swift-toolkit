@@ -15,14 +15,50 @@ import ARKit
 ***REMOVED***
 ***REMOVED***
 
+extension FlyoverSceneView {
+***REMOVED***class Model: NSObject, ObservableObject, ARSessionDelegate {
+***REMOVED******REMOVED***var sceneViewProxy: SceneViewProxy?
+***REMOVED******REMOVED***let configuration: ARWorldTrackingConfiguration
+***REMOVED******REMOVED***let session = ARSession()
+***REMOVED******REMOVED***let cameraController: TransformationMatrixCameraController
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***init(initialCamera: Camera, translationFactor: Double) {
+***REMOVED******REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
+***REMOVED******REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+***REMOVED******REMOVED******REMOVED***cameraController.translationFactor = translationFactor
+***REMOVED******REMOVED******REMOVED***self.cameraController = cameraController
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***super.init()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***session.delegate = self
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
+***REMOVED******REMOVED******REMOVED***updateLastGoodDeviceOrientation()
+***REMOVED******REMOVED******REMOVED***sceneViewProxy?.updateCameraAndFieldOfView(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The last portrait or landscape orientation value.
+***REMOVED******REMOVED***private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Updates the last good device orientation.
+***REMOVED******REMOVED***func updateLastGoodDeviceOrientation() {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Get the device orientation, but don't allow non-landscape/portrait values.
+***REMOVED******REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
+***REMOVED******REMOVED******REMOVED***if deviceOrientation.isValidInterfaceOrientation {
+***REMOVED******REMOVED******REMOVED******REMOVED***lastGoodDeviceOrientation = deviceOrientation
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***/ A scene view that provides an augmented reality fly over experience.
 public struct FlyoverSceneView: View {
-***REMOVED******REMOVED***/ The last portrait or landscape orientation value.
-***REMOVED***@State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
-***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-***REMOVED***private let configuration: ARWorldTrackingConfiguration
+***REMOVED***@StateObject var model: Model
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -40,47 +76,22 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
-***REMOVED******REMOVED***cameraController.translationFactor = translationFactor
-***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
-***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
+***REMOVED******REMOVED***_model = StateObject(wrappedValue: Model(initialCamera: initialCamera, translationFactor: translationFactor))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
-***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateLastGoodDeviceOrientation()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.updateCameraAndFieldOfView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.videoFeedHidden()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(model.cameraController)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.sceneViewProxy = sceneViewProxy
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.session.run(model.configuration)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.pause()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.session.pause()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Updates the last good device orientation.
-***REMOVED***func updateLastGoodDeviceOrientation() {
-***REMOVED******REMOVED******REMOVED*** Get the device orientation, but don't allow non-landscape/portrait values.
-***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
-***REMOVED******REMOVED***if deviceOrientation.isValidInterfaceOrientation {
-***REMOVED******REMOVED******REMOVED***lastGoodDeviceOrientation = deviceOrientation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
