@@ -781,13 +781,13 @@ final class FormViewTests: XCTestCase {
     /// Test case 4.1: Test regular selection
     func testCase_4_1() {
         let app = XCUIApplication()
+        let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
         let fieldTitle = app.staticTexts["Radio Button Text"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["FormView Tests"]
         let dogOption = app.buttons["Radio Button Text dog"]
         let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
-        let birdOption = app.buttons["Radio Button Text bird"]
-        let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
+        let noValueOption = app.buttons["Radio Button Text No value"]
         
         app.launch()
         
@@ -805,45 +805,31 @@ final class FormViewTests: XCTestCase {
             "The field title doesn't exist."
         )
         
-        
         XCTAssertTrue(
-            birdOptionCheckmark.isHittable,
+            birdOptionCheckmark.exists,
             "The bird option isn't selected."
         )
         
         XCTAssertFalse(
-            dogOptionCheckmark.isHittable,
+            dogOptionCheckmark.exists,
             "The dog option is selected."
         )
         
         dogOption.tap()
         
         XCTAssertTrue(
-            dogOptionCheckmark.isHittable,
+            dogOptionCheckmark.exists,
             "The dog option isn't selected."
         )
         
         XCTAssertFalse(
-            birdOptionCheckmark.isHittable,
+            birdOptionCheckmark.exists,
             "The bird option is selected."
         )
-    }
-    
-    /// Test case 4.2:
-    func testCase_4_2() {
-        let app = XCUIApplication()
-        let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
         
-        app.launch()
-        
-        // Open the FormView component test view.
-        formViewTestsButton.tap()
-        
-        // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            noValueOption.exists,
+            "The no value option doesn't exist."
         )
     }
 }
