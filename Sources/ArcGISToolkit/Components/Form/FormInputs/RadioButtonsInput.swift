@@ -65,7 +65,7 @@ struct RadioButtonsInput: View {
                 InputHeader(element: element)
                     .padding([.top], elementPadding)
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: .zero) {
                     ForEach(codedValues, id: \.self) { codedValue in
                         Button {
                             selectedValue = codedValue
@@ -79,8 +79,7 @@ struct RadioButtonsInput: View {
                                         .foregroundColor(.accentColor)
                                 }
                             }
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 12)
+                            .padding(10)
                         }
                         .foregroundColor(.primary)
                         .frame(maxWidth: .infinity, alignment: .leading)
