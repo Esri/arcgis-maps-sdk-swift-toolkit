@@ -45,13 +45,21 @@ extension FlyoverSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***lastGoodDeviceOrientation = deviceOrientation
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func startARSession() {
+***REMOVED******REMOVED******REMOVED***session.run(configuration)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func pauseARSession() {
+***REMOVED******REMOVED******REMOVED***session.pause()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 extension FlyoverSceneView.Model: ARSessionDelegate {
 ***REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
 ***REMOVED******REMOVED***updateLastGoodDeviceOrientation()
-***REMOVED******REMOVED***sceneViewProxy?.updateCameraAndFieldOfView(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
+***REMOVED******REMOVED***sceneViewProxy?.updateCamera(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
 ***REMOVED***
 ***REMOVED***
 
@@ -81,29 +89,27 @@ public struct FlyoverSceneView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(model.cameraController)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.sceneViewProxy = sceneViewProxy
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.session.run(model.configuration)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.session.pause()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
+***REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(model.cameraController)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.sceneViewProxy = sceneViewProxy
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.startARSession()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.pauseARSession()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 extension SceneViewProxy {
-***REMOVED******REMOVED***/ Updates the scene view's camera and field of view for a given augmented reality frame.
+***REMOVED******REMOVED***/ Updates the scene view's camera for a given augmented reality frame.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - frame: The current AR frame.
 ***REMOVED******REMOVED***/   - cameraController: The current camera controller assigned to the scene view.
 ***REMOVED******REMOVED***/   - orientation: The device orientation.
-***REMOVED***func updateCameraAndFieldOfView(
+***REMOVED***func updateCamera(
 ***REMOVED******REMOVED***frame: ARFrame,
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
 ***REMOVED******REMOVED***orientation: UIDeviceOrientation
@@ -122,23 +128,6 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the matrix on the camera controller.
 ***REMOVED******REMOVED***cameraController.transformationMatrix = .identity.adding(transformationMatrix)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Set FOV on scene view.
-***REMOVED******REMOVED***let intrinsics = frame.camera.intrinsics
-***REMOVED******REMOVED***let imageResolution = frame.camera.imageResolution
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***setFieldOfViewFromLensIntrinsics(
-***REMOVED******REMOVED******REMOVED***xFocalLength: intrinsics[0][0],
-***REMOVED******REMOVED******REMOVED***yFocalLength: intrinsics[1][1],
-***REMOVED******REMOVED******REMOVED***xPrincipal: intrinsics[2][0],
-***REMOVED******REMOVED******REMOVED***yPrincipal: intrinsics[2][1],
-***REMOVED******REMOVED******REMOVED***xImageSize: Float(imageResolution.width),
-***REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
-***REMOVED******REMOVED******REMOVED***deviceOrientation: orientation
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Render the Scene with the new transformation.
-***REMOVED******REMOVED***draw()
 ***REMOVED***
 ***REMOVED***
 
@@ -150,7 +139,7 @@ private extension ARCamera {
 ***REMOVED******REMOVED***precondition(orientation.isValidInterfaceOrientation)
 ***REMOVED******REMOVED***switch orientation {
 ***REMOVED******REMOVED***case .portrait:
-***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees counter-clockwise in the XY plane.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees clockwise in the XY plane.
 ***REMOVED******REMOVED******REMOVED***return simd_float4x4(
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.1,
 ***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.0,
@@ -158,8 +147,10 @@ private extension ARCamera {
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .landscapeLeft:
+***REMOVED******REMOVED******REMOVED******REMOVED*** No rotation necessary.
 ***REMOVED******REMOVED******REMOVED***return transform
 ***REMOVED******REMOVED***case .landscapeRight:
+***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate 180.
 ***REMOVED******REMOVED******REMOVED***return simd_float4x4(
 ***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.0,
 ***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.1,
@@ -167,6 +158,7 @@ private extension ARCamera {
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .portraitUpsideDown:
+***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate 90 counter clockwise.
 ***REMOVED******REMOVED******REMOVED***return simd_float4x4(
 ***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.1,
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.0,
