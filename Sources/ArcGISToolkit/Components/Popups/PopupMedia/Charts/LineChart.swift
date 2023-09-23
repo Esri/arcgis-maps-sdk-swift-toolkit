@@ -41,12 +41,12 @@ struct LineChart: View {
 #if canImport(Charts)
             Chart(chartData) {
                 LineMark(
-                    x: .value("Field", $0.label),
-                    y: .value("Value", $0.value)
+                    x: .value(String.field, $0.label),
+                    y: .value(String.value, $0.value)
                 )
                 PointMark(
-                    x: .value("Field", $0.label),
-                    y: .value("Value", $0.value)
+                    x: .value(String.field, $0.label),
+                    y: .value(String.value, $0.value)
                 )
             }
             .chartXAxis {
