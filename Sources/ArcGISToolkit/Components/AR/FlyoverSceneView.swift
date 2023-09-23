@@ -18,9 +18,9 @@ import ARKit
 extension FlyoverSceneView {
 ***REMOVED***class Model: NSObject, ObservableObject {
 ***REMOVED******REMOVED***var sceneViewProxy: SceneViewProxy?
-***REMOVED******REMOVED***let configuration: ARWorldTrackingConfiguration
-***REMOVED******REMOVED***let session = ARSession()
-***REMOVED******REMOVED***let cameraController: TransformationMatrixCameraController
+***REMOVED******REMOVED***private let configuration: ARWorldTrackingConfiguration
+***REMOVED******REMOVED***private let session = ARSession()
+***REMOVED******REMOVED***private let cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED******REMOVED***/ The last portrait or landscape orientation value.
 ***REMOVED******REMOVED***private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
 ***REMOVED******REMOVED***
@@ -46,28 +46,33 @@ extension FlyoverSceneView {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Starts the AR session.
 ***REMOVED******REMOVED***func startARSession() {
 ***REMOVED******REMOVED******REMOVED***session.run(configuration)
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Pauses the AR session.
 ***REMOVED******REMOVED***func pauseARSession() {
 ***REMOVED******REMOVED******REMOVED***session.pause()
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Published
+***REMOVED******REMOVED******REMOVED***var currentFrame: ARFrame?
 ***REMOVED***
 ***REMOVED***
 
 extension FlyoverSceneView.Model: ARSessionDelegate {
 ***REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
 ***REMOVED******REMOVED***updateLastGoodDeviceOrientation()
+***REMOVED******REMOVED***currentFrame = frame
 ***REMOVED******REMOVED***sceneViewProxy?.updateCamera(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
 ***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ A scene view that provides an augmented reality fly over experience.
 public struct FlyoverSceneView: View {
-***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
-***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED***@StateObject private var model: Model
+***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
 ***REMOVED******REMOVED***/ - Parameters:
