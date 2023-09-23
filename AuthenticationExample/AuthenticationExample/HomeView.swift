@@ -25,7 +25,7 @@ struct HomeView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if let portal = portal {
 ***REMOVED******REMOVED******REMOVED***NavigationView{
-***REMOVED******REMOVED******REMOVED******REMOVED***FeaturedMapsView(portal: portal)
+***REMOVED******REMOVED******REMOVED******REMOVED***WebMapsView(portal: portal)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
