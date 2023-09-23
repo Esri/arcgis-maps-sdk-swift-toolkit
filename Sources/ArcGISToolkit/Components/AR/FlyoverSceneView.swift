@@ -23,6 +23,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
+***REMOVED***@State private var interfaceOrientation: UIInterfaceOrientation?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -72,6 +73,14 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.pause()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InterfaceOrientationReader(interfaceOrientation: $interfaceOrientation)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: interfaceOrientation) { io in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let io {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("-- new io: \(io)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -85,18 +94,18 @@ public struct FlyoverSceneView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var window: UIWindow? {
-***REMOVED******REMOVED***guard let scene = UIApplication.shared.connectedScenes.first,
-***REMOVED******REMOVED******REMOVED***  let windowSceneDelegate = scene.delegate as? UIWindowSceneDelegate,
-***REMOVED******REMOVED******REMOVED***  let window = windowSceneDelegate.window else {
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
-***REMOVED******REMOVED***return window
-***REMOVED***
-***REMOVED***
-***REMOVED***var interfaceOrientation: UIInterfaceOrientation? {
-***REMOVED******REMOVED***window?.windowScene?.interfaceOrientation
-***REMOVED***
+***REMOVED******REMOVED***var window: UIWindow? {
+***REMOVED******REMOVED******REMOVED***guard let scene = UIApplication.shared.connectedScenes.first,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let windowSceneDelegate = scene.delegate as? UIWindowSceneDelegate,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let window = windowSceneDelegate.window else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return window
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var interfaceOrientation: UIInterfaceOrientation? {
+***REMOVED******REMOVED******REMOVED***window?.windowScene?.interfaceOrientation
+***REMOVED******REMOVED***
 ***REMOVED***
 
 extension SceneViewProxy {
@@ -179,5 +188,50 @@ private extension ARCamera {
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***preconditionFailure()
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+struct InterfaceOrientationReader: UIViewRepresentable {
+***REMOVED***let binding: Binding<UIInterfaceOrientation?>
+***REMOVED***
+***REMOVED***init(interfaceOrientation: Binding<UIInterfaceOrientation?>) {
+***REMOVED******REMOVED***binding = interfaceOrientation
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeUIView(context: Context) -> InterfaceOrientationView {
+***REMOVED******REMOVED***InterfaceOrientationView(interfaceOrientation: binding)
+***REMOVED***
+***REMOVED***
+***REMOVED***func updateUIView(_ uiView: InterfaceOrientationView, context: Context) {
+***REMOVED***
+***REMOVED***
+
+class InterfaceOrientationView: UIView {
+***REMOVED***let binding: Binding<UIInterfaceOrientation?>
+***REMOVED***
+***REMOVED***init(interfaceOrientation: Binding<UIInterfaceOrientation?>) {
+***REMOVED******REMOVED***binding = interfaceOrientation
+***REMOVED******REMOVED***super.init(frame: .zero)
+***REMOVED******REMOVED******REMOVED***NotificationCenter.default.addObserver(forName: .de, object: <#T##Any?#>, queue: <#T##OperationQueue?#>, using: <#T##(Notification) -> Void#>)
+***REMOVED***
+***REMOVED***
+***REMOVED***required init?(coder: NSCoder) {
+***REMOVED******REMOVED***fatalError("init(coder:) has not been implemented")
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var interfaceOrientation: UIInterfaceOrientation? {
+***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED***return self.window?.windowScene?.interfaceOrientation
+***REMOVED***
+***REMOVED***
+***REMOVED***override func layoutSubviews() {
+***REMOVED******REMOVED***binding.wrappedValue = interfaceOrientation
+***REMOVED******REMOVED***super.layoutSubviews()
+***REMOVED***
+***REMOVED***
+***REMOVED***override func updateConstraints() {
+***REMOVED******REMOVED***binding.wrappedValue = interfaceOrientation
+***REMOVED******REMOVED***super.updateConstraints()
 ***REMOVED***
 ***REMOVED***
