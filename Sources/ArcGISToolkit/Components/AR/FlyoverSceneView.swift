@@ -45,13 +45,21 @@ extension FlyoverSceneView {
                 lastGoodDeviceOrientation = deviceOrientation
             }
         }
+        
+        func startARSession() {
+            session.run(configuration)
+        }
+        
+        func pauseARSession() {
+            session.pause()
+        }
     }
 }
 
 extension FlyoverSceneView.Model: ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         updateLastGoodDeviceOrientation()
-        sceneViewProxy?.updateCameraAndFieldOfView(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
+        sceneViewProxy?.updateCamera(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
     }
 }
 
@@ -81,29 +89,27 @@ public struct FlyoverSceneView: View {
     }
     
     public var body: some View {
-        ZStack {
-            SceneViewReader { sceneViewProxy in
-                sceneViewBuilder(sceneViewProxy)
-                    .cameraController(model.cameraController)
-                    .onAppear {
-                        model.sceneViewProxy = sceneViewProxy
-                        model.session.run(model.configuration)
-                    }
-                    .onDisappear {
-                        model.session.pause()
-                    }
-            }
+        SceneViewReader { sceneViewProxy in
+            sceneViewBuilder(sceneViewProxy)
+                .cameraController(model.cameraController)
+                .onAppear {
+                    model.sceneViewProxy = sceneViewProxy
+                    model.startARSession()
+                }
+                .onDisappear {
+                    model.pauseARSession()
+                }
         }
     }
 }
 
 extension SceneViewProxy {
-    /// Updates the scene view's camera and field of view for a given augmented reality frame.
+    /// Updates the scene view's camera for a given augmented reality frame.
     /// - Parameters:
     ///   - frame: The current AR frame.
     ///   - cameraController: The current camera controller assigned to the scene view.
     ///   - orientation: The device orientation.
-    func updateCameraAndFieldOfView(
+    func updateCamera(
         frame: ARFrame,
         cameraController: TransformationMatrixCameraController,
         orientation: UIDeviceOrientation
@@ -122,23 +128,6 @@ extension SceneViewProxy {
         
         // Set the matrix on the camera controller.
         cameraController.transformationMatrix = .identity.adding(transformationMatrix)
-        
-        // Set FOV on scene view.
-        let intrinsics = frame.camera.intrinsics
-        let imageResolution = frame.camera.imageResolution
-        
-        setFieldOfViewFromLensIntrinsics(
-            xFocalLength: intrinsics[0][0],
-            yFocalLength: intrinsics[1][1],
-            xPrincipal: intrinsics[2][0],
-            yPrincipal: intrinsics[2][1],
-            xImageSize: Float(imageResolution.width),
-            yImageSize: Float(imageResolution.height),
-            deviceOrientation: orientation
-        )
-        
-        // Render the Scene with the new transformation.
-        draw()
     }
 }
 
@@ -150,7 +139,7 @@ private extension ARCamera {
         precondition(orientation.isValidInterfaceOrientation)
         switch orientation {
         case .portrait:
-            // Rotate camera transform 90 degrees counter-clockwise in the XY plane.
+            // Rotate camera transform 90 degrees clockwise in the XY plane.
             return simd_float4x4(
                 transform.columns.1,
                 -transform.columns.0,
@@ -158,8 +147,10 @@ private extension ARCamera {
                 transform.columns.3
             )
         case .landscapeLeft:
+            // No rotation necessary.
             return transform
         case .landscapeRight:
+            // Rotate 180.
             return simd_float4x4(
                 -transform.columns.0,
                 -transform.columns.1,
@@ -167,6 +158,7 @@ private extension ARCamera {
                 transform.columns.3
             )
         case .portraitUpsideDown:
+            // Rotate 90 counter clockwise.
             return simd_float4x4(
                 -transform.columns.1,
                 transform.columns.0,
