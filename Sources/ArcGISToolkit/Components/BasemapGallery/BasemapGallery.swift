@@ -258,15 +258,37 @@ extension AlertItem {
         
         switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
         case (.some(_), .some(_)):
-            message = String(localized: "The basemap has a spatial reference that is incompatible with the map.", bundle: .toolkitModule)
+            message = String(
+                localized: "The basemap has a spatial reference that is incompatible with the map.",
+                bundle: .toolkitModule,
+                comment: """
+                         A label indicating the spatial reference of the chosen basemap doesn't
+                         match the spatial reference of the map.
+                         """
+            )
         case (_, .none):
-            message = String(localized: "The map does not have a spatial reference.", bundle: .toolkitModule)
+            message = String(
+                localized: "The map does not have a spatial reference.",
+                bundle: .toolkitModule,
+                comment: "A label indicating the map doesn't have a spatial reference."
+            )
         case (.none, _):
-            message = String(localized: "The basemap does not have a spatial reference.", bundle: .toolkitModule)
+            message = String(
+                localized: "The basemap does not have a spatial reference.",
+                bundle: .toolkitModule,
+                comment: "A label indicating the chosen basemap doesn't have a spatial reference."
+            )
         }
         
         self.init(
-            title: String(localized: "Spatial reference mismatch.", bundle: .toolkitModule),
+            title: String(
+                localized: "Spatial reference mismatch.",
+                bundle: .toolkitModule,
+                comment: """
+                         A label indicating the spatial reference of the chosen basemap doesn't
+                         match the spatial reference of the map or scene.
+                         """
+            ),
             message: message
         )
     }

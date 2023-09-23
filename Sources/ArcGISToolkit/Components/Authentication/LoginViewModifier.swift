@@ -47,15 +47,23 @@ struct LoginViewModifier: ViewModifier {
                         The host is indicated in the variable.
                         """
                 ),
-                title: String(localized: "Authentication Required", bundle: .toolkitModule),
+                title: String(
+                    localized: "Authentication Required",
+                    bundle: .toolkitModule,
+                    comment: "A label indicating authentication is required to proceed."
+                ),
                 cancelAction: .init(
-                    title: String(localized: "Cancel", bundle: .toolkitModule),
+                    title: String.cancel,
                     handler: { _, _ in
                         onCancel()
                     }
                 ),
                 continueAction: .init(
-                    title: String(localized: "Continue", bundle: .toolkitModule),
+                    title: String(
+                        localized: "Continue",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button used to continue the authentication operation."
+                    ),
                     handler: { username, password in
                         let loginCredential = LoginCredential(
                             username: username, password: password
