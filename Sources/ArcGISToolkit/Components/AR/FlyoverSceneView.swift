@@ -23,6 +23,7 @@ public struct FlyoverSceneView: View {
     @State private var cameraController: TransformationMatrixCameraController
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     private let configuration: ARWorldTrackingConfiguration
+    @State private var interfaceOrientation: UIInterfaceOrientation?
     
     /// Creates a fly over scene view.
     /// - Parameters:
@@ -72,6 +73,14 @@ public struct FlyoverSceneView: View {
                     .onDisappear {
                         arViewProxy.session?.pause()
                     }
+                    .overlay {
+                        InterfaceOrientationReader(interfaceOrientation: $interfaceOrientation)
+                    }
+                    .onChange(of: interfaceOrientation) { io in
+                        if let io {
+                            print("-- new io: \(io)")
+                        }
+                    }
             }
         }
     }
@@ -85,18 +94,18 @@ public struct FlyoverSceneView: View {
         }
     }
     
-    var window: UIWindow? {
-        guard let scene = UIApplication.shared.connectedScenes.first,
-              let windowSceneDelegate = scene.delegate as? UIWindowSceneDelegate,
-              let window = windowSceneDelegate.window else {
-            return nil
-        }
-        return window
-    }
-    
-    var interfaceOrientation: UIInterfaceOrientation? {
-        window?.windowScene?.interfaceOrientation
-    }
+//    var window: UIWindow? {
+//        guard let scene = UIApplication.shared.connectedScenes.first,
+//              let windowSceneDelegate = scene.delegate as? UIWindowSceneDelegate,
+//              let window = windowSceneDelegate.window else {
+//            return nil
+//        }
+//        return window
+//    }
+//    
+//    var interfaceOrientation: UIInterfaceOrientation? {
+//        window?.windowScene?.interfaceOrientation
+//    }
 }
 
 extension SceneViewProxy {
@@ -179,5 +188,50 @@ private extension ARCamera {
         default:
             preconditionFailure()
         }
+    }
+}
+
+struct InterfaceOrientationReader: UIViewRepresentable {
+    let binding: Binding<UIInterfaceOrientation?>
+    
+    init(interfaceOrientation: Binding<UIInterfaceOrientation?>) {
+        binding = interfaceOrientation
+    }
+    
+    func makeUIView(context: Context) -> InterfaceOrientationView {
+        InterfaceOrientationView(interfaceOrientation: binding)
+    }
+    
+    func updateUIView(_ uiView: InterfaceOrientationView, context: Context) {
+    }
+}
+
+class InterfaceOrientationView: UIView {
+    let binding: Binding<UIInterfaceOrientation?>
+    
+    init(interfaceOrientation: Binding<UIInterfaceOrientation?>) {
+        binding = interfaceOrientation
+        super.init(frame: .zero)
+//        NotificationCenter.default.addObserver(forName: .de, object: <#T##Any?#>, queue: <#T##OperationQueue?#>, using: <#T##(Notification) -> Void#>)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    var interfaceOrientation: UIInterfaceOrientation? {
+//        fatalError()
+        return self.window?.windowScene?.interfaceOrientation
+    }
+    
+    override func layoutSubviews() {
+        binding.wrappedValue = interfaceOrientation
+        super.layoutSubviews()
+    }
+    
+    override func updateConstraints() {
+        binding.wrappedValue = interfaceOrientation
+        super.updateConstraints()
     }
 }
