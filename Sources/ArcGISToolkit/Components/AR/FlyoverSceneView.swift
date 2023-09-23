@@ -85,6 +85,19 @@ public struct FlyoverSceneView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***var window: UIWindow? {
+***REMOVED******REMOVED***guard let scene = UIApplication.shared.connectedScenes.first,
+***REMOVED******REMOVED******REMOVED***  let windowSceneDelegate = scene.delegate as? UIWindowSceneDelegate,
+***REMOVED******REMOVED******REMOVED***  let window = windowSceneDelegate.window else {
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED******REMOVED***return window
+***REMOVED***
+***REMOVED***
+***REMOVED***var interfaceOrientation: UIInterfaceOrientation? {
+***REMOVED******REMOVED***window?.windowScene?.interfaceOrientation
+***REMOVED***
+***REMOVED***
 
 extension SceneViewProxy {
 ***REMOVED******REMOVED***/ Draws the scene view manually and sets the camera for a given augmented reality frame.
