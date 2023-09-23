@@ -15,64 +15,16 @@ import ARKit
 import SwiftUI
 import ArcGIS
 
-extension FlyoverSceneView {
-    class Model: NSObject, ObservableObject {
-        var sceneViewProxy: SceneViewProxy?
-        private let configuration: ARWorldTrackingConfiguration
-        private let session = ARSession()
-        private let cameraController: TransformationMatrixCameraController
-        /// The last portrait or landscape orientation value.
-        private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
-        
-        init(initialCamera: Camera, translationFactor: Double) {
-            configuration = ARWorldTrackingConfiguration()
-            configuration.worldAlignment = .gravityAndHeading
-            
-            let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
-            cameraController.translationFactor = translationFactor
-            self.cameraController = cameraController
-            
-            super.init()
-            
-            session.delegate = self
-        }
-        
-        /// Updates the last good device orientation.
-        func updateLastGoodDeviceOrientation() {
-            // Get the device orientation, but don't allow non-landscape/portrait values.
-            let deviceOrientation = UIDevice.current.orientation
-            if deviceOrientation.isValidInterfaceOrientation {
-                lastGoodDeviceOrientation = deviceOrientation
-            }
-        }
-        
-        /// Starts the AR session.
-        func startARSession() {
-            session.run(configuration)
-        }
-        
-        /// Pauses the AR session.
-        func pauseARSession() {
-            session.pause()
-        }
-        
-//        @Published
-//        var currentFrame: ARFrame?
-    }
-}
-
-extension FlyoverSceneView.Model: ARSessionDelegate {
-    func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        updateLastGoodDeviceOrientation()
-        currentFrame = frame
-        sceneViewProxy?.updateCamera(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
-    }
-}
-
 /// A scene view that provides an augmented reality fly over experience.
 public struct FlyoverSceneView: View {
-    @StateObject private var model: Model
+    /// The AR session.
+    @StateObject private var session = ObservableARSession()
+    /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
+    /// The camera controller that we will set on the scene view.
+    @State private var cameraController: TransformationMatrixCameraController
+    /// The last portrait or landscape orientation value.
+    @State var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     
     /// Creates a fly over scene view.
     /// - Parameters:
@@ -82,29 +34,77 @@ public struct FlyoverSceneView: View {
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     /// - Remark: The provided scene view will have certain properties overridden in order to
-    /// be effectively viewed in augmented reality. Properties such as the camera controller,
-    /// and view drawing mode.
+    /// be effectively viewed in augmented reality. One such property is the camera controller.
     public init(
         initialCamera: Camera,
         translationFactor: Double,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         self.sceneViewBuilder = sceneView
-        _model = StateObject(wrappedValue: Model(initialCamera: initialCamera, translationFactor: translationFactor))
+        
+        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+        cameraController.translationFactor = translationFactor
+        _cameraController = .init(initialValue: cameraController)
     }
     
     public var body: some View {
         SceneViewReader { sceneViewProxy in
             sceneViewBuilder(sceneViewProxy)
-                .cameraController(model.cameraController)
-                .onAppear {
-                    model.sceneViewProxy = sceneViewProxy
-                    model.startARSession()
-                }
-                .onDisappear {
-                    model.pauseARSession()
+                .cameraController(cameraController)
+                .onAppear { session.start() }
+                .onDisappear { session.pause() }
+                .onChange(of: session.currentFrame) { frame in
+                    guard let frame else { return }
+                    sceneViewProxy.updateCamera(
+                        frame: frame,
+                        cameraController: cameraController,
+                        orientation: lastGoodDeviceOrientation
+                    )
                 }
         }
+    }
+    
+    /// Updates the last good device orientation.
+    func updateLastGoodDeviceOrientation() {
+        // Get the device orientation, but don't allow non-landscape/portrait values.
+        let deviceOrientation = UIDevice.current.orientation
+        if deviceOrientation.isValidInterfaceOrientation {
+            lastGoodDeviceOrientation = deviceOrientation
+        }
+    }
+}
+
+/// An observable object that wraps an `ARSession` and provides the current frame.
+private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate {
+    /// The configuration used for the AR session.
+    private let configuration: ARWorldTrackingConfiguration
+    
+    /// The backing AR session.
+    private let session = ARSession()
+    
+    override init() {
+        configuration = ARWorldTrackingConfiguration()
+        configuration.worldAlignment = .gravityAndHeading
+        super.init()
+        session.delegate = self
+    }
+    
+    /// Starts the AR session.
+    func start() {
+        session.run(configuration)
+    }
+    
+    /// Pauses the AR session.
+    func pause() {
+        session.pause()
+    }
+    
+    /// The latest AR frame.
+    @Published
+    var currentFrame: ARFrame?
+    
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        currentFrame = frame
     }
 }
 
