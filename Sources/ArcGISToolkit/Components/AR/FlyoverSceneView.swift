@@ -15,64 +15,16 @@ import ARKit
 ***REMOVED***
 ***REMOVED***
 
-extension FlyoverSceneView {
-***REMOVED***class Model: NSObject, ObservableObject {
-***REMOVED******REMOVED***var sceneViewProxy: SceneViewProxy?
-***REMOVED******REMOVED***private let configuration: ARWorldTrackingConfiguration
-***REMOVED******REMOVED***private let session = ARSession()
-***REMOVED******REMOVED***private let cameraController: TransformationMatrixCameraController
-***REMOVED******REMOVED******REMOVED***/ The last portrait or landscape orientation value.
-***REMOVED******REMOVED***private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(initialCamera: Camera, translationFactor: Double) {
-***REMOVED******REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
-***REMOVED******REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
-***REMOVED******REMOVED******REMOVED***cameraController.translationFactor = translationFactor
-***REMOVED******REMOVED******REMOVED***self.cameraController = cameraController
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***super.init()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***session.delegate = self
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Updates the last good device orientation.
-***REMOVED******REMOVED***func updateLastGoodDeviceOrientation() {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Get the device orientation, but don't allow non-landscape/portrait values.
-***REMOVED******REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
-***REMOVED******REMOVED******REMOVED***if deviceOrientation.isValidInterfaceOrientation {
-***REMOVED******REMOVED******REMOVED******REMOVED***lastGoodDeviceOrientation = deviceOrientation
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Starts the AR session.
-***REMOVED******REMOVED***func startARSession() {
-***REMOVED******REMOVED******REMOVED***session.run(configuration)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Pauses the AR session.
-***REMOVED******REMOVED***func pauseARSession() {
-***REMOVED******REMOVED******REMOVED***session.pause()
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@Published
-***REMOVED******REMOVED******REMOVED***var currentFrame: ARFrame?
-***REMOVED***
-***REMOVED***
-
-extension FlyoverSceneView.Model: ARSessionDelegate {
-***REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
-***REMOVED******REMOVED***updateLastGoodDeviceOrientation()
-***REMOVED******REMOVED***currentFrame = frame
-***REMOVED******REMOVED***sceneViewProxy?.updateCamera(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
-***REMOVED***
-***REMOVED***
-
 ***REMOVED***/ A scene view that provides an augmented reality fly over experience.
 public struct FlyoverSceneView: View {
-***REMOVED***@StateObject private var model: Model
+***REMOVED******REMOVED***/ The AR session.
+***REMOVED***@StateObject private var session = ObservableARSession()
+***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
+***REMOVED******REMOVED***/ The camera controller that we will set on the scene view.
+***REMOVED***@State private var cameraController: TransformationMatrixCameraController
+***REMOVED******REMOVED***/ The last portrait or landscape orientation value.
+***REMOVED***@State var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -82,29 +34,77 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
 ***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
-***REMOVED******REMOVED***/ be effectively viewed in augmented reality. Properties such as the camera controller,
-***REMOVED******REMOVED***/ and view drawing mode.
+***REMOVED******REMOVED***/ be effectively viewed in augmented reality. One such property is the camera controller.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***initialCamera: Camera,
 ***REMOVED******REMOVED***translationFactor: Double,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
-***REMOVED******REMOVED***_model = StateObject(wrappedValue: Model(initialCamera: initialCamera, translationFactor: translationFactor))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+***REMOVED******REMOVED***cameraController.translationFactor = translationFactor
+***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(model.cameraController)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.sceneViewProxy = sceneViewProxy
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.startARSession()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.pauseARSession()
+***REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear { session.start() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear { session.pause() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: session.currentFrame) { frame in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let frame else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.updateCamera(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Updates the last good device orientation.
+***REMOVED***func updateLastGoodDeviceOrientation() {
+***REMOVED******REMOVED******REMOVED*** Get the device orientation, but don't allow non-landscape/portrait values.
+***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
+***REMOVED******REMOVED***if deviceOrientation.isValidInterfaceOrientation {
+***REMOVED******REMOVED******REMOVED***lastGoodDeviceOrientation = deviceOrientation
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ An observable object that wraps an `ARSession` and provides the current frame.
+private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate {
+***REMOVED******REMOVED***/ The configuration used for the AR session.
+***REMOVED***private let configuration: ARWorldTrackingConfiguration
+***REMOVED***
+***REMOVED******REMOVED***/ The backing AR session.
+***REMOVED***private let session = ARSession()
+***REMOVED***
+***REMOVED***override init() {
+***REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
+***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
+***REMOVED******REMOVED***super.init()
+***REMOVED******REMOVED***session.delegate = self
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Starts the AR session.
+***REMOVED***func start() {
+***REMOVED******REMOVED***session.run(configuration)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Pauses the AR session.
+***REMOVED***func pause() {
+***REMOVED******REMOVED***session.pause()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The latest AR frame.
+***REMOVED***@Published
+***REMOVED***var currentFrame: ARFrame?
+***REMOVED***
+***REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
+***REMOVED******REMOVED***currentFrame = frame
 ***REMOVED***
 ***REMOVED***
 
