@@ -18,9 +18,9 @@ import ArcGIS
 extension FlyoverSceneView {
     class Model: NSObject, ObservableObject {
         var sceneViewProxy: SceneViewProxy?
-        let configuration: ARWorldTrackingConfiguration
-        let session = ARSession()
-        let cameraController: TransformationMatrixCameraController
+        private let configuration: ARWorldTrackingConfiguration
+        private let session = ARSession()
+        private let cameraController: TransformationMatrixCameraController
         /// The last portrait or landscape orientation value.
         private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
         
@@ -46,28 +46,33 @@ extension FlyoverSceneView {
             }
         }
         
+        /// Starts the AR session.
         func startARSession() {
             session.run(configuration)
         }
         
+        /// Pauses the AR session.
         func pauseARSession() {
             session.pause()
         }
+        
+//        @Published
+//        var currentFrame: ARFrame?
     }
 }
 
 extension FlyoverSceneView.Model: ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         updateLastGoodDeviceOrientation()
+        currentFrame = frame
         sceneViewProxy?.updateCamera(frame: frame, cameraController: cameraController, orientation: lastGoodDeviceOrientation)
     }
 }
 
 /// A scene view that provides an augmented reality fly over experience.
 public struct FlyoverSceneView: View {
-    @State private var arViewProxy = ARSwiftUIViewProxy()
-    private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     @StateObject private var model: Model
+    private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     
     /// Creates a fly over scene view.
     /// - Parameters:
