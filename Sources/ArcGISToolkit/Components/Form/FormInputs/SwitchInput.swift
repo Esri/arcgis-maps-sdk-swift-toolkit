@@ -57,8 +57,8 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED***ComboBoxInput(
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm: featureForm,
 ***REMOVED******REMOVED******REMOVED******REMOVED***element: element,
-***REMOVED******REMOVED******REMOVED******REMOVED***noValueLabel: "",
-***REMOVED******REMOVED******REMOVED******REMOVED***noValueOption: .hide
+***REMOVED******REMOVED******REMOVED******REMOVED***noValueLabel: .noValue,
+***REMOVED******REMOVED******REMOVED******REMOVED***noValueOption: .show
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Group {
