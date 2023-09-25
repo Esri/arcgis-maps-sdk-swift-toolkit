@@ -24,6 +24,7 @@ struct ARSwiftUIView {
 ***REMOVED***private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED***private(set) var onSingleTapGesture: ((CGPoint) -> Void)?
 ***REMOVED***private(set) var videoFeedIsHidden: Bool = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The proxy.
 ***REMOVED***private let proxy: ARSwiftUIViewProxy?
 ***REMOVED***
