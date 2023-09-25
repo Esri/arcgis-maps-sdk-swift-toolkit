@@ -61,7 +61,7 @@ public struct TableTopSceneView: View {
     public var body: some View {
         ZStack {
             ARSwiftUIView(proxy: arViewProxy)
-                .onRender { _, _, _ in
+                .onDidUpdateFrame { _, frame in
                     guard let sceneViewProxy else { return }
                     updateLastGoodDeviceOrientation()
                     sceneViewProxy.draw(
