@@ -57,8 +57,8 @@ struct SwitchInput: View {
             ComboBoxInput(
                 featureForm: featureForm,
                 element: element,
-                noValueLabel: "",
-                noValueOption: .hide
+                noValueLabel: .noValue,
+                noValueOption: .show
             )
         } else {
             Group {
