@@ -61,7 +61,7 @@ public struct TableTopSceneView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onRender { _, _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateLastGoodDeviceOrientation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.draw(
