@@ -11,8 +11,9 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Foundation
 ***REMOVED***
+import Combine
+import Foundation
 
 ***REMOVED***/ Uses a Locator to provide search and suggest results. Most configuration should be done on the
 ***REMOVED***/ `GeocodeParameters` directly.

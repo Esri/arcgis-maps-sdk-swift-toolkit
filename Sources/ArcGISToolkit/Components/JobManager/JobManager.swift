@@ -13,6 +13,7 @@
 
 ***REMOVED***
 import BackgroundTasks
+import Combine
 import Foundation
 import OSLog
 ***REMOVED***
