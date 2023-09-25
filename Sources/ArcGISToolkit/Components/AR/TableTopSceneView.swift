@@ -64,11 +64,15 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateLastGoodDeviceOrientation()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.draw(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: arViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.updateCamera(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation: initialTransformation ?? .identity
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.setFieldOfView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: frame,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { _, node, anchor in
@@ -100,7 +104,6 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.sceneViewProxy = proxy
@@ -238,5 +241,25 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED***let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return initialTransformation
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the field of view for the scene view's camera for a given augmented reality frame.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - frame: The current AR frame.
+***REMOVED******REMOVED***/   - orientation: The device orientation.
+***REMOVED***func setFieldOfView(for frame: ARFrame, orientation: UIDeviceOrientation) {
+***REMOVED******REMOVED***let camera = frame.camera
+***REMOVED******REMOVED***let intrinsics = camera.intrinsics
+***REMOVED******REMOVED***let imageResolution = camera.imageResolution
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***setFieldOfViewFromLensIntrinsics(
+***REMOVED******REMOVED******REMOVED***xFocalLength: intrinsics[0][0],
+***REMOVED******REMOVED******REMOVED***yFocalLength: intrinsics[1][1],
+***REMOVED******REMOVED******REMOVED***xPrincipal: intrinsics[2][0],
+***REMOVED******REMOVED******REMOVED***yPrincipal: intrinsics[2][1],
+***REMOVED******REMOVED******REMOVED***xImageSize: Float(imageResolution.width),
+***REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
+***REMOVED******REMOVED******REMOVED***deviceOrientation: orientation
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

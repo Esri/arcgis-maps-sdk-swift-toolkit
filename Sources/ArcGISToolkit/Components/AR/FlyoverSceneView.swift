@@ -118,7 +118,7 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***frame: ARFrame,
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
 ***REMOVED******REMOVED***orientation: UIDeviceOrientation,
-***REMOVED******REMOVED***initialTransformation: TransformationMatrix = .identity
+***REMOVED******REMOVED***initialTransformation: TransformationMatrix? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***let transform = frame.camera.transform(for: orientation)
 ***REMOVED******REMOVED***let quaternion = simd_quatf(transform)
@@ -133,7 +133,11 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the matrix on the camera controller.
-***REMOVED******REMOVED***cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
+***REMOVED******REMOVED***if let initialTransformation {
+***REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = transformationMatrix
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
