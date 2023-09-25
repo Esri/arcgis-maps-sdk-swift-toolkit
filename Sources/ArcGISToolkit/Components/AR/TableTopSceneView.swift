@@ -64,11 +64,15 @@ public struct TableTopSceneView: View {
                 .onDidUpdateFrame { _, frame in
                     guard let sceneViewProxy else { return }
                     updateLastGoodDeviceOrientation()
-                    sceneViewProxy.draw(
-                        for: arViewProxy,
+                    sceneViewProxy.updateCamera(
+                        frame: frame,
                         cameraController: cameraController,
                         orientation: lastGoodDeviceOrientation,
                         initialTransformation: initialTransformation ?? .identity
+                    )
+                    sceneViewProxy.setFieldOfView(
+                        for: frame,
+                        orientation: lastGoodDeviceOrientation
                     )
                 }
                 .onAddNode { _, node, anchor in
@@ -100,7 +104,6 @@ public struct TableTopSceneView: View {
                     .cameraController(cameraController)
                     .attributionBarHidden(true)
                     .spaceEffect(.transparent)
-                    .viewDrawingMode(.manual)
                     .atmosphereEffect(.off)
                     .onAppear {
                         self.sceneViewProxy = proxy
@@ -238,5 +241,25 @@ private extension SceneViewProxy {
         let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
         
         return initialTransformation
+    }
+    
+    /// Sets the field of view for the scene view's camera for a given augmented reality frame.
+    /// - Parameters:
+    ///   - frame: The current AR frame.
+    ///   - orientation: The device orientation.
+    func setFieldOfView(for frame: ARFrame, orientation: UIDeviceOrientation) {
+        let camera = frame.camera
+        let intrinsics = camera.intrinsics
+        let imageResolution = camera.imageResolution
+        
+        setFieldOfViewFromLensIntrinsics(
+            xFocalLength: intrinsics[0][0],
+            yFocalLength: intrinsics[1][1],
+            xPrincipal: intrinsics[2][0],
+            yPrincipal: intrinsics[2][1],
+            xImageSize: Float(imageResolution.width),
+            yImageSize: Float(imageResolution.height),
+            deviceOrientation: orientation
+        )
     }
 }
