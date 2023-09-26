@@ -22,7 +22,6 @@ struct ARSwiftUIView {
     private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
     private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
     private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
-    private(set) var onSingleTapGesture: ((CGPoint) -> Void)?
     
     /// The proxy.
     private let proxy: ARSwiftUIViewProxy?
@@ -60,15 +59,6 @@ struct ARSwiftUIView {
         view.onUpdateNodeAction = action
         return view
     }
-    
-    /// Sets a closure to perform when a single tap occurs on the AR view.
-    func onSingleTapGesture(
-        perform action: @escaping (CGPoint) -> Void
-    ) -> Self {
-        var view = self
-        view.onSingleTapGesture = action
-        return view
-    }
 }
 
 extension ARSwiftUIView: UIViewRepresentable {
@@ -76,7 +66,6 @@ extension ARSwiftUIView: UIViewRepresentable {
         let arView = ARViewType()
         arView.delegate = context.coordinator
         arView.session.delegate = context.coordinator
-        arView.addGestureRecognizer(context.coordinator.makeGestureRecognizer())
         proxy?.arView = arView
         return arView
     }
@@ -85,7 +74,6 @@ extension ARSwiftUIView: UIViewRepresentable {
         context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
         context.coordinator.onAddNodeAction = onAddNodeAction
         context.coordinator.onUpdateNodeAction = onUpdateNodeAction
-        context.coordinator.onSingleTapGesture = onSingleTapGesture
     }
     
     func makeCoordinator() -> Coordinator {
@@ -98,7 +86,6 @@ extension ARSwiftUIView {
         var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
         var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
         var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
-        var onSingleTapGesture: ((CGPoint) -> Void)?
         
         func session(_ session: ARSession, didUpdate frame: ARFrame) {
             onDidUpdateFrameAction?(session, frame)
@@ -110,17 +97,6 @@ extension ARSwiftUIView {
         
         func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
             onUpdateNodeAction?(renderer, node, anchor)
-        }
-        
-        func makeGestureRecognizer() -> UITapGestureRecognizer {
-            let tapGestureRecognizer = UITapGestureRecognizer()
-            tapGestureRecognizer.addTarget(self, action: #selector(handleTap))
-            return tapGestureRecognizer
-        }
-        
-        @objc private func handleTap(_ sender: UIGestureRecognizer) {
-            guard let view = sender.view else { return }
-            onSingleTapGesture?(sender.location(in: view))
         }
     }
 }
