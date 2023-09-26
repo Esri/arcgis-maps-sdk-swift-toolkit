@@ -52,7 +52,7 @@ struct ARSwiftUIView {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the closure to call when the scene's nodes are update.
+***REMOVED******REMOVED***/ Sets the closure to call when the scene's nodes are updated.
 ***REMOVED***func onUpdateNode(
 ***REMOVED******REMOVED***perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
 ***REMOVED***) -> Self {

@@ -83,7 +83,8 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  !initialTransformationIsSet else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  !initialTransformationIsSet
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let transformation = sceneViewProxy.initialTransformation(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: arViewProxy,
@@ -147,7 +148,8 @@ public struct TableTopSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let planeAnchor = anchor as? ARPlaneAnchor,
-***REMOVED******REMOVED******REMOVED***  let plane = node.childNodes.first as? Plane else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***  let plane = node.childNodes.first as? Plane
+***REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Update extent visualization to the anchor's new bounding rectangle.
 ***REMOVED******REMOVED***if let extentGeometry = plane.node.geometry as? SCNPlane {
@@ -159,7 +161,7 @@ public struct TableTopSceneView: View {
 ***REMOVED***
 
 ***REMOVED***/ A helper class to visualize a plane found by ARKit.
-class Plane: SCNNode {
+private class Plane: SCNNode {
 ***REMOVED***let node: SCNNode
 ***REMOVED***
 ***REMOVED***init?(anchor: ARPlaneAnchor) {
