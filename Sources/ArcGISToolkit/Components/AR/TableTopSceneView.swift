@@ -83,7 +83,8 @@ public struct TableTopSceneView: View {
                 }
                 .onSingleTapGesture { screenPoint in
                     guard let sceneViewProxy,
-                          !initialTransformationIsSet else { return }
+                          !initialTransformationIsSet
+                    else { return }
                     
                     if let transformation = sceneViewProxy.initialTransformation(
                         for: arViewProxy,
@@ -147,7 +148,8 @@ public struct TableTopSceneView: View {
         }
         
         guard let planeAnchor = anchor as? ARPlaneAnchor,
-              let plane = node.childNodes.first as? Plane else { return }
+              let plane = node.childNodes.first as? Plane
+        else { return }
         
         // Update extent visualization to the anchor's new bounding rectangle.
         if let extentGeometry = plane.node.geometry as? SCNPlane {
@@ -159,7 +161,7 @@ public struct TableTopSceneView: View {
 }
 
 /// A helper class to visualize a plane found by ARKit.
-class Plane: SCNNode {
+private class Plane: SCNNode {
     let node: SCNNode
     
     init?(anchor: ARPlaneAnchor) {

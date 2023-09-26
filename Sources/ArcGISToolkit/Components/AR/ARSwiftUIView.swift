@@ -52,7 +52,7 @@ struct ARSwiftUIView {
         return view
     }
     
-    /// Sets the closure to call when the scene's nodes are update.
+    /// Sets the closure to call when the scene's nodes are updated.
     func onUpdateNode(
         perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
     ) -> Self {
