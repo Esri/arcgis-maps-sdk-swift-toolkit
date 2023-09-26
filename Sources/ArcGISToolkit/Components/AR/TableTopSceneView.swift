@@ -68,7 +68,7 @@ public struct TableTopSceneView: View {
                         frame: frame,
                         cameraController: cameraController,
                         orientation: lastGoodDeviceOrientation,
-                        initialTransformation: initialTransformation ?? .identity
+                        initialTransformation: initialTransformation
                     )
                     sceneViewProxy.setFieldOfView(
                         for: frame,
@@ -156,6 +156,27 @@ public struct TableTopSceneView: View {
             extentGeometry.width = CGFloat(planeAnchor.extent.x)
             extentGeometry.height = CGFloat(planeAnchor.extent.z)
             plane.node.simdPosition = planeAnchor.center
+        }
+    }
+}
+
+private extension View {
+    /// Sets a closure to perform when a single tap occurs on the view.
+    /// - Parameters:
+    ///   - action: The closure to perform upon single tap.
+    ///   - screenPoint: The location of the tap in the view's coordinate space.
+    func onSingleTapGesture(perform action: @escaping (_ screenPoint: CGPoint) -> Void) -> some View {
+        if #available(iOS 16.0, *) {
+            return self.onTapGesture { screenPoint in
+                action(screenPoint)
+            }
+        } else {
+            return self.gesture(
+                DragGesture()
+                    .onEnded { screenPoint in
+                        action(screenPoint.location)
+                    }
+            )
         }
     }
 }
