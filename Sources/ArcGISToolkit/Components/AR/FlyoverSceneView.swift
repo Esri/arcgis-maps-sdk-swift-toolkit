@@ -17,12 +17,14 @@ import ArcGIS
 
 /// A scene view that provides an augmented reality fly over experience.
 public struct FlyoverSceneView: View {
+    /// The AR session.
+    @StateObject private var session = ObservableARSession()
+    /// The closure that builds the scene view.
+    private let sceneViewBuilder: (SceneViewProxy) -> SceneView
+    /// The camera controller that we will set on the scene view.
+    @State private var cameraController: TransformationMatrixCameraController
     /// The last portrait or landscape orientation value.
     @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
-    @State private var arViewProxy = ARSwiftUIViewProxy()
-    @State private var cameraController: TransformationMatrixCameraController
-    private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-    private let configuration: ARWorldTrackingConfiguration
     
     /// Creates a fly over scene view.
     /// - Parameters:
@@ -32,8 +34,7 @@ public struct FlyoverSceneView: View {
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     /// - Remark: The provided scene view will have certain properties overridden in order to
-    /// be effectively viewed in augmented reality. Properties such as the camera controller,
-    /// and view drawing mode.
+    /// be effectively viewed in augmented reality. One such property is the camera controller.
     public init(
         initialCamera: Camera,
         translationFactor: Double,
@@ -44,35 +45,23 @@ public struct FlyoverSceneView: View {
         let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
         cameraController.translationFactor = translationFactor
         _cameraController = .init(initialValue: cameraController)
-        
-        configuration = ARWorldTrackingConfiguration()
-        configuration.worldAlignment = .gravityAndHeading
     }
     
     public var body: some View {
-        ZStack {
-            SceneViewReader { sceneViewProxy in
-                sceneViewBuilder(sceneViewProxy)
-                    .cameraController(cameraController)
-                    .viewDrawingMode(.manual)
-                ARSwiftUIView(proxy: arViewProxy)
-                    .onRender { _, _, _ in
-                        updateLastGoodDeviceOrientation()
-                        sceneViewProxy.draw(
-                            for: arViewProxy,
-                            cameraController: cameraController,
-                            orientation: lastGoodDeviceOrientation
-                        )
-                    }
-                    .videoFeedHidden()
-                    .disabled(true)
-                    .onAppear {
-                        arViewProxy.session?.run(configuration)
-                    }
-                    .onDisappear {
-                        arViewProxy.session?.pause()
-                    }
-            }
+        SceneViewReader { sceneViewProxy in
+            sceneViewBuilder(sceneViewProxy)
+                .cameraController(cameraController)
+                .onAppear { session.start() }
+                .onDisappear { session.pause() }
+                .onChange(of: session.currentFrame) { frame in
+                    guard let frame else { return }
+                    updateLastGoodDeviceOrientation()
+                    sceneViewProxy.updateCamera(
+                        frame: frame,
+                        cameraController: cameraController,
+                        orientation: lastGoodDeviceOrientation
+                    )
+                }
         }
     }
     
@@ -86,55 +75,104 @@ public struct FlyoverSceneView: View {
     }
 }
 
+/// An observable object that wraps an `ARSession` and provides the current frame.
+private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate {
+    /// The configuration used for the AR session.
+    private let configuration: ARWorldTrackingConfiguration
+    
+    /// The backing AR session.
+    private let session = ARSession()
+    
+    override init() {
+        configuration = ARWorldTrackingConfiguration()
+        configuration.worldAlignment = .gravityAndHeading
+        super.init()
+        session.delegate = self
+    }
+    
+    /// Starts the AR session.
+    func start() {
+        session.run(configuration)
+    }
+    
+    /// Pauses the AR session.
+    func pause() {
+        session.pause()
+    }
+    
+    /// The latest AR frame.
+    @Published
+    var currentFrame: ARFrame?
+    
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        currentFrame = frame
+    }
+}
+
 extension SceneViewProxy {
-    /// Draws the scene view manually and sets the camera for a given augmented reality view.
+    /// Updates the scene view's camera for a given augmented reality frame.
     /// - Parameters:
-    ///   - arViewProxy: The AR view proxy.
+    ///   - frame: The current AR frame.
     ///   - cameraController: The current camera controller assigned to the scene view.
     ///   - orientation: The device orientation.
-    func draw(
-        for arViewProxy: ARSwiftUIViewProxy,
+    func updateCamera(
+        frame: ARFrame,
         cameraController: TransformationMatrixCameraController,
         orientation: UIDeviceOrientation
     ) {
-        
-        // Get transform from SCNView.pointOfView.
-        guard let transform = arViewProxy.pointOfView?.transform else { return }
-        guard let session = arViewProxy.session else { return }
-        
-        let cameraTransform = simd_double4x4(transform)
-        
-        let cameraQuat = simd_quatd(cameraTransform)
+        let transform = frame.camera.transform(for: orientation)
+        let quaternion = simd_quatf(transform)
         let transformationMatrix = TransformationMatrix.normalized(
-            quaternionX: cameraQuat.vector.x,
-            quaternionY: cameraQuat.vector.y,
-            quaternionZ: cameraQuat.vector.z,
-            quaternionW: cameraQuat.vector.w,
-            translationX: cameraTransform.columns.3.x,
-            translationY: cameraTransform.columns.3.y,
-            translationZ: cameraTransform.columns.3.z
+            quaternionX: Double(quaternion.vector.x),
+            quaternionY: Double(quaternion.vector.y),
+            quaternionZ: Double(quaternion.vector.z),
+            quaternionW: Double(quaternion.vector.w),
+            translationX: Double(transform.columns.3.x),
+            translationY: Double(transform.columns.3.y),
+            translationZ: Double(transform.columns.3.z)
         )
         
         // Set the matrix on the camera controller.
         cameraController.transformationMatrix = .identity.adding(transformationMatrix)
-        
-        // Set FOV on camera.
-        if let camera = session.currentFrame?.camera {
-            let intrinsics = camera.intrinsics
-            let imageResolution = camera.imageResolution
-            
-            setFieldOfViewFromLensIntrinsics(
-                xFocalLength: intrinsics[0][0],
-                yFocalLength: intrinsics[1][1],
-                xPrincipal: intrinsics[2][0],
-                yPrincipal: intrinsics[2][1],
-                xImageSize: Float(imageResolution.width),
-                yImageSize: Float(imageResolution.height),
-                deviceOrientation: orientation
+    }
+}
+
+private extension ARCamera {
+    /// The transform rotated for a particular device orientation.
+    /// - Parameter orientation: The device orientation that the transform is appropriate for.
+    /// - Precondition: 'orientation.isValidInterfaceOrientation'
+    func transform(for orientation: UIDeviceOrientation) -> simd_float4x4 {
+        precondition(orientation.isValidInterfaceOrientation)
+        switch orientation {
+        case .portrait:
+            // Rotate camera transform 90 degrees clockwise in the XY plane.
+            return simd_float4x4(
+                transform.columns.1,
+                -transform.columns.0,
+                transform.columns.2,
+                transform.columns.3
             )
+        case .landscapeLeft:
+            // No rotation necessary.
+            return transform
+        case .landscapeRight:
+            // Rotate 180.
+            return simd_float4x4(
+                -transform.columns.0,
+                -transform.columns.1,
+                transform.columns.2,
+                transform.columns.3
+            )
+        case .portraitUpsideDown:
+            // Rotate 90 counter clockwise.
+            return simd_float4x4(
+                -transform.columns.1,
+                transform.columns.0,
+                transform.columns.2,
+                transform.columns.3
+            )
+        default:
+            preconditionFailure()
         }
-        
-        // Render the Scene with the new transformation.
-        draw()
     }
 }
