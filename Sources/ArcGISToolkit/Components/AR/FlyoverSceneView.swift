@@ -24,7 +24,7 @@ public struct FlyoverSceneView: View {
     /// The camera controller that we will set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
     /// The last portrait or landscape orientation value.
-    @State var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
+    @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     
     /// Creates a fly over scene view.
     /// - Parameters:
