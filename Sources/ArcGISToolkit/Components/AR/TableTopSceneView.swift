@@ -68,7 +68,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation: initialTransformation ?? .identity
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation: initialTransformation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.setFieldOfView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: frame,
@@ -156,6 +156,27 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED***extentGeometry.width = CGFloat(planeAnchor.extent.x)
 ***REMOVED******REMOVED******REMOVED***extentGeometry.height = CGFloat(planeAnchor.extent.z)
 ***REMOVED******REMOVED******REMOVED***plane.node.simdPosition = planeAnchor.center
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension View {
+***REMOVED******REMOVED***/ Sets a closure to perform when a single tap occurs on the view.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - action: The closure to perform upon single tap.
+***REMOVED******REMOVED***/   - screenPoint: The location of the tap in the view's coordinate space.
+***REMOVED***func onSingleTapGesture(perform action: @escaping (_ screenPoint: CGPoint) -> Void) -> some View {
+***REMOVED******REMOVED***if #available(iOS 16.0, *) {
+***REMOVED******REMOVED******REMOVED***return self.onTapGesture { screenPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED***action(screenPoint)
+***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return self.gesture(
+***REMOVED******REMOVED******REMOVED******REMOVED***DragGesture()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onEnded { screenPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(screenPoint.location)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
