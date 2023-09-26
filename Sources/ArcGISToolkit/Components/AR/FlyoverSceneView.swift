@@ -55,6 +55,7 @@ public struct FlyoverSceneView: View {
                 .onDisappear { session.pause() }
                 .onChange(of: session.currentFrame) { frame in
                     guard let frame else { return }
+                    updateLastGoodDeviceOrientation()
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
