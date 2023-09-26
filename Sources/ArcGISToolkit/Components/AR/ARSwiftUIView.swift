@@ -23,7 +23,6 @@ struct ARSwiftUIView {
 ***REMOVED***private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED***private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED***private(set) var onSingleTapGesture: ((CGPoint) -> Void)?
-***REMOVED***private(set) var videoFeedIsHidden: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The proxy.
 ***REMOVED***private let proxy: ARSwiftUIViewProxy?
@@ -71,13 +70,6 @@ struct ARSwiftUIView {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Hides the video feed for the AR view.
-***REMOVED***func videoFeedHidden() -> Self {
-***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.videoFeedIsHidden = true
-***REMOVED******REMOVED***return view
-***REMOVED***
-***REMOVED***
 
 extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***func makeUIView(context: Context) -> ARViewType {
@@ -94,7 +86,6 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED******REMOVED***context.coordinator.onAddNodeAction = onAddNodeAction
 ***REMOVED******REMOVED***context.coordinator.onUpdateNodeAction = onUpdateNodeAction
 ***REMOVED******REMOVED***context.coordinator.onSingleTapGesture = onSingleTapGesture
-***REMOVED******REMOVED***uiView.isHidden = videoFeedIsHidden
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCoordinator() -> Coordinator {
