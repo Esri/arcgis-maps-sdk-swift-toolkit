@@ -80,7 +80,7 @@ struct SwitchInput: View {
             }
             .onChange(of: switchState) { newValue in
                 let codedValue = newValue ? input.onValue : input.offValue
-                featureForm?.feature.setAttributeValue(codedValue, forKey: element.fieldName)
+                featureForm?.feature.setAttributeValue(codedValue.code, forKey: element.fieldName)
             }
         }
     }
