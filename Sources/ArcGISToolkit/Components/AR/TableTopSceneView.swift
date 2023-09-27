@@ -173,8 +173,8 @@ private extension View {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return self.gesture(
 ***REMOVED******REMOVED******REMOVED******REMOVED***DragGesture()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onEnded { screenPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(screenPoint.location)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onEnded { dragAttributes in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(dragAttributes.location)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
