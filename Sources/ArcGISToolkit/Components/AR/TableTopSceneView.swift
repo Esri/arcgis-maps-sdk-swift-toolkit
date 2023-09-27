@@ -128,7 +128,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/   - renderer: The renderer for the scene.
 ***REMOVED******REMOVED***/   - node: The node to be added to the scene.
 ***REMOVED******REMOVED***/   - anchor: The anchor position of the node.
-***REMOVED***func addPlane(renderer: SCNSceneRenderer, node: SCNNode, for anchor: ARAnchor) {
+***REMOVED***private func addPlane(renderer: SCNSceneRenderer, node: SCNNode, for anchor: ARAnchor) {
 ***REMOVED******REMOVED***guard let planeAnchor = anchor as? ARPlaneAnchor,
 ***REMOVED******REMOVED******REMOVED***  let device = renderer.device,
 ***REMOVED******REMOVED******REMOVED***  let planeGeometry = ARSCNPlaneGeometry(device: device)
@@ -150,13 +150,14 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***node.addChildNode(planeNode)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Visualizes a node updated in scene as an AR Plane.
+***REMOVED******REMOVED***/ Visualizes a node updated in the scene as an AR Plane.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - node: The node to be updated in the scene.
 ***REMOVED******REMOVED***/   - anchor: The anchor position of the node.
 ***REMOVED***private func updatePlane(with node: SCNNode, for anchor: ARAnchor) {
 ***REMOVED******REMOVED***if initialTransformationIsSet {
 ***REMOVED******REMOVED******REMOVED***node.removeFromParentNode()
+***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let planeAnchor = anchor as? ARPlaneAnchor,
