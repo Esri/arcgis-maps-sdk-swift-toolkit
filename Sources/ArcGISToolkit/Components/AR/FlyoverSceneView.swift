@@ -191,47 +191,47 @@ private extension ARCamera {
     }
 }
 
-struct InterfaceOrientationReader: UIViewRepresentable {
+struct InterfaceOrientationReader: UIViewControllerRepresentable {
     let binding: Binding<UIInterfaceOrientation?>
     
     init(interfaceOrientation: Binding<UIInterfaceOrientation?>) {
         binding = interfaceOrientation
     }
     
-    func makeUIView(context: Context) -> InterfaceOrientationView {
-        InterfaceOrientationView(interfaceOrientation: binding)
+    func makeUIViewController(context: Context) -> InterfaceOrientationViewController {
+        InterfaceOrientationViewController(interfaceOrientation: binding)
     }
     
-    func updateUIView(_ uiView: InterfaceOrientationView, context: Context) {
-    }
+    func updateUIViewController(_ uiView: InterfaceOrientationViewController, context: Context) {}
 }
 
-class InterfaceOrientationView: UIView {
+final class InterfaceOrientationViewController: UIViewController {
     let binding: Binding<UIInterfaceOrientation?>
     
     init(interfaceOrientation: Binding<UIInterfaceOrientation?>) {
         binding = interfaceOrientation
-        super.init(frame: .zero)
-//        NotificationCenter.default.addObserver(forName: .de, object: <#T##Any?#>, queue: <#T##OperationQueue?#>, using: <#T##(Notification) -> Void#>)
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    var interfaceOrientation: UIInterfaceOrientation? {
-//        fatalError()
-        return self.window?.windowScene?.interfaceOrientation
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.binding.wrappedValue = self.windowInterfaceOrientation
     }
     
-    override func layoutSubviews() {
-        binding.wrappedValue = interfaceOrientation
-        super.layoutSubviews()
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        coordinator.animate { _ in
+            self.binding.wrappedValue = self.windowInterfaceOrientation
+        }
     }
     
-    override func updateConstraints() {
-        binding.wrappedValue = interfaceOrientation
-        super.updateConstraints()
+    var windowInterfaceOrientation: UIInterfaceOrientation? {
+        view.window?.windowScene?.interfaceOrientation
     }
+    
 }
