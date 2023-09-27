@@ -18,9 +18,11 @@ typealias ARViewType = ARSCNView
 
 ***REMOVED***/ A SwiftUI version of an AR view.
 struct ARSwiftUIView {
-***REMOVED******REMOVED***/ The closure to call when the AR view renders.
+***REMOVED******REMOVED***/ The closure to call when the session's frame updates.
 ***REMOVED***private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
+***REMOVED******REMOVED***/ The closure to call when a node corresponding to a new anchor has been added to the view.
 ***REMOVED***private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+***REMOVED******REMOVED***/ The closure to call when a node has been updated to match it's corresponding anchor.
 ***REMOVED***private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The proxy.
@@ -66,6 +68,7 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED******REMOVED***let arView = ARViewType()
 ***REMOVED******REMOVED***arView.delegate = context.coordinator
 ***REMOVED******REMOVED***arView.session.delegate = context.coordinator
+***REMOVED******REMOVED******REMOVED*** Set the AR view on the proxy.
 ***REMOVED******REMOVED***proxy?.arView = arView
 ***REMOVED******REMOVED***return arView
 ***REMOVED***
