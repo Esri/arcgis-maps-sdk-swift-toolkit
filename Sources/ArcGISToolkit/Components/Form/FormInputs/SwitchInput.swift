@@ -103,6 +103,8 @@ extension SwitchInput {
 ***REMOVED******REMOVED******REMOVED***return Int32(element.value) == value
 ***REMOVED******REMOVED***case let value as Int64:
 ***REMOVED******REMOVED******REMOVED***return Int64(element.value) == value
+***REMOVED******REMOVED***case let value as String:
+***REMOVED******REMOVED******REMOVED***return element.value == value
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
