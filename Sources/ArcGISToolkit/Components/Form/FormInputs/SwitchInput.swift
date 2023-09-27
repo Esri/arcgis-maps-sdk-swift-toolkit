@@ -87,6 +87,10 @@ struct SwitchInput: View {
 }
 
 extension SwitchInput {
+    /// A Boolean value indicating whether the switch is toggled on or off.
+    ///
+    /// Element values are provided as Strings whereas input on/off value codes may be a number of
+    /// types. We must cast the element value string to the correct type to perform an accurate check.
     var isOn: Bool {
         switch input.onValue.code {
         case let value as Double:
