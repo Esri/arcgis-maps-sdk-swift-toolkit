@@ -87,6 +87,10 @@ struct SwitchInput: View {
 ***REMOVED***
 
 extension SwitchInput {
+***REMOVED******REMOVED***/ A Boolean value indicating whether the switch is toggled on or off.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Element values are provided as Strings whereas input on/off value codes may be a number of
+***REMOVED******REMOVED***/ types. We must cast the element value string to the correct type to perform an accurate check.
 ***REMOVED***var isOn: Bool {
 ***REMOVED******REMOVED***switch input.onValue.code {
 ***REMOVED******REMOVED***case let value as Double:
