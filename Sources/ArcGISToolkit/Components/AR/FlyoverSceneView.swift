@@ -191,47 +191,47 @@ private extension ARCamera {
 ***REMOVED***
 ***REMOVED***
 
-struct InterfaceOrientationReader: UIViewRepresentable {
+struct InterfaceOrientationReader: UIViewControllerRepresentable {
 ***REMOVED***let binding: Binding<UIInterfaceOrientation?>
 ***REMOVED***
 ***REMOVED***init(interfaceOrientation: Binding<UIInterfaceOrientation?>) {
 ***REMOVED******REMOVED***binding = interfaceOrientation
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func makeUIView(context: Context) -> InterfaceOrientationView {
-***REMOVED******REMOVED***InterfaceOrientationView(interfaceOrientation: binding)
+***REMOVED***func makeUIViewController(context: Context) -> InterfaceOrientationViewController {
+***REMOVED******REMOVED***InterfaceOrientationViewController(interfaceOrientation: binding)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func updateUIView(_ uiView: InterfaceOrientationView, context: Context) {
-***REMOVED***
+***REMOVED***func updateUIViewController(_ uiView: InterfaceOrientationViewController, context: Context) {***REMOVED***
 ***REMOVED***
 
-class InterfaceOrientationView: UIView {
+final class InterfaceOrientationViewController: UIViewController {
 ***REMOVED***let binding: Binding<UIInterfaceOrientation?>
 ***REMOVED***
 ***REMOVED***init(interfaceOrientation: Binding<UIInterfaceOrientation?>) {
 ***REMOVED******REMOVED***binding = interfaceOrientation
-***REMOVED******REMOVED***super.init(frame: .zero)
-***REMOVED******REMOVED******REMOVED***NotificationCenter.default.addObserver(forName: .de, object: <#T##Any?#>, queue: <#T##OperationQueue?#>, using: <#T##(Notification) -> Void#>)
+***REMOVED******REMOVED***super.init(nibName: nil, bundle: nil)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***required init?(coder: NSCoder) {
 ***REMOVED******REMOVED***fatalError("init(coder:) has not been implemented")
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***var interfaceOrientation: UIInterfaceOrientation? {
-***REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED***return self.window?.windowScene?.interfaceOrientation
-***REMOVED***
-***REMOVED***
-***REMOVED***override func layoutSubviews() {
-***REMOVED******REMOVED***binding.wrappedValue = interfaceOrientation
-***REMOVED******REMOVED***super.layoutSubviews()
+***REMOVED***override func viewDidAppear(_ animated: Bool) {
+***REMOVED******REMOVED***super.viewDidAppear(animated)
+***REMOVED******REMOVED***self.binding.wrappedValue = self.windowInterfaceOrientation
 ***REMOVED***
 ***REMOVED***
-***REMOVED***override func updateConstraints() {
-***REMOVED******REMOVED***binding.wrappedValue = interfaceOrientation
-***REMOVED******REMOVED***super.updateConstraints()
+***REMOVED***override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+***REMOVED******REMOVED***super.viewWillTransition(to: size, with: coordinator)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***coordinator.animate { _ in
+***REMOVED******REMOVED******REMOVED***self.binding.wrappedValue = self.windowInterfaceOrientation
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var windowInterfaceOrientation: UIInterfaceOrientation? {
+***REMOVED******REMOVED***view.window?.windowScene?.interfaceOrientation
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
