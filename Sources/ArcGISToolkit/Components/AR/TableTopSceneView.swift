@@ -128,7 +128,7 @@ public struct TableTopSceneView: View {
     ///   - renderer: The renderer for the scene.
     ///   - node: The node to be added to the scene.
     ///   - anchor: The anchor position of the node.
-    func addPlane(renderer: SCNSceneRenderer, node: SCNNode, for anchor: ARAnchor) {
+    private func addPlane(renderer: SCNSceneRenderer, node: SCNNode, for anchor: ARAnchor) {
         guard let planeAnchor = anchor as? ARPlaneAnchor,
               let device = renderer.device,
               let planeGeometry = ARSCNPlaneGeometry(device: device)
@@ -150,13 +150,14 @@ public struct TableTopSceneView: View {
         node.addChildNode(planeNode)
     }
     
-    /// Visualizes a node updated in scene as an AR Plane.
+    /// Visualizes a node updated in the scene as an AR Plane.
     /// - Parameters:
     ///   - node: The node to be updated in the scene.
     ///   - anchor: The anchor position of the node.
     private func updatePlane(with node: SCNNode, for anchor: ARAnchor) {
         if initialTransformationIsSet {
             node.removeFromParentNode()
+            return
         }
         
         guard let planeAnchor = anchor as? ARPlaneAnchor,
