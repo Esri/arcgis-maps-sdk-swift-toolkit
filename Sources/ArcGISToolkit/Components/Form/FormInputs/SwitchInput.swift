@@ -64,8 +64,8 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED******REMOVED******REMOVED***Toggle(element.label, isOn: $switchState)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.switch)
+***REMOVED******REMOVED******REMOVED******REMOVED***Toggle(switchState ? input.onValue.name : input.offValue.name, isOn: $switchState)
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
