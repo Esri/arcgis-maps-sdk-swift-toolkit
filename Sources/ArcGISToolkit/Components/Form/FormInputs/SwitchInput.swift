@@ -64,8 +64,8 @@ struct SwitchInput: View {
             Group {
                 InputHeader(element: element)
                     .padding([.top], elementPadding)
-                Toggle(element.label, isOn: $switchState)
                     .toggleStyle(.switch)
+                Toggle(switchState ? input.onValue.name : input.offValue.name, isOn: $switchState)
                 InputFooter(element: element, requiredValueMissing: requiredValueMissing)
             }
             .padding([.bottom], elementPadding)
