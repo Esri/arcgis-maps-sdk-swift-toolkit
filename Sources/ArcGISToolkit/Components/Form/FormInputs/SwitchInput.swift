@@ -75,13 +75,36 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.value.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switchState = (element.value == input.onValue.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switchState = isOn
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: switchState) { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***let codedValue = newValue ? input.onValue : input.offValue
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(codedValue.code, forKey: element.fieldName)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension SwitchInput {
+***REMOVED***var isOn: Bool {
+***REMOVED******REMOVED***switch input.onValue.code {
+***REMOVED******REMOVED***case let value as Double:
+***REMOVED******REMOVED******REMOVED***return Double(element.value) == value
+***REMOVED******REMOVED***case let value as Float:
+***REMOVED******REMOVED******REMOVED***return Float(element.value) == value
+***REMOVED******REMOVED***case let value as Int:
+***REMOVED******REMOVED******REMOVED***return Int(element.value) == value
+***REMOVED******REMOVED***case let value as Int8:
+***REMOVED******REMOVED******REMOVED***return Int8(element.value) == value
+***REMOVED******REMOVED***case let value as Int16:
+***REMOVED******REMOVED******REMOVED***return Int16(element.value) == value
+***REMOVED******REMOVED***case let value as Int32:
+***REMOVED******REMOVED******REMOVED***return Int32(element.value) == value
+***REMOVED******REMOVED***case let value as Int64:
+***REMOVED******REMOVED******REMOVED***return Int64(element.value) == value
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
