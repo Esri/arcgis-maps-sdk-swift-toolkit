@@ -75,13 +75,36 @@ struct SwitchInput: View {
                 if element.value.isEmpty {
                     fallbackToComboBox = true
                 } else {
-                    switchState = (element.value == input.onValue.name)
+                    switchState = isOn
                 }
             }
             .onChange(of: switchState) { newValue in
                 let codedValue = newValue ? input.onValue : input.offValue
                 featureForm?.feature.setAttributeValue(codedValue.code, forKey: element.fieldName)
             }
+        }
+    }
+}
+
+extension SwitchInput {
+    var isOn: Bool {
+        switch input.onValue.code {
+        case let value as Double:
+            return Double(element.value) == value
+        case let value as Float:
+            return Float(element.value) == value
+        case let value as Int:
+            return Int(element.value) == value
+        case let value as Int8:
+            return Int8(element.value) == value
+        case let value as Int16:
+            return Int16(element.value) == value
+        case let value as Int32:
+            return Int32(element.value) == value
+        case let value as Int64:
+            return Int64(element.value) == value
+        default:
+            return false
         }
     }
 }
