@@ -127,7 +127,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - node: The node to be added to the scene.
 ***REMOVED******REMOVED***/   - anchor: The anchor position of the node.
-***REMOVED***func addPlane(with node: SCNNode, for anchor: ARAnchor) {
+***REMOVED***private func addPlane(with node: SCNNode, for anchor: ARAnchor) {
 ***REMOVED******REMOVED******REMOVED*** Place content only for anchors found by plane detection.
 ***REMOVED******REMOVED***guard let planeAnchor = anchor as? ARPlaneAnchor,
 ***REMOVED******REMOVED******REMOVED***  ***REMOVED*** Create a custom object to visualize the plane geometry and extent.
@@ -142,7 +142,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - node: The node to be updated in the scene.
 ***REMOVED******REMOVED***/   - anchor: The anchor position of the node.
-***REMOVED***func updatePlane(with node: SCNNode, for anchor: ARAnchor) {
+***REMOVED***private func updatePlane(with node: SCNNode, for anchor: ARAnchor) {
 ***REMOVED******REMOVED***if initialTransformationIsSet {
 ***REMOVED******REMOVED******REMOVED***node.removeFromParentNode()
 ***REMOVED***
@@ -183,8 +183,11 @@ private extension View {
 
 ***REMOVED***/ A helper class to visualize a plane found by ARKit.
 private class Plane: SCNNode {
+***REMOVED******REMOVED***/ The plane node.
 ***REMOVED***let node: SCNNode
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a plane node to visuialize a plane found by ARKit.
+***REMOVED******REMOVED***/ - Parameter anchor: The ARPlaneAnchor used to set the plane node's geometry.
 ***REMOVED***init?(anchor: ARPlaneAnchor) {
 ***REMOVED******REMOVED******REMOVED*** Create a node to visualize the plane's bounding rectangle.
 ***REMOVED******REMOVED***let extent = SCNPlane(width: CGFloat(anchor.extent.x), height: CGFloat(anchor.extent.z))
@@ -215,7 +218,7 @@ private extension ARSwiftUIViewProxy {
 ***REMOVED******REMOVED***/ Performs a hit test operation to get the transformation matrix representing the corresponding real-world point for `screenPoint`.
 ***REMOVED******REMOVED***/ - Parameter screenPoint: The screen point to determine the real world transformation matrix from.
 ***REMOVED******REMOVED***/ - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
-***REMOVED***func hitTest(using screenPoint: CGPoint) -> TransformationMatrix? {
+***REMOVED***func hitTest(at screenPoint: CGPoint) -> TransformationMatrix? {
 ***REMOVED******REMOVED******REMOVED*** Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
 ***REMOVED******REMOVED***guard let query = raycastQuery(
 ***REMOVED******REMOVED******REMOVED***from: screenPoint,
@@ -229,9 +232,10 @@ private extension ARSwiftUIViewProxy {
 ***REMOVED******REMOVED***guard let worldTransform = results?.first?.worldTransform else { return nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create our hit test matrix based on the worldTransform location.
-***REMOVED******REMOVED******REMOVED*** right now we ignore the orientation of the plane that was hit to find the point
-***REMOVED******REMOVED******REMOVED*** since we only use horizontal planes, when we will start using vertical planes
-***REMOVED******REMOVED******REMOVED*** we should stop suppressing the quaternion rotation to a null rotation (0,0,0,1)
+***REMOVED******REMOVED******REMOVED*** Right now we ignore the orientation of the plane that was hit to find the point
+***REMOVED******REMOVED******REMOVED*** since we only use horizontal planes.
+***REMOVED******REMOVED******REMOVED*** If we start supporting vertical planes we will have to stop suppressing the
+***REMOVED******REMOVED******REMOVED*** quaternion rotation to a null rotation (0,0,0,1).
 ***REMOVED******REMOVED***let hitTestMatrix = TransformationMatrix.normalized(
 ***REMOVED******REMOVED******REMOVED***quaternionX: 0,
 ***REMOVED******REMOVED******REMOVED***quaternionY: 0,
@@ -258,7 +262,7 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED***using screenPoint: CGPoint
 ***REMOVED***) -> TransformationMatrix? {
 ***REMOVED******REMOVED******REMOVED*** Use the `hitTest` method to get the matrix of `screenPoint`.
-***REMOVED******REMOVED***guard let matrix = arViewProxy.hitTest(using: screenPoint) else { return nil ***REMOVED***
+***REMOVED******REMOVED***guard let matrix = arViewProxy.hitTest(at: screenPoint) else { return nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
 ***REMOVED******REMOVED***let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
