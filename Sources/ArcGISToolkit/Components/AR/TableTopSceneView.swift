@@ -173,8 +173,8 @@ private extension View {
         } else {
             return self.gesture(
                 DragGesture()
-                    .onEnded { screenPoint in
-                        action(screenPoint.location)
+                    .onEnded { dragAttributes in
+                        action(dragAttributes.location)
                     }
             )
         }
