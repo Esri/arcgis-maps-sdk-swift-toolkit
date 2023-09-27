@@ -80,7 +80,7 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: switchState) { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***let codedValue = newValue ? input.onValue : input.offValue
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(codedValue, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(codedValue.code, forKey: element.fieldName)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
