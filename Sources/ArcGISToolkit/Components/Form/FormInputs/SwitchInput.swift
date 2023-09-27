@@ -103,6 +103,8 @@ extension SwitchInput {
             return Int32(element.value) == value
         case let value as Int64:
             return Int64(element.value) == value
+        case let value as String:
+            return element.value == value
         default:
             return false
         }
