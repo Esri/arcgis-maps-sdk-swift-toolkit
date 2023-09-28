@@ -62,16 +62,16 @@ public struct TableTopSceneView: View {
             InterfaceOrientationDetector(interfaceOrientation: $interfaceOrientation)
             ARSwiftUIView(proxy: arViewProxy)
                 .onDidUpdateFrame { _, frame in
-                    guard let sceneViewProxy else { return }
+                    guard let sceneViewProxy, let interfaceOrientation else { return }
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
-                        orientation: interfaceOrientation ?? .portrait,
+                        orientation: interfaceOrientation,
                         initialTransformation: initialTransformation
                     )
                     sceneViewProxy.setFieldOfView(
                         for: frame,
-                        orientation: interfaceOrientation ?? .portrait
+                        orientation: interfaceOrientation
                     )
                 }
                 .onAddNode { _, node, anchor in

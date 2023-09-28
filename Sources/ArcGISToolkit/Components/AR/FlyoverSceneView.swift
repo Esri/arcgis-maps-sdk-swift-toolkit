@@ -54,11 +54,11 @@ public struct FlyoverSceneView: View {
                 .onAppear { session.start() }
                 .onDisappear { session.pause() }
                 .onChange(of: session.currentFrame) { frame in
-                    guard let frame else { return }
+                    guard let frame, let interfaceOrientation else { return }
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
-                        orientation: interfaceOrientation ?? .portrait
+                        orientation: interfaceOrientation
                     )
                 }
                 .background {
