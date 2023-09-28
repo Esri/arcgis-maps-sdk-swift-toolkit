@@ -45,9 +45,6 @@ struct SingleLineTextInput: View {
         self.featureForm = featureForm
         self.element = element
         self.input = input
-        
-        print("feature isloaded: \(featureForm?.feature.loadStatus); domain = \(element.domain)")
-        print("feature domain: \(featureForm?.feature.table?.field(named: element.fieldName)?.domain)")
     }
     
     var body: some View {
