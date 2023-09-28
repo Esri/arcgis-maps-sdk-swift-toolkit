@@ -61,8 +61,10 @@ private extension ARCamera {
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .landscapeLeft:
+***REMOVED******REMOVED******REMOVED******REMOVED*** No rotation necessary.
 ***REMOVED******REMOVED******REMOVED***return transform
 ***REMOVED******REMOVED***case .landscapeRight:
+***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate 180.
 ***REMOVED******REMOVED******REMOVED***return simd_float4x4(
 ***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.0,
 ***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.1,
@@ -70,6 +72,7 @@ private extension ARCamera {
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .portraitUpsideDown:
+***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate 90 counter clockwise.
 ***REMOVED******REMOVED******REMOVED***return simd_float4x4(
 ***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.1,
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.0,
