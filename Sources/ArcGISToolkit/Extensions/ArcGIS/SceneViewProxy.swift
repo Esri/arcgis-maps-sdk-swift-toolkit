@@ -18,11 +18,11 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - frame: The current AR frame.
 ***REMOVED******REMOVED***/   - cameraController: The current camera controller assigned to the scene view.
-***REMOVED******REMOVED***/   - orientation: The device orientation.
+***REMOVED******REMOVED***/   - orientation: The interface orientation.
 ***REMOVED***func updateCamera(
 ***REMOVED******REMOVED***frame: ARFrame,
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
-***REMOVED******REMOVED***orientation: UIDeviceOrientation,
+***REMOVED******REMOVED***orientation: InterfaceOrientation,
 ***REMOVED******REMOVED***initialTransformation: TransformationMatrix? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***let transform = frame.camera.transform(for: orientation)
@@ -47,14 +47,12 @@ extension SceneViewProxy {
 ***REMOVED***
 
 private extension ARCamera {
-***REMOVED******REMOVED***/ The transform rotated for a particular device orientation.
-***REMOVED******REMOVED***/ - Parameter orientation: The device orientation that the transform is appropriate for.
-***REMOVED******REMOVED***/ - Precondition: 'orientation.isValidInterfaceOrientation'
-***REMOVED***func transform(for orientation: UIDeviceOrientation) -> simd_float4x4 {
-***REMOVED******REMOVED***precondition(orientation.isValidInterfaceOrientation)
+***REMOVED******REMOVED***/ The transform rotated for a particular interface orientation.
+***REMOVED******REMOVED***/ - Parameter orientation: The interface orientation that the transform is appropriate for.
+***REMOVED***func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
 ***REMOVED******REMOVED***switch orientation {
 ***REMOVED******REMOVED***case .portrait:
-***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees clockwise in the XY plane.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees counter-clockwise in the XY plane.
 ***REMOVED******REMOVED******REMOVED***return simd_float4x4(
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.1,
 ***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.0,
@@ -62,10 +60,8 @@ private extension ARCamera {
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .landscapeLeft:
-***REMOVED******REMOVED******REMOVED******REMOVED*** No rotation necessary.
 ***REMOVED******REMOVED******REMOVED***return transform
 ***REMOVED******REMOVED***case .landscapeRight:
-***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate 180.
 ***REMOVED******REMOVED******REMOVED***return simd_float4x4(
 ***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.0,
 ***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.1,
@@ -73,7 +69,6 @@ private extension ARCamera {
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .portraitUpsideDown:
-***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate 90 counter clockwise.
 ***REMOVED******REMOVED******REMOVED***return simd_float4x4(
 ***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.1,
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.0,
@@ -81,7 +76,8 @@ private extension ARCamera {
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***preconditionFailure()
+***REMOVED******REMOVED******REMOVED***assertionFailure("Unrecognized interface orientation")
+***REMOVED******REMOVED******REMOVED***return transform
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

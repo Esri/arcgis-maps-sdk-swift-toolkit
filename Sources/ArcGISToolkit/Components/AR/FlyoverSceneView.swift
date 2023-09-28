@@ -24,7 +24,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/ The camera controller that we will set on the scene view.
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The last portrait or landscape orientation value.
-***REMOVED***@State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
+***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -55,15 +55,14 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear { session.pause() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: session.currentFrame) { frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let frame else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateLastGoodDeviceOrientation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.updateCamera(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InterfaceOrientationDetector(interfaceOrientation: $interfaceOrientation)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InterfaceOrientationDetector(interfaceOrientation: $interfaceOrientation)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -100,42 +99,6 @@ private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate
 ***REMOVED***
 ***REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
 ***REMOVED******REMOVED***currentFrame = frame
-***REMOVED***
-***REMOVED***
-
-private extension ARCamera {
-***REMOVED******REMOVED***/ The transform rotated for a particular device orientation.
-***REMOVED******REMOVED***/ - Parameter orientation: The device orientation that the transform is appropriate for.
-***REMOVED***func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
-***REMOVED******REMOVED***switch orientation {
-***REMOVED******REMOVED***case .portrait:
-***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees counter-clockwise in the XY plane.
-***REMOVED******REMOVED******REMOVED***return simd_float4x4(
-***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.1,
-***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.0,
-***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.2,
-***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***case .landscapeLeft:
-***REMOVED******REMOVED******REMOVED***return transform
-***REMOVED******REMOVED***case .landscapeRight:
-***REMOVED******REMOVED******REMOVED***return simd_float4x4(
-***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.0,
-***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.1,
-***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.2,
-***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***case .portraitUpsideDown:
-***REMOVED******REMOVED******REMOVED***return simd_float4x4(
-***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.1,
-***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.0,
-***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.2,
-***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***assertionFailure("Unrecognized interface orientation")
-***REMOVED******REMOVED******REMOVED***return transform
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
