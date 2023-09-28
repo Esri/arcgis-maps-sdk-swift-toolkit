@@ -24,7 +24,7 @@ struct FlyoverExampleView: View {
     )
     
     private let initialCamera = Camera(
-        latitude: 51.9244, longitude: 4.4777, altitude: 1_000, heading: 0, pitch: 120, roll: 0
+        latitude: 51.9244, longitude: 4.4777, altitude: 1_000, heading: 0, pitch: 90, roll: 0
     )
     
     var body: some View {
