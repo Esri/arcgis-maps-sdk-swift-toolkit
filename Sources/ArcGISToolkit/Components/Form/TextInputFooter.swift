@@ -25,13 +25,13 @@ struct TextInputFooter: View {
     
     /// A Boolean value indicating whether the text input field has been edited.
     @State private var hasBeenEdited = false
-
+    
     /// The current text in the text input field.
     private let text: String
     
     /// The current length of the text in the text input field.
     private let currentLength: Int
-
+    
     /// The field's parent element.
     private let element: FieldFormElement
     
