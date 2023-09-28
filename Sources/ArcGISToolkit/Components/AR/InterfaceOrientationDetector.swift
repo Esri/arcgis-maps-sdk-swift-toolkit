@@ -65,8 +65,11 @@ struct InterfaceOrientationDetector: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The interface orientation of the window that this view is contained in.
 ***REMOVED******REMOVED***var windowInterfaceOrientation: InterfaceOrientation? {
-***REMOVED******REMOVED******REMOVED***let x = view.window?.windowScene?.interfaceOrientation
-***REMOVED******REMOVED******REMOVED***return x.map { InterfaceOrientation($0) ***REMOVED*** ?? nil
+***REMOVED******REMOVED******REMOVED***if let orientation = view.window?.windowScene?.interfaceOrientation {
+***REMOVED******REMOVED******REMOVED******REMOVED***return InterfaceOrientation(orientation)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
