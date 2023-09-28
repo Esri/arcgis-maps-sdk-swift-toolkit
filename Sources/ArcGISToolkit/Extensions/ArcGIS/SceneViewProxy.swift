@@ -12,17 +12,18 @@
 import Foundation
 import ArcGIS
 import ARKit
+import SwiftUI
 
 extension SceneViewProxy {
     /// Updates the scene view's camera for a given augmented reality frame.
     /// - Parameters:
     ///   - frame: The current AR frame.
     ///   - cameraController: The current camera controller assigned to the scene view.
-    ///   - orientation: The device orientation.
+    ///   - orientation: The interface orientation.
     func updateCamera(
         frame: ARFrame,
         cameraController: TransformationMatrixCameraController,
-        orientation: UIDeviceOrientation,
+        orientation: InterfaceOrientation,
         initialTransformation: TransformationMatrix? = nil
     ) {
         let transform = frame.camera.transform(for: orientation)
@@ -47,11 +48,9 @@ extension SceneViewProxy {
 }
 
 private extension ARCamera {
-    /// The transform rotated for a particular device orientation.
-    /// - Parameter orientation: The device orientation that the transform is appropriate for.
-    /// - Precondition: 'orientation.isValidInterfaceOrientation'
-    func transform(for orientation: UIDeviceOrientation) -> simd_float4x4 {
-        precondition(orientation.isValidInterfaceOrientation)
+    /// The transform rotated for a particular interface orientation.
+    /// - Parameter orientation: The interface orientation that the transform is appropriate for.
+    func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
         switch orientation {
         case .portrait:
             // Rotate camera transform 90 degrees clockwise in the XY plane.
@@ -81,7 +80,8 @@ private extension ARCamera {
                 transform.columns.3
             )
         default:
-            preconditionFailure()
+            assertionFailure("Unrecognized interface orientation")
+            return transform
         }
     }
 }
