@@ -24,7 +24,7 @@ public struct FlyoverSceneView: View {
     /// The camera controller that we will set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
     /// The last portrait or landscape orientation value.
-    @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
+    @State private var interfaceOrientation: InterfaceOrientation?
     
     /// Creates a fly over scene view.
     /// - Parameters:
@@ -55,15 +55,14 @@ public struct FlyoverSceneView: View {
                 .onDisappear { session.pause() }
                 .onChange(of: session.currentFrame) { frame in
                     guard let frame else { return }
-                    updateLastGoodDeviceOrientation()
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
-                        orientation: lastGoodDeviceOrientation
+                        orientation: interfaceOrientation
                     )
                 }
                 .overlay {
-                    InterfaceOrientationDetector(interfaceOrientation: $interfaceOrientation)
+                    //InterfaceOrientationDetector(interfaceOrientation: $interfaceOrientation)
                 }
         }
     }
@@ -100,42 +99,6 @@ private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         currentFrame = frame
-    }
-}
-
-private extension ARCamera {
-    /// The transform rotated for a particular device orientation.
-    /// - Parameter orientation: The device orientation that the transform is appropriate for.
-    func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
-        switch orientation {
-        case .portrait:
-            // Rotate camera transform 90 degrees counter-clockwise in the XY plane.
-            return simd_float4x4(
-                transform.columns.1,
-                -transform.columns.0,
-                transform.columns.2,
-                transform.columns.3
-            )
-        case .landscapeLeft:
-            return transform
-        case .landscapeRight:
-            return simd_float4x4(
-                -transform.columns.0,
-                -transform.columns.1,
-                transform.columns.2,
-                transform.columns.3
-            )
-        case .portraitUpsideDown:
-            return simd_float4x4(
-                -transform.columns.1,
-                transform.columns.0,
-                transform.columns.2,
-                transform.columns.3
-            )
-        default:
-            assertionFailure("Unrecognized interface orientation")
-            return transform
-        }
     }
 }
 
