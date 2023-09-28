@@ -76,7 +76,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addPlane(renderer: renderer, node: node, for: anchor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addPlane(renderer: renderer, node: node, anchor: anchor)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { _, node, anchor in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updatePlane(with: node, for: anchor)
@@ -128,7 +128,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/   - renderer: The renderer for the scene.
 ***REMOVED******REMOVED***/   - node: The node to be added to the scene.
 ***REMOVED******REMOVED***/   - anchor: The anchor position of the node.
-***REMOVED***private func addPlane(renderer: SCNSceneRenderer, node: SCNNode, for anchor: ARAnchor) {
+***REMOVED***private func addPlane(renderer: SCNSceneRenderer, node: SCNNode, anchor: ARAnchor) {
 ***REMOVED******REMOVED***guard let planeAnchor = anchor as? ARPlaneAnchor,
 ***REMOVED******REMOVED******REMOVED***  let device = renderer.device,
 ***REMOVED******REMOVED******REMOVED***  let planeGeometry = ARSCNPlaneGeometry(device: device)
