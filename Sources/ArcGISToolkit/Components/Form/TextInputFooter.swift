@@ -89,7 +89,6 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***self.isNumeric = isNumeric
 ***REMOVED******REMOVED***self.isDecimal = isDecimal
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***print("isNumeric: \(isNumeric)")
 ***REMOVED******REMOVED***switch input {
 ***REMOVED******REMOVED***case let input as TextBoxFormInput:
 ***REMOVED******REMOVED******REMOVED***self.maxLength = input.maxLength

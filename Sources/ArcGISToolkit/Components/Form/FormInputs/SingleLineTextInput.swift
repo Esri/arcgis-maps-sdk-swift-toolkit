@@ -45,9 +45,6 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***print("feature isloaded: \(featureForm?.feature.loadStatus); domain = \(element.domain)")
-***REMOVED******REMOVED***print("feature domain: \(featureForm?.feature.table?.field(named: element.fieldName)?.domain)")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
