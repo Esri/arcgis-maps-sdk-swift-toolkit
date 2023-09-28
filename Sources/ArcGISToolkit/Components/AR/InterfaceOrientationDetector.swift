@@ -87,6 +87,7 @@ private extension InterfaceOrientation {
 ***REMOVED******REMOVED***case .landscapeLeft:
 ***REMOVED******REMOVED******REMOVED***self = .landscapeRight
 ***REMOVED******REMOVED***case .landscapeRight:
+***REMOVED******REMOVED******REMOVED******REMOVED*** UIInterfaceOrientation and InterfaceOrientation have left/right reversed.
 ***REMOVED******REMOVED******REMOVED***self = .landscapeLeft
 ***REMOVED******REMOVED***@unknown default:
 ***REMOVED******REMOVED******REMOVED***assertionFailure("Unknown UIInterfaceOrientation")
