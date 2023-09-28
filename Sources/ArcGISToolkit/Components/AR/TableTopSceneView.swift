@@ -17,14 +17,21 @@ import ArcGIS
 
 /// A scene view that provides an augmented reality table top experience.
 public struct TableTopSceneView: View {
+    /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
+    /// The proxy for the scene view.
     @State private var sceneViewProxy: SceneViewProxy?
+    /// The initial transformation for the scene's camera controller.
     @State private var initialTransformation: TransformationMatrix? = nil
+    /// The camera controller that we will set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
-     /// The current interface orientation.
+    /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
+    /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
+    /// The configuration for the AR session.
     private let configuration: ARWorldTrackingConfiguration
+    /// A Boolean value indicating that the scene's initial transformation has been set.
     private var initialTransformationIsSet: Bool { initialTransformation != nil }
     
     /// Creates a table top scene view.
@@ -106,6 +113,9 @@ public struct TableTopSceneView: View {
                     .spaceEffect(.transparent)
                     .atmosphereEffect(.off)
                     .onAppear {
+                        // Capture scene view proxy as a workaround for a bug where
+                        // preferences set for `ARSwiftUIView` are not honored. The
+                        // issue has been logged with a bug report with ID FB13188508.
                         self.sceneViewProxy = proxy
                     }
                     .opacity(initialTransformationIsSet ? 1 : 0)
