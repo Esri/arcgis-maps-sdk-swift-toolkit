@@ -84,8 +84,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.isFocused = isFocused
 ***REMOVED******REMOVED***self.description = element.description
-***REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
-***REMOVED******REMOVED***self.isRequired = false***REMOVED***element.required
+***REMOVED******REMOVED***self.isRequired = element.isRequired
 ***REMOVED******REMOVED***self.rangeDomain = rangeDomain
 ***REMOVED******REMOVED***self.isNumeric = isNumeric
 ***REMOVED******REMOVED***self.isDecimal = isDecimal
