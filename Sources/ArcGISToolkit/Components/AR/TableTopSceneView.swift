@@ -76,7 +76,7 @@ public struct TableTopSceneView: View {
                     )
                 }
                 .onAddNode { renderer, node, anchor in
-                    addPlane(renderer: renderer, node: node, for: anchor)
+                    addPlane(renderer: renderer, node: node, anchor: anchor)
                 }
                 .onUpdateNode { _, node, anchor in
                     updatePlane(with: node, for: anchor)
@@ -128,7 +128,7 @@ public struct TableTopSceneView: View {
     ///   - renderer: The renderer for the scene.
     ///   - node: The node to be added to the scene.
     ///   - anchor: The anchor position of the node.
-    private func addPlane(renderer: SCNSceneRenderer, node: SCNNode, for anchor: ARAnchor) {
+    private func addPlane(renderer: SCNSceneRenderer, node: SCNNode, anchor: ARAnchor) {
         guard let planeAnchor = anchor as? ARPlaneAnchor,
               let device = renderer.device,
               let planeGeometry = ARSCNPlaneGeometry(device: device)
