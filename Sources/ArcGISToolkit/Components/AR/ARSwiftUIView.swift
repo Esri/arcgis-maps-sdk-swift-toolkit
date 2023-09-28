@@ -18,9 +18,13 @@ typealias ARViewType = ARSCNView
 
 /// A SwiftUI version of an AR view.
 struct ARSwiftUIView {
-    /// The closure to call when the AR view renders.
+    /// The closure to call when the session's frame updates.
     private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-    private(set) var videoFeedIsHidden: Bool = false
+    /// The closure to call when a node corresponding to a new anchor has been added to the view.
+    private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+    /// The closure to call when a node has been updated to match it's corresponding anchor.
+    private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+    
     /// The proxy.
     private let proxy: ARSwiftUIViewProxy?
     
@@ -40,10 +44,21 @@ struct ARSwiftUIView {
         return view
     }
     
-    /// Hides the video feed for the AR view.
-    func videoFeedHidden() -> Self {
+    /// Sets the closure to call when a new node has been added to the scene.
+    func onAddNode(
+        perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
+    ) -> Self {
         var view = self
-        view.videoFeedIsHidden = true
+        view.onAddNodeAction = action
+        return view
+    }
+    
+    /// Sets the closure to call when the scene's nodes are updated.
+    func onUpdateNode(
+        perform action: @escaping (SCNSceneRenderer, SCNNode, ARAnchor) -> Void
+    ) -> Self {
+        var view = self
+        view.onUpdateNodeAction = action
         return view
     }
 }
@@ -51,14 +66,17 @@ struct ARSwiftUIView {
 extension ARSwiftUIView: UIViewRepresentable {
     func makeUIView(context: Context) -> ARViewType {
         let arView = ARViewType()
+        arView.delegate = context.coordinator
         arView.session.delegate = context.coordinator
+        // Set the AR view on the proxy.
         proxy?.arView = arView
         return arView
     }
-
+    
     func updateUIView(_ uiView: ARViewType, context: Context) {
         context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
-        uiView.isHidden = videoFeedIsHidden
+        context.coordinator.onAddNodeAction = onAddNodeAction
+        context.coordinator.onUpdateNodeAction = onUpdateNodeAction
     }
     
     func makeCoordinator() -> Coordinator {
@@ -67,11 +85,21 @@ extension ARSwiftUIView: UIViewRepresentable {
 }
 
 extension ARSwiftUIView {
-    class Coordinator: NSObject, ARSessionDelegate {
+    class Coordinator: NSObject, ARSCNViewDelegate, ARSessionDelegate {
         var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
+        var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+        var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
         
         func session(_ session: ARSession, didUpdate frame: ARFrame) {
             onDidUpdateFrameAction?(session, frame)
+        }
+        
+        func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+            onAddNodeAction?(renderer, node, anchor)
+        }
+        
+        func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+            onUpdateNodeAction?(renderer, node, anchor)
         }
     }
 }
@@ -85,5 +113,23 @@ class ARSwiftUIViewProxy {
     /// The AR session.
     var session: ARSession? {
         arView?.session
+    }
+    
+    /// Creates a raycast query that originates from a point on the view, aligned with the center of the camera's field of view.
+    /// - Parameters:
+    ///   - point: The point on the view to extend the raycast from.
+    ///   - target: The type of surface the raycast can interact with.
+    ///   - alignment: The target's alignment with respect to gravity.
+    /// - Returns: An `ARRaycastQuery`.
+    func raycastQuery(
+        from point: CGPoint,
+        allowing target: ARRaycastQuery.Target,
+        alignment: ARRaycastQuery.TargetAlignment
+    ) -> ARRaycastQuery? {
+        return arView?.raycastQuery(
+            from: point,
+            allowing: target,
+            alignment: alignment
+        )
     }
 }

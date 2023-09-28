@@ -59,9 +59,16 @@ struct MediaDetailView : View {
                     }
                     if popupMedia.value?.linkURL != nil {
                         HStack {
-                            Text("Tap on the image for more information.", bundle: .toolkitModule)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
+                            Text(
+                                "Tap on the image for more information.",
+                                bundle: .toolkitModule,
+                                comment: """
+                                         A label indicating that tapping an image will reveal
+                                         additional information.
+                                         """
+                            )
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                             Spacer()
                         }
                     }
