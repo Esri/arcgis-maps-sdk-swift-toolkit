@@ -87,6 +87,7 @@ private extension InterfaceOrientation {
         case .landscapeLeft:
             self = .landscapeRight
         case .landscapeRight:
+            // UIInterfaceOrientation and InterfaceOrientation have left/right reversed.
             self = .landscapeLeft
         @unknown default:
             assertionFailure("Unknown UIInterfaceOrientation")
