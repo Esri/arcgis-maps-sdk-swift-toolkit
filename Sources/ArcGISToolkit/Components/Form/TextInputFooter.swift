@@ -55,14 +55,14 @@ struct TextInputFooter: View {
     
     /// The minimum allowable length in the text input field.
     private let minValue: Double = 1
-
+    
     /// The range domain for the text field input. This is used to
     /// generate messages if the numeric value is out-of-range.
     private let rangeDomain: RangeDomain?
     
     private var isNumeric: Bool
     private var isDecimal: Bool
-
+    
     /// Creates a footer shown at the bottom of each text input element in a form.
     /// - Parameters:
     ///   - currentLength: The current length of the text in the text input field.
