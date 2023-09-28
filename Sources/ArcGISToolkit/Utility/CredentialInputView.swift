@@ -46,23 +46,27 @@ extension View {
 
 struct CredentialInputSheetView_Previews: PreviewProvider {
 ***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***Text("test")
-***REMOVED******REMOVED******REMOVED***.credentialInput(
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true),
-***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
-***REMOVED******REMOVED******REMOVED******REMOVED***message: "You must sign in to access 'arcgis.com'",
-***REMOVED******REMOVED******REMOVED******REMOVED***title: "Authentication Required",
-***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Continue",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { username, password in
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"test",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for development purposes only. This is not user visible."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.credentialInput(
+***REMOVED******REMOVED******REMOVED***isPresented: .constant(true),
+***REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
+***REMOVED******REMOVED******REMOVED***message: "You must sign in to access 'arcgis.com'",
+***REMOVED******REMOVED******REMOVED***title: "Authentication Required",
+***REMOVED******REMOVED******REMOVED***cancelAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***continueAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED***title: "Continue",
+***REMOVED******REMOVED******REMOVED******REMOVED***handler: { username, password in
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
@@ -171,7 +175,8 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED***TextField(
 ***REMOVED******REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Username",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label in reference to a credential username."
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***text: $username
 ***REMOVED******REMOVED***)
@@ -189,7 +194,8 @@ struct CredentialInputSheetView: View {
 ***REMOVED******REMOVED***SecureField(
 ***REMOVED******REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "Password",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label in reference to a credential password."
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***text: $password
 ***REMOVED******REMOVED***)

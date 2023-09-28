@@ -15,9 +15,12 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying an async image, with error display and progress view.
-struct AsyncImageView: View {
+public struct AsyncImageView: View {
 ***REMOVED******REMOVED***/ The `URL` of the image.
-***REMOVED***private var url: URL
+***REMOVED***private var url: URL?
+***REMOVED***
+***REMOVED******REMOVED***/ The `LoadableImage` representing the view.
+***REMOVED***private var loadableImage: LoadableImage?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `ContentMode` defining how the image fills the available space.
 ***REMOVED***private let contentMode: ContentMode
@@ -37,7 +40,7 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***/   - contentMode: The `ContentMode` defining how the image fills the available space.
 ***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
 ***REMOVED******REMOVED***/   - mediaSize: The size of the media's frame.
-***REMOVED***init(
+***REMOVED***public init(
 ***REMOVED******REMOVED***url: URL,
 ***REMOVED******REMOVED***contentMode: ContentMode = .fit,
 ***REMOVED******REMOVED***refreshInterval: TimeInterval? = nil,
@@ -47,11 +50,31 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***self.mediaSize = mediaSize
 ***REMOVED******REMOVED***self.url = url
 ***REMOVED******REMOVED***self.refreshInterval = refreshInterval
+***REMOVED******REMOVED***loadableImage = nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: AsyncImageViewModel())
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var body: some View {
+***REMOVED******REMOVED***/ Creates an `AsyncImageView`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - loadableImage: The `LoadableImage` representing the image.
+***REMOVED******REMOVED***/   - contentMode: The `ContentMode` defining how the image fills the available space.
+***REMOVED******REMOVED***/   - mediaSize: The size of the media's frame.
+***REMOVED***public init(
+***REMOVED******REMOVED***loadableImage: LoadableImage,
+***REMOVED******REMOVED***contentMode: ContentMode = .fit,
+***REMOVED******REMOVED***mediaSize: CGSize? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***self.contentMode = contentMode
+***REMOVED******REMOVED***self.mediaSize = mediaSize
+***REMOVED******REMOVED***self.loadableImage = loadableImage
+***REMOVED******REMOVED***refreshInterval = nil
+***REMOVED******REMOVED***url = nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: AsyncImageViewModel())
+***REMOVED***
+***REMOVED***
+***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***switch viewModel.result {
 ***REMOVED******REMOVED******REMOVED***case .success(let image):
@@ -69,7 +92,8 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"An error occurred loading the image: \(error.localizedDescription).",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A fallback message to display when an image cannot be loaded."
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom])
@@ -93,12 +117,7 @@ struct AsyncImageView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear() {
 ***REMOVED******REMOVED******REMOVED***viewModel.url = url
-***REMOVED******REMOVED******REMOVED***viewModel.refreshInterval = refreshInterval
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: url) { _ in
-***REMOVED******REMOVED******REMOVED***viewModel.url = url
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: refreshInterval) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.loadableImage = loadableImage
 ***REMOVED******REMOVED******REMOVED***viewModel.refreshInterval = refreshInterval
 ***REMOVED***
 ***REMOVED***

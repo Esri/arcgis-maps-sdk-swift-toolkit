@@ -26,6 +26,13 @@ import UIKit
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The `LoadableImage` representing the view.
+***REMOVED***var loadableImage: LoadableImage? {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***refresh()
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
 ***REMOVED***var refreshInterval: TimeInterval? {
 ***REMOVED******REMOVED***didSet {
@@ -67,9 +74,9 @@ import UIKit
 ***REMOVED******REMOVED***refresh()
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Refreshes the image data from `url` and creates the image.
+***REMOVED******REMOVED***/ Refreshes the image data from `url` or `loadableImage` and creates the image.
 ***REMOVED***private func refresh() {
-***REMOVED******REMOVED***guard !isRefreshing else { return ***REMOVED***
+***REMOVED******REMOVED***guard !isRefreshing, (url != nil || loadableImage != nil) else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Only refresh if we're not already refreshing.  Sometimes the
 ***REMOVED******REMOVED******REMOVED*** `refreshInterval` will be shorter than the time it takes to
@@ -78,28 +85,43 @@ import UIKit
 ***REMOVED******REMOVED******REMOVED*** we may never get an image to display.
 ***REMOVED******REMOVED***isRefreshing = true
 ***REMOVED******REMOVED***Task { [weak self] in
-***REMOVED******REMOVED******REMOVED***guard let self, let url else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let (data, _) = try await ArcGISEnvironment.urlSession.data(from: url)
-***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async { [weak self] in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let image = UIImage(data: data) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .success(image)
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** We have data, but couldn't create an image.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .failure(LoadImageError())
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let url {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await loadFromURL(url: url)
+***REMOVED******REMOVED******REMOVED*** else if let loadableImage {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await loadFromLoadableImage(loadableImage: loadableImage)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***result = .failure(error)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***isRefreshing = false
-***REMOVED******REMOVED******REMOVED***if let refreshInterval,
-***REMOVED******REMOVED******REMOVED***   refreshInterval >= 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***progressInterval = Date()...Date().addingTimeInterval(refreshInterval)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func loadFromURL(url: URL) async throws {
+***REMOVED******REMOVED***let (data, _) = try await ArcGISEnvironment.urlSession.data(from: url)
+***REMOVED******REMOVED***DispatchQueue.main.async { [weak self] in
+***REMOVED******REMOVED******REMOVED***if let image = UIImage(data: data) {
+***REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .success(image)
+***REMOVED******REMOVED******REMOVED******REMOVED***print("image success: \(url.absoluteString)")
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** We have data, but couldn't create an image.
+***REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .failure(LoadImageError())
+***REMOVED******REMOVED******REMOVED******REMOVED***print("image failure: \(url.absoluteString)")
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***isRefreshing = false
+***REMOVED******REMOVED***if let refreshInterval,
+***REMOVED******REMOVED***   refreshInterval >= 1 {
+***REMOVED******REMOVED******REMOVED***progressInterval = Date()...Date().addingTimeInterval(refreshInterval)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***private func loadFromLoadableImage(loadableImage: LoadableImage) async throws {
+***REMOVED******REMOVED***try await loadableImage.load()
+***REMOVED******REMOVED***result = .success(loadableImage.image)
 ***REMOVED***
 ***REMOVED***
 
@@ -110,7 +132,7 @@ struct LoadImageError: Error {
 extension LoadImageError: LocalizedError {
 ***REMOVED***public var errorDescription: String? {
 ***REMOVED******REMOVED***return String(
-***REMOVED******REMOVED******REMOVED***localized: "The URL could not be reached or did not contain image data",
+***REMOVED******REMOVED******REMOVED***localized: "The URL could not be reached or did not contain image data.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Description of error thrown when a remote image could not be loaded."
 ***REMOVED******REMOVED***)
