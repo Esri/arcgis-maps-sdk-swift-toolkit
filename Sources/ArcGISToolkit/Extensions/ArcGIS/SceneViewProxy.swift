@@ -61,8 +61,10 @@ private extension ARCamera {
                 transform.columns.3
             )
         case .landscapeLeft:
+            // No rotation necessary.
             return transform
         case .landscapeRight:
+            // Rotate 180.
             return simd_float4x4(
                 -transform.columns.0,
                 -transform.columns.1,
@@ -70,6 +72,7 @@ private extension ARCamera {
                 transform.columns.3
             )
         case .portraitUpsideDown:
+            // Rotate 90 counter clockwise.
             return simd_float4x4(
                 -transform.columns.1,
                 transform.columns.0,
