@@ -53,7 +53,7 @@ private extension ARCamera {
 ***REMOVED***func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
 ***REMOVED******REMOVED***switch orientation {
 ***REMOVED******REMOVED***case .portrait:
-***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees counter-clockwise in the XY plane.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees clockwise in the XY plane.
 ***REMOVED******REMOVED******REMOVED***return simd_float4x4(
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.1,
 ***REMOVED******REMOVED******REMOVED******REMOVED***-transform.columns.0,
