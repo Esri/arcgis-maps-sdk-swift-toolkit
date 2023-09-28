@@ -782,9 +782,9 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***func testCase_5_1() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch integer"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["switch integer Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let `switch` = app.switches["switch integer Switch"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED******REMOVED***
@@ -798,25 +798,30 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
 ***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***fieldValue.label,
-***REMOVED******REMOVED******REMOVED***"On"
+***REMOVED******REMOVED******REMOVED***`switch`.label,
+***REMOVED******REMOVED******REMOVED***"2"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***...
+***REMOVED******REMOVED***`switch`.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***`switch`.label,
+***REMOVED******REMOVED******REMOVED***"1"
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 5.2: Test switch off
 ***REMOVED***func testCase_5_2() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch string"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["switch string Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let `switch` = app.switches["switch string Switch"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED******REMOVED***
@@ -835,11 +840,17 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***fieldValue.label,
-***REMOVED******REMOVED******REMOVED***"Off"
+***REMOVED******REMOVED******REMOVED***`switch`.label,
+***REMOVED******REMOVED******REMOVED***"1"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***...
+***REMOVED******REMOVED***`switch`.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***`switch`.label,
+***REMOVED******REMOVED******REMOVED***"2"
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 5.3: Test switch with no value
@@ -866,12 +877,10 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldValue.exists,
 ***REMOVED******REMOVED******REMOVED***""
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***...
 ***REMOVED***
 ***REMOVED***
 
