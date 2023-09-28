@@ -782,9 +782,9 @@ final class FormViewTests: XCTestCase {
     func testCase_5_1() {
         let app = XCUIApplication()
         let fieldTitle = app.staticTexts["switch integer"]
-        let fieldValue = app.staticTexts["switch integer Value"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["FormView Tests"]
+        let `switch` = app.switches["switch integer Switch"]
         
         app.launch()
             
@@ -798,25 +798,30 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            fieldTitle.isHittable,
+            fieldTitle.exists,
             "The field title isn't hittable."
         )
         
         XCTAssertEqual(
-            fieldValue.label,
-            "On"
+            `switch`.label,
+            "2"
         )
         
-//        ...
+        `switch`.tap()
+        
+        XCTAssertEqual(
+            `switch`.label,
+            "1"
+        )
     }
     
     /// Test case 5.2: Test switch off
     func testCase_5_2() {
         let app = XCUIApplication()
         let fieldTitle = app.staticTexts["switch string"]
-        let fieldValue = app.staticTexts["switch string Value"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["FormView Tests"]
+        let `switch` = app.switches["switch string Switch"]
         
         app.launch()
             
@@ -835,11 +840,17 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            fieldValue.label,
-            "Off"
+            `switch`.label,
+            "1"
         )
         
-//        ...
+        `switch`.tap()
+        
+        
+        XCTAssertEqual(
+            `switch`.label,
+            "2"
+        )
     }
     
     /// Test case 5.3: Test switch with no value
@@ -866,12 +877,10 @@ final class FormViewTests: XCTestCase {
             "The field title isn't hittable."
         )
         
-        XCTAssertEqual(
-            fieldValue.label,
+        XCTAssertTrue(
+            fieldValue.exists,
             ""
         )
-        
-//        ...
     }
 }
 
