@@ -117,10 +117,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == element.value ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: selectedValue) { newValue in
-***REMOVED******REMOVED******REMOVED***guard let current = codedValues.first(where: { $0.name == element.value ***REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***  current != newValue else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***requiredValueMissing = element.isRequired && newValue == nil
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
 ***REMOVED***
