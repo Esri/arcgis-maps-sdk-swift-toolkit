@@ -23,7 +23,7 @@ public struct FlyoverSceneView: View {
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The camera controller that we will set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
-    /// The last portrait or landscape orientation value.
+    /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
     
     /// Creates a fly over scene view.
@@ -58,11 +58,11 @@ public struct FlyoverSceneView: View {
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
-                        orientation: interfaceOrientation
+                        orientation: interfaceOrientation ?? .portrait
                     )
                 }
-                .overlay {
-                    //InterfaceOrientationDetector(interfaceOrientation: $interfaceOrientation)
+                .background {
+                    InterfaceOrientationDetector(interfaceOrientation: $interfaceOrientation)
                 }
         }
     }
@@ -99,59 +99,5 @@ private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         currentFrame = frame
-    }
-}
-
-/// A view that is able to update a binding to an interface orientation.
-struct InterfaceOrientationDetector: UIViewControllerRepresentable {
-    /// The binding to update when an interface orientation change is detected.
-    let binding: Binding<UIInterfaceOrientation?>
-    
-    /// Creates an interface orientation detector view.
-    init(interfaceOrientation: Binding<UIInterfaceOrientation?>) {
-        binding = interfaceOrientation
-    }
-    
-    func makeUIViewController(context: Context) -> InterfaceOrientationViewController {
-        InterfaceOrientationViewController(interfaceOrientation: binding)
-    }
-    
-    func updateUIViewController(_ uiView: InterfaceOrientationViewController, context: Context) {}
-    
-    final class InterfaceOrientationViewController: UIViewController {
-        let binding: Binding<UIInterfaceOrientation?>
-        
-        init(interfaceOrientation: Binding<UIInterfaceOrientation?>) {
-            binding = interfaceOrientation
-            super.init(nibName: nil, bundle: nil)
-            view.isUserInteractionEnabled = false
-            view.isHidden = true
-        }
-        
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-        
-        override func viewDidAppear(_ animated: Bool) {
-            super.viewDidAppear(animated)
-            self.binding.wrappedValue = self.windowInterfaceOrientation
-        }
-        
-        override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-            // According to the Apple documentation, this is the new way to be notified when the
-            // interface orientation changes.
-            // Also, a similar solution is on SO here: https://stackoverflow.com/a/60577486/1687195
-            
-            super.viewWillTransition(to: size, with: coordinator)
-            
-            coordinator.animate { _ in
-                self.binding.wrappedValue = self.windowInterfaceOrientation
-            }
-        }
-        
-        /// The interface orientation of the window that this view is contained in.
-        var windowInterfaceOrientation: UIInterfaceOrientation? {
-            view.window?.windowScene?.interfaceOrientation
-        }
     }
 }

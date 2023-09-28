@@ -12,6 +12,7 @@
 import Foundation
 import ArcGIS
 import ARKit
+import SwiftUI
 
 extension SceneViewProxy {
     /// Updates the scene view's camera for a given augmented reality frame.
