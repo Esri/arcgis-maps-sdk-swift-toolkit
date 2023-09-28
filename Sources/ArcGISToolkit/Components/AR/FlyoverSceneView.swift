@@ -74,7 +74,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.pause()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InterfaceOrientationReader(interfaceOrientation: $interfaceOrientation)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***InterfaceOrientationDetector(interfaceOrientation: $interfaceOrientation)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: interfaceOrientation) { io in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let io {
@@ -118,7 +118,7 @@ extension SceneViewProxy {
 ***REMOVED***func draw(
 ***REMOVED******REMOVED***frame: ARFrame,
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
-***REMOVED******REMOVED***orientation: UIDeviceOrientation
+***REMOVED******REMOVED***orientation: InterfaceOrientation
 ***REMOVED***) {
 ***REMOVED******REMOVED***let transform = frame.camera.transform(for: orientation)
 ***REMOVED******REMOVED***let quaternion = simd_quatf(transform)
@@ -157,9 +157,7 @@ extension SceneViewProxy {
 private extension ARCamera {
 ***REMOVED******REMOVED***/ The transform rotated for a particular device orientation.
 ***REMOVED******REMOVED***/ - Parameter orientation: The device orientation that the transform is appropriate for.
-***REMOVED******REMOVED***/ - Precondition: 'orientation.isValidInterfaceOrientation'
-***REMOVED***func transform(for orientation: UIDeviceOrientation) -> simd_float4x4 {
-***REMOVED******REMOVED***precondition(orientation.isValidInterfaceOrientation)
+***REMOVED***func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
 ***REMOVED******REMOVED***switch orientation {
 ***REMOVED******REMOVED***case .portrait:
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees counter-clockwise in the XY plane.
@@ -186,14 +184,18 @@ private extension ARCamera {
 ***REMOVED******REMOVED******REMOVED******REMOVED***transform.columns.3
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***preconditionFailure()
+***REMOVED******REMOVED******REMOVED***assertionFailure("Unrecognized interface orientation")
+***REMOVED******REMOVED******REMOVED***return transform
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-struct InterfaceOrientationReader: UIViewControllerRepresentable {
+***REMOVED***/ A view that is able to update a binding to an interface orientation.
+struct InterfaceOrientationDetector: UIViewControllerRepresentable {
+***REMOVED******REMOVED***/ The binding to update when an interface orientation change is detected.
 ***REMOVED***let binding: Binding<UIInterfaceOrientation?>
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates an interface orientation detector view.
 ***REMOVED***init(interfaceOrientation: Binding<UIInterfaceOrientation?>) {
 ***REMOVED******REMOVED***binding = interfaceOrientation
 ***REMOVED***
@@ -204,34 +206,40 @@ struct InterfaceOrientationReader: UIViewControllerRepresentable {
 ***REMOVED***
 ***REMOVED***func updateUIViewController(_ uiView: InterfaceOrientationViewController, context: Context) {***REMOVED***
 ***REMOVED***
-
-final class InterfaceOrientationViewController: UIViewController {
-***REMOVED***let binding: Binding<UIInterfaceOrientation?>
-***REMOVED***
-***REMOVED***init(interfaceOrientation: Binding<UIInterfaceOrientation?>) {
-***REMOVED******REMOVED***binding = interfaceOrientation
-***REMOVED******REMOVED***super.init(nibName: nil, bundle: nil)
-***REMOVED***
-***REMOVED***
-***REMOVED***required init?(coder: NSCoder) {
-***REMOVED******REMOVED***fatalError("init(coder:) has not been implemented")
-***REMOVED***
-***REMOVED***
-***REMOVED***override func viewDidAppear(_ animated: Bool) {
-***REMOVED******REMOVED***super.viewDidAppear(animated)
-***REMOVED******REMOVED***self.binding.wrappedValue = self.windowInterfaceOrientation
-***REMOVED***
-***REMOVED***
-***REMOVED***override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-***REMOVED******REMOVED***super.viewWillTransition(to: size, with: coordinator)
+***REMOVED***final class InterfaceOrientationViewController: UIViewController {
+***REMOVED******REMOVED***let binding: Binding<UIInterfaceOrientation?>
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***coordinator.animate { _ in
+***REMOVED******REMOVED***init(interfaceOrientation: Binding<UIInterfaceOrientation?>) {
+***REMOVED******REMOVED******REMOVED***binding = interfaceOrientation
+***REMOVED******REMOVED******REMOVED***super.init(nibName: nil, bundle: nil)
+***REMOVED******REMOVED******REMOVED***view.isUserInteractionEnabled = false
+***REMOVED******REMOVED******REMOVED***view.isHidden = true
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***required init?(coder: NSCoder) {
+***REMOVED******REMOVED******REMOVED***fatalError("init(coder:) has not been implemented")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***override func viewDidAppear(_ animated: Bool) {
+***REMOVED******REMOVED******REMOVED***super.viewDidAppear(animated)
 ***REMOVED******REMOVED******REMOVED***self.binding.wrappedValue = self.windowInterfaceOrientation
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+***REMOVED******REMOVED******REMOVED******REMOVED*** According to the Apple documentation, this is the new way to be notified when the
+***REMOVED******REMOVED******REMOVED******REMOVED*** interface orientation changes.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Also, a similar solution is on SO here: https:***REMOVED***stackoverflow.com/a/60577486/1687195
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***super.viewWillTransition(to: size, with: coordinator)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***coordinator.animate { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***self.binding.wrappedValue = self.windowInterfaceOrientation
+***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***var windowInterfaceOrientation: UIInterfaceOrientation? {
-***REMOVED******REMOVED***view.window?.windowScene?.interfaceOrientation
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The interface orientation of the window that this view is contained in.
+***REMOVED******REMOVED***var windowInterfaceOrientation: UIInterfaceOrientation? {
+***REMOVED******REMOVED******REMOVED***view.window?.windowScene?.interfaceOrientation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
