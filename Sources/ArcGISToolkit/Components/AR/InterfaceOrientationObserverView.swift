@@ -13,14 +13,26 @@
 
 ***REMOVED***
 
+extension View {
+***REMOVED******REMOVED***/ Observes interface orientation changes for a given view.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - interfaceOrientation: A binding to an interface orientation that will be updated
+***REMOVED******REMOVED***/   when an interface orientation change is detected.
+***REMOVED***func observingInterfaceOrientation(_ interfaceOrientation: Binding<InterfaceOrientation?>) -> some View {
+***REMOVED******REMOVED***background {
+***REMOVED******REMOVED******REMOVED***InterfaceOrientationObserverView(interfaceOrientation: interfaceOrientation)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***/ A view that is able to update a binding to an interface orientation.
 ***REMOVED***/ This view will detect and report the interface orientation when the view is
 ***REMOVED***/ in a window.
-struct InterfaceOrientationDetector: UIViewControllerRepresentable {
+private struct InterfaceOrientationObserverView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***/ The binding to update when an interface orientation change is detected.
 ***REMOVED***let binding: Binding<InterfaceOrientation?>
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates an interface orientation detector view.
+***REMOVED******REMOVED***/ Creates an interface orientation observer view.
 ***REMOVED***init(interfaceOrientation: Binding<InterfaceOrientation?>) {
 ***REMOVED******REMOVED***binding = interfaceOrientation
 ***REMOVED***
