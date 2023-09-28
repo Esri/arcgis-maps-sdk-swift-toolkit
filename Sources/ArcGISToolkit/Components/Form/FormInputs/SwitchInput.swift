@@ -68,6 +68,7 @@ struct SwitchInput: View {
                     .toggleStyle(.switch)
                     .padding([.horizontal], 5)
                     .formTextInputStyle()
+                    .accessibilityIdentifier("\(element.label) Switch")
                 InputFooter(element: element, requiredValueMissing: requiredValueMissing)
             }
             .padding([.bottom], elementPadding)
