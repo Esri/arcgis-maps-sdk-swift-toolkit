@@ -99,7 +99,7 @@ struct TextInputFooter: View {
             self.minLength = input.minLength
             _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
         default:
-            fatalError("TextInputFooter can only be used with TextAreaFormInput or TextBoxFormInput")
+            fatalError("\(Self.self) can only be used with \(TextAreaFormInput.self) or \(TextBoxFormInput.self)")
         }
     }
     
