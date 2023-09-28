@@ -97,6 +97,7 @@ private extension InterfaceOrientation {
         case .portraitUpsideDown:
             self = .portraitUpsideDown
         case .landscapeLeft:
+            // UIInterfaceOrientation and InterfaceOrientation have left/right reversed.
             self = .landscapeRight
         case .landscapeRight:
             // UIInterfaceOrientation and InterfaceOrientation have left/right reversed.
