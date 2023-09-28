@@ -17,12 +17,11 @@ import ARKit
 
 ***REMOVED***/ A scene view that provides an augmented reality table top experience.
 public struct TableTopSceneView: View {
-***REMOVED******REMOVED***/ The last portrait or landscape orientation value.
-***REMOVED***@State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
 ***REMOVED***@State private var initialTransformation: TransformationMatrix? = nil
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
+***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
 ***REMOVED***private var initialTransformationIsSet: Bool { initialTransformation != nil ***REMOVED***
@@ -60,19 +59,19 @@ public struct TableTopSceneView: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***InterfaceOrientationDetector(interfaceOrientation: $interfaceOrientation)
 ***REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateLastGoodDeviceOrientation()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.updateCamera(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation ?? .portrait,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation: initialTransformation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.setFieldOfView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: frame,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation ?? .portrait
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { _, node, anchor in
@@ -111,15 +110,6 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(initialTransformationIsSet ? 1 : 0)
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Updates the last good device orientation.
-***REMOVED***func updateLastGoodDeviceOrientation() {
-***REMOVED******REMOVED******REMOVED*** Get the device orientation, but don't allow non-landscape/portrait values.
-***REMOVED******REMOVED***let deviceOrientation = UIDevice.current.orientation
-***REMOVED******REMOVED***if deviceOrientation.isValidInterfaceOrientation {
-***REMOVED******REMOVED******REMOVED***lastGoodDeviceOrientation = deviceOrientation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -273,8 +263,8 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED***/ Sets the field of view for the scene view's camera for a given augmented reality frame.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - frame: The current AR frame.
-***REMOVED******REMOVED***/   - orientation: The device orientation.
-***REMOVED***func setFieldOfView(for frame: ARFrame, orientation: UIDeviceOrientation) {
+***REMOVED******REMOVED***/   - orientation: The interface orientation.
+***REMOVED***func setFieldOfView(for frame: ARFrame, orientation: InterfaceOrientation) {
 ***REMOVED******REMOVED***let camera = frame.camera
 ***REMOVED******REMOVED***let intrinsics = camera.intrinsics
 ***REMOVED******REMOVED***let imageResolution = camera.imageResolution
@@ -286,7 +276,7 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED******REMOVED***yPrincipal: intrinsics[2][1],
 ***REMOVED******REMOVED******REMOVED***xImageSize: Float(imageResolution.width),
 ***REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
-***REMOVED******REMOVED******REMOVED***deviceOrientation: orientation
+***REMOVED******REMOVED******REMOVED***interfaceOrientation: orientation
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
