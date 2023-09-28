@@ -21,6 +21,7 @@ public struct TableTopSceneView: View {
     @State private var sceneViewProxy: SceneViewProxy?
     @State private var initialTransformation: TransformationMatrix? = nil
     @State private var cameraController: TransformationMatrixCameraController
+     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     private let configuration: ARWorldTrackingConfiguration
