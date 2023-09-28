@@ -61,9 +61,7 @@ public struct FlyoverSceneView: View {
                         orientation: interfaceOrientation
                     )
                 }
-                .background {
-                    InterfaceOrientationDetector(interfaceOrientation: $interfaceOrientation)
-                }
+                .observingInterfaceOrientation($interfaceOrientation)
         }
     }
 }
