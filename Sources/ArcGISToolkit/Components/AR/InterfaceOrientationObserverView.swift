@@ -13,14 +13,26 @@
 
 import SwiftUI
 
+extension View {
+    /// Observes interface orientation changes for a given view.
+    /// - Parameters:
+    ///   - interfaceOrientation: A binding to an interface orientation that will be updated
+    ///   when an interface orientation change is detected.
+    func observingInterfaceOrientation(_ interfaceOrientation: Binding<InterfaceOrientation?>) -> some View {
+        background {
+            InterfaceOrientationObserverView(interfaceOrientation: interfaceOrientation)
+        }
+    }
+}
+
 /// A view that is able to update a binding to an interface orientation.
 /// This view will detect and report the interface orientation when the view is
 /// in a window.
-struct InterfaceOrientationDetector: UIViewControllerRepresentable {
+private struct InterfaceOrientationObserverView: UIViewControllerRepresentable {
     /// The binding to update when an interface orientation change is detected.
     let binding: Binding<InterfaceOrientation?>
     
-    /// Creates an interface orientation detector view.
+    /// Creates an interface orientation observer view.
     init(interfaceOrientation: Binding<InterfaceOrientation?>) {
         binding = interfaceOrientation
     }

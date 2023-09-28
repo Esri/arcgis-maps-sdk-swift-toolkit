@@ -59,7 +59,6 @@ public struct TableTopSceneView: View {
     
     public var body: some View {
         ZStack {
-            InterfaceOrientationDetector(interfaceOrientation: $interfaceOrientation)
             ARSwiftUIView(proxy: arViewProxy)
                 .onDidUpdateFrame { _, frame in
                     guard let sceneViewProxy, let interfaceOrientation else { return }
@@ -111,6 +110,7 @@ public struct TableTopSceneView: View {
                     .opacity(initialTransformationIsSet ? 1 : 0)
             }
         }
+        .observingInterfaceOrientation($interfaceOrientation)
     }
     
     /// Visualizes a new node added to the scene as an AR Plane.
