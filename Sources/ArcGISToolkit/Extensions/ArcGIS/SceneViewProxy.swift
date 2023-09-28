@@ -53,7 +53,7 @@ private extension ARCamera {
     func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
         switch orientation {
         case .portrait:
-            // Rotate camera transform 90 degrees counter-clockwise in the XY plane.
+            // Rotate camera transform 90 degrees clockwise in the XY plane.
             return simd_float4x4(
                 transform.columns.1,
                 -transform.columns.0,
