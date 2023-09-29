@@ -41,14 +41,10 @@ struct TextInputFooter: View {
     /// A Boolean value indicating whether the text input field is required.
     private let isRequired: Bool
     
-    /// The maximum allowable length of text in the text input field.
-    private let maxLength: Int
+    /// The allowable length of text in the text input field.
+    private let lengthRange: ClosedRange<Int>
     
-    /// The minimum allowable length of text in the text input field.
-    private let minLength: Int
-    
-    /// The range domain for the text field input. This is used to
-    /// generate messages if the numeric value is out-of-range.
+    /// The allowable range of numeric values in the text input field.
     private let rangeDomain: RangeDomain?
     
     private var isNumeric: Bool
@@ -79,12 +75,10 @@ struct TextInputFooter: View {
         
         switch input {
         case let input as TextBoxFormInput:
-            self.maxLength = input.maxLength
-            self.minLength = input.minLength
+            lengthRange = input.minLength...input.maxLength
             _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
         case let input as TextAreaFormInput:
-            self.maxLength = input.maxLength
-            self.minLength = input.minLength
+            lengthRange = input.minLength...input.maxLength
             _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
         default:
             fatalError("\(Self.self) can only be used with \(TextAreaFormInput.self) or \(TextBoxFormInput.self)")
@@ -108,7 +102,7 @@ struct TextInputFooter: View {
         .foregroundColor(validationError == nil ? .secondary : .red)
         .onChange(of: currentLength) { newLength in
             if !hasPreviouslySatisfiedMinimum {
-                if newLength >= minLength {
+                if newLength >= lengthRange.lowerBound {
                     hasPreviouslySatisfiedMinimum = true
                 }
             } else {
@@ -147,9 +141,9 @@ extension TextInputFooter {
     /// The length validation scheme performed on the text input, determined by the minimum and
     /// maximum lengths.
     var scheme: LengthValidationScheme {
-        if minLength == 0 {
+        if lengthRange.lowerBound == 0 {
             return .max
-        } else if minLength == maxLength {
+        } else if lengthRange.lowerBound == lengthRange.upperBound {
             return .exact
         } else {
             return .minAndMax
@@ -180,7 +174,7 @@ extension TextInputFooter {
             validationError = .outOfRange
         } else if length == .zero && isRequired && !focused {
             validationError = .emptyWhenRequired
-        } else if length < minLength || length > maxLength {
+        } else if length < lengthRange.lowerBound || length > lengthRange.upperBound {
             validationError = .minOrMaxUnmet
         } else {
             validationError = nil
@@ -193,7 +187,7 @@ extension TextInputFooter {
     /// well use `maxLength`.
     var exactText: Text {
         Text(
-            "Enter \(minLength) characters",
+            "Enter \(lengthRange.lowerBound) characters",
             bundle: .toolkitModule,
             comment: "Text indicating a field's exact number of required characters."
         )
@@ -202,7 +196,7 @@ extension TextInputFooter {
     /// Text indicating a field's maximum number of allowed characters.
     var maximumText: Text {
         Text(
-            "Maximum \(maxLength) characters",
+            "Maximum \(lengthRange.lowerBound) characters",
             bundle: .toolkitModule,
             comment: "Text indicating a field's maximum number of allowed characters."
         )
@@ -211,7 +205,7 @@ extension TextInputFooter {
     /// Text indicating a field's minimum and maximum number of allowed characters.
     var minAndMaxText: Text {
         Text(
-            "Enter \(minLength) to \(maxLength) characters",
+            "Enter \(lengthRange.lowerBound) to \(lengthRange.upperBound) characters",
             bundle: .toolkitModule,
             comment: "Text indicating a field's minimum and maximum number of allowed characters."
         )
