@@ -47,12 +47,6 @@ struct TextInputFooter: View {
     /// The minimum allowable length of text in the text input field.
     private let minLength: Int
     
-    /// The maximum allowable value in the text input field.
-    private let maxValue: Double = 10
-    
-    /// The minimum allowable length in the text input field.
-    private let minValue: Double = 1
-    
     /// The range domain for the text field input. This is used to
     /// generate messages if the numeric value is out-of-range.
     private let rangeDomain: RangeDomain?
