@@ -23,9 +23,6 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ length at any point in time.
 ***REMOVED***@State private var hasPreviouslySatisfiedMinimum: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field has been edited.
-***REMOVED***@State private var hasBeenEdited = false
-***REMOVED***
 ***REMOVED******REMOVED***/ The current text in the text input field.
 ***REMOVED***private let text: String
 ***REMOVED***
@@ -116,17 +113,16 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.foregroundColor(validationError == nil ? .secondary : .red)
 ***REMOVED******REMOVED***.onChange(of: currentLength) { newLength in
-***REMOVED******REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if newLength >= minLength {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***hasPreviouslySatisfiedMinimum = true
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***hasBeenEdited = true
-***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: newLength, focused: isFocused)
+***REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum {
+***REMOVED******REMOVED******REMOVED******REMOVED***if newLength >= minLength {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***hasPreviouslySatisfiedMinimum = true
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: newLength, focused: isFocused)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { newIsFocused in
-***REMOVED******REMOVED******REMOVED***if hasBeenEdited || !newIsFocused {
+***REMOVED******REMOVED******REMOVED***if hasPreviouslySatisfiedMinimum || !newIsFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: currentLength, focused: newIsFocused)
 ***REMOVED******REMOVED***
 ***REMOVED***
