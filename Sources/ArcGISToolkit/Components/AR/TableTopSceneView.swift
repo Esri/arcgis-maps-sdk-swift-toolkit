@@ -27,6 +27,8 @@ public struct TableTopSceneView: View {
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
+***REMOVED******REMOVED***/ The help text to guide the user through the AR experience.
+***REMOVED***@State private var helpText: String?
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ The configuration for the AR session.
@@ -81,6 +83,9 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onCameraTrackingStateChange { _, camera in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setHelpText(for: camera.trackingState)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addPlane(renderer: renderer, node: node, anchor: anchor)
 ***REMOVED******REMOVED******REMOVED***
@@ -97,6 +102,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***using: screenPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation = transformation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***helpText = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
@@ -121,6 +127,14 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(initialTransformationIsSet ? 1 : 0)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.overlay(alignment: .top) {
+***REMOVED******REMOVED******REMOVED***if let helpText {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(helpText)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
 ***REMOVED***
 ***REMOVED***
@@ -130,7 +144,8 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/   - node: The node to be added to the scene.
 ***REMOVED******REMOVED***/   - anchor: The anchor position of the node.
 ***REMOVED***private func addPlane(renderer: SCNSceneRenderer, node: SCNNode, anchor: ARAnchor) {
-***REMOVED******REMOVED***guard let planeAnchor = anchor as? ARPlaneAnchor,
+***REMOVED******REMOVED***guard !initialTransformationIsSet,
+***REMOVED******REMOVED******REMOVED***  let planeAnchor = anchor as? ARPlaneAnchor,
 ***REMOVED******REMOVED******REMOVED***  let device = renderer.device,
 ***REMOVED******REMOVED******REMOVED***  let planeGeometry = ARSCNPlaneGeometry(device: device)
 ***REMOVED******REMOVED***else { return ***REMOVED***
@@ -149,6 +164,9 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED*** Add the visualization to the ARKit-managed node so that it tracks
 ***REMOVED******REMOVED******REMOVED*** changes in the plane anchor as plane estimation continues.
 ***REMOVED******REMOVED***node.addChildNode(planeNode)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set help text when plane is visualized.
+***REMOVED******REMOVED***helpText = "Tap a surface to place the scene"
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Visualizes a node updated in the scene as an AR Plane.
@@ -168,6 +186,37 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Update extent visualization to the anchor's new geometry.
 ***REMOVED******REMOVED***planeGeometry.update(from: planeAnchor.geometry)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set help text when plane visualization is updated.
+***REMOVED******REMOVED***helpText = "Tap a surface to place the scene"
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the help text to guide the user through the AR experience using the AR session's camera tracking status.
+***REMOVED******REMOVED***/ - Parameter trackingState: The camera's tracking status.
+***REMOVED***private func setHelpText(for trackingState: ARCamera.TrackingState) {
+***REMOVED******REMOVED***guard !initialTransformationIsSet else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch trackingState {
+***REMOVED******REMOVED***case .normal:
+***REMOVED******REMOVED******REMOVED***helpText = "Keep moving your device"
+***REMOVED******REMOVED***case .notAvailable:
+***REMOVED******REMOVED******REMOVED***helpText = "Location not available"
+***REMOVED******REMOVED***case .limited(let reason):
+***REMOVED******REMOVED******REMOVED***switch reason {
+***REMOVED******REMOVED******REMOVED***case .excessiveMotion:
+***REMOVED******REMOVED******REMOVED******REMOVED***helpText = "Try moving your device more slowly"
+***REMOVED******REMOVED******REMOVED***case .initializing:
+***REMOVED******REMOVED******REMOVED******REMOVED***helpText = "Keep moving your device"
+***REMOVED******REMOVED******REMOVED***case .insufficientFeatures:
+***REMOVED******REMOVED******REMOVED******REMOVED***helpText = "Try turning on more lights and moving around"
+***REMOVED******REMOVED******REMOVED***case .relocalizing:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This case will not occur since the AR session delegate
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** does not implement relocalization support.
+***REMOVED******REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
