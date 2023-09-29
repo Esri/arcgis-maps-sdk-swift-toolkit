@@ -27,6 +27,8 @@ public struct TableTopSceneView: View {
     @State private var cameraController: TransformationMatrixCameraController
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
+    /// The help text to guide the user through the AR experience.
+    @State private var helpText: String?
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The configuration for the AR session.
@@ -81,6 +83,9 @@ public struct TableTopSceneView: View {
                         orientation: interfaceOrientation
                     )
                 }
+                .onCameraTrackingStateChange { _, camera in
+                    setHelpText(for: camera.trackingState)
+                }
                 .onAddNode { renderer, node, anchor in
                     addPlane(renderer: renderer, node: node, anchor: anchor)
                 }
@@ -97,6 +102,7 @@ public struct TableTopSceneView: View {
                         using: screenPoint
                     ) {
                         initialTransformation = transformation
+                        helpText = nil
                     }
                 }
                 .onAppear {
@@ -121,6 +127,14 @@ public struct TableTopSceneView: View {
                     .opacity(initialTransformationIsSet ? 1 : 0)
             }
         }
+        .overlay(alignment: .top) {
+            if let helpText {
+                Text(helpText)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(8)
+                    .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+            }
+        }
         .observingInterfaceOrientation($interfaceOrientation)
     }
     
@@ -130,7 +144,8 @@ public struct TableTopSceneView: View {
     ///   - node: The node to be added to the scene.
     ///   - anchor: The anchor position of the node.
     private func addPlane(renderer: SCNSceneRenderer, node: SCNNode, anchor: ARAnchor) {
-        guard let planeAnchor = anchor as? ARPlaneAnchor,
+        guard !initialTransformationIsSet,
+              let planeAnchor = anchor as? ARPlaneAnchor,
               let device = renderer.device,
               let planeGeometry = ARSCNPlaneGeometry(device: device)
         else { return }
@@ -149,6 +164,9 @@ public struct TableTopSceneView: View {
         // Add the visualization to the ARKit-managed node so that it tracks
         // changes in the plane anchor as plane estimation continues.
         node.addChildNode(planeNode)
+        
+        // Set help text when plane is visualized.
+        helpText = "Tap a surface to place the scene"
     }
     
     /// Visualizes a node updated in the scene as an AR Plane.
@@ -168,6 +186,37 @@ public struct TableTopSceneView: View {
         
         // Update extent visualization to the anchor's new geometry.
         planeGeometry.update(from: planeAnchor.geometry)
+        
+        // Set help text when plane visualization is updated.
+        helpText = "Tap a surface to place the scene"
+    }
+    
+    /// Sets the help text to guide the user through the AR experience using the AR session's camera tracking status.
+    /// - Parameter trackingState: The camera's tracking status.
+    private func setHelpText(for trackingState: ARCamera.TrackingState) {
+        guard !initialTransformationIsSet else { return }
+        
+        switch trackingState {
+        case .normal:
+            helpText = "Keep moving your device"
+        case .notAvailable:
+            helpText = "Location not available"
+        case .limited(let reason):
+            switch reason {
+            case .excessiveMotion:
+                helpText = "Try moving your device more slowly"
+            case .initializing:
+                helpText = "Keep moving your device"
+            case .insufficientFeatures:
+                helpText = "Try turning on more lights and moving around"
+            case .relocalizing:
+                // This case will not occur since the AR session delegate
+                // does not implement relocalization support.
+                break
+            default:
+                break
+            }
+        }
     }
 }
 
