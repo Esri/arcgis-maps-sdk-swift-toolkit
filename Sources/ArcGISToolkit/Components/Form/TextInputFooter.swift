@@ -98,8 +98,7 @@ struct TextInputFooter: View {
                     .accessibilityIdentifier("\(element.label) Footer")
             }
             Spacer()
-            if isFocused, description.isEmpty || validationError != nil,
-                isNumeric == false {
+            if isFocused, description.isEmpty || validationError != nil, !isNumeric {
                 Text(currentLength, format: .number)
                     .accessibilityIdentifier("\(element.label) Character Indicator")
             }
