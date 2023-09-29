@@ -23,7 +23,7 @@ public struct TableTopSceneView: View {
 ***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
 ***REMOVED******REMOVED***/ The initial transformation for the scene's camera controller.
 ***REMOVED***@State private var initialTransformation: TransformationMatrix? = nil
-***REMOVED******REMOVED***/ The camera controller that we will set on the scene view.
+***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
