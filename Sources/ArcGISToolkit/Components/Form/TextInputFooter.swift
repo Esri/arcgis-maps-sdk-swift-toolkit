@@ -172,7 +172,6 @@ extension TextInputFooter {
     /// The length validation text, dependent on the length validation scheme.
     var validationText: Text {
         if isNumeric {
-            print("range = \(rangeDomain)")
             return rangeDomain == nil ? Text("") : minAndMaxValue
         } else {
             switch scheme {
