@@ -25,6 +25,8 @@ public struct FlyoverSceneView: View {
     @State private var cameraController: TransformationMatrixCameraController
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
+    /// The translation factor to set on the camera controller.
+    private let translationFactor: Double
     
     /// Creates a fly over scene view.
     /// - Parameters:
@@ -45,12 +47,19 @@ public struct FlyoverSceneView: View {
         let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
         cameraController.translationFactor = translationFactor
         _cameraController = .init(initialValue: cameraController)
+        
+        self.translationFactor = translationFactor
     }
     
     public var body: some View {
         SceneViewReader { sceneViewProxy in
             sceneViewBuilder(sceneViewProxy)
                 .cameraController(cameraController)
+                .onInteractiveZoomingChanged { isZooming in
+                    if !isZooming {
+                        cameraController.translationFactor = translationFactor
+                    }
+                }
                 .onAppear { session.start() }
                 .onDisappear { session.pause() }
                 .onChange(of: session.currentFrame) { frame in
