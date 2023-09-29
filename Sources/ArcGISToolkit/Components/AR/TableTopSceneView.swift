@@ -17,12 +17,12 @@ import ArcGIS
 
 /// A scene view that provides an augmented reality table top experience.
 public struct TableTopSceneView: View {
-    /// The last portrait or landscape orientation value.
-    @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
     @State private var arViewProxy = ARSwiftUIViewProxy()
     @State private var sceneViewProxy: SceneViewProxy?
     @State private var initialTransformation: TransformationMatrix? = nil
     @State private var cameraController: TransformationMatrixCameraController
+     /// The current interface orientation.
+    @State private var interfaceOrientation: InterfaceOrientation?
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     private let configuration: ARWorldTrackingConfiguration
     private var initialTransformationIsSet: Bool { initialTransformation != nil }
@@ -62,17 +62,16 @@ public struct TableTopSceneView: View {
         ZStack {
             ARSwiftUIView(proxy: arViewProxy)
                 .onDidUpdateFrame { _, frame in
-                    guard let sceneViewProxy else { return }
-                    updateLastGoodDeviceOrientation()
+                    guard let sceneViewProxy, let interfaceOrientation else { return }
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
-                        orientation: lastGoodDeviceOrientation,
+                        orientation: interfaceOrientation,
                         initialTransformation: initialTransformation
                     )
                     sceneViewProxy.setFieldOfView(
                         for: frame,
-                        orientation: lastGoodDeviceOrientation
+                        orientation: interfaceOrientation
                     )
                 }
                 .onAddNode { renderer, node, anchor in
@@ -112,15 +111,7 @@ public struct TableTopSceneView: View {
                     .opacity(initialTransformationIsSet ? 1 : 0)
             }
         }
-    }
-    
-    /// Updates the last good device orientation.
-    func updateLastGoodDeviceOrientation() {
-        // Get the device orientation, but don't allow non-landscape/portrait values.
-        let deviceOrientation = UIDevice.current.orientation
-        if deviceOrientation.isValidInterfaceOrientation {
-            lastGoodDeviceOrientation = deviceOrientation
-        }
+        .observingInterfaceOrientation($interfaceOrientation)
     }
     
     /// Visualizes a new node added to the scene as an AR Plane.
@@ -250,8 +241,8 @@ private extension SceneViewProxy {
     /// Sets the field of view for the scene view's camera for a given augmented reality frame.
     /// - Parameters:
     ///   - frame: The current AR frame.
-    ///   - orientation: The device orientation.
-    func setFieldOfView(for frame: ARFrame, orientation: UIDeviceOrientation) {
+    ///   - orientation: The interface orientation.
+    func setFieldOfView(for frame: ARFrame, orientation: InterfaceOrientation) {
         let camera = frame.camera
         let intrinsics = camera.intrinsics
         let imageResolution = camera.imageResolution
@@ -263,7 +254,7 @@ private extension SceneViewProxy {
             yPrincipal: intrinsics[2][1],
             xImageSize: Float(imageResolution.width),
             yImageSize: Float(imageResolution.height),
-            deviceOrientation: orientation
+            interfaceOrientation: orientation
         )
     }
 }
