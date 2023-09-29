@@ -242,10 +242,34 @@ extension TextInputFooter {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Text indicating a field's number value is not in the correct range of acceptable values.
 ***REMOVED***var minAndMaxValue: Text {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Enter value from \(minValue) to \(maxValue)",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's number value is not in the correct range of acceptable values."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let minAndMax = rangeDomain?.displayableMinAndMax
+***REMOVED******REMOVED***if let minAndMax {
+***REMOVED******REMOVED******REMOVED***return Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Enter value from \(minAndMax.min) to \(minAndMax.max)",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's number value is not in the correct range of acceptable values."
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Enter value in the allowed range",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's number value is not in the correct range of acceptable values."
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension RangeDomain {
+***REMOVED******REMOVED***/ String representations of the minimum and maximum value of the range domain.
+***REMOVED***var displayableMinAndMax: (min: String, max: String)? {
+***REMOVED******REMOVED***if let min = minValue as? Double, let max = maxValue as? Double {
+***REMOVED******REMOVED******REMOVED***return (String(min), String(max))
+***REMOVED*** else if let min = minValue as? Int, let max = maxValue as? Int {
+***REMOVED******REMOVED******REMOVED***return (String(min), String(max))
+***REMOVED*** else if let min = minValue as? Int32, let max = maxValue as? Int32 {
+***REMOVED******REMOVED******REMOVED***return (String(min), String(max))
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
