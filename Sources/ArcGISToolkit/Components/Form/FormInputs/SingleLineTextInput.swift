@@ -99,6 +99,7 @@ struct SingleLineTextInput: View {
 ***REMOVED***
 
 private extension SingleLineTextInput {
+***REMOVED******REMOVED***/ A Boolean value indicating whether the input is for a numeric data type.
 ***REMOVED***var isNumeric: Bool {
 ***REMOVED******REMOVED***if let field = featureForm?.feature.table?.field(named: element.fieldName)?.type {
 ***REMOVED******REMOVED******REMOVED***return field.isNumeric
@@ -106,6 +107,7 @@ private extension SingleLineTextInput {
 ***REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the field has a numeric data type with decimal precision.
 ***REMOVED***var isDecimal: Bool {
 ***REMOVED******REMOVED***if let field = featureForm?.feature.table?.field(named: element.fieldName)?.type {
 ***REMOVED******REMOVED******REMOVED***return field.isFloatingPoint
@@ -113,10 +115,12 @@ private extension SingleLineTextInput {
 ***REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.
 ***REMOVED***var keyboardType: UIKeyboardType {
 ***REMOVED******REMOVED***isNumeric ? (isDecimal ? .decimalPad : .numberPad) : .default
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The range of valid values for a numeric input field.
 ***REMOVED***var rangeDomain: RangeDomain? {
 ***REMOVED******REMOVED***if let field = featureForm?.feature.table?.field(named: element.fieldName) {
 ***REMOVED******REMOVED******REMOVED***return field.domain as? RangeDomain
@@ -127,10 +131,12 @@ private extension SingleLineTextInput {
 ***REMOVED***
 
 private extension FieldType {
+***REMOVED******REMOVED***/ A Boolean value indicating whether the field has a numeric data type.
 ***REMOVED***var isNumeric: Bool {
 ***REMOVED******REMOVED***self == .float32 || self == .float64 || self == .int16 || self == .int32 || self == .int64
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the field has a floating point data type.
 ***REMOVED***var isFloatingPoint: Bool {
 ***REMOVED******REMOVED***self == .float32 || self == .float64
 ***REMOVED***
