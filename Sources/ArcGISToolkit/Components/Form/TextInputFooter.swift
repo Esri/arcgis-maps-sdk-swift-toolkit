@@ -16,7 +16,7 @@ import ArcGIS
 
 /// A view shown at the bottom of each text input element in a form.
 struct TextInputFooter: View {
-    /// An error that is present when a length constraint is not met.
+    /// An error present when a validation constraint is unmet.
     @State private var validationError: TextValidationError?
     
     /// A Boolean value indicating whether the text input field has previously satisfied the minimum
