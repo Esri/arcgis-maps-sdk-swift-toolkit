@@ -102,18 +102,18 @@ struct TextInputFooter: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.foregroundColor(validationError == nil ? .secondary : .red)
-***REMOVED******REMOVED***.onChange(of: currentLength) { newLength in
+***REMOVED******REMOVED***.onChange(of: text) { newText in
 ***REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum {
-***REMOVED******REMOVED******REMOVED******REMOVED***if newLength >= lengthRange.lowerBound {
+***REMOVED******REMOVED******REMOVED******REMOVED***if newText.count  >= lengthRange.lowerBound {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***hasPreviouslySatisfiedMinimum = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: newLength, focused: isFocused)
+***REMOVED******REMOVED******REMOVED******REMOVED***validate(text: newText, focused: isFocused)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { newIsFocused in
 ***REMOVED******REMOVED******REMOVED***if hasPreviouslySatisfiedMinimum || !newIsFocused {
-***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: currentLength, focused: newIsFocused)
+***REMOVED******REMOVED******REMOVED******REMOVED***validate(text: text, focused: newIsFocused)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -169,14 +169,19 @@ extension TextInputFooter {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Checks for any validation errors and updates the value of `validationError`.
-***REMOVED******REMOVED***/ - Parameter length: The length of text to use for validation.
+***REMOVED******REMOVED***/ - Parameter text: The text to use for validation.
 ***REMOVED******REMOVED***/ - Parameter focused: The focus state to use for validation.
-***REMOVED***func validate(length: Int, focused: Bool) {
+***REMOVED***func validate(text: String, focused: Bool) {
 ***REMOVED******REMOVED***if isNumeric {
-***REMOVED******REMOVED******REMOVED***validationError = .outOfRange
-***REMOVED*** else if length == .zero && isRequired && !focused {
+***REMOVED******REMOVED******REMOVED***if !(rangeDomain?.contains(text) ?? false) {
+***REMOVED******REMOVED******REMOVED******REMOVED***validationError = .outOfRange
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***validationError = nil
+***REMOVED******REMOVED***
+***REMOVED*** else if text.count == .zero && isRequired && !focused {
 ***REMOVED******REMOVED******REMOVED***validationError = .emptyWhenRequired
-***REMOVED*** else if length < lengthRange.lowerBound || length > lengthRange.upperBound {
+***REMOVED*** else if text.count < lengthRange.lowerBound || text.count > lengthRange.upperBound {
+***REMOVED******REMOVED******REMOVED***print(".minOrMaxUnmet", text.count, lengthRange)
 ***REMOVED******REMOVED******REMOVED***validationError = .minOrMaxUnmet
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***validationError = nil
@@ -185,7 +190,7 @@ extension TextInputFooter {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Text indicating a field's exact number of allowed characters.
 ***REMOVED******REMOVED***/ - Note: This is intended to be used in instances where the character minimum and maximum are
-***REMOVED******REMOVED***/ identical, such as an ID field; the implementation uses `minLength` but it could just as
+***REMOVED******REMOVED***/ identical, such as an ID fie7ld; the implementation uses `minLength` but it could just as
 ***REMOVED******REMOVED***/ well use `maxLength`.
 ***REMOVED***var exactText: Text {
 ***REMOVED******REMOVED***Text(
@@ -252,6 +257,21 @@ extension RangeDomain {
 ***REMOVED******REMOVED******REMOVED***return (String(min), String(max))
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Determines if the text's numeric value is within the range domain.
+***REMOVED******REMOVED***/ - Parameter value: Text with a numeric value.
+***REMOVED******REMOVED***/ - Returns: A Boolean value indicating whether the text's numeric value is within the range domain.
+***REMOVED***func contains(_ value: String) -> Bool {
+***REMOVED******REMOVED***if let min = minValue as? Double, let max = maxValue as? Double, let v = Double(value) {
+***REMOVED******REMOVED******REMOVED***return (min...max).contains(v)
+***REMOVED*** else if let min = minValue as? Int, let max = maxValue as? Int, let v = Int(value) {
+***REMOVED******REMOVED******REMOVED***return (min...max).contains(v)
+***REMOVED*** else if let min = minValue as? Int32, let max = maxValue as? Int32, let v = Int32(value)  {
+***REMOVED******REMOVED******REMOVED***return (min...max).contains(v)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
