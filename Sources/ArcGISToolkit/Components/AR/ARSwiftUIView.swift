@@ -20,7 +20,7 @@ typealias ARViewType = ARSCNView
 struct ARSwiftUIView {
     /// The closure to call when the session's frame updates.
     private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-    /// The closure to call when the camera's tracking status changes.
+    /// The closure to call when the camera tracking status changes.
     private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
     /// The closure to call when a node corresponding to a new anchor has been added to the view.
     private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
