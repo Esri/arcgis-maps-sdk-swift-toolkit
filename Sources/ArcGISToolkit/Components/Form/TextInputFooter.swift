@@ -61,7 +61,6 @@ struct TextInputFooter: View {
     private let rangeDomain: RangeDomain?
     
     private var isNumeric: Bool
-    private var isDecimal: Bool
     
     /// Creates a footer shown at the bottom of each text input element in a form.
     /// - Parameters:
@@ -76,8 +75,7 @@ struct TextInputFooter: View {
         element: FieldFormElement,
         input: FormInput,
         rangeDomain: RangeDomain? = nil,
-        isNumeric: Bool = false,
-        isDecimal: Bool = false
+        isNumeric: Bool = false
     ) {
         self.text = text
         self.currentLength = text.count
@@ -87,7 +85,6 @@ struct TextInputFooter: View {
         self.isRequired = element.isRequired
         self.rangeDomain = rangeDomain
         self.isNumeric = isNumeric
-        self.isDecimal = isDecimal
         
         switch input {
         case let input as TextBoxFormInput:
