@@ -67,8 +67,8 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
 ***REMOVED******REMOVED******REMOVED***element: element,
 ***REMOVED******REMOVED******REMOVED***input: input,
-***REMOVED******REMOVED******REMOVED***isNumeric: isNumericInput,
-***REMOVED******REMOVED******REMOVED***isDecimal: isDecimalInput
+***REMOVED******REMOVED******REMOVED***rangeDomain: rangeDomain,
+***REMOVED******REMOVED******REMOVED***isNumeric: isNumericInput
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
