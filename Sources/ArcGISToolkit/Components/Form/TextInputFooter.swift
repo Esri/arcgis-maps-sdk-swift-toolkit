@@ -23,9 +23,6 @@ struct TextInputFooter: View {
     /// length at any point in time.
     @State private var hasPreviouslySatisfiedMinimum: Bool
     
-    /// A Boolean value indicating whether the text input field has been edited.
-    @State private var hasBeenEdited = false
-    
     /// The current text in the text input field.
     private let text: String
     
@@ -116,17 +113,16 @@ struct TextInputFooter: View {
         .font(.footnote)
         .foregroundColor(validationError == nil ? .secondary : .red)
         .onChange(of: currentLength) { newLength in
-//            if !hasPreviouslySatisfiedMinimum {
-//                if newLength >= minLength {
-//                    hasPreviouslySatisfiedMinimum = true
-//                }
-//            } else {
-            hasBeenEdited = true
+            if !hasPreviouslySatisfiedMinimum {
+                if newLength >= minLength {
+                    hasPreviouslySatisfiedMinimum = true
+                }
+            } else {
                 validate(length: newLength, focused: isFocused)
-//            }
+            }
         }
         .onChange(of: isFocused) { newIsFocused in
-            if hasBeenEdited || !newIsFocused {
+            if hasPreviouslySatisfiedMinimum || !newIsFocused {
                 validate(length: currentLength, focused: newIsFocused)
             }
         }
