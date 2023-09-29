@@ -75,8 +75,8 @@ public struct TableTopSceneView: View {
                         orientation: lastGoodDeviceOrientation
                     )
                 }
-                .onAddNode { _, node, anchor in
-                    addPlane(with: node, for: anchor)
+                .onAddNode { renderer, node, anchor in
+                    addPlane(renderer: renderer, node: node, anchor: anchor)
                 }
                 .onUpdateNode { _, node, anchor in
                     updatePlane(with: node, for: anchor)
@@ -125,38 +125,48 @@ public struct TableTopSceneView: View {
     
     /// Visualizes a new node added to the scene as an AR Plane.
     /// - Parameters:
+    ///   - renderer: The renderer for the scene.
     ///   - node: The node to be added to the scene.
     ///   - anchor: The anchor position of the node.
-    private func addPlane(with node: SCNNode, for anchor: ARAnchor) {
-        // Place content only for anchors found by plane detection.
+    private func addPlane(renderer: SCNSceneRenderer, node: SCNNode, anchor: ARAnchor) {
         guard let planeAnchor = anchor as? ARPlaneAnchor,
-              // Create a custom object to visualize the plane geometry and extent.
-              let plane = Plane(anchor: planeAnchor) else { return }
+              let device = renderer.device,
+              let planeGeometry = ARSCNPlaneGeometry(device: device)
+        else { return }
+        
+        planeGeometry.update(from: planeAnchor.geometry)
+        
+        // Add SCNMaterial to plane geometry.
+        let material = SCNMaterial()
+        material.isDoubleSided = true
+        material.diffuse.contents = UIColor.white.withAlphaComponent(0.5)
+        planeGeometry.materials = [material]
+        
+        // Create a SCNNode from plane geometry.
+        let planeNode = SCNNode(geometry: planeGeometry)
         
         // Add the visualization to the ARKit-managed node so that it tracks
         // changes in the plane anchor as plane estimation continues.
-        node.addChildNode(plane)
+        node.addChildNode(planeNode)
     }
     
-    /// Visualizes a node updated in scene as an AR Plane.
+    /// Visualizes a node updated in the scene as an AR Plane.
     /// - Parameters:
     ///   - node: The node to be updated in the scene.
     ///   - anchor: The anchor position of the node.
     private func updatePlane(with node: SCNNode, for anchor: ARAnchor) {
         if initialTransformationIsSet {
             node.removeFromParentNode()
+            return
         }
         
         guard let planeAnchor = anchor as? ARPlaneAnchor,
-              let plane = node.childNodes.first as? Plane
+              let planeNode = node.childNodes.first,
+              let planeGeometry = planeNode.geometry as? ARSCNPlaneGeometry
         else { return }
         
-        // Update extent visualization to the anchor's new bounding rectangle.
-        if let extentGeometry = plane.node.geometry as? SCNPlane {
-            extentGeometry.width = CGFloat(planeAnchor.extent.x)
-            extentGeometry.height = CGFloat(planeAnchor.extent.z)
-            plane.node.simdPosition = planeAnchor.center
-        }
+        // Update extent visualization to the anchor's new geometry.
+        planeGeometry.update(from: planeAnchor.geometry)
     }
 }
 
@@ -178,39 +188,6 @@ private extension View {
                     }
             )
         }
-    }
-}
-
-/// A helper class to visualize a plane found by ARKit.
-private class Plane: SCNNode {
-    /// The plane node.
-    let node: SCNNode
-    
-    /// Creates a plane node to visuialize a plane found by ARKit.
-    /// - Parameter anchor: The ARPlaneAnchor used to set the plane node's geometry.
-    init?(anchor: ARPlaneAnchor) {
-        // Create a node to visualize the plane's bounding rectangle.
-        let extent = SCNPlane(width: CGFloat(anchor.extent.x), height: CGFloat(anchor.extent.z))
-        node = SCNNode(geometry: extent)
-        node.simdPosition = anchor.center
-        
-        // `SCNPlane` is vertically oriented in its local coordinate space, so
-        // rotate it to match the orientation of `ARPlaneAnchor`.
-        node.eulerAngles.x = -.pi / 2
-        
-        super.init()
-        
-        node.opacity = 0.25
-        guard let material = node.geometry?.firstMaterial else { return nil }
-        
-        material.diffuse.contents = UIColor.white
-        
-        // Add the plane node as child node so they appear in the scene.
-        addChildNode(node)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 
