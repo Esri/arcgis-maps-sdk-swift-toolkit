@@ -29,7 +29,7 @@ struct TextInputFooter: View {
     /// The current length of the text in the text input field.
     private let currentLength: Int
     
-    /// The field's parent element.
+    /// The footer's parent element.
     private let element: FieldFormElement
     
     /// A Boolean value indicating whether the text input field is focused.
@@ -47,15 +47,17 @@ struct TextInputFooter: View {
     /// The allowable range of numeric values in the text input field.
     private let rangeDomain: RangeDomain?
     
+    /// A Boolean value indicating whether the field has a numeric data type.
     private var isNumeric: Bool
     
     /// Creates a footer shown at the bottom of each text input element in a form.
     /// - Parameters:
-    ///   - currentLength: The current length of the text in the text input field.
+    ///   - text: The current text in the text input field.
     ///   - isFocused: A Boolean value indicating whether the text input field is focused.
-    ///   - element: A field element that provides a description for the text input and whether
-    ///  or not text is required for this input.
+    ///   - element: The footer's parent element.
     ///   - input: A form input that provides length constraints for the text input.
+    ///   - rangeDomain: The allowable range of numeric values in the text input field.
+    ///   - isNumeric: A Boolean value indicating whether the field has a numeric data type.
     init(
         text: String,
         isFocused: Bool,
