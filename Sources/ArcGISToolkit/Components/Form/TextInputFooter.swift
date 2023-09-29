@@ -16,7 +16,7 @@
 
 ***REMOVED***/ A view shown at the bottom of each text input element in a form.
 struct TextInputFooter: View {
-***REMOVED******REMOVED***/ An error that is present when a length constraint is not met.
+***REMOVED******REMOVED***/ An error present when a validation constraint is unmet.
 ***REMOVED***@State private var validationError: TextValidationError?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field has previously satisfied the minimum
