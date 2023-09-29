@@ -78,10 +78,14 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***switch input {
 ***REMOVED******REMOVED***case let input as TextBoxFormInput:
 ***REMOVED******REMOVED******REMOVED***lengthRange = input.minLength...input.maxLength
-***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
+***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(
+***REMOVED******REMOVED******REMOVED******REMOVED***initialValue: !isNumeric && currentLength >= input.minLength
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case let input as TextAreaFormInput:
 ***REMOVED******REMOVED******REMOVED***lengthRange = input.minLength...input.maxLength
-***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
+***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(
+***REMOVED******REMOVED******REMOVED******REMOVED***initialValue: !isNumeric && currentLength >= input.minLength
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***fatalError("\(Self.self) can only be used with \(TextAreaFormInput.self) or \(TextBoxFormInput.self)")
 ***REMOVED***
