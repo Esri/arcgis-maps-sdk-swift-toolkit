@@ -242,10 +242,34 @@ extension TextInputFooter {
     
     /// Text indicating a field's number value is not in the correct range of acceptable values.
     var minAndMaxValue: Text {
-        Text(
-            "Enter value from \(minValue) to \(maxValue)",
-            bundle: .toolkitModule,
-            comment: "Text indicating a field's number value is not in the correct range of acceptable values."
-        )
+        let minAndMax = rangeDomain?.displayableMinAndMax
+        if let minAndMax {
+            return Text(
+                "Enter value from \(minAndMax.min) to \(minAndMax.max)",
+                bundle: .toolkitModule,
+                comment: "Text indicating a field's number value is not in the correct range of acceptable values."
+            )
+        } else {
+            return Text(
+                "Enter value in the allowed range",
+                bundle: .toolkitModule,
+                comment: "Text indicating a field's number value is not in the correct range of acceptable values."
+            )
+        }
+    }
+}
+
+extension RangeDomain {
+    /// String representations of the minimum and maximum value of the range domain.
+    var displayableMinAndMax: (min: String, max: String)? {
+        if let min = minValue as? Double, let max = maxValue as? Double {
+            return (String(min), String(max))
+        } else if let min = minValue as? Int, let max = maxValue as? Int {
+            return (String(min), String(max))
+        } else if let min = minValue as? Int32, let max = maxValue as? Int32 {
+            return (String(min), String(max))
+        } else {
+            return nil
+        }
     }
 }
