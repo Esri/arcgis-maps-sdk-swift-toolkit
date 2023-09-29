@@ -181,7 +181,6 @@ extension TextInputFooter {
         } else if text.count == .zero && isRequired && !focused {
             validationError = .emptyWhenRequired
         } else if text.count < lengthRange.lowerBound || text.count > lengthRange.upperBound {
-            print(".minOrMaxUnmet", text.count, lengthRange)
             validationError = .minOrMaxUnmet
         } else {
             validationError = nil
