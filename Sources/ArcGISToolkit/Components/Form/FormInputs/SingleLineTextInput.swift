@@ -68,7 +68,7 @@ struct SingleLineTextInput: View {
             element: element,
             input: input,
             rangeDomain: rangeDomain,
-            isNumeric: isNumericInput
+            isNumeric: isNumeric
         )
         .padding([.bottom], elementPadding)
         .onAppear {
@@ -82,11 +82,11 @@ struct SingleLineTextInput: View {
         .onChange(of: text) { newValue in
             // Note: this will be replaced by `element.updateValue()`, which will
             // handle all the following logic internally.
-            if isDecimalInput {
+            if isDecimal {
                 // Note: this should handle other decimal types as well, if they exist (float?)
                 let value = Double(newValue)
                 featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
-            } else if isNumericInput {
+            } else if isNumeric {
                 // Note: this should handle more than just Int32
                 let value = Int32(newValue)
                 featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
@@ -99,14 +99,14 @@ struct SingleLineTextInput: View {
 }
 
 private extension SingleLineTextInput {
-    var isNumericInput: Bool {
+    var isNumeric: Bool {
         if let field = featureForm?.feature.table?.field(named: element.fieldName)?.type {
             return field.isNumeric
         }
         return false
     }
     
-    var isDecimalInput: Bool {
+    var isDecimal: Bool {
         if let field = featureForm?.feature.table?.field(named: element.fieldName)?.type {
             return field.isFloatingPoint
         }
@@ -114,7 +114,7 @@ private extension SingleLineTextInput {
     }
     
     var keyboardType: UIKeyboardType {
-        isNumericInput ? (isDecimalInput ? .decimalPad : .numberPad) : .default
+        isNumeric ? (isDecimal ? .decimalPad : .numberPad) : .default
     }
     
     var rangeDomain: RangeDomain? {
