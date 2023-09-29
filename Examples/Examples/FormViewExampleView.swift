@@ -15,7 +15,7 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-struct FormExampleView: View {
+struct FormViewExampleView: View {
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
@@ -48,8 +48,7 @@ struct FormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Or present a FormView in a Floating Panel (provided via the Toolkit)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: .constant(.half),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
@@ -58,24 +57,22 @@ struct FormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView(featureForm: featureForm)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(isPresented)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Once iOS 16.0 is the minimum supported, the two conditionals to show the
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** buttons can be merged and hoisted up as the root content of the toolbar.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented && !useControlsInForm {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.undoEdits()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented && !useControlsInForm {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Submit") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await formViewModel.submitChanges()
@@ -89,7 +86,7 @@ struct FormExampleView: View {
 ***REMOVED***
 ***REMOVED***
 
-extension FormExampleView {
+extension FormViewExampleView {
 ***REMOVED******REMOVED***/ Identifies features, if any, at the current screen point.
 ***REMOVED******REMOVED***/ - Parameter proxy: The proxy to use for identification.
 ***REMOVED******REMOVED***/ - Returns: The first identified feature.
@@ -109,15 +106,6 @@ extension FormExampleView {
 ***REMOVED******REMOVED******REMOVED***return feature
 ***REMOVED***
 ***REMOVED******REMOVED***return nil
-***REMOVED***
-***REMOVED***
-
-private extension FormExampleView {
-***REMOVED******REMOVED***/ A Boolean value indicating whether the form controls should be shown directly in the form's presenting container.
-***REMOVED***var useControlsInForm: Bool {
-***REMOVED******REMOVED***verticalSizeClass == .compact ||
-***REMOVED******REMOVED***UIDevice.current.userInterfaceIdiom == .mac ||
-***REMOVED******REMOVED***UIDevice.current.userInterfaceIdiom == .pad
 ***REMOVED***
 ***REMOVED***
 
