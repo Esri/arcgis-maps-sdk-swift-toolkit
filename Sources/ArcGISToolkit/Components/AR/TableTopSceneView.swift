@@ -27,7 +27,7 @@ public struct TableTopSceneView: View {
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
-***REMOVED******REMOVED***/ The help text to guide the user through the AR experience.
+***REMOVED******REMOVED***/ The help text to guide the user through an AR experience.
 ***REMOVED***@State private var helpText: String?
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
@@ -191,7 +191,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***helpText = "Tap a surface to place the scene"
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the help text to guide the user through the AR experience using the AR session's camera tracking status.
+***REMOVED******REMOVED***/ Sets the help text to guide the user through an AR experience using the AR session's camera tracking status.
 ***REMOVED******REMOVED***/ - Parameter trackingState: The camera's tracking status.
 ***REMOVED***private func setHelpText(for trackingState: ARCamera.TrackingState) {
 ***REMOVED******REMOVED***guard !initialTransformationIsSet else { return ***REMOVED***
