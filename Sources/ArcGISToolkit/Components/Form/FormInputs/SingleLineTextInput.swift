@@ -116,6 +116,14 @@ private extension SingleLineTextInput {
     var keyboardType: UIKeyboardType {
         isNumericInput ? (isDecimalInput ? .decimalPad : .numberPad) : .default
     }
+    
+    var rangeDomain: RangeDomain? {
+        if let field = featureForm?.feature.table?.field(named: element.fieldName) {
+            return field.domain as? RangeDomain
+        } else {
+            return nil
+        }
+    }
 }
 
 private extension FieldType {
@@ -125,15 +133,5 @@ private extension FieldType {
     
     var isFloatingPoint: Bool {
         self == .float32 || self == .float64
-    }
-}
-
-extension SingleLineTextInput {
-    var rangeDomain: RangeDomain? {
-        if let field = featureForm?.feature.table?.field(named: element.fieldName) {
-            return field.domain as? RangeDomain
-        } else {
-            return nil
-        }
     }
 }
