@@ -172,7 +172,6 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ The length validation text, dependent on the length validation scheme.
 ***REMOVED***var validationText: Text {
 ***REMOVED******REMOVED***if isNumeric {
-***REMOVED******REMOVED******REMOVED***print("range = \(rangeDomain)")
 ***REMOVED******REMOVED******REMOVED***return rangeDomain == nil ? Text("") : minAndMaxValue
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***switch scheme {
