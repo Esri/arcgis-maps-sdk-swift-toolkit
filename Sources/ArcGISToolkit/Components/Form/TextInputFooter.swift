@@ -78,10 +78,14 @@ struct TextInputFooter: View {
         switch input {
         case let input as TextBoxFormInput:
             lengthRange = input.minLength...input.maxLength
-            _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
+            _hasPreviouslySatisfiedMinimum = State(
+                initialValue: !isNumeric && currentLength >= input.minLength
+            )
         case let input as TextAreaFormInput:
             lengthRange = input.minLength...input.maxLength
-            _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
+            _hasPreviouslySatisfiedMinimum = State(
+                initialValue: !isNumeric && currentLength >= input.minLength
+            )
         default:
             fatalError("\(Self.self) can only be used with \(TextAreaFormInput.self) or \(TextBoxFormInput.self)")
         }
