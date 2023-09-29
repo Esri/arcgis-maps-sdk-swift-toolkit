@@ -99,6 +99,7 @@ struct SingleLineTextInput: View {
 }
 
 private extension SingleLineTextInput {
+    /// A Boolean value indicating whether the input is for a numeric data type.
     var isNumeric: Bool {
         if let field = featureForm?.feature.table?.field(named: element.fieldName)?.type {
             return field.isNumeric
@@ -106,6 +107,7 @@ private extension SingleLineTextInput {
         return false
     }
     
+    /// A Boolean value indicating whether the field has a numeric data type with decimal precision.
     var isDecimal: Bool {
         if let field = featureForm?.feature.table?.field(named: element.fieldName)?.type {
             return field.isFloatingPoint
@@ -113,10 +115,12 @@ private extension SingleLineTextInput {
         return false
     }
     
+    /// The keyboard type to use depending on where the input is numeric and decimal.
     var keyboardType: UIKeyboardType {
         isNumeric ? (isDecimal ? .decimalPad : .numberPad) : .default
     }
     
+    /// The range of valid values for a numeric input field.
     var rangeDomain: RangeDomain? {
         if let field = featureForm?.feature.table?.field(named: element.fieldName) {
             return field.domain as? RangeDomain
@@ -127,10 +131,12 @@ private extension SingleLineTextInput {
 }
 
 private extension FieldType {
+    /// A Boolean value indicating whether the field has a numeric data type.
     var isNumeric: Bool {
         self == .float32 || self == .float64 || self == .int16 || self == .int32 || self == .int64
     }
     
+    /// A Boolean value indicating whether the field has a floating point data type.
     var isFloatingPoint: Bool {
         self == .float32 || self == .float64
     }
