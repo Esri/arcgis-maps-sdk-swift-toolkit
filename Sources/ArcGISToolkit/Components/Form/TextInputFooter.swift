@@ -98,8 +98,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if isFocused, description.isEmpty || validationError != nil,
-***REMOVED******REMOVED******REMOVED******REMOVED***isNumeric == false {
+***REMOVED******REMOVED******REMOVED***if isFocused, description.isEmpty || validationError != nil, !isNumeric {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(currentLength, format: .number)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Character Indicator")
 ***REMOVED******REMOVED***
