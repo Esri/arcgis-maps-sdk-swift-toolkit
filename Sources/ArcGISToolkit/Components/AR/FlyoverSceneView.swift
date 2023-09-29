@@ -23,8 +23,8 @@ public struct FlyoverSceneView: View {
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The camera controller that we will set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
-    /// The last portrait or landscape orientation value.
-    @State private var lastGoodDeviceOrientation = UIDeviceOrientation.portrait
+    /// The current interface orientation.
+    @State private var interfaceOrientation: InterfaceOrientation?
     
     /// Creates a fly over scene view.
     /// - Parameters:
@@ -54,23 +54,14 @@ public struct FlyoverSceneView: View {
                 .onAppear { session.start() }
                 .onDisappear { session.pause() }
                 .onChange(of: session.currentFrame) { frame in
-                    guard let frame else { return }
-                    updateLastGoodDeviceOrientation()
+                    guard let frame, let interfaceOrientation else { return }
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
-                        orientation: lastGoodDeviceOrientation
+                        orientation: interfaceOrientation
                     )
                 }
-        }
-    }
-    
-    /// Updates the last good device orientation.
-    func updateLastGoodDeviceOrientation() {
-        // Get the device orientation, but don't allow non-landscape/portrait values.
-        let deviceOrientation = UIDevice.current.orientation
-        if deviceOrientation.isValidInterfaceOrientation {
-            lastGoodDeviceOrientation = deviceOrientation
+                .observingInterfaceOrientation($interfaceOrientation)
         }
     }
 }
