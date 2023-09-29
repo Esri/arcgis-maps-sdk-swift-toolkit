@@ -117,6 +117,14 @@ private extension SingleLineTextInput {
 ***REMOVED******REMOVED***isNumericInput ? (isDecimalInput ? .decimalPad : .numberPad) : .default
 ***REMOVED***
 ***REMOVED***
+***REMOVED***var rangeDomain: RangeDomain? {
+***REMOVED******REMOVED***if let field = featureForm?.feature.table?.field(named: element.fieldName) {
+***REMOVED******REMOVED******REMOVED***return field.domain as? RangeDomain
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
 
 private extension FieldType {
 ***REMOVED***var isNumeric: Bool {
@@ -125,15 +133,5 @@ private extension FieldType {
 ***REMOVED***
 ***REMOVED***var isFloatingPoint: Bool {
 ***REMOVED******REMOVED***self == .float32 || self == .float64
-***REMOVED***
-***REMOVED***
-
-extension SingleLineTextInput {
-***REMOVED***var rangeDomain: RangeDomain? {
-***REMOVED******REMOVED***if let field = featureForm?.feature.table?.field(named: element.fieldName) {
-***REMOVED******REMOVED******REMOVED***return field.domain as? RangeDomain
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
