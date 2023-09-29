@@ -41,14 +41,10 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field is required.
 ***REMOVED***private let isRequired: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ The maximum allowable length of text in the text input field.
-***REMOVED***private let maxLength: Int
+***REMOVED******REMOVED***/ The allowable length of text in the text input field.
+***REMOVED***private let lengthRange: ClosedRange<Int>
 ***REMOVED***
-***REMOVED******REMOVED***/ The minimum allowable length of text in the text input field.
-***REMOVED***private let minLength: Int
-***REMOVED***
-***REMOVED******REMOVED***/ The range domain for the text field input. This is used to
-***REMOVED******REMOVED***/ generate messages if the numeric value is out-of-range.
+***REMOVED******REMOVED***/ The allowable range of numeric values in the text input field.
 ***REMOVED***private let rangeDomain: RangeDomain?
 ***REMOVED***
 ***REMOVED***private var isNumeric: Bool
@@ -79,12 +75,10 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch input {
 ***REMOVED******REMOVED***case let input as TextBoxFormInput:
-***REMOVED******REMOVED******REMOVED***self.maxLength = input.maxLength
-***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
+***REMOVED******REMOVED******REMOVED***lengthRange = input.minLength...input.maxLength
 ***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
 ***REMOVED******REMOVED***case let input as TextAreaFormInput:
-***REMOVED******REMOVED******REMOVED***self.maxLength = input.maxLength
-***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
+***REMOVED******REMOVED******REMOVED***lengthRange = input.minLength...input.maxLength
 ***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***fatalError("\(Self.self) can only be used with \(TextAreaFormInput.self) or \(TextBoxFormInput.self)")
@@ -108,7 +102,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***.foregroundColor(validationError == nil ? .secondary : .red)
 ***REMOVED******REMOVED***.onChange(of: currentLength) { newLength in
 ***REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum {
-***REMOVED******REMOVED******REMOVED******REMOVED***if newLength >= minLength {
+***REMOVED******REMOVED******REMOVED******REMOVED***if newLength >= lengthRange.lowerBound {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***hasPreviouslySatisfiedMinimum = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
@@ -147,9 +141,9 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ The length validation scheme performed on the text input, determined by the minimum and
 ***REMOVED******REMOVED***/ maximum lengths.
 ***REMOVED***var scheme: LengthValidationScheme {
-***REMOVED******REMOVED***if minLength == 0 {
+***REMOVED******REMOVED***if lengthRange.lowerBound == 0 {
 ***REMOVED******REMOVED******REMOVED***return .max
-***REMOVED*** else if minLength == maxLength {
+***REMOVED*** else if lengthRange.lowerBound == lengthRange.upperBound {
 ***REMOVED******REMOVED******REMOVED***return .exact
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return .minAndMax
@@ -180,7 +174,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED******REMOVED***validationError = .outOfRange
 ***REMOVED*** else if length == .zero && isRequired && !focused {
 ***REMOVED******REMOVED******REMOVED***validationError = .emptyWhenRequired
-***REMOVED*** else if length < minLength || length > maxLength {
+***REMOVED*** else if length < lengthRange.lowerBound || length > lengthRange.upperBound {
 ***REMOVED******REMOVED******REMOVED***validationError = .minOrMaxUnmet
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***validationError = nil
@@ -193,7 +187,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ well use `maxLength`.
 ***REMOVED***var exactText: Text {
 ***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Enter \(minLength) characters",
+***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange.lowerBound) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's exact number of required characters."
 ***REMOVED******REMOVED***)
@@ -202,7 +196,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ Text indicating a field's maximum number of allowed characters.
 ***REMOVED***var maximumText: Text {
 ***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Maximum \(maxLength) characters",
+***REMOVED******REMOVED******REMOVED***"Maximum \(lengthRange.lowerBound) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's maximum number of allowed characters."
 ***REMOVED******REMOVED***)
@@ -211,7 +205,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ Text indicating a field's minimum and maximum number of allowed characters.
 ***REMOVED***var minAndMaxText: Text {
 ***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Enter \(minLength) to \(maxLength) characters",
+***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange.lowerBound) to \(lengthRange.upperBound) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's minimum and maximum number of allowed characters."
 ***REMOVED******REMOVED***)
