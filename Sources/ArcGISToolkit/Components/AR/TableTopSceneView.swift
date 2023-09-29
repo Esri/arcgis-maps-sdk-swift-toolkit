@@ -75,8 +75,8 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: lastGoodDeviceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { _, node, anchor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addPlane(with: node, for: anchor)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addPlane(renderer: renderer, node: node, anchor: anchor)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { _, node, anchor in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updatePlane(with: node, for: anchor)
@@ -125,38 +125,48 @@ public struct TableTopSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Visualizes a new node added to the scene as an AR Plane.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - renderer: The renderer for the scene.
 ***REMOVED******REMOVED***/   - node: The node to be added to the scene.
 ***REMOVED******REMOVED***/   - anchor: The anchor position of the node.
-***REMOVED***private func addPlane(with node: SCNNode, for anchor: ARAnchor) {
-***REMOVED******REMOVED******REMOVED*** Place content only for anchors found by plane detection.
+***REMOVED***private func addPlane(renderer: SCNSceneRenderer, node: SCNNode, anchor: ARAnchor) {
 ***REMOVED******REMOVED***guard let planeAnchor = anchor as? ARPlaneAnchor,
-***REMOVED******REMOVED******REMOVED***  ***REMOVED*** Create a custom object to visualize the plane geometry and extent.
-***REMOVED******REMOVED******REMOVED***  let plane = Plane(anchor: planeAnchor) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***  let device = renderer.device,
+***REMOVED******REMOVED******REMOVED***  let planeGeometry = ARSCNPlaneGeometry(device: device)
+***REMOVED******REMOVED***else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***planeGeometry.update(from: planeAnchor.geometry)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Add SCNMaterial to plane geometry.
+***REMOVED******REMOVED***let material = SCNMaterial()
+***REMOVED******REMOVED***material.isDoubleSided = true
+***REMOVED******REMOVED***material.diffuse.contents = UIColor.white.withAlphaComponent(0.5)
+***REMOVED******REMOVED***planeGeometry.materials = [material]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create a SCNNode from plane geometry.
+***REMOVED******REMOVED***let planeNode = SCNNode(geometry: planeGeometry)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Add the visualization to the ARKit-managed node so that it tracks
 ***REMOVED******REMOVED******REMOVED*** changes in the plane anchor as plane estimation continues.
-***REMOVED******REMOVED***node.addChildNode(plane)
+***REMOVED******REMOVED***node.addChildNode(planeNode)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Visualizes a node updated in scene as an AR Plane.
+***REMOVED******REMOVED***/ Visualizes a node updated in the scene as an AR Plane.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - node: The node to be updated in the scene.
 ***REMOVED******REMOVED***/   - anchor: The anchor position of the node.
 ***REMOVED***private func updatePlane(with node: SCNNode, for anchor: ARAnchor) {
 ***REMOVED******REMOVED***if initialTransformationIsSet {
 ***REMOVED******REMOVED******REMOVED***node.removeFromParentNode()
+***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let planeAnchor = anchor as? ARPlaneAnchor,
-***REMOVED******REMOVED******REMOVED***  let plane = node.childNodes.first as? Plane
+***REMOVED******REMOVED******REMOVED***  let planeNode = node.childNodes.first,
+***REMOVED******REMOVED******REMOVED***  let planeGeometry = planeNode.geometry as? ARSCNPlaneGeometry
 ***REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Update extent visualization to the anchor's new bounding rectangle.
-***REMOVED******REMOVED***if let extentGeometry = plane.node.geometry as? SCNPlane {
-***REMOVED******REMOVED******REMOVED***extentGeometry.width = CGFloat(planeAnchor.extent.x)
-***REMOVED******REMOVED******REMOVED***extentGeometry.height = CGFloat(planeAnchor.extent.z)
-***REMOVED******REMOVED******REMOVED***plane.node.simdPosition = planeAnchor.center
-***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Update extent visualization to the anchor's new geometry.
+***REMOVED******REMOVED***planeGeometry.update(from: planeAnchor.geometry)
 ***REMOVED***
 ***REMOVED***
 
@@ -178,39 +188,6 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A helper class to visualize a plane found by ARKit.
-private class Plane: SCNNode {
-***REMOVED******REMOVED***/ The plane node.
-***REMOVED***let node: SCNNode
-***REMOVED***
-***REMOVED******REMOVED***/ Creates a plane node to visuialize a plane found by ARKit.
-***REMOVED******REMOVED***/ - Parameter anchor: The ARPlaneAnchor used to set the plane node's geometry.
-***REMOVED***init?(anchor: ARPlaneAnchor) {
-***REMOVED******REMOVED******REMOVED*** Create a node to visualize the plane's bounding rectangle.
-***REMOVED******REMOVED***let extent = SCNPlane(width: CGFloat(anchor.extent.x), height: CGFloat(anchor.extent.z))
-***REMOVED******REMOVED***node = SCNNode(geometry: extent)
-***REMOVED******REMOVED***node.simdPosition = anchor.center
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** `SCNPlane` is vertically oriented in its local coordinate space, so
-***REMOVED******REMOVED******REMOVED*** rotate it to match the orientation of `ARPlaneAnchor`.
-***REMOVED******REMOVED***node.eulerAngles.x = -.pi / 2
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***super.init()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***node.opacity = 0.25
-***REMOVED******REMOVED***guard let material = node.geometry?.firstMaterial else { return nil ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***material.diffuse.contents = UIColor.white
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Add the plane node as child node so they appear in the scene.
-***REMOVED******REMOVED***addChildNode(node)
-***REMOVED***
-***REMOVED***
-***REMOVED***required init?(coder aDecoder: NSCoder) {
-***REMOVED******REMOVED***fatalError("init(coder:) has not been implemented")
 ***REMOVED***
 ***REMOVED***
 
