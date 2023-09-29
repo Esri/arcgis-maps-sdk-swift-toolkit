@@ -102,18 +102,18 @@ struct TextInputFooter: View {
         }
         .font(.footnote)
         .foregroundColor(validationError == nil ? .secondary : .red)
-        .onChange(of: currentLength) { newLength in
+        .onChange(of: text) { newText in
             if !hasPreviouslySatisfiedMinimum {
-                if newLength >= lengthRange.lowerBound {
+                if newText.count  >= lengthRange.lowerBound {
                     hasPreviouslySatisfiedMinimum = true
                 }
             } else {
-                validate(length: newLength, focused: isFocused)
+                validate(text: newText, focused: isFocused)
             }
         }
         .onChange(of: isFocused) { newIsFocused in
             if hasPreviouslySatisfiedMinimum || !newIsFocused {
-                validate(length: currentLength, focused: newIsFocused)
+                validate(text: text, focused: newIsFocused)
             }
         }
     }
@@ -169,14 +169,19 @@ extension TextInputFooter {
     }
     
     /// Checks for any validation errors and updates the value of `validationError`.
-    /// - Parameter length: The length of text to use for validation.
+    /// - Parameter text: The text to use for validation.
     /// - Parameter focused: The focus state to use for validation.
-    func validate(length: Int, focused: Bool) {
+    func validate(text: String, focused: Bool) {
         if isNumeric {
-            validationError = .outOfRange
-        } else if length == .zero && isRequired && !focused {
+            if !(rangeDomain?.contains(text) ?? false) {
+                validationError = .outOfRange
+            } else {
+                validationError = nil
+            }
+        } else if text.count == .zero && isRequired && !focused {
             validationError = .emptyWhenRequired
-        } else if length < lengthRange.lowerBound || length > lengthRange.upperBound {
+        } else if text.count < lengthRange.lowerBound || text.count > lengthRange.upperBound {
+            print(".minOrMaxUnmet", text.count, lengthRange)
             validationError = .minOrMaxUnmet
         } else {
             validationError = nil
@@ -185,7 +190,7 @@ extension TextInputFooter {
     
     /// Text indicating a field's exact number of allowed characters.
     /// - Note: This is intended to be used in instances where the character minimum and maximum are
-    /// identical, such as an ID field; the implementation uses `minLength` but it could just as
+    /// identical, such as an ID fie7ld; the implementation uses `minLength` but it could just as
     /// well use `maxLength`.
     var exactText: Text {
         Text(
@@ -252,6 +257,21 @@ extension RangeDomain {
             return (String(min), String(max))
         } else {
             return nil
+        }
+    }
+    
+    /// Determines if the text's numeric value is within the range domain.
+    /// - Parameter value: Text with a numeric value.
+    /// - Returns: A Boolean value indicating whether the text's numeric value is within the range domain.
+    func contains(_ value: String) -> Bool {
+        if let min = minValue as? Double, let max = maxValue as? Double, let v = Double(value) {
+            return (min...max).contains(v)
+        } else if let min = minValue as? Int, let max = maxValue as? Int, let v = Int(value) {
+            return (min...max).contains(v)
+        } else if let min = minValue as? Int32, let max = maxValue as? Int32, let v = Int32(value)  {
+            return (min...max).contains(v)
+        } else {
+            return false
         }
     }
 }
