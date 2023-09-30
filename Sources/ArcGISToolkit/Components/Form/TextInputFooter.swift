@@ -218,6 +218,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Text indicating a field's value must be convertible to a number.
 ***REMOVED***var expectedDecimal: Text {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Value must be a number",
@@ -226,6 +227,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Text indicating a field's value must be convertible to a whole number.
 ***REMOVED***var expectedInteger: Text {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Value must be a whole number",
@@ -287,6 +289,7 @@ private extension String {
 ***REMOVED******REMOVED***return Int(self) != nil
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating that the string be cast to decimal value.
 ***REMOVED***var isDecimal: Bool {
 ***REMOVED******REMOVED***return Double(self) != nil
 ***REMOVED***
