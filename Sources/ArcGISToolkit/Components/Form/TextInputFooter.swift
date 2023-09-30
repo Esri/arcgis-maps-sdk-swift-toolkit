@@ -218,6 +218,7 @@ extension TextInputFooter {
         )
     }
     
+    /// Text indicating a field's value must be convertible to a number.
     var expectedDecimal: Text {
         Text(
             "Value must be a number",
@@ -226,6 +227,7 @@ extension TextInputFooter {
         )
     }
     
+    /// Text indicating a field's value must be convertible to a whole number.
     var expectedInteger: Text {
         Text(
             "Value must be a whole number",
@@ -287,6 +289,7 @@ private extension String {
         return Int(self) != nil
     }
     
+    /// A Boolean value indicating that the string be cast to decimal value.
     var isDecimal: Bool {
         return Double(self) != nil
     }
