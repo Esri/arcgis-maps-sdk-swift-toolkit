@@ -50,6 +50,9 @@ struct TextInputFooter: View {
     /// A Boolean value indicating whether the field has a numeric data type.
     private var isNumeric: Bool
     
+    /// A Boolean value indicating whether the field has a numeric data type with decimal precision.
+    private var isDecimal: Bool
+    
     /// Creates a footer shown at the bottom of each text input element in a form.
     /// - Parameters:
     ///   - text: The current text in the text input field.
@@ -58,13 +61,15 @@ struct TextInputFooter: View {
     ///   - input: A form input that provides length constraints for the text input.
     ///   - rangeDomain: The allowable range of numeric values in the text input field.
     ///   - isNumeric: A Boolean value indicating whether the field has a numeric data type.
+    ///   - isDecimal: A Boolean value indicating whether the field has a numeric data type with decimal precision.
     init(
         text: String,
         isFocused: Bool,
         element: FieldFormElement,
         input: FormInput,
         rangeDomain: RangeDomain? = nil,
-        isNumeric: Bool = false
+        isNumeric: Bool = false,
+        isDecimal: Bool = false
     ) {
         self.text = text
         self.currentLength = text.count
@@ -74,6 +79,7 @@ struct TextInputFooter: View {
         self.isRequired = element.isRequired
         self.rangeDomain = rangeDomain
         self.isNumeric = isNumeric
+        self.isDecimal = isDecimal
         
         switch input {
         case let input as TextBoxFormInput:
@@ -106,8 +112,8 @@ struct TextInputFooter: View {
         .font(.footnote)
         .foregroundColor(validationError == nil ? .secondary : .red)
         .onChange(of: text) { newText in
-            if !hasPreviouslySatisfiedMinimum {
-                if newText.count  >= lengthRange.lowerBound {
+            if !hasPreviouslySatisfiedMinimum && !isNumeric {
+                if newText.count >= lengthRange.lowerBound {
                     hasPreviouslySatisfiedMinimum = true
                 }
             } else {
@@ -158,7 +164,13 @@ extension TextInputFooter {
     /// The length validation text, dependent on the length validation scheme.
     var validationText: Text {
         if isNumeric {
-            return rangeDomain == nil ? Text("") : minAndMaxValue
+            if validationError == .nonInteger {
+                return expectedInteger
+            } else if  validationError == .nonDecimal {
+                return expectedDecimal
+            } else {
+                return rangeDomain == nil ? Text("") : minAndMaxValue
+            }
         } else {
             switch scheme {
             case .max:
@@ -176,7 +188,11 @@ extension TextInputFooter {
     /// - Parameter focused: The focus state to use for validation.
     func validate(text: String, focused: Bool) {
         if isNumeric {
-            if !(rangeDomain?.contains(text) ?? false) {
+            if !isDecimal && !text.isInteger {
+                validationError = .nonInteger
+            } else if isDecimal && !text.isDecimal {
+                validationError = .nonDecimal
+            } else if !(rangeDomain?.contains(text) ?? false) {
                 validationError = .outOfRange
             } else {
                 validationError = nil
@@ -199,6 +215,22 @@ extension TextInputFooter {
             "Enter \(lengthRange.lowerBound) characters",
             bundle: .toolkitModule,
             comment: "Text indicating a field's exact number of required characters."
+        )
+    }
+    
+    var expectedDecimal: Text {
+        Text(
+            "Value must be a number",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field's value must be convertible to a number."
+        )
+    }
+    
+    var expectedInteger: Text {
+        Text(
+            "Value must be a whole number",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field's value must be convertible to a whole number."
         )
     }
     
@@ -245,6 +277,18 @@ extension TextInputFooter {
                 comment: "Text indicating a field's number value is not in the correct range of acceptable values."
             )
         }
+    }
+}
+
+private extension String {
+    /// A Boolean value indicating that the string contains no alphabetic or special characters and
+    /// can be cast to numeric value.
+    var isInteger: Bool {
+        return Int(self) != nil
+    }
+    
+    var isDecimal: Bool {
+        return Double(self) != nil
     }
 }
 

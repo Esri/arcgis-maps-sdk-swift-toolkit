@@ -17,6 +17,10 @@ enum TextValidationError {
     case emptyWhenRequired
     /// The text field has too few or too many characters.
     case minOrMaxUnmet
+    /// The text field contains a value that does not represent a whole number.
+    case nonInteger
+    /// The text field contains a value that does not represent a fractional number.
+    case nonDecimal
     /// The text number value is out of range.
     case outOfRange
 }
