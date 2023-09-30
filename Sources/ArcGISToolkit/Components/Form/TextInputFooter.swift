@@ -199,7 +199,7 @@ extension TextInputFooter {
             }
         } else if text.count == .zero && isRequired && !focused {
             validationError = .emptyWhenRequired
-        } else if text.count < lengthRange.lowerBound || text.count > lengthRange.upperBound {
+        } else if !lengthRange.contains(text.count) {
             validationError = .minOrMaxUnmet
         } else {
             validationError = nil
