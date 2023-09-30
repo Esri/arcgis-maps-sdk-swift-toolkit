@@ -208,8 +208,7 @@ extension TextInputFooter {
     
     /// Text indicating a field's exact number of allowed characters.
     /// - Note: This is intended to be used in instances where the character minimum and maximum are
-    /// identical, such as an ID fie7ld; the implementation uses `minLength` but it could just as
-    /// well use `maxLength`.
+    /// identical, such as an ID field.
     var exactText: Text {
         Text(
             "Enter \(lengthRange.lowerBound) characters",
