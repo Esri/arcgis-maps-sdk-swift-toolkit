@@ -50,6 +50,9 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the field has a numeric data type.
 ***REMOVED***private var isNumeric: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the field has a numeric data type with decimal precision.
+***REMOVED***private var isDecimal: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a footer shown at the bottom of each text input element in a form.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - text: The current text in the text input field.
@@ -58,13 +61,15 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/   - input: A form input that provides length constraints for the text input.
 ***REMOVED******REMOVED***/   - rangeDomain: The allowable range of numeric values in the text input field.
 ***REMOVED******REMOVED***/   - isNumeric: A Boolean value indicating whether the field has a numeric data type.
+***REMOVED******REMOVED***/   - isDecimal: A Boolean value indicating whether the field has a numeric data type with decimal precision.
 ***REMOVED***init(
 ***REMOVED******REMOVED***text: String,
 ***REMOVED******REMOVED***isFocused: Bool,
 ***REMOVED******REMOVED***element: FieldFormElement,
 ***REMOVED******REMOVED***input: FormInput,
 ***REMOVED******REMOVED***rangeDomain: RangeDomain? = nil,
-***REMOVED******REMOVED***isNumeric: Bool = false
+***REMOVED******REMOVED***isNumeric: Bool = false,
+***REMOVED******REMOVED***isDecimal: Bool = false
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.text = text
 ***REMOVED******REMOVED***self.currentLength = text.count
@@ -74,6 +79,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***self.isRequired = element.isRequired
 ***REMOVED******REMOVED***self.rangeDomain = rangeDomain
 ***REMOVED******REMOVED***self.isNumeric = isNumeric
+***REMOVED******REMOVED***self.isDecimal = isDecimal
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch input {
 ***REMOVED******REMOVED***case let input as TextBoxFormInput:
@@ -106,8 +112,8 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.foregroundColor(validationError == nil ? .secondary : .red)
 ***REMOVED******REMOVED***.onChange(of: text) { newText in
-***REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum {
-***REMOVED******REMOVED******REMOVED******REMOVED***if newText.count  >= lengthRange.lowerBound {
+***REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum && !isNumeric {
+***REMOVED******REMOVED******REMOVED******REMOVED***if newText.count >= lengthRange.lowerBound {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***hasPreviouslySatisfiedMinimum = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
@@ -158,7 +164,13 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ The length validation text, dependent on the length validation scheme.
 ***REMOVED***var validationText: Text {
 ***REMOVED******REMOVED***if isNumeric {
-***REMOVED******REMOVED******REMOVED***return rangeDomain == nil ? Text("") : minAndMaxValue
+***REMOVED******REMOVED******REMOVED***if validationError == .nonInteger {
+***REMOVED******REMOVED******REMOVED******REMOVED***return expectedInteger
+***REMOVED******REMOVED*** else if  validationError == .nonDecimal {
+***REMOVED******REMOVED******REMOVED******REMOVED***return expectedDecimal
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return rangeDomain == nil ? Text("") : minAndMaxValue
+***REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***switch scheme {
 ***REMOVED******REMOVED******REMOVED***case .max:
@@ -176,7 +188,11 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ - Parameter focused: The focus state to use for validation.
 ***REMOVED***func validate(text: String, focused: Bool) {
 ***REMOVED******REMOVED***if isNumeric {
-***REMOVED******REMOVED******REMOVED***if !(rangeDomain?.contains(text) ?? false) {
+***REMOVED******REMOVED******REMOVED***if !isDecimal && !text.isInteger {
+***REMOVED******REMOVED******REMOVED******REMOVED***validationError = .nonInteger
+***REMOVED******REMOVED*** else if isDecimal && !text.isDecimal {
+***REMOVED******REMOVED******REMOVED******REMOVED***validationError = .nonDecimal
+***REMOVED******REMOVED*** else if !(rangeDomain?.contains(text) ?? false) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***validationError = .outOfRange
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***validationError = nil
@@ -199,6 +215,22 @@ extension TextInputFooter {
 ***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange.lowerBound) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's exact number of required characters."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var expectedDecimal: Text {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Value must be a number",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must be convertible to a number."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***var expectedInteger: Text {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Value must be a whole number",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must be convertible to a whole number."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -245,6 +277,18 @@ extension TextInputFooter {
 ***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's number value is not in the correct range of acceptable values."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension String {
+***REMOVED******REMOVED***/ A Boolean value indicating that the string contains no alphabetic or special characters and
+***REMOVED******REMOVED***/ can be cast to numeric value.
+***REMOVED***var isInteger: Bool {
+***REMOVED******REMOVED***return Int(self) != nil
+***REMOVED***
+***REMOVED***
+***REMOVED***var isDecimal: Bool {
+***REMOVED******REMOVED***return Double(self) != nil
 ***REMOVED***
 ***REMOVED***
 
