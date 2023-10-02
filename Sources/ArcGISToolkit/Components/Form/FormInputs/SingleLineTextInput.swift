@@ -55,6 +55,14 @@ struct SingleLineTextInput: View {
             TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
                 .keyboardType(keyboardType)
                 .focused($isFocused)
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        if isFocused, isNumeric {
+                            positiveNegativeButton
+                            Spacer()
+                        }
+                    }
+                }
                 .accessibilityIdentifier("\(element.label) Text Field")
             if !text.isEmpty {
                 ClearButton { text.removeAll() }
@@ -119,6 +127,19 @@ private extension SingleLineTextInput {
     /// The keyboard type to use depending on where the input is numeric and decimal.
     var keyboardType: UIKeyboardType {
         isNumeric ? (isDecimal ? .decimalPad : .numberPad) : .default
+    }
+    
+    /// The button that allows a user to switch the numeric value between positive and negative.
+    var positiveNegativeButton: some View {
+        Button {
+            if text.first == "-" {
+                text.removeFirst()
+            } else {
+                text.insert("-", at: text.startIndex)
+            }
+        } label: {
+            Image(systemName: "plus.forwardslash.minus")
+        }
     }
     
     /// The range of valid values for a numeric input field.
