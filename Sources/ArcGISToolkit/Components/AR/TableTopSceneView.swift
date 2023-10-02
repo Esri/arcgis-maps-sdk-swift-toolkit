@@ -28,7 +28,7 @@ public struct TableTopSceneView: View {
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
     /// The help text to guide the user through an AR experience.
-    @State private var helpText: String?
+    @State private var helpText: String = ""
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The configuration for the AR session.
@@ -84,7 +84,7 @@ public struct TableTopSceneView: View {
                     )
                 }
                 .onCameraTrackingStateChange { _, camera in
-                    setHelpText(for: camera.trackingState)
+                    updateHelpText(for: camera.trackingState)
                 }
                 .onAddNode { renderer, node, anchor in
                     addPlane(renderer: renderer, node: node, anchor: anchor)
@@ -102,7 +102,7 @@ public struct TableTopSceneView: View {
                         using: screenPoint
                     ) {
                         initialTransformation = transformation
-                        helpText = nil
+                        helpText = ""
                     }
                 }
                 .onAppear {
@@ -128,7 +128,7 @@ public struct TableTopSceneView: View {
             }
         }
         .overlay(alignment: .top) {
-            if let helpText {
+            if !helpText.isEmpty {
                 Text(helpText)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(8)
@@ -191,10 +191,13 @@ public struct TableTopSceneView: View {
         helpText = "Tap a surface to place the scene"
     }
     
-    /// Sets the help text to guide the user through an AR experience using the AR session's camera tracking status.
+    /// Updates the help text to guide the user through an AR experience using the AR session's camera tracking status.
     /// - Parameter trackingState: The camera's tracking status.
-    private func setHelpText(for trackingState: ARCamera.TrackingState) {
-        guard !initialTransformationIsSet else { return }
+    private func updateHelpText(for trackingState: ARCamera.TrackingState) {
+        guard !initialTransformationIsSet else {
+            helpText = ""
+            return
+        }
         
         switch trackingState {
         case .normal:
