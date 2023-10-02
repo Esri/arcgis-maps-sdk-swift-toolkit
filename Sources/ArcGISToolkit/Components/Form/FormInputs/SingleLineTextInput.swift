@@ -57,7 +57,7 @@ struct SingleLineTextInput: View {
                 .focused($isFocused)
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
-                        if isFocused, isNumeric {
+                        if UIDevice.current.userInterfaceIdiom == .phone, isFocused, isNumeric {
                             positiveNegativeButton
                             Spacer()
                         }
