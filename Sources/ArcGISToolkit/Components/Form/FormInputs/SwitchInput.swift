@@ -15,6 +15,9 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view for boolean style input.
+***REMOVED***/
+***REMOVED***/ The switch represents two mutually exclusive values, such as: yes/no, on/off, true/false.
 struct SwitchInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
