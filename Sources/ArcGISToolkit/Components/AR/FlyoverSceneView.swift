@@ -69,14 +69,13 @@ public struct FlyoverSceneView: View {
 /// An observable object that wraps an `ARSession` and provides the current frame.
 private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate {
     /// The configuration used for the AR session.
-    private let configuration: ARWorldTrackingConfiguration
+    private let configuration: ARConfiguration
     
     /// The backing AR session.
     private let session = ARSession()
     
     override init() {
-        configuration = ARWorldTrackingConfiguration()
-        configuration.worldAlignment = .gravityAndHeading
+        configuration = ARPositionalTrackingConfiguration()
         super.init()
         session.delegate = self
     }
