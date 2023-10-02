@@ -15,6 +15,9 @@
 import ArcGIS
 import SwiftUI
 
+/// A view for numerical value input.
+///
+/// This is the preferable input type for short lists of coded value domains.
 struct RadioButtonsInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
