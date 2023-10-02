@@ -37,6 +37,7 @@ public struct WorldScaleSceneView: View {
     private let configuration: ARConfiguration
     
     @State private var availability: GeotrackingLocationAvailability = .checking
+    @State private var trackingStatus: ARGeoTrackingStatus?
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -114,11 +115,40 @@ public struct WorldScaleSceneView: View {
     
     @MainActor
     @ViewBuilder
+    var trackingStatusView: some View {
+        VStack {
+            switch trackingStatus?.state {
+            case .notAvailable:
+                Text("Not available.")
+            case .initializing:
+                Text("Initializing.")
+                ProgressView()
+            case .localizing:
+                Text("Localizing.")
+                ProgressView()
+            case .localized:
+                Text("Localized.")
+            case nil:
+                EmptyView()
+            @unknown default:
+                EmptyView()
+            }
+        }
+        .multilineTextAlignment(.center)
+        .padding()
+        .background(Color.white.opacity(0.5))
+    }
+    
+    @MainActor
+    @ViewBuilder
     var arView: some View {
         ZStack {
             ARSwiftUIView(proxy: arViewProxy)
                 .onDidUpdateFrame { _, frame in
+                    trackingStatus = frame.geoTrackingStatus
+                    
                     guard let sceneViewProxy, let interfaceOrientation else { return }
+                    
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
@@ -130,19 +160,23 @@ public struct WorldScaleSceneView: View {
                     )
                 }
             
-            SceneViewReader { proxy in
-                sceneViewBuilder(proxy)
-                    .cameraController(cameraController)
-                    .attributionBarHidden(true)
-                    .spaceEffect(.transparent)
-                    .atmosphereEffect(.off)
-                    .onAppear {
-                        // Capture scene view proxy as a workaround for a bug where
-                        // preferences set for `ARSwiftUIView` are not honored. The
-                        // issue has been logged with a bug report with ID FB13188508.
-                        self.sceneViewProxy = proxy
-                    }
+            if trackingStatus?.state == .localized {
+                SceneViewReader { proxy in
+                    sceneViewBuilder(proxy)
+                        .cameraController(cameraController)
+                        .attributionBarHidden(true)
+                        .spaceEffect(.transparent)
+                        .atmosphereEffect(.off)
+                        .onAppear {
+                            // Capture scene view proxy as a workaround for a bug where
+                            // preferences set for `ARSwiftUIView` are not honored. The
+                            // issue has been logged with a bug report with ID FB13188508.
+                            self.sceneViewProxy = proxy
+                        }
+                }
             }
+            
+            trackingStatusView
         }
         .observingInterfaceOrientation($interfaceOrientation)
         .onAppear {
