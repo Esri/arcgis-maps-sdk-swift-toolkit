@@ -203,17 +203,17 @@ public struct TableTopSceneView: View {
         
         switch trackingState {
         case .normal:
-            helpText = "Keep moving your device"
+            helpText = .moveDevice
         case .notAvailable:
-            helpText = "Location not available"
+            helpText = .locationUnavailable
         case .limited(let reason):
             switch reason {
             case .excessiveMotion:
-                helpText = "Try moving your device more slowly"
+                helpText = .excessiveMotion
             case .initializing:
-                helpText = "Keep moving your device"
+                helpText = .moveDevice
             case .insufficientFeatures:
-                helpText = "Try turning on more lights and moving around"
+                helpText = .insufficentFeatures
             case .relocalizing:
                 // This case will not occur since the AR session delegate
                 // does not implement relocalization support.
@@ -330,4 +330,53 @@ private extension SceneViewProxy {
             interfaceOrientation: orientation
         )
     }
+}
+
+private extension String {
+    static let planeFound = String(
+        localized: "Tap a surface to place the scene",
+        bundle: .toolkitModule,
+        comment: """
+                 An instruction to the user to tap on a horizontal surface to
+                 place an ArcGIS Scene.
+                 """
+    )
+    
+    static let moveDevice = String(
+        localized: "Keep moving your device",
+        bundle: .toolkitModule,
+        comment: """
+                 An instruction to the user to keep moving their device so that
+                 horizontal planes can be identidifed in the AR experience.
+                 """
+    )
+    
+    static let locationUnavailable = String(
+        localized: "Location not available",
+        bundle: .toolkitModule,
+        comment: """
+                 A message to the user to notify them that the location of their device
+                 is unavailable in the AR experience.
+                 """
+    )
+    
+    static let excessiveMotion = String(
+        localized: "Try moving your device more slowly",
+        bundle: .toolkitModule,
+        comment: """
+                 An instruction the user to reduce excessive device motion by
+                 moving the device more slowly to imporve the AR experience which
+                 requires limited device motion.
+                """
+    )
+    
+    static let insufficentFeatures = String(
+        localized: "Try turning on more lights and moving around",
+        bundle: .toolkitModule,
+        comment: """
+                 An instruction the the user to turn on more lights or move towards a
+                 light source to imporve the AR experience which requires sufficient
+                 lighting conditions.
+                 """
+    )
 }
