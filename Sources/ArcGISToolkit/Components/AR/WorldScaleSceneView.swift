@@ -18,7 +18,7 @@ import ARKit
 enum GeotrackingLocationAvailability {
 ***REMOVED***case checking
 ***REMOVED***case available
-***REMOVED***case unavailable(Error)
+***REMOVED***case unavailable(Error?)
 ***REMOVED***
 
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience.
@@ -66,39 +66,49 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch availability {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .checking:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Checking Geotracking availability at current location")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***checkingGeotrackingAvailability
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .available:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Geotracking is available!")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arView
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .unavailable:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Geotracking is unavailable at your current location")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geotrackingIsNotAvailable
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARGeoTrackingConfiguration.checkAvailability { available, error in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if available {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.availability = .available
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if let error {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.availability = .unavailable(error)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.availability = .unavailable(error)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***var checkingGeotrackingAvailability: some View {
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***Text("Checking Geotracking availability at current location")
+***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***var geotrackingIsNotAvailable: some View {
+***REMOVED******REMOVED***Text("Geotracking is not available at your current location.")
+***REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
 ***REMOVED***var unsupportedDeviceView: some View {
-***REMOVED******REMOVED***Text("Geotracking not supported by this device")
+***REMOVED******REMOVED***Text("Geotracking is not supported by this device.")
+***REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
