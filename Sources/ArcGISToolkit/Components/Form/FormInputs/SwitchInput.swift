@@ -15,6 +15,9 @@
 import ArcGIS
 import SwiftUI
 
+/// A view for boolean style input.
+///
+/// The switch represents two mutually exclusive values, such as: yes/no, on/off, true/false.
 struct SwitchInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
