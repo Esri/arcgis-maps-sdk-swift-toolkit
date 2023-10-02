@@ -265,6 +265,57 @@ final class FormViewTests: XCTestCase {
         )
     }
     
+    func testCase_1_4() {
+        let app = XCUIApplication()
+        let footer = app.staticTexts["numbers Footer"]
+        let formTitle = app.staticTexts["Domain"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let textField = app.textFields["numbers Text Field"]
+        
+        app.launch()
+        
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertEqual(
+            footer.label,
+            "Range domain  2-5"
+        )
+        
+        textField.tap()
+        
+        textField.typeText("1")
+        
+        XCTAssertEqual(
+            footer.label,
+            "Enter value from 2.0 to 5.0"
+        )
+        
+        // Highlight/select the current value and replace it
+        textField.doubleTap()
+        textField.typeText("2.1")
+        
+        XCTAssertEqual(
+            footer.label,
+            "Range domain  2-5"
+        )
+        
+        // Highlight/select the current value and replace it
+        textField.doubleTap()
+        textField.typeText("5.1")
+        
+        XCTAssertEqual(
+            footer.label,
+            "Enter value from 2.0 to 5.0"
+        )
+    }
+    
     // - MARK: Test case 2: Test case 2: DateTime picker input type
     
     /// Test case 2.1: Unfocused and focused state, no value, date required
@@ -605,57 +656,6 @@ final class FormViewTests: XCTestCase {
         XCTAssertEqual(
             fieldValue.label,
             "No Value"
-        )
-    }
-    
-    func testCase_6_1() {
-        let app = XCUIApplication()
-        let footer = app.staticTexts["numbers Footer"]
-        let formTitle = app.staticTexts["Domain"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
-        let textField = app.textFields["numbers Text Field"]
-        
-        app.launch()
-        
-        // Open the FormView component test view.
-        formViewTestsButton.tap()
-        
-        // Wait and verify that the form is opened.
-        XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
-        )
-        
-        XCTAssertEqual(
-            footer.label,
-            "Range domain  2-5"
-        )
-        
-        textField.tap()
-        
-        textField.typeText("1")
-        
-        XCTAssertEqual(
-            footer.label,
-            "Enter value from 2.0 to 5.0"
-        )
-        
-        // Highlight/select the current value and replace it
-        textField.doubleTap()
-        textField.typeText("2.1")
-        
-        XCTAssertEqual(
-            footer.label,
-            "Range domain  2-5"
-        )
-        
-        // Highlight/select the current value and replace it
-        textField.doubleTap()
-        textField.typeText("5.1")
-        
-        XCTAssertEqual(
-            footer.label,
-            "Enter value from 2.0 to 5.0"
         )
     }
 }
