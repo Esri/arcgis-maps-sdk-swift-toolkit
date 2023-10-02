@@ -35,6 +35,8 @@ public struct TableTopSceneView: View {
     private let configuration: ARWorldTrackingConfiguration
     /// A Boolean value indicating that the scene's initial transformation has been set.
     private var initialTransformationIsSet: Bool { initialTransformation != nil }
+    /// A Boolean value that indicates whether to hide the help text.
+    private var isHelpTextHidden: Bool = false
     
     /// Creates a table top scene view.
     /// - Parameters:
@@ -128,7 +130,7 @@ public struct TableTopSceneView: View {
             }
         }
         .overlay(alignment: .top) {
-            if !helpText.isEmpty {
+            if !helpText.isEmpty && !isHelpTextHidden {
                 Text(helpText)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(8)
@@ -220,6 +222,15 @@ public struct TableTopSceneView: View {
                 break
             }
         }
+    }
+    
+    /// Sets the visibility of the help text.
+    /// - Parameter hidden: A Boolean value that indicates whether to hide the
+    ///  help text.
+    public func helpTexteHidden(_ hidden: Bool) -> Self {
+        var view = self
+        view.isHelpTextHidden = hidden
+        return view
     }
 }
 
