@@ -15,6 +15,12 @@ import ARKit
 import SwiftUI
 import ArcGIS
 
+enum GeotrackingLocationAvailability {
+    case checking
+    case available
+    case unavailable(Error)
+}
+
 /// A scene view that provides an augmented reality world scale experience.
 public struct WorldScaleSceneView: View {
     /// The proxy for the ARSwiftUIView.
@@ -28,7 +34,9 @@ public struct WorldScaleSceneView: View {
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The configuration for the AR session.
-    private let configuration: ARWorldTrackingConfiguration
+    private let configuration: ARConfiguration
+    
+    @State private var availability: GeotrackingLocationAvailability = .checking
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -48,11 +56,55 @@ public struct WorldScaleSceneView: View {
 //        cameraController.translationFactor = translationFactor
         _cameraController = .init(initialValue: cameraController)
         
-        configuration = ARWorldTrackingConfiguration()
-        configuration.worldAlignment = .gravityAndHeading
+        configuration = ARGeoTrackingConfiguration()
     }
     
     public var body: some View {
+        if !ARGeoTrackingConfiguration.isSupported {
+            unsupportedDeviceView
+        } else {
+            Group {
+                switch availability {
+                case .checking:
+                    VStack {
+                        Text("Checking Geotracking availability at current location")
+                            .multilineTextAlignment(.center)
+                            .padding()
+                        ProgressView()
+                    }
+                case .available:
+                    Text("Geotracking is available!")
+                        .padding()
+                case .unavailable:
+                    Text("Geotracking is unavailable at your current location")
+                        .padding()
+                }
+            }
+            .onAppear {
+                ARGeoTrackingConfiguration.checkAvailability { available, error in
+                    if available {
+                        self.availability = .available
+                    } else if let error {
+                        self.availability = .unavailable(error)
+                    } else {
+                        fatalError()
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    @MainActor
+    @ViewBuilder
+    var unsupportedDeviceView: some View {
+        Text("Geotracking not supported by this device")
+            .padding()
+    }
+    
+    @MainActor
+    @ViewBuilder
+    var arView: some View {
         ZStack {
             ARSwiftUIView(proxy: arViewProxy)
                 .onDidUpdateFrame { _, frame in
@@ -66,12 +118,6 @@ public struct WorldScaleSceneView: View {
                         for: frame,
                         orientation: interfaceOrientation
                     )
-                }
-                .onAppear {
-                    arViewProxy.session?.run(configuration)
-                }
-                .onDisappear {
-                    arViewProxy.session?.pause()
                 }
             
             SceneViewReader { proxy in
@@ -89,5 +135,8 @@ public struct WorldScaleSceneView: View {
             }
         }
         .observingInterfaceOrientation($interfaceOrientation)
+        .onAppear {
+            arViewProxy.session?.run(configuration)
+        }
     }
 }
