@@ -203,17 +203,17 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch trackingState {
 ***REMOVED******REMOVED***case .normal:
-***REMOVED******REMOVED******REMOVED***helpText = "Keep moving your device"
+***REMOVED******REMOVED******REMOVED***helpText = .moveDevice
 ***REMOVED******REMOVED***case .notAvailable:
-***REMOVED******REMOVED******REMOVED***helpText = "Location not available"
+***REMOVED******REMOVED******REMOVED***helpText = .locationUnavailable
 ***REMOVED******REMOVED***case .limited(let reason):
 ***REMOVED******REMOVED******REMOVED***switch reason {
 ***REMOVED******REMOVED******REMOVED***case .excessiveMotion:
-***REMOVED******REMOVED******REMOVED******REMOVED***helpText = "Try moving your device more slowly"
+***REMOVED******REMOVED******REMOVED******REMOVED***helpText = .excessiveMotion
 ***REMOVED******REMOVED******REMOVED***case .initializing:
-***REMOVED******REMOVED******REMOVED******REMOVED***helpText = "Keep moving your device"
+***REMOVED******REMOVED******REMOVED******REMOVED***helpText = .moveDevice
 ***REMOVED******REMOVED******REMOVED***case .insufficientFeatures:
-***REMOVED******REMOVED******REMOVED******REMOVED***helpText = "Try turning on more lights and moving around"
+***REMOVED******REMOVED******REMOVED******REMOVED***helpText = .insufficentFeatures
 ***REMOVED******REMOVED******REMOVED***case .relocalizing:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This case will not occur since the AR session delegate
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** does not implement relocalization support.
@@ -330,4 +330,53 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED******REMOVED***interfaceOrientation: orientation
 ***REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
+
+private extension String {
+***REMOVED***static let planeFound = String(
+***REMOVED******REMOVED***localized: "Tap a surface to place the scene",
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction to the user to tap on a horizontal surface to
+***REMOVED******REMOVED******REMOVED******REMOVED*** place an ArcGIS Scene.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let moveDevice = String(
+***REMOVED******REMOVED***localized: "Keep moving your device",
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction to the user to keep moving their device so that
+***REMOVED******REMOVED******REMOVED******REMOVED*** horizontal planes can be identidifed in the AR experience.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let locationUnavailable = String(
+***REMOVED******REMOVED***localized: "Location not available",
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** A message to the user to notify them that the location of their device
+***REMOVED******REMOVED******REMOVED******REMOVED*** is unavailable in the AR experience.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let excessiveMotion = String(
+***REMOVED******REMOVED***localized: "Try moving your device more slowly",
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction the user to reduce excessive device motion by
+***REMOVED******REMOVED******REMOVED******REMOVED*** moving the device more slowly to imporve the AR experience which
+***REMOVED******REMOVED******REMOVED******REMOVED*** requires limited device motion.
+***REMOVED******REMOVED******REMOVED******REMOVED***"""
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let insufficentFeatures = String(
+***REMOVED******REMOVED***localized: "Try turning on more lights and moving around",
+***REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction the the user to turn on more lights or move towards a
+***REMOVED******REMOVED******REMOVED******REMOVED*** light source to imporve the AR experience which requires sufficient
+***REMOVED******REMOVED******REMOVED******REMOVED*** lighting conditions.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED***)
 ***REMOVED***
