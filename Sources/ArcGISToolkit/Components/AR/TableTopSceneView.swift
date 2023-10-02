@@ -248,23 +248,3 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED***return initialTransformation
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the field of view for the scene view's camera for a given augmented reality frame.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - frame: The current AR frame.
-***REMOVED******REMOVED***/   - orientation: The interface orientation.
-***REMOVED***func setFieldOfView(for frame: ARFrame, orientation: InterfaceOrientation) {
-***REMOVED******REMOVED***let camera = frame.camera
-***REMOVED******REMOVED***let intrinsics = camera.intrinsics
-***REMOVED******REMOVED***let imageResolution = camera.imageResolution
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***setFieldOfViewFromLensIntrinsics(
-***REMOVED******REMOVED******REMOVED***xFocalLength: intrinsics[0][0],
-***REMOVED******REMOVED******REMOVED***yFocalLength: intrinsics[1][1],
-***REMOVED******REMOVED******REMOVED***xPrincipal: intrinsics[2][0],
-***REMOVED******REMOVED******REMOVED***yPrincipal: intrinsics[2][1],
-***REMOVED******REMOVED******REMOVED***xImageSize: Float(imageResolution.width),
-***REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
-***REMOVED******REMOVED******REMOVED***interfaceOrientation: orientation
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
