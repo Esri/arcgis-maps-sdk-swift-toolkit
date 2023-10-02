@@ -26,7 +26,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ The current length of the text in the text input field.
 ***REMOVED***private let currentLength: Int
 ***REMOVED***
-***REMOVED******REMOVED***/ The field's parent element.
+***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field is focused.
@@ -48,8 +48,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - currentLength: The current length of the text in the text input field.
 ***REMOVED******REMOVED***/   - isFocused: A Boolean value indicating whether the text input field is focused.
-***REMOVED******REMOVED***/   - element: A field element that provides a description for the text input and whether
-***REMOVED******REMOVED***/  or not text is required for this input.
+***REMOVED******REMOVED***/   - element: The input's parent element.
 ***REMOVED******REMOVED***/   - input: A form input that provides length constraints for the text input.
 ***REMOVED***init(
 ***REMOVED******REMOVED***currentLength: Int,
@@ -63,7 +62,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***self.isFocused = isFocused
 ***REMOVED******REMOVED***self.description = element.description
 ***REMOVED******REMOVED***self.isRequired = (isRequired == nil ? element.isRequired : isRequired!)
-***REMOVED******REMOVED***print("isRequired: \(isRequired); self.isRequired: \(isRequired == nil ? element.isRequired : isRequired) for \(element.label)")
+***REMOVED******REMOVED******REMOVED***print("isRequired: \(isRequired); self.isRequired: \(isRequired == nil ? element.isRequired : isRequired) for \(element.label)")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch input {
 ***REMOVED******REMOVED***case let input as TextBoxFormInput:
@@ -160,7 +159,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ - Parameter length: The length of text to use for validation.
 ***REMOVED******REMOVED***/ - Parameter focused: The focus state to use for validation.
 ***REMOVED***func validate(length: Int, focused: Bool, isRequired: Bool) {
-***REMOVED******REMOVED***print("validate: focused: \(focused) isRequired: \(isRequired) for \(element.label)")
+***REMOVED******REMOVED******REMOVED***print("validate: focused: \(focused) isRequired: \(isRequired) for \(element.label)")
 ***REMOVED******REMOVED***if length == .zero && isRequired && !focused {
 ***REMOVED******REMOVED******REMOVED***validationError = .emptyWhenRequired
 ***REMOVED*** else if length < minLength || length > maxLength {
@@ -178,7 +177,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Enter \(minLength) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's exact number of required characters."
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating the user should enter a field's exact number of required characters."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -191,12 +190,12 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Text indicating a field's minimum and maximum number of allowed characters.
+***REMOVED******REMOVED***/ Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters.
 ***REMOVED***var minAndMaxText: Text {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Enter \(minLength) to \(maxLength) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's minimum and maximum number of allowed characters."
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

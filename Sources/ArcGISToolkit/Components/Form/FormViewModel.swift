@@ -29,6 +29,28 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***@Published var formDefinition: FeatureFormDefinition? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The structure of the form.
+***REMOVED***public var featureForm: FeatureForm? {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***featureForm?.elements.forEach { element in
+***REMOVED******REMOVED******REMOVED******REMOVED***tasks.append(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task.detached { [unowned self] in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await _ in element.$isVisible {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("isRequired changed: \(isRequired) for \(element.label)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visibleElements = featureForm!.elements.filter { $0.isVisible ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visibleElements.removeAll()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visibleElements.append(contentsOf: featureForm!.elements.filter { $0.isVisible ***REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("visibleElements.count: \(visibleElements.count)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("isRequired: \(isRequired); self.isRequired: \(isRequired == nil ? element.isRequired : isRequired) for \(element.label)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED******REMOVED***/ The structure of the form.
 ***REMOVED***public var formElements = [FormElement]() {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***print("formElements: \(formElements)")
@@ -60,11 +82,11 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***@Published var focusedFieldName: String?
 ***REMOVED***
 ***REMOVED***@Published var visibleElements = [FormElement]()
-
-***REMOVED***var evalutateTask: Task<Void, Never>? = nil
 ***REMOVED***
 ***REMOVED***private var tasks = [Task<Void, Never>]()
 ***REMOVED***
+***REMOVED***var evalutateTask: Task<Void, Never>? = nil
+
 ***REMOVED***deinit {
 ***REMOVED******REMOVED***clearTasks()
 ***REMOVED***

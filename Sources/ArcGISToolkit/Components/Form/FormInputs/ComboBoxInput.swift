@@ -36,10 +36,10 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The feature form containing the input.
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
-***REMOVED******REMOVED***/ The field's parent element.
+***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/ The input configuration of the field.
+***REMOVED******REMOVED***/ The input configuration of the view.
 ***REMOVED***private let input: ComboBoxFormInput
 ***REMOVED***
 ***REMOVED******REMOVED***/ A subset of coded values with names containing `filterPhrase` or all of the coded values
@@ -55,8 +55,8 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ Creates a view for a combo box input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
-***REMOVED******REMOVED***/   - element: The field's parent element.
-***REMOVED******REMOVED***/   - input: The input configuration of the field.
+***REMOVED******REMOVED***/   - element: The input's parent element.
+***REMOVED******REMOVED***/   - input: The input configuration of the view.
 ***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: ComboBoxFormInput) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
@@ -137,8 +137,12 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.value.isEmpty && !element.isRequired {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if input.noValueOption == .show {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(input.noValueLabel.isEmpty ? String.noValue : input.noValueLabel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(input.noValueLabel.isEmpty ? String.noValue : input.noValueLabel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.italic()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if selectedValue == nil {
@@ -171,7 +175,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.done
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
