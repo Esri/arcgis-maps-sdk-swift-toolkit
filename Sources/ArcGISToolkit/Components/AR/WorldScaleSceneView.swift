@@ -37,6 +37,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***private let configuration: ARConfiguration
 ***REMOVED***
 ***REMOVED***@State private var availability: GeotrackingLocationAvailability = .checking
+***REMOVED***@State private var trackingStatus: ARGeoTrackingStatus?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -114,11 +115,40 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
+***REMOVED***var trackingStatusView: some View {
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***switch trackingStatus?.state {
+***REMOVED******REMOVED******REMOVED***case .notAvailable:
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Not available.")
+***REMOVED******REMOVED******REMOVED***case .initializing:
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Initializing.")
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED***case .localizing:
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Localizing.")
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED***case .localized:
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Localized.")
+***REMOVED******REMOVED******REMOVED***case nil:
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***.background(Color.white.opacity(0.5))
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
 ***REMOVED***var arView: some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***trackingStatus = frame.geoTrackingStatus
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy, let interfaceOrientation else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.updateCamera(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
@@ -130,19 +160,23 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(proxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Capture scene view proxy as a workaround for a bug where
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** preferences set for `ARSwiftUIView` are not honored. The
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** issue has been logged with a bug report with ID FB13188508.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.sceneViewProxy = proxy
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if trackingStatus?.state == .localized {
+***REMOVED******REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(proxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Capture scene view proxy as a workaround for a bug where
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** preferences set for `ARSwiftUIView` are not honored. The
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** issue has been logged with a bug report with ID FB13188508.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.sceneViewProxy = proxy
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***trackingStatusView
 ***REMOVED***
 ***REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
 ***REMOVED******REMOVED***.onAppear {
