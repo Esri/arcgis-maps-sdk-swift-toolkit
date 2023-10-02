@@ -38,7 +38,10 @@ public struct WorldScaleSceneView: View {
     
     @State private var availability: GeotrackingLocationAvailability = .checking
     @State private var trackingStatus: ARGeoTrackingStatus?
-    @State private var localizedPoint: CLLocationCoordinate2D?
+    //@State private var localizedPoint: CLLocationCoordinate2D?
+    
+    @State private var statusText: String = ""
+    @State private var geoAnchor: ARGeoAnchor?
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -90,65 +93,92 @@ public struct WorldScaleSceneView: View {
     @MainActor
     @ViewBuilder
     var arView: some View {
-        ZStack {
-            ARSwiftUIView(proxy: arViewProxy)
-                .onDidUpdateFrame { _, frame in
-                    trackingStatus = frame.geoTrackingStatus
-                    
-                    guard let sceneViewProxy, let interfaceOrientation else { return }
-                    
-                    sceneViewProxy.updateCamera(
-                        frame: frame,
-                        cameraController: cameraController,
-                        orientation: interfaceOrientation
-                    )
-                    sceneViewProxy.setFieldOfView(
-                        for: frame,
-                        orientation: interfaceOrientation
-                    )
+        GeometryReader { proxy in
+            ZStack {
+                ARSwiftUIView(proxy: arViewProxy)
+                    .onDidUpdateFrame { _, frame in
+                        trackingStatus = frame.geoTrackingStatus
+                        
+                        guard let sceneViewProxy, let interfaceOrientation else { return }
+                        
+                        sceneViewProxy.updateCamera(
+                            frame: frame,
+                            cameraController: cameraController,
+                            orientation: interfaceOrientation
+                        )
+                        sceneViewProxy.setFieldOfView(
+                            for: frame,
+                            orientation: interfaceOrientation
+                        )
+                        
+//                        if let geoAnchor {
+//                            statusText = "\(geoAnchor.transform)"
+//                        }
+                    }
+//                    .onAddNode { renderer, node, anchor in
+//                        statusText = "anchor added"
+//                    }
+                
+                if trackingStatus?.state == .localized {
+                    SceneViewReader { proxy in
+                        sceneViewBuilder(proxy)
+                            .cameraController(cameraController)
+                            .attributionBarHidden(true)
+                            .spaceEffect(.transparent)
+                            .atmosphereEffect(.off)
+                            .onAppear {
+                                // Capture scene view proxy as a workaround for a bug where
+                                // preferences set for `ARSwiftUIView` are not honored. The
+                                // issue has been logged with a bug report with ID FB13188508.
+                                self.sceneViewProxy = proxy
+                            }
+                    }
                 }
-            
-            if trackingStatus?.state == .localized {
-                SceneViewReader { proxy in
-                    sceneViewBuilder(proxy)
-                        .cameraController(cameraController)
-                        .attributionBarHidden(true)
-                        .spaceEffect(.transparent)
-                        .atmosphereEffect(.off)
-                        .onAppear {
-                            // Capture scene view proxy as a workaround for a bug where
-                            // preferences set for `ARSwiftUIView` are not honored. The
-                            // issue has been logged with a bug report with ID FB13188508.
-                            self.sceneViewProxy = proxy
-                        }
+                
+//                if let localizedPoint {
+//                    statusView(for: "\(localizedPoint.latitude), \(localizedPoint.longitude)")
+//                        .background(Color.white.opacity(0.85))
+//                }
+                
+                if !statusText.isEmpty {
+                    statusView(for: statusText)
+                        .background(Color.white.opacity(0.85))
                 }
+                
+                trackingStatusView
             }
-            
-            if let localizedPoint {
-                statusView(for: "\(localizedPoint.latitude), \(localizedPoint.longitude)")
-                    .background(Color.white.opacity(0.85))
+            .observingInterfaceOrientation($interfaceOrientation)
+            .onAppear {
+                arViewProxy.session?.run(configuration)
             }
-            
-            trackingStatusView
-        }
-        .observingInterfaceOrientation($interfaceOrientation)
-        .onAppear {
-            arViewProxy.session?.run(configuration)
-        }
-        .onChange(of: trackingStatus) { status in
-            guard let session = arViewProxy.session, let status, status.state == .localized else { return }
-            Task {
-                let point = simd_float3()
-                let (location, _) = try await session.geoLocation(forPoint: point)
-                cameraController.originCamera = Camera(
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                    altitude: 0,
-                    heading: 0,
-                    pitch: 90,
-                    roll: 0
-                )
-                localizedPoint = location
+            .onChange(of: trackingStatus) { status in
+                guard let session = arViewProxy.session, let status, status.state == .localized else { return }
+                
+                guard let query = session.currentFrame?.raycastQuery(
+                    from: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
+                    allowing: .estimatedPlane,
+                    alignment: .any
+                ) else { return }
+                guard let result = session.raycast(query).first else { return }
+                
+                Task {
+                    let point = result.worldTransform.translation
+                    let (location, _) = try await session.geoLocation(forPoint: point)
+                    cameraController.originCamera = Camera(
+                        latitude: location.latitude,
+                        longitude: location.longitude,
+                        altitude: 3,
+                        heading: 0,
+                        pitch: 90,
+                        roll: 0
+                    )
+                    
+                    statusText = "Localized point: \(location.latitude), \(location.longitude)"
+                    
+                    let anchor = ARGeoAnchor(coordinate: location)
+                    session.add(anchor: anchor)
+                    geoAnchor = anchor
+                }
             }
         }
     }
@@ -202,5 +232,11 @@ public struct WorldScaleSceneView: View {
                 ProgressView()
             }
         }
+    }
+}
+
+extension simd_float4x4 {
+    var translation: simd_float3 {
+        return [columns.3.x, columns.3.y, columns.3.z]
     }
 }
