@@ -27,9 +27,8 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the current value doesn't exist as an option in the domain.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ In this scenario a ``ComboBoxInput`` should be used instead.
+***REMOVED******REMOVED***/ A Boolean value indicating whether a `ComboBoxInput`` should be used instead. This will be `true` if
+***REMOVED******REMOVED***/ the current value doesn't exist as an option in the domain
 ***REMOVED***@State private var fallbackToComboBox = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
