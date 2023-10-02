@@ -15,6 +15,12 @@ import ARKit
 ***REMOVED***
 ***REMOVED***
 
+enum GeotrackingLocationAvailability {
+***REMOVED***case checking
+***REMOVED***case available
+***REMOVED***case unavailable(Error)
+***REMOVED***
+
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience.
 public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
@@ -28,7 +34,9 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ The configuration for the AR session.
-***REMOVED***private let configuration: ARWorldTrackingConfiguration
+***REMOVED***private let configuration: ARConfiguration
+***REMOVED***
+***REMOVED***@State private var availability: GeotrackingLocationAvailability = .checking
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -48,11 +56,55 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***cameraController.translationFactor = translationFactor
 ***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
-***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
+***REMOVED******REMOVED***configuration = ARGeoTrackingConfiguration()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
+***REMOVED******REMOVED***if !ARGeoTrackingConfiguration.isSupported {
+***REMOVED******REMOVED******REMOVED***unsupportedDeviceView
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED***switch availability {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .checking:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Checking Geotracking availability at current location")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***case .available:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Geotracking is available!")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***case .unavailable:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Geotracking is unavailable at your current location")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***ARGeoTrackingConfiguration.checkAvailability { available, error in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if available {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.availability = .available
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let error {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.availability = .unavailable(error)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***var unsupportedDeviceView: some View {
+***REMOVED******REMOVED***Text("Geotracking not supported by this device")
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***var arView: some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
@@ -66,12 +118,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.pause()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
@@ -89,5 +135,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
