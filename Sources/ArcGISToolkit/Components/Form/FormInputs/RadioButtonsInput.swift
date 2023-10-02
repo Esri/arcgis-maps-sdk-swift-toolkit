@@ -15,6 +15,9 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view for numerical value input.
+***REMOVED***/
+***REMOVED***/ This is the preferable input type for short lists of coded value domains.
 struct RadioButtonsInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
