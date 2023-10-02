@@ -35,6 +35,8 @@ public struct TableTopSceneView: View {
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
 ***REMOVED******REMOVED***/ A Boolean value indicating that the scene's initial transformation has been set.
 ***REMOVED***private var initialTransformationIsSet: Bool { initialTransformation != nil ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value that indicates whether to hide the help text.
+***REMOVED***private var isHelpTextHidden: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a table top scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -128,7 +130,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(alignment: .top) {
-***REMOVED******REMOVED******REMOVED***if !helpText.isEmpty {
+***REMOVED******REMOVED******REMOVED***if !helpText.isEmpty && !isHelpTextHidden {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(helpText)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
@@ -220,6 +222,15 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the visibility of the help text.
+***REMOVED******REMOVED***/ - Parameter hidden: A Boolean value that indicates whether to hide the
+***REMOVED******REMOVED***/  help text.
+***REMOVED***public func helpTexteHidden(_ hidden: Bool) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.isHelpTextHidden = hidden
+***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
 
