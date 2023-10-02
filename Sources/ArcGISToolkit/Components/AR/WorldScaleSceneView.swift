@@ -18,7 +18,7 @@ import ArcGIS
 enum GeotrackingLocationAvailability {
     case checking
     case available
-    case unavailable(Error)
+    case unavailable(Error?)
 }
 
 /// A scene view that provides an augmented reality world scale experience.
@@ -66,39 +66,49 @@ public struct WorldScaleSceneView: View {
             Group {
                 switch availability {
                 case .checking:
-                    VStack {
-                        Text("Checking Geotracking availability at current location")
-                            .multilineTextAlignment(.center)
-                            .padding()
-                        ProgressView()
-                    }
+                    checkingGeotrackingAvailability
                 case .available:
-                    Text("Geotracking is available!")
-                        .padding()
+                    arView
                 case .unavailable:
-                    Text("Geotracking is unavailable at your current location")
-                        .padding()
+                    geotrackingIsNotAvailable
                 }
             }
             .onAppear {
                 ARGeoTrackingConfiguration.checkAvailability { available, error in
                     if available {
                         self.availability = .available
-                    } else if let error {
-                        self.availability = .unavailable(error)
                     } else {
-                        fatalError()
+                        self.availability = .unavailable(error)
                     }
                 }
             }
         }
     }
     
+    @MainActor
+    @ViewBuilder
+    var checkingGeotrackingAvailability: some View {
+        VStack {
+            Text("Checking Geotracking availability at current location")
+                .multilineTextAlignment(.center)
+                .padding()
+            ProgressView()
+        }
+    }
+    
+    @MainActor
+    @ViewBuilder
+    var geotrackingIsNotAvailable: some View {
+        Text("Geotracking is not available at your current location.")
+            .multilineTextAlignment(.center)
+            .padding()
+    }
     
     @MainActor
     @ViewBuilder
     var unsupportedDeviceView: some View {
-        Text("Geotracking not supported by this device")
+        Text("Geotracking is not supported by this device.")
+            .multilineTextAlignment(.center)
             .padding()
     }
     
