@@ -227,7 +227,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/ Sets the visibility of the help text.
 ***REMOVED******REMOVED***/ - Parameter hidden: A Boolean value that indicates whether to hide the
 ***REMOVED******REMOVED***/  help text.
-***REMOVED***public func helpTexteHidden(_ hidden: Bool) -> Self {
+***REMOVED***public func helpTextHidden(_ hidden: Bool) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.isHelpTextHidden = hidden
 ***REMOVED******REMOVED***return view
