@@ -27,9 +27,8 @@ struct RadioButtonsInput: View {
     /// The selected option.
     @State private var selectedValue: CodedValue?
     
-    /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
-    ///
-    /// In this scenario a ``ComboBoxInput`` should be used instead.
+    /// A Boolean value indicating whether a `ComboBoxInput`` should be used instead. This will be `true` if
+    /// the current value doesn't exist as an option in the domain
     @State private var fallbackToComboBox = false
     
     /// The field's parent element.
