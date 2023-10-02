@@ -43,7 +43,7 @@ public struct FormView: View {
                 VStack(alignment: .leading) {
                     FormHeader(title: featureForm?.title)
                         .padding([.bottom], elementPadding)
-                    ForEach(featureForm?.elements ?? [], id: \.label) { element in
+                    ForEach(visibleElements, id: \.label) { element in
                         makeElement(element)
 //                            .task {
 //                                print("isVisible changed .task for \(element.label)")

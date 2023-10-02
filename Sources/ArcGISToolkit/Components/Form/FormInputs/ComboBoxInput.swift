@@ -36,10 +36,10 @@ struct ComboBoxInput: View {
     /// The feature form containing the input.
     private var featureForm: FeatureForm?
     
-    /// The field's parent element.
+    /// The input's parent element.
     private let element: FieldFormElement
     
-    /// The input configuration of the field.
+    /// The input configuration of the view.
     private let input: ComboBoxFormInput
     
     /// A subset of coded values with names containing `filterPhrase` or all of the coded values
@@ -55,8 +55,8 @@ struct ComboBoxInput: View {
     /// Creates a view for a combo box input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
-    ///   - element: The field's parent element.
-    ///   - input: The input configuration of the field.
+    ///   - element: The input's parent element.
+    ///   - input: The input configuration of the view.
     init(featureForm: FeatureForm?, element: FieldFormElement, input: ComboBoxFormInput) {
         self.featureForm = featureForm
         self.element = element
@@ -137,8 +137,12 @@ struct ComboBoxInput: View {
                 if element.value.isEmpty && !element.isRequired {
                     if input.noValueOption == .show {
                         HStack {
-                            Button(input.noValueLabel.isEmpty ? String.noValue : input.noValueLabel) {
+                            Button {
                                 selectedValue = nil
+                            } label: {
+                                Text(input.noValueLabel.isEmpty ? String.noValue : input.noValueLabel)
+                                    .italic()
+                                    .foregroundStyle(.secondary)
                             }
                             Spacer()
                             if selectedValue == nil {
@@ -171,7 +175,7 @@ struct ComboBoxInput: View {
                         isPresented = false
                     } label: {
                         Text.done
-                            .bold()
+                            .fontWeight(.semibold)
                     }
                 }
             }
