@@ -55,6 +55,14 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isFocused)
+***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isFocused, isNumeric {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***positiveNegativeButton
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Field")
 ***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
@@ -119,6 +127,19 @@ private extension SingleLineTextInput {
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.
 ***REMOVED***var keyboardType: UIKeyboardType {
 ***REMOVED******REMOVED***isNumeric ? (isDecimal ? .decimalPad : .numberPad) : .default
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The button that allows a user to switch the numeric value between positive and negative.
+***REMOVED***var positiveNegativeButton: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***if text.first == "-" {
+***REMOVED******REMOVED******REMOVED******REMOVED***text.removeFirst()
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***text.insert("-", at: text.startIndex)
+***REMOVED******REMOVED***
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "plus.forwardslash.minus")
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The range of valid values for a numeric input field.
