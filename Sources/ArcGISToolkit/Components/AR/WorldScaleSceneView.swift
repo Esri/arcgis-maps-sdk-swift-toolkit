@@ -38,6 +38,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED***@State private var availability: GeotrackingLocationAvailability = .checking
 ***REMOVED***@State private var trackingStatus: ARGeoTrackingStatus?
+***REMOVED***@State private var localizedPoint: CLLocationCoordinate2D?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -88,59 +89,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
-***REMOVED***var checkingGeotrackingAvailability: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***Text("Checking Geotracking availability at current location")
-***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***@MainActor
-***REMOVED***@ViewBuilder
-***REMOVED***var geotrackingIsNotAvailable: some View {
-***REMOVED******REMOVED***Text("Geotracking is not available at your current location.")
-***REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED***
-***REMOVED***
-***REMOVED***@MainActor
-***REMOVED***@ViewBuilder
-***REMOVED***var unsupportedDeviceView: some View {
-***REMOVED******REMOVED***Text("Geotracking is not supported by this device.")
-***REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED***
-***REMOVED***
-***REMOVED***@MainActor
-***REMOVED***@ViewBuilder
-***REMOVED***var trackingStatusView: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***switch trackingStatus?.state {
-***REMOVED******REMOVED******REMOVED***case .notAvailable:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Not available.")
-***REMOVED******REMOVED******REMOVED***case .initializing:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Initializing.")
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED***case .localizing:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Localizing.")
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED***case .localized:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Localized.")
-***REMOVED******REMOVED******REMOVED***case nil:
-***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***.background(Color.white.opacity(0.5))
-***REMOVED***
-***REMOVED***
-***REMOVED***@MainActor
-***REMOVED***@ViewBuilder
 ***REMOVED***var arView: some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
@@ -176,11 +124,83 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if let localizedPoint {
+***REMOVED******REMOVED******REMOVED******REMOVED***statusView(for: "\(localizedPoint.latitude), \(localizedPoint.longitude)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.white.opacity(0.85))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***trackingStatusView
 ***REMOVED***
 ***REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: trackingStatus) { status in
+***REMOVED******REMOVED******REMOVED***guard let session = arViewProxy.session, let status, status.state == .localized else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***let point = simd_float3()
+***REMOVED******REMOVED******REMOVED******REMOVED***let (location, _) = try await session.geoLocation(forPoint: point)
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***latitude: location.latitude,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***longitude: location.longitude,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***altitude: 0,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: 0,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***localizedPoint = location
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***var checkingGeotrackingAvailability: some View {
+***REMOVED******REMOVED***statusView(for: "Checking Geotracking availability at current location.", showProgress: true)
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***var geotrackingIsNotAvailable: some View {
+***REMOVED******REMOVED***statusView(for: "Geotracking is not available at your current location.")
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***var unsupportedDeviceView: some View {
+***REMOVED******REMOVED***statusView(for: "Geotracking is not supported by this device.")
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***var trackingStatusView: some View {
+***REMOVED******REMOVED***switch trackingStatus?.state {
+***REMOVED******REMOVED***case .notAvailable:
+***REMOVED******REMOVED******REMOVED***statusView(for: "Not available.")
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.white.opacity(0.5))
+***REMOVED******REMOVED***case .initializing:
+***REMOVED******REMOVED******REMOVED***statusView(for: "Initializing.")
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.white.opacity(0.5))
+***REMOVED******REMOVED***case .localizing:
+***REMOVED******REMOVED******REMOVED***statusView(for: "Localizing.")
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.white.opacity(0.5))
+***REMOVED******REMOVED***case .localized:
+***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED***case nil:
+***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder func statusView(for status: String, showProgress: Bool = false) -> some View {
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***Text(status)
+***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***if showProgress {
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
