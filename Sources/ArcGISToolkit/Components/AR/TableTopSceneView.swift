@@ -227,7 +227,7 @@ public struct TableTopSceneView: View {
     /// Sets the visibility of the help text.
     /// - Parameter hidden: A Boolean value that indicates whether to hide the
     ///  help text.
-    public func helpTexteHidden(_ hidden: Bool) -> Self {
+    public func helpTextHidden(_ hidden: Bool) -> Self {
         var view = self
         view.isHelpTextHidden = hidden
         return view
