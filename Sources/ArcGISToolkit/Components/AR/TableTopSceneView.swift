@@ -28,7 +28,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
 ***REMOVED******REMOVED***/ The help text to guide the user through an AR experience.
-***REMOVED***@State private var helpText: String?
+***REMOVED***@State private var helpText: String = ""
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ The configuration for the AR session.
@@ -84,7 +84,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onCameraTrackingStateChange { _, camera in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setHelpText(for: camera.trackingState)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateHelpText(for: camera.trackingState)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addPlane(renderer: renderer, node: node, anchor: anchor)
@@ -102,7 +102,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***using: screenPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation = transformation
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***helpText = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***helpText = ""
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
@@ -128,7 +128,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(alignment: .top) {
-***REMOVED******REMOVED******REMOVED***if let helpText {
+***REMOVED******REMOVED******REMOVED***if !helpText.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(helpText)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
@@ -191,10 +191,13 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***helpText = "Tap a surface to place the scene"
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the help text to guide the user through an AR experience using the AR session's camera tracking status.
+***REMOVED******REMOVED***/ Updates the help text to guide the user through an AR experience using the AR session's camera tracking status.
 ***REMOVED******REMOVED***/ - Parameter trackingState: The camera's tracking status.
-***REMOVED***private func setHelpText(for trackingState: ARCamera.TrackingState) {
-***REMOVED******REMOVED***guard !initialTransformationIsSet else { return ***REMOVED***
+***REMOVED***private func updateHelpText(for trackingState: ARCamera.TrackingState) {
+***REMOVED******REMOVED***guard !initialTransformationIsSet else {
+***REMOVED******REMOVED******REMOVED***helpText = ""
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch trackingState {
 ***REMOVED******REMOVED***case .normal:
