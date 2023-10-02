@@ -130,6 +130,14 @@ contains one or more facilities in a floor-aware map or scene. */
 trace operation. */
 "Function Results" = "Function Results";
 
+/* An instruction to the user to keep moving their device so that
+horizontal planes can be identidifed in the AR experience. */
+"Keep moving your device" = "Keep moving your device";
+
+/* A message to the user to notify them that the location of their device
+is unavailable in the AR experience. */
+"Location not available" = "Location not available";
+
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
 
@@ -225,6 +233,10 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Starting Points";
 
+/* An instruction to the user to tap on a horizontal surface to
+place an ArcGIS Scene. */
+"Tap a surface to place the scene" = "Tap a surface to place the scene";
+
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "Tap on the image for more information.";
@@ -272,6 +284,16 @@ match the spatial reference of the map. */
 
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Try Again";
+
+/*  An instruction the user to reduce excessive device motion by
+ moving the device more slowly to imporve the AR experience which
+ requires limited device motion. */
+"Try moving your device more slowly" = "Try moving your device more slowly";
+
+/* An instruction the the user to turn on more lights or move towards a
+light source to imporve the AR experience which requires sufficient
+lighting conditions. */
+"Try turning on more lights and moving around" = "Try turning on more lights and moving around";
 
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Unnamed Asset Type";
