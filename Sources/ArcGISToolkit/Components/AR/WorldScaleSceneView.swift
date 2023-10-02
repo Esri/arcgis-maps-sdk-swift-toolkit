@@ -38,6 +38,7 @@ public struct WorldScaleSceneView: View {
     
     @State private var availability: GeotrackingLocationAvailability = .checking
     @State private var trackingStatus: ARGeoTrackingStatus?
+    @State private var localizedPoint: CLLocationCoordinate2D?
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -88,59 +89,6 @@ public struct WorldScaleSceneView: View {
     
     @MainActor
     @ViewBuilder
-    var checkingGeotrackingAvailability: some View {
-        VStack {
-            Text("Checking Geotracking availability at current location")
-                .multilineTextAlignment(.center)
-                .padding()
-            ProgressView()
-        }
-    }
-    
-    @MainActor
-    @ViewBuilder
-    var geotrackingIsNotAvailable: some View {
-        Text("Geotracking is not available at your current location.")
-            .multilineTextAlignment(.center)
-            .padding()
-    }
-    
-    @MainActor
-    @ViewBuilder
-    var unsupportedDeviceView: some View {
-        Text("Geotracking is not supported by this device.")
-            .multilineTextAlignment(.center)
-            .padding()
-    }
-    
-    @MainActor
-    @ViewBuilder
-    var trackingStatusView: some View {
-        VStack {
-            switch trackingStatus?.state {
-            case .notAvailable:
-                Text("Not available.")
-            case .initializing:
-                Text("Initializing.")
-                ProgressView()
-            case .localizing:
-                Text("Localizing.")
-                ProgressView()
-            case .localized:
-                Text("Localized.")
-            case nil:
-                EmptyView()
-            @unknown default:
-                EmptyView()
-            }
-        }
-        .multilineTextAlignment(.center)
-        .padding()
-        .background(Color.white.opacity(0.5))
-    }
-    
-    @MainActor
-    @ViewBuilder
     var arView: some View {
         ZStack {
             ARSwiftUIView(proxy: arViewProxy)
@@ -176,11 +124,83 @@ public struct WorldScaleSceneView: View {
                 }
             }
             
+            if let localizedPoint {
+                statusView(for: "\(localizedPoint.latitude), \(localizedPoint.longitude)")
+                    .background(Color.white.opacity(0.85))
+            }
+            
             trackingStatusView
         }
         .observingInterfaceOrientation($interfaceOrientation)
         .onAppear {
             arViewProxy.session?.run(configuration)
+        }
+        .onChange(of: trackingStatus) { status in
+            guard let session = arViewProxy.session, let status, status.state == .localized else { return }
+            Task {
+                let point = simd_float3()
+                let (location, _) = try await session.geoLocation(forPoint: point)
+                cameraController.originCamera = Camera(
+                    latitude: location.latitude,
+                    longitude: location.longitude,
+                    altitude: 0,
+                    heading: 0,
+                    pitch: 90,
+                    roll: 0
+                )
+                localizedPoint = location
+            }
+        }
+    }
+    
+    @MainActor
+    @ViewBuilder
+    var checkingGeotrackingAvailability: some View {
+        statusView(for: "Checking Geotracking availability at current location.", showProgress: true)
+    }
+    
+    @MainActor
+    @ViewBuilder
+    var geotrackingIsNotAvailable: some View {
+        statusView(for: "Geotracking is not available at your current location.")
+    }
+    
+    @MainActor
+    @ViewBuilder
+    var unsupportedDeviceView: some View {
+        statusView(for: "Geotracking is not supported by this device.")
+    }
+    
+    @MainActor
+    @ViewBuilder
+    var trackingStatusView: some View {
+        switch trackingStatus?.state {
+        case .notAvailable:
+            statusView(for: "Not available.")
+                .background(Color.white.opacity(0.5))
+        case .initializing:
+            statusView(for: "Initializing.")
+                .background(Color.white.opacity(0.5))
+        case .localizing:
+            statusView(for: "Localizing.")
+                .background(Color.white.opacity(0.5))
+        case .localized:
+            EmptyView()
+        case nil:
+            EmptyView()
+        @unknown default:
+            EmptyView()
+        }
+    }
+    
+    @ViewBuilder func statusView(for status: String, showProgress: Bool = false) -> some View {
+        VStack {
+            Text(status)
+                .multilineTextAlignment(.center)
+                .padding()
+            if showProgress {
+                ProgressView()
+            }
         }
     }
 }
