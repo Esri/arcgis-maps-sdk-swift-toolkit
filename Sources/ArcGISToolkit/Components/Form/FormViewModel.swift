@@ -29,6 +29,28 @@ public class FormViewModel: ObservableObject {
     @Published var formDefinition: FeatureFormDefinition? = nil
     
     /// The structure of the form.
+    public var featureForm: FeatureForm? {
+        didSet {
+            featureForm?.elements.forEach { element in
+                tasks.append(
+                    Task.detached { [unowned self] in
+                        for await _ in element.$isVisible {
+                            //                print("isRequired changed: \(isRequired) for \(element.label)")
+                            await MainActor.run {
+                                visibleElements = featureForm!.elements.filter { $0.isVisible }
+//                                visibleElements.removeAll()
+//                                visibleElements.append(contentsOf: featureForm!.elements.filter { $0.isVisible })
+                                print("visibleElements.count: \(visibleElements.count)")
+                                //        print("isRequired: \(isRequired); self.isRequired: \(isRequired == nil ? element.isRequired : isRequired) for \(element.label)")
+                            }
+                        }
+                    }
+                )
+            }
+        }
+    }
+
+    /// The structure of the form.
     public var formElements = [FormElement]() {
         didSet {
             print("formElements: \(formElements)")
@@ -60,11 +82,11 @@ public class FormViewModel: ObservableObject {
     @Published var focusedFieldName: String?
     
     @Published var visibleElements = [FormElement]()
-
-    var evalutateTask: Task<Void, Never>? = nil
     
     private var tasks = [Task<Void, Never>]()
     
+    var evalutateTask: Task<Void, Never>? = nil
+
     deinit {
         clearTasks()
     }

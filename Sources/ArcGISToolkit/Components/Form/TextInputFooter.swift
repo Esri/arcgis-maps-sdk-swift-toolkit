@@ -26,7 +26,7 @@ struct TextInputFooter: View {
     /// The current length of the text in the text input field.
     private let currentLength: Int
     
-    /// The field's parent element.
+    /// The input's parent element.
     private let element: FieldFormElement
     
     /// A Boolean value indicating whether the text input field is focused.
@@ -48,8 +48,7 @@ struct TextInputFooter: View {
     /// - Parameters:
     ///   - currentLength: The current length of the text in the text input field.
     ///   - isFocused: A Boolean value indicating whether the text input field is focused.
-    ///   - element: A field element that provides a description for the text input and whether
-    ///  or not text is required for this input.
+    ///   - element: The input's parent element.
     ///   - input: A form input that provides length constraints for the text input.
     init(
         currentLength: Int,
@@ -63,7 +62,7 @@ struct TextInputFooter: View {
         self.isFocused = isFocused
         self.description = element.description
         self.isRequired = (isRequired == nil ? element.isRequired : isRequired!)
-        print("isRequired: \(isRequired); self.isRequired: \(isRequired == nil ? element.isRequired : isRequired) for \(element.label)")
+//        print("isRequired: \(isRequired); self.isRequired: \(isRequired == nil ? element.isRequired : isRequired) for \(element.label)")
         
         switch input {
         case let input as TextBoxFormInput:
@@ -160,7 +159,7 @@ extension TextInputFooter {
     /// - Parameter length: The length of text to use for validation.
     /// - Parameter focused: The focus state to use for validation.
     func validate(length: Int, focused: Bool, isRequired: Bool) {
-        print("validate: focused: \(focused) isRequired: \(isRequired) for \(element.label)")
+//        print("validate: focused: \(focused) isRequired: \(isRequired) for \(element.label)")
         if length == .zero && isRequired && !focused {
             validationError = .emptyWhenRequired
         } else if length < minLength || length > maxLength {
@@ -178,7 +177,7 @@ extension TextInputFooter {
         Text(
             "Enter \(minLength) characters",
             bundle: .toolkitModule,
-            comment: "Text indicating a field's exact number of required characters."
+            comment: "Text indicating the user should enter a field's exact number of required characters."
         )
     }
     
@@ -191,12 +190,12 @@ extension TextInputFooter {
         )
     }
     
-    /// Text indicating a field's minimum and maximum number of allowed characters.
+    /// Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters.
     var minAndMaxText: Text {
         Text(
             "Enter \(minLength) to \(maxLength) characters",
             bundle: .toolkitModule,
-            comment: "Text indicating a field's minimum and maximum number of allowed characters."
+            comment: "Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters."
         )
     }
 }
