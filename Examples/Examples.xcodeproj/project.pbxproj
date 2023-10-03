@@ -424,7 +424,7 @@
 				CODE_SIGN_ENTITLEMENTS = ExamplesApp/Examples.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ExamplesApp/Preview Content\"";
-				DEVELOPMENT_TEAM = HA9FCJGHQ6;
+				DEVELOPMENT_TEAM = P8HGHS7JQ8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ExamplesApp/Info.plist;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
@@ -453,7 +453,7 @@
 				CODE_SIGN_ENTITLEMENTS = ExamplesApp/Examples.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ExamplesApp/Preview Content\"";
-				DEVELOPMENT_TEAM = HA9FCJGHQ6;
+				DEVELOPMENT_TEAM = P8HGHS7JQ8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ExamplesApp/Info.plist;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
