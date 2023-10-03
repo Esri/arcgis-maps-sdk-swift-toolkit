@@ -91,31 +91,4 @@ public class FormInputModel: ObservableObject {
             }
         }
     }
-    
-    //        await withTaskGroup(of: Void.self) { group in
-    //            for element in featureForm.elements {
-    //                group.addTask {
-    //                    for await isVisible in $0.$isVisible {
-    //                        elements = featureForm.elements.filter { $0.isVisible }
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    
-    public func outputIsVisible(featureForm: FeatureForm) {
-        featureForm.elements.forEach { element in
-            print("element: \(element.label) isVisible = \(element.isVisible)")
-        }
-    }
-    
-    internal func evaluateExpressions(model: FormViewModel, featureForm: FeatureForm) {
-        model.evalutateTask?.cancel()
-        model.evalutateTask = Task {
-            try? await featureForm.evaluateExpressions()
-            //                model.outputIsVisible(featureForm: featureForm!)
-//            print("evaluation completed; element.isVisible = \(element.isVisible)")
-        }
-
-    }
 }

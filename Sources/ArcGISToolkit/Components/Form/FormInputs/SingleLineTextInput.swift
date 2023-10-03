@@ -88,25 +88,15 @@ struct SingleLineTextInput: View {
             }
         }
         .onChange(of: text) { newValue in
-//            print(".onChange(of: text) \(newValue) - \(element.fieldName)")
             guard newValue != inputModel.value else {
-//                print("onChange(of: text) values are the same - \(element.fieldName)")
                 return
             }
+
             featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
-            inputModel.evaluateExpressions(model: model, featureForm: featureForm!)
+            model.evaluateExpressions()
         }
         .onChange(of: inputModel.value) { newValue in
-//            print(".onchange(of: value) \(newValue); oldValue: \(text) - \(element.fieldName)")
             text = newValue
         }
-        
-        
-        //        .onReceive(element.$isVisible) {
-        //            print("isVisible changed: \($0)")
-        //            isVisible = $0
-        //        }
     }
-    
-    
 }

@@ -117,7 +117,7 @@ struct MultiLineTextInput: View {
                     return
                 }
                 featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
-                inputModel.evaluateExpressions(model: model, featureForm: featureForm!)
+                model.evaluateExpressions()
             }
         }
         .onChange(of: inputModel.value) { newValue in
