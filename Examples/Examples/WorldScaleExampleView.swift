@@ -18,13 +18,13 @@ import ArcGISToolkit
 struct WorldScaleExampleView: View {
     @State private var scene: ArcGIS.Scene = {
         // Creates an elevation source from Terrain3D REST service.
-        let elevationServiceURL = URL(string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!
-        let elevationSource = ArcGISTiledElevationSource(url: elevationServiceURL)
-        let surface = Surface()
-        surface.addElevationSource(elevationSource)
+//        let elevationServiceURL = URL(string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!
+//        let elevationSource = ArcGISTiledElevationSource(url: elevationServiceURL)
+//        let surface = Surface()
+//        surface.addElevationSource(elevationSource)
         let scene = Scene()
-        scene.baseSurface = surface
-        scene.baseSurface.navigationConstraint = .unconstrained
+//        scene.baseSurface = surface
+//        scene.baseSurface.navigationConstraint = .unconstrained
         scene.basemap = Basemap(style: .arcGISImagery)
         scene.addOperationalLayer(.canyonCountyParcels)
         return scene
@@ -52,6 +52,8 @@ extension FeatureTable {
 
 extension Layer {
     static var canyonCountyParcels: FeatureLayer {
-        FeatureLayer(featureTable: .canyonCountyParcels)
+        let fl = FeatureLayer(featureTable: .canyonCountyParcels)
+        fl.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .yellow, width: 3))
+        return fl
     }
 }
