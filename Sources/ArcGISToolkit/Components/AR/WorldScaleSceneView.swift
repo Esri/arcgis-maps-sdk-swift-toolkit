@@ -55,12 +55,12 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let initial = Point(latitude: 43.541829415061166, longitude: -116.5794293050851)
-***REMOVED******REMOVED******REMOVED***let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
-***REMOVED******REMOVED******REMOVED******REMOVED***let initialCamera = Camera(lookingAt: initial, distance: 20, heading: 0, pitch: -10, roll: 0)
-***REMOVED******REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+***REMOVED******REMOVED***let initial = Point(latitude: 43.541829415061166, longitude: -116.5794293050851)
+***REMOVED******REMOVED***let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
+***REMOVED******REMOVED******REMOVED***let initialCamera = Camera(lookingAt: initial, distance: 20, heading: 0, pitch: -10, roll: 0)
+***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController()
+***REMOVED******REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController()
 ***REMOVED******REMOVED***cameraController.translationFactor = 1
 ***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED******REMOVED***
@@ -123,7 +123,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "anchor added"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if trackingStatus?.state == .localized {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if trackingStatus?.state == .localized {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(proxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
@@ -137,7 +137,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.sceneViewProxy = proxy
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !statusText.isEmpty {

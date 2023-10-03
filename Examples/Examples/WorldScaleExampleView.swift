@@ -24,23 +24,35 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED***surface.addElevationSource(elevationSource)
 ***REMOVED******REMOVED***let scene = Scene()
 ***REMOVED******REMOVED******REMOVED***scene.baseSurface = surface
+***REMOVED******REMOVED***scene.baseSurface.backgroundGrid.isVisible = false
 ***REMOVED******REMOVED******REMOVED***scene.baseSurface.navigationConstraint = .unconstrained
 ***REMOVED******REMOVED***scene.basemap = Basemap(style: .arcGISImagery)
-***REMOVED******REMOVED***scene.basemap?.baseLayers.first?.opacity = 0.15
 ***REMOVED******REMOVED***scene.addOperationalLayer(.canyonCountyParcels)
 ***REMOVED******REMOVED***return scene
 ***REMOVED***()
 ***REMOVED***
+***REMOVED***@State private var opacity: Float = 1
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***WorldScaleSceneView { proxy in
-***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task.detached {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("\(results.count) identify result(s).")
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***WorldScaleSceneView { proxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task.detached {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("\(results.count) identify result(s).")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Slider(value: $opacity, in: 0...1.0)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: opacity) { opacity in
+***REMOVED******REMOVED******REMOVED***guard let basemap = scene.basemap else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***for layer in basemap.baseLayers {
+***REMOVED******REMOVED******REMOVED******REMOVED***layer.opacity = opacity
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
