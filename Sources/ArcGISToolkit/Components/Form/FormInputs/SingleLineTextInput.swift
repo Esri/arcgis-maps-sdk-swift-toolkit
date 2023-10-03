@@ -88,25 +88,15 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***print(".onChange(of: text) \(newValue) - \(element.fieldName)")
 ***REMOVED******REMOVED******REMOVED***guard newValue != inputModel.value else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("onChange(of: text) values are the same - \(element.fieldName)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
+
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
-***REMOVED******REMOVED******REMOVED***inputModel.evaluateExpressions(model: model, featureForm: featureForm!)
+***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***print(".onchange(of: value) \(newValue); oldValue: \(text) - \(element.fieldName)")
 ***REMOVED******REMOVED******REMOVED***text = newValue
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(element.$isVisible) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("isVisible changed: \($0)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isVisible = $0
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

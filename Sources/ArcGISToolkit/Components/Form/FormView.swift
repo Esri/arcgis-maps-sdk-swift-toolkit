@@ -23,11 +23,9 @@ public struct FormView: View {
 ***REMOVED***private let featureForm: FeatureForm?
 ***REMOVED***
 ***REMOVED***private let model: FormViewModel
-
+***REMOVED***
 ***REMOVED***@State var isEvaluating = true
-***REMOVED***@State var refresh: Bool = false
-***REMOVED***@State var visibleElements = [FormElement]()
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameter featureForm: The form's configuration.
 ***REMOVED***public init(featureForm: FeatureForm?, model: FormViewModel) {
@@ -43,30 +41,8 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: featureForm?.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(visibleElements, id: \.label) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(featureForm?.elements ?? [], id: \.label) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("isVisible changed .task for \(element.label)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await isVisible in element.$isVisible {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("isVisible changed: \(isVisible) for \(element.label)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***refresh.toggle()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TODO: refresh.toggle() doesn't work (current code)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***=> Move visibility stuff to model and find some
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***way to trigger display updates from the model.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***=> Because an EmptyView does not appear to run `.task`
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***stuff, it doesn't handle `isVisible` changes
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***=> So we need to handle visibility at the `FormView` level
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***==>> Maybe created a @Published model.elements property and
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***update that based on the visibility of each element.
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("ENDED isVisible changed .task for \(element.label)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -76,21 +52,10 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isEvaluating = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await featureForm?.evaluateExpressions()
 ***REMOVED******REMOVED******REMOVED******REMOVED***isEvaluating = false
-***REMOVED******REMOVED******REMOVED******REMOVED***model.formElements = featureForm?.elements ?? []
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("error evaluating expressions: \(error.localizedDescription)")
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: model.visibleElements) { newValue in
-***REMOVED******REMOVED******REMOVED***print("onChange of model.visibleElements")
-***REMOVED******REMOVED******REMOVED***visibleElements = model.visibleElements
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension FormElement: Equatable {
-***REMOVED***public static func == (lhs: ArcGIS.FormElement, rhs: ArcGIS.FormElement) -> Bool {
-***REMOVED******REMOVED***lhs.label == rhs.label
 ***REMOVED***
 ***REMOVED***
 

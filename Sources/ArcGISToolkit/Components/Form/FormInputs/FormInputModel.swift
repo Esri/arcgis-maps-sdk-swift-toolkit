@@ -92,30 +92,3 @@ public class FormInputModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for element in featureForm.elements {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await isVisible in $0.$isVisible {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elements = featureForm.elements.filter { $0.isVisible ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***public func outputIsVisible(featureForm: FeatureForm) {
-***REMOVED******REMOVED***featureForm.elements.forEach { element in
-***REMOVED******REMOVED******REMOVED***print("element: \(element.label) isVisible = \(element.isVisible)")
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***internal func evaluateExpressions(model: FormViewModel, featureForm: FeatureForm) {
-***REMOVED******REMOVED***model.evalutateTask?.cancel()
-***REMOVED******REMOVED***model.evalutateTask = Task {
-***REMOVED******REMOVED******REMOVED***try? await featureForm.evaluateExpressions()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.outputIsVisible(featureForm: featureForm!)
-***REMOVED******REMOVED******REMOVED******REMOVED***print("evaluation completed; element.isVisible = \(element.isVisible)")
-***REMOVED***
-
-***REMOVED***
-***REMOVED***

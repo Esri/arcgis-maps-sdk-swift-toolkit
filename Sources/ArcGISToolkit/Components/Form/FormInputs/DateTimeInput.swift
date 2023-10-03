@@ -80,7 +80,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***requiredValueMissing = inputModel.isRequired && newDate == nil
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
-***REMOVED******REMOVED******REMOVED***inputModel.evaluateExpressions(model: model, featureForm: featureForm!)
+***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.focusedFieldName) { newFocusedFieldName in
 ***REMOVED******REMOVED******REMOVED***isEditing = newFocusedFieldName == element.fieldName
