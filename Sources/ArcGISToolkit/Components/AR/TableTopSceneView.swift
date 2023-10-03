@@ -333,50 +333,60 @@ private extension SceneViewProxy {
 ***REMOVED***
 
 private extension String {
-***REMOVED***static let planeFound = String(
-***REMOVED******REMOVED***localized: "Tap a surface to place the scene",
-***REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED***comment: """
+***REMOVED***static var planeFound: String {
+***REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED***localized: "Tap a surface to place the scene",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction to the user to tap on a horizontal surface to
 ***REMOVED******REMOVED******REMOVED******REMOVED*** place an ArcGIS Scene.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
-***REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***static let moveDevice = String(
-***REMOVED******REMOVED***localized: "Keep moving your device",
-***REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED***comment: """
+***REMOVED***
+***REMOVED***static var moveDevice: String {
+***REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED***localized: "Keep moving your device",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction to the user to keep moving their device so that
 ***REMOVED******REMOVED******REMOVED******REMOVED*** horizontal planes can be identified in the AR experience.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
-***REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***static let locationUnavailable = String(
-***REMOVED******REMOVED***localized: "Location not available",
-***REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED*** A message to the user to notify them that the location of their 
+***REMOVED***
+***REMOVED***static var locationUnavailable: String {
+***REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED***localized: "Location not available",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** A message to the user to notify them that the location of their
 ***REMOVED******REMOVED******REMOVED******REMOVED*** device is unavailable in the AR experience.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
-***REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***static let excessiveMotion = String(
-***REMOVED******REMOVED***localized: "Try moving your device more slowly",
-***REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED***comment: """
+***REMOVED***
+***REMOVED***static var excessiveMotion: String {
+***REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED***localized: "Try moving your device more slowly",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction to the user to reduce excessive device motion by
 ***REMOVED******REMOVED******REMOVED******REMOVED*** moving the device more slowly to improve the AR experience which
 ***REMOVED******REMOVED******REMOVED******REMOVED*** requires limited device motion.
 ***REMOVED******REMOVED******REMOVED******REMOVED***"""
-***REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***static let insufficentFeatures = String(
-***REMOVED******REMOVED***localized: "Try turning on more lights and moving around",
-***REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED***comment: """
+***REMOVED***
+***REMOVED***static var insufficentFeatures: String {
+***REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED***localized: "Try turning on more lights and moving around",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction to the user to turn on more lights or move towards a
 ***REMOVED******REMOVED******REMOVED******REMOVED*** light source to improve the AR experience which requires sufficient
 ***REMOVED******REMOVED******REMOVED******REMOVED*** lighting conditions.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
-***REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***

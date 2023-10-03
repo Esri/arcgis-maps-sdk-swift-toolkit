@@ -134,7 +134,7 @@ trace operation. */
 horizontal planes can be identified in the AR experience. */
 "Keep moving your device" = "Keep moving your device";
 
-/* A message to the user to notify them that the location of their 
+/* A message to the user to notify them that the location of their
 device is unavailable in the AR experience. */
 "Location not available" = "Location not available";
 
