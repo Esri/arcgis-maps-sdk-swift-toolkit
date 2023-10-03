@@ -28,7 +28,10 @@ public struct FlyoverSceneView: View {
     
     /// Creates a fly over scene view.
     /// - Parameters:
-    ///   - initialCamera: The initial camera.
+    ///   - initialLatitude: The initial latitude of the scene view's camera.
+    ///   - initialLongitude: The initial longitude of the scene view's camera.
+    ///   - initialAltitude: The initial altitude of the scene view's camera.
+    ///   - initialHeading: The initial heading of the scene view's camera.
     ///   - translationFactor: The translation factor that defines how much the scene view translates
     ///   as the device moves.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
@@ -36,6 +39,54 @@ public struct FlyoverSceneView: View {
     /// - Remark: The provided scene view will have certain properties overridden in order to
     /// be effectively viewed in augmented reality. One such property is the camera controller.
     public init(
+        initialLatitude: Double,
+        initialLongitude: Double,
+        initialAltitude: Double,
+        initialHeading: Double,
+        translationFactor: Double,
+        @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
+    ) {
+        let camera = Camera(
+            latitude: initialLatitude,
+            longitude: initialLongitude,
+            altitude: initialAltitude,
+            heading: initialHeading,
+            pitch: 90,
+            roll: 0
+        )
+        self.init(initialCamera: camera, translationFactor: translationFactor, sceneView: sceneView)
+    }
+    
+    /// Creates a fly over scene view.
+    /// - Parameters:
+    ///   - initialLocation: The initial location of the scene view's camera.
+    ///   - initialHeading: The initial heading of the scene view's camera.
+    ///   - translationFactor: The translation factor that defines how much the scene view translates
+    ///   as the device moves.
+    ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
+    ///   augmented reality video feed.
+    /// - Remark: The provided scene view will have certain properties overridden in order to
+    /// be effectively viewed in augmented reality. One such property is the camera controller.
+    public init(
+        initialLocation: Point,
+        initialHeading: Double,
+        translationFactor: Double,
+        @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
+    ) {
+        let camera = Camera(location: initialLocation, heading: initialHeading, pitch: 90, roll: 0)
+        self.init(initialCamera: camera, translationFactor: translationFactor, sceneView: sceneView)
+    }
+    
+    /// Creates a fly over scene view.
+    /// - Parameters:
+    ///   - initialCamera: The initial camera.
+    ///   - translationFactor: The translation factor that defines how much the scene view translates
+    ///   as the device moves.
+    ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
+    ///   augmented reality video feed.
+    /// - Remark: The provided scene view will have certain properties overridden in order to
+    /// be effectively viewed in augmented reality. One such property is the camera controller.
+    private init(
         initialCamera: Camera,
         translationFactor: Double,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
@@ -55,6 +106,7 @@ public struct FlyoverSceneView: View {
                 .onDisappear { session.pause() }
                 .onChange(of: session.currentFrame) { frame in
                     guard let frame, let interfaceOrientation else { return }
+                    
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
