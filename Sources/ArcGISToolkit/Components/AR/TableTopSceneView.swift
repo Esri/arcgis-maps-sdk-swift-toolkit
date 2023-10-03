@@ -218,10 +218,8 @@ public struct TableTopSceneView: View {
                 // This case will not occur since the AR session delegate
                 // does not implement relocalization support.
                 helpText = ""
-                break
             default:
                 helpText = ""
-                break
             }
         }
     }
