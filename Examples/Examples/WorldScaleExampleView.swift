@@ -24,23 +24,35 @@ struct WorldScaleExampleView: View {
 //        surface.addElevationSource(elevationSource)
         let scene = Scene()
 //        scene.baseSurface = surface
+        scene.baseSurface.backgroundGrid.isVisible = false
 //        scene.baseSurface.navigationConstraint = .unconstrained
         scene.basemap = Basemap(style: .arcGISImagery)
-        scene.basemap?.baseLayers.first?.opacity = 0.15
         scene.addOperationalLayer(.canyonCountyParcels)
         return scene
     }()
     
+    @State private var opacity: Float = 1
+    
     var body: some View {
-        WorldScaleSceneView { proxy in
-            SceneView(scene: scene)
-                .onSingleTapGesture { screen, _ in
-                    print("Identifying...")
-                    Task.detached {
-                        let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
-                        print("\(results.count) identify result(s).")
+        VStack {
+            WorldScaleSceneView { proxy in
+                SceneView(scene: scene)
+                    .onSingleTapGesture { screen, _ in
+                        print("Identifying...")
+                        Task.detached {
+                            let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
+                            print("\(results.count) identify result(s).")
+                        }
                     }
-                }
+            }
+            Slider(value: $opacity, in: 0...1.0)
+                .padding(.horizontal)
+        }
+        .onChange(of: opacity) { opacity in
+            guard let basemap = scene.basemap else { return }
+            for layer in basemap.baseLayers {
+                layer.opacity = opacity
+            }
         }
     }
 }
