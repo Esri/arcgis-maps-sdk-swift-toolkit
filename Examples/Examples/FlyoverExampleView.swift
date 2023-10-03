@@ -23,58 +23,20 @@ struct FlyoverExampleView: View {
         )
     )
 
-//    var body: some View {
-//        FlyoverSceneView(
-//            initialLocation: Point(x: 4.4777, y: 51.9244, z: 1_000, spatialReference: .wgs84),
-//            initialHeading: 0,
-//            translationFactor: 2_000
-//        ) { proxy in
-//            SceneView(scene: scene)
-//                .onSingleTapGesture { screen, _ in
-//                    print("Identifying...")
-//                    Task.detached {
-//                        let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
-//                        print("\(results.count) identify result(s).")
-//                    }
-//                }
-//        }
-//    }
-    
-    @State var lat = 43.54
-    @State var tf = 2000.0
-    
     var body: some View {
-        VStack {
-            FlyoverSceneView(
-                initialLatitude: lat,
-                initialLongitude: -116.5794293050851,
-                initialAltitude: 3300,
-                initialHeading: 0,
-                translationFactor: tf
-            ) { proxy in
-                SceneView(scene: scene)
-                    .onSingleTapGesture { screen, _ in
-                        print("Identifying...")
-                        Task.detached {
-                            let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
-                            print("\(results.count) identify result(s).")
-                        }
+        FlyoverSceneView(
+            initialLocation: Point(x: 4.4777, y: 51.9244, z: 1_000, spatialReference: .wgs84),
+            initialHeading: 0,
+            translationFactor: 2_000
+        ) { proxy in
+            SceneView(scene: scene)
+                .onSingleTapGesture { screen, _ in
+                    print("Identifying...")
+                    Task.detached {
+                        let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
+                        print("\(results.count) identify result(s).")
                     }
-            }
-            HStack {
-                Button {
-                    lat += 5
-                } label: {
-                    Text("lat")
                 }
-                Spacer()
-                Button {
-                    tf += 1000
-                } label: {
-                    Text("tf")
-                }
-            }
-            .padding()
         }
     }
 }
