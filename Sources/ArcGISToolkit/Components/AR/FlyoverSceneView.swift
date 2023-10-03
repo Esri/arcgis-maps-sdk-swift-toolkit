@@ -19,16 +19,16 @@ import ArcGIS
 public struct FlyoverSceneView: View {
     /// The AR session.
     @StateObject private var session = ObservableARSession()
+    /// The initial camera.
+    private let initialCamera: Camera
+    /// The translation factor.
+    private let translationFactor: Double
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The camera controller that we will set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
-    /// The initial camera.
-    let initialCamera: Camera
-    /// The translation factor.
-    let translationFactor: Double
     
     /// Creates a fly over scene view.
     /// - Parameters:
