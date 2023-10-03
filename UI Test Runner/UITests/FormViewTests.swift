@@ -776,6 +776,63 @@ final class FormViewTests: XCTestCase {
         )
     }
     
+    // - MARK: Test case 4: Radio Buttons input type
+    
+    /// Test case 4.1: Test regular selection
+    func testCase_4_1() {
+        let app = XCUIApplication()
+        let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
+        let fieldTitle = app.staticTexts["Radio Button Text"]
+        let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let dogOption = app.buttons["Radio Button Text dog"]
+        let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
+        let noValueOption = app.buttons["Radio Button Text No value"]
+        
+        app.launch()
+        
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.exists,
+            "The field title doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            birdOptionCheckmark.exists,
+            "The bird option isn't selected."
+        )
+        
+        XCTAssertFalse(
+            dogOptionCheckmark.exists,
+            "The dog option is selected."
+        )
+        
+        dogOption.tap()
+        
+        XCTAssertTrue(
+            dogOptionCheckmark.exists,
+            "The dog option isn't selected."
+        )
+        
+        XCTAssertFalse(
+            birdOptionCheckmark.exists,
+            "The bird option is selected."
+        )
+        
+        XCTAssertTrue(
+            noValueOption.exists,
+            "The no value option doesn't exist."
+        )
+    }
+    
     // - MARK: Test case 5: Switch input type
     
     /// Test case 5.1: Test switch on
