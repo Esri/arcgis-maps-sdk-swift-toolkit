@@ -37,17 +37,17 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED***/ so it must be implemented manually.
 ***REMOVED***@State private var isPlaceholder = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The field's parent element.
+***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/ The input configuration of the field.
+***REMOVED******REMOVED***/ The input configuration of the view.
 ***REMOVED***private let input: TextAreaFormInput
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for text input spanning multiple lines.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
-***REMOVED******REMOVED***/   - element: The field's parent element.
-***REMOVED******REMOVED***/   - input: The input configuration of the field.
+***REMOVED******REMOVED***/   - element: The input's parent element.
+***REMOVED******REMOVED***/   - input: The input configuration of the view.
 ***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: TextAreaFormInput) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element =  element
@@ -55,7 +55,7 @@ struct MultiLineTextInput: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED***InputHeader(element: element)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
 ***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
@@ -93,11 +93,10 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***let text = featureForm?.feature.attributes[element.fieldName] as? String
-***REMOVED******REMOVED******REMOVED***if let text, !text.isEmpty {
+***REMOVED******REMOVED******REMOVED***let text = element.value
+***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.text = text
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.text = element.hint
@@ -105,6 +104,9 @@ struct MultiLineTextInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { newValue in
 ***REMOVED******REMOVED******REMOVED***if !isPlaceholder {
+***REMOVED******REMOVED******REMOVED******REMOVED***guard newValue != element.value else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
 ***REMOVED******REMOVED***
 ***REMOVED***

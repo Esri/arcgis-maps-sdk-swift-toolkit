@@ -316,7 +316,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** - MARK: Test case 2: Test case 2: DateTime picker input type
+***REMOVED******REMOVED*** - MARK: Test case 2: DateTime picker input type
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 2.1: Unfocused and focused state, no value, date required
 ***REMOVED***func testCase_2_1() throws {
@@ -357,12 +357,12 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***footer.label,
-***REMOVED******REMOVED******REMOVED***"Required"
+***REMOVED******REMOVED******REMOVED***"Date Entry is Required"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***calendarImage.isHittable,
-***REMOVED******REMOVED******REMOVED***"The calendar image isn't hittable."
+***REMOVED******REMOVED******REMOVED***calendarImage.exists,
+***REMOVED******REMOVED******REMOVED***"The calendar image doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
@@ -417,9 +417,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let formatter = DateFormatter()
-***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-***REMOVED******REMOVED***let localDate = formatter.date(from: "1969-07-07T20:17:00.000Z")
+***REMOVED******REMOVED***let localDate = Calendar.current.date(
+***REMOVED******REMOVED******REMOVED***from: DateComponents(
+***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 1969, month: 7, day: 8, hour: 3, minute: 17
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -492,9 +494,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The field value isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let formatter = DateFormatter()
-***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd"
-***REMOVED******REMOVED***let localDate = formatter.date(from: "2023-07-14")
+***REMOVED******REMOVED***let localDate = Calendar.current.date(
+***REMOVED******REMOVED******REMOVED***from: DateComponents(
+***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 2023, month: 7, day: 15, hour: 3, minute: 53
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -553,9 +557,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"End date and Time 7/27/1969 12:00:00 AM"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let formatter = DateFormatter()
-***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-***REMOVED******REMOVED***let localDate = formatter.date(from: "1969-07-27T07:00:00.000Z")
+***REMOVED******REMOVED***let localDate = Calendar.current.date(
+***REMOVED******REMOVED******REMOVED***from: DateComponents(
+***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 1969, month: 7, day: 27, hour: 7
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -606,9 +612,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***julyFirstButton.tap()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let formatter = DateFormatter()
-***REMOVED******REMOVED***formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-***REMOVED******REMOVED***let localDate = formatter.date(from: "1969-07-01T07:00:00.000Z")
+***REMOVED******REMOVED***let localDate = Calendar.current.date(
+***REMOVED******REMOVED******REMOVED***from: DateComponents(
+***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 1969, month: 7, day: 1, hour: 7
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
@@ -656,6 +664,273 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***fieldValue.label,
 ***REMOVED******REMOVED******REMOVED***"No Value"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** - MARK: Test case 3: Combo Box input type
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 3.1: Pre-existing value, description, clear button, no value label
+***REMOVED***func testCase_3_1() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let clearButton = app.buttons["Combo String Clear Button"]
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo String"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Value"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let footer = app.staticTexts["Combo String Footer"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
+***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldValue.isHittable,
+***REMOVED******REMOVED******REMOVED***"The field value isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***"String 3"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***clearButton.isHittable,
+***REMOVED******REMOVED******REMOVED***"The clear button isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***clearButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***"No value"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***footer.isHittable,
+***REMOVED******REMOVED******REMOVED***"The footer isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"Combo Box of Field Type String"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 3.2: No pre-existing value, no value label, options button
+***REMOVED***func testCase_3_2() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo Integer"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo Integer Value"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let optionsButton = app.images["Combo Integer Options Button"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
+***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldValue.isHittable,
+***REMOVED******REMOVED******REMOVED***"The field value isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***"No value"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***optionsButton.isHittable,
+***REMOVED******REMOVED******REMOVED***"The options button isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 3.3: Pick a value
+***REMOVED***func testCase_3_3() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo String"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Value"]
+***REMOVED******REMOVED***let firstOptionButton = app.buttons["String 1"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
+***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldValue.isHittable,
+***REMOVED******REMOVED******REMOVED***"The field value isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***"String 3"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***fieldValue.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***firstOptionButton.isHittable,
+***REMOVED******REMOVED******REMOVED***"The first option (String 1) isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***firstOptionButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***doneButton.isHittable,
+***REMOVED******REMOVED******REMOVED***"The done button isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***doneButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***"String 1"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** - MARK: Test case 5: Switch input type
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 5.1: Test switch on
+***REMOVED***func testCase_5_1() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch integer"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let switchView = app.switches["switch integer Switch"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***switchView.label,
+***REMOVED******REMOVED******REMOVED***"2"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switchView.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***switchView.label,
+***REMOVED******REMOVED******REMOVED***"1"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 5.2: Test switch off
+***REMOVED***func testCase_5_2() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch string"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let switchView = app.switches["switch string Switch"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
+***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***switchView.label,
+***REMOVED******REMOVED******REMOVED***"1"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switchView.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***switchView.label,
+***REMOVED******REMOVED******REMOVED***"2"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 5.3: Test switch with no value
+***REMOVED***func testCase_5_3() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch double"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["switch double Value"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldValue.exists,
+***REMOVED******REMOVED******REMOVED***"The combo box doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

@@ -19,11 +19,11 @@
 public struct FormView: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The form's configuration.
 ***REMOVED***private var featureForm: FeatureForm?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
-***REMOVED******REMOVED***/ - Parameter featureForm: <#featureForm description#>
+***REMOVED******REMOVED***/ - Parameter featureForm: The form's configuration.
 ***REMOVED***public init(featureForm: FeatureForm?) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED***
@@ -63,6 +63,8 @@ extension FormView {
 ***REMOVED******REMOVED******REMOVED***ComboBoxInput(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***case let `input` as DateTimePickerFormInput:
 ***REMOVED******REMOVED******REMOVED***DateTimeInput(featureForm: featureForm, element: element, input: `input`)
+***REMOVED******REMOVED***case let `input` as SwitchFormInput:
+***REMOVED******REMOVED******REMOVED***SwitchInput(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***case let `input` as TextAreaFormInput:
 ***REMOVED******REMOVED******REMOVED***MultiLineTextInput(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***case let `input` as TextBoxFormInput:

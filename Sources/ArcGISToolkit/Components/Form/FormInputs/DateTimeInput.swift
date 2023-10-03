@@ -32,17 +32,17 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the date selection was cleared when a value is required.
 ***REMOVED***@State private var requiredValueMissing = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The field's parent element.
+***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/ The input configuration of the field.
+***REMOVED******REMOVED***/ The input configuration of the view.
 ***REMOVED***private let input: DateTimePickerFormInput
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a date (and time if applicable) input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
-***REMOVED******REMOVED***/   - element: The field's parent element.
-***REMOVED******REMOVED***/   - input: The input configuration of the field.
+***REMOVED******REMOVED***/   - element: The input's parent element.
+***REMOVED******REMOVED***/   - input: The input configuration of the view.
 ***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: DateTimePickerFormInput) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
@@ -51,22 +51,27 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***FormElementHeader(element: element)
+***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***dateEditor
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***footer
+***REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***if let date = featureForm?.feature.attributes[element.fieldName] as? Date {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.date = date
+***REMOVED******REMOVED******REMOVED***if element.value.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = try? Date(element.value, strategy: .arcGISDateParseStrategy)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
-***REMOVED******REMOVED******REMOVED******REMOVED***TODO: add `required` property to API
-***REMOVED******REMOVED******REMOVED***requiredValueMissing = /*element.required && */newDate == nil
+***REMOVED******REMOVED******REMOVED***guard let currentDate = try? Date(element.value, strategy: .arcGISDateParseStrategy),
+***REMOVED******REMOVED******REMOVED******REMOVED***  newDate != currentDate else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***requiredValueMissing = element.isRequired && newDate == nil
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.focusedFieldName) { newFocusedFieldName in
@@ -161,20 +166,6 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The message shown below the date editor and viewer.
-***REMOVED***@ViewBuilder var footer: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if requiredValueMissing {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text.required
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED***.foregroundColor(requiredValueMissing ? .red : .secondary)
-***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The human-readable date and time selection.
 ***REMOVED***var formattedDate: String? {
 ***REMOVED******REMOVED***if input.includeTime {
@@ -202,14 +193,12 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED***
 
-
-private extension String {
-***REMOVED******REMOVED***/ A string indicating that no date or time has been set for a date/time field.
-***REMOVED***static var noValue: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "No Value",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A string indicating that no date or time has been set for a date/time field."
+private extension ParseStrategy where Self == Date.ParseStrategy {
+***REMOVED******REMOVED***/ A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
+***REMOVED***static var arcGISDateParseStrategy: Self {
+***REMOVED******REMOVED***.fixed(
+***REMOVED******REMOVED******REMOVED***format: "\(year: .defaultDigits)-\(month: .defaultDigits)-\(day: .defaultDigits)T\(hour: .defaultDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .defaultDigits):\(second: .defaultDigits)",
+***REMOVED******REMOVED******REMOVED***timeZone: .current
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -221,15 +210,6 @@ private extension Text {
 ***REMOVED******REMOVED******REMOVED***"Now",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose the current time and date for a field."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A label indicating a required field was left blank.
-***REMOVED***static var required: Self {
-***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***"Required",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "A label indicating a required field was left blank."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

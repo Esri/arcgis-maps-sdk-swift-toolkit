@@ -142,7 +142,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***case (.some(let validationError), _, _):
 ***REMOVED******REMOVED******REMOVED***switch (validationError, scheme) {
 ***REMOVED******REMOVED******REMOVED***case (.emptyWhenRequired, .max):
-***REMOVED******REMOVED******REMOVED******REMOVED***return requiredText
+***REMOVED******REMOVED******REMOVED******REMOVED***return .required
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***return validationText
 ***REMOVED******REMOVED***
@@ -213,7 +213,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange.lowerBound) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's exact number of required characters."
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating the user should enter a field's exact number of required characters."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -244,21 +244,12 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Text indicating a field's minimum and maximum number of allowed characters.
+***REMOVED******REMOVED***/ Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters.
 ***REMOVED***var minAndMaxText: Text {
 ***REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange.lowerBound) to \(lengthRange.upperBound) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's minimum and maximum number of allowed characters."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Text indicating a field is required.
-***REMOVED***var requiredText: Text {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Required",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field is required"
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
