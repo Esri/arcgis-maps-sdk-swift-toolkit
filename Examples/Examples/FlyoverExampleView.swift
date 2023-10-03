@@ -22,14 +22,11 @@ struct FlyoverExampleView: View {
 ***REMOVED******REMOVED******REMOVED***id: PortalItem.ID("7558ee942b2547019f66885c44d4f0b1")!
 ***REMOVED******REMOVED***)
 ***REMOVED***)
-***REMOVED***
-***REMOVED***private let initialCamera = Camera(
-***REMOVED******REMOVED***latitude: 51.9244, longitude: 4.4777, altitude: 1_000, heading: 0, pitch: 90, roll: 0
-***REMOVED***)
-***REMOVED***
+
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FlyoverSceneView(
-***REMOVED******REMOVED******REMOVED***initialCamera: initialCamera,
+***REMOVED******REMOVED******REMOVED***initialLocation: Point(x: 4.4777, y: 51.9244, z: 1_000, spatialReference: .wgs84),
+***REMOVED******REMOVED******REMOVED***initialHeading: 0,
 ***REMOVED******REMOVED******REMOVED***translationFactor: 2_000
 ***REMOVED******REMOVED***) { proxy in
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
