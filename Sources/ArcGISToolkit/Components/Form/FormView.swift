@@ -65,6 +65,8 @@ extension FormView {
             DateTimeInput(featureForm: featureForm, element: element, input: `input`)
         case let `input` as RadioButtonsFormInput:
             RadioButtonsInput(featureForm: featureForm, element: element, input: `input`)
+        case let `input` as SwitchFormInput:
+            SwitchInput(featureForm: featureForm, element: element, input: `input`)
         case let `input` as TextAreaFormInput:
             MultiLineTextInput(featureForm: featureForm, element: element, input: `input`)
         case let `input` as TextBoxFormInput:
