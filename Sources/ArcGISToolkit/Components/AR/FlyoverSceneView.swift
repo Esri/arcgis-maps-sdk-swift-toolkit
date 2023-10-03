@@ -19,16 +19,16 @@ import ARKit
 public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/ The AR session.
 ***REMOVED***@StateObject private var session = ObservableARSession()
+***REMOVED******REMOVED***/ The initial camera.
+***REMOVED***private let initialCamera: Camera
+***REMOVED******REMOVED***/ The translation factor.
+***REMOVED***private let translationFactor: Double
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ The camera controller that we will set on the scene view.
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
-***REMOVED******REMOVED***/ The initial camera.
-***REMOVED***let initialCamera: Camera
-***REMOVED******REMOVED***/ The translation factor.
-***REMOVED***let translationFactor: Double
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
 ***REMOVED******REMOVED***/ - Parameters:
