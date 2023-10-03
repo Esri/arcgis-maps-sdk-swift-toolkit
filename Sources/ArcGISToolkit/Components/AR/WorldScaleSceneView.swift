@@ -55,43 +55,43 @@ public struct WorldScaleSceneView: View {
     ) {
         self.sceneViewBuilder = sceneView
         
-        let initial = Point(latitude: 43.541829415061166, longitude: -116.5794293050851)
-        let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
-//        let initialCamera = Camera(lookingAt: initial, distance: 20, heading: 0, pitch: -10, roll: 0)
-        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
-        //cameraController.transformationMatrix = .identity
+//        let initial = Point(latitude: 43.541829415061166, longitude: -116.5794293050851)
+//        let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
+////        let initialCamera = Camera(lookingAt: initial, distance: 20, heading: 0, pitch: -10, roll: 0)
+//        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+        
+        let cameraController = TransformationMatrixCameraController()
         cameraController.translationFactor = 1
         _cameraController = .init(initialValue: cameraController)
         
-        configuration = ARWorldTrackingConfiguration()
+        configuration = ARGeoTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
     }
     
     public var body: some View {
-        arView
-//        if !ARGeoTrackingConfiguration.isSupported {
-//            unsupportedDeviceView
-//        } else {
-//            Group {
-//                switch availability {
-//                case .checking:
-//                    checkingGeotrackingAvailability
-//                case .available:
-//                    arView
-//                case .unavailable:
-//                    geotrackingIsNotAvailable
-//                }
-//            }
-//            .onAppear {
-//                ARGeoTrackingConfiguration.checkAvailability { available, error in
-//                    if available {
-//                        self.availability = .available
-//                    } else {
-//                        self.availability = .unavailable(error)
-//                    }
-//                }
-//            }
-//        }
+        if !ARGeoTrackingConfiguration.isSupported {
+            unsupportedDeviceView
+        } else {
+            Group {
+                switch availability {
+                case .checking:
+                    checkingGeotrackingAvailability
+                case .available:
+                    arView
+                case .unavailable:
+                    geotrackingIsNotAvailable
+                }
+            }
+            .onAppear {
+                ARGeoTrackingConfiguration.checkAvailability { available, error in
+                    if available {
+                        self.availability = .available
+                    } else {
+                        self.availability = .unavailable(error)
+                    }
+                }
+            }
+        }
     }
     
     @MainActor
@@ -110,10 +110,10 @@ public struct WorldScaleSceneView: View {
                             cameraController: cameraController,
                             orientation: interfaceOrientation
                         )
-//                        sceneViewProxy.setFieldOfView(
-//                            for: frame,
-//                            orientation: interfaceOrientation
-//                        )
+                        sceneViewProxy.setFieldOfView(
+                            for: frame,
+                            orientation: interfaceOrientation
+                        )
                         
 //                        if let geoAnchor {
 //                            statusText = "\(geoAnchor.transform)"
@@ -123,7 +123,7 @@ public struct WorldScaleSceneView: View {
 //                        statusText = "anchor added"
 //                    }
                 
-//                if trackingStatus?.state == .localized {
+                if trackingStatus?.state == .localized {
                     SceneViewReader { proxy in
                         sceneViewBuilder(proxy)
                             .cameraController(cameraController)
@@ -137,68 +137,66 @@ public struct WorldScaleSceneView: View {
                                 self.sceneViewProxy = proxy
                             }
                     }
-//                }
-                
-//                if let localizedPoint {
-//                    statusView(for: "\(localizedPoint.latitude), \(localizedPoint.longitude)")
-//                        .background(Color.white.opacity(0.85))
-//                }
-                
+                }
+            }
+            .overlay(alignment: .top) {
                 if !statusText.isEmpty {
                     statusView(for: statusText)
-                        .background(Color.white.opacity(0.85))
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(8)
+                        .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
                 }
-                
-                trackingStatusView
             }
             .observingInterfaceOrientation($interfaceOrientation)
             .onAppear {
                 arViewProxy.session?.run(configuration)
             }
-//            .onChange(of: trackingStatus) { status in
-//                guard let session = arViewProxy.session, let status, status.state == .localized else { return }
-//                
-////                guard let query = session.currentFrame?.raycastQuery(
-////                    from: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
-////                    allowing: .estimatedPlane,
-////                    alignment: .any
-////                ) else {
-////                    statusText = "cannot create query"
-////                    return
-////                }
-////                guard let result = session.raycast(query).first else {
-////                    statusText = "raycast failed"
-////                    return
-////                }
-//                
-//                Task {
-////                    let point = result.worldTransform.translation
-//                    let point = simd_float3()
-//                    let (location, _) = try await session.geoLocation(forPoint: point)
-//                    cameraController.originCamera = Camera(
-//                        latitude: location.latitude,
-//                        longitude: location.longitude,
-//                        altitude: 3,
-//                        heading: 0,
-//                        pitch: 90,
-//                        roll: 0
-//                    )
-//                    
-//                    statusText = "Localized point: \(location.latitude), \(location.longitude)"
-//                    
-////                    let anchor = ARGeoAnchor(coordinate: location)
-////                    session.add(anchor: anchor)
-////                    geoAnchor = anchor
+            .onChange(of: trackingStatus) { status in
+                if let state = status?.state, let trackingStateText = statusText(for: state) {
+                    statusText = trackingStateText
+                }
+                
+                guard let session = arViewProxy.session, let status, status.state == .localized else { return }
+                
+//                guard let query = session.currentFrame?.raycastQuery(
+//                    from: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
+//                    allowing: .estimatedPlane,
+//                    alignment: .any
+//                ) else {
+//                    statusText = "cannot create query"
+//                    return
 //                }
-//            }
-        
-//        }
+//                guard let result = session.raycast(query).first else {
+//                    statusText = "raycast failed"
+//                    return
+//                }
+                
+                Task {
+//                    let point = result.worldTransform.translation
+                    let point = simd_float3()
+                    let (location, _) = try await session.geoLocation(forPoint: point)
+                    cameraController.originCamera = Camera(
+                        latitude: location.latitude,
+                        longitude: location.longitude,
+                        altitude: 3,
+                        heading: 0,
+                        pitch: 90,
+                        roll: 0
+                    )
+                    
+                    statusText = "Localized point: \(location.latitude), \(location.longitude)"
+                    
+//                    let anchor = ARGeoAnchor(coordinate: location)
+//                    session.add(anchor: anchor)
+//                    geoAnchor = anchor
+                }
+            }
     }
     
     @MainActor
     @ViewBuilder
     var checkingGeotrackingAvailability: some View {
-        statusView(for: "Checking Geotracking availability at current location.", showProgress: true)
+        statusView(for: "Checking Geotracking availability at current location.")
     }
     
     @MainActor
@@ -213,37 +211,26 @@ public struct WorldScaleSceneView: View {
         statusView(for: "Geotracking is not supported by this device.")
     }
     
-    @MainActor
-    @ViewBuilder
-    var trackingStatusView: some View {
+    func statusText(for: ARGeoTrackingStatus.State) -> String? {
         switch trackingStatus?.state {
         case .notAvailable:
-            statusView(for: "Not available.")
-                .background(Color.white.opacity(0.5))
+            return "Not available."
         case .initializing:
-            statusView(for: "Initializing.")
-                .background(Color.white.opacity(0.5))
+            return "Initializing"
         case .localizing:
-            statusView(for: "Localizing.")
-                .background(Color.white.opacity(0.5))
+            return "Localizing"
         case .localized:
-            EmptyView()
+            return "Localized"
         case nil:
-            EmptyView()
+            return nil
         @unknown default:
-            EmptyView()
+            return nil
         }
     }
     
-    @ViewBuilder func statusView(for status: String, showProgress: Bool = false) -> some View {
-        VStack {
-            Text(status)
-                .multilineTextAlignment(.center)
-                .padding()
-            if showProgress {
-                ProgressView()
-            }
-        }
+    @ViewBuilder func statusView(for status: String) -> some View {
+        Text(status)
+            .multilineTextAlignment(.center)
     }
 }
 
