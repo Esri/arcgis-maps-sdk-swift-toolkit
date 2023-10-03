@@ -55,45 +55,49 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let initial = Point(latitude: 0, longitude: 0)
+***REMOVED******REMOVED***let initial = Point(latitude: 43.541829415061166, longitude: -116.5794293050851)
 ***REMOVED******REMOVED***let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
+***REMOVED******REMOVED******REMOVED***let initialCamera = Camera(lookingAt: initial, distance: 20, heading: 0, pitch: -10, roll: 0)
 ***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
-***REMOVED******REMOVED******REMOVED***cameraController.translationFactor = translationFactor
+***REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = .identity
+***REMOVED******REMOVED***cameraController.translationFactor = 1
 ***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***configuration = ARGeoTrackingConfiguration()
+***REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
+***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***if !ARGeoTrackingConfiguration.isSupported {
-***REMOVED******REMOVED******REMOVED***unsupportedDeviceView
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***switch availability {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .checking:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***checkingGeotrackingAvailability
-***REMOVED******REMOVED******REMOVED******REMOVED***case .available:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arView
-***REMOVED******REMOVED******REMOVED******REMOVED***case .unavailable:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geotrackingIsNotAvailable
+***REMOVED******REMOVED***arView
+***REMOVED******REMOVED******REMOVED***if !ARGeoTrackingConfiguration.isSupported {
+***REMOVED******REMOVED******REMOVED******REMOVED***unsupportedDeviceView
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch availability {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .checking:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***checkingGeotrackingAvailability
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .available:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .unavailable:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geotrackingIsNotAvailable
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***ARGeoTrackingConfiguration.checkAvailability { available, error in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if available {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.availability = .available
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.availability = .unavailable(error)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ARGeoTrackingConfiguration.checkAvailability { available, error in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if available {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.availability = .available
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.availability = .unavailable(error)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
 ***REMOVED***var arView: some View {
-***REMOVED******REMOVED***GeometryReader { proxy in
+***REMOVED******REMOVED******REMOVED***GeometryReader { proxy in
 ***REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
@@ -106,10 +110,10 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.setFieldOfView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: frame,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.setFieldOfView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: frame,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let geoAnchor {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(geoAnchor.transform)"
@@ -119,7 +123,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "anchor added"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if trackingStatus?.state == .localized {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if trackingStatus?.state == .localized {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(proxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
@@ -133,7 +137,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.sceneViewProxy = proxy
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let localizedPoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusView(for: "\(localizedPoint.latitude), \(localizedPoint.longitude)")
@@ -151,36 +155,44 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: trackingStatus) { status in
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let session = arViewProxy.session, let status, status.state == .localized else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let query = session.currentFrame?.raycastQuery(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***from: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***allowing: .estimatedPlane,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .any
-***REMOVED******REMOVED******REMOVED******REMOVED***) else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let result = session.raycast(query).first else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let point = result.worldTransform.translation
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let (location, _) = try await session.geoLocation(forPoint: point)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***latitude: location.latitude,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***longitude: location.longitude,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***altitude: 3,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: 0,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: trackingStatus) { status in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let session = arViewProxy.session, let status, status.state == .localized else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "Localized point: \(location.latitude), \(location.longitude)"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let query = session.currentFrame?.raycastQuery(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***from: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***allowing: .estimatedPlane,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .any
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "cannot create query"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let anchor = ARGeoAnchor(coordinate: location)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***session.add(anchor: anchor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoAnchor = anchor
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let result = session.raycast(query).first else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "raycast failed"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let point = result.worldTransform.translation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let point = simd_float3()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let (location, _) = try await session.geoLocation(forPoint: point)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***latitude: location.latitude,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***longitude: location.longitude,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***altitude: 3,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: 0,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "Localized point: \(location.latitude), \(location.longitude)"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let anchor = ARGeoAnchor(coordinate: location)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***session.add(anchor: anchor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoAnchor = anchor
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor

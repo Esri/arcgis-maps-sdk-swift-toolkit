@@ -18,13 +18,13 @@
 struct WorldScaleExampleView: View {
 ***REMOVED***@State private var scene: ArcGIS.Scene = {
 ***REMOVED******REMOVED******REMOVED*** Creates an elevation source from Terrain3D REST service.
-***REMOVED******REMOVED***let elevationServiceURL = URL(string: "https:***REMOVED***elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!
-***REMOVED******REMOVED***let elevationSource = ArcGISTiledElevationSource(url: elevationServiceURL)
-***REMOVED******REMOVED***let surface = Surface()
-***REMOVED******REMOVED***surface.addElevationSource(elevationSource)
+***REMOVED******REMOVED******REMOVED***let elevationServiceURL = URL(string: "https:***REMOVED***elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!
+***REMOVED******REMOVED******REMOVED***let elevationSource = ArcGISTiledElevationSource(url: elevationServiceURL)
+***REMOVED******REMOVED******REMOVED***let surface = Surface()
+***REMOVED******REMOVED******REMOVED***surface.addElevationSource(elevationSource)
 ***REMOVED******REMOVED***let scene = Scene()
-***REMOVED******REMOVED***scene.baseSurface = surface
-***REMOVED******REMOVED***scene.baseSurface.navigationConstraint = .unconstrained
+***REMOVED******REMOVED******REMOVED***scene.baseSurface = surface
+***REMOVED******REMOVED******REMOVED***scene.baseSurface.navigationConstraint = .unconstrained
 ***REMOVED******REMOVED***scene.basemap = Basemap(style: .arcGISImagery)
 ***REMOVED******REMOVED***scene.addOperationalLayer(.canyonCountyParcels)
 ***REMOVED******REMOVED***return scene
@@ -52,6 +52,8 @@ extension FeatureTable {
 
 extension Layer {
 ***REMOVED***static var canyonCountyParcels: FeatureLayer {
-***REMOVED******REMOVED***FeatureLayer(featureTable: .canyonCountyParcels)
+***REMOVED******REMOVED***let fl = FeatureLayer(featureTable: .canyonCountyParcels)
+***REMOVED******REMOVED***fl.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .yellow, width: 3))
+***REMOVED******REMOVED***return fl
 ***REMOVED***
 ***REMOVED***
