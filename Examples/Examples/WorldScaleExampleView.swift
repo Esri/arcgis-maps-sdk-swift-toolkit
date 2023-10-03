@@ -26,6 +26,7 @@ struct WorldScaleExampleView: View {
 //        scene.baseSurface = surface
 //        scene.baseSurface.navigationConstraint = .unconstrained
         scene.basemap = Basemap(style: .arcGISImagery)
+        scene.basemap?.baseLayers.first?.opacity = 0.15
         scene.addOperationalLayer(.canyonCountyParcels)
         return scene
     }()
