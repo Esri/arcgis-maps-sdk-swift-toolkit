@@ -106,7 +106,6 @@ public struct FlyoverSceneView: View {
                 .onDisappear { session.pause() }
                 .onChange(of: session.currentFrame) { frame in
                     guard let frame, let interfaceOrientation else { return }
-                    
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
