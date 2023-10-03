@@ -775,6 +775,113 @@ final class FormViewTests: XCTestCase {
             "String 1"
         )
     }
+    
+    // - MARK: Test case 5: Switch input type
+    
+    /// Test case 5.1: Test switch on
+    func testCase_5_1() {
+        let app = XCUIApplication()
+        let fieldTitle = app.staticTexts["switch integer"]
+        let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let switchView = app.switches["switch integer Switch"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.exists,
+            "The field title isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            switchView.label,
+            "2"
+        )
+        
+        switchView.tap()
+        
+        XCTAssertEqual(
+            switchView.label,
+            "1"
+        )
+    }
+    
+    /// Test case 5.2: Test switch off
+    func testCase_5_2() {
+        let app = XCUIApplication()
+        let fieldTitle = app.staticTexts["switch string"]
+        let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let switchView = app.switches["switch string Switch"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            switchView.label,
+            "1"
+        )
+        
+        switchView.tap()
+        
+        
+        XCTAssertEqual(
+            switchView.label,
+            "2"
+        )
+    }
+    
+    /// Test case 5.3: Test switch with no value
+    func testCase_5_3() {
+        let app = XCUIApplication()
+        let fieldTitle = app.staticTexts["switch double"]
+        let fieldValue = app.staticTexts["switch double Value"]
+        let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.exists,
+            "The field title doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            fieldValue.exists,
+            "The combo box doesn't exist."
+        )
+    }
 }
 
 private extension String {
