@@ -15,6 +15,9 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view for numerical value input.
+***REMOVED***/
+***REMOVED***/ This is the preferable input type for long lists of coded value domains.
 struct ComboBoxInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***

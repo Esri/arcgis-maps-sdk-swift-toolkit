@@ -63,6 +63,8 @@ extension FormView {
 ***REMOVED******REMOVED******REMOVED***ComboBoxInput(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***case let `input` as DateTimePickerFormInput:
 ***REMOVED******REMOVED******REMOVED***DateTimeInput(featureForm: featureForm, element: element, input: `input`)
+***REMOVED******REMOVED***case let `input` as RadioButtonsFormInput:
+***REMOVED******REMOVED******REMOVED***RadioButtonsInput(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***case let `input` as SwitchFormInput:
 ***REMOVED******REMOVED******REMOVED***SwitchInput(featureForm: featureForm, element: element, input: `input`)
 ***REMOVED******REMOVED***case let `input` as TextAreaFormInput:
