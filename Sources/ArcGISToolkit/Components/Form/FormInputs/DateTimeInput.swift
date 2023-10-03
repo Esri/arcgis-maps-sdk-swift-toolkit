@@ -32,17 +32,17 @@ struct DateTimeInput: View {
     /// A Boolean value indicating whether the date selection was cleared when a value is required.
     @State private var requiredValueMissing = false
     
-    /// The field's parent element.
+    /// The input's parent element.
     private let element: FieldFormElement
     
-    /// The input configuration of the field.
+    /// The input configuration of the view.
     private let input: DateTimePickerFormInput
     
     /// Creates a view for a date (and time if applicable) input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
-    ///   - element: The field's parent element.
-    ///   - input: The input configuration of the field.
+    ///   - element: The input's parent element.
+    ///   - input: The input configuration of the view.
     init(featureForm: FeatureForm?, element: FieldFormElement, input: DateTimePickerFormInput) {
         self.featureForm = featureForm
         self.element = element
@@ -51,22 +51,27 @@ struct DateTimeInput: View {
     
     var body: some View {
         Group {
-            FormElementHeader(element: element)
+            InputHeader(element: element)
                 .padding([.top], elementPadding)
             
             dateEditor
             
-            footer
+            InputFooter(element: element, requiredValueMissing: requiredValueMissing)
         }
         .padding([.bottom], elementPadding)
         .onAppear {
-            if let date = featureForm?.feature.attributes[element.fieldName] as? Date {
-                self.date = date
+            if element.value.isEmpty {
+                date = nil
+            } else {
+                date = try? Date(element.value, strategy: .arcGISDateParseStrategy)
             }
         }
         .onChange(of: date) { newDate in
-            //TODO: add `required` property to API
-            requiredValueMissing = /*element.required && */newDate == nil
+            guard let currentDate = try? Date(element.value, strategy: .arcGISDateParseStrategy),
+                  newDate != currentDate else {
+                return
+            }
+            requiredValueMissing = element.isRequired && newDate == nil
             featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
         }
         .onChange(of: model.focusedFieldName) { newFocusedFieldName in
@@ -161,20 +166,6 @@ struct DateTimeInput: View {
         }
     }
     
-    /// The message shown below the date editor and viewer.
-    @ViewBuilder var footer: some View {
-        Group {
-            if requiredValueMissing {
-                Text.required
-            } else {
-                Text(element.description)
-            }
-        }
-        .font(.footnote)
-        .foregroundColor(requiredValueMissing ? .red : .secondary)
-        .accessibilityIdentifier("\(element.label) Footer")
-    }
-    
     /// The human-readable date and time selection.
     var formattedDate: String? {
         if input.includeTime {
@@ -202,14 +193,12 @@ struct DateTimeInput: View {
     }
 }
 
-
-private extension String {
-    /// A string indicating that no date or time has been set for a date/time field.
-    static var noValue: Self {
-        .init(
-            localized: "No Value",
-            bundle: .toolkitModule,
-            comment: "A string indicating that no date or time has been set for a date/time field."
+private extension ParseStrategy where Self == Date.ParseStrategy {
+    /// A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
+    static var arcGISDateParseStrategy: Self {
+        .fixed(
+            format: "\(year: .defaultDigits)-\(month: .defaultDigits)-\(day: .defaultDigits)T\(hour: .defaultDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .defaultDigits):\(second: .defaultDigits)",
+            timeZone: .current
         )
     }
 }
@@ -221,15 +210,6 @@ private extension Text {
             "Now",
             bundle: .toolkitModule,
             comment: "A label for a button to choose the current time and date for a field."
-        )
-    }
-    
-    /// A label indicating a required field was left blank.
-    static var required: Self {
-        .init(
-            "Required",
-            bundle: .toolkitModule,
-            comment: "A label indicating a required field was left blank."
         )
     }
     

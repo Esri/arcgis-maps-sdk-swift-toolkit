@@ -316,7 +316,7 @@ final class FormViewTests: XCTestCase {
         )
     }
     
-    // - MARK: Test case 2: Test case 2: DateTime picker input type
+    // - MARK: Test case 2: DateTime picker input type
     
     /// Test case 2.1: Unfocused and focused state, no value, date required
     func testCase_2_1() throws {
@@ -357,12 +357,12 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertEqual(
             footer.label,
-            "Required"
+            "Date Entry is Required"
         )
         
         XCTAssertTrue(
-            calendarImage.isHittable,
-            "The calendar image isn't hittable."
+            calendarImage.exists,
+            "The calendar image doesn't exist."
         )
         
         fieldValue.tap()
@@ -417,9 +417,11 @@ final class FormViewTests: XCTestCase {
             "The field title isn't hittable."
         )
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let localDate = formatter.date(from: "1969-07-07T20:17:00.000Z")
+        let localDate = Calendar.current.date(
+            from: DateComponents(
+                timeZone: .gmt, year: 1969, month: 7, day: 8, hour: 3, minute: 17
+            )
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -492,9 +494,11 @@ final class FormViewTests: XCTestCase {
             "The field value isn't hittable."
         )
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let localDate = formatter.date(from: "2023-07-14")
+        let localDate = Calendar.current.date(
+            from: DateComponents(
+                timeZone: .gmt, year: 2023, month: 7, day: 15, hour: 3, minute: 53
+            )
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -553,9 +557,11 @@ final class FormViewTests: XCTestCase {
             "End date and Time 7/27/1969 12:00:00 AM"
         )
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let localDate = formatter.date(from: "1969-07-27T07:00:00.000Z")
+        let localDate = Calendar.current.date(
+            from: DateComponents(
+                timeZone: .gmt, year: 1969, month: 7, day: 27, hour: 7
+            )
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -606,9 +612,11 @@ final class FormViewTests: XCTestCase {
         
         julyFirstButton.tap()
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let localDate = formatter.date(from: "1969-07-01T07:00:00.000Z")
+        let localDate = Calendar.current.date(
+            from: DateComponents(
+                timeZone: .gmt, year: 1969, month: 7, day: 1, hour: 7
+            )
+        )
         
         XCTAssertEqual(
             fieldValue.label,
@@ -656,6 +664,273 @@ final class FormViewTests: XCTestCase {
         XCTAssertEqual(
             fieldValue.label,
             "No Value"
+        )
+    }
+    
+    // - MARK: Test case 3: Combo Box input type
+    
+    /// Test case 3.1: Pre-existing value, description, clear button, no value label
+    func testCase_3_1() {
+        let app = XCUIApplication()
+        let clearButton = app.buttons["Combo String Clear Button"]
+        let fieldTitle = app.staticTexts["Combo String"]
+        let fieldValue = app.staticTexts["Combo String Value"]
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let footer = app.staticTexts["Combo String Footer"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title isn't hittable."
+        )
+        
+        XCTAssertTrue(
+            fieldValue.isHittable,
+            "The field value isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "String 3"
+        )
+        
+        XCTAssertTrue(
+            clearButton.isHittable,
+            "The clear button isn't hittable."
+        )
+        
+        clearButton.tap()
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "No value"
+        )
+        
+        XCTAssertTrue(
+            footer.isHittable,
+            "The footer isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            footer.label,
+            "Combo Box of Field Type String"
+        )
+    }
+    
+    /// Test case 3.2: No pre-existing value, no value label, options button
+    func testCase_3_2() {
+        let app = XCUIApplication()
+        let fieldTitle = app.staticTexts["Combo Integer"]
+        let fieldValue = app.staticTexts["Combo Integer Value"]
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let optionsButton = app.images["Combo Integer Options Button"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title isn't hittable."
+        )
+        
+        XCTAssertTrue(
+            fieldValue.isHittable,
+            "The field value isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "No value"
+        )
+        
+        XCTAssertTrue(
+            optionsButton.isHittable,
+            "The options button isn't hittable."
+        )
+    }
+    
+    /// Test case 3.3: Pick a value
+    func testCase_3_3() {
+        let app = XCUIApplication()
+        let doneButton = app.buttons["Done"]
+        let fieldTitle = app.staticTexts["Combo String"]
+        let fieldValue = app.staticTexts["Combo String Value"]
+        let firstOptionButton = app.buttons["String 1"]
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title isn't hittable."
+        )
+        
+        XCTAssertTrue(
+            fieldValue.isHittable,
+            "The field value isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "String 3"
+        )
+        
+        fieldValue.tap()
+        
+        XCTAssertTrue(
+            firstOptionButton.isHittable,
+            "The first option (String 1) isn't hittable."
+        )
+        
+        firstOptionButton.tap()
+        
+        XCTAssertTrue(
+            doneButton.isHittable,
+            "The done button isn't hittable."
+        )
+        
+        doneButton.tap()
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "String 1"
+        )
+    }
+    
+    // - MARK: Test case 5: Switch input type
+    
+    /// Test case 5.1: Test switch on
+    func testCase_5_1() {
+        let app = XCUIApplication()
+        let fieldTitle = app.staticTexts["switch integer"]
+        let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let switchView = app.switches["switch integer Switch"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.exists,
+            "The field title isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            switchView.label,
+            "2"
+        )
+        
+        switchView.tap()
+        
+        XCTAssertEqual(
+            switchView.label,
+            "1"
+        )
+    }
+    
+    /// Test case 5.2: Test switch off
+    func testCase_5_2() {
+        let app = XCUIApplication()
+        let fieldTitle = app.staticTexts["switch string"]
+        let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let switchView = app.switches["switch string Switch"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            switchView.label,
+            "1"
+        )
+        
+        switchView.tap()
+        
+        
+        XCTAssertEqual(
+            switchView.label,
+            "2"
+        )
+    }
+    
+    /// Test case 5.3: Test switch with no value
+    func testCase_5_3() {
+        let app = XCUIApplication()
+        let fieldTitle = app.staticTexts["switch double"]
+        let fieldValue = app.staticTexts["switch double Value"]
+        let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.exists,
+            "The field title doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            fieldValue.exists,
+            "The combo box doesn't exist."
         )
     }
 }

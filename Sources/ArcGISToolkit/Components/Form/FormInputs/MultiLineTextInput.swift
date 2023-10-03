@@ -37,17 +37,17 @@ struct MultiLineTextInput: View {
     /// so it must be implemented manually.
     @State private var isPlaceholder = false
     
-    /// The field's parent element.
+    /// The input's parent element.
     private let element: FieldFormElement
     
-    /// The input configuration of the field.
+    /// The input configuration of the view.
     private let input: TextAreaFormInput
     
     /// Creates a view for text input spanning multiple lines.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
-    ///   - element: The field's parent element.
-    ///   - input: The input configuration of the field.
+    ///   - element: The input's parent element.
+    ///   - input: The input configuration of the view.
     init(featureForm: FeatureForm?, element: FieldFormElement, input: TextAreaFormInput) {
         self.featureForm = featureForm
         self.element =  element
@@ -55,7 +55,7 @@ struct MultiLineTextInput: View {
     }
     
     var body: some View {
-        FormElementHeader(element: element)
+        InputHeader(element: element)
             .padding([.top], elementPadding)
         HStack(alignment: .bottom) {
             if #available(iOS 16.0, *) {
@@ -93,11 +93,10 @@ struct MultiLineTextInput: View {
         )
         .padding([.bottom], elementPadding)
         .onAppear {
-            let text = featureForm?.feature.attributes[element.fieldName] as? String
-            if let text, !text.isEmpty {
+            let text = element.value
+            if !text.isEmpty {
                 isPlaceholder = false
                 self.text = text
-                
             } else {
                 isPlaceholder = true
                 self.text = element.hint
@@ -105,6 +104,9 @@ struct MultiLineTextInput: View {
         }
         .onChange(of: text) { newValue in
             if !isPlaceholder {
+                guard newValue != element.value else {
+                    return
+                }
                 featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
             }
         }

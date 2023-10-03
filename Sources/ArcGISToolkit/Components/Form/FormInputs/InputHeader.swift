@@ -14,16 +14,14 @@
 import SwiftUI
 import ArcGIS
 
-/// A view shown at the top of each field element in a form.
-struct FormElementHeader: View {
+/// A view shown at the top of a field element in a form.
+struct InputHeader: View {
     /// The form element the header is for.
     let element: FieldFormElement
     
     var body: some View {
-        //TODO: add `required` property to API
-//        Text(verbatim: "\(element.label + (element.required ? " *" : ""))")
-        Text(verbatim: "\(element.label)")
-        .font(.subheadline)
-        .foregroundColor(.secondary)
+        Text(verbatim: "\(element.label + (element.isRequired ? " *" : ""))")
+            .font(.subheadline)
+            .foregroundColor(.secondary)
     }
 }
