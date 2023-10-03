@@ -25,6 +25,10 @@ public struct FlyoverSceneView: View {
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
+***REMOVED******REMOVED***/ The initial camera.
+***REMOVED***let initialCamera: Camera
+***REMOVED******REMOVED***/ The translation factor.
+***REMOVED***let translationFactor: Double
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -92,6 +96,8 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
+***REMOVED******REMOVED***self.translationFactor = translationFactor
+***REMOVED******REMOVED***self.initialCamera = initialCamera
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
 ***REMOVED******REMOVED***cameraController.translationFactor = translationFactor
@@ -112,8 +118,19 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: initialCamera) { initialCamera in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController.originCamera = initialCamera
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: translationFactor) { translationFactor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController.translationFactor = translationFactor
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func updateCameraController() {
+***REMOVED******REMOVED***cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+***REMOVED******REMOVED***cameraController.translationFactor = translationFactor
 ***REMOVED***
 ***REMOVED***
 
