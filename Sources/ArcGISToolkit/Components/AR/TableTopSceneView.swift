@@ -333,50 +333,60 @@ private extension SceneViewProxy {
 }
 
 private extension String {
-    static let planeFound = String(
-        localized: "Tap a surface to place the scene",
-        bundle: .toolkitModule,
-        comment: """
+    static var planeFound: String {
+        String(
+            localized: "Tap a surface to place the scene",
+            bundle: .toolkitModule,
+            comment: """
                  An instruction to the user to tap on a horizontal surface to
                  place an ArcGIS Scene.
                  """
-    )
+        )
+    }
     
-    static let moveDevice = String(
-        localized: "Keep moving your device",
-        bundle: .toolkitModule,
-        comment: """
+    static var moveDevice: String {
+        String(
+            localized: "Keep moving your device",
+            bundle: .toolkitModule,
+            comment: """
                  An instruction to the user to keep moving their device so that
                  horizontal planes can be identified in the AR experience.
                  """
-    )
+        )
+    }
     
-    static let locationUnavailable = String(
-        localized: "Location not available",
-        bundle: .toolkitModule,
-        comment: """
-                 A message to the user to notify them that the location of their 
+    static var locationUnavailable: String {
+        String(
+            localized: "Location not available",
+            bundle: .toolkitModule,
+            comment: """
+                 A message to the user to notify them that the location of their
                  device is unavailable in the AR experience.
                  """
-    )
+        )
+    }
     
-    static let excessiveMotion = String(
-        localized: "Try moving your device more slowly",
-        bundle: .toolkitModule,
-        comment: """
+    static var excessiveMotion: String {
+        String(
+            localized: "Try moving your device more slowly",
+            bundle: .toolkitModule,
+            comment: """
                  An instruction to the user to reduce excessive device motion by
                  moving the device more slowly to improve the AR experience which
                  requires limited device motion.
                 """
-    )
+        )
+    }
     
-    static let insufficentFeatures = String(
-        localized: "Try turning on more lights and moving around",
-        bundle: .toolkitModule,
-        comment: """
+    static var insufficentFeatures: String {
+        String(
+            localized: "Try turning on more lights and moving around",
+            bundle: .toolkitModule,
+            comment: """
                  An instruction to the user to turn on more lights or move towards a
                  light source to improve the AR experience which requires sufficient
                  lighting conditions.
                  """
-    )
+        )
+    }
 }
