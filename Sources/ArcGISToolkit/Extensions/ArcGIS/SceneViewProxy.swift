@@ -24,7 +24,7 @@ extension SceneViewProxy {
         frame: ARFrame,
         cameraController: TransformationMatrixCameraController,
         orientation: InterfaceOrientation,
-        initialTransformation: TransformationMatrix? = nil
+        initialTransformation: TransformationMatrix = .identity
     ) {
         let transform = frame.camera.transform(for: orientation)
         let quaternion = simd_quatf(transform)
@@ -39,11 +39,12 @@ extension SceneViewProxy {
         )
         
         // Set the matrix on the camera controller.
-        if let initialTransformation {
-            cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
-        } else {
-            cameraController.transformationMatrix = transformationMatrix
-        }
+        cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
+//        if let initialTransformation {
+//            cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
+//        } else {
+//            cameraController.transformationMatrix = transformationMatrix
+//        }
     }
     
     /// Sets the field of view for the scene view's camera for a given augmented reality frame.
@@ -71,6 +72,14 @@ private extension ARCamera {
     /// The transform rotated for a particular interface orientation.
     /// - Parameter orientation: The interface orientation that the transform is appropriate for.
     func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
+//        let transform = simd_float4x4(
+//            self.transform.columns.0,
+//            self.transform.columns.1,
+//            self.transform.columns.2,
+//            self.transform.columns.3
+//        )
+//        return transform
+        
         switch orientation {
         case .portrait:
             // Rotate camera transform 90 degrees clockwise in the XY plane.
@@ -105,3 +114,28 @@ private extension ARCamera {
         }
     }
 }
+
+//extension simd_float4x4 {
+//    func rotated() -> Self {
+//        simd_float4x4(
+//            columns.0,
+//            columns.2,
+//            -columns.1,
+//            columns.3
+//        )
+//    }
+//}
+
+//extension TransformationMatrix {
+//    func rotated() -> TransformationMatrix {
+//        TransformationMatrix.normalized(
+//            quaternionX: quaternionX,
+//            quaternionY: quaternionY,
+//            quaternionZ: quaternionZ,
+//            quaternionW: quaternionW,
+//            translationX: translationX,
+//            translationY: translationY,
+//            translationZ: translationZ
+//        )
+//    }
+//}
