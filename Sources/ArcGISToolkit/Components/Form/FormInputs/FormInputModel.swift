@@ -16,7 +16,6 @@ import SwiftUI
 
 /// - Since: 200.2
 public class FormInputModel: ObservableObject {
-    @Published var isVisible: Bool
     @Published var isRequired: Bool
     @Published var isEditable: Bool
     @Published var value: String
@@ -32,7 +31,6 @@ public class FormInputModel: ObservableObject {
     /// Initializes a form view model.
     public init(fieldFormElement: FieldFormElement) {
         element = fieldFormElement
-        isVisible = element.isVisible
         isRequired = element.isRequired
         isEditable = element.isEditable
         value = element.value
