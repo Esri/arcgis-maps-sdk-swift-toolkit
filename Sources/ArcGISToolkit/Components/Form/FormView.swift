@@ -19,18 +19,18 @@ import SwiftUI
 public struct FormView: View {
     @Environment(\.formElementPadding) var elementPadding
     
+    /// The model for the ancestral form view.
+    @EnvironmentObject var model: FormViewModel
+
     /// The form's configuration.
     private let featureForm: FeatureForm?
-    
-    private let model: FormViewModel
     
     @State var isEvaluating = true
     
     /// Initializes a form view.
     /// - Parameter featureForm: The form's configuration.
-    public init(featureForm: FeatureForm?, model: FormViewModel) {
+    public init(featureForm: FeatureForm?) {
         self.featureForm = featureForm
-        self.model = model
     }
     
     public var body: some View {

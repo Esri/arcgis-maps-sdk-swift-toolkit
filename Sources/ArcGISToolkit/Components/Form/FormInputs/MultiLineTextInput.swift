@@ -122,13 +122,6 @@ struct MultiLineTextInput: View {
         }
         .onChange(of: inputModel.value) { newValue in
             text = newValue
-//            if !isPlaceholder {
-//                guard newValue != element.value else {
-//                    return
-//                }
-//                featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
-//                inputModel.evaluateExpressions(model: model, featureForm: featureForm!)
-//            }
         }
     }
 }

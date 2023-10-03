@@ -34,8 +34,7 @@ public class FormViewModel: ObservableObject {
     var evalutateTask: Task<Void, Never>? = nil
 
     /// Initializes a form view model.
-    public init() {
-    }
+    public init() {}
     
     /// Prepares the feature for editing in the form.
     /// - Parameter feature: The feature to be edited in the form.
