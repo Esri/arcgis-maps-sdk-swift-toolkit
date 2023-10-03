@@ -14,6 +14,7 @@
 import SwiftUI
 import ArcGIS
 
+/// A view for date/time input.
 struct DateTimeInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
