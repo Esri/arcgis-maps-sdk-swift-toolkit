@@ -26,6 +26,7 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED***scene.baseSurface = surface
 ***REMOVED******REMOVED******REMOVED***scene.baseSurface.navigationConstraint = .unconstrained
 ***REMOVED******REMOVED***scene.basemap = Basemap(style: .arcGISImagery)
+***REMOVED******REMOVED***scene.basemap?.baseLayers.first?.opacity = 0.15
 ***REMOVED******REMOVED***scene.addOperationalLayer(.canyonCountyParcels)
 ***REMOVED******REMOVED***return scene
 ***REMOVED***()
