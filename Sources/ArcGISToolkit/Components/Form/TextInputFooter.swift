@@ -142,7 +142,7 @@ extension TextInputFooter {
         case (.some(let validationError), _, _):
             switch (validationError, scheme) {
             case (.emptyWhenRequired, .max):
-                return requiredText
+                return .required
             default:
                 return validationText
             }
@@ -213,7 +213,7 @@ extension TextInputFooter {
         Text(
             "Enter \(lengthRange.lowerBound) characters",
             bundle: .toolkitModule,
-            comment: "Text indicating a field's exact number of required characters."
+            comment: "Text indicating the user should enter a field's exact number of required characters."
         )
     }
     
@@ -244,21 +244,12 @@ extension TextInputFooter {
         )
     }
     
-    /// Text indicating a field's minimum and maximum number of allowed characters.
+    /// Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters.
     var minAndMaxText: Text {
         Text(
             "Enter \(lengthRange.lowerBound) to \(lengthRange.upperBound) characters",
             bundle: .toolkitModule,
-            comment: "Text indicating a field's minimum and maximum number of allowed characters."
-        )
-    }
-    
-    /// Text indicating a field is required.
-    var requiredText: Text {
-        Text(
-            "Required",
-            bundle: .toolkitModule,
-            comment: "Text indicating a field is required"
+            comment: "Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters."
         )
     }
     

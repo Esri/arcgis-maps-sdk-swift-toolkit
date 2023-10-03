@@ -15,23 +15,36 @@
 import ArcGIS
 import SwiftUI
 
+/// A view for boolean style input.
+///
+/// The switch represents two mutually exclusive values, such as: yes/no, on/off, true/false.
 struct SwitchInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The feature form containing the input.
-    private var featureForm: FeatureForm?
+    /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
+    ///
+    /// In this scenario a ``ComboBoxInput`` should be used instead.
+    @State private var fallbackToComboBox = false
+    
+    /// A Boolean value indicating whether a value is required but missing.
+    @State private var requiredValueMissing = false
+    
+    /// A Boolean value indicating whether the switch is toggled on or off.
+    @State private var switchState: Bool = false
+    
+    /// The value represented by the switch.
+    @State private var selectedValue: Bool?
     
     /// The field's parent element.
     private let element: FieldFormElement
     
+    /// The feature form containing the input.
+    private var featureForm: FeatureForm?
+    
     /// The input configuration of the field.
     private let input: SwitchFormInput
     
-    @State private var value: Bool?
-    
-    @State private var switchState: Bool = false
-    
-    /// Creates a view for a Switch input.
+    /// Creates a view for a switch input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
     ///   - element: The field's parent element.
@@ -43,33 +56,65 @@ struct SwitchInput: View {
     }
     
     var body: some View {
-        Group {
-            FormElementHeader(element: element)
-                .padding([.top], elementPadding)
-            Toggle(element.label, isOn: $switchState)
-                .toggleStyle(.switch)
-            footer
-        }
-        .padding([.bottom], elementPadding)
-        .onAppear {
-//            if let value = element.value {  // returns name for CodedValues
-//                switchState = (value == input.onValue.name)
-//            }
-            if let value = featureForm?.feature.attributes[element.fieldName] as? CodedValue {
-                switchState = (value.name == input.onValue.name)
+        if fallbackToComboBox {
+            ComboBoxInput(
+                featureForm: featureForm,
+                element: element,
+                noValueLabel: .noValue,
+                noValueOption: .show
+            )
+        } else {
+            Group {
+                InputHeader(element: element)
+                    .padding([.top], elementPadding)
+                Toggle(switchState ? input.onValue.name : input.offValue.name, isOn: $switchState)
+                    .toggleStyle(.switch)
+                    .padding([.horizontal], 5)
+                    .formTextInputStyle()
+                    .accessibilityIdentifier("\(element.label) Switch")
+                InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+            }
+            .padding([.bottom], elementPadding)
+            .onAppear {
+                if element.value.isEmpty {
+                    fallbackToComboBox = true
+                } else {
+                    switchState = isOn
+                }
+            }
+            .onChange(of: switchState) { newValue in
+                let codedValue = newValue ? input.onValue : input.offValue
+                featureForm?.feature.setAttributeValue(codedValue.code, forKey: element.fieldName)
             }
         }
-        .onChange(of: switchState) { newValue in
-            let codedValue = newValue ? input.onValue : input.offValue
-            // element.updateValue(codedValue)
-            featureForm?.feature.setAttributeValue(codedValue, forKey: element.fieldName)
-        }
     }
-    
-    /// The message shown below the date editor and viewer.
-    @ViewBuilder var footer: some View {
-        Text(element.description)
-            .font(.footnote)
-            .foregroundColor(.secondary)
+}
+
+extension SwitchInput {
+    /// A Boolean value indicating whether the switch is toggled on or off.
+    ///
+    /// Element values are provided as Strings whereas input on/off value codes may be a number of
+    /// types. We must cast the element value string to the correct type to perform an accurate check.
+    var isOn: Bool {
+        switch input.onValue.code {
+        case let value as Double:
+            return Double(element.value) == value
+        case let value as Float:
+            return Float(element.value) == value
+        case let value as Int:
+            return Int(element.value) == value
+        case let value as Int8:
+            return Int8(element.value) == value
+        case let value as Int16:
+            return Int16(element.value) == value
+        case let value as Int32:
+            return Int32(element.value) == value
+        case let value as Int64:
+            return Int64(element.value) == value
+        case let value as String:
+            return element.value == value
+        default:
+            return false
+        }
     }
 }
