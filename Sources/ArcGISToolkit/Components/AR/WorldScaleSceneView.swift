@@ -55,45 +55,49 @@ public struct WorldScaleSceneView: View {
     ) {
         self.sceneViewBuilder = sceneView
         
-        let initial = Point(latitude: 0, longitude: 0)
+        let initial = Point(latitude: 43.541829415061166, longitude: -116.5794293050851)
         let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
+//        let initialCamera = Camera(lookingAt: initial, distance: 20, heading: 0, pitch: -10, roll: 0)
         let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
-//        cameraController.translationFactor = translationFactor
+        //cameraController.transformationMatrix = .identity
+        cameraController.translationFactor = 1
         _cameraController = .init(initialValue: cameraController)
         
-        configuration = ARGeoTrackingConfiguration()
+        configuration = ARWorldTrackingConfiguration()
+        configuration.worldAlignment = .gravityAndHeading
     }
     
     public var body: some View {
-        if !ARGeoTrackingConfiguration.isSupported {
-            unsupportedDeviceView
-        } else {
-            Group {
-                switch availability {
-                case .checking:
-                    checkingGeotrackingAvailability
-                case .available:
-                    arView
-                case .unavailable:
-                    geotrackingIsNotAvailable
-                }
-            }
-            .onAppear {
-                ARGeoTrackingConfiguration.checkAvailability { available, error in
-                    if available {
-                        self.availability = .available
-                    } else {
-                        self.availability = .unavailable(error)
-                    }
-                }
-            }
-        }
+        arView
+//        if !ARGeoTrackingConfiguration.isSupported {
+//            unsupportedDeviceView
+//        } else {
+//            Group {
+//                switch availability {
+//                case .checking:
+//                    checkingGeotrackingAvailability
+//                case .available:
+//                    arView
+//                case .unavailable:
+//                    geotrackingIsNotAvailable
+//                }
+//            }
+//            .onAppear {
+//                ARGeoTrackingConfiguration.checkAvailability { available, error in
+//                    if available {
+//                        self.availability = .available
+//                    } else {
+//                        self.availability = .unavailable(error)
+//                    }
+//                }
+//            }
+//        }
     }
     
     @MainActor
     @ViewBuilder
     var arView: some View {
-        GeometryReader { proxy in
+//        GeometryReader { proxy in
             ZStack {
                 ARSwiftUIView(proxy: arViewProxy)
                     .onDidUpdateFrame { _, frame in
@@ -106,10 +110,10 @@ public struct WorldScaleSceneView: View {
                             cameraController: cameraController,
                             orientation: interfaceOrientation
                         )
-                        sceneViewProxy.setFieldOfView(
-                            for: frame,
-                            orientation: interfaceOrientation
-                        )
+//                        sceneViewProxy.setFieldOfView(
+//                            for: frame,
+//                            orientation: interfaceOrientation
+//                        )
                         
 //                        if let geoAnchor {
 //                            statusText = "\(geoAnchor.transform)"
@@ -119,7 +123,7 @@ public struct WorldScaleSceneView: View {
 //                        statusText = "anchor added"
 //                    }
                 
-                if trackingStatus?.state == .localized {
+//                if trackingStatus?.state == .localized {
                     SceneViewReader { proxy in
                         sceneViewBuilder(proxy)
                             .cameraController(cameraController)
@@ -133,7 +137,7 @@ public struct WorldScaleSceneView: View {
                                 self.sceneViewProxy = proxy
                             }
                     }
-                }
+//                }
                 
 //                if let localizedPoint {
 //                    statusView(for: "\(localizedPoint.latitude), \(localizedPoint.longitude)")
@@ -151,36 +155,44 @@ public struct WorldScaleSceneView: View {
             .onAppear {
                 arViewProxy.session?.run(configuration)
             }
-            .onChange(of: trackingStatus) { status in
-                guard let session = arViewProxy.session, let status, status.state == .localized else { return }
-                
-                guard let query = session.currentFrame?.raycastQuery(
-                    from: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
-                    allowing: .estimatedPlane,
-                    alignment: .any
-                ) else { return }
-                guard let result = session.raycast(query).first else { return }
-                
-                Task {
-                    let point = result.worldTransform.translation
-                    let (location, _) = try await session.geoLocation(forPoint: point)
-                    cameraController.originCamera = Camera(
-                        latitude: location.latitude,
-                        longitude: location.longitude,
-                        altitude: 3,
-                        heading: 0,
-                        pitch: 90,
-                        roll: 0
-                    )
-                    
-                    statusText = "Localized point: \(location.latitude), \(location.longitude)"
-                    
-                    let anchor = ARGeoAnchor(coordinate: location)
-                    session.add(anchor: anchor)
-                    geoAnchor = anchor
-                }
-            }
-        }
+//            .onChange(of: trackingStatus) { status in
+//                guard let session = arViewProxy.session, let status, status.state == .localized else { return }
+//                
+////                guard let query = session.currentFrame?.raycastQuery(
+////                    from: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
+////                    allowing: .estimatedPlane,
+////                    alignment: .any
+////                ) else {
+////                    statusText = "cannot create query"
+////                    return
+////                }
+////                guard let result = session.raycast(query).first else {
+////                    statusText = "raycast failed"
+////                    return
+////                }
+//                
+//                Task {
+////                    let point = result.worldTransform.translation
+//                    let point = simd_float3()
+//                    let (location, _) = try await session.geoLocation(forPoint: point)
+//                    cameraController.originCamera = Camera(
+//                        latitude: location.latitude,
+//                        longitude: location.longitude,
+//                        altitude: 3,
+//                        heading: 0,
+//                        pitch: 90,
+//                        roll: 0
+//                    )
+//                    
+//                    statusText = "Localized point: \(location.latitude), \(location.longitude)"
+//                    
+////                    let anchor = ARGeoAnchor(coordinate: location)
+////                    session.add(anchor: anchor)
+////                    geoAnchor = anchor
+//                }
+//            }
+        
+//        }
     }
     
     @MainActor
