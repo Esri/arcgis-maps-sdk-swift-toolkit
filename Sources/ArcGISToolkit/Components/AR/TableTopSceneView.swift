@@ -218,10 +218,8 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This case will not occur since the AR session delegate
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** does not implement relocalization support.
 ***REMOVED******REMOVED******REMOVED******REMOVED***helpText = ""
-***REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***helpText = ""
-***REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
