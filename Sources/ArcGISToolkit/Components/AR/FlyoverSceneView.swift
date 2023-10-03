@@ -25,6 +25,10 @@ public struct FlyoverSceneView: View {
     @State private var cameraController: TransformationMatrixCameraController
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
+    /// The initial camera.
+    let initialCamera: Camera
+    /// The translation factor.
+    let translationFactor: Double
     
     /// Creates a fly over scene view.
     /// - Parameters:
@@ -92,6 +96,8 @@ public struct FlyoverSceneView: View {
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         self.sceneViewBuilder = sceneView
+        self.translationFactor = translationFactor
+        self.initialCamera = initialCamera
         
         let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
         cameraController.translationFactor = translationFactor
@@ -112,8 +118,19 @@ public struct FlyoverSceneView: View {
                         orientation: interfaceOrientation
                     )
                 }
+                .onChange(of: initialCamera) { initialCamera in
+                    cameraController.originCamera = initialCamera
+                }
+                .onChange(of: translationFactor) { translationFactor in
+                    cameraController.translationFactor = translationFactor
+                }
                 .observingInterfaceOrientation($interfaceOrientation)
         }
+    }
+    
+    func updateCameraController() {
+        cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+        cameraController.translationFactor = translationFactor
     }
 }
 
