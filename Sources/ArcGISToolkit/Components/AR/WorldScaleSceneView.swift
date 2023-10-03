@@ -55,12 +55,11 @@ public struct WorldScaleSceneView: View {
     ) {
         self.sceneViewBuilder = sceneView
         
-        let initial = Point(latitude: 43.541829415061166, longitude: -116.5794293050851)
-        let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
-//        let initialCamera = Camera(lookingAt: initial, distance: 20, heading: 0, pitch: -10, roll: 0)
-        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+//        let initial = Point(latitude: 43.541829415061166, longitude: -116.5794293050851)
+//        let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
+//        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
         
-//        let cameraController = TransformationMatrixCameraController()
+        let cameraController = TransformationMatrixCameraController()
         cameraController.translationFactor = 1
         _cameraController = .init(initialValue: cameraController)
         
@@ -123,7 +122,7 @@ public struct WorldScaleSceneView: View {
 //                        statusText = "anchor added"
 //                    }
                 
-//                if trackingStatus?.state == .localized {
+                if trackingStatus?.state == .localized {
                     SceneViewReader { proxy in
                         sceneViewBuilder(proxy)
                             .cameraController(cameraController)
@@ -137,7 +136,7 @@ public struct WorldScaleSceneView: View {
                                 self.sceneViewProxy = proxy
                             }
                     }
-//                }
+                }
             }
             .overlay(alignment: .top) {
                 if !statusText.isEmpty {
@@ -172,9 +171,11 @@ public struct WorldScaleSceneView: View {
 //                }
                 
                 Task {
+                    statusText = "..."
+                    
 //                    let point = result.worldTransform.translation
                     let point = simd_float3()
-                    let (location, _) = try await session.geoLocation(forPoint: point)
+                    let (location, accuracy) = try await session.geoLocation(forPoint: point)
                     cameraController.originCamera = Camera(
                         latitude: location.latitude,
                         longitude: location.longitude,
@@ -184,7 +185,7 @@ public struct WorldScaleSceneView: View {
                         roll: 0
                     )
                     
-                    statusText = "Localized point: \(location.latitude), \(location.longitude)"
+                    statusText = "\(location.latitude), \(location.longitude)\n+/- \(accuracy)m"
                     
 //                    let anchor = ARGeoAnchor(coordinate: location)
 //                    session.add(anchor: anchor)
