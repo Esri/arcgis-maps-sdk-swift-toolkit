@@ -36,7 +36,7 @@ public struct TableTopSceneView: View {
     /// A Boolean value indicating that the scene's initial transformation has been set.
     private var initialTransformationIsSet: Bool { initialTransformation != nil }
     /// A Boolean value that indicates whether to hide the help text.
-    private var isHelpTextHidden: Bool = false
+    private var helpTextIsHidden: Bool = false
     
     /// Creates a table top scene view.
     /// - Parameters:
@@ -130,7 +130,7 @@ public struct TableTopSceneView: View {
             }
         }
         .overlay(alignment: .top) {
-            if !helpText.isEmpty && !isHelpTextHidden {
+            if !helpText.isEmpty && !helpTextIsHidden {
                 Text(helpText)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(8)
@@ -168,7 +168,7 @@ public struct TableTopSceneView: View {
         node.addChildNode(planeNode)
         
         // Set help text when plane is visualized.
-        helpText = "Tap a surface to place the scene"
+        helpText = .planeFound
     }
     
     /// Visualizes a node updated in the scene as an AR Plane.
@@ -190,7 +190,7 @@ public struct TableTopSceneView: View {
         planeGeometry.update(from: planeAnchor.geometry)
         
         // Set help text when plane visualization is updated.
-        helpText = "Tap a surface to place the scene"
+        helpText = .planeFound
     }
     
     /// Updates the help text to guide the user through an AR experience using the AR session's camera tracking status.
@@ -229,7 +229,7 @@ public struct TableTopSceneView: View {
     ///  help text.
     public func helpTextHidden(_ hidden: Bool) -> Self {
         var view = self
-        view.isHelpTextHidden = hidden
+        view.helpTextIsHidden = hidden
         return view
     }
 }
@@ -347,7 +347,7 @@ private extension String {
         bundle: .toolkitModule,
         comment: """
                  An instruction to the user to keep moving their device so that
-                 horizontal planes can be identidifed in the AR experience.
+                 horizontal planes can be identified in the AR experience.
                  """
     )
     
@@ -355,8 +355,8 @@ private extension String {
         localized: "Location not available",
         bundle: .toolkitModule,
         comment: """
-                 A message to the user to notify them that the location of their device
-                 is unavailable in the AR experience.
+                 A message to the user to notify them that the location of their 
+                 device is unavailable in the AR experience.
                  """
     )
     
@@ -364,8 +364,8 @@ private extension String {
         localized: "Try moving your device more slowly",
         bundle: .toolkitModule,
         comment: """
-                 An instruction the user to reduce excessive device motion by
-                 moving the device more slowly to imporve the AR experience which
+                 An instruction to the user to reduce excessive device motion by
+                 moving the device more slowly to improve the AR experience which
                  requires limited device motion.
                 """
     )
@@ -374,8 +374,8 @@ private extension String {
         localized: "Try turning on more lights and moving around",
         bundle: .toolkitModule,
         comment: """
-                 An instruction the the user to turn on more lights or move towards a
-                 light source to imporve the AR experience which requires sufficient
+                 An instruction to the user to turn on more lights or move towards a
+                 light source to improve the AR experience which requires sufficient
                  lighting conditions.
                  """
     )
