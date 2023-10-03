@@ -69,7 +69,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy, let interfaceOrientation else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy, let interfaceOrientation, let initialTransformation else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.updateCamera(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
