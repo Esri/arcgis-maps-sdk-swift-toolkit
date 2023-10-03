@@ -69,7 +69,7 @@ public struct TableTopSceneView: View {
         ZStack {
             ARSwiftUIView(proxy: arViewProxy)
                 .onDidUpdateFrame { _, frame in
-                    guard let sceneViewProxy, let interfaceOrientation else { return }
+                    guard let sceneViewProxy, let interfaceOrientation, let initialTransformation else { return }
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
