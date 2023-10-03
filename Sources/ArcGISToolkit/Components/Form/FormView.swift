@@ -19,18 +19,18 @@
 public struct FormView: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
+***REMOVED******REMOVED***/ The model for the ancestral form view.
+***REMOVED***@EnvironmentObject var model: FormViewModel
+
 ***REMOVED******REMOVED***/ The form's configuration.
 ***REMOVED***private let featureForm: FeatureForm?
-***REMOVED***
-***REMOVED***private let model: FormViewModel
 ***REMOVED***
 ***REMOVED***@State var isEvaluating = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameter featureForm: The form's configuration.
-***REMOVED***public init(featureForm: FeatureForm?, model: FormViewModel) {
+***REMOVED***public init(featureForm: FeatureForm?) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
-***REMOVED******REMOVED***self.model = model
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {

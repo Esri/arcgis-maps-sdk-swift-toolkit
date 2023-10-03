@@ -16,7 +16,6 @@
 
 ***REMOVED***/ - Since: 200.2
 public class FormInputModel: ObservableObject {
-***REMOVED***@Published var isVisible: Bool
 ***REMOVED***@Published var isRequired: Bool
 ***REMOVED***@Published var isEditable: Bool
 ***REMOVED***@Published var value: String
@@ -32,7 +31,6 @@ public class FormInputModel: ObservableObject {
 ***REMOVED******REMOVED***/ Initializes a form view model.
 ***REMOVED***public init(fieldFormElement: FieldFormElement) {
 ***REMOVED******REMOVED***element = fieldFormElement
-***REMOVED******REMOVED***isVisible = element.isVisible
 ***REMOVED******REMOVED***isRequired = element.isRequired
 ***REMOVED******REMOVED***isEditable = element.isEditable
 ***REMOVED******REMOVED***value = element.value

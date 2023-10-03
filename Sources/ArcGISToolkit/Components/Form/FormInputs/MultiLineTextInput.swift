@@ -122,13 +122,6 @@ struct MultiLineTextInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
 ***REMOVED******REMOVED******REMOVED***text = newValue
-***REMOVED******REMOVED******REMOVED******REMOVED***if !isPlaceholder {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard newValue != element.value else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***inputModel.evaluateExpressions(model: model, featureForm: featureForm!)
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

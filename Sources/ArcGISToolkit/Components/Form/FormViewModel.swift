@@ -34,8 +34,7 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***var evalutateTask: Task<Void, Never>? = nil
 
 ***REMOVED******REMOVED***/ Initializes a form view model.
-***REMOVED***public init() {
-***REMOVED***
+***REMOVED***public init() {***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Prepares the feature for editing in the form.
 ***REMOVED******REMOVED***/ - Parameter feature: The feature to be edited in the form.
