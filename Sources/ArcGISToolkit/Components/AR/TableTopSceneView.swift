@@ -36,7 +36,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating that the scene's initial transformation has been set.
 ***REMOVED***private var initialTransformationIsSet: Bool { initialTransformation != nil ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether to hide the help text.
-***REMOVED***private var isHelpTextHidden: Bool = false
+***REMOVED***private var helpTextIsHidden: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a table top scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -130,7 +130,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(alignment: .top) {
-***REMOVED******REMOVED******REMOVED***if !helpText.isEmpty && !isHelpTextHidden {
+***REMOVED******REMOVED******REMOVED***if !helpText.isEmpty && !helpTextIsHidden {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(helpText)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
@@ -168,7 +168,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***node.addChildNode(planeNode)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set help text when plane is visualized.
-***REMOVED******REMOVED***helpText = "Tap a surface to place the scene"
+***REMOVED******REMOVED***helpText = .planeFound
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Visualizes a node updated in the scene as an AR Plane.
@@ -190,7 +190,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***planeGeometry.update(from: planeAnchor.geometry)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set help text when plane visualization is updated.
-***REMOVED******REMOVED***helpText = "Tap a surface to place the scene"
+***REMOVED******REMOVED***helpText = .planeFound
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the help text to guide the user through an AR experience using the AR session's camera tracking status.
@@ -229,7 +229,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/  help text.
 ***REMOVED***public func helpTextHidden(_ hidden: Bool) -> Self {
 ***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.isHelpTextHidden = hidden
+***REMOVED******REMOVED***view.helpTextIsHidden = hidden
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
@@ -347,7 +347,7 @@ private extension String {
 ***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: """
 ***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction to the user to keep moving their device so that
-***REMOVED******REMOVED******REMOVED******REMOVED*** horizontal planes can be identidifed in the AR experience.
+***REMOVED******REMOVED******REMOVED******REMOVED*** horizontal planes can be identified in the AR experience.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED***)
 ***REMOVED***
@@ -355,8 +355,8 @@ private extension String {
 ***REMOVED******REMOVED***localized: "Location not available",
 ***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED*** A message to the user to notify them that the location of their device
-***REMOVED******REMOVED******REMOVED******REMOVED*** is unavailable in the AR experience.
+***REMOVED******REMOVED******REMOVED******REMOVED*** A message to the user to notify them that the location of their 
+***REMOVED******REMOVED******REMOVED******REMOVED*** device is unavailable in the AR experience.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED***)
 ***REMOVED***
@@ -364,8 +364,8 @@ private extension String {
 ***REMOVED******REMOVED***localized: "Try moving your device more slowly",
 ***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction the user to reduce excessive device motion by
-***REMOVED******REMOVED******REMOVED******REMOVED*** moving the device more slowly to imporve the AR experience which
+***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction to the user to reduce excessive device motion by
+***REMOVED******REMOVED******REMOVED******REMOVED*** moving the device more slowly to improve the AR experience which
 ***REMOVED******REMOVED******REMOVED******REMOVED*** requires limited device motion.
 ***REMOVED******REMOVED******REMOVED******REMOVED***"""
 ***REMOVED***)
@@ -374,8 +374,8 @@ private extension String {
 ***REMOVED******REMOVED***localized: "Try turning on more lights and moving around",
 ***REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction the the user to turn on more lights or move towards a
-***REMOVED******REMOVED******REMOVED******REMOVED*** light source to imporve the AR experience which requires sufficient
+***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction to the user to turn on more lights or move towards a
+***REMOVED******REMOVED******REMOVED******REMOVED*** light source to improve the AR experience which requires sufficient
 ***REMOVED******REMOVED******REMOVED******REMOVED*** lighting conditions.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED***)
