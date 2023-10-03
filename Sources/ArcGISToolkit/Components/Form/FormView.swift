@@ -23,11 +23,9 @@ public struct FormView: View {
     private let featureForm: FeatureForm?
     
     private let model: FormViewModel
-
+    
     @State var isEvaluating = true
-    @State var refresh: Bool = false
-    @State var visibleElements = [FormElement]()
-
+    
     /// Initializes a form view.
     /// - Parameter featureForm: The form's configuration.
     public init(featureForm: FeatureForm?, model: FormViewModel) {
@@ -43,30 +41,8 @@ public struct FormView: View {
                 VStack(alignment: .leading) {
                     FormHeader(title: featureForm?.title)
                         .padding([.bottom], elementPadding)
-                    ForEach(visibleElements, id: \.label) { element in
+                    ForEach(featureForm?.elements ?? [], id: \.label) { element in
                         makeElement(element)
-//                            .task {
-//                                print("isVisible changed .task for \(element.label)")
-//                                for await isVisible in element.$isVisible {
-//                                    print("isVisible changed: \(isVisible) for \(element.label)")
-//                                    refresh.toggle()
-//
-//
-//
-//
-////                                TODO: refresh.toggle() doesn't work (current code)
-////                                    => Move visibility stuff to model and find some
-////                                    way to trigger display updates from the model.
-////                                    => Because an EmptyView does not appear to run `.task`
-////                                    stuff, it doesn't handle `isVisible` changes
-////                                    => So we need to handle visibility at the `FormView` level
-////                                    ==>> Maybe created a @Published model.elements property and
-////                                    update that based on the visibility of each element.
-//
-//
-//                                }
-//                                print("ENDED isVisible changed .task for \(element.label)")
-//                            }
                     }
                 }
             }
@@ -76,21 +52,10 @@ public struct FormView: View {
                 isEvaluating = true
                 try await featureForm?.evaluateExpressions()
                 isEvaluating = false
-                model.formElements = featureForm?.elements ?? []
             } catch {
                 print("error evaluating expressions: \(error.localizedDescription)")
             }
         }
-        .onChange(of: model.visibleElements) { newValue in
-            print("onChange of model.visibleElements")
-            visibleElements = model.visibleElements
-        }
-    }
-}
-
-extension FormElement: Equatable {
-    public static func == (lhs: ArcGIS.FormElement, rhs: ArcGIS.FormElement) -> Bool {
-        lhs.label == rhs.label
     }
 }
 
