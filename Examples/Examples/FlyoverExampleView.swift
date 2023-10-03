@@ -23,58 +23,20 @@ struct FlyoverExampleView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***)
 
-***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***FlyoverSceneView(
-***REMOVED******REMOVED******REMOVED******REMOVED***initialLocation: Point(x: 4.4777, y: 51.9244, z: 1_000, spatialReference: .wgs84),
-***REMOVED******REMOVED******REMOVED******REMOVED***initialHeading: 0,
-***REMOVED******REMOVED******REMOVED******REMOVED***translationFactor: 2_000
-***REMOVED******REMOVED******REMOVED***) { proxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task.detached {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("\(results.count) identify result(s).")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***@State var lat = 43.54
-***REMOVED***@State var tf = 2000.0
-***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***FlyoverSceneView(
-***REMOVED******REMOVED******REMOVED******REMOVED***initialLatitude: lat,
-***REMOVED******REMOVED******REMOVED******REMOVED***initialLongitude: -116.5794293050851,
-***REMOVED******REMOVED******REMOVED******REMOVED***initialAltitude: 3300,
-***REMOVED******REMOVED******REMOVED******REMOVED***initialHeading: 0,
-***REMOVED******REMOVED******REMOVED******REMOVED***translationFactor: tf
-***REMOVED******REMOVED******REMOVED***) { proxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task.detached {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("\(results.count) identify result(s).")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***FlyoverSceneView(
+***REMOVED******REMOVED******REMOVED***initialLocation: Point(x: 4.4777, y: 51.9244, z: 1_000, spatialReference: .wgs84),
+***REMOVED******REMOVED******REMOVED***initialHeading: 0,
+***REMOVED******REMOVED******REMOVED***translationFactor: 2_000
+***REMOVED******REMOVED***) { proxy in
+***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task.detached {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("\(results.count) identify result(s).")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lat += 5
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("lat")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tf += 1000
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("tf")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
