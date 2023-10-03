@@ -55,12 +55,12 @@ public struct WorldScaleSceneView: View {
     ) {
         self.sceneViewBuilder = sceneView
         
-//        let initial = Point(latitude: 43.541829415061166, longitude: -116.5794293050851)
-//        let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
-////        let initialCamera = Camera(lookingAt: initial, distance: 20, heading: 0, pitch: -10, roll: 0)
-//        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+        let initial = Point(latitude: 43.541829415061166, longitude: -116.5794293050851)
+        let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
+//        let initialCamera = Camera(lookingAt: initial, distance: 20, heading: 0, pitch: -10, roll: 0)
+        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
         
-        let cameraController = TransformationMatrixCameraController()
+//        let cameraController = TransformationMatrixCameraController()
         cameraController.translationFactor = 1
         _cameraController = .init(initialValue: cameraController)
         
@@ -123,7 +123,7 @@ public struct WorldScaleSceneView: View {
 //                        statusText = "anchor added"
 //                    }
                 
-                if trackingStatus?.state == .localized {
+//                if trackingStatus?.state == .localized {
                     SceneViewReader { proxy in
                         sceneViewBuilder(proxy)
                             .cameraController(cameraController)
@@ -137,7 +137,7 @@ public struct WorldScaleSceneView: View {
                                 self.sceneViewProxy = proxy
                             }
                     }
-                }
+//                }
             }
             .overlay(alignment: .top) {
                 if !statusText.isEmpty {
