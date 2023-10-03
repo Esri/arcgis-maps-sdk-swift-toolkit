@@ -12,6 +12,7 @@
 // limitations under the License.
 
 import ArcGIS
+import Combine
 import SwiftUI
 
 /// - Since: 200.2
