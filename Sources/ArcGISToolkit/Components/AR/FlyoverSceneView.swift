@@ -127,11 +127,6 @@ public struct FlyoverSceneView: View {
                 .observingInterfaceOrientation($interfaceOrientation)
         }
     }
-    
-    func updateCameraController() {
-        cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
-        cameraController.translationFactor = translationFactor
-    }
 }
 
 /// An observable object that wraps an `ARSession` and provides the current frame.
