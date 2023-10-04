@@ -43,7 +43,9 @@ struct FormExampleView: View {
                     if let feature = await identifyFeature(with: mapViewProxy),
                        let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
                         featureForm = FeatureForm(feature: feature, definition: formDefinition)
-                        formViewModel.startEditing(feature)
+                        if let featureForm {
+                            formViewModel.startEditing(feature, featureForm: featureForm)
+                        }
                         isPresented = featureForm != nil
                     }
                 }
