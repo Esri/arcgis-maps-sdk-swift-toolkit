@@ -24,7 +24,7 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***frame: ARFrame,
 ***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
 ***REMOVED******REMOVED***orientation: InterfaceOrientation,
-***REMOVED******REMOVED***initialTransformation: TransformationMatrix = .identity
+***REMOVED******REMOVED***initialTransformation: TransformationMatrix? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***let transform = frame.camera.transform(for: orientation)
 ***REMOVED******REMOVED***let quaternion = simd_quatf(transform)
@@ -39,32 +39,11 @@ extension SceneViewProxy {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the matrix on the camera controller.
-***REMOVED******REMOVED***cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
-***REMOVED******REMOVED******REMOVED***if let initialTransformation {
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = transformationMatrix
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***if let initialTransformation {
+***REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = initialTransformation.adding(transformationMatrix)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = transformationMatrix
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Sets the field of view for the scene view's camera for a given augmented reality frame.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - frame: The current AR frame.
-***REMOVED******REMOVED***/   - orientation: The interface orientation.
-***REMOVED***func setFieldOfView(for frame: ARFrame, orientation: InterfaceOrientation) {
-***REMOVED******REMOVED***let camera = frame.camera
-***REMOVED******REMOVED***let intrinsics = camera.intrinsics
-***REMOVED******REMOVED***let imageResolution = camera.imageResolution
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***setFieldOfViewFromLensIntrinsics(
-***REMOVED******REMOVED******REMOVED***xFocalLength: intrinsics[0][0],
-***REMOVED******REMOVED******REMOVED***yFocalLength: intrinsics[1][1],
-***REMOVED******REMOVED******REMOVED***xPrincipal: intrinsics[2][0],
-***REMOVED******REMOVED******REMOVED***yPrincipal: intrinsics[2][1],
-***REMOVED******REMOVED******REMOVED***xImageSize: Float(imageResolution.width),
-***REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
-***REMOVED******REMOVED******REMOVED***interfaceOrientation: orientation
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
@@ -72,14 +51,6 @@ private extension ARCamera {
 ***REMOVED******REMOVED***/ The transform rotated for a particular interface orientation.
 ***REMOVED******REMOVED***/ - Parameter orientation: The interface orientation that the transform is appropriate for.
 ***REMOVED***func transform(for orientation: InterfaceOrientation) -> simd_float4x4 {
-***REMOVED******REMOVED******REMOVED***let transform = simd_float4x4(
-***REMOVED******REMOVED******REMOVED******REMOVED***self.transform.columns.0,
-***REMOVED******REMOVED******REMOVED******REMOVED***self.transform.columns.1,
-***REMOVED******REMOVED******REMOVED******REMOVED***self.transform.columns.2,
-***REMOVED******REMOVED******REMOVED******REMOVED***self.transform.columns.3
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***return transform
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch orientation {
 ***REMOVED******REMOVED***case .portrait:
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Rotate camera transform 90 degrees clockwise in the XY plane.
@@ -114,28 +85,3 @@ private extension ARCamera {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-***REMOVED***extension simd_float4x4 {
-***REMOVED******REMOVED***func rotated() -> Self {
-***REMOVED******REMOVED******REMOVED***simd_float4x4(
-***REMOVED******REMOVED******REMOVED******REMOVED***columns.0,
-***REMOVED******REMOVED******REMOVED******REMOVED***columns.2,
-***REMOVED******REMOVED******REMOVED******REMOVED***-columns.1,
-***REMOVED******REMOVED******REMOVED******REMOVED***columns.3
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-
-***REMOVED***extension TransformationMatrix {
-***REMOVED******REMOVED***func rotated() -> TransformationMatrix {
-***REMOVED******REMOVED******REMOVED***TransformationMatrix.normalized(
-***REMOVED******REMOVED******REMOVED******REMOVED***quaternionX: quaternionX,
-***REMOVED******REMOVED******REMOVED******REMOVED***quaternionY: quaternionY,
-***REMOVED******REMOVED******REMOVED******REMOVED***quaternionZ: quaternionZ,
-***REMOVED******REMOVED******REMOVED******REMOVED***quaternionW: quaternionW,
-***REMOVED******REMOVED******REMOVED******REMOVED***translationX: translationX,
-***REMOVED******REMOVED******REMOVED******REMOVED***translationY: translationY,
-***REMOVED******REMOVED******REMOVED******REMOVED***translationZ: translationZ
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
