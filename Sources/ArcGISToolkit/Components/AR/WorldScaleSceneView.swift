@@ -55,7 +55,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let initial = Point(latitude: 43.541829415061166, longitude: -116.5794293050851)
+***REMOVED******REMOVED******REMOVED***let initial = Point(latitude: 44.541829415061166, longitude: -117.5794293050851)
 ***REMOVED******REMOVED******REMOVED***let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
 ***REMOVED******REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
 ***REMOVED******REMOVED***
