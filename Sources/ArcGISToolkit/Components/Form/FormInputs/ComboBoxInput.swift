@@ -21,6 +21,9 @@ import SwiftUI
 struct ComboBoxInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
+    /// The model for the ancestral form view.
+    @EnvironmentObject var model: FormViewModel
+
     /// The set of options in the combo box.
     @State private var codedValues = [CodedValue]()
     
@@ -48,6 +51,8 @@ struct ComboBoxInput: View {
     /// The display state value for `nil` value options.
     private let noValueOption: FormInputNoValueOption
     
+    @StateObject var inputModel: FormInputModel
+
     /// A subset of coded values with names containing `filterPhrase` or all of the coded values
     /// if `filterPhrase` is empty.
     var matchingValues: [CodedValue] {
@@ -68,6 +73,10 @@ struct ComboBoxInput: View {
         self.element = element
         self.noValueLabel = input.noValueLabel
         self.noValueOption = input.noValueOption
+        
+        _inputModel = StateObject(
+            wrappedValue: FormInputModel(fieldFormElement: element)
+        )
     }
     
     /// Creates a view for a combo box input.
@@ -81,11 +90,15 @@ struct ComboBoxInput: View {
         self.element = element
         self.noValueLabel = noValueLabel
         self.noValueOption = noValueOption
+        
+        _inputModel = StateObject(
+            wrappedValue: FormInputModel(fieldFormElement: element)
+        )
     }
     
     var body: some View {
         VStack(alignment: .leading) {
-            InputHeader(element: element)
+            InputHeader(label: element.label, isRequired: inputModel.isRequired)
                 .padding([.top], elementPadding)
             
             HStack {
@@ -93,17 +106,17 @@ struct ComboBoxInput: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
                     .accessibilityIdentifier("\(element.label) Value")
-                
                 if selectedValue == nil {
                     Image(systemName: "list.bullet")
                         .foregroundColor(.secondary)
                         .accessibilityIdentifier("\(element.label) Options Button")
-                } else if !element.isRequired {
+                } else if !inputModel.isRequired && inputModel.isEditable  {
                     ClearButton { selectedValue = nil }
                         .accessibilityIdentifier("\(element.label) Clear Button")
                 }
             }
             .formTextInputStyle()
+            .disabled(!inputModel.isEditable)
             // Pass `matchingValues` via a capture list so that the sheet receives up-to-date values.
             .sheet(isPresented: $isPresented) { [matchingValues] in
                 makePicker(for: matchingValues)
@@ -120,8 +133,17 @@ struct ComboBoxInput: View {
             selectedValue = codedValues.first { $0.name == element.value }
         }
         .onChange(of: selectedValue) { newValue in
+            guard newValue?.name != inputModel.value else {
+                return
+            }
+
             requiredValueMissing = element.isRequired && newValue == nil
             featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
+            model.evaluateExpressions()
+        }
+        .onChange(of: inputModel.value) { newValue in
+            let codedValues = featureForm!.codedValues(fieldName: element.fieldName)
+            selectedValue = codedValues.first { $0.name == newValue }
         }
     }
     
