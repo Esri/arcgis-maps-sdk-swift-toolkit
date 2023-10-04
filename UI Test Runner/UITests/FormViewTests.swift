@@ -776,6 +776,170 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED*** - MARK: Test case 4: Radio Buttons input type
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 4.1: Test regular selection
+***REMOVED***func testCase_4_1() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Radio Button Text"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let dogOption = app.buttons["Radio Button Text dog"]
+***REMOVED******REMOVED***let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
+***REMOVED******REMOVED***let noValueOption = app.buttons["Radio Button Text No value"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***birdOptionCheckmark.exists,
+***REMOVED******REMOVED******REMOVED***"The bird option isn't selected."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***dogOptionCheckmark.exists,
+***REMOVED******REMOVED******REMOVED***"The dog option is selected."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***dogOption.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***dogOptionCheckmark.exists,
+***REMOVED******REMOVED******REMOVED***"The dog option isn't selected."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***birdOptionCheckmark.exists,
+***REMOVED******REMOVED******REMOVED***"The bird option is selected."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***noValueOption.exists,
+***REMOVED******REMOVED******REMOVED***"The no value option doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** - MARK: Test case 5: Switch input type
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 5.1: Test switch on
+***REMOVED***func testCase_5_1() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch integer"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let switchView = app.switches["switch integer Switch"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***switchView.label,
+***REMOVED******REMOVED******REMOVED***"2"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switchView.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***switchView.label,
+***REMOVED******REMOVED******REMOVED***"1"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 5.2: Test switch off
+***REMOVED***func testCase_5_2() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch string"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let switchView = app.switches["switch string Switch"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
+***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***switchView.label,
+***REMOVED******REMOVED******REMOVED***"1"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switchView.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***switchView.label,
+***REMOVED******REMOVED******REMOVED***"2"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 5.3: Test switch with no value
+***REMOVED***func testCase_5_3() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch double"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["switch double Value"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldValue.exists,
+***REMOVED******REMOVED******REMOVED***"The combo box doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 
 private extension String {
 ***REMOVED******REMOVED***/ 257 characters of Lorem ipsum text
