@@ -37,6 +37,12 @@ public struct TableTopSceneView: View {
     private var initialTransformationIsSet: Bool { initialTransformation != nil }
     /// A Boolean value that indicates whether to hide the help text.
     private var helpTextIsHidden: Bool = false
+    /// The anchor point for the scene view.
+    private let anchorPoint: Point
+    /// The translation factor for the scene's camera controller.
+    private let translationFactor: Double
+    /// The clipping distance for the scene's camera controller.
+    private let clippingDistance: Double?
     
     /// Creates a table top scene view.
     /// - Parameters:
@@ -57,6 +63,9 @@ public struct TableTopSceneView: View {
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         self.sceneViewBuilder = sceneView
+        self.anchorPoint = anchorPoint
+        self.translationFactor = translationFactor
+        self.clippingDistance = clippingDistance
         
         let initialCamera = Camera(location: anchorPoint, heading: 0, pitch: 90, roll: 0)
         let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
@@ -136,6 +145,15 @@ public struct TableTopSceneView: View {
                     .padding(8)
                     .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
             }
+        }
+        .onChange(of: anchorPoint) { anchorPoint in
+            cameraController.originCamera = Camera(location: anchorPoint, heading: 0, pitch: 90, roll: 0)
+        }
+        .onChange(of: translationFactor) { translationFactor in
+            cameraController.translationFactor = translationFactor
+        }
+        .onChange(of: clippingDistance) { clippingDistance in
+            cameraController.clippingDistance = clippingDistance
         }
         .observingInterfaceOrientation($interfaceOrientation)
     }
