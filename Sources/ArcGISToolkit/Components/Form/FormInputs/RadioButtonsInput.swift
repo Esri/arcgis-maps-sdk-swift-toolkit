@@ -21,6 +21,9 @@
 struct RadioButtonsInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
+***REMOVED******REMOVED***/ The model for the ancestral form view.
+***REMOVED***@EnvironmentObject var model: FormViewModel
+
 ***REMOVED******REMOVED***/ The set of options in the input.
 ***REMOVED***@State private var codedValues = [CodedValue]()
 ***REMOVED***
@@ -43,6 +46,8 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ The input configuration of the field.
 ***REMOVED***private let input: RadioButtonsFormInput
 ***REMOVED***
+***REMOVED***@StateObject var inputModel: FormInputModel
+
 ***REMOVED******REMOVED***/ Creates a view for a date (and time if applicable) input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
@@ -52,6 +57,10 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_inputModel = StateObject(
+***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -64,7 +73,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: .zero) {
@@ -88,6 +97,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 10)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .tertiarySystemFill))
@@ -111,6 +121,12 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***requiredValueMissing = element.isRequired && newValue == nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue?.code ?? "", forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***let codedValues = featureForm!.codedValues(fieldName: element.fieldName)
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == newValue ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

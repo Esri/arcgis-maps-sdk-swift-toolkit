@@ -21,6 +21,9 @@
 struct ComboBoxInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
+***REMOVED******REMOVED***/ The model for the ancestral form view.
+***REMOVED***@EnvironmentObject var model: FormViewModel
+
 ***REMOVED******REMOVED***/ The set of options in the combo box.
 ***REMOVED***@State private var codedValues = [CodedValue]()
 ***REMOVED***
@@ -48,6 +51,8 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The display state value for `nil` value options.
 ***REMOVED***private let noValueOption: FormInputNoValueOption
 ***REMOVED***
+***REMOVED***@StateObject var inputModel: FormInputModel
+
 ***REMOVED******REMOVED***/ A subset of coded values with names containing `filterPhrase` or all of the coded values
 ***REMOVED******REMOVED***/ if `filterPhrase` is empty.
 ***REMOVED***var matchingValues: [CodedValue] {
@@ -68,6 +73,10 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.noValueLabel = input.noValueLabel
 ***REMOVED******REMOVED***self.noValueOption = input.noValueOption
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_inputModel = StateObject(
+***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a combo box input.
@@ -81,11 +90,15 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.noValueLabel = noValueLabel
 ***REMOVED******REMOVED***self.noValueOption = noValueOption
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_inputModel = StateObject(
+***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
+***REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***HStack {
@@ -93,17 +106,17 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(selectedValue != nil ? .primary : .secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Value")
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if selectedValue == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "list.bullet")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Options Button")
-***REMOVED******REMOVED******REMOVED*** else if !element.isRequired {
+***REMOVED******REMOVED******REMOVED*** else if !inputModel.isRequired && inputModel.isEditable  {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { selectedValue = nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.formTextInputStyle()
+***REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Pass `matchingValues` via a capture list so that the sheet receives up-to-date values.
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) { [matchingValues] in
 ***REMOVED******REMOVED******REMOVED******REMOVED***makePicker(for: matchingValues)
@@ -120,8 +133,17 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == element.value ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: selectedValue) { newValue in
+***REMOVED******REMOVED******REMOVED***guard newValue?.name != inputModel.value else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
+
 ***REMOVED******REMOVED******REMOVED***requiredValueMissing = element.isRequired && newValue == nil
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
+***REMOVED******REMOVED******REMOVED***let codedValues = featureForm!.codedValues(fieldName: element.fieldName)
+***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == newValue ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
