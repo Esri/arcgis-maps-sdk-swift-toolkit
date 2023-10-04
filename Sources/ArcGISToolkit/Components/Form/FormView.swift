@@ -27,6 +27,8 @@ public struct FormView: View {
     
     @State var isEvaluating = true
     
+    @State var visibleElements = [FormElement]()
+    
     /// Initializes a form view.
     /// - Parameter featureForm: The form's configuration.
     public init(featureForm: FeatureForm?) {
@@ -41,17 +43,21 @@ public struct FormView: View {
                 VStack(alignment: .leading) {
                     FormHeader(title: featureForm?.title)
                         .padding([.bottom], elementPadding)
-                    ForEach(featureForm?.elements ?? [], id: \.label) { element in
+                    ForEach(model.visibleElements, id: \.id) { element in
                         makeElement(element)
                     }
                 }
             }
+        }
+        .onChange(of: model.visibleElements) { _ in
+            visibleElements = model.visibleElements
         }
         .task {
             do {
                 isEvaluating = true
                 try await featureForm?.evaluateExpressions()
                 isEvaluating = false
+                model.initializeIsVisibleTasks()
             } catch {
                 print("error evaluating expressions: \(error.localizedDescription)")
             }

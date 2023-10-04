@@ -32,7 +32,12 @@ public class FormViewModel: ObservableObject {
     @Published var focusedFieldName: String?
     
     var evalutateTask: Task<Void, Never>? = nil
-
+    
+    private var isVisibleTasks = [Task<Void, Never>]()
+    
+    /// The list of visible form elements.
+    @Published var visibleElements = [FormElement]()
+    
     /// Initializes a form view model.
     public init() {}
     
@@ -45,6 +50,41 @@ public class FormViewModel: ObservableObject {
             self.database = table.serviceGeodatabase
             self.table = table
         }
+    }
+    
+    deinit {
+        clearIsVisibleTasks()
+    }
+    
+    func initializeIsVisibleTasks() {
+        guard let featureForm else { return }
+        clearIsVisibleTasks()
+        
+        // Kick off tasks to monitor isVisible for each element.
+        featureForm.elements.forEach { element in
+            let newTask = Task.detached { [unowned self] in
+                for await _ in element.$isVisible {
+                    await MainActor.run {
+                        self.updateVisibleElements()
+                    }
+                }
+            }
+            isVisibleTasks.append(newTask)
+        }
+    }
+    
+    /// A detached task observing location display autoPan changes.
+    private func updateVisibleElements() {
+        guard let featureForm else { return }
+        visibleElements = featureForm.elements.filter { $0.isVisible }
+    }
+    
+    /// Cancels and removes tasks.
+    private func clearIsVisibleTasks() {
+        isVisibleTasks.forEach { task in
+            task.cancel()
+        }
+        isVisibleTasks.removeAll()
     }
     
     internal func evaluateExpressions() {
@@ -77,12 +117,6 @@ public class FormViewModel: ObservableObject {
         
         if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
             print("An error occurred while submitting the changes.")
-        }
-    }
-    
-    public func outputIsVisible(featureForm: FeatureForm) {
-        featureForm.elements.forEach { element in
-            print("element: \(element.label) isVisible = \(element.isVisible)")
         }
     }
 }
