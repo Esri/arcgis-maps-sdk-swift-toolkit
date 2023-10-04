@@ -114,20 +114,25 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let geoAnchor {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(geoAnchor.transform)"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if anchor == geoAnchor {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(anchor.transform)"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if anchor == geoAnchor {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "adding box"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let material = SCNMaterial()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***material.isDoubleSided = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***material.diffuse.contents = UIColor.red.withAlphaComponent(0.5)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***box.materials = [material]
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let boxNode = SCNNode()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***boxNode.geometry = box
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***boxNode.position = node.position
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***node.addChildNode(boxNode)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { renderer, node, anchor in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if anchor == geoAnchor { ***REMOVED******REMOVED***, initialTransformation == nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(anchor.transform)"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(anchor.transform)"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation = .normalized(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***quaternionX: 0,
