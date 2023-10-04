@@ -102,16 +102,13 @@ public struct WorldScaleSceneView: View {
                 .onDidUpdateFrame { _, frame in
                     trackingStatus = frame.geoTrackingStatus
                     
-                    guard let sceneViewProxy, let interfaceOrientation else { return }
-                    
-                    if let geoAnchor {
-                        statusText = "\(geoAnchor.transform)"
-                    }
+                    guard let sceneViewProxy, let interfaceOrientation, let initialTransformation else { return }
                     
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
-                        orientation: interfaceOrientation
+                        orientation: interfaceOrientation,
+                        initialTransformation: initialTransformation
                     )
                     sceneViewProxy.setFieldOfView(
                         for: frame,
@@ -122,14 +119,27 @@ public struct WorldScaleSceneView: View {
                     //                            statusText = "\(geoAnchor.transform)"
                     //                        }
                 }
-            //                    .onAddNode { renderer, node, anchor in
-            //                        statusText = "anchor added"
-            //                    }
-            //                    .onUpdateNode { renderer, node, anchor in
-            //                        if anchor == geoAnchor {
-            //                            statusText = "\(anchor.transform)"
-            //                        }
-            //                    }
+//                .onAddNode { renderer, node, anchor in
+//                    if anchor == geoAnchor {
+//                        statusText = "\(anchor.transform)"
+//                        
+//                    }
+//                }
+                .onUpdateNode { renderer, node, anchor in
+                    if anchor == geoAnchor { //}, initialTransformation == nil {
+                        statusText = "\(anchor.transform)"
+                        
+                        initialTransformation = .normalized(
+                            quaternionX: 0,
+                            quaternionY: 0,
+                            quaternionZ: 0,
+                            quaternionW: 1,
+                            translationX: Double(anchor.transform.columns.3.x),
+                            translationY: Double(anchor.transform.columns.3.y),
+                            translationZ: Double(anchor.transform.columns.3.z)
+                        )
+                    }
+                }
             
             if trackingStatus?.state == .localized {
                 SceneViewReader { proxy in
@@ -202,11 +212,17 @@ public struct WorldScaleSceneView: View {
             
             statusText = "\(location.latitude), \(location.longitude)\n+/- \(accuracy)m"
             
+            if let geoAnchor {
+                session.remove(anchor: geoAnchor)
+            }
+            
             let anchor = ARGeoAnchor(coordinate: location)
             session.add(anchor: anchor)
             geoAnchor = anchor
         }
     }
+    
+    @State private var initialTransformation: TransformationMatrix?
     
     @MainActor
     @ViewBuilder
@@ -231,9 +247,9 @@ public struct WorldScaleSceneView: View {
         case .notAvailable:
             return "GeoTracking is not available."
         case .initializing:
-            return "Make sure you are outdoors. Point the device at static structures or buildings."
+            return "Make sure you are outdoors.\nUse the camera to scan static structures or buildings."
         case .localizing:
-            return "Attempting to identify device location."
+            return "Attempting to identify device location.\nContinue to scan outdoor structures or buildings."
         case .localized:
             return "Location has been identified."
         case nil:
