@@ -102,16 +102,13 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***trackingStatus = frame.geoTrackingStatus
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy, let interfaceOrientation else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let geoAnchor {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(geoAnchor.transform)"
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy, let interfaceOrientation, let initialTransformation else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.updateCamera(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation: initialTransformation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.setFieldOfView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: frame,
@@ -122,14 +119,27 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(geoAnchor.transform)"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "anchor added"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { renderer, node, anchor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if anchor == geoAnchor {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(anchor.transform)"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if anchor == geoAnchor {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(anchor.transform)"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { renderer, node, anchor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if anchor == geoAnchor { ***REMOVED******REMOVED***, initialTransformation == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(anchor.transform)"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation = .normalized(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***quaternionX: 0,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***quaternionY: 0,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***quaternionZ: 0,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***quaternionW: 1,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***translationX: Double(anchor.transform.columns.3.x),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***translationY: Double(anchor.transform.columns.3.y),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***translationZ: Double(anchor.transform.columns.3.z)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if trackingStatus?.state == .localized {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
@@ -202,11 +212,17 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***statusText = "\(location.latitude), \(location.longitude)\n+/- \(accuracy)m"
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if let geoAnchor {
+***REMOVED******REMOVED******REMOVED******REMOVED***session.remove(anchor: geoAnchor)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let anchor = ARGeoAnchor(coordinate: location)
 ***REMOVED******REMOVED******REMOVED***session.add(anchor: anchor)
 ***REMOVED******REMOVED******REMOVED***geoAnchor = anchor
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***@State private var initialTransformation: TransformationMatrix?
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
@@ -231,9 +247,9 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***case .notAvailable:
 ***REMOVED******REMOVED******REMOVED***return "GeoTracking is not available."
 ***REMOVED******REMOVED***case .initializing:
-***REMOVED******REMOVED******REMOVED***return "Make sure you are outdoors. Point the device at static structures or buildings."
+***REMOVED******REMOVED******REMOVED***return "Make sure you are outdoors.\nUse the camera to scan static structures or buildings."
 ***REMOVED******REMOVED***case .localizing:
-***REMOVED******REMOVED******REMOVED***return "Attempting to identify device location."
+***REMOVED******REMOVED******REMOVED***return "Attempting to identify device location.\nContinue to scan outdoor structures or buildings."
 ***REMOVED******REMOVED***case .localized:
 ***REMOVED******REMOVED******REMOVED***return "Location has been identified."
 ***REMOVED******REMOVED***case nil:
