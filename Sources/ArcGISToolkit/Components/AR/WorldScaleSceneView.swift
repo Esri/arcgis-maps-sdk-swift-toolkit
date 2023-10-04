@@ -64,7 +64,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***configuration = ARGeoTrackingConfiguration()
-***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -117,7 +116,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if anchor == geoAnchor {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "adding box"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "adding box"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let box = SCNSphere(radius: 1)
@@ -134,7 +133,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { renderer, node, anchor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if anchor == geoAnchor { ***REMOVED******REMOVED***, initialTransformation == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if anchor == geoAnchor, initialTransformation == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(anchor.transform)"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation = .normalized(
@@ -207,18 +206,21 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***statusText = "Getting geo location..."
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let point = result.worldTransform.translation
-***REMOVED******REMOVED******REMOVED***let point = simd_float3()
-***REMOVED******REMOVED******REMOVED***let (location, accuracy) = try await session.geoLocation(forPoint: point)
+***REMOVED******REMOVED******REMOVED***var point = simd_float3()
+***REMOVED******REMOVED******REMOVED***point.x = 1
+***REMOVED******REMOVED******REMOVED***point.y = 1
+***REMOVED******REMOVED******REMOVED***point.z = 1
+***REMOVED******REMOVED******REMOVED***let (location, altitude) = try await session.geoLocation(forPoint: point)
 ***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
 ***REMOVED******REMOVED******REMOVED******REMOVED***latitude: location.latitude,
 ***REMOVED******REMOVED******REMOVED******REMOVED***longitude: location.longitude,
-***REMOVED******REMOVED******REMOVED******REMOVED***altitude: 3,
+***REMOVED******REMOVED******REMOVED******REMOVED***altitude: altitude + 3,
 ***REMOVED******REMOVED******REMOVED******REMOVED***heading: 0,
 ***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
 ***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***statusText = "\(location.latitude), \(location.longitude)\n+/- \(accuracy)m"
+***REMOVED******REMOVED******REMOVED***statusText = "\(location.latitude), \(location.longitude)\n+/-\(status.accuracy.rawValue)m"
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if let geoAnchor {
 ***REMOVED******REMOVED******REMOVED******REMOVED***session.remove(anchor: geoAnchor)
