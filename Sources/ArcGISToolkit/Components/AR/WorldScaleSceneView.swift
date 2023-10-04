@@ -121,6 +121,11 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "anchor added"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { renderer, node, anchor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if anchor == geoAnchor {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(anchor.transform)"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if trackingStatus?.state == .localized {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
@@ -187,9 +192,9 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(location.latitude), \(location.longitude)\n+/- \(accuracy)m"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let anchor = ARGeoAnchor(coordinate: location)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***session.add(anchor: anchor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoAnchor = anchor
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let anchor = ARGeoAnchor(coordinate: location)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***session.add(anchor: anchor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoAnchor = anchor
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
