@@ -104,6 +104,10 @@ public struct WorldScaleSceneView: View {
                         
                         guard let sceneViewProxy, let interfaceOrientation else { return }
                         
+                        if let geoAnchor {
+                            statusText = "\(geoAnchor.transform)"
+                        }
+                        
                         sceneViewProxy.updateCamera(
                             frame: frame,
                             cameraController: cameraController,
@@ -121,11 +125,11 @@ public struct WorldScaleSceneView: View {
 //                    .onAddNode { renderer, node, anchor in
 //                        statusText = "anchor added"
 //                    }
-                    .onUpdateNode { renderer, node, anchor in
-                        if anchor == geoAnchor {
-                            statusText = "\(anchor.transform)"
-                        }
-                    }
+//                    .onUpdateNode { renderer, node, anchor in
+//                        if anchor == geoAnchor {
+//                            statusText = "\(anchor.transform)"
+//                        }
+//                    }
                 
                 if trackingStatus?.state == .localized {
                     SceneViewReader { proxy in
@@ -220,13 +224,13 @@ public struct WorldScaleSceneView: View {
     func statusText(for: ARGeoTrackingStatus.State) -> String? {
         switch trackingStatus?.state {
         case .notAvailable:
-            return "Not available."
+            return "GeoTracking is not available."
         case .initializing:
-            return "Initializing"
+            return "Make sure you are outdoors. Point the device at static structures or buildings."
         case .localizing:
-            return "Localizing"
+            return "Attempting to identify device location."
         case .localized:
-            return "Localized"
+            return "Location has been identified."
         case nil:
             return nil
         @unknown default:
