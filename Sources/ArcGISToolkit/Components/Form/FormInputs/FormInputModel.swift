@@ -43,7 +43,6 @@ public class FormInputModel: ObservableObject {
                 observeValueTask
             ]
         )
-
     }
     
     /// Cancels and removes tasks.
@@ -53,7 +52,7 @@ public class FormInputModel: ObservableObject {
         }
         tasks.removeAll()
     }
-
+    
     /// A detached task observing location display autoPan changes.
     private var observeIsRequiredTask: Task<Void, Never> {
         Task.detached { [unowned self] in
