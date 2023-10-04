@@ -119,14 +119,17 @@ public struct WorldScaleSceneView: View {
                     if anchor == geoAnchor {
                         statusText = "adding box"
                         
-                        let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0)
+                        //let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0)
+                        let box = SCNSphere(radius: 1)
+                        
                         let material = SCNMaterial()
                         material.isDoubleSided = true
-                        material.diffuse.contents = UIColor.red.withAlphaComponent(0.5)
+                        material.diffuse.contents = UIColor.red.withAlphaComponent(0.85)
                         box.materials = [material]
+                        
                         let boxNode = SCNNode()
                         boxNode.geometry = box
-                        boxNode.position = node.position
+                        boxNode.worldPosition = node.worldPosition
                         node.addChildNode(boxNode)
                     }
                 }
