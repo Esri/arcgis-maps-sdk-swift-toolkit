@@ -64,7 +64,6 @@ public struct WorldScaleSceneView: View {
         _cameraController = .init(initialValue: cameraController)
         
         configuration = ARGeoTrackingConfiguration()
-        configuration.worldAlignment = .gravityAndHeading
     }
     
     public var body: some View {
@@ -117,7 +116,7 @@ public struct WorldScaleSceneView: View {
                 }
                 .onAddNode { renderer, node, anchor in
                     if anchor == geoAnchor {
-                        statusText = "adding box"
+                        //statusText = "adding box"
                         
                         //let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0)
                         let box = SCNSphere(radius: 1)
@@ -134,7 +133,7 @@ public struct WorldScaleSceneView: View {
                     }
                 }
                 .onUpdateNode { renderer, node, anchor in
-                    if anchor == geoAnchor { //}, initialTransformation == nil {
+                    if anchor == geoAnchor, initialTransformation == nil {
                         //statusText = "\(anchor.transform)"
                         
                         initialTransformation = .normalized(
@@ -207,18 +206,21 @@ public struct WorldScaleSceneView: View {
             statusText = "Getting geo location..."
             
             //                    let point = result.worldTransform.translation
-            let point = simd_float3()
-            let (location, accuracy) = try await session.geoLocation(forPoint: point)
+            var point = simd_float3()
+            point.x = 1
+            point.y = 1
+            point.z = 1
+            let (location, altitude) = try await session.geoLocation(forPoint: point)
             cameraController.originCamera = Camera(
                 latitude: location.latitude,
                 longitude: location.longitude,
-                altitude: 3,
+                altitude: altitude + 3,
                 heading: 0,
                 pitch: 90,
                 roll: 0
             )
             
-            statusText = "\(location.latitude), \(location.longitude)\n+/- \(accuracy)m"
+            statusText = "\(location.latitude), \(location.longitude)\n+/-\(status.accuracy.rawValue)m"
             
             if let geoAnchor {
                 session.remove(anchor: geoAnchor)
