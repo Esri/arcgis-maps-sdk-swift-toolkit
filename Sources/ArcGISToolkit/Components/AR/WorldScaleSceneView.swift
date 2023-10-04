@@ -186,7 +186,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***statusText = "..."
+***REMOVED******REMOVED******REMOVED***statusText = "Getting geo location..."
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let point = result.worldTransform.translation
 ***REMOVED******REMOVED******REMOVED***let point = simd_float3()
