@@ -21,9 +21,12 @@
 struct SwitchInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
+<<<<<<< HEAD
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 
+=======
+>>>>>>> Forms
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the current value doesn't exist as an option in the domain.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ In this scenario a ``ComboBoxInput`` should be used instead.
@@ -47,8 +50,11 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***/ The input configuration of the field.
 ***REMOVED***private let input: SwitchFormInput
 ***REMOVED***
+<<<<<<< HEAD
 ***REMOVED***@StateObject var inputModel: FormInputModel
 
+=======
+>>>>>>> Forms
 ***REMOVED******REMOVED***/ Creates a view for a switch input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
@@ -58,10 +64,13 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
+<<<<<<< HEAD
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_inputModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
 ***REMOVED******REMOVED***)
+=======
+>>>>>>> Forms
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -74,7 +83,11 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Group {
+<<<<<<< HEAD
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
+=======
+***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(element: element)
+>>>>>>> Forms
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Toggle(switchState ? input.onValue.name : input.offValue.name, isOn: $switchState)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.switch)
@@ -83,7 +96,10 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch")
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
 ***REMOVED******REMOVED***
+<<<<<<< HEAD
 ***REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
+=======
+>>>>>>> Forms
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.value.isEmpty {
@@ -93,6 +109,7 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: switchState) { newValue in
+<<<<<<< HEAD
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Convert value to bool
 ***REMOVED******REMOVED******REMOVED******REMOVED***let inputModelValue = inputModel.value == input.onValue.name
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard newValue != (inputModelValue) else {
@@ -104,6 +121,10 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = newValue == input.onValue.name
+=======
+***REMOVED******REMOVED******REMOVED******REMOVED***let codedValue = newValue ? input.onValue : input.offValue
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(codedValue.code, forKey: element.fieldName)
+>>>>>>> Forms
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
