@@ -32,7 +32,12 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***@Published var focusedFieldName: String?
 ***REMOVED***
 ***REMOVED***var evalutateTask: Task<Void, Never>? = nil
-
+***REMOVED***
+***REMOVED***private var isVisibleTasks = [Task<Void, Never>]()
+***REMOVED***
+***REMOVED******REMOVED***/ The list of visible form elements.
+***REMOVED***@Published var visibleElements = [FormElement]()
+***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
 ***REMOVED***public init() {***REMOVED***
 ***REMOVED***
@@ -45,6 +50,41 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***self.database = table.serviceGeodatabase
 ***REMOVED******REMOVED******REMOVED***self.table = table
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***deinit {
+***REMOVED******REMOVED***clearIsVisibleTasks()
+***REMOVED***
+***REMOVED***
+***REMOVED***func initializeIsVisibleTasks() {
+***REMOVED******REMOVED***guard let featureForm else { return ***REMOVED***
+***REMOVED******REMOVED***clearIsVisibleTasks()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Kick off tasks to monitor isVisible for each element.
+***REMOVED******REMOVED***featureForm.elements.forEach { element in
+***REMOVED******REMOVED******REMOVED***let newTask = Task.detached { [unowned self] in
+***REMOVED******REMOVED******REMOVED******REMOVED***for await _ in element.$isVisible {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.updateVisibleElements()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***isVisibleTasks.append(newTask)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A detached task observing location display autoPan changes.
+***REMOVED***private func updateVisibleElements() {
+***REMOVED******REMOVED***guard let featureForm else { return ***REMOVED***
+***REMOVED******REMOVED***visibleElements = featureForm.elements.filter { $0.isVisible ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Cancels and removes tasks.
+***REMOVED***private func clearIsVisibleTasks() {
+***REMOVED******REMOVED***isVisibleTasks.forEach { task in
+***REMOVED******REMOVED******REMOVED***task.cancel()
+***REMOVED***
+***REMOVED******REMOVED***isVisibleTasks.removeAll()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***internal func evaluateExpressions() {
@@ -77,12 +117,6 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
 ***REMOVED******REMOVED******REMOVED***print("An error occurred while submitting the changes.")
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***public func outputIsVisible(featureForm: FeatureForm) {
-***REMOVED******REMOVED***featureForm.elements.forEach { element in
-***REMOVED******REMOVED******REMOVED***print("element: \(element.label) isVisible = \(element.isVisible)")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
