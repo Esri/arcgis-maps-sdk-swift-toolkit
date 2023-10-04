@@ -186,7 +186,7 @@ public struct WorldScaleSceneView: View {
         //                }
         
         Task {
-            statusText = "..."
+            statusText = "Getting geo location..."
             
             //                    let point = result.worldTransform.translation
             let point = simd_float3()
