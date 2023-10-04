@@ -21,12 +21,9 @@ import SwiftUI
 struct SwitchInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-<<<<<<< HEAD
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
 
-=======
->>>>>>> Forms
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
     /// In this scenario a ``ComboBoxInput`` should be used instead.
@@ -50,11 +47,8 @@ struct SwitchInput: View {
     /// The input configuration of the field.
     private let input: SwitchFormInput
     
-<<<<<<< HEAD
     @StateObject var inputModel: FormInputModel
 
-=======
->>>>>>> Forms
     /// Creates a view for a switch input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
@@ -64,13 +58,10 @@ struct SwitchInput: View {
         self.featureForm = featureForm
         self.element = element
         self.input = input
-<<<<<<< HEAD
         
         _inputModel = StateObject(
             wrappedValue: FormInputModel(fieldFormElement: element)
         )
-=======
->>>>>>> Forms
     }
     
     var body: some View {
@@ -83,11 +74,7 @@ struct SwitchInput: View {
             )
         } else {
             Group {
-<<<<<<< HEAD
                 InputHeader(label: element.label, isRequired: inputModel.isRequired)
-=======
-                InputHeader(element: element)
->>>>>>> Forms
                     .padding([.top], elementPadding)
                 Toggle(switchState ? input.onValue.name : input.offValue.name, isOn: $switchState)
                     .toggleStyle(.switch)
@@ -96,10 +83,7 @@ struct SwitchInput: View {
                     .accessibilityIdentifier("\(element.label) Switch")
                 InputFooter(element: element, requiredValueMissing: requiredValueMissing)
             }
-<<<<<<< HEAD
             .disabled(!inputModel.isEditable)
-=======
->>>>>>> Forms
             .padding([.bottom], elementPadding)
             .onAppear {
                 if element.value.isEmpty {
@@ -109,7 +93,6 @@ struct SwitchInput: View {
                 }
             }
             .onChange(of: switchState) { newValue in
-<<<<<<< HEAD
                 // Convert value to bool
                 let inputModelValue = inputModel.value == input.onValue.name
                 guard newValue != (inputModelValue) else {
@@ -121,10 +104,6 @@ struct SwitchInput: View {
             }
             .onChange(of: inputModel.value) { newValue in
                 selectedValue = newValue == input.onValue.name
-=======
-                let codedValue = newValue ? input.onValue : input.offValue
-                featureForm?.feature.setAttributeValue(codedValue.code, forKey: element.fieldName)
->>>>>>> Forms
             }
         }
     }
