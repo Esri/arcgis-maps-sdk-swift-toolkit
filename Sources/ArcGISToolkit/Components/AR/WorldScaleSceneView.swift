@@ -133,19 +133,19 @@ public struct WorldScaleSceneView: View {
                     }
                 }
                 .onUpdateNode { renderer, node, anchor in
-                    if anchor == geoAnchor, initialTransformation == nil {
-                        //statusText = "\(anchor.transform)"
-                        
-                        initialTransformation = .normalized(
-                            quaternionX: 0,
-                            quaternionY: 0,
-                            quaternionZ: 0,
-                            quaternionW: 1,
-                            translationX: Double(anchor.transform.columns.3.x),
-                            translationY: Double(anchor.transform.columns.3.y),
-                            translationZ: Double(anchor.transform.columns.3.z)
-                        )
-                    }
+//                    if anchor == geoAnchor, initialTransformation == nil {
+//                        //statusText = "\(anchor.transform)"
+//                        
+//                        initialTransformation = .normalized(
+//                            quaternionX: 0,
+//                            quaternionY: 0,
+//                            quaternionZ: 0,
+//                            quaternionW: 1,
+//                            translationX: Double(anchor.transform.columns.3.x),
+//                            translationY: Double(anchor.transform.columns.3.y),
+//                            translationZ: Double(anchor.transform.columns.3.z)
+//                        )
+//                    }
                 }
             
             if trackingStatus?.state == .localized {
@@ -207,9 +207,9 @@ public struct WorldScaleSceneView: View {
             
             //                    let point = result.worldTransform.translation
             var point = simd_float3()
-            point.x = 1
-            point.y = 1
-            point.z = 1
+            point.x = 0
+            point.y = 0
+            point.z = -1
             let (location, altitude) = try await session.geoLocation(forPoint: point)
             cameraController.originCamera = Camera(
                 latitude: location.latitude,
