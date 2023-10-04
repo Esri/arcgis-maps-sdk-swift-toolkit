@@ -15,7 +15,7 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-struct FormViewExampleView: View {
+struct FormExampleView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
     /// The `Map` displayed in the `MapView`.
@@ -48,7 +48,8 @@ struct FormViewExampleView: View {
                     }
                 }
                 .ignoresSafeArea(.keyboard)
-            
+                
+                // Or present a FormView in a Floating Panel (provided via the Toolkit)
                 .floatingPanel(
                     selectedDetent: .constant(.half),
                     horizontalAlignment: .leading,
@@ -57,22 +58,24 @@ struct FormViewExampleView: View {
                     FormView(featureForm: featureForm)
                         .padding()
                 }
-            
+                
                 .environmentObject(formViewModel)
                 .navigationBarBackButtonHidden(isPresented)
                 .toolbar {
                     // Once iOS 16.0 is the minimum supported, the two conditionals to show the
                     // buttons can be merged and hoisted up as the root content of the toolbar.
+                    
                     ToolbarItem(placement: .navigationBarLeading) {
-                        if isPresented {
+                        if isPresented && !useControlsInForm {
                             Button("Cancel", role: .cancel) {
                                 formViewModel.undoEdits()
                                 isPresented = false
                             }
                         }
                     }
+                    
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        if isPresented {
+                        if isPresented && !useControlsInForm {
                             Button("Submit") {
                                 Task {
                                     await formViewModel.submitChanges()
@@ -86,7 +89,7 @@ struct FormViewExampleView: View {
     }
 }
 
-extension FormViewExampleView {
+extension FormExampleView {
     /// Identifies features, if any, at the current screen point.
     /// - Parameter proxy: The proxy to use for identification.
     /// - Returns: The first identified feature.
@@ -106,6 +109,15 @@ extension FormViewExampleView {
             return feature
         }
         return nil
+    }
+}
+
+private extension FormExampleView {
+    /// A Boolean value indicating whether the form controls should be shown directly in the form's presenting container.
+    var useControlsInForm: Bool {
+        verticalSizeClass == .compact ||
+        UIDevice.current.userInterfaceIdiom == .mac ||
+        UIDevice.current.userInterfaceIdiom == .pad
     }
 }
 
