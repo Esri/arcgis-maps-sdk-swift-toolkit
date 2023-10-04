@@ -121,6 +121,11 @@ public struct WorldScaleSceneView: View {
 //                    .onAddNode { renderer, node, anchor in
 //                        statusText = "anchor added"
 //                    }
+                    .onUpdateNode { renderer, node, anchor in
+                        if anchor == geoAnchor {
+                            statusText = "\(anchor.transform)"
+                        }
+                    }
                 
                 if trackingStatus?.state == .localized {
                     SceneViewReader { proxy in
@@ -187,9 +192,9 @@ public struct WorldScaleSceneView: View {
                     
                     statusText = "\(location.latitude), \(location.longitude)\n+/- \(accuracy)m"
                     
-//                    let anchor = ARGeoAnchor(coordinate: location)
-//                    session.add(anchor: anchor)
-//                    geoAnchor = anchor
+                    let anchor = ARGeoAnchor(coordinate: location)
+                    session.add(anchor: anchor)
+                    geoAnchor = anchor
                 }
             }
     }
