@@ -55,9 +55,9 @@ public struct WorldScaleSceneView: View {
     ) {
         self.sceneViewBuilder = sceneView
         
-//        let initial = Point(latitude: 44.541829415061166, longitude: -117.5794293050851)
-//        let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
-//        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
+        //        let initial = Point(latitude: 44.541829415061166, longitude: -117.5794293050851)
+        //        let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
+        //        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
         
         let cameraController = TransformationMatrixCameraController()
         cameraController.translationFactor = 1
@@ -96,111 +96,116 @@ public struct WorldScaleSceneView: View {
     @MainActor
     @ViewBuilder
     var arView: some View {
-//        GeometryReader { proxy in
-            ZStack {
-                ARSwiftUIView(proxy: arViewProxy)
-                    .onDidUpdateFrame { _, frame in
-                        trackingStatus = frame.geoTrackingStatus
-                        
-                        guard let sceneViewProxy, let interfaceOrientation else { return }
-                        
-                        if let geoAnchor {
-                            statusText = "\(geoAnchor.transform)"
-                        }
-                        
-                        sceneViewProxy.updateCamera(
-                            frame: frame,
-                            cameraController: cameraController,
-                            orientation: interfaceOrientation
-                        )
-                        sceneViewProxy.setFieldOfView(
-                            for: frame,
-                            orientation: interfaceOrientation
-                        )
-                        
-//                        if let geoAnchor {
-//                            statusText = "\(geoAnchor.transform)"
-//                        }
-                    }
-//                    .onAddNode { renderer, node, anchor in
-//                        statusText = "anchor added"
-//                    }
-//                    .onUpdateNode { renderer, node, anchor in
-//                        if anchor == geoAnchor {
-//                            statusText = "\(anchor.transform)"
-//                        }
-//                    }
-                
-                if trackingStatus?.state == .localized {
-                    SceneViewReader { proxy in
-                        sceneViewBuilder(proxy)
-                            .cameraController(cameraController)
-                            .attributionBarHidden(true)
-                            .spaceEffect(.transparent)
-                            .atmosphereEffect(.off)
-                            .onAppear {
-                                // Capture scene view proxy as a workaround for a bug where
-                                // preferences set for `ARSwiftUIView` are not honored. The
-                                // issue has been logged with a bug report with ID FB13188508.
-                                self.sceneViewProxy = proxy
-                            }
-                    }
-                }
-            }
-            .overlay(alignment: .top) {
-                if !statusText.isEmpty {
-                    statusView(for: statusText)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(8)
-                        .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
-                }
-            }
-            .observingInterfaceOrientation($interfaceOrientation)
-            .onAppear {
-                arViewProxy.session?.run(configuration)
-            }
-            .onChange(of: trackingStatus) { status in
-                if let state = status?.state, let trackingStateText = statusText(for: state) {
-                    statusText = trackingStateText
-                }
-                
-                guard let session = arViewProxy.session, let status, status.state == .localized else { return }
-                
-//                guard let query = session.currentFrame?.raycastQuery(
-//                    from: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
-//                    allowing: .estimatedPlane,
-//                    alignment: .any
-//                ) else {
-//                    statusText = "cannot create query"
-//                    return
-//                }
-//                guard let result = session.raycast(query).first else {
-//                    statusText = "raycast failed"
-//                    return
-//                }
-                
-                Task {
-                    statusText = "..."
+        //        GeometryReader { proxy in
+        ZStack {
+            ARSwiftUIView(proxy: arViewProxy)
+                .onDidUpdateFrame { _, frame in
+                    trackingStatus = frame.geoTrackingStatus
                     
-//                    let point = result.worldTransform.translation
-                    let point = simd_float3()
-                    let (location, accuracy) = try await session.geoLocation(forPoint: point)
-                    cameraController.originCamera = Camera(
-                        latitude: location.latitude,
-                        longitude: location.longitude,
-                        altitude: 3,
-                        heading: 0,
-                        pitch: 90,
-                        roll: 0
+                    guard let sceneViewProxy, let interfaceOrientation else { return }
+                    
+                    if let geoAnchor {
+                        statusText = "\(geoAnchor.transform)"
+                    }
+                    
+                    sceneViewProxy.updateCamera(
+                        frame: frame,
+                        cameraController: cameraController,
+                        orientation: interfaceOrientation
+                    )
+                    sceneViewProxy.setFieldOfView(
+                        for: frame,
+                        orientation: interfaceOrientation
                     )
                     
-                    statusText = "\(location.latitude), \(location.longitude)\n+/- \(accuracy)m"
-                    
-                    let anchor = ARGeoAnchor(coordinate: location)
-                    session.add(anchor: anchor)
-                    geoAnchor = anchor
+                    //                        if let geoAnchor {
+                    //                            statusText = "\(geoAnchor.transform)"
+                    //                        }
+                }
+            //                    .onAddNode { renderer, node, anchor in
+            //                        statusText = "anchor added"
+            //                    }
+            //                    .onUpdateNode { renderer, node, anchor in
+            //                        if anchor == geoAnchor {
+            //                            statusText = "\(anchor.transform)"
+            //                        }
+            //                    }
+            
+            if trackingStatus?.state == .localized {
+                SceneViewReader { proxy in
+                    sceneViewBuilder(proxy)
+                        .cameraController(cameraController)
+                        .attributionBarHidden(true)
+                        .spaceEffect(.transparent)
+                        .atmosphereEffect(.off)
+                        .onAppear {
+                            // Capture scene view proxy as a workaround for a bug where
+                            // preferences set for `ARSwiftUIView` are not honored. The
+                            // issue has been logged with a bug report with ID FB13188508.
+                            self.sceneViewProxy = proxy
+                        }
                 }
             }
+        }
+        .overlay(alignment: .top) {
+            if !statusText.isEmpty {
+                statusView(for: statusText)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(8)
+                    .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+            }
+        }
+        .observingInterfaceOrientation($interfaceOrientation)
+        .onAppear {
+            arViewProxy.session?.run(configuration)
+        }
+        .onChange(of: trackingStatus) { status in
+            handleTrackingStatusChange(status: status)
+        }
+    }
+    
+    func handleTrackingStatusChange(status: ARGeoTrackingStatus?) {
+        
+        if let state = status?.state, let trackingStateText = statusText(for: state) {
+            statusText = trackingStateText
+        }
+        
+        guard let session = arViewProxy.session, let status, status.state == .localized else { return }
+        
+        //                guard let query = session.currentFrame?.raycastQuery(
+        //                    from: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
+        //                    allowing: .estimatedPlane,
+        //                    alignment: .any
+        //                ) else {
+        //                    statusText = "cannot create query"
+        //                    return
+        //                }
+        //                guard let result = session.raycast(query).first else {
+        //                    statusText = "raycast failed"
+        //                    return
+        //                }
+        
+        Task {
+            statusText = "..."
+            
+            //                    let point = result.worldTransform.translation
+            let point = simd_float3()
+            let (location, accuracy) = try await session.geoLocation(forPoint: point)
+            cameraController.originCamera = Camera(
+                latitude: location.latitude,
+                longitude: location.longitude,
+                altitude: 3,
+                heading: 0,
+                pitch: 90,
+                roll: 0
+            )
+            
+            statusText = "\(location.latitude), \(location.longitude)\n+/- \(accuracy)m"
+            
+            let anchor = ARGeoAnchor(coordinate: location)
+            session.add(anchor: anchor)
+            geoAnchor = anchor
+        }
     }
     
     @MainActor
