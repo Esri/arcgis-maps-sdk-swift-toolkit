@@ -37,6 +37,12 @@ public struct TableTopSceneView: View {
 ***REMOVED***private var initialTransformationIsSet: Bool { initialTransformation != nil ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether to hide the help text.
 ***REMOVED***private var helpTextIsHidden: Bool = false
+***REMOVED******REMOVED***/ The anchor point for the scene view.
+***REMOVED***private let anchorPoint: Point
+***REMOVED******REMOVED***/ The translation factor for the scene's camera controller.
+***REMOVED***private let translationFactor: Double
+***REMOVED******REMOVED***/ The clipping distance for the scene's camera controller.
+***REMOVED***private let clippingDistance: Double?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a table top scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -57,6 +63,9 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
+***REMOVED******REMOVED***self.anchorPoint = anchorPoint
+***REMOVED******REMOVED***self.translationFactor = translationFactor
+***REMOVED******REMOVED***self.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let initialCamera = Camera(location: anchorPoint, heading: 0, pitch: 90, roll: 0)
 ***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
@@ -136,6 +145,15 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: anchorPoint) { anchorPoint in
+***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(location: anchorPoint, heading: 0, pitch: 90, roll: 0)
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: translationFactor) { translationFactor in
+***REMOVED******REMOVED******REMOVED***cameraController.translationFactor = translationFactor
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: clippingDistance) { clippingDistance in
+***REMOVED******REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
 ***REMOVED***
 ***REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
 ***REMOVED***
