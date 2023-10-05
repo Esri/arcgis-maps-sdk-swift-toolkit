@@ -24,6 +24,8 @@ struct ARSwiftUIView {
     private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
     /// The closure to call when a node has been updated to match it's corresponding anchor.
     private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+    /// The closure to call when the geo-tracking status changes.
+    private(set) var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
     
     /// The proxy.
     private let proxy: ARSwiftUIViewProxy?
@@ -61,6 +63,15 @@ struct ARSwiftUIView {
         view.onUpdateNodeAction = action
         return view
     }
+    
+    /// Sets the closure to call when the geo-tracking status changes.
+    func onGeoTrackingStatusChange(
+        perform action: @escaping (ARSession, ARGeoTrackingStatus) -> Void
+    ) -> Self {
+        var view = self
+        view.onGeoTrackingStatusChangeAction = action
+        return view
+    }
 }
 
 extension ARSwiftUIView: UIViewRepresentable {
@@ -77,6 +88,7 @@ extension ARSwiftUIView: UIViewRepresentable {
         context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
         context.coordinator.onAddNodeAction = onAddNodeAction
         context.coordinator.onUpdateNodeAction = onUpdateNodeAction
+        context.coordinator.onGeoTrackingStatusChangeAction = onGeoTrackingStatusChangeAction
     }
     
     func makeCoordinator() -> Coordinator {
@@ -89,6 +101,7 @@ extension ARSwiftUIView {
         var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
         var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
         var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+        var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
         
         func session(_ session: ARSession, didUpdate frame: ARFrame) {
             onDidUpdateFrameAction?(session, frame)
@@ -100,6 +113,10 @@ extension ARSwiftUIView {
         
         func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
             onUpdateNodeAction?(renderer, node, anchor)
+        }
+        
+        func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
+            onGeoTrackingStatusChangeAction?(session, geoTrackingStatus)
         }
     }
 }

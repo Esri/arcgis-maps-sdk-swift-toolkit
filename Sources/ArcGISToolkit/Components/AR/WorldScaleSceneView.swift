@@ -37,7 +37,7 @@ public struct WorldScaleSceneView: View {
     private let configuration: ARConfiguration
     
     @State private var availability: GeotrackingLocationAvailability = .checking
-    @State private var trackingStatus: ARGeoTrackingStatus?
+    @State private var isLocalized = false
     //@State private var localizedPoint: CLLocationCoordinate2D?
     
     @State private var statusText: String = ""
@@ -99,24 +99,29 @@ public struct WorldScaleSceneView: View {
         ZStack {
             ARSwiftUIView(proxy: arViewProxy)
                 .onDidUpdateFrame { _, frame in
-                    trackingStatus = frame.geoTrackingStatus
-                    
-                    guard let sceneViewProxy, let interfaceOrientation, let initialTransformation else { return }
-                    
+                    guard let sceneViewProxy, let interfaceOrientation, let geoAnchor
+                            , let initialTransformation else { return }
+
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
                         orientation: interfaceOrientation,
                         initialTransformation: initialTransformation
                     )
-                    sceneViewProxy.setFieldOfView(
-                        for: frame,
-                        orientation: interfaceOrientation
-                    )
+//                    sceneViewProxy.setFieldOfView(
+//                        for: frame,
+//                        orientation: interfaceOrientation
+//                    )
+                }
+                .onGeoTrackingStatusChange { session, geoTrackingStatus in
+                    if geoTrackingStatus.state == .localized {
+                        isLocalized = true
+                    }
+                    handleTrackingStatusChange(status: geoTrackingStatus)
                 }
                 .onAddNode { renderer, node, anchor in
-                    if anchor == geoAnchor {
-                        //statusText = "adding box"
+                    if anchor.identifier == geoAnchor?.identifier {
+                        statusText += "adding box"
                         
                         //let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0)
                         let box = SCNSphere(radius: 1)
@@ -133,22 +138,44 @@ public struct WorldScaleSceneView: View {
                     }
                 }
                 .onUpdateNode { renderer, node, anchor in
-//                    if anchor == geoAnchor, initialTransformation == nil {
-//                        //statusText = "\(anchor.transform)"
-//                        
+                    if anchor.identifier == geoAnchor?.identifier { //}, initialTransformation == nil, anchor.transform != .init(diagonal: .one) {
+                        //statusText = "\(anchor.transform)\n\(node.worldPosition)"
+                        
+                        let transform = node.simdTransform
+                        let quaternion = simd_quatf(transform)
+                        
+//                        let s = "\(quaternion.vector.x), \(quaternion.vector.y), \(quaternion.vector.z), \(quaternion.vector.y), \(transform.columns.3.x), \(transform.columns.3.y), \(transform.columns.3.z)"
+//                        statusText = s
+                        
+                        let transformationMatrix = TransformationMatrix.normalized(
+                            quaternionX: Double(quaternion.vector.x),
+                            quaternionY: Double(quaternion.vector.y),
+                            quaternionZ: Double(quaternion.vector.z),
+                            quaternionW: Double(quaternion.vector.w),
+                            translationX: Double(transform.columns.3.x),
+                            translationY: Double(transform.columns.3.y),
+                            translationZ: Double(transform.columns.3.z)
+                        )
+                        initialTransformation = transformationMatrix
+                        //cameraController.transformationMatrix = transformationMatrix
+                        statusText = "\(transformationMatrix)"
+                        
+//                        let transform = anchor.transform
 //                        initialTransformation = .normalized(
 //                            quaternionX: 0,
 //                            quaternionY: 0,
 //                            quaternionZ: 0,
 //                            quaternionW: 1,
-//                            translationX: Double(anchor.transform.columns.3.x),
-//                            translationY: Double(anchor.transform.columns.3.y),
-//                            translationZ: Double(anchor.transform.columns.3.z)
+//                            translationX: -Double(transform.columns.3.x),
+//                            translationY: -Double(transform.columns.3.y),
+//                            translationZ: -Double(transform.columns.3.z)
 //                        )
-//                    }
+                        
+                            //cameraController.transformationMatrix = initialTransformation!
+                    }
                 }
             
-            if trackingStatus?.state == .localized {
+            if isLocalized {
                 SceneViewReader { proxy in
                     sceneViewBuilder(proxy)
                         .cameraController(cameraController)
@@ -176,18 +203,17 @@ public struct WorldScaleSceneView: View {
         .onAppear {
             arViewProxy.session?.run(configuration)
         }
-        .onChange(of: trackingStatus) { status in
-            handleTrackingStatusChange(status: status)
-        }
     }
     
-    func handleTrackingStatusChange(status: ARGeoTrackingStatus?) {
-        
-        if let state = status?.state, let trackingStateText = statusText(for: state) {
+    func handleTrackingStatusChange(status: ARGeoTrackingStatus) {
+        let state = status.state
+        if let trackingStateText = statusText(for: state) {
             statusText = trackingStateText
         }
         
-        guard let session = arViewProxy.session, let status, status.state == .localized else { return }
+        guard let session = arViewProxy.session, state == .localized else { return }
+        
+        guard geoAnchor == nil else { return }
         
         //                guard let query = session.currentFrame?.raycastQuery(
         //                    from: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
@@ -203,13 +229,13 @@ public struct WorldScaleSceneView: View {
         //                }
         
         Task {
-            statusText = "Getting geo location..."
+            //statusText = "Getting geo location..."
             
             //                    let point = result.worldTransform.translation
             var point = simd_float3()
             point.x = 0
             point.y = 0
-            point.z = -1
+            point.z = 2
             let (location, altitude) = try await session.geoLocation(forPoint: point)
             cameraController.originCamera = Camera(
                 latitude: location.latitude,
@@ -220,7 +246,8 @@ public struct WorldScaleSceneView: View {
                 roll: 0
             )
             
-            statusText = "\(location.latitude), \(location.longitude)\n+/-\(status.accuracy.rawValue)m"
+            
+            //statusText = "\(location.latitude), \(location.longitude)\n+/-\(status.accuracy.rawValue)m"
             
             if let geoAnchor {
                 session.remove(anchor: geoAnchor)
@@ -252,8 +279,8 @@ public struct WorldScaleSceneView: View {
         statusView(for: "Geotracking is not supported by this device.")
     }
     
-    func statusText(for: ARGeoTrackingStatus.State) -> String? {
-        switch trackingStatus?.state {
+    func statusText(for state: ARGeoTrackingStatus.State) -> String? {
+        switch state {
         case .notAvailable:
             return "GeoTracking is not available."
         case .initializing:
@@ -261,8 +288,7 @@ public struct WorldScaleSceneView: View {
         case .localizing:
             return "Attempting to identify device location.\nContinue to scan outdoor structures or buildings."
         case .localized:
-            return "Location has been identified."
-        case nil:
+            //return "Location has been identified."
             return nil
         @unknown default:
             return nil
@@ -278,5 +304,11 @@ public struct WorldScaleSceneView: View {
 extension simd_float4x4 {
     var translation: simd_float3 {
         return [columns.3.x, columns.3.y, columns.3.z]
+    }
+}
+
+extension TransformationMatrix: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        "\(quaternionX), \(quaternionY), \(quaternionZ), \(quaternionW), \(translationX), \(translationY), \(translationZ)"
     }
 }
