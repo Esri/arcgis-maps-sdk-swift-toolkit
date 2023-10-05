@@ -24,6 +24,8 @@ struct ARSwiftUIView {
 ***REMOVED***private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED******REMOVED***/ The closure to call when a node has been updated to match it's corresponding anchor.
 ***REMOVED***private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+***REMOVED******REMOVED***/ The closure to call when the geo-tracking status changes.
+***REMOVED***private(set) var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The proxy.
 ***REMOVED***private let proxy: ARSwiftUIViewProxy?
@@ -62,6 +64,15 @@ struct ARSwiftUIView {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Sets the closure to call when the geo-tracking status changes.
+***REMOVED***func onGeoTrackingStatusChange(
+***REMOVED******REMOVED***perform action: @escaping (ARSession, ARGeoTrackingStatus) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onGeoTrackingStatusChangeAction = action
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
 
 extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***func makeUIView(context: Context) -> ARViewType {
@@ -77,6 +88,7 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED******REMOVED***context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
 ***REMOVED******REMOVED***context.coordinator.onAddNodeAction = onAddNodeAction
 ***REMOVED******REMOVED***context.coordinator.onUpdateNodeAction = onUpdateNodeAction
+***REMOVED******REMOVED***context.coordinator.onGeoTrackingStatusChangeAction = onGeoTrackingStatusChangeAction
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCoordinator() -> Coordinator {
@@ -89,6 +101,7 @@ extension ARSwiftUIView {
 ***REMOVED******REMOVED***var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
 ***REMOVED******REMOVED***var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED******REMOVED***var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+***REMOVED******REMOVED***var onGeoTrackingStatusChangeAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
 ***REMOVED******REMOVED******REMOVED***onDidUpdateFrameAction?(session, frame)
@@ -100,6 +113,10 @@ extension ARSwiftUIView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
 ***REMOVED******REMOVED******REMOVED***onUpdateNodeAction?(renderer, node, anchor)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
+***REMOVED******REMOVED******REMOVED***onGeoTrackingStatusChangeAction?(session, geoTrackingStatus)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
