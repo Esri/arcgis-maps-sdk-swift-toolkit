@@ -132,10 +132,12 @@ private extension SingleLineTextInput {
     /// The button that allows a user to switch the numeric value between positive and negative.
     var positiveNegativeButton: some View {
         Button {
-            if text.first == "-" {
-                text.removeFirst()
-            } else {
-                text.insert("-", at: text.startIndex)
+            if let value = Int(text) {
+                text = String(value * -1)
+            } else if let value = Float(text) {
+                text = String(value * -1)
+            } else if let value = Double(text) {
+                text = String(value * -1)
             }
         } label: {
             Image(systemName: "plus.forwardslash.minus")
