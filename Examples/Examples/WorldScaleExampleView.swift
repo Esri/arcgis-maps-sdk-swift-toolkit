@@ -17,15 +17,15 @@ import ArcGISToolkit
 
 struct WorldScaleExampleView: View {
     @State private var scene: ArcGIS.Scene = {
-        // Creates an elevation source from Terrain3D REST service.
-        let elevationServiceURL = URL(string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!
-        let elevationSource = ArcGISTiledElevationSource(url: elevationServiceURL)
-        let surface = Surface()
-        surface.addElevationSource(elevationSource)
+//        // Creates an elevation source from Terrain3D REST service.
+//        let elevationServiceURL = URL(string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!
+//        let elevationSource = ArcGISTiledElevationSource(url: elevationServiceURL)
+//        let surface = Surface()
+//        surface.addElevationSource(elevationSource)
         let scene = Scene()
-        scene.baseSurface = surface
+//        scene.baseSurface = surface
         scene.baseSurface.backgroundGrid.isVisible = false
-        scene.baseSurface.navigationConstraint = .unconstrained
+//        scene.baseSurface.navigationConstraint = .unconstrained
         scene.basemap = Basemap(style: .arcGISImagery)
         scene.addOperationalLayer(.canyonCountyParcels)
         return scene
