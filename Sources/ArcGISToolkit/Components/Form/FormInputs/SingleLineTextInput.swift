@@ -57,7 +57,7 @@ struct SingleLineTextInput: View {
                 .focused($isFocused)
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
-                        if UIDevice.current.userInterfaceIdiom == .phone, isFocused, isNumeric {
+                        if UIDevice.current.userInterfaceIdiom == .phone, isFocused, fieldType.isNumeric {
                             positiveNegativeButton
                             Spacer()
                         }
@@ -76,8 +76,7 @@ struct SingleLineTextInput: View {
             element: element,
             input: input,
             rangeDomain: rangeDomain,
-            isNumeric: isNumeric,
-            isDecimal: isDecimal
+            fieldType: fieldType
         )
         .padding([.bottom], elementPadding)
         .onAppear {
@@ -91,11 +90,11 @@ struct SingleLineTextInput: View {
         .onChange(of: text) { newValue in
             // Note: this will be replaced by `element.updateValue()`, which will
             // handle all the following logic internally.
-            if isDecimal {
+            if fieldType.isFloatingPoint {
                 // Note: this should handle other decimal types as well, if they exist (float?)
                 let value = Double(newValue)
                 featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
-            } else if isNumeric {
+            } else if fieldType.isNumeric {
                 // Note: this should handle more than just Int32
                 let value = Int32(newValue)
                 featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
@@ -108,20 +107,6 @@ struct SingleLineTextInput: View {
 }
 
 private extension SingleLineTextInput {
-    /// A Boolean value indicating whether the input is for a numeric data type.
-    var isNumeric: Bool {
-        if let field = featureForm?.feature.table?.field(named: element.fieldName)?.type {
-            return field.isNumeric
-        }
-        return false
-    }
-    
-    /// A Boolean value indicating whether the field has a numeric data type with decimal precision.
-    var isDecimal: Bool {
-        if let field = featureForm?.feature.table?.field(named: element.fieldName)?.type {
-            return field.isFloatingPoint
-        }
-        return false
     /// The field type of the text input.
     var fieldType: FieldType {
         featureForm!.feature.table!.field(named: element.fieldName)!.type!
@@ -129,7 +114,7 @@ private extension SingleLineTextInput {
     
     /// The keyboard type to use depending on where the input is numeric and decimal.
     var keyboardType: UIKeyboardType {
-        isNumeric ? (isDecimal ? .decimalPad : .numberPad) : .default
+        fieldType.isNumeric ? (fieldType.isFloatingPoint ? .decimalPad : .numberPad) : .default
     }
     
     /// The button that allows a user to switch the numeric value between positive and negative.

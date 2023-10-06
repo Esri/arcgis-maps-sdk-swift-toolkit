@@ -32,6 +32,9 @@ struct TextInputFooter: View {
     /// The footer's parent element.
     private let element: FieldFormElement
     
+    /// The field type of the text input.
+    private let fieldType: FieldType
+    
     /// A Boolean value indicating whether the text input field is focused.
     private let isFocused: Bool
     
@@ -47,12 +50,6 @@ struct TextInputFooter: View {
     /// The allowable range of numeric values in the text input field.
     private let rangeDomain: RangeDomain?
     
-    /// A Boolean value indicating whether the field has a numeric data type.
-    private var isNumeric: Bool
-    
-    /// A Boolean value indicating whether the field has a numeric data type with decimal precision.
-    private var isDecimal: Bool
-    
     /// Creates a footer shown at the bottom of each text input element in a form.
     /// - Parameters:
     ///   - text: The current text in the text input field.
@@ -60,16 +57,14 @@ struct TextInputFooter: View {
     ///   - element: The footer's parent element.
     ///   - input: A form input that provides length constraints for the text input.
     ///   - rangeDomain: The allowable range of numeric values in the text input field.
-    ///   - isNumeric: A Boolean value indicating whether the field has a numeric data type.
-    ///   - isDecimal: A Boolean value indicating whether the field has a numeric data type with decimal precision.
+    ///   - fieldType: The field type of the text input.
     init(
         text: String,
         isFocused: Bool,
         element: FieldFormElement,
         input: FormInput,
         rangeDomain: RangeDomain? = nil,
-        isNumeric: Bool = false,
-        isDecimal: Bool = false
+        fieldType: FieldType
     ) {
         self.text = text
         self.currentLength = text.count
@@ -78,19 +73,18 @@ struct TextInputFooter: View {
         self.description = element.description
         self.isRequired = element.isRequired
         self.rangeDomain = rangeDomain
-        self.isNumeric = isNumeric
-        self.isDecimal = isDecimal
+        self.fieldType = fieldType
         
         switch input {
         case let input as TextBoxFormInput:
             lengthRange = input.minLength...input.maxLength
             _hasPreviouslySatisfiedMinimum = State(
-                initialValue: !isNumeric && currentLength >= input.minLength
+                initialValue: !fieldType.isNumeric && currentLength >= input.minLength
             )
         case let input as TextAreaFormInput:
             lengthRange = input.minLength...input.maxLength
             _hasPreviouslySatisfiedMinimum = State(
-                initialValue: !isNumeric && currentLength >= input.minLength
+                initialValue: !fieldType.isNumeric && currentLength >= input.minLength
             )
         default:
             fatalError("\(Self.self) can only be used with \(TextAreaFormInput.self) or \(TextBoxFormInput.self)")
@@ -104,7 +98,7 @@ struct TextInputFooter: View {
                     .accessibilityIdentifier("\(element.label) Footer")
             }
             Spacer()
-            if isFocused, description.isEmpty || validationError != nil, !isNumeric {
+            if isFocused, description.isEmpty || validationError != nil, !fieldType.isNumeric {
                 Text(currentLength, format: .number)
                     .accessibilityIdentifier("\(element.label) Character Indicator")
             }
@@ -112,7 +106,7 @@ struct TextInputFooter: View {
         .font(.footnote)
         .foregroundColor(validationError == nil ? .secondary : .red)
         .onChange(of: text) { newText in
-            if !hasPreviouslySatisfiedMinimum && !isNumeric {
+            if !hasPreviouslySatisfiedMinimum && !fieldType.isNumeric {
                 if newText.count >= lengthRange.lowerBound {
                     hasPreviouslySatisfiedMinimum = true
                 }
@@ -163,7 +157,7 @@ extension TextInputFooter {
     
     /// The length validation text, dependent on the length validation scheme.
     var validationText: Text {
-        if isNumeric {
+        if fieldType.isNumeric {
             if validationError == .nonInteger {
                 return expectedInteger
             } else if  validationError == .nonDecimal {
@@ -187,10 +181,10 @@ extension TextInputFooter {
     /// - Parameter text: The text to use for validation.
     /// - Parameter focused: The focus state to use for validation.
     func validate(text: String, focused: Bool) {
-        if isNumeric {
-            if !isDecimal && !text.isInteger {
+        if fieldType.isNumeric {
+            if !fieldType.isFloatingPoint && !text.isInteger {
                 validationError = .nonInteger
-            } else if isDecimal && !text.isDecimal {
+            } else if fieldType.isFloatingPoint && !text.isDecimal {
                 validationError = .nonDecimal
             } else if !(rangeDomain?.contains(text) ?? false) {
                 validationError = .outOfRange

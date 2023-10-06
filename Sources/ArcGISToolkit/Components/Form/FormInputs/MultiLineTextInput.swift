@@ -89,7 +89,8 @@ struct MultiLineTextInput: View {
             text: isPlaceholder ? "" : text,
             isFocused: isFocused,
             element: element,
-            input: input
+            input: input,
+            fieldType: fieldType
         )
         .padding([.bottom], elementPadding)
         .onAppear {
