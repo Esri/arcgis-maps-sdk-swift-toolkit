@@ -211,6 +211,8 @@ public struct WorldScaleSceneView: View {
             pitch: 90,
             roll: 0
         )
+        
+        initialTransformation = .identity
     }
     
     func handleTrackingStatusChange(status: ARGeoTrackingStatus) {
