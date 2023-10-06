@@ -94,7 +94,6 @@ public struct WorldScaleSceneView: View {
     @MainActor
     @ViewBuilder
     var arView: some View {
-        //        GeometryReader { proxy in
         ZStack {
             ARSwiftUIView(proxy: arViewProxy)
                 .onDidUpdateFrame { _, frame in
