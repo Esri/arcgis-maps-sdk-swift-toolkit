@@ -94,7 +94,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
 ***REMOVED***var arView: some View {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeometryReader { proxy in
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
