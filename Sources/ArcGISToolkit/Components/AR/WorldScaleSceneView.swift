@@ -58,10 +58,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let initial = Point(latitude: 44.541829415061166, longitude: -117.5794293050851)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController()
 ***REMOVED******REMOVED***cameraController.translationFactor = 1
 ***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
@@ -102,15 +98,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDidUpdateFrame { _, frame in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let transform = frame.camera.transform
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let quaternion = simd_quatf(transform)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let heading = Double(quaternion.vector.x) * 180 / Double.pi
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(heading)"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let sceneViewProxy, let interfaceOrientation, let initialTransformation else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***   ***REMOVED*** guard let geoAnchor = frame.anchors.first(where: { $0.identifier == self.geoAnchor?.identifier ***REMOVED***) else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.updateCamera(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***frame: frame,
@@ -131,68 +119,29 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if anchor.identifier == geoAnchor?.identifier {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText += "adding box"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let box = SCNSphere(radius: 1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let material = SCNMaterial()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***material.isDoubleSided = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***material.diffuse.contents = UIColor.red.withAlphaComponent(0.85)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***box.materials = [material]
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let boxNode = SCNNode()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***boxNode.geometry = box
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***boxNode.worldPosition = node.worldPosition
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***node.addChildNode(boxNode)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { renderer, node, anchor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if anchor.identifier == geoAnchor?.identifier, initialTransformation == nil, anchor.transform != .init(diagonal: .one) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(anchor.transform)\n\(node.worldPosition)"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let transform = node.simdTransform
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let quaternion = simd_quatf(transform)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let s = "\(quaternion.vector.x), \(quaternion.vector.y), \(quaternion.vector.z), \(quaternion.vector.y), \(transform.columns.3.x), \(transform.columns.3.y), \(transform.columns.3.z)"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = s
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let transformationMatrix = TransformationMatrix.normalized(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***quaternionX: Double(quaternion.vector.x),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***quaternionY: Double(quaternion.vector.y),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***quaternionZ: Double(quaternion.vector.z),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***quaternionW: Double(quaternion.vector.w),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***translationX: Double(transform.columns.3.x),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***translationY: Double(transform.columns.3.y),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***translationZ: Double(transform.columns.3.z)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation = transformationMatrix
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(transformationMatrix)"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let transform = anchor.transform
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation = .normalized(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***quaternionX: 0,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***quaternionY: 0,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***quaternionZ: 0,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***quaternionW: 1,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***translationX: Double(transform.columns.3.x),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***translationY: Double(transform.columns.3.y),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***translationZ: Double(transform.columns.3.z)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let session = arViewProxy.session else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Perform ARKit raycast on tap location
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let query = arViewProxy.raycastQuery(from: screenPoint, allowing: .estimatedPlane, alignment: .any) else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let session = arViewProxy.session else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Perform ARKit raycast on tap location
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let query = arViewProxy.raycastQuery(from: screenPoint, allowing: .estimatedPlane, alignment: .any) else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let result = session.raycast(query).first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addGeoAnchor(at: result.worldTransform.translation)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "No raycast result.\nTry pointing at a different area\nor move closer to a surface."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let result = session.raycast(query).first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addGeoAnchor(at: result.worldTransform.translation)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "No raycast result.\nTry pointing at a different area\nor move closer to a surface."
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if initialTransformation != nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
@@ -258,7 +207,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***latitude: location.latitude,
 ***REMOVED******REMOVED******REMOVED***longitude: location.longitude,
 ***REMOVED******REMOVED******REMOVED***altitude: (altitude ?? 0) + 3,
-***REMOVED******REMOVED******REMOVED***heading: 0,
+***REMOVED******REMOVED******REMOVED***heading: currentHeading ?? 0,
 ***REMOVED******REMOVED******REMOVED***pitch: 90,
 ***REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED***)
@@ -268,72 +217,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***let state = status.state
 ***REMOVED******REMOVED***if let trackingStateText = statusText(for: state) {
 ***REMOVED******REMOVED******REMOVED***statusText = trackingStateText
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let session = arViewProxy.session, state == .localized else { return ***REMOVED***
-***REMOVED******REMOVED***guard let heading = currentHeading else { return ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard geoAnchor == nil else { return ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let query = session.currentFrame?.raycastQuery(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***from: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***allowing: .estimatedPlane,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .any
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "cannot create query"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let result = session.raycast(query).first else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "raycast failed"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***statusText = "Getting geo location..."
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let point = result.worldTransform.translation
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***var point = simd_float3()
-***REMOVED******REMOVED******REMOVED***point.x = 0
-***REMOVED******REMOVED******REMOVED***point.y = 0
-***REMOVED******REMOVED******REMOVED***point.z = 2
-***REMOVED******REMOVED******REMOVED***let (location, altitude) = try await session.geoLocation(forPoint: point)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
-***REMOVED******REMOVED******REMOVED******REMOVED***latitude: location.latitude,
-***REMOVED******REMOVED******REMOVED******REMOVED***longitude: location.longitude,
-***REMOVED******REMOVED******REMOVED******REMOVED***altitude: altitude + 10,
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: heading,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let camera = session.currentFrame?.camera else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let point = camera.transform.translation
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let (location, altitude) = try await session.geoLocation(forPoint: point)
-***REMOVED******REMOVED******REMOVED******REMOVED***let heading = (camera.eulerAngles.z * 180) / .pi
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***latitude: location.latitude,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***longitude: location.longitude,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***altitude: altitude + 3,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: Double(heading),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***initialTransformation = .identity
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***statusText = "\(location.latitude), \(location.longitude)\n+/-\(status.accuracy.rawValue)m"
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let geoAnchor {
-***REMOVED******REMOVED******REMOVED******REMOVED***session.remove(anchor: geoAnchor)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let anchor = ARGeoAnchor(coordinate: location)
-***REMOVED******REMOVED******REMOVED***session.add(anchor: anchor)
-***REMOVED******REMOVED******REMOVED***geoAnchor = anchor
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
