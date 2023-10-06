@@ -174,9 +174,24 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***try? await locationDatasSource.start()
 ***REMOVED******REMOVED******REMOVED***for await heading in locationDatasSource.headings {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.currentHeading = heading
-***REMOVED******REMOVED******REMOVED******REMOVED***self.statusText = "heading: \(heading)"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.statusText = "heading: \(heading)"
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint in
+***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let currentHeading else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***latitude: 43.541829415061166,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***longitude: -116.5794293050851,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***altitude: 40,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: currentHeading + 90,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation = .identity
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func addGeoAnchor(at worldPosition: SIMD3<Float>) {
@@ -192,6 +207,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED***func addGeoAnchor(at location: CLLocationCoordinate2D, altitude: CLLocationDistance? = nil) {
 ***REMOVED******REMOVED***guard let session = arViewProxy.session else { return ***REMOVED***
+***REMOVED******REMOVED***guard let currentHeading else { return ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let geoAnchor: ARGeoAnchor
 ***REMOVED******REMOVED***if let altitude = altitude {
 ***REMOVED******REMOVED******REMOVED***geoAnchor = ARGeoAnchor(coordinate: location, altitude: altitude)
@@ -205,8 +222,9 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***cameraController.originCamera = Camera(
 ***REMOVED******REMOVED******REMOVED***latitude: location.latitude,
 ***REMOVED******REMOVED******REMOVED***longitude: location.longitude,
-***REMOVED******REMOVED******REMOVED***altitude: (altitude ?? 0) + 3,
-***REMOVED******REMOVED******REMOVED***heading: currentHeading ?? 0,
+***REMOVED******REMOVED******REMOVED******REMOVED***altitude: (altitude ?? 0) + 10,
+***REMOVED******REMOVED******REMOVED***altitude: 5,
+***REMOVED******REMOVED******REMOVED***heading: currentHeading + 90,
 ***REMOVED******REMOVED******REMOVED***pitch: 90,
 ***REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED***)
