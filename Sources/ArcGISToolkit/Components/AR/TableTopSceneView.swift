@@ -117,11 +117,16 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.pause()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session.pause()
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***ARCoachinOverlay(goal: .horizontalPlane)
+***REMOVED******REMOVED******REMOVED******REMOVED***.sessionProvider(arViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED***.active(helpText != .planeFound && initialTransformation == nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(proxy)
@@ -285,10 +290,10 @@ private extension ARSwiftUIViewProxy {
 ***REMOVED******REMOVED******REMOVED***alignment: .any
 ***REMOVED******REMOVED***) else { return nil ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let results = session?.raycast(query)
+***REMOVED******REMOVED***let results = session.raycast(query)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Get the worldTransform from the first result; if there's no worldTransform, return nil.
-***REMOVED******REMOVED***guard let worldTransform = results?.first?.worldTransform else { return nil ***REMOVED***
+***REMOVED******REMOVED***guard let worldTransform = results.first?.worldTransform else { return nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create our hit test matrix based on the worldTransform location.
 ***REMOVED******REMOVED******REMOVED*** Right now we ignore the orientation of the plane that was hit to find the point

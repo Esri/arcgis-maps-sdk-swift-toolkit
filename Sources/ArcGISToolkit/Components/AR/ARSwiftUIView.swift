@@ -122,14 +122,14 @@ extension ARSwiftUIView {
 ***REMOVED***
 
 ***REMOVED***/ A proxy for the ARSwiftUIView.
-class ARSwiftUIViewProxy {
+class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
 ***REMOVED******REMOVED***/ The underlying AR view.
 ***REMOVED******REMOVED***/ This is set by the ARSwiftUIView when it is available.
-***REMOVED***fileprivate var arView: ARViewType?
+***REMOVED***fileprivate var arView: ARViewType!
 ***REMOVED***
 ***REMOVED******REMOVED***/ The AR session.
-***REMOVED***var session: ARSession? {
-***REMOVED******REMOVED***arView?.session
+***REMOVED***@objc dynamic var session: ARSession {
+***REMOVED******REMOVED***arView.session
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a raycast query that originates from a point on the view, aligned with the center of the camera's field of view.
@@ -143,10 +143,47 @@ class ARSwiftUIViewProxy {
 ***REMOVED******REMOVED***allowing target: ARRaycastQuery.Target,
 ***REMOVED******REMOVED***alignment: ARRaycastQuery.TargetAlignment
 ***REMOVED***) -> ARRaycastQuery? {
-***REMOVED******REMOVED***return arView?.raycastQuery(
+***REMOVED******REMOVED***return arView.raycastQuery(
 ***REMOVED******REMOVED******REMOVED***from: point,
 ***REMOVED******REMOVED******REMOVED***allowing: target,
 ***REMOVED******REMOVED******REMOVED***alignment: alignment
 ***REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
+
+struct ARCoachinOverlay: UIViewRepresentable {
+***REMOVED***var sessionProvider: ARSessionProviding?
+***REMOVED***var goal: ARCoachingOverlayView.Goal
+***REMOVED***var active: Bool = false
+
+***REMOVED***func active(_ active: Bool) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.active = active
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED***func sessionProvider(_ sessionProvider: ARSessionProviding) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.sessionProvider = sessionProvider
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeUIView(context: Context) -> ARCoachingOverlayView {
+***REMOVED******REMOVED***let view = ARCoachingOverlayView()
+***REMOVED******REMOVED***view.delegate = context.coordinator
+***REMOVED******REMOVED***view.activatesAutomatically = false
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED***func updateUIView(_ uiView: ARCoachingOverlayView, context: Context) {
+***REMOVED******REMOVED***uiView.sessionProvider = sessionProvider
+***REMOVED******REMOVED***uiView.goal = goal
+***REMOVED******REMOVED***uiView.setActive(active, animated: true)
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeCoordinator() -> Coordinator {
+***REMOVED******REMOVED***Coordinator()
+***REMOVED***
+***REMOVED***
+***REMOVED***class Coordinator: NSObject, ARCoachingOverlayViewDelegate {***REMOVED***
 ***REMOVED***
