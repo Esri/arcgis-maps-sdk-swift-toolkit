@@ -39,8 +39,6 @@ public struct TableTopSceneView: View {
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
 ***REMOVED******REMOVED***/ A Boolean value indicating that the scene's initial transformation has been set.
 ***REMOVED***private var initialTransformationIsSet: Bool { initialTransformation != nil ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value that indicates whether to hide the help text.
-***REMOVED***private var helpTextIsHidden: Bool = false
 ***REMOVED******REMOVED***/ The anchor point for the scene view.
 ***REMOVED***private let anchorPoint: Point
 ***REMOVED******REMOVED***/ The translation factor for the scene's camera controller.
@@ -131,6 +129,14 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sessionProvider(arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.active(coachingOverlayIsActive)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay (alignment: .top) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !helpText.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(helpText)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
@@ -146,14 +152,6 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.sceneViewProxy = proxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(initialTransformationIsSet ? 1 : 0)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.overlay (alignment: .top) {
-***REMOVED******REMOVED******REMOVED***if !helpText.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(helpText)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: anchorPoint) { anchorPoint in
