@@ -84,7 +84,7 @@ struct MultiLineTextInput: View {
                 model.focusedFieldName = element.fieldName
             }
         }
-        .formTextInputStyle()
+        .formInputStyle()
         TextInputFooter(
             currentLength: isPlaceholder ? .zero : text.count,
             isFocused: isFocused,
