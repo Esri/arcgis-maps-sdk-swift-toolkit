@@ -15,18 +15,20 @@
 
 ***REMOVED***/ SwiftUI `TextEditor` and `TextField` views have different styling. `TextField`s have
 ***REMOVED***/ `textFieldStyle` and `TextEditor`s do not. This modifier allows for common styling.
-struct FormTextInputStyle: ViewModifier {
+struct FormInputStyle: ViewModifier {
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.padding(4)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
+***REMOVED******REMOVED******REMOVED***.padding([.vertical], 4)
+***REMOVED******REMOVED******REMOVED***.padding([.horizontal], 6)
 ***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .tertiarySystemFill))
 ***REMOVED******REMOVED******REMOVED***.cornerRadius(10)
 ***REMOVED***
 ***REMOVED***
 
 extension View {
-***REMOVED******REMOVED***/ Adds a common padding and background around form field text elements.
+***REMOVED******REMOVED***/ Adds a common padding and background around form field inputs.
 ***REMOVED***func formTextInputStyle() -> some View {
-***REMOVED******REMOVED***modifier(FormTextInputStyle())
+***REMOVED******REMOVED***modifier(FormInputStyle())
 ***REMOVED***
 ***REMOVED***
