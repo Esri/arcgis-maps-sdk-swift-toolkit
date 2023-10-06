@@ -12,14 +12,20 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import Combine
 ***REMOVED***
 
 ***REMOVED***/ - Since: 200.2
 public class FormInputModel: ObservableObject {
+***REMOVED******REMOVED***/ A Boolean value indicating whether a value in the input is required.
 ***REMOVED***@Published var isRequired: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether a value in the input is editable.
 ***REMOVED***@Published var isEditable: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ The value of the input.
 ***REMOVED***@Published var value: String
-
+***REMOVED***
 ***REMOVED***private var element: FieldFormElement
 ***REMOVED***
 ***REMOVED***private var tasks = [Task<Void, Never>]()
@@ -28,14 +34,14 @@ public class FormInputModel: ObservableObject {
 ***REMOVED******REMOVED***clearTasks()
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Initializes a form view model.
+***REMOVED******REMOVED***/ Initializes a form input model.
 ***REMOVED***public init(fieldFormElement: FieldFormElement) {
 ***REMOVED******REMOVED***element = fieldFormElement
 ***REMOVED******REMOVED***isRequired = element.isRequired
 ***REMOVED******REMOVED***isEditable = element.isEditable
 ***REMOVED******REMOVED***value = element.value
-
-***REMOVED******REMOVED******REMOVED*** Kick off tasks to monitor autoPan, locations, and satellites.
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Kick off tasks to monitor required, editable and value.
 ***REMOVED******REMOVED***tasks.append(
 ***REMOVED******REMOVED******REMOVED***contentsOf: [
 ***REMOVED******REMOVED******REMOVED******REMOVED***observeIsRequiredTask,
@@ -53,11 +59,10 @@ public class FormInputModel: ObservableObject {
 ***REMOVED******REMOVED***tasks.removeAll()
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A detached task observing location display autoPan changes.
+***REMOVED******REMOVED***/ A detached task observing changes in the required state.
 ***REMOVED***private var observeIsRequiredTask: Task<Void, Never> {
 ***REMOVED******REMOVED***Task.detached { [unowned self] in
 ***REMOVED******REMOVED******REMOVED***for await isRequired in element.$isRequired {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("isRequired changed: \(isRequired) for \(element.label)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isRequired = isRequired
 ***REMOVED******REMOVED******REMOVED***
@@ -65,11 +70,10 @@ public class FormInputModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A detached task observing location display autoPan changes.
+***REMOVED******REMOVED***/ A detached task observing changes in the editable state.
 ***REMOVED***private var observeIsEditableTask: Task<Void, Never> {
 ***REMOVED******REMOVED***Task.detached { [unowned self] in
 ***REMOVED******REMOVED******REMOVED***for await isEditable in element.$isEditable {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("isEditable changed: \(isEditable) (oldvalue: \(element.isEditable)) for \(element.label)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isEditable = isEditable
 ***REMOVED******REMOVED******REMOVED***
