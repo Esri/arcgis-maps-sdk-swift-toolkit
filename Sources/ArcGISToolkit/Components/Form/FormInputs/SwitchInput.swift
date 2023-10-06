@@ -70,7 +70,7 @@ struct SwitchInput: View {
                 Toggle(switchState ? input.onValue.name : input.offValue.name, isOn: $switchState)
                     .toggleStyle(.switch)
                     .padding([.horizontal], 5)
-                    .formTextInputStyle()
+                    .formInputStyle()
                     .accessibilityIdentifier("\(element.label) Switch")
                 InputFooter(element: element, requiredValueMissing: requiredValueMissing)
             }

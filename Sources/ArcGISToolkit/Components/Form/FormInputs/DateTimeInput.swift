@@ -113,7 +113,7 @@ struct DateTimeInput: View {
             }
         }
         .padding([.vertical], 1.5)
-        .formTextInputStyle()
+        .formInputStyle()
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {
