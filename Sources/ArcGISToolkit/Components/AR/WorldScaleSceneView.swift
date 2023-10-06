@@ -58,10 +58,6 @@ public struct WorldScaleSceneView: View {
     ) {
         self.sceneViewBuilder = sceneView
         
-        //        let initial = Point(latitude: 44.541829415061166, longitude: -117.5794293050851)
-        //        let initialCamera = Camera(location: initial, heading: 0, pitch: 90, roll: 0)
-        //        let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
-        
         let cameraController = TransformationMatrixCameraController()
         cameraController.translationFactor = 1
         _cameraController = .init(initialValue: cameraController)
@@ -102,15 +98,7 @@ public struct WorldScaleSceneView: View {
         ZStack {
             ARSwiftUIView(proxy: arViewProxy)
                 .onDidUpdateFrame { _, frame in
-                    
-//                    let transform = frame.camera.transform
-//                    let quaternion = simd_quatf(transform)
-//                    let heading = Double(quaternion.vector.x) * 180 / Double.pi
-//                    statusText = "\(heading)"
-                    
-                    
                     guard let sceneViewProxy, let interfaceOrientation, let initialTransformation else { return }
-                   // guard let geoAnchor = frame.anchors.first(where: { $0.identifier == self.geoAnchor?.identifier }) else { return }
                     
                     sceneViewProxy.updateCamera(
                         frame: frame,
@@ -131,68 +119,29 @@ public struct WorldScaleSceneView: View {
                 }
                 .onAddNode { renderer, node, anchor in
                     if anchor.identifier == geoAnchor?.identifier {
-                        statusText += "adding box"
-                        
-                        //let box = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0)
                         let box = SCNSphere(radius: 1)
-                        
                         let material = SCNMaterial()
                         material.isDoubleSided = true
                         material.diffuse.contents = UIColor.red.withAlphaComponent(0.85)
                         box.materials = [material]
-                        
                         let boxNode = SCNNode()
                         boxNode.geometry = box
                         boxNode.worldPosition = node.worldPosition
                         node.addChildNode(boxNode)
                     }
                 }
-//                .onUpdateNode { renderer, node, anchor in
-//                    if anchor.identifier == geoAnchor?.identifier, initialTransformation == nil, anchor.transform != .init(diagonal: .one) {
-//                        statusText = "\(anchor.transform)\n\(node.worldPosition)"
-//                        
-////                        let transform = node.simdTransform
-////                        let quaternion = simd_quatf(transform)
-////                        
-////                        let s = "\(quaternion.vector.x), \(quaternion.vector.y), \(quaternion.vector.z), \(quaternion.vector.y), \(transform.columns.3.x), \(transform.columns.3.y), \(transform.columns.3.z)"
-////                        statusText = s
-////                        
-////                        let transformationMatrix = TransformationMatrix.normalized(
-////                            quaternionX: Double(quaternion.vector.x),
-////                            quaternionY: Double(quaternion.vector.y),
-////                            quaternionZ: Double(quaternion.vector.z),
-////                            quaternionW: Double(quaternion.vector.w),
-////                            translationX: Double(transform.columns.3.x),
-////                            translationY: Double(transform.columns.3.y),
-////                            translationZ: Double(transform.columns.3.z)
-////                        )
-////                        initialTransformation = transformationMatrix
-////                        statusText = "\(transformationMatrix)"
-//                        
-//                        let transform = anchor.transform
-//                        initialTransformation = .normalized(
-//                            quaternionX: 0,
-//                            quaternionY: 0,
-//                            quaternionZ: 0,
-//                            quaternionW: 1,
-//                            translationX: Double(transform.columns.3.x),
-//                            translationY: Double(transform.columns.3.y),
-//                            translationZ: Double(transform.columns.3.z)
-//                        )
-//                    }
-//                }
-//                .onSingleTapGesture { screenPoint in
-//                    guard let session = arViewProxy.session else { return }
-//                    // Perform ARKit raycast on tap location
-//                    guard let query = arViewProxy.raycastQuery(from: screenPoint, allowing: .estimatedPlane, alignment: .any) else {
-//                        return
-//                    }
-//                    if let result = session.raycast(query).first {
-//                        addGeoAnchor(at: result.worldTransform.translation)
-//                    } else {
-//                        statusText = "No raycast result.\nTry pointing at a different area\nor move closer to a surface."
-//                    }
-//                }
+                .onSingleTapGesture { screenPoint in
+                    guard let session = arViewProxy.session else { return }
+                    // Perform ARKit raycast on tap location
+                    guard let query = arViewProxy.raycastQuery(from: screenPoint, allowing: .estimatedPlane, alignment: .any) else {
+                        return
+                    }
+                    if let result = session.raycast(query).first {
+                        addGeoAnchor(at: result.worldTransform.translation)
+                    } else {
+                        statusText = "No raycast result.\nTry pointing at a different area\nor move closer to a surface."
+                    }
+                }
             
             if initialTransformation != nil {
                 SceneViewReader { proxy in
@@ -258,7 +207,7 @@ public struct WorldScaleSceneView: View {
             latitude: location.latitude,
             longitude: location.longitude,
             altitude: (altitude ?? 0) + 3,
-            heading: 0,
+            heading: currentHeading ?? 0,
             pitch: 90,
             roll: 0
         )
@@ -268,72 +217,6 @@ public struct WorldScaleSceneView: View {
         let state = status.state
         if let trackingStateText = statusText(for: state) {
             statusText = trackingStateText
-        }
-        
-        guard let session = arViewProxy.session, state == .localized else { return }
-        guard let heading = currentHeading else { return }
-        
-        guard geoAnchor == nil else { return }
-        
-        //                guard let query = session.currentFrame?.raycastQuery(
-        //                    from: CGPoint(x: proxy.size.width / 2, y: proxy.size.height / 2),
-        //                    allowing: .estimatedPlane,
-        //                    alignment: .any
-        //                ) else {
-        //                    statusText = "cannot create query"
-        //                    return
-        //                }
-        //                guard let result = session.raycast(query).first else {
-        //                    statusText = "raycast failed"
-        //                    return
-        //                }
-        
-        Task {
-            //statusText = "Getting geo location..."
-            
-            //                    let point = result.worldTransform.translation
-            
-            var point = simd_float3()
-            point.x = 0
-            point.y = 0
-            point.z = 2
-            let (location, altitude) = try await session.geoLocation(forPoint: point)
-            
-            cameraController.originCamera = Camera(
-                latitude: location.latitude,
-                longitude: location.longitude,
-                altitude: altitude + 10,
-                heading: heading,
-                pitch: 90,
-                roll: 0
-            )
-            
-//            guard let camera = session.currentFrame?.camera else { return }
-//            let point = camera.transform.translation
-//            
-//            let (location, altitude) = try await session.geoLocation(forPoint: point)
-//            let heading = (camera.eulerAngles.z * 180) / .pi
-//            
-//            cameraController.originCamera = Camera(
-//                latitude: location.latitude,
-//                longitude: location.longitude,
-//                altitude: altitude + 3,
-//                heading: Double(heading),
-//                pitch: 90,
-//                roll: 0
-//            )
-            
-            initialTransformation = .identity
-            
-            //statusText = "\(location.latitude), \(location.longitude)\n+/-\(status.accuracy.rawValue)m"
-            
-            if let geoAnchor {
-                session.remove(anchor: geoAnchor)
-            }
-            
-            let anchor = ARGeoAnchor(coordinate: location)
-            session.add(anchor: anchor)
-            geoAnchor = anchor
         }
     }
     
