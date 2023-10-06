@@ -114,7 +114,9 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***using: screenPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation = transformation
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***helpText = ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***helpText = ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
@@ -129,15 +131,6 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sessionProvider(arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.active(coachingOverlayIsActive)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .top) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !helpText.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(helpText)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.animation(.easeInOut, value: 1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
@@ -153,6 +146,14 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.sceneViewProxy = proxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(initialTransformationIsSet ? 1 : 0)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.overlay (alignment: .top) {
+***REMOVED******REMOVED******REMOVED***if !helpText.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(helpText)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: anchorPoint) { anchorPoint in
@@ -198,7 +199,9 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***node.addChildNode(planeNode)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set help text when plane is visualized.
-***REMOVED******REMOVED***helpText = .planeFound
+***REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED***helpText = .planeFound
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Visualizes a node updated in the scene as an AR Plane.
@@ -220,7 +223,9 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***planeGeometry.update(from: planeAnchor.geometry)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set help text when plane visualization is updated.
-***REMOVED******REMOVED***helpText = .planeFound
+***REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED***helpText = .planeFound
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the visibility of the coaching overlay view for the AR experince.
