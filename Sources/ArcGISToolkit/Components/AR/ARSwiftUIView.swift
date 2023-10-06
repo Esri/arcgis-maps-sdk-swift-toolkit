@@ -134,17 +134,27 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A SwiftUI version of an ARCoachingOverlayView view.
 struct ARCoachingOverlay: UIViewRepresentable {
+***REMOVED******REMOVED***/ The data source for an AR sesison.
 ***REMOVED***var sessionProvider: ARSessionProviding?
+***REMOVED******REMOVED***/ The goal for the coaching overlay.
 ***REMOVED***var goal: ARCoachingOverlayView.Goal
+***REMOVED******REMOVED***/ A Boolean value that indicates if coaching is in progress.
 ***REMOVED***var active: Bool = false
-
+***REMOVED***
+***REMOVED******REMOVED***/ Controls whether the coaching is in progress.
+***REMOVED******REMOVED***/ - Parameter active: A Boolean value indicating if coaching is in progress.
+***REMOVED******REMOVED***/ - Returns: The `ARCoachingOverlay`.
 ***REMOVED***func active(_ active: Bool) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.active = active
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Sets the AR session data source for the coaching overlay.
+***REMOVED******REMOVED***/ - Parameter sessionProvider: The AR session data source.
+***REMOVED******REMOVED***/ - Returns: The `ARCoachingOverlay`.
 ***REMOVED***func sessionProvider(_ sessionProvider: ARSessionProviding) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.sessionProvider = sessionProvider
