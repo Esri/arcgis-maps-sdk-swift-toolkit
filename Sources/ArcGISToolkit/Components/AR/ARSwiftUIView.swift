@@ -20,8 +20,6 @@ typealias ARViewType = ARSCNView
 struct ARSwiftUIView {
     /// The closure to call when the session's frame updates.
     private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-    /// The closure to call when the camera tracking status changes.
-    private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
     /// The closure to call when a node corresponding to a new anchor has been added to the view.
     private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
     /// The closure to call when a node has been updated to match it's corresponding anchor.
@@ -43,15 +41,6 @@ struct ARSwiftUIView {
     ) -> Self {
         var view = self
         view.onDidUpdateFrameAction = action
-        return view
-    }
-    
-    /// Sets the closure to call when the camera tracking status changes.
-    func onCameraTrackingStateChange(
-        perform action: @escaping (ARSession, ARCamera) -> Void
-    ) -> Self {
-        var view = self
-        view.onCameraTrackingStateChangeAction = action
         return view
     }
     
@@ -86,7 +75,6 @@ extension ARSwiftUIView: UIViewRepresentable {
     
     func updateUIView(_ uiView: ARViewType, context: Context) {
         context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
-        context.coordinator.onCameraTrackingStateChangeAction = onCameraTrackingStateChangeAction
         context.coordinator.onAddNodeAction = onAddNodeAction
         context.coordinator.onUpdateNodeAction = onUpdateNodeAction
     }
@@ -99,16 +87,11 @@ extension ARSwiftUIView: UIViewRepresentable {
 extension ARSwiftUIView {
     class Coordinator: NSObject, ARSCNViewDelegate, ARSessionDelegate {
         var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-        var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
         var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
         var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
         
         func session(_ session: ARSession, didUpdate frame: ARFrame) {
             onDidUpdateFrameAction?(session, frame)
-        }
-        
-        func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-            onCameraTrackingStateChangeAction?(session, camera)
         }
         
         func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
@@ -151,7 +134,7 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
     }
 }
 
-struct ARCoachinOverlay: UIViewRepresentable {
+struct ARCoachingOverlay: UIViewRepresentable {
     var sessionProvider: ARSessionProviding?
     var goal: ARCoachingOverlayView.Goal
     var active: Bool = false
