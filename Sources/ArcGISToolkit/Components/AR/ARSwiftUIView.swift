@@ -122,14 +122,14 @@ extension ARSwiftUIView {
 }
 
 /// A proxy for the ARSwiftUIView.
-class ARSwiftUIViewProxy {
+class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
     /// The underlying AR view.
     /// This is set by the ARSwiftUIView when it is available.
-    fileprivate var arView: ARViewType?
+    fileprivate var arView: ARViewType!
     
     /// The AR session.
-    var session: ARSession? {
-        arView?.session
+    @objc dynamic var session: ARSession {
+        arView.session
     }
     
     /// Creates a raycast query that originates from a point on the view, aligned with the center of the camera's field of view.
@@ -143,10 +143,47 @@ class ARSwiftUIViewProxy {
         allowing target: ARRaycastQuery.Target,
         alignment: ARRaycastQuery.TargetAlignment
     ) -> ARRaycastQuery? {
-        return arView?.raycastQuery(
+        return arView.raycastQuery(
             from: point,
             allowing: target,
             alignment: alignment
         )
     }
+}
+
+struct ARCoachinOverlay: UIViewRepresentable {
+    var sessionProvider: ARSessionProviding?
+    var goal: ARCoachingOverlayView.Goal
+    var active: Bool = false
+
+    func active(_ active: Bool) -> Self {
+        var view = self
+        view.active = active
+        return view
+    }
+    
+    func sessionProvider(_ sessionProvider: ARSessionProviding) -> Self {
+        var view = self
+        view.sessionProvider = sessionProvider
+        return view
+    }
+    
+    func makeUIView(context: Context) -> ARCoachingOverlayView {
+        let view = ARCoachingOverlayView()
+        view.delegate = context.coordinator
+        view.activatesAutomatically = false
+        return view
+    }
+    
+    func updateUIView(_ uiView: ARCoachingOverlayView, context: Context) {
+        uiView.sessionProvider = sessionProvider
+        uiView.goal = goal
+        uiView.setActive(active, animated: true)
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+    
+    class Coordinator: NSObject, ARCoachingOverlayViewDelegate {}
 }

@@ -117,11 +117,16 @@ public struct TableTopSceneView: View {
                     }
                 }
                 .onAppear {
-                    arViewProxy.session?.run(configuration)
+                    arViewProxy.session.run(configuration)
                 }
                 .onDisappear {
-                    arViewProxy.session?.pause()
+                    arViewProxy.session.pause()
                 }
+            
+            ARCoachinOverlay(goal: .horizontalPlane)
+                .sessionProvider(arViewProxy)
+                .active(helpText != .planeFound && initialTransformation == nil)
+                .allowsHitTesting(false)
             
             SceneViewReader { proxy in
                 sceneViewBuilder(proxy)
@@ -285,10 +290,10 @@ private extension ARSwiftUIViewProxy {
             alignment: .any
         ) else { return nil }
         
-        let results = session?.raycast(query)
+        let results = session.raycast(query)
         
         // Get the worldTransform from the first result; if there's no worldTransform, return nil.
-        guard let worldTransform = results?.first?.worldTransform else { return nil }
+        guard let worldTransform = results.first?.worldTransform else { return nil }
         
         // Create our hit test matrix based on the worldTransform location.
         // Right now we ignore the orientation of the plane that was hit to find the point
