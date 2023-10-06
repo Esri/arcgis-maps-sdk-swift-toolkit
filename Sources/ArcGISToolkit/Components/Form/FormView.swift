@@ -21,12 +21,14 @@ public struct FormView: View {
     
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
-
+    
     /// The form's configuration.
     private let featureForm: FeatureForm?
     
+    /// A Boolean value indicating whether an evaluation is running.
     @State var isEvaluating = true
     
+    /// A list of the visible elements in the form.
     @State var visibleElements = [FormElement]()
     
     /// Initializes a form view.
