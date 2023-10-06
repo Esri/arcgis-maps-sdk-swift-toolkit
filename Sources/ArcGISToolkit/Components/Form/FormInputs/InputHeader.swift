@@ -29,7 +29,7 @@ struct InputHeader: View {
         self.label = label
         self.isRequired = isRequired
     }
-
+    
     var body: some View {
         Text(verbatim: "\(label + (isRequired ? " *" : ""))")
             .font(.subheadline)

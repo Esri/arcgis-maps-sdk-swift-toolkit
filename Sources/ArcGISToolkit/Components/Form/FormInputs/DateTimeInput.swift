@@ -51,7 +51,6 @@ struct DateTimeInput: View {
         self.featureForm = featureForm
         self.element = element
         self.input = input
-        print("date init")
         _inputModel = StateObject(
             wrappedValue: FormInputModel(fieldFormElement: element)
         )
