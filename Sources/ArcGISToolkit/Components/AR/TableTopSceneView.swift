@@ -29,6 +29,10 @@ public struct TableTopSceneView: View {
     @State private var interfaceOrientation: InterfaceOrientation?
     /// The help text to guide the user through an AR experience.
     @State private var helpText: String = ""
+    /// A Boolean value that indicates whether the coaching overlay view is active.
+    @State private var coachingOverlayIsActive: Bool = true
+    /// A Boolean value that indicates whether to hide the coaching overlay view.
+    private var coachingOverlayIsHidden: Bool = false
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The configuration for the AR session.
@@ -94,9 +98,6 @@ public struct TableTopSceneView: View {
                         orientation: interfaceOrientation
                     )
                 }
-                .onCameraTrackingStateChange { _, camera in
-                    updateHelpText(for: camera.trackingState)
-                }
                 .onAddNode { renderer, node, anchor in
                     addPlane(renderer: renderer, node: node, anchor: anchor)
                 }
@@ -123,10 +124,20 @@ public struct TableTopSceneView: View {
                     arViewProxy.session.pause()
                 }
             
-            ARCoachinOverlay(goal: .horizontalPlane)
+            ARCoachingOverlay(goal: .horizontalPlane)
                 .sessionProvider(arViewProxy)
-                .active(helpText != .planeFound && initialTransformation == nil)
+                .active(coachingOverlayIsActive)
                 .allowsHitTesting(false)
+                .overlay(alignment: .top) {
+                    if !helpText.isEmpty {
+                        Text(helpText)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(8)
+                            .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+                            .animation(.easeInOut, value: 1)
+                    }
+                }
+                .opacity(coachingOverlayIsHidden ? 0 : 1)
             
             SceneViewReader { proxy in
                 sceneViewBuilder(proxy)
@@ -141,14 +152,6 @@ public struct TableTopSceneView: View {
                         self.sceneViewProxy = proxy
                     }
                     .opacity(initialTransformationIsSet ? 1 : 0)
-            }
-        }
-        .overlay(alignment: .top) {
-            if !helpText.isEmpty && !helpTextIsHidden {
-                Text(helpText)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(8)
-                    .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
             }
         }
         .onChange(of: anchorPoint) { anchorPoint in
@@ -175,12 +178,15 @@ public struct TableTopSceneView: View {
               let planeGeometry = ARSCNPlaneGeometry(device: device)
         else { return }
         
+        // Disable coaching overlay when a plane node is found.
+        coachingOverlayIsActive = false
+        
         planeGeometry.update(from: planeAnchor.geometry)
         
         // Add SCNMaterial to plane geometry.
         let material = SCNMaterial()
         material.isDoubleSided = true
-        material.diffuse.contents = UIColor.white.withAlphaComponent(0.5)
+        material.diffuse.contents = UIColor.white.withAlphaComponent(0.65)
         planeGeometry.materials = [material]
         
         // Create a SCNNode from plane geometry.
@@ -216,43 +222,12 @@ public struct TableTopSceneView: View {
         helpText = .planeFound
     }
     
-    /// Updates the help text to guide the user through an AR experience using the AR session's camera tracking status.
-    /// - Parameter trackingState: The camera's tracking status.
-    private func updateHelpText(for trackingState: ARCamera.TrackingState) {
-        guard !initialTransformationIsSet else {
-            helpText = ""
-            return
-        }
-        
-        switch trackingState {
-        case .normal:
-            helpText = .moveDevice
-        case .notAvailable:
-            helpText = .locationUnavailable
-        case .limited(let reason):
-            switch reason {
-            case .excessiveMotion:
-                helpText = .excessiveMotion
-            case .initializing:
-                helpText = .moveDevice
-            case .insufficientFeatures:
-                helpText = .insufficentFeatures
-            case .relocalizing:
-                // This case will not occur since the AR session delegate
-                // does not implement relocalization support.
-                helpText = ""
-            default:
-                helpText = ""
-            }
-        }
-    }
-    
-    /// Sets the visibility of the help text.
+    /// Sets the visibility of the coaching overlay view for the AR experince.
     /// - Parameter hidden: A Boolean value that indicates whether to hide the
-    ///  help text.
-    public func helpTextHidden(_ hidden: Bool) -> Self {
+    ///  coaching overlay view.
+    public func coachingOverlayHidden(_ hidden: Bool) -> Self {
         var view = self
-        view.helpTextIsHidden = hidden
+        view.coachingOverlayIsHidden = hidden
         return view
     }
 }
@@ -363,52 +338,6 @@ private extension String {
             comment: """
                  An instruction to the user to tap on a horizontal surface to
                  place an ArcGIS Scene.
-                 """
-        )
-    }
-    
-    static var moveDevice: String {
-        String(
-            localized: "Keep moving your device",
-            bundle: .toolkitModule,
-            comment: """
-                 An instruction to the user to keep moving their device so that
-                 horizontal planes can be identified in the AR experience.
-                 """
-        )
-    }
-    
-    static var locationUnavailable: String {
-        String(
-            localized: "Location not available",
-            bundle: .toolkitModule,
-            comment: """
-                 A message to the user to notify them that the location of their
-                 device is unavailable in the AR experience.
-                 """
-        )
-    }
-    
-    static var excessiveMotion: String {
-        String(
-            localized: "Try moving your device more slowly",
-            bundle: .toolkitModule,
-            comment: """
-                 An instruction to the user to reduce excessive device motion by
-                 moving the device more slowly to improve the AR experience which
-                 requires limited device motion.
-                """
-        )
-    }
-    
-    static var insufficentFeatures: String {
-        String(
-            localized: "Try turning on more lights and moving around",
-            bundle: .toolkitModule,
-            comment: """
-                 An instruction to the user to turn on more lights or move towards a
-                 light source to improve the AR experience which requires sufficient
-                 lighting conditions.
                  """
         )
     }
