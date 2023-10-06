@@ -23,7 +23,7 @@ struct RadioButtonsInput: View {
     
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
-
+    
     /// The set of options in the input.
     @State private var codedValues = [CodedValue]()
     
@@ -46,8 +46,9 @@ struct RadioButtonsInput: View {
     /// The input configuration of the field.
     private let input: RadioButtonsFormInput
     
+    /// The model for the input.
     @StateObject var inputModel: FormInputModel
-
+    
     /// Creates a view for a date (and time if applicable) input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.

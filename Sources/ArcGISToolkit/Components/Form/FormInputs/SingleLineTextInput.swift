@@ -13,7 +13,6 @@
 
 import SwiftUI
 import ArcGIS
-import Combine
 
 /// A view for single line text input.
 struct SingleLineTextInput: View {
@@ -37,6 +36,7 @@ struct SingleLineTextInput: View {
     /// The input configuration of the view.
     private let input: TextBoxFormInput
     
+    /// The model for the input.
     @StateObject var inputModel: FormInputModel
     
     /// Creates a view for single line text input.
@@ -91,7 +91,7 @@ struct SingleLineTextInput: View {
             guard newValue != inputModel.value else {
                 return
             }
-
+            
             featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
             model.evaluateExpressions()
         }

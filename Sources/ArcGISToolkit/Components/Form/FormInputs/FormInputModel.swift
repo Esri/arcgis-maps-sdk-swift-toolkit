@@ -15,7 +15,9 @@ import ArcGIS
 import Combine
 import SwiftUI
 
-/// - Since: 200.2
+/// A model for an input in a form.
+///
+/// - Since: 200.3
 public class FormInputModel: ObservableObject {
     /// A Boolean value indicating whether a value in the input is required.
     @Published var isRequired: Bool
@@ -81,11 +83,10 @@ public class FormInputModel: ObservableObject {
         }
     }
     
-    /// A detached task observing location display autoPan changes.
+    /// A detached task observing changes in the value.
     private var observeValueTask: Task<Void, Never> {
         Task.detached { [unowned self] in
             for await value in element.$value {
-//                print("value changed: \(value) for \(element.label)")
                 await MainActor.run {
                     self.value = value
                 }

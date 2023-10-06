@@ -23,7 +23,7 @@ struct SwitchInput: View {
     
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
-
+    
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
     /// In this scenario a ``ComboBoxInput`` should be used instead.
@@ -47,8 +47,9 @@ struct SwitchInput: View {
     /// The input configuration of the field.
     private let input: SwitchFormInput
     
+    /// The model for the input.
     @StateObject var inputModel: FormInputModel
-
+    
     /// Creates a view for a switch input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
