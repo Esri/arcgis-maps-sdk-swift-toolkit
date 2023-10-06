@@ -114,7 +114,9 @@ public struct TableTopSceneView: View {
                         using: screenPoint
                     ) {
                         initialTransformation = transformation
-                        helpText = ""
+                        withAnimation {
+                            helpText = ""
+                        }
                     }
                 }
                 .onAppear {
@@ -129,15 +131,6 @@ public struct TableTopSceneView: View {
                     .sessionProvider(arViewProxy)
                     .active(coachingOverlayIsActive)
                     .allowsHitTesting(false)
-                    .overlay(alignment: .top) {
-                        if !helpText.isEmpty {
-                            Text(helpText)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding(8)
-                                .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
-                                .animation(.easeInOut, value: 1)
-                        }
-                    }
             }
             
             SceneViewReader { proxy in
@@ -153,6 +146,14 @@ public struct TableTopSceneView: View {
                         self.sceneViewProxy = proxy
                     }
                     .opacity(initialTransformationIsSet ? 1 : 0)
+            }
+        }
+        .overlay (alignment: .top) {
+            if !helpText.isEmpty {
+                Text(helpText)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(8)
+                    .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
             }
         }
         .onChange(of: anchorPoint) { anchorPoint in
@@ -198,7 +199,9 @@ public struct TableTopSceneView: View {
         node.addChildNode(planeNode)
         
         // Set help text when plane is visualized.
-        helpText = .planeFound
+        withAnimation {
+            helpText = .planeFound
+        }
     }
     
     /// Visualizes a node updated in the scene as an AR Plane.
@@ -220,7 +223,9 @@ public struct TableTopSceneView: View {
         planeGeometry.update(from: planeAnchor.geometry)
         
         // Set help text when plane visualization is updated.
-        helpText = .planeFound
+        withAnimation {
+            helpText = .planeFound
+        }
     }
     
     /// Sets the visibility of the coaching overlay view for the AR experince.
