@@ -70,7 +70,7 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Toggle(switchState ? input.onValue.name : input.offValue.name, isOn: $switchState)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.switch)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal], 5)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formTextInputStyle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch")
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
 ***REMOVED******REMOVED***
