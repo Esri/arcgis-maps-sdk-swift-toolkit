@@ -153,15 +153,3 @@ private extension SingleLineTextInput {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-private extension FieldType {
-***REMOVED******REMOVED***/ A Boolean value indicating whether the field has a numeric data type.
-***REMOVED***var isNumeric: Bool {
-***REMOVED******REMOVED***self == .float32 || self == .float64 || self == .int16 || self == .int32 || self == .int64
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the field has a floating point data type.
-***REMOVED***var isFloatingPoint: Bool {
-***REMOVED******REMOVED***self == .float32 || self == .float64
-***REMOVED***
-***REMOVED***
