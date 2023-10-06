@@ -174,9 +174,24 @@ public struct WorldScaleSceneView: View {
             try? await locationDatasSource.start()
             for await heading in locationDatasSource.headings {
                 self.currentHeading = heading
-                self.statusText = "heading: \(heading)"
+                //self.statusText = "heading: \(heading)"
             }
         }
+//        .onSingleTapGesture { screenPoint in
+//
+//            guard let currentHeading else { return }
+//            
+//            cameraController.originCamera = Camera(
+//                latitude: 43.541829415061166,
+//                longitude: -116.5794293050851,
+//                altitude: 40,
+//                heading: currentHeading + 90,
+//                pitch: 90,
+//                roll: 0
+//            )
+//            
+//            initialTransformation = .identity
+//        }
     }
     
     func addGeoAnchor(at worldPosition: SIMD3<Float>) {
@@ -192,6 +207,8 @@ public struct WorldScaleSceneView: View {
     
     func addGeoAnchor(at location: CLLocationCoordinate2D, altitude: CLLocationDistance? = nil) {
         guard let session = arViewProxy.session else { return }
+        guard let currentHeading else { return }
+        
         let geoAnchor: ARGeoAnchor
         if let altitude = altitude {
             geoAnchor = ARGeoAnchor(coordinate: location, altitude: altitude)
@@ -205,8 +222,9 @@ public struct WorldScaleSceneView: View {
         cameraController.originCamera = Camera(
             latitude: location.latitude,
             longitude: location.longitude,
-            altitude: (altitude ?? 0) + 3,
-            heading: currentHeading ?? 0,
+            //altitude: (altitude ?? 0) + 10,
+            altitude: 5,
+            heading: currentHeading + 90,
             pitch: 90,
             roll: 0
         )
