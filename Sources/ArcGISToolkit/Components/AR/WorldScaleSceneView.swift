@@ -211,6 +211,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***pitch: 90,
 ***REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***initialTransformation = .identity
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func handleTrackingStatusChange(status: ARGeoTrackingStatus) {
