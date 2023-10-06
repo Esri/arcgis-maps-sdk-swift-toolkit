@@ -112,7 +112,6 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.padding([.vertical], 1.5)
 ***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
