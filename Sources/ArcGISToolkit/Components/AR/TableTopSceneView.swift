@@ -124,20 +124,21 @@ public struct TableTopSceneView: View {
                     arViewProxy.session.pause()
                 }
             
-            ARCoachingOverlay(goal: .horizontalPlane)
-                .sessionProvider(arViewProxy)
-                .active(coachingOverlayIsActive)
-                .allowsHitTesting(false)
-                .overlay(alignment: .top) {
-                    if !helpText.isEmpty {
-                        Text(helpText)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(8)
-                            .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
-                            .animation(.easeInOut, value: 1)
+            if !coachingOverlayIsHidden {
+                ARCoachingOverlay(goal: .horizontalPlane)
+                    .sessionProvider(arViewProxy)
+                    .active(coachingOverlayIsActive)
+                    .allowsHitTesting(false)
+                    .overlay(alignment: .top) {
+                        if !helpText.isEmpty {
+                            Text(helpText)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(8)
+                                .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+                                .animation(.easeInOut, value: 1)
+                        }
                     }
-                }
-                .opacity(coachingOverlayIsHidden ? 0 : 1)
+            }
             
             SceneViewReader { proxy in
                 sceneViewBuilder(proxy)
