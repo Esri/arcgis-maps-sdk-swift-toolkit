@@ -20,8 +20,6 @@ typealias ARViewType = ARSCNView
 struct ARSwiftUIView {
 ***REMOVED******REMOVED***/ The closure to call when the session's frame updates.
 ***REMOVED***private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-***REMOVED******REMOVED***/ The closure to call when the camera tracking status changes.
-***REMOVED***private(set) var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
 ***REMOVED******REMOVED***/ The closure to call when a node corresponding to a new anchor has been added to the view.
 ***REMOVED***private(set) var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED******REMOVED***/ The closure to call when a node has been updated to match it's corresponding anchor.
@@ -43,15 +41,6 @@ struct ARSwiftUIView {
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.onDidUpdateFrameAction = action
-***REMOVED******REMOVED***return view
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Sets the closure to call when the camera tracking status changes.
-***REMOVED***func onCameraTrackingStateChange(
-***REMOVED******REMOVED***perform action: @escaping (ARSession, ARCamera) -> Void
-***REMOVED***) -> Self {
-***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.onCameraTrackingStateChangeAction = action
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
@@ -86,7 +75,6 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***
 ***REMOVED***func updateUIView(_ uiView: ARViewType, context: Context) {
 ***REMOVED******REMOVED***context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
-***REMOVED******REMOVED***context.coordinator.onCameraTrackingStateChangeAction = onCameraTrackingStateChangeAction
 ***REMOVED******REMOVED***context.coordinator.onAddNodeAction = onAddNodeAction
 ***REMOVED******REMOVED***context.coordinator.onUpdateNodeAction = onUpdateNodeAction
 ***REMOVED***
@@ -99,16 +87,11 @@ extension ARSwiftUIView: UIViewRepresentable {
 extension ARSwiftUIView {
 ***REMOVED***class Coordinator: NSObject, ARSCNViewDelegate, ARSessionDelegate {
 ***REMOVED******REMOVED***var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
-***REMOVED******REMOVED***var onCameraTrackingStateChangeAction: ((ARSession, ARCamera) -> Void)?
 ***REMOVED******REMOVED***var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED******REMOVED***var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
 ***REMOVED******REMOVED******REMOVED***onDidUpdateFrameAction?(session, frame)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-***REMOVED******REMOVED******REMOVED***onCameraTrackingStateChangeAction?(session, camera)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
@@ -151,7 +134,7 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
 ***REMOVED***
 ***REMOVED***
 
-struct ARCoachinOverlay: UIViewRepresentable {
+struct ARCoachingOverlay: UIViewRepresentable {
 ***REMOVED***var sessionProvider: ARSessionProviding?
 ***REMOVED***var goal: ARCoachingOverlayView.Goal
 ***REMOVED***var active: Bool = false
