@@ -23,7 +23,7 @@ struct ComboBoxInput: View {
     
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
-
+    
     /// The set of options in the combo box.
     @State private var codedValues = [CodedValue]()
     
@@ -51,8 +51,9 @@ struct ComboBoxInput: View {
     /// The display state value for `nil` value options.
     private let noValueOption: FormInputNoValueOption
     
+    /// The model for the input.
     @StateObject var inputModel: FormInputModel
-
+    
     /// A subset of coded values with names containing `filterPhrase` or all of the coded values
     /// if `filterPhrase` is empty.
     var matchingValues: [CodedValue] {
@@ -116,7 +117,6 @@ struct ComboBoxInput: View {
                 }
             }
             .formTextInputStyle()
-            .disabled(!inputModel.isEditable)
             // Pass `matchingValues` via a capture list so that the sheet receives up-to-date values.
             .sheet(isPresented: $isPresented) { [matchingValues] in
                 makePicker(for: matchingValues)

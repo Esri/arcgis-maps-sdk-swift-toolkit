@@ -17,7 +17,7 @@ import ArcGIS
 /// A view for date/time input.
 struct DateTimeInput: View {
     @Environment(\.formElementPadding) var elementPadding
-
+    
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
@@ -39,7 +39,7 @@ struct DateTimeInput: View {
     /// The input configuration of the view.
     private let input: DateTimePickerFormInput
         
-    // The model for the input.
+    /// The model for the input.
     @StateObject var inputModel: FormInputModel
 
     /// Creates a view for a date (and time if applicable) input.
