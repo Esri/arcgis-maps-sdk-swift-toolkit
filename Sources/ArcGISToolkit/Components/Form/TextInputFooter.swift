@@ -62,7 +62,6 @@ struct TextInputFooter: View {
         self.isFocused = isFocused
         self.description = element.description
         self.isRequired = (isRequired == nil ? element.isRequired : isRequired!)
-//        print("isRequired: \(isRequired); self.isRequired: \(isRequired == nil ? element.isRequired : isRequired) for \(element.label)")
         
         switch input {
         case let input as TextBoxFormInput:
@@ -74,7 +73,7 @@ struct TextInputFooter: View {
             self.minLength = input.minLength
             _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
         default:
-            fatalError("TextInputFooter can only be used with TextAreaFormInput or TextBoxFormInput")
+            fatalError("\(Self.self) can only be used with \(TextAreaFormInput.self) or \(TextBoxFormInput.self)")
         }
         validate(length: currentLength, focused: isFocused, isRequired: self.isRequired)
     }
@@ -159,7 +158,6 @@ extension TextInputFooter {
     /// - Parameter length: The length of text to use for validation.
     /// - Parameter focused: The focus state to use for validation.
     func validate(length: Int, focused: Bool, isRequired: Bool) {
-//        print("validate: focused: \(focused) isRequired: \(isRequired) for \(element.label)")
         if length == .zero && isRequired && !focused {
             validationError = .emptyWhenRequired
         } else if length < minLength || length > maxLength {

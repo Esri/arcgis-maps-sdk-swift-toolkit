@@ -43,7 +43,7 @@ struct MultiLineTextInput: View {
     /// The input configuration of the view.
     private let input: TextAreaFormInput
     
-    // The model for the input.
+    /// The model for the input.
     @StateObject var inputModel: FormInputModel
     
     /// Creates a view for text input spanning multiple lines.
