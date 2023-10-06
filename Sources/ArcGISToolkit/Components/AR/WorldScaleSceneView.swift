@@ -38,7 +38,7 @@ public struct WorldScaleSceneView: View {
     
     @State private var availability: GeotrackingLocationAvailability = .checking
     @State private var isLocalized = false
-    //@State private var localizedPoint: CLLocationCoordinate2D?
+    @State private var initialTransformation: TransformationMatrix?
     
     @State private var statusText: String = ""
     @State private var geoAnchor: ARGeoAnchor?
@@ -112,10 +112,10 @@ public struct WorldScaleSceneView: View {
 //                    )
                 }
                 .onGeoTrackingStatusChange { session, geoTrackingStatus in
-                    if geoTrackingStatus.state == .localized {
-                        isLocalized = true
+                    isLocalized = geoTrackingStatus.state == .localized
+                    if let trackingStateText = statusText(for: geoTrackingStatus.state) {
+                        statusText = trackingStateText
                     }
-                    handleTrackingStatusChange(status: geoTrackingStatus)
                 }
                 .onAddNode { renderer, node, anchor in
                     if anchor.identifier == geoAnchor?.identifier {
@@ -214,15 +214,6 @@ public struct WorldScaleSceneView: View {
         
         initialTransformation = .identity
     }
-    
-    func handleTrackingStatusChange(status: ARGeoTrackingStatus) {
-        let state = status.state
-        if let trackingStateText = statusText(for: state) {
-            statusText = trackingStateText
-        }
-    }
-    
-    @State private var initialTransformation: TransformationMatrix?
     
     @MainActor
     @ViewBuilder
