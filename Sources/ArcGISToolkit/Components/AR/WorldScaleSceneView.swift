@@ -43,6 +43,9 @@ public struct WorldScaleSceneView: View {
     @State private var statusText: String = ""
     @State private var geoAnchor: ARGeoAnchor?
     
+    @State private var locationDatasSource = SystemLocationDataSource()
+    @State private var currentHeading: Double? = 0
+    
     /// Creates a world scale scene view.
     /// - Parameters:
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
@@ -99,8 +102,15 @@ public struct WorldScaleSceneView: View {
         ZStack {
             ARSwiftUIView(proxy: arViewProxy)
                 .onDidUpdateFrame { _, frame in
-                    guard let sceneViewProxy, let interfaceOrientation else { return } //, let initialTransformation else { return }
-                    guard let geoAnchor = frame.anchors.first(where: { $0.identifier == self.geoAnchor?.identifier }) else { return }
+                    
+//                    let transform = frame.camera.transform
+//                    let quaternion = simd_quatf(transform)
+//                    let heading = Double(quaternion.vector.x) * 180 / Double.pi
+//                    statusText = "\(heading)"
+                    
+                    
+                    guard let sceneViewProxy, let interfaceOrientation, let initialTransformation else { return }
+                   // guard let geoAnchor = frame.anchors.first(where: { $0.identifier == self.geoAnchor?.identifier }) else { return }
                     
                     sceneViewProxy.updateCamera(
                         frame: frame,
@@ -137,40 +147,40 @@ public struct WorldScaleSceneView: View {
                         node.addChildNode(boxNode)
                     }
                 }
-                .onUpdateNode { renderer, node, anchor in
-                    if anchor.identifier == geoAnchor?.identifier, initialTransformation == nil, anchor.transform != .init(diagonal: .one) {
-                        statusText = "\(anchor.transform)\n\(node.worldPosition)"
-                        
-//                        let transform = node.simdTransform
-//                        let quaternion = simd_quatf(transform)
+//                .onUpdateNode { renderer, node, anchor in
+//                    if anchor.identifier == geoAnchor?.identifier, initialTransformation == nil, anchor.transform != .init(diagonal: .one) {
+//                        statusText = "\(anchor.transform)\n\(node.worldPosition)"
 //                        
-//                        let s = "\(quaternion.vector.x), \(quaternion.vector.y), \(quaternion.vector.z), \(quaternion.vector.y), \(transform.columns.3.x), \(transform.columns.3.y), \(transform.columns.3.z)"
-//                        statusText = s
+////                        let transform = node.simdTransform
+////                        let quaternion = simd_quatf(transform)
+////                        
+////                        let s = "\(quaternion.vector.x), \(quaternion.vector.y), \(quaternion.vector.z), \(quaternion.vector.y), \(transform.columns.3.x), \(transform.columns.3.y), \(transform.columns.3.z)"
+////                        statusText = s
+////                        
+////                        let transformationMatrix = TransformationMatrix.normalized(
+////                            quaternionX: Double(quaternion.vector.x),
+////                            quaternionY: Double(quaternion.vector.y),
+////                            quaternionZ: Double(quaternion.vector.z),
+////                            quaternionW: Double(quaternion.vector.w),
+////                            translationX: Double(transform.columns.3.x),
+////                            translationY: Double(transform.columns.3.y),
+////                            translationZ: Double(transform.columns.3.z)
+////                        )
+////                        initialTransformation = transformationMatrix
+////                        statusText = "\(transformationMatrix)"
 //                        
-//                        let transformationMatrix = TransformationMatrix.normalized(
-//                            quaternionX: Double(quaternion.vector.x),
-//                            quaternionY: Double(quaternion.vector.y),
-//                            quaternionZ: Double(quaternion.vector.z),
-//                            quaternionW: Double(quaternion.vector.w),
+//                        let transform = anchor.transform
+//                        initialTransformation = .normalized(
+//                            quaternionX: 0,
+//                            quaternionY: 0,
+//                            quaternionZ: 0,
+//                            quaternionW: 1,
 //                            translationX: Double(transform.columns.3.x),
 //                            translationY: Double(transform.columns.3.y),
 //                            translationZ: Double(transform.columns.3.z)
 //                        )
-//                        initialTransformation = transformationMatrix
-//                        statusText = "\(transformationMatrix)"
-                        
-                        let transform = anchor.transform
-                        initialTransformation = .normalized(
-                            quaternionX: 0,
-                            quaternionY: 0,
-                            quaternionZ: 0,
-                            quaternionW: 1,
-                            translationX: Double(transform.columns.3.x),
-                            translationY: Double(transform.columns.3.y),
-                            translationZ: Double(transform.columns.3.z)
-                        )
-                    }
-                }
+//                    }
+//                }
 //                .onSingleTapGesture { screenPoint in
 //                    guard let session = arViewProxy.session else { return }
 //                    // Perform ARKit raycast on tap location
@@ -211,6 +221,13 @@ public struct WorldScaleSceneView: View {
         .observingInterfaceOrientation($interfaceOrientation)
         .onAppear {
             arViewProxy.session?.run(configuration, options: [.resetTracking])
+        }
+        .task {
+            try? await locationDatasSource.start()
+            for await heading in locationDatasSource.headings {
+                self.currentHeading = heading
+                self.statusText = "heading: \(heading)"
+            }
         }
     }
     
@@ -254,6 +271,7 @@ public struct WorldScaleSceneView: View {
         }
         
         guard let session = arViewProxy.session, state == .localized else { return }
+        guard let heading = currentHeading else { return }
         
         guard geoAnchor == nil else { return }
         
@@ -285,15 +303,16 @@ public struct WorldScaleSceneView: View {
                 latitude: location.latitude,
                 longitude: location.longitude,
                 altitude: altitude + 10,
-                heading: 180,
+                heading: heading,
                 pitch: 90,
                 roll: 0
             )
+            
 //            guard let camera = session.currentFrame?.camera else { return }
 //            let point = camera.transform.translation
 //            
 //            let (location, altitude) = try await session.geoLocation(forPoint: point)
-//            let heading = (camera.eulerAngles.y * 180) / .pi
+//            let heading = (camera.eulerAngles.z * 180) / .pi
 //            
 //            cameraController.originCamera = Camera(
 //                latitude: location.latitude,
@@ -304,7 +323,7 @@ public struct WorldScaleSceneView: View {
 //                roll: 0
 //            )
             
-//            initialTransformation = .identity
+            initialTransformation = .identity
             
             //statusText = "\(location.latitude), \(location.longitude)\n+/-\(status.accuracy.rawValue)m"
             
