@@ -14,8 +14,8 @@
 
 ***REMOVED***
 
-***REMOVED***/ SwiftUI `TextEditor` and `TextField` views have different styling. `TextField`s have
-***REMOVED***/ `textFieldStyle` and `TextEditor`s do not. This modifier allows for common styling.
+***REMOVED***/ Provides a frame minimum height constraint, padding, background color and rounded corners for a
+***REMOVED***/ form input.
 struct FormInputStyle: ViewModifier {
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
@@ -28,8 +28,9 @@ struct FormInputStyle: ViewModifier {
 ***REMOVED***
 
 extension View {
-***REMOVED******REMOVED***/ Adds a common padding and background around form field inputs.
-***REMOVED***func formTextInputStyle() -> some View {
+***REMOVED******REMOVED***/ Provides a frame minimum height constraint, padding, background color and rounded corners
+***REMOVED******REMOVED***/ for a form input.
+***REMOVED***func formInputStyle() -> some View {
 ***REMOVED******REMOVED***modifier(FormInputStyle())
 ***REMOVED***
 ***REMOVED***
