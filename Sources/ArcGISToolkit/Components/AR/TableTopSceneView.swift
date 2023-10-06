@@ -39,8 +39,6 @@ public struct TableTopSceneView: View {
     private let configuration: ARWorldTrackingConfiguration
     /// A Boolean value indicating that the scene's initial transformation has been set.
     private var initialTransformationIsSet: Bool { initialTransformation != nil }
-    /// A Boolean value that indicates whether to hide the help text.
-    private var helpTextIsHidden: Bool = false
     /// The anchor point for the scene view.
     private let anchorPoint: Point
     /// The translation factor for the scene's camera controller.
@@ -131,6 +129,14 @@ public struct TableTopSceneView: View {
                     .sessionProvider(arViewProxy)
                     .active(coachingOverlayIsActive)
                     .allowsHitTesting(false)
+                    .overlay (alignment: .top) {
+                        if !helpText.isEmpty {
+                            Text(helpText)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(8)
+                                .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+                        }
+                    }
             }
             
             SceneViewReader { proxy in
@@ -146,14 +152,6 @@ public struct TableTopSceneView: View {
                         self.sceneViewProxy = proxy
                     }
                     .opacity(initialTransformationIsSet ? 1 : 0)
-            }
-        }
-        .overlay (alignment: .top) {
-            if !helpText.isEmpty {
-                Text(helpText)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(8)
-                    .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
             }
         }
         .onChange(of: anchorPoint) { anchorPoint in
