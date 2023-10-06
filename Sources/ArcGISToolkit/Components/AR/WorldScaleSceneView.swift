@@ -38,7 +38,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED***@State private var availability: GeotrackingLocationAvailability = .checking
 ***REMOVED***@State private var isLocalized = false
-***REMOVED******REMOVED***@State private var localizedPoint: CLLocationCoordinate2D?
+***REMOVED***@State private var initialTransformation: TransformationMatrix?
 ***REMOVED***
 ***REMOVED***@State private var statusText: String = ""
 ***REMOVED***@State private var geoAnchor: ARGeoAnchor?
@@ -112,10 +112,10 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onGeoTrackingStatusChange { session, geoTrackingStatus in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if geoTrackingStatus.state == .localized {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isLocalized = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isLocalized = geoTrackingStatus.state == .localized
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let trackingStateText = statusText(for: geoTrackingStatus.state) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = trackingStateText
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handleTrackingStatusChange(status: geoTrackingStatus)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAddNode { renderer, node, anchor in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if anchor.identifier == geoAnchor?.identifier {
@@ -214,15 +214,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***initialTransformation = .identity
 ***REMOVED***
-***REMOVED***
-***REMOVED***func handleTrackingStatusChange(status: ARGeoTrackingStatus) {
-***REMOVED******REMOVED***let state = status.state
-***REMOVED******REMOVED***if let trackingStateText = statusText(for: state) {
-***REMOVED******REMOVED******REMOVED***statusText = trackingStateText
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***@State private var initialTransformation: TransformationMatrix?
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
