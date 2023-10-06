@@ -124,20 +124,21 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session.pause()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***ARCoachingOverlay(goal: .horizontalPlane)
-***REMOVED******REMOVED******REMOVED******REMOVED***.sessionProvider(arViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED***.active(coachingOverlayIsActive)
-***REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
-***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .top) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !helpText.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(helpText)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.animation(.easeInOut, value: 1)
+***REMOVED******REMOVED******REMOVED***if !coachingOverlayIsHidden {
+***REMOVED******REMOVED******REMOVED******REMOVED***ARCoachingOverlay(goal: .horizontalPlane)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sessionProvider(arViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.active(coachingOverlayIsActive)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .top) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !helpText.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(helpText)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.animation(.easeInOut, value: 1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(coachingOverlayIsHidden ? 0 : 1)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(proxy)
