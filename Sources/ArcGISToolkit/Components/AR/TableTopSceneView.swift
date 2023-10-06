@@ -171,27 +171,6 @@ public struct TableTopSceneView: View {
 ***REMOVED***
 ***REMOVED***
 
-private extension View {
-***REMOVED******REMOVED***/ Sets a closure to perform when a single tap occurs on the view.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - action: The closure to perform upon single tap.
-***REMOVED******REMOVED***/   - screenPoint: The location of the tap in the view's coordinate space.
-***REMOVED***func onSingleTapGesture(perform action: @escaping (_ screenPoint: CGPoint) -> Void) -> some View {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***return self.onTapGesture { screenPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED***action(screenPoint)
-***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return self.gesture(
-***REMOVED******REMOVED******REMOVED******REMOVED***DragGesture()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onEnded { dragAttributes in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(dragAttributes.location)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
 private extension ARSwiftUIViewProxy {
 ***REMOVED******REMOVED***/ Performs a hit test operation to get the transformation matrix representing the corresponding real-world point for `screenPoint`.
 ***REMOVED******REMOVED***/ - Parameter screenPoint: The screen point to determine the real world transformation matrix from.
