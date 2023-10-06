@@ -112,7 +112,6 @@ struct DateTimeInput: View {
                 }
             }
         }
-        .padding([.vertical], 1.5)
         .formInputStyle()
         .frame(maxWidth: .infinity)
         .onTapGesture {
