@@ -32,6 +32,9 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ The footer's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
+***REMOVED******REMOVED***/ The field type of the text input.
+***REMOVED***private let fieldType: FieldType
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field is focused.
 ***REMOVED***private let isFocused: Bool
 ***REMOVED***
@@ -47,12 +50,6 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ The allowable range of numeric values in the text input field.
 ***REMOVED***private let rangeDomain: RangeDomain?
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the field has a numeric data type.
-***REMOVED***private var isNumeric: Bool
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the field has a numeric data type with decimal precision.
-***REMOVED***private var isDecimal: Bool
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a footer shown at the bottom of each text input element in a form.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - text: The current text in the text input field.
@@ -60,16 +57,14 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/   - element: The footer's parent element.
 ***REMOVED******REMOVED***/   - input: A form input that provides length constraints for the text input.
 ***REMOVED******REMOVED***/   - rangeDomain: The allowable range of numeric values in the text input field.
-***REMOVED******REMOVED***/   - isNumeric: A Boolean value indicating whether the field has a numeric data type.
-***REMOVED******REMOVED***/   - isDecimal: A Boolean value indicating whether the field has a numeric data type with decimal precision.
+***REMOVED******REMOVED***/   - fieldType: The field type of the text input.
 ***REMOVED***init(
 ***REMOVED******REMOVED***text: String,
 ***REMOVED******REMOVED***isFocused: Bool,
 ***REMOVED******REMOVED***element: FieldFormElement,
 ***REMOVED******REMOVED***input: FormInput,
 ***REMOVED******REMOVED***rangeDomain: RangeDomain? = nil,
-***REMOVED******REMOVED***isNumeric: Bool = false,
-***REMOVED******REMOVED***isDecimal: Bool = false
+***REMOVED******REMOVED***fieldType: FieldType
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.text = text
 ***REMOVED******REMOVED***self.currentLength = text.count
@@ -78,19 +73,18 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***self.description = element.description
 ***REMOVED******REMOVED***self.isRequired = element.isRequired
 ***REMOVED******REMOVED***self.rangeDomain = rangeDomain
-***REMOVED******REMOVED***self.isNumeric = isNumeric
-***REMOVED******REMOVED***self.isDecimal = isDecimal
+***REMOVED******REMOVED***self.fieldType = fieldType
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch input {
 ***REMOVED******REMOVED***case let input as TextBoxFormInput:
 ***REMOVED******REMOVED******REMOVED***lengthRange = input.minLength...input.maxLength
 ***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(
-***REMOVED******REMOVED******REMOVED******REMOVED***initialValue: !isNumeric && currentLength >= input.minLength
+***REMOVED******REMOVED******REMOVED******REMOVED***initialValue: !fieldType.isNumeric && currentLength >= input.minLength
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case let input as TextAreaFormInput:
 ***REMOVED******REMOVED******REMOVED***lengthRange = input.minLength...input.maxLength
 ***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(
-***REMOVED******REMOVED******REMOVED******REMOVED***initialValue: !isNumeric && currentLength >= input.minLength
+***REMOVED******REMOVED******REMOVED******REMOVED***initialValue: !fieldType.isNumeric && currentLength >= input.minLength
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***fatalError("\(Self.self) can only be used with \(TextAreaFormInput.self) or \(TextBoxFormInput.self)")
@@ -104,7 +98,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if isFocused, description.isEmpty || validationError != nil, !isNumeric {
+***REMOVED******REMOVED******REMOVED***if isFocused, description.isEmpty || validationError != nil, !fieldType.isNumeric {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(currentLength, format: .number)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Character Indicator")
 ***REMOVED******REMOVED***
@@ -112,7 +106,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.foregroundColor(validationError == nil ? .secondary : .red)
 ***REMOVED******REMOVED***.onChange(of: text) { newText in
-***REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum && !isNumeric {
+***REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum && !fieldType.isNumeric {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if newText.count >= lengthRange.lowerBound {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***hasPreviouslySatisfiedMinimum = true
 ***REMOVED******REMOVED******REMOVED***
@@ -163,7 +157,7 @@ extension TextInputFooter {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The length validation text, dependent on the length validation scheme.
 ***REMOVED***var validationText: Text {
-***REMOVED******REMOVED***if isNumeric {
+***REMOVED******REMOVED***if fieldType.isNumeric {
 ***REMOVED******REMOVED******REMOVED***if validationError == .nonInteger {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return expectedInteger
 ***REMOVED******REMOVED*** else if  validationError == .nonDecimal {
@@ -187,10 +181,10 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ - Parameter text: The text to use for validation.
 ***REMOVED******REMOVED***/ - Parameter focused: The focus state to use for validation.
 ***REMOVED***func validate(text: String, focused: Bool) {
-***REMOVED******REMOVED***if isNumeric {
-***REMOVED******REMOVED******REMOVED***if !isDecimal && !text.isInteger {
+***REMOVED******REMOVED***if fieldType.isNumeric {
+***REMOVED******REMOVED******REMOVED***if !fieldType.isFloatingPoint && !text.isInteger {
 ***REMOVED******REMOVED******REMOVED******REMOVED***validationError = .nonInteger
-***REMOVED******REMOVED*** else if isDecimal && !text.isDecimal {
+***REMOVED******REMOVED*** else if fieldType.isFloatingPoint && !text.isDecimal {
 ***REMOVED******REMOVED******REMOVED******REMOVED***validationError = .nonDecimal
 ***REMOVED******REMOVED*** else if !(rangeDomain?.contains(text) ?? false) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***validationError = .outOfRange
