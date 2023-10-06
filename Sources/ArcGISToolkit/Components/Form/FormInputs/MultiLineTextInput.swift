@@ -112,3 +112,10 @@ struct MultiLineTextInput: View {
         }
     }
 }
+
+private extension MultiLineTextInput {
+    /// The field type of the text input.
+    var fieldType: FieldType {
+        featureForm!.feature.table!.field(named: element.fieldName)!.type!
+    }
+}
