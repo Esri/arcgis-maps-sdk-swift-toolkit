@@ -112,3 +112,10 @@ struct MultiLineTextInput: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+private extension MultiLineTextInput {
+***REMOVED******REMOVED***/ The field type of the text input.
+***REMOVED***var fieldType: FieldType {
+***REMOVED******REMOVED***featureForm!.feature.table!.field(named: element.fieldName)!.type!
+***REMOVED***
+***REMOVED***

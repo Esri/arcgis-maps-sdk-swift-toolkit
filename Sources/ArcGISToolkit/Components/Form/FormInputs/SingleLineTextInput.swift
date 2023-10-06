@@ -122,6 +122,9 @@ private extension SingleLineTextInput {
 ***REMOVED******REMOVED******REMOVED***return field.isFloatingPoint
 ***REMOVED***
 ***REMOVED******REMOVED***return false
+***REMOVED******REMOVED***/ The field type of the text input.
+***REMOVED***var fieldType: FieldType {
+***REMOVED******REMOVED***featureForm!.feature.table!.field(named: element.fieldName)!.type!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.
