@@ -62,7 +62,6 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***self.isFocused = isFocused
 ***REMOVED******REMOVED***self.description = element.description
 ***REMOVED******REMOVED***self.isRequired = (isRequired == nil ? element.isRequired : isRequired!)
-***REMOVED******REMOVED******REMOVED***print("isRequired: \(isRequired); self.isRequired: \(isRequired == nil ? element.isRequired : isRequired) for \(element.label)")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch input {
 ***REMOVED******REMOVED***case let input as TextBoxFormInput:
@@ -74,7 +73,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED******REMOVED***self.minLength = input.minLength
 ***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
 ***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***fatalError("TextInputFooter can only be used with TextAreaFormInput or TextBoxFormInput")
+***REMOVED******REMOVED******REMOVED***fatalError("\(Self.self) can only be used with \(TextAreaFormInput.self) or \(TextBoxFormInput.self)")
 ***REMOVED***
 ***REMOVED******REMOVED***validate(length: currentLength, focused: isFocused, isRequired: self.isRequired)
 ***REMOVED***
@@ -159,7 +158,6 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ - Parameter length: The length of text to use for validation.
 ***REMOVED******REMOVED***/ - Parameter focused: The focus state to use for validation.
 ***REMOVED***func validate(length: Int, focused: Bool, isRequired: Bool) {
-***REMOVED******REMOVED******REMOVED***print("validate: focused: \(focused) isRequired: \(isRequired) for \(element.label)")
 ***REMOVED******REMOVED***if length == .zero && isRequired && !focused {
 ***REMOVED******REMOVED******REMOVED***validationError = .emptyWhenRequired
 ***REMOVED*** else if length < minLength || length > maxLength {

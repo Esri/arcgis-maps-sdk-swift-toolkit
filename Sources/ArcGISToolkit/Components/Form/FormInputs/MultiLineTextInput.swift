@@ -43,7 +43,7 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED***/ The input configuration of the view.
 ***REMOVED***private let input: TextAreaFormInput
 ***REMOVED***
-***REMOVED******REMOVED*** The model for the input.
+***REMOVED******REMOVED***/ The model for the input.
 ***REMOVED***@StateObject var inputModel: FormInputModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for text input spanning multiple lines.

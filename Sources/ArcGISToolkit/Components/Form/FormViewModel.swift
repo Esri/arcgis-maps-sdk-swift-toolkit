@@ -32,8 +32,10 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The name of the current focused field, if one exists.
 ***REMOVED***@Published var focusedFieldName: String?
 ***REMOVED***
-***REMOVED***var evalutateTask: Task<Void, Never>? = nil
+***REMOVED******REMOVED***/ The expression evaluation task.
+***REMOVED***var evaluateTask: Task<Void, Never>? = nil
 ***REMOVED***
+***REMOVED******REMOVED***/ The group of visibility tasks.
 ***REMOVED***private var isVisibleTasks = [Task<Void, Never>]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The list of visible form elements.
@@ -74,7 +76,7 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A detached task observing location display autoPan changes.
+***REMOVED******REMOVED***/ A detached task observing visibility changes.
 ***REMOVED***private func updateVisibleElements() {
 ***REMOVED******REMOVED***guard let featureForm else { return ***REMOVED***
 ***REMOVED******REMOVED***visibleElements = featureForm.elements.filter { $0.isVisible ***REMOVED***
@@ -89,8 +91,8 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***internal func evaluateExpressions() {
-***REMOVED******REMOVED***evalutateTask?.cancel()
-***REMOVED******REMOVED***evalutateTask = Task {
+***REMOVED******REMOVED***evaluateTask?.cancel()
+***REMOVED******REMOVED***evaluateTask = Task {
 ***REMOVED******REMOVED******REMOVED***try? await featureForm?.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
