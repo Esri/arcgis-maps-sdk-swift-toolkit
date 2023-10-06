@@ -15,7 +15,9 @@
 import Combine
 ***REMOVED***
 
-***REMOVED***/ - Since: 200.2
+***REMOVED***/ A model for an input in a form.
+***REMOVED***/
+***REMOVED***/ - Since: 200.3
 public class FormInputModel: ObservableObject {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether a value in the input is required.
 ***REMOVED***@Published var isRequired: Bool
@@ -81,11 +83,10 @@ public class FormInputModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A detached task observing location display autoPan changes.
+***REMOVED******REMOVED***/ A detached task observing changes in the value.
 ***REMOVED***private var observeValueTask: Task<Void, Never> {
 ***REMOVED******REMOVED***Task.detached { [unowned self] in
 ***REMOVED******REMOVED******REMOVED***for await value in element.$value {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("value changed: \(value) for \(element.label)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.value = value
 ***REMOVED******REMOVED******REMOVED***

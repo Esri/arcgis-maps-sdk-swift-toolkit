@@ -51,7 +51,6 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
-***REMOVED******REMOVED***print("date init")
 ***REMOVED******REMOVED***_inputModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
 ***REMOVED******REMOVED***)

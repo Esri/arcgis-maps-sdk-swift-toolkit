@@ -29,7 +29,7 @@ struct InputHeader: View {
 ***REMOVED******REMOVED***self.label = label
 ***REMOVED******REMOVED***self.isRequired = isRequired
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Text(verbatim: "\(label + (isRequired ? " *" : ""))")
 ***REMOVED******REMOVED******REMOVED***.font(.subheadline)

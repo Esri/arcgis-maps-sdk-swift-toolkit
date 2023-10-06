@@ -13,7 +13,6 @@
 
 ***REMOVED***
 ***REMOVED***
-import Combine
 
 ***REMOVED***/ A view for single line text input.
 struct SingleLineTextInput: View {
@@ -37,6 +36,7 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED***/ The input configuration of the view.
 ***REMOVED***private let input: TextBoxFormInput
 ***REMOVED***
+***REMOVED******REMOVED***/ The model for the input.
 ***REMOVED***@StateObject var inputModel: FormInputModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for single line text input.
@@ -91,7 +91,7 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED***guard newValue != inputModel.value else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
-
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
