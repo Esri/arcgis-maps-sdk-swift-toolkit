@@ -151,74 +151,32 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
-***REMOVED*** else if let currentCamera, shouldUpdateCamera() {
+***REMOVED*** else if shouldUpdateCamera() {
 ***REMOVED******REMOVED******REMOVED***statusText += " |"
 ***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
 ***REMOVED******REMOVED******REMOVED******REMOVED***latitude: currentLocation.position.y,
 ***REMOVED******REMOVED******REMOVED******REMOVED***longitude: currentLocation.position.x,
 ***REMOVED******REMOVED******REMOVED******REMOVED***altitude: 5,
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: currentHeading, ***REMOVED***currentCamera.heading,
+***REMOVED******REMOVED******REMOVED******REMOVED***heading: currentHeading,
 ***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
 ***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = .identity
 ***REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration, options: [.resetTracking])
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if lastResetLocation == nil {
-***REMOVED******REMOVED******REMOVED******REMOVED***lastResetLocation = currentLocation.position
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let lastResetLocation,
-***REMOVED******REMOVED******REMOVED***   let result = GeometryEngine.geodeticDistance(
-***REMOVED******REMOVED******REMOVED******REMOVED***from: lastResetLocation,
-***REMOVED******REMOVED******REMOVED******REMOVED***to: currentLocation.position,
-***REMOVED******REMOVED******REMOVED******REMOVED***distanceUnit: .meters,
-***REMOVED******REMOVED******REMOVED******REMOVED***azimuthUnit: nil,
-***REMOVED******REMOVED******REMOVED******REMOVED***curveType: .geodesic
-***REMOVED******REMOVED******REMOVED***   ),
-***REMOVED******REMOVED******REMOVED***   result.distance.value > 3 {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("-- resetting tracking")
-***REMOVED******REMOVED******REMOVED******REMOVED***statusText += " |"
-***REMOVED******REMOVED******REMOVED******REMOVED***self.lastResetLocation = currentLocation.position
-***REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration, options: [.resetTracking])
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***@State private var headingOffCount: Int = 0
 ***REMOVED***
 ***REMOVED***func shouldUpdateCamera() -> Bool {
-***REMOVED******REMOVED***guard let currentHeading, let currentLocation, let currentCamera else { return false ***REMOVED***
+***REMOVED******REMOVED***guard let currentLocation, let currentCamera else { return false ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let currentHeading else { return false ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***if fabs(Self.delta(currentCamera.heading, currentHeading)) > 20 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("-- heading: \(currentCamera.heading) to \(currentHeading)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***return true
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if fabs(Self.delta(currentCamera.heading, currentHeading)) > 45 {
-***REMOVED******REMOVED******REMOVED******REMOVED***headingOffCount += 1
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if headingOffCount == 5 {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("-- heading: \(cameraController.originCamera.heading) to \(currentHeading)")
-***REMOVED******REMOVED******REMOVED******REMOVED***headingOffCount = 0
-***REMOVED******REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let sr = currentCamera.location.spatialReference else { return false ***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let currentLocationPosition = GeometryEngine.project(currentLocation.position, into: sr) else { return false ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if let result = GeometryEngine.geodeticDistance(
-***REMOVED******REMOVED******REMOVED***from: currentCamera.location,
-***REMOVED******REMOVED******REMOVED***to: currentLocationPosition,
-***REMOVED******REMOVED******REMOVED***distanceUnit: .meters,
-***REMOVED******REMOVED******REMOVED***azimuthUnit: nil,
-***REMOVED******REMOVED******REMOVED***curveType: .geodesic
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***statusText = "dist delta: \(result.distance.value)"
-***REMOVED******REMOVED******REMOVED***print("-- distance delta: \(result.distance.value)")
-***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if currentLocation.horizontalAccuracy > 5 {
 ***REMOVED******REMOVED******REMOVED***return false
@@ -231,7 +189,7 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED******REMOVED***azimuthUnit: nil,
 ***REMOVED******REMOVED******REMOVED***curveType: .geodesic
 ***REMOVED******REMOVED***), result.distance.value > 2 {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("-- distance: \(result.distance.value)")
+***REMOVED******REMOVED******REMOVED***print("-- distance: \(result.distance.value)")
 ***REMOVED******REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED******REMOVED***
