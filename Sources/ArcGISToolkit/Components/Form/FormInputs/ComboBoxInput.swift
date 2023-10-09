@@ -103,7 +103,7 @@ struct ComboBoxInput: View {
                         .accessibilityIdentifier("\(element.label) Clear Button")
                 }
             }
-            .formTextInputStyle()
+            .formInputStyle()
             // Pass `matchingValues` via a capture list so that the sheet receives up-to-date values.
             .sheet(isPresented: $isPresented) { [matchingValues] in
                 makePicker(for: matchingValues)
