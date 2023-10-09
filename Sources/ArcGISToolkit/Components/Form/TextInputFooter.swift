@@ -50,6 +50,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/   - isFocused: A Boolean value indicating whether the text input field is focused.
 ***REMOVED******REMOVED***/   - element: The input's parent element.
 ***REMOVED******REMOVED***/   - input: A form input that provides length constraints for the text input.
+***REMOVED******REMOVED***/   - isRequired: A Boolean value indicating whether the text input field is required.
 ***REMOVED***init(
 ***REMOVED******REMOVED***currentLength: Int,
 ***REMOVED******REMOVED***isFocused: Bool,
