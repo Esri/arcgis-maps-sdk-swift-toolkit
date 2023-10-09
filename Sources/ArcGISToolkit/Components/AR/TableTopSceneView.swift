@@ -27,12 +27,24 @@ public struct TableTopSceneView: View {
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
+***REMOVED******REMOVED***/ The help text to guide the user through an AR experience.
+***REMOVED***@State private var helpText: String = ""
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the coaching overlay view is active.
+***REMOVED***@State private var coachingOverlayIsActive: Bool = true
+***REMOVED******REMOVED***/ A Boolean value that indicates whether to hide the coaching overlay view.
+***REMOVED***private var coachingOverlayIsHidden: Bool = false
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ The configuration for the AR session.
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
 ***REMOVED******REMOVED***/ A Boolean value indicating that the scene's initial transformation has been set.
 ***REMOVED***private var initialTransformationIsSet: Bool { initialTransformation != nil ***REMOVED***
+***REMOVED******REMOVED***/ The anchor point for the scene view.
+***REMOVED***private let anchorPoint: Point
+***REMOVED******REMOVED***/ The translation factor for the scene's camera controller.
+***REMOVED***private let translationFactor: Double
+***REMOVED******REMOVED***/ The clipping distance for the scene's camera controller.
+***REMOVED***private let clippingDistance: Double?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a table top scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -53,6 +65,9 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
+***REMOVED******REMOVED***self.anchorPoint = anchorPoint
+***REMOVED******REMOVED***self.translationFactor = translationFactor
+***REMOVED******REMOVED***self.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let initialCamera = Camera(location: anchorPoint, heading: 0, pitch: 90, roll: 0)
 ***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
@@ -97,14 +112,32 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***using: screenPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialTransformation = transformation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***helpText = ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session?.pause()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session.pause()
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if !coachingOverlayIsHidden {
+***REMOVED******REMOVED******REMOVED******REMOVED***ARCoachingOverlay(goal: .horizontalPlane)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sessionProvider(arViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.active(coachingOverlayIsActive)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay (alignment: .top) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !helpText.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(helpText)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***SceneViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(proxy)
@@ -121,6 +154,15 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(initialTransformationIsSet ? 1 : 0)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: anchorPoint) { anchorPoint in
+***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(location: anchorPoint, heading: 0, pitch: 90, roll: 0)
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: translationFactor) { translationFactor in
+***REMOVED******REMOVED******REMOVED***cameraController.translationFactor = translationFactor
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: clippingDistance) { clippingDistance in
+***REMOVED******REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
+***REMOVED***
 ***REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
 ***REMOVED***
 ***REMOVED***
@@ -130,17 +172,21 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/   - node: The node to be added to the scene.
 ***REMOVED******REMOVED***/   - anchor: The anchor position of the node.
 ***REMOVED***private func addPlane(renderer: SCNSceneRenderer, node: SCNNode, anchor: ARAnchor) {
-***REMOVED******REMOVED***guard let planeAnchor = anchor as? ARPlaneAnchor,
+***REMOVED******REMOVED***guard !initialTransformationIsSet,
+***REMOVED******REMOVED******REMOVED***  let planeAnchor = anchor as? ARPlaneAnchor,
 ***REMOVED******REMOVED******REMOVED***  let device = renderer.device,
 ***REMOVED******REMOVED******REMOVED***  let planeGeometry = ARSCNPlaneGeometry(device: device)
 ***REMOVED******REMOVED***else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Disable coaching overlay when a plane node is found.
+***REMOVED******REMOVED***coachingOverlayIsActive = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***planeGeometry.update(from: planeAnchor.geometry)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Add SCNMaterial to plane geometry.
 ***REMOVED******REMOVED***let material = SCNMaterial()
 ***REMOVED******REMOVED***material.isDoubleSided = true
-***REMOVED******REMOVED***material.diffuse.contents = UIColor.white.withAlphaComponent(0.5)
+***REMOVED******REMOVED***material.diffuse.contents = UIColor.white.withAlphaComponent(0.65)
 ***REMOVED******REMOVED***planeGeometry.materials = [material]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create a SCNNode from plane geometry.
@@ -149,6 +195,11 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED*** Add the visualization to the ARKit-managed node so that it tracks
 ***REMOVED******REMOVED******REMOVED*** changes in the plane anchor as plane estimation continues.
 ***REMOVED******REMOVED***node.addChildNode(planeNode)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set help text when plane is visualized.
+***REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED***helpText = .planeFound
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Visualizes a node updated in the scene as an AR Plane.
@@ -168,6 +219,20 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Update extent visualization to the anchor's new geometry.
 ***REMOVED******REMOVED***planeGeometry.update(from: planeAnchor.geometry)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set help text when plane visualization is updated.
+***REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED***helpText = .planeFound
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the visibility of the coaching overlay view for the AR experince.
+***REMOVED******REMOVED***/ - Parameter hidden: A Boolean value that indicates whether to hide the
+***REMOVED******REMOVED***/  coaching overlay view.
+***REMOVED***public func coachingOverlayHidden(_ hidden: Bool) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.coachingOverlayIsHidden = hidden
+***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
 
@@ -183,10 +248,10 @@ private extension ARSwiftUIViewProxy {
 ***REMOVED******REMOVED******REMOVED***alignment: .any
 ***REMOVED******REMOVED***) else { return nil ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let results = session?.raycast(query)
+***REMOVED******REMOVED***let results = session.raycast(query)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Get the worldTransform from the first result; if there's no worldTransform, return nil.
-***REMOVED******REMOVED***guard let worldTransform = results?.first?.worldTransform else { return nil ***REMOVED***
+***REMOVED******REMOVED***guard let worldTransform = results.first?.worldTransform else { return nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create our hit test matrix based on the worldTransform location.
 ***REMOVED******REMOVED******REMOVED*** Right now we ignore the orientation of the plane that was hit to find the point
@@ -225,5 +290,18 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED***let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return initialTransformation
+***REMOVED***
+***REMOVED***
+
+private extension String {
+***REMOVED***static var planeFound: String {
+***REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED***localized: "Tap a surface to place the scene",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** An instruction to the user to tap on a horizontal surface to
+***REMOVED******REMOVED******REMOVED******REMOVED*** place an ArcGIS Scene.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

@@ -128,11 +128,6 @@ public struct FlyoverSceneView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func updateCameraController() {
-***REMOVED******REMOVED***cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
-***REMOVED******REMOVED***cameraController.translationFactor = translationFactor
-***REMOVED***
-***REMOVED***
 
 ***REMOVED***/ An observable object that wraps an `ARSession` and provides the current frame.
 private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate {
