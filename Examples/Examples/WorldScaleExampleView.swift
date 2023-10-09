@@ -35,7 +35,7 @@ struct WorldScaleExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***WorldScaleSceneView { proxy in
+***REMOVED******REMOVED******REMOVED***WorldScaleSceneView2 { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")

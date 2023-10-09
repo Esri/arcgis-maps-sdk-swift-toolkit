@@ -130,12 +130,11 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let session = arViewProxy.session else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Perform ARKit raycast on tap location
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let query = arViewProxy.raycastQuery(from: screenPoint, allowing: .estimatedPlane, alignment: .any) else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let result = session.raycast(query).first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let result = arViewProxy.session.raycast(query).first {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***addGeoAnchor(at: result.worldTransform.translation)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "No raycast result.\nTry pointing at a different area\nor move closer to a surface."
@@ -168,7 +167,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***arViewProxy.session?.run(configuration, options: [.resetTracking])
+***REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration, options: [.resetTracking])
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***try? await locationDatasSource.start()
@@ -195,8 +194,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func addGeoAnchor(at worldPosition: SIMD3<Float>) {
-***REMOVED******REMOVED***guard let session = arViewProxy.session else { return ***REMOVED***
-***REMOVED******REMOVED***session.getGeoLocation(forPoint: worldPosition) { (location, altitude, error) in
+***REMOVED******REMOVED***arViewProxy.session.getGeoLocation(forPoint: worldPosition) { (location, altitude, error) in
 ***REMOVED******REMOVED******REMOVED***if let error = error {
 ***REMOVED******REMOVED******REMOVED******REMOVED***statusText = "Cannot add geo anchor: \(error.localizedDescription)"
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
@@ -206,7 +204,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func addGeoAnchor(at location: CLLocationCoordinate2D, altitude: CLLocationDistance? = nil) {
-***REMOVED******REMOVED***guard let session = arViewProxy.session else { return ***REMOVED***
 ***REMOVED******REMOVED***guard let currentHeading else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let geoAnchor: ARGeoAnchor
@@ -216,7 +213,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***geoAnchor = ARGeoAnchor(coordinate: location)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***session.add(anchor: geoAnchor)
+***REMOVED******REMOVED***arViewProxy.session.add(anchor: geoAnchor)
 ***REMOVED******REMOVED***self.geoAnchor = geoAnchor
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***cameraController.originCamera = Camera(
