@@ -60,7 +60,7 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.formTextInputStyle()
+***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED***TextInputFooter(
 ***REMOVED******REMOVED******REMOVED***currentLength: text.count,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,

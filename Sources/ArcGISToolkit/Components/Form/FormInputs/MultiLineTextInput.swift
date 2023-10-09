@@ -84,7 +84,7 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = element.fieldName
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.formTextInputStyle()
+***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED***TextInputFooter(
 ***REMOVED******REMOVED******REMOVED***currentLength: isPlaceholder ? .zero : text.count,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
