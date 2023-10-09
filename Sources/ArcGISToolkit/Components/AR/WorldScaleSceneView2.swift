@@ -35,6 +35,7 @@ public struct WorldScaleSceneView2: View {
     @State private var currentHeading: Double?
     @State private var currentLocation: Location?
     @State private var locationDataSourceError: Error?
+    @State private var lastResetLocation: Point?
     @State private var shouldShowSceneView = false
     
     /// Creates a world scale scene view.
@@ -68,10 +69,10 @@ public struct WorldScaleSceneView2: View {
                         cameraController: cameraController,
                         orientation: interfaceOrientation
                     )
-//                    sceneViewProxy.setFieldOfView(
-//                        for: frame,
-//                        orientation: interfaceOrientation
-//                    )
+                    sceneViewProxy.setFieldOfView(
+                        for: frame,
+                        orientation: interfaceOrientation
+                    )
                 }
             
             if shouldShowSceneView {
@@ -121,6 +122,7 @@ public struct WorldScaleSceneView2: View {
                 }
             } catch {
                 locationDataSourceError = error
+                
             }
         }
     }
@@ -130,12 +132,29 @@ public struct WorldScaleSceneView2: View {
         cameraController.originCamera = Camera(
             latitude: currentLocation.position.y,
             longitude: currentLocation.position.x,
-            altitude: 15,
+            altitude: 5,
             heading: currentHeading,
             pitch: 90,
             roll: 0
         )
-        //arViewProxy.session.run(configuration, options: [.resetTracking])
+        
+        if lastResetLocation == nil {
+            lastResetLocation = currentLocation.position
+        }
+        
+        if let lastResetLocation,
+           let result = GeometryEngine.geodeticDistance(
+            from: lastResetLocation,
+            to: currentLocation.position,
+            distanceUnit: .meters,
+            azimuthUnit: nil,
+            curveType: .geodesic
+           ),
+           result.distance.value > 10 {
+            self.lastResetLocation = currentLocation.position
+            arViewProxy.session.run(configuration, options: [.resetTracking])
+        }
+        
         shouldShowSceneView = true
     }
     
