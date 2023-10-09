@@ -151,74 +151,32 @@ public struct WorldScaleSceneView2: View {
                 roll: 0
             )
             initialCameraIsSet = true
-        } else if let currentCamera, shouldUpdateCamera() {
+        } else if shouldUpdateCamera() {
             statusText += " |"
             cameraController.originCamera = Camera(
                 latitude: currentLocation.position.y,
                 longitude: currentLocation.position.x,
                 altitude: 5,
-                heading: currentHeading, //currentCamera.heading,
+                heading: currentHeading,
                 pitch: 90,
                 roll: 0
             )
             cameraController.transformationMatrix = .identity
             arViewProxy.session.run(configuration, options: [.resetTracking])
         }
-        
-        
-//        if lastResetLocation == nil {
-//            lastResetLocation = currentLocation.position
-//        }
-//        
-//        if let lastResetLocation,
-//           let result = GeometryEngine.geodeticDistance(
-//            from: lastResetLocation,
-//            to: currentLocation.position,
-//            distanceUnit: .meters,
-//            azimuthUnit: nil,
-//            curveType: .geodesic
-//           ),
-//           result.distance.value > 3 {
-//            print("-- resetting tracking")
-//            statusText += " |"
-//            self.lastResetLocation = currentLocation.position
-//            arViewProxy.session.run(configuration, options: [.resetTracking])
-//        }
-        
     }
     
-    //@State private var headingOffCount: Int = 0
-    
     func shouldUpdateCamera() -> Bool {
-        guard let currentHeading, let currentLocation, let currentCamera else { return false }
+        guard let currentLocation, let currentCamera else { return false }
+        
+//        guard let currentHeading else { return false }
 //        if fabs(Self.delta(currentCamera.heading, currentHeading)) > 20 {
 //            print("-- heading: \(currentCamera.heading) to \(currentHeading)")
 //            return true
 //        }
-//        if fabs(Self.delta(currentCamera.heading, currentHeading)) > 45 {
-//            headingOffCount += 1
-//        }
-//        
-//        if headingOffCount == 5 {
-//            print("-- heading: \(cameraController.originCamera.heading) to \(currentHeading)")
-//            headingOffCount = 0
-//            return true
-//        }
         
         guard let sr = currentCamera.location.spatialReference else { return false }
-        
         guard let currentLocationPosition = GeometryEngine.project(currentLocation.position, into: sr) else { return false }
-        
-        if let result = GeometryEngine.geodeticDistance(
-            from: currentCamera.location,
-            to: currentLocationPosition,
-            distanceUnit: .meters,
-            azimuthUnit: nil,
-            curveType: .geodesic
-        ) {
-            //statusText = "dist delta: \(result.distance.value)"
-            print("-- distance delta: \(result.distance.value)")
-        }
         
         if currentLocation.horizontalAccuracy > 5 {
             return false
@@ -231,7 +189,7 @@ public struct WorldScaleSceneView2: View {
             azimuthUnit: nil,
             curveType: .geodesic
         ), result.distance.value > 2 {
-            //print("-- distance: \(result.distance.value)")
+            print("-- distance: \(result.distance.value)")
             return true
         }
         
