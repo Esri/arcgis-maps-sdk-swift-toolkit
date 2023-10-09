@@ -50,6 +50,7 @@ struct TextInputFooter: View {
     ///   - isFocused: A Boolean value indicating whether the text input field is focused.
     ///   - element: The input's parent element.
     ///   - input: A form input that provides length constraints for the text input.
+    ///   - isRequired: A Boolean value indicating whether the text input field is required.
     init(
         currentLength: Int,
         isFocused: Bool,
