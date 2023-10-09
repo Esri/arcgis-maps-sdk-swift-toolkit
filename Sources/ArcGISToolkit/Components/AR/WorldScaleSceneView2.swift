@@ -73,6 +73,8 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.draw()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if shouldShowSceneView {
@@ -82,6 +84,7 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Capture scene view proxy as a workaround for a bug where
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** preferences set for `ARSwiftUIView` are not honored. The
@@ -110,50 +113,70 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await heading in locationDatasSource.headings {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.currentHeading = heading
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateSceneView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await updateSceneView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await location in locationDatasSource.locations {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.currentLocation = location
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateSceneView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await updateSceneView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationDataSourceError = error
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "Failed to access current location."
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func updateSceneView() {
+***REMOVED******REMOVED******REMOVED***guard !shouldShowSceneView else { return ***REMOVED***
 ***REMOVED******REMOVED***guard let currentHeading, let currentLocation else { return ***REMOVED***
-***REMOVED******REMOVED***cameraController.originCamera = Camera(
-***REMOVED******REMOVED******REMOVED***latitude: currentLocation.position.y,
-***REMOVED******REMOVED******REMOVED***longitude: currentLocation.position.x,
-***REMOVED******REMOVED******REMOVED***altitude: 5,
-***REMOVED******REMOVED******REMOVED***heading: currentHeading,
-***REMOVED******REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED******REMOVED***roll: 0
-***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if lastResetLocation == nil {
-***REMOVED******REMOVED******REMOVED***lastResetLocation = currentLocation.position
+***REMOVED******REMOVED***if shouldShowSceneView {
+***REMOVED******REMOVED******REMOVED***let originCamera = cameraController.originCamera
+***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
+***REMOVED******REMOVED******REMOVED******REMOVED***latitude: currentLocation.position.y,
+***REMOVED******REMOVED******REMOVED******REMOVED***longitude: currentLocation.position.x,
+***REMOVED******REMOVED******REMOVED******REMOVED***altitude: 5,
+***REMOVED******REMOVED******REMOVED******REMOVED***heading: originCamera.heading,
+***REMOVED******REMOVED******REMOVED******REMOVED***pitch: originCamera.pitch,
+***REMOVED******REMOVED******REMOVED******REMOVED***roll: originCamera.roll
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
+***REMOVED******REMOVED******REMOVED******REMOVED***latitude: currentLocation.position.y,
+***REMOVED******REMOVED******REMOVED******REMOVED***longitude: currentLocation.position.x,
+***REMOVED******REMOVED******REMOVED******REMOVED***altitude: 5,
+***REMOVED******REMOVED******REMOVED******REMOVED***heading: currentHeading,
+***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
+***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED******REMOVED***cameraController.transformationMatrix = .identity
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if let lastResetLocation,
-***REMOVED******REMOVED***   let result = GeometryEngine.geodeticDistance(
-***REMOVED******REMOVED******REMOVED***from: lastResetLocation,
-***REMOVED******REMOVED******REMOVED***to: currentLocation.position,
-***REMOVED******REMOVED******REMOVED***distanceUnit: .meters,
-***REMOVED******REMOVED******REMOVED***azimuthUnit: nil,
-***REMOVED******REMOVED******REMOVED***curveType: .geodesic
-***REMOVED******REMOVED***   ),
-***REMOVED******REMOVED***   result.distance.value > 10 {
-***REMOVED******REMOVED******REMOVED***self.lastResetLocation = currentLocation.position
-***REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration, options: [.resetTracking])
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***if lastResetLocation == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***lastResetLocation = currentLocation.position
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if let lastResetLocation,
+***REMOVED******REMOVED******REMOVED***   let result = GeometryEngine.geodeticDistance(
+***REMOVED******REMOVED******REMOVED******REMOVED***from: lastResetLocation,
+***REMOVED******REMOVED******REMOVED******REMOVED***to: currentLocation.position,
+***REMOVED******REMOVED******REMOVED******REMOVED***distanceUnit: .meters,
+***REMOVED******REMOVED******REMOVED******REMOVED***azimuthUnit: nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***curveType: .geodesic
+***REMOVED******REMOVED******REMOVED***   ),
+***REMOVED******REMOVED******REMOVED***   result.distance.value > 3 {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("-- resetting tracking")
+***REMOVED******REMOVED******REMOVED******REMOVED***statusText += " |"
+***REMOVED******REMOVED******REMOVED******REMOVED***self.lastResetLocation = currentLocation.position
+***REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration, options: [.resetTracking])
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***shouldShowSceneView = true
 ***REMOVED***
