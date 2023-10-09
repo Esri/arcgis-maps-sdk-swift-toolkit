@@ -130,12 +130,11 @@ public struct WorldScaleSceneView: View {
                     }
                 }
                 .onSingleTapGesture { screenPoint in
-                    guard let session = arViewProxy.session else { return }
                     // Perform ARKit raycast on tap location
                     guard let query = arViewProxy.raycastQuery(from: screenPoint, allowing: .estimatedPlane, alignment: .any) else {
                         return
                     }
-                    if let result = session.raycast(query).first {
+                    if let result = arViewProxy.session.raycast(query).first {
                         addGeoAnchor(at: result.worldTransform.translation)
                     } else {
                         statusText = "No raycast result.\nTry pointing at a different area\nor move closer to a surface."
@@ -168,7 +167,7 @@ public struct WorldScaleSceneView: View {
         }
         .observingInterfaceOrientation($interfaceOrientation)
         .onAppear {
-            arViewProxy.session?.run(configuration, options: [.resetTracking])
+            arViewProxy.session.run(configuration, options: [.resetTracking])
         }
         .task {
             try? await locationDatasSource.start()
@@ -195,8 +194,7 @@ public struct WorldScaleSceneView: View {
     }
     
     func addGeoAnchor(at worldPosition: SIMD3<Float>) {
-        guard let session = arViewProxy.session else { return }
-        session.getGeoLocation(forPoint: worldPosition) { (location, altitude, error) in
+        arViewProxy.session.getGeoLocation(forPoint: worldPosition) { (location, altitude, error) in
             if let error = error {
                 statusText = "Cannot add geo anchor: \(error.localizedDescription)"
                 return
@@ -206,7 +204,6 @@ public struct WorldScaleSceneView: View {
     }
     
     func addGeoAnchor(at location: CLLocationCoordinate2D, altitude: CLLocationDistance? = nil) {
-        guard let session = arViewProxy.session else { return }
         guard let currentHeading else { return }
         
         let geoAnchor: ARGeoAnchor
@@ -216,7 +213,7 @@ public struct WorldScaleSceneView: View {
             geoAnchor = ARGeoAnchor(coordinate: location)
         }
         
-        session.add(anchor: geoAnchor)
+        arViewProxy.session.add(anchor: geoAnchor)
         self.geoAnchor = geoAnchor
         
         cameraController.originCamera = Camera(
