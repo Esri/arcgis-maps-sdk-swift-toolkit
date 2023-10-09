@@ -36,7 +36,8 @@ public struct WorldScaleSceneView2: View {
     @State private var currentLocation: Location?
     @State private var locationDataSourceError: Error?
     @State private var lastResetLocation: Point?
-    @State private var shouldShowSceneView = false
+    @State private var initialCameraIsSet = false
+    @State private var currentCamera: Camera?
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -62,12 +63,13 @@ public struct WorldScaleSceneView2: View {
         ZStack {
             ARSwiftUIView(proxy: arViewProxy)
                 .onDidUpdateFrame { _, frame in
-                    guard let sceneViewProxy, let interfaceOrientation else { return }
+                    guard let sceneViewProxy, let interfaceOrientation, initialCameraIsSet else { return }
                     
                     sceneViewProxy.updateCamera(
                         frame: frame,
                         cameraController: cameraController,
-                        orientation: interfaceOrientation
+                        orientation: interfaceOrientation,
+                        initialTransformation: .identity
                     )
                     sceneViewProxy.setFieldOfView(
                         for: frame,
@@ -77,7 +79,7 @@ public struct WorldScaleSceneView2: View {
                     sceneViewProxy.draw()
                 }
             
-            if shouldShowSceneView {
+            if initialCameraIsSet {
                 SceneViewReader { proxy in
                     sceneViewBuilder(proxy)
                         .cameraController(cameraController)
@@ -85,6 +87,9 @@ public struct WorldScaleSceneView2: View {
                         .spaceEffect(.transparent)
                         .atmosphereEffect(.off)
                         .viewDrawingMode(.manual)
+                        .onCameraChanged { camera in
+                            self.currentCamera = camera
+                        }
                         .onAppear {
                             // Capture scene view proxy as a workaround for a bug where
                             // preferences set for `ARSwiftUIView` are not honored. The
@@ -134,20 +139,9 @@ public struct WorldScaleSceneView2: View {
     
     @MainActor
     func updateSceneView() {
-        //guard !shouldShowSceneView else { return }
         guard let currentHeading, let currentLocation else { return }
         
-        if shouldShowSceneView {
-            let originCamera = cameraController.originCamera
-            cameraController.originCamera = Camera(
-                latitude: currentLocation.position.y,
-                longitude: currentLocation.position.x,
-                altitude: 5,
-                heading: originCamera.heading,
-                pitch: originCamera.pitch,
-                roll: originCamera.roll
-            )
-        } else {
+        if !initialCameraIsSet {
             cameraController.originCamera = Camera(
                 latitude: currentLocation.position.y,
                 longitude: currentLocation.position.x,
@@ -156,8 +150,21 @@ public struct WorldScaleSceneView2: View {
                 pitch: 90,
                 roll: 0
             )
+            initialCameraIsSet = true
+        } else if let currentCamera, shouldUpdateCamera() {
+            statusText += " |"
+            cameraController.originCamera = Camera(
+                latitude: currentLocation.position.y,
+                longitude: currentLocation.position.x,
+                altitude: 5,
+                heading: currentHeading, //currentCamera.heading,
+                pitch: 90,
+                roll: 0
+            )
+            cameraController.transformationMatrix = .identity
+            arViewProxy.session.run(configuration, options: [.resetTracking])
         }
-        cameraController.transformationMatrix = .identity
+        
         
 //        if lastResetLocation == nil {
 //            lastResetLocation = currentLocation.position
@@ -178,11 +185,69 @@ public struct WorldScaleSceneView2: View {
 //            arViewProxy.session.run(configuration, options: [.resetTracking])
 //        }
         
-        shouldShowSceneView = true
+    }
+    
+    //@State private var headingOffCount: Int = 0
+    
+    func shouldUpdateCamera() -> Bool {
+        guard let currentHeading, let currentLocation, let currentCamera else { return false }
+//        if fabs(Self.delta(currentCamera.heading, currentHeading)) > 20 {
+//            print("-- heading: \(currentCamera.heading) to \(currentHeading)")
+//            return true
+//        }
+//        if fabs(Self.delta(currentCamera.heading, currentHeading)) > 45 {
+//            headingOffCount += 1
+//        }
+//        
+//        if headingOffCount == 5 {
+//            print("-- heading: \(cameraController.originCamera.heading) to \(currentHeading)")
+//            headingOffCount = 0
+//            return true
+//        }
+        
+        guard let sr = currentCamera.location.spatialReference else { return false }
+        
+        guard let currentLocationPosition = GeometryEngine.project(currentLocation.position, into: sr) else { return false }
+        
+        if let result = GeometryEngine.geodeticDistance(
+            from: currentCamera.location,
+            to: currentLocationPosition,
+            distanceUnit: .meters,
+            azimuthUnit: nil,
+            curveType: .geodesic
+        ) {
+            //statusText = "dist delta: \(result.distance.value)"
+            print("-- distance delta: \(result.distance.value)")
+        }
+        
+        if currentLocation.horizontalAccuracy > 5 {
+            return false
+        }
+        
+        if let result = GeometryEngine.geodeticDistance(
+            from: currentCamera.location,
+            to: currentLocationPosition,
+            distanceUnit: .meters,
+            azimuthUnit: nil,
+            curveType: .geodesic
+        ), result.distance.value > 2 {
+            //print("-- distance: \(result.distance.value)")
+            return true
+        }
+        
+        return false
     }
     
     @ViewBuilder func statusView(for status: String) -> some View {
         Text(status)
             .multilineTextAlignment(.center)
     }
+    
+    private static func delta(_ angle1: Double, _ angle2: Double) -> Double {
+        var delta = angle2 - angle1
+        while (delta < -180) { delta += 360 }
+        while (delta > 180) { delta -= 360 }
+        return delta
+    }
 }
+
