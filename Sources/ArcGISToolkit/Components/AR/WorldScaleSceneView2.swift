@@ -35,6 +35,7 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED***@State private var currentHeading: Double?
 ***REMOVED***@State private var currentLocation: Location?
 ***REMOVED***@State private var locationDataSourceError: Error?
+***REMOVED***@State private var lastResetLocation: Point?
 ***REMOVED***@State private var shouldShowSceneView = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
@@ -68,10 +69,10 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.setFieldOfView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: frame,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewProxy.setFieldOfView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: frame,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if shouldShowSceneView {
@@ -121,6 +122,7 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationDataSourceError = error
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -130,12 +132,29 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED***cameraController.originCamera = Camera(
 ***REMOVED******REMOVED******REMOVED***latitude: currentLocation.position.y,
 ***REMOVED******REMOVED******REMOVED***longitude: currentLocation.position.x,
-***REMOVED******REMOVED******REMOVED***altitude: 15,
+***REMOVED******REMOVED******REMOVED***altitude: 5,
 ***REMOVED******REMOVED******REMOVED***heading: currentHeading,
 ***REMOVED******REMOVED******REMOVED***pitch: 90,
 ***REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if lastResetLocation == nil {
+***REMOVED******REMOVED******REMOVED***lastResetLocation = currentLocation.position
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if let lastResetLocation,
+***REMOVED******REMOVED***   let result = GeometryEngine.geodeticDistance(
+***REMOVED******REMOVED******REMOVED***from: lastResetLocation,
+***REMOVED******REMOVED******REMOVED***to: currentLocation.position,
+***REMOVED******REMOVED******REMOVED***distanceUnit: .meters,
+***REMOVED******REMOVED******REMOVED***azimuthUnit: nil,
+***REMOVED******REMOVED******REMOVED***curveType: .geodesic
+***REMOVED******REMOVED***   ),
+***REMOVED******REMOVED***   result.distance.value > 10 {
+***REMOVED******REMOVED******REMOVED***self.lastResetLocation = currentLocation.position
 ***REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration, options: [.resetTracking])
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***shouldShowSceneView = true
 ***REMOVED***
 ***REMOVED***
