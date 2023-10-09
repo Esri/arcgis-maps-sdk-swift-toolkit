@@ -36,7 +36,7 @@ struct TextInputFooter: View {
 ***REMOVED***private let description: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field is required.
-***REMOVED***@State private var isRequired: Bool
+***REMOVED***private var isRequired: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum allowable length of text in the text input field.
 ***REMOVED***private let maxLength: Int
@@ -76,7 +76,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***fatalError("\(Self.self) can only be used with \(TextAreaFormInput.self) or \(TextBoxFormInput.self)")
 ***REMOVED***
-***REMOVED******REMOVED***validate(length: currentLength, focused: isFocused, isRequired: self.isRequired)
+***REMOVED******REMOVED***validate(length: currentLength, focused: isFocused)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -99,12 +99,12 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***hasPreviouslySatisfiedMinimum = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: newLength, focused: isFocused, isRequired: isRequired)
+***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: newLength, focused: isFocused)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { newIsFocused in
 ***REMOVED******REMOVED******REMOVED***if hasPreviouslySatisfiedMinimum || !newIsFocused {
-***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: currentLength, focused: newIsFocused, isRequired: isRequired)
+***REMOVED******REMOVED******REMOVED******REMOVED***validate(length: currentLength, focused: newIsFocused)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -158,7 +158,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ Checks for any validation errors and updates the value of `validationError`.
 ***REMOVED******REMOVED***/ - Parameter length: The length of text to use for validation.
 ***REMOVED******REMOVED***/ - Parameter focused: The focus state to use for validation.
-***REMOVED***func validate(length: Int, focused: Bool, isRequired: Bool) {
+***REMOVED***func validate(length: Int, focused: Bool) {
 ***REMOVED******REMOVED***if length == .zero && isRequired && !focused {
 ***REMOVED******REMOVED******REMOVED***validationError = .emptyWhenRequired
 ***REMOVED*** else if length < minLength || length > maxLength {
