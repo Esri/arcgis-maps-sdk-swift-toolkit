@@ -27,12 +27,24 @@ public struct TableTopSceneView: View {
     @State private var cameraController: TransformationMatrixCameraController
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
+    /// The help text to guide the user through an AR experience.
+    @State private var helpText: String = ""
+    /// A Boolean value that indicates whether the coaching overlay view is active.
+    @State private var coachingOverlayIsActive: Bool = true
+    /// A Boolean value that indicates whether to hide the coaching overlay view.
+    private var coachingOverlayIsHidden: Bool = false
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The configuration for the AR session.
     private let configuration: ARWorldTrackingConfiguration
     /// A Boolean value indicating that the scene's initial transformation has been set.
     private var initialTransformationIsSet: Bool { initialTransformation != nil }
+    /// The anchor point for the scene view.
+    private let anchorPoint: Point
+    /// The translation factor for the scene's camera controller.
+    private let translationFactor: Double
+    /// The clipping distance for the scene's camera controller.
+    private let clippingDistance: Double?
     
     /// Creates a table top scene view.
     /// - Parameters:
@@ -53,6 +65,9 @@ public struct TableTopSceneView: View {
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         self.sceneViewBuilder = sceneView
+        self.anchorPoint = anchorPoint
+        self.translationFactor = translationFactor
+        self.clippingDistance = clippingDistance
         
         let initialCamera = Camera(location: anchorPoint, heading: 0, pitch: 90, roll: 0)
         let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
@@ -97,14 +112,32 @@ public struct TableTopSceneView: View {
                         using: screenPoint
                     ) {
                         initialTransformation = transformation
+                        withAnimation {
+                            helpText = ""
+                        }
                     }
                 }
                 .onAppear {
-                    arViewProxy.session?.run(configuration)
+                    arViewProxy.session.run(configuration)
                 }
                 .onDisappear {
-                    arViewProxy.session?.pause()
+                    arViewProxy.session.pause()
                 }
+            
+            if !coachingOverlayIsHidden {
+                ARCoachingOverlay(goal: .horizontalPlane)
+                    .sessionProvider(arViewProxy)
+                    .active(coachingOverlayIsActive)
+                    .allowsHitTesting(false)
+                    .overlay (alignment: .top) {
+                        if !helpText.isEmpty {
+                            Text(helpText)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(8)
+                                .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+                        }
+                    }
+            }
             
             SceneViewReader { proxy in
                 sceneViewBuilder(proxy)
@@ -121,6 +154,15 @@ public struct TableTopSceneView: View {
                     .opacity(initialTransformationIsSet ? 1 : 0)
             }
         }
+        .onChange(of: anchorPoint) { anchorPoint in
+            cameraController.originCamera = Camera(location: anchorPoint, heading: 0, pitch: 90, roll: 0)
+        }
+        .onChange(of: translationFactor) { translationFactor in
+            cameraController.translationFactor = translationFactor
+        }
+        .onChange(of: clippingDistance) { clippingDistance in
+            cameraController.clippingDistance = clippingDistance
+        }
         .observingInterfaceOrientation($interfaceOrientation)
     }
     
@@ -130,17 +172,21 @@ public struct TableTopSceneView: View {
     ///   - node: The node to be added to the scene.
     ///   - anchor: The anchor position of the node.
     private func addPlane(renderer: SCNSceneRenderer, node: SCNNode, anchor: ARAnchor) {
-        guard let planeAnchor = anchor as? ARPlaneAnchor,
+        guard !initialTransformationIsSet,
+              let planeAnchor = anchor as? ARPlaneAnchor,
               let device = renderer.device,
               let planeGeometry = ARSCNPlaneGeometry(device: device)
         else { return }
+        
+        // Disable coaching overlay when a plane node is found.
+        coachingOverlayIsActive = false
         
         planeGeometry.update(from: planeAnchor.geometry)
         
         // Add SCNMaterial to plane geometry.
         let material = SCNMaterial()
         material.isDoubleSided = true
-        material.diffuse.contents = UIColor.white.withAlphaComponent(0.5)
+        material.diffuse.contents = UIColor.white.withAlphaComponent(0.65)
         planeGeometry.materials = [material]
         
         // Create a SCNNode from plane geometry.
@@ -149,6 +195,11 @@ public struct TableTopSceneView: View {
         // Add the visualization to the ARKit-managed node so that it tracks
         // changes in the plane anchor as plane estimation continues.
         node.addChildNode(planeNode)
+        
+        // Set help text when plane is visualized.
+        withAnimation {
+            helpText = .planeFound
+        }
     }
     
     /// Visualizes a node updated in the scene as an AR Plane.
@@ -168,6 +219,20 @@ public struct TableTopSceneView: View {
         
         // Update extent visualization to the anchor's new geometry.
         planeGeometry.update(from: planeAnchor.geometry)
+        
+        // Set help text when plane visualization is updated.
+        withAnimation {
+            helpText = .planeFound
+        }
+    }
+    
+    /// Sets the visibility of the coaching overlay view for the AR experince.
+    /// - Parameter hidden: A Boolean value that indicates whether to hide the
+    ///  coaching overlay view.
+    public func coachingOverlayHidden(_ hidden: Bool) -> Self {
+        var view = self
+        view.coachingOverlayIsHidden = hidden
+        return view
     }
 }
 
@@ -183,10 +248,10 @@ private extension ARSwiftUIViewProxy {
             alignment: .any
         ) else { return nil }
         
-        let results = session?.raycast(query)
+        let results = session.raycast(query)
         
         // Get the worldTransform from the first result; if there's no worldTransform, return nil.
-        guard let worldTransform = results?.first?.worldTransform else { return nil }
+        guard let worldTransform = results.first?.worldTransform else { return nil }
         
         // Create our hit test matrix based on the worldTransform location.
         // Right now we ignore the orientation of the plane that was hit to find the point
@@ -225,5 +290,18 @@ private extension SceneViewProxy {
         let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
         
         return initialTransformation
+    }
+}
+
+private extension String {
+    static var planeFound: String {
+        String(
+            localized: "Tap a surface to place the scene",
+            bundle: .toolkitModule,
+            comment: """
+                 An instruction to the user to tap on a horizontal surface to
+                 place an ArcGIS Scene.
+                 """
+        )
     }
 }
