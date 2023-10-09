@@ -131,11 +131,11 @@ public struct WorldScaleSceneView2: View {
             latitude: currentLocation.position.y,
             longitude: currentLocation.position.x,
             altitude: 15,
-            heading: currentHeading + 90,
+            heading: currentHeading,
             pitch: 90,
             roll: 0
         )
-        arViewProxy.session.run(configuration, options: [.resetTracking])
+        //arViewProxy.session.run(configuration, options: [.resetTracking])
         shouldShowSceneView = true
     }
     
