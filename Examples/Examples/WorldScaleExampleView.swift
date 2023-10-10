@@ -31,8 +31,8 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED***return scene
 ***REMOVED***()
 ***REMOVED***
+***REMOVED******REMOVED***/ Basemap opacity.
 ***REMOVED***@State private var opacity: Float = 1
-***REMOVED***
 ***REMOVED******REMOVED***/ Graphics overlay to show a graphic around your initial location.
 ***REMOVED***@State private var graphicsOverlay = GraphicsOverlay()
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
