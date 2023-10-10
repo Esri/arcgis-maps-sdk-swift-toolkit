@@ -28,7 +28,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ Status text displayed.
 ***REMOVED***@State private var statusText: String = ""
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
-***REMOVED***@State private var locationDatasSource = SystemLocationDataSource()
+***REMOVED***@State private var locationDatasSource: LocationDataSource
 ***REMOVED******REMOVED***/ A Boolean value indicating if the camera was initially set.
 ***REMOVED***@State private var initialCameraIsSet = false
 ***REMOVED******REMOVED***/ The current camera of the scene view.
@@ -40,6 +40,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - locationDataSource: The location datasource used to acquire the device's location.
 ***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera. A value
 ***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
@@ -48,6 +49,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ be effectively viewed in augmented reality. Properties such as the camera controller,
 ***REMOVED******REMOVED***/ and view drawing mode.
 ***REMOVED***public init(
+***REMOVED******REMOVED***locationDataSource: LocationDataSource = SystemLocationDataSource(),
 ***REMOVED******REMOVED***clippingDistance: Double? = nil,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
@@ -60,6 +62,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
 ***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_locationDatasSource = .init(initialValue: locationDataSource)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
