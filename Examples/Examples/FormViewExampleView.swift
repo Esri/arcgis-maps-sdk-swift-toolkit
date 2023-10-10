@@ -15,7 +15,7 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-struct FormExampleView: View {
+struct FormViewExampleView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
     /// The `Map` displayed in the `MapView`.
@@ -89,7 +89,7 @@ struct FormExampleView: View {
     }
 }
 
-extension FormExampleView {
+extension FormViewExampleView {
     /// Identifies features, if any, at the current screen point.
     /// - Parameter proxy: The proxy to use for identification.
     /// - Returns: The first identified feature.
@@ -112,7 +112,7 @@ extension FormExampleView {
     }
 }
 
-private extension FormExampleView {
+private extension FormViewExampleView {
     /// A Boolean value indicating whether the form controls should be shown directly in the form's presenting container.
     var useControlsInForm: Bool {
         verticalSizeClass == .compact ||
@@ -124,5 +124,4 @@ private extension FormExampleView {
 private extension URL {
     static var sampleData: Self {
         .init(string: <#URL#>)!
-    }
 }
