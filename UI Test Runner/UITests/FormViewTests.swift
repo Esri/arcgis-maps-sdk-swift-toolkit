@@ -905,6 +905,54 @@ final class FormViewTests: XCTestCase {
         // TODO: Finish implementation, pending merge of #459
     }
     
+    /// Test case 3.6: noValueOption is 'Hide'
+    func testCase_3_6() {
+        let app = XCUIApplication()
+        let doneButton = app.buttons["Done"]
+        let fieldTitle = app.staticTexts["Combo No Value False"]
+        let fieldValue = app.staticTexts["Combo No Value False Value"]
+        let firstOption = app.buttons["First"]
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let noValueButton = app.buttons["No Value"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            ""
+        )
+        
+        fieldValue.tap()
+        
+        XCTAssertFalse(
+            noValueButton.exists,
+            "No Value exists as an option but it shouldn't."
+        )
+        
+        firstOption.tap()
+        doneButton.tap()
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "First"
+        )
+    }
+    
     // - MARK: Test case 4: Radio Buttons input type
     
     /// Test case 4.1: Test regular selection
