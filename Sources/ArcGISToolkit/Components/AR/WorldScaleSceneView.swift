@@ -94,6 +94,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewDrawingMode(.manual)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.interactiveNavigationDisabled(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCameraChanged { camera in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.currentCamera = camera
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
