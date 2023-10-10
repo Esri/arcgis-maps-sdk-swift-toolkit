@@ -35,7 +35,6 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/   - initialLatitude: The initial latitude of the scene view's camera.
 ***REMOVED******REMOVED***/   - initialLongitude: The initial longitude of the scene view's camera.
 ***REMOVED******REMOVED***/   - initialAltitude: The initial altitude of the scene view's camera.
-***REMOVED******REMOVED***/   - initialHeading: The initial heading of the scene view's camera.
 ***REMOVED******REMOVED***/   - translationFactor: The translation factor that defines how much the scene view translates
 ***REMOVED******REMOVED***/   as the device moves.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
@@ -46,7 +45,6 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***initialLatitude: Double,
 ***REMOVED******REMOVED***initialLongitude: Double,
 ***REMOVED******REMOVED***initialAltitude: Double,
-***REMOVED******REMOVED***initialHeading: Double,
 ***REMOVED******REMOVED***translationFactor: Double,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
@@ -54,7 +52,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED***latitude: initialLatitude,
 ***REMOVED******REMOVED******REMOVED***longitude: initialLongitude,
 ***REMOVED******REMOVED******REMOVED***altitude: initialAltitude,
-***REMOVED******REMOVED******REMOVED***heading: initialHeading,
+***REMOVED******REMOVED******REMOVED***heading: 0,
 ***REMOVED******REMOVED******REMOVED***pitch: 90,
 ***REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED***)
@@ -64,7 +62,6 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - initialLocation: The initial location of the scene view's camera.
-***REMOVED******REMOVED***/   - initialHeading: The initial heading of the scene view's camera.
 ***REMOVED******REMOVED***/   - translationFactor: The translation factor that defines how much the scene view translates
 ***REMOVED******REMOVED***/   as the device moves.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
@@ -73,11 +70,10 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/ be effectively viewed in augmented reality. One such property is the camera controller.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***initialLocation: Point,
-***REMOVED******REMOVED***initialHeading: Double,
 ***REMOVED******REMOVED***translationFactor: Double,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
-***REMOVED******REMOVED***let camera = Camera(location: initialLocation, heading: initialHeading, pitch: 90, roll: 0)
+***REMOVED******REMOVED***let camera = Camera(location: initialLocation, heading: 0, pitch: 90, roll: 0)
 ***REMOVED******REMOVED***self.init(initialCamera: camera, translationFactor: translationFactor, sceneView: sceneView)
 ***REMOVED***
 ***REMOVED***
@@ -139,6 +135,7 @@ private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate
 ***REMOVED***
 ***REMOVED***override init() {
 ***REMOVED******REMOVED***configuration = ARPositionalTrackingConfiguration()
+***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
 ***REMOVED******REMOVED***super.init()
 ***REMOVED******REMOVED***session.delegate = self
 ***REMOVED***
