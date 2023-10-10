@@ -109,7 +109,7 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.observingInterfaceOrientation($interfaceOrientation)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration, options: [.resetTracking])
+***REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration)
 ***REMOVED***
 ***REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED***arViewProxy.session.pause()
