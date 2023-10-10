@@ -26,7 +26,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
 ***REMOVED******REMOVED***/ Status text displayed.
-***REMOVED***@State private var statusText: String = ""
+***REMOVED***@State private var statusText: String = "Acquiring current location..."
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***@State private var locationDatasSource = SystemLocationDataSource()
 ***REMOVED******REMOVED***/ A Boolean value indicating if the camera was initially set.
@@ -130,7 +130,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "Failed to access current location."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "Failed to acquire current location."
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -140,13 +140,20 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ from the location datasource.
 ***REMOVED***@MainActor
 ***REMOVED***private func updateSceneView(for location: Location) {
+***REMOVED******REMOVED******REMOVED*** Make sure there is at least a minimum horizontal and vertical accuracy.
+***REMOVED******REMOVED***guard location.horizontalAccuracy < 10 && location.verticalAccuracy < 10 else { return ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Make sure either the initial camera is not set, or we need to update the camera.
 ***REMOVED******REMOVED***guard (!initialCameraIsSet || shouldUpdateCamera(for: location)) else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Add the vertical accuracy to the z value of the position, that way if the
+***REMOVED******REMOVED******REMOVED*** GPS location is not accurate, we won't end up below the earth's surface.
+***REMOVED******REMOVED***let altitude = (location.position.z ?? 0) + location.verticalAccuracy
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***cameraController.originCamera = Camera(
 ***REMOVED******REMOVED******REMOVED***latitude: location.position.y,
 ***REMOVED******REMOVED******REMOVED***longitude: location.position.x,
-***REMOVED******REMOVED******REMOVED***altitude: 5,
+***REMOVED******REMOVED******REMOVED***altitude: altitude,
 ***REMOVED******REMOVED******REMOVED***heading: 0,
 ***REMOVED******REMOVED******REMOVED***pitch: 90,
 ***REMOVED******REMOVED******REMOVED***roll: 0
@@ -156,6 +163,12 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***cameraController.transformationMatrix = .identity
 ***REMOVED******REMOVED***arViewProxy.session.run(configuration, options: .resetTracking)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***if !initialCameraIsSet {
+***REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED***statusText = ""
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set flag
 ***REMOVED******REMOVED***initialCameraIsSet = true
 ***REMOVED***
@@ -163,6 +176,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ Returns a Boolean value indicating if the camera should be updated for a location
 ***REMOVED******REMOVED***/ coming in from the location datasource.
 ***REMOVED***func shouldUpdateCamera(for location: Location) -> Bool {
+***REMOVED******REMOVED******REMOVED*** Do not update unless the horizontal accuracy is less than a threshold.
 ***REMOVED******REMOVED***guard let currentCamera, location.horizontalAccuracy < 5 else { return false ***REMOVED***
 ***REMOVED******REMOVED***guard let sr = currentCamera.location.spatialReference else { return false ***REMOVED***
 ***REMOVED******REMOVED***guard let currentPosition = GeometryEngine.project(location.position, into: sr) else { return false ***REMOVED***
