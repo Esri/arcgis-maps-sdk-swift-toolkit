@@ -14,6 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***Toolkit
+import CoreLocation
 
 struct WorldScaleExampleView: View {
 ***REMOVED***@State private var scene: ArcGIS.Scene = {
@@ -27,16 +28,20 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED***scene.baseSurface.backgroundGrid.isVisible = false
 ***REMOVED******REMOVED***scene.baseSurface.navigationConstraint = .unconstrained
 ***REMOVED******REMOVED***scene.basemap = Basemap(style: .arcGISImagery)
-***REMOVED******REMOVED***scene.addOperationalLayer(.canyonCountyParcels)
 ***REMOVED******REMOVED***return scene
 ***REMOVED***()
 ***REMOVED***
 ***REMOVED***@State private var opacity: Float = 1
 ***REMOVED***
+***REMOVED******REMOVED***/ Graphics overlay to show a graphic around your initial location.
+***REMOVED***@State private var graphicsOverlay = GraphicsOverlay()
+***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
+***REMOVED***@State private var locationDatasSource = SystemLocationDataSource()
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***WorldScaleSceneView { proxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
+***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task.detached {
@@ -54,19 +59,25 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***layer.opacity = opacity
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Request when-in-use location authorization.
+***REMOVED******REMOVED******REMOVED***let locationManager = CLLocationManager()
+***REMOVED******REMOVED******REMOVED***if locationManager.authorizationStatus == .notDetermined {
+***REMOVED******REMOVED******REMOVED******REMOVED***locationManager.requestWhenInUseAuthorization()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await locationDatasSource.start()
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("Failed to start location datasource: \(error.localizedDescription)")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Retrieve initial location
+***REMOVED******REMOVED******REMOVED***guard let initialLocation = await locationDatasSource.locations.first(where: { _ in true ***REMOVED***) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Put a circle graphic around the initial location
+***REMOVED******REMOVED******REMOVED***let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
+***REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(Graphic(geometry: circle, symbol: SimpleLineSymbol(color: .red, width: 3)))
 ***REMOVED***
-***REMOVED***
-
-extension FeatureTable {
-***REMOVED***static var canyonCountyParcels: ServiceFeatureTable {
-***REMOVED******REMOVED***ServiceFeatureTable(url: URL(string: "https:***REMOVED***services6.arcgis.com/gcOKRHSENxBrmPoN/arcgis/rest/services/Parcels/FeatureServer/6")!)
-***REMOVED***
-***REMOVED***
-
-extension Layer {
-***REMOVED***static var canyonCountyParcels: FeatureLayer {
-***REMOVED******REMOVED***let fl = FeatureLayer(featureTable: .canyonCountyParcels)
-***REMOVED******REMOVED***fl.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .yellow, width: 3))
-***REMOVED******REMOVED***return fl
 ***REMOVED***
 ***REMOVED***

@@ -205,4 +205,3 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
-
