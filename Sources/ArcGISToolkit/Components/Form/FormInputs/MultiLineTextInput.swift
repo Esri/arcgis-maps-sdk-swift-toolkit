@@ -93,12 +93,13 @@ struct MultiLineTextInput: View {
                 model.focusedFieldName = element.fieldName
             }
         }
-        .formTextInputStyle()
+        .formInputStyle()
         TextInputFooter(
-            currentLength: isPlaceholder ? .zero : text.count,
+            text: isPlaceholder ? "" : text,
             isFocused: isFocused,
             element: element,
-            input: input
+            input: input,
+            fieldType: fieldType
         )
         .padding([.bottom], elementPadding)
         .onAppear {
@@ -123,5 +124,12 @@ struct MultiLineTextInput: View {
         .onChange(of: inputModel.value) { newValue in
             text = newValue
         }
+    }
+}
+
+private extension MultiLineTextInput {
+    /// The field type of the text input.
+    var fieldType: FieldType {
+        featureForm!.feature.table!.field(named: element.fieldName)!.type!
     }
 }
