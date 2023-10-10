@@ -25,34 +25,39 @@ public struct WorldScaleSceneView2: View {
     @State private var cameraController: TransformationMatrixCameraController
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
+    /// Status text displayed.
+    @State private var statusText: String = ""
+    /// The location datasource that is used to access the device location.
+    @State private var locationDatasSource = SystemLocationDataSource()
+    /// The current location.
+    @State private var currentLocation: Location?
+    /// A Boolean value indicating if the camera was initially set.
+    @State private var initialCameraIsSet = false
+    /// The current camera of the scene view.
+    @State private var currentCamera: Camera?
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The configuration for the AR session.
     private let configuration: ARConfiguration
     
-    @State private var statusText: String = ""
-    @State private var locationDatasSource = SystemLocationDataSource()
-    @State private var currentHeading: Double?
-    @State private var currentLocation: Location?
-    @State private var locationDataSourceError: Error?
-    @State private var lastResetLocation: Point?
-    @State private var initialCameraIsSet = false
-    @State private var currentCamera: Camera?
-    
     /// Creates a world scale scene view.
     /// - Parameters:
+    ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
+    ///   of `nil` means that no data will be clipped.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     /// - Remark: The provided scene view will have certain properties overridden in order to
     /// be effectively viewed in augmented reality. Properties such as the camera controller,
     /// and view drawing mode.
     public init(
+        clippingDistance: Double? = nil,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         self.sceneViewBuilder = sceneView
         
         let cameraController = TransformationMatrixCameraController()
         cameraController.translationFactor = 1
+        cameraController.clippingDistance = clippingDistance
         _cameraController = .init(initialValue: cameraController)
         
         configuration = ARWorldTrackingConfiguration()
@@ -126,7 +131,6 @@ public struct WorldScaleSceneView2: View {
                     }
                 }
             } catch {
-                locationDataSourceError = error
                 withAnimation {
                     statusText = "Failed to access current location."
                 }
@@ -135,38 +139,34 @@ public struct WorldScaleSceneView2: View {
     }
     
     @MainActor
-    func updateSceneView() {
+    private func updateSceneView() {
         guard let currentLocation else { return }
+        guard (!initialCameraIsSet || shouldUpdateCamera()) else { return }
         
-        if !initialCameraIsSet {
-            cameraController.originCamera = Camera(
-                latitude: currentLocation.position.y,
-                longitude: currentLocation.position.x,
-                altitude: 5,
-                heading: 0,
-                pitch: 90,
-                roll: 0
-            )
-            initialCameraIsSet = true
-        } else if shouldUpdateCamera() {
-            //statusText += " |"
-            cameraController.originCamera = Camera(
-                latitude: currentLocation.position.y,
-                longitude: currentLocation.position.x,
-                altitude: 5,
-                heading: 0,
-                pitch: 90,
-                roll: 0
-            )
-            cameraController.transformationMatrix = .identity
-            // We have to do this or the error gets bigger and bigger.
-            arViewProxy.session.run(configuration, options: .resetTracking)
-        }
+        updateOriginCamera(with: currentLocation)
+        
+        // We have to do this or the error gets bigger and bigger.
+        cameraController.transformationMatrix = .identity
+        arViewProxy.session.run(configuration, options: .resetTracking)
+        
+        // Set flag
+        initialCameraIsSet = true
+    }
+    
+    @MainActor
+    private func updateOriginCamera(with location: Location) {
+        cameraController.originCamera = Camera(
+            latitude: location.position.y,
+            longitude: location.position.x,
+            altitude: 5,
+            heading: 0,
+            pitch: 90,
+            roll: 0
+        )
     }
     
     func shouldUpdateCamera() -> Bool {
-        guard let currentLocation, let currentCamera else { return false }
-        
+        guard let currentLocation, let currentCamera, currentLocation.horizontalAccuracy < 5 else { return false }
         guard let sr = currentCamera.location.spatialReference else { return false }
         guard let currentLocationPosition = GeometryEngine.project(currentLocation.position, into: sr) else { return false }
         guard let result = GeometryEngine.geodeticDistance(
@@ -179,10 +179,8 @@ public struct WorldScaleSceneView2: View {
             return false
         }
         
-        statusText = " \(result.distance.value)\n+/-\(currentLocation.horizontalAccuracy)m"
-        
         // If the location becomes off by over a certain threshold, then update the camera location.
-        let threshold = currentLocation.horizontalAccuracy / 2
+        let threshold = 2.0
         if result.distance.value > threshold {
             return true
         }
