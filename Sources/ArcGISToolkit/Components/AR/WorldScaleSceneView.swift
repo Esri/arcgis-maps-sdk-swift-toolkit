@@ -180,9 +180,11 @@ public struct WorldScaleSceneView: View {
     /// coming in from the location datasource.
     func shouldUpdateCamera(for location: Location) -> Bool {
         // Do not update unless the horizontal accuracy is less than a threshold.
-        guard let currentCamera, location.horizontalAccuracy < 5 else { return false }
-        guard let sr = currentCamera.location.spatialReference else { return false }
-        guard let currentPosition = GeometryEngine.project(location.position, into: sr) else { return false }
+        guard let currentCamera,
+              location.horizontalAccuracy < 5,
+              let spatialReference = currentCamera.location.spatialReference,
+              let currentPosition = GeometryEngine.project(location.position, into: spatialReference)
+        else { return false }
         
         // Measure the distance between the location datasource's reported location
         // and the camera's current location.
