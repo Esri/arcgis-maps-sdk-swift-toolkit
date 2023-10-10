@@ -163,14 +163,14 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***cameraController.transformationMatrix = .identity
 ***REMOVED******REMOVED***arViewProxy.session.run(configuration, options: .resetTracking)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** If initial camera is not set, then we set it the flag here to true
+***REMOVED******REMOVED******REMOVED*** and set the status text to empty.
 ***REMOVED******REMOVED***if !initialCameraIsSet {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED***statusText = ""
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Set flag
-***REMOVED******REMOVED***initialCameraIsSet = true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns a Boolean value indicating if the camera should be updated for a location
