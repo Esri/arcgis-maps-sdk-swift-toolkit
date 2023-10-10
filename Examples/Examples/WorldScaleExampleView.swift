@@ -16,6 +16,9 @@ import ArcGIS
 import ArcGISToolkit
 import CoreLocation
 
+/// An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
+/// of your current location. Because this is an example that can be run from anywhere,
+/// it places a red circle around your initial location which can be explored.
 struct WorldScaleExampleView: View {
     @State private var scene: ArcGIS.Scene = {
         // Creates an elevation source from Terrain3D REST service.
@@ -50,6 +53,7 @@ struct WorldScaleExampleView: View {
                         }
                     }
             }
+            // A slider to adjust the basemap opacity.
             Slider(value: $opacity, in: 0...1.0)
                 .padding(.horizontal)
         }
@@ -61,6 +65,11 @@ struct WorldScaleExampleView: View {
         }
         .task {
             // Request when-in-use location authorization.
+            // This is necessary for 2 reasons:
+            // 1. Because we use location datasource to get the initial location in this example
+            // in order to display a ring around the initial location.
+            // 2. Because the `WorldScaleSceneView` utilizes a location datasource and that
+            // datasource will not start until authorized.
             let locationManager = CLLocationManager()
             if locationManager.authorizationStatus == .notDetermined {
                 locationManager.requestWhenInUseAuthorization()
