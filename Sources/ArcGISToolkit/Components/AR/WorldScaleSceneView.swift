@@ -151,7 +151,7 @@ public struct WorldScaleSceneView: View {
         
         // Add some of the vertical accuracy to the z value of the position, that way if the
         // GPS location is not accurate, we won't end up below the earth's surface.
-        let altitude = (location.position.z ?? 0) + (location.verticalAccuracy / 2)
+        let altitude = (location.position.z ?? 0) + location.verticalAccuracy
         
         cameraController.originCamera = Camera(
             latitude: location.position.y,
