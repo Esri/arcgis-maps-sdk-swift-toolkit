@@ -28,7 +28,7 @@ public struct WorldScaleSceneView: View {
     /// Status text displayed.
     @State private var statusText: String = ""
     /// The location datasource that is used to access the device location.
-    @State private var locationDatasSource = SystemLocationDataSource()
+    @State private var locationDatasSource: LocationDataSource
     /// A Boolean value indicating if the camera was initially set.
     @State private var initialCameraIsSet = false
     /// The current camera of the scene view.
@@ -40,6 +40,7 @@ public struct WorldScaleSceneView: View {
     
     /// Creates a world scale scene view.
     /// - Parameters:
+    ///   - locationDataSource: The location datasource used to acquire the device's location.
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
     ///   of `nil` means that no data will be clipped.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
@@ -48,6 +49,7 @@ public struct WorldScaleSceneView: View {
     /// be effectively viewed in augmented reality. Properties such as the camera controller,
     /// and view drawing mode.
     public init(
+        locationDataSource: LocationDataSource = SystemLocationDataSource(),
         clippingDistance: Double? = nil,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
@@ -60,6 +62,8 @@ public struct WorldScaleSceneView: View {
         
         configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
+        
+        _locationDatasSource = .init(initialValue: locationDataSource)
     }
     
     public var body: some View {
