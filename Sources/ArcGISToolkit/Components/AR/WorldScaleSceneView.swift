@@ -94,6 +94,7 @@ public struct WorldScaleSceneView: View {
                         .spaceEffect(.transparent)
                         .atmosphereEffect(.off)
                         .viewDrawingMode(.manual)
+                        .interactiveNavigationDisabled(true)
                         .onCameraChanged { camera in
                             self.currentCamera = camera
                         }
