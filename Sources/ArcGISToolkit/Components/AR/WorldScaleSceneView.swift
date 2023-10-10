@@ -26,7 +26,7 @@ public struct WorldScaleSceneView: View {
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
     /// Status text displayed.
-    @State private var statusText: String = ""
+    @State private var statusText: String = "Acquiring current location..."
     /// The location datasource that is used to access the device location.
     @State private var locationDatasSource = SystemLocationDataSource()
     /// A Boolean value indicating if the camera was initially set.
@@ -130,7 +130,7 @@ public struct WorldScaleSceneView: View {
                 }
             } catch {
                 withAnimation {
-                    statusText = "Failed to access current location."
+                    statusText = "Failed to acquire current location."
                 }
             }
         }
@@ -140,13 +140,20 @@ public struct WorldScaleSceneView: View {
     /// from the location datasource.
     @MainActor
     private func updateSceneView(for location: Location) {
+        // Make sure there is at least a minimum horizontal and vertical accuracy.
+        guard location.horizontalAccuracy < 10 && location.verticalAccuracy < 10 else { return }
+        
         // Make sure either the initial camera is not set, or we need to update the camera.
         guard (!initialCameraIsSet || shouldUpdateCamera(for: location)) else { return }
+        
+        // Add the vertical accuracy to the z value of the position, that way if the
+        // GPS location is not accurate, we won't end up below the earth's surface.
+        let altitude = (location.position.z ?? 0) + location.verticalAccuracy
         
         cameraController.originCamera = Camera(
             latitude: location.position.y,
             longitude: location.position.x,
-            altitude: 5,
+            altitude: altitude,
             heading: 0,
             pitch: 90,
             roll: 0
@@ -156,6 +163,12 @@ public struct WorldScaleSceneView: View {
         cameraController.transformationMatrix = .identity
         arViewProxy.session.run(configuration, options: .resetTracking)
         
+        if !initialCameraIsSet {
+            withAnimation {
+                statusText = ""
+            }
+        }
+        
         // Set flag
         initialCameraIsSet = true
     }
@@ -163,6 +176,7 @@ public struct WorldScaleSceneView: View {
     /// Returns a Boolean value indicating if the camera should be updated for a location
     /// coming in from the location datasource.
     func shouldUpdateCamera(for location: Location) -> Bool {
+        // Do not update unless the horizontal accuracy is less than a threshold.
         guard let currentCamera, location.horizontalAccuracy < 5 else { return false }
         guard let sr = currentCamera.location.spatialReference else { return false }
         guard let currentPosition = GeometryEngine.project(location.position, into: sr) else { return false }
