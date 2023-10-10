@@ -26,8 +26,7 @@ struct FlyoverExampleView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FlyoverSceneView(
 ***REMOVED******REMOVED******REMOVED***initialLocation: Point(x: 4.4777, y: 51.9244, z: 1_000, spatialReference: .wgs84),
-***REMOVED******REMOVED******REMOVED***initialHeading: 0,
-***REMOVED******REMOVED******REMOVED***translationFactor: 2_000
+***REMOVED******REMOVED******REMOVED***translationFactor: 1_000
 ***REMOVED******REMOVED***) { proxy in
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
