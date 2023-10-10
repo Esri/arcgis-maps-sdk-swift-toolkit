@@ -26,7 +26,7 @@ public struct WorldScaleSceneView: View {
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
     /// Status text displayed.
-    @State private var statusText: String = "Acquiring current location..."
+    @State private var statusText: String = ""
     /// The location datasource that is used to access the device location.
     @State private var locationDatasSource = SystemLocationDataSource()
     /// A Boolean value indicating if the camera was initially set.
@@ -120,6 +120,9 @@ public struct WorldScaleSceneView: View {
         }
         .task {
             do {
+                withAnimation {
+                    statusText = "Acquiring current location."
+                }
                 try await locationDatasSource.start()
                 await withTaskGroup(of: Void.self) { group in
                     group.addTask {
