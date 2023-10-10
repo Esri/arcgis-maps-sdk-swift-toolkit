@@ -905,6 +905,54 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** TODO: Finish implementation, pending merge of #459
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test case 3.6: noValueOption is 'Hide'
+***REMOVED***func testCase_3_6() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo No Value False"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo No Value False Value"]
+***REMOVED******REMOVED***let firstOption = app.buttons["First"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let noValueButton = app.buttons["No Value"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
+***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***""
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***fieldValue.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***noValueButton.exists,
+***REMOVED******REMOVED******REMOVED***"No Value exists as an option but it shouldn't."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***firstOption.tap()
+***REMOVED******REMOVED***doneButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***"First"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Test case 4: Radio Buttons input type
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 4.1: Test regular selection
