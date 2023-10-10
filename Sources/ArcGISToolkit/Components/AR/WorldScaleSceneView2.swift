@@ -25,34 +25,39 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
+***REMOVED******REMOVED***/ Status text displayed.
+***REMOVED***@State private var statusText: String = ""
+***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
+***REMOVED***@State private var locationDatasSource = SystemLocationDataSource()
+***REMOVED******REMOVED***/ The current location.
+***REMOVED***@State private var currentLocation: Location?
+***REMOVED******REMOVED***/ A Boolean value indicating if the camera was initially set.
+***REMOVED***@State private var initialCameraIsSet = false
+***REMOVED******REMOVED***/ The current camera of the scene view.
+***REMOVED***@State private var currentCamera: Camera?
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ The configuration for the AR session.
 ***REMOVED***private let configuration: ARConfiguration
 ***REMOVED***
-***REMOVED***@State private var statusText: String = ""
-***REMOVED***@State private var locationDatasSource = SystemLocationDataSource()
-***REMOVED***@State private var currentHeading: Double?
-***REMOVED***@State private var currentLocation: Location?
-***REMOVED***@State private var locationDataSourceError: Error?
-***REMOVED***@State private var lastResetLocation: Point?
-***REMOVED***@State private var initialCameraIsSet = false
-***REMOVED***@State private var currentCamera: Camera?
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera. A value
+***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
 ***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
 ***REMOVED******REMOVED***/ be effectively viewed in augmented reality. Properties such as the camera controller,
 ***REMOVED******REMOVED***/ and view drawing mode.
 ***REMOVED***public init(
+***REMOVED******REMOVED***clippingDistance: Double? = nil,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController()
 ***REMOVED******REMOVED***cameraController.translationFactor = 1
+***REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
@@ -126,7 +131,6 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***locationDataSourceError = error
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "Failed to access current location."
 ***REMOVED******REMOVED******REMOVED***
@@ -135,38 +139,34 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
-***REMOVED***func updateSceneView() {
+***REMOVED***private func updateSceneView() {
 ***REMOVED******REMOVED***guard let currentLocation else { return ***REMOVED***
+***REMOVED******REMOVED***guard (!initialCameraIsSet || shouldUpdateCamera()) else { return ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if !initialCameraIsSet {
-***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
-***REMOVED******REMOVED******REMOVED******REMOVED***latitude: currentLocation.position.y,
-***REMOVED******REMOVED******REMOVED******REMOVED***longitude: currentLocation.position.x,
-***REMOVED******REMOVED******REMOVED******REMOVED***altitude: 5,
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: 0,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
-***REMOVED*** else if shouldUpdateCamera() {
-***REMOVED******REMOVED******REMOVED******REMOVED***statusText += " |"
-***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
-***REMOVED******REMOVED******REMOVED******REMOVED***latitude: currentLocation.position.y,
-***REMOVED******REMOVED******REMOVED******REMOVED***longitude: currentLocation.position.x,
-***REMOVED******REMOVED******REMOVED******REMOVED***altitude: 5,
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: 0,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = .identity
-***REMOVED******REMOVED******REMOVED******REMOVED*** We have to do this or the error gets bigger and bigger.
-***REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration, options: .resetTracking)
+***REMOVED******REMOVED***updateOriginCamera(with: currentLocation)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** We have to do this or the error gets bigger and bigger.
+***REMOVED******REMOVED***cameraController.transformationMatrix = .identity
+***REMOVED******REMOVED***arViewProxy.session.run(configuration, options: .resetTracking)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set flag
+***REMOVED******REMOVED***initialCameraIsSet = true
 ***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***private func updateOriginCamera(with location: Location) {
+***REMOVED******REMOVED***cameraController.originCamera = Camera(
+***REMOVED******REMOVED******REMOVED***latitude: location.position.y,
+***REMOVED******REMOVED******REMOVED***longitude: location.position.x,
+***REMOVED******REMOVED******REMOVED***altitude: 5,
+***REMOVED******REMOVED******REMOVED***heading: 0,
+***REMOVED******REMOVED******REMOVED***pitch: 90,
+***REMOVED******REMOVED******REMOVED***roll: 0
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func shouldUpdateCamera() -> Bool {
-***REMOVED******REMOVED***guard let currentLocation, let currentCamera else { return false ***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let currentLocation, let currentCamera, currentLocation.horizontalAccuracy < 5 else { return false ***REMOVED***
 ***REMOVED******REMOVED***guard let sr = currentCamera.location.spatialReference else { return false ***REMOVED***
 ***REMOVED******REMOVED***guard let currentLocationPosition = GeometryEngine.project(currentLocation.position, into: sr) else { return false ***REMOVED***
 ***REMOVED******REMOVED***guard let result = GeometryEngine.geodeticDistance(
@@ -179,10 +179,8 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***statusText = " \(result.distance.value)\n+/-\(currentLocation.horizontalAccuracy)m"
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If the location becomes off by over a certain threshold, then update the camera location.
-***REMOVED******REMOVED***let threshold = currentLocation.horizontalAccuracy / 2
+***REMOVED******REMOVED***let threshold = 2.0
 ***REMOVED******REMOVED***if result.distance.value > threshold {
 ***REMOVED******REMOVED******REMOVED***return true
 ***REMOVED***
