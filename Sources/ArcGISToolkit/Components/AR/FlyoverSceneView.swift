@@ -35,7 +35,6 @@ public struct FlyoverSceneView: View {
     ///   - initialLatitude: The initial latitude of the scene view's camera.
     ///   - initialLongitude: The initial longitude of the scene view's camera.
     ///   - initialAltitude: The initial altitude of the scene view's camera.
-    ///   - initialHeading: The initial heading of the scene view's camera.
     ///   - translationFactor: The translation factor that defines how much the scene view translates
     ///   as the device moves.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
@@ -46,7 +45,6 @@ public struct FlyoverSceneView: View {
         initialLatitude: Double,
         initialLongitude: Double,
         initialAltitude: Double,
-        initialHeading: Double,
         translationFactor: Double,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
@@ -54,7 +52,7 @@ public struct FlyoverSceneView: View {
             latitude: initialLatitude,
             longitude: initialLongitude,
             altitude: initialAltitude,
-            heading: initialHeading,
+            heading: 0,
             pitch: 90,
             roll: 0
         )
@@ -64,7 +62,6 @@ public struct FlyoverSceneView: View {
     /// Creates a fly over scene view.
     /// - Parameters:
     ///   - initialLocation: The initial location of the scene view's camera.
-    ///   - initialHeading: The initial heading of the scene view's camera.
     ///   - translationFactor: The translation factor that defines how much the scene view translates
     ///   as the device moves.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
@@ -73,11 +70,10 @@ public struct FlyoverSceneView: View {
     /// be effectively viewed in augmented reality. One such property is the camera controller.
     public init(
         initialLocation: Point,
-        initialHeading: Double,
         translationFactor: Double,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
-        let camera = Camera(location: initialLocation, heading: initialHeading, pitch: 90, roll: 0)
+        let camera = Camera(location: initialLocation, heading: 0, pitch: 90, roll: 0)
         self.init(initialCamera: camera, translationFactor: translationFactor, sceneView: sceneView)
     }
     
@@ -139,6 +135,7 @@ private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate
     
     override init() {
         configuration = ARPositionalTrackingConfiguration()
+        configuration.worldAlignment = .gravityAndHeading
         super.init()
         session.delegate = self
     }
