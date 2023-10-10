@@ -149,7 +149,7 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
 ***REMOVED*** else if shouldUpdateCamera() {
-***REMOVED******REMOVED******REMOVED***statusText += " |"
+***REMOVED******REMOVED******REMOVED******REMOVED***statusText += " |"
 ***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
 ***REMOVED******REMOVED******REMOVED******REMOVED***latitude: currentLocation.position.y,
 ***REMOVED******REMOVED******REMOVED******REMOVED***longitude: currentLocation.position.x,
@@ -159,23 +159,31 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = .identity
+***REMOVED******REMOVED******REMOVED******REMOVED*** We have to do this or the error gets bigger and bigger.
+***REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration, options: .resetTracking)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func shouldUpdateCamera() -> Bool {
-***REMOVED******REMOVED***guard let currentLocation, let currentCamera, currentLocation.horizontalAccuracy < 5 else { return false ***REMOVED***
+***REMOVED******REMOVED***guard let currentLocation, let currentCamera else { return false ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let sr = currentCamera.location.spatialReference else { return false ***REMOVED***
 ***REMOVED******REMOVED***guard let currentLocationPosition = GeometryEngine.project(currentLocation.position, into: sr) else { return false ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if let result = GeometryEngine.geodeticDistance(
+***REMOVED******REMOVED***guard let result = GeometryEngine.geodeticDistance(
 ***REMOVED******REMOVED******REMOVED***from: currentCamera.location,
 ***REMOVED******REMOVED******REMOVED***to: currentLocationPosition,
 ***REMOVED******REMOVED******REMOVED***distanceUnit: .meters,
 ***REMOVED******REMOVED******REMOVED***azimuthUnit: nil,
 ***REMOVED******REMOVED******REMOVED***curveType: .geodesic
-***REMOVED******REMOVED***), result.distance.value > 2 {
-***REMOVED******REMOVED******REMOVED***print("-- distance: \(result.distance.value)")
+***REMOVED******REMOVED***) else {
+***REMOVED******REMOVED******REMOVED***return false
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***statusText = " \(result.distance.value)\n+/-\(currentLocation.horizontalAccuracy)m"
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** If the location becomes off by over a certain threshold, then update the camera location.
+***REMOVED******REMOVED***let threshold = currentLocation.horizontalAccuracy / 2
+***REMOVED******REMOVED***if result.distance.value > threshold {
 ***REMOVED******REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED******REMOVED***
