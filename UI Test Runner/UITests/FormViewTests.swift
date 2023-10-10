@@ -830,10 +830,8 @@ final class FormViewTests: XCTestCase {
     /// Test case 3.4: Picker with a noValueLabel row
     func testCase_3_4() {
         let app = XCUIApplication()
-        let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Combo String"]
         let fieldValue = app.staticTexts["Combo String Value"]
-        let firstOptionButton = app.buttons["String 1"]
         let formTitle = app.staticTexts["comboBox"]
         let formViewTestsButton = app.buttons["FormView Tests"]
         
@@ -871,10 +869,8 @@ final class FormViewTests: XCTestCase {
     func testCase_3_5() {
         let app = XCUIApplication()
         let clearButton = app.buttons["Required Combo Box Clear Button"]
-        let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Required Combo Box"]
         let fieldValue = app.staticTexts["Required Combo Box Value"]
-        let firstOptionButton = app.buttons["String 1"]
         let formTitle = app.staticTexts["comboBox"]
         let formViewTestsButton = app.buttons["FormView Tests"]
         
