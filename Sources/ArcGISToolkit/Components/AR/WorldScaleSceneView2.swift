@@ -149,7 +149,7 @@ public struct WorldScaleSceneView2: View {
             )
             initialCameraIsSet = true
         } else if shouldUpdateCamera() {
-            statusText += " |"
+            //statusText += " |"
             cameraController.originCamera = Camera(
                 latitude: currentLocation.position.y,
                 longitude: currentLocation.position.x,
@@ -159,23 +159,31 @@ public struct WorldScaleSceneView2: View {
                 roll: 0
             )
             cameraController.transformationMatrix = .identity
+            // We have to do this or the error gets bigger and bigger.
+            arViewProxy.session.run(configuration, options: .resetTracking)
         }
     }
     
     func shouldUpdateCamera() -> Bool {
-        guard let currentLocation, let currentCamera, currentLocation.horizontalAccuracy < 5 else { return false }
+        guard let currentLocation, let currentCamera else { return false }
         
         guard let sr = currentCamera.location.spatialReference else { return false }
         guard let currentLocationPosition = GeometryEngine.project(currentLocation.position, into: sr) else { return false }
-        
-        if let result = GeometryEngine.geodeticDistance(
+        guard let result = GeometryEngine.geodeticDistance(
             from: currentCamera.location,
             to: currentLocationPosition,
             distanceUnit: .meters,
             azimuthUnit: nil,
             curveType: .geodesic
-        ), result.distance.value > 2 {
-            print("-- distance: \(result.distance.value)")
+        ) else {
+            return false
+        }
+        
+        statusText = " \(result.distance.value)\n+/-\(currentLocation.horizontalAccuracy)m"
+        
+        // If the location becomes off by over a certain threshold, then update the camera location.
+        let threshold = currentLocation.horizontalAccuracy / 2
+        if result.distance.value > threshold {
             return true
         }
         
