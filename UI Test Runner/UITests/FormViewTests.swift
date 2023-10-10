@@ -867,6 +867,48 @@ final class FormViewTests: XCTestCase {
         // TODO: Finish implementation, pending design issue resolution
     }
     
+    /// Test case 3.5: Required Value
+    func testCase_3_5() {
+        let app = XCUIApplication()
+        let clearButton = app.buttons["Required Combo Box Clear Button"]
+        let doneButton = app.buttons["Done"]
+        let fieldTitle = app.staticTexts["Required Combo Box"]
+        let fieldValue = app.staticTexts["Required Combo Box Value"]
+        let firstOptionButton = app.buttons["String 1"]
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "Pine"
+        )
+        
+        XCTAssertTrue(
+            clearButton.isHittable,
+            "The clear button isn't hittable."
+        )
+        
+        clearButton.tap()
+        
+        // TODO: Finish implementation, pending merge of #459
+    }
+    
     // - MARK: Test case 4: Radio Buttons input type
     
     /// Test case 4.1: Test regular selection
