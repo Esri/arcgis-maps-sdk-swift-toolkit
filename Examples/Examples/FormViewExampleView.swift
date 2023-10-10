@@ -49,7 +49,6 @@ struct FormViewExampleView: View {
                 }
                 .ignoresSafeArea(.keyboard)
                 
-                // Or present a FormView in a Floating Panel (provided via the Toolkit)
                 .floatingPanel(
                     selectedDetent: .constant(.half),
                     horizontalAlignment: .leading,
@@ -66,7 +65,7 @@ struct FormViewExampleView: View {
                     // buttons can be merged and hoisted up as the root content of the toolbar.
                     
                     ToolbarItem(placement: .navigationBarLeading) {
-                        if isPresented && !useControlsInForm {
+                        if isPresented {
                             Button("Cancel", role: .cancel) {
                                 formViewModel.undoEdits()
                                 isPresented = false
@@ -75,7 +74,7 @@ struct FormViewExampleView: View {
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        if isPresented && !useControlsInForm {
+                        if isPresented {
                             Button("Submit") {
                                 Task {
                                     await formViewModel.submitChanges()
@@ -112,16 +111,8 @@ extension FormViewExampleView {
     }
 }
 
-private extension FormViewExampleView {
-    /// A Boolean value indicating whether the form controls should be shown directly in the form's presenting container.
-    var useControlsInForm: Bool {
-        verticalSizeClass == .compact ||
-        UIDevice.current.userInterfaceIdiom == .mac ||
-        UIDevice.current.userInterfaceIdiom == .pad
-    }
-}
-
 private extension URL {
     static var sampleData: Self {
-        .init(string: <#URL#>)!
+        .init(string: "")!
+    }
 }
