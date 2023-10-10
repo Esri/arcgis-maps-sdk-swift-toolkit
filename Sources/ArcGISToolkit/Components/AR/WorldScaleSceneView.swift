@@ -146,9 +146,9 @@ public struct WorldScaleSceneView: View {
         // Make sure either the initial camera is not set, or we need to update the camera.
         guard (!initialCameraIsSet || shouldUpdateCamera(for: location)) else { return }
         
-        // Add the vertical accuracy to the z value of the position, that way if the
+        // Add some of the vertical accuracy to the z value of the position, that way if the
         // GPS location is not accurate, we won't end up below the earth's surface.
-        let altitude = (location.position.z ?? 0) + location.verticalAccuracy
+        let altitude = (location.position.z ?? 0) + (location.verticalAccuracy / 2)
         
         cameraController.originCamera = Camera(
             latitude: location.position.y,
