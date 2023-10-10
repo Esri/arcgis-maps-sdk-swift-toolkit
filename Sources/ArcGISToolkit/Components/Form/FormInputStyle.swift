@@ -1,10 +1,11 @@
 ***REMOVED*** Copyright 2023 Esri.
-
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,20 +14,23 @@
 
 ***REMOVED***
 
-***REMOVED***/ SwiftUI `TextEditor` and `TextField` views have different styling. `TextField`s have
-***REMOVED***/ `textFieldStyle` and `TextEditor`s do not. This modifier allows for common styling.
-struct FormTextInputStyle: ViewModifier {
+***REMOVED***/ Provides a frame minimum height constraint, padding, background color and rounded corners for a
+***REMOVED***/ form input.
+struct FormInputStyle: ViewModifier {
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.padding(4)
+***REMOVED******REMOVED******REMOVED***.frame(minHeight: 30)
+***REMOVED******REMOVED******REMOVED***.padding([.horizontal], 10)
+***REMOVED******REMOVED******REMOVED***.padding([.vertical], 5)
 ***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .tertiarySystemFill))
 ***REMOVED******REMOVED******REMOVED***.cornerRadius(10)
 ***REMOVED***
 ***REMOVED***
 
 extension View {
-***REMOVED******REMOVED***/ Adds a common padding and background around form field text elements.
-***REMOVED***func formTextInputStyle() -> some View {
-***REMOVED******REMOVED***modifier(FormTextInputStyle())
+***REMOVED******REMOVED***/ Provides a frame minimum height constraint, padding, background color and rounded corners
+***REMOVED******REMOVED***/ for a form input.
+***REMOVED***func formInputStyle() -> some View {
+***REMOVED******REMOVED***modifier(FormInputStyle())
 ***REMOVED***
 ***REMOVED***

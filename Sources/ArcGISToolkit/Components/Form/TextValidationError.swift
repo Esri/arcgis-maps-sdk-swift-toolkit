@@ -11,10 +11,16 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***/ An error that can be encountered while performing length validation.
-enum LengthError {
+***REMOVED***/ An error that can be encountered while performing text validation.
+enum TextValidationError {
 ***REMOVED******REMOVED***/ The text field was left empty but a value is required.
 ***REMOVED***case emptyWhenRequired
 ***REMOVED******REMOVED***/ The text field has too few or too many characters.
 ***REMOVED***case minOrMaxUnmet
+***REMOVED******REMOVED***/ The text field contains a value that does not represent a whole number.
+***REMOVED***case nonInteger
+***REMOVED******REMOVED***/ The text field contains a value that does not represent a fractional number.
+***REMOVED***case nonDecimal
+***REMOVED******REMOVED***/ The text number value is out of range.
+***REMOVED***case outOfRange
 ***REMOVED***

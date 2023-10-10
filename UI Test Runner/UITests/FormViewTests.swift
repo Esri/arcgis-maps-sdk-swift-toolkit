@@ -265,6 +265,57 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***func testCase_1_4() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let footer = app.staticTexts["numbers Footer"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["Domain"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let textField = app.textFields["numbers Text Field"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"Range domain  2-5"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***textField.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***textField.typeText("1")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"Enter value from 2.0 to 5.0"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Highlight/select the current value and replace it
+***REMOVED******REMOVED***textField.doubleTap()
+***REMOVED******REMOVED***textField.typeText("2.1")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"Range domain  2-5"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Highlight/select the current value and replace it
+***REMOVED******REMOVED***textField.doubleTap()
+***REMOVED******REMOVED***textField.typeText("5.1")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"Enter value from 2.0 to 5.0"
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Test case 2: DateTime picker input type
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 2.1: Unfocused and focused state, no value, date required
