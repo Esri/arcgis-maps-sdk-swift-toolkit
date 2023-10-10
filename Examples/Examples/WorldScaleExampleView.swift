@@ -16,6 +16,9 @@
 ***REMOVED***Toolkit
 import CoreLocation
 
+***REMOVED***/ An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
+***REMOVED***/ of your current location. Because this is an example that can be run from anywhere,
+***REMOVED***/ it places a red circle around your initial location which can be explored.
 struct WorldScaleExampleView: View {
 ***REMOVED***@State private var scene: ArcGIS.Scene = {
 ***REMOVED******REMOVED******REMOVED*** Creates an elevation source from Terrain3D REST service.
@@ -50,6 +53,7 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** A slider to adjust the basemap opacity.
 ***REMOVED******REMOVED******REMOVED***Slider(value: $opacity, in: 0...1.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
 ***REMOVED***
@@ -61,6 +65,11 @@ struct WorldScaleExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Request when-in-use location authorization.
+***REMOVED******REMOVED******REMOVED******REMOVED*** This is necessary for 2 reasons:
+***REMOVED******REMOVED******REMOVED******REMOVED*** 1. Because we use location datasource to get the initial location in this example
+***REMOVED******REMOVED******REMOVED******REMOVED*** in order to display a ring around the initial location.
+***REMOVED******REMOVED******REMOVED******REMOVED*** 2. Because the `WorldScaleSceneView` utilizes a location datasource and that
+***REMOVED******REMOVED******REMOVED******REMOVED*** datasource will not start until authorized.
 ***REMOVED******REMOVED******REMOVED***let locationManager = CLLocationManager()
 ***REMOVED******REMOVED******REMOVED***if locationManager.authorizationStatus == .notDetermined {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationManager.requestWhenInUseAuthorization()
