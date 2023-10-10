@@ -14,6 +14,7 @@
 import SwiftUI
 import ArcGIS
 import ArcGISToolkit
+import CoreLocation
 
 struct WorldScaleExampleView: View {
     @State private var scene: ArcGIS.Scene = {
@@ -27,16 +28,20 @@ struct WorldScaleExampleView: View {
         scene.baseSurface.backgroundGrid.isVisible = false
         scene.baseSurface.navigationConstraint = .unconstrained
         scene.basemap = Basemap(style: .arcGISImagery)
-        scene.addOperationalLayer(.canyonCountyParcels)
         return scene
     }()
     
     @State private var opacity: Float = 1
     
+    /// Graphics overlay to show a graphic around your initial location.
+    @State private var graphicsOverlay = GraphicsOverlay()
+    /// The location datasource that is used to access the device location.
+    @State private var locationDatasSource = SystemLocationDataSource()
+    
     var body: some View {
         VStack {
             WorldScaleSceneView { proxy in
-                SceneView(scene: scene)
+                SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
                     .onSingleTapGesture { screen, _ in
                         print("Identifying...")
                         Task.detached {
@@ -54,19 +59,25 @@ struct WorldScaleExampleView: View {
                 layer.opacity = opacity
             }
         }
-    }
-}
-
-extension FeatureTable {
-    static var canyonCountyParcels: ServiceFeatureTable {
-        ServiceFeatureTable(url: URL(string: "https://services6.arcgis.com/gcOKRHSENxBrmPoN/arcgis/rest/services/Parcels/FeatureServer/6")!)
-    }
-}
-
-extension Layer {
-    static var canyonCountyParcels: FeatureLayer {
-        let fl = FeatureLayer(featureTable: .canyonCountyParcels)
-        fl.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .yellow, width: 3))
-        return fl
+        .task {
+            // Request when-in-use location authorization.
+            let locationManager = CLLocationManager()
+            if locationManager.authorizationStatus == .notDetermined {
+                locationManager.requestWhenInUseAuthorization()
+            }
+            
+            do {
+                try await locationDatasSource.start()
+            } catch {
+                print("Failed to start location datasource: \(error.localizedDescription)")
+            }
+            
+            // Retrieve initial location
+            guard let initialLocation = await locationDatasSource.locations.first(where: { _ in true }) else { return }
+            
+            // Put a circle graphic around the initial location
+            let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
+            graphicsOverlay.addGraphic(Graphic(geometry: circle, symbol: SimpleLineSymbol(color: .red, width: 3)))
+        }
     }
 }
