@@ -163,14 +163,14 @@ public struct WorldScaleSceneView: View {
         cameraController.transformationMatrix = .identity
         arViewProxy.session.run(configuration, options: .resetTracking)
         
+        // If initial camera is not set, then we set it the flag here to true
+        // and set the status text to empty.
         if !initialCameraIsSet {
             withAnimation {
                 statusText = ""
             }
+            initialCameraIsSet = true
         }
-        
-        // Set flag
-        initialCameraIsSet = true
     }
     
     /// Returns a Boolean value indicating if the camera should be updated for a location
