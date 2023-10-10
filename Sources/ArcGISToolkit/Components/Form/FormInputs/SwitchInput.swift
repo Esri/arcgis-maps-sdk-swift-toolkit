@@ -77,11 +77,14 @@ struct SwitchInput: View {
             Group {
                 InputHeader(label: element.label, isRequired: inputModel.isRequired)
                     .padding([.top], elementPadding)
-                Toggle(switchState ? input.onValue.name : input.offValue.name, isOn: $switchState)
-                    .toggleStyle(.switch)
-                    .padding([.horizontal], 5)
-                    .formTextInputStyle()
-                    .accessibilityIdentifier("\(element.label) Switch")
+                HStack {
+                    Text(switchState ? input.onValue.name : input.offValue.name)
+                    Spacer()
+                    Toggle("", isOn: $switchState)
+                        .toggleStyle(.switch)
+                        .accessibilityIdentifier("\(element.label) Switch")
+                }
+                .formInputStyle()
                 InputFooter(element: element, requiredValueMissing: requiredValueMissing)
             }
             .disabled(!inputModel.isEditable)
