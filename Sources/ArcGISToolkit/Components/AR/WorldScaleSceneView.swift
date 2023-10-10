@@ -26,7 +26,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
 ***REMOVED******REMOVED***/ Status text displayed.
-***REMOVED***@State private var statusText: String = "Acquiring current location..."
+***REMOVED***@State private var statusText: String = ""
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***@State private var locationDatasSource = SystemLocationDataSource()
 ***REMOVED******REMOVED***/ A Boolean value indicating if the camera was initially set.
@@ -120,6 +120,9 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***statusText = "Acquiring current location."
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await locationDatasSource.start()
 ***REMOVED******REMOVED******REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
