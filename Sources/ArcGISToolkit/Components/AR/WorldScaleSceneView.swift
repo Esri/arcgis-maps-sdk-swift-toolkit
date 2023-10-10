@@ -205,4 +205,3 @@ public struct WorldScaleSceneView: View {
         return false
     }
 }
-
