@@ -111,6 +111,9 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration, options: [.resetTracking])
 ***REMOVED***
+***REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED***arViewProxy.session.pause()
+***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await locationDatasSource.start()
@@ -156,7 +159,6 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***cameraController.transformationMatrix = .identity
-***REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration, options: [.resetTracking])
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
