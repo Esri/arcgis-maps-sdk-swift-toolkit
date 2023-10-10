@@ -15,7 +15,7 @@ import SwiftUI
 import ArcGIS
 import ArcGISToolkit
 
-struct WorldTrackingExampleView: View {
+struct WorldScaleExampleView: View {
     @State private var scene: ArcGIS.Scene = {
 //        // Creates an elevation source from Terrain3D REST service.
 //        let elevationServiceURL = URL(string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!
@@ -35,7 +35,7 @@ struct WorldTrackingExampleView: View {
     
     var body: some View {
         VStack {
-            WorldTrackingSceneView { proxy in
+            WorldScaleSceneView { proxy in
                 SceneView(scene: scene)
                     .onSingleTapGesture { screen, _ in
                         print("Identifying...")
