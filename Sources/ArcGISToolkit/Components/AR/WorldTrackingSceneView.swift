@@ -16,7 +16,7 @@ import ARKit
 ***REMOVED***
 
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience.
-public struct WorldScaleSceneView2: View {
+public struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED******REMOVED***/ The proxy for the scene view.
@@ -29,8 +29,6 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED***@State private var statusText: String = ""
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***@State private var locationDatasSource = SystemLocationDataSource()
-***REMOVED******REMOVED***/ The current location.
-***REMOVED***@State private var currentLocation: Location?
 ***REMOVED******REMOVED***/ A Boolean value indicating if the camera was initially set.
 ***REMOVED***@State private var initialCameraIsSet = false
 ***REMOVED******REMOVED***/ The current camera of the scene view.
@@ -125,8 +123,7 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await location in locationDatasSource.locations {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.currentLocation = location
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await updateSceneView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await updateSceneView(for: location)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -139,11 +136,18 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
-***REMOVED***private func updateSceneView() {
-***REMOVED******REMOVED***guard let currentLocation else { return ***REMOVED***
-***REMOVED******REMOVED***guard (!initialCameraIsSet || shouldUpdateCamera()) else { return ***REMOVED***
+***REMOVED***private func updateSceneView(for location: Location) {
+***REMOVED******REMOVED******REMOVED*** Make sure either the initial camera is not set, or we need to update the camera.
+***REMOVED******REMOVED***guard (!initialCameraIsSet || shouldUpdateCamera(for: location)) else { return ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***updateOriginCamera(with: currentLocation)
+***REMOVED******REMOVED***cameraController.originCamera = Camera(
+***REMOVED******REMOVED******REMOVED***latitude: location.position.y,
+***REMOVED******REMOVED******REMOVED***longitude: location.position.x,
+***REMOVED******REMOVED******REMOVED***altitude: 5,
+***REMOVED******REMOVED******REMOVED***heading: 0,
+***REMOVED******REMOVED******REMOVED***pitch: 90,
+***REMOVED******REMOVED******REMOVED***roll: 0
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** We have to do this or the error gets bigger and bigger.
 ***REMOVED******REMOVED***cameraController.transformationMatrix = .identity
@@ -153,25 +157,16 @@ public struct WorldScaleSceneView2: View {
 ***REMOVED******REMOVED***initialCameraIsSet = true
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor
-***REMOVED***private func updateOriginCamera(with location: Location) {
-***REMOVED******REMOVED***cameraController.originCamera = Camera(
-***REMOVED******REMOVED******REMOVED***latitude: location.position.y,
-***REMOVED******REMOVED******REMOVED***longitude: location.position.x,
-***REMOVED******REMOVED******REMOVED***altitude: 5,
-***REMOVED******REMOVED******REMOVED***heading: 0,
-***REMOVED******REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED******REMOVED***roll: 0
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***func shouldUpdateCamera() -> Bool {
-***REMOVED******REMOVED***guard let currentLocation, let currentCamera, currentLocation.horizontalAccuracy < 5 else { return false ***REMOVED***
+***REMOVED***func shouldUpdateCamera(for location: Location) -> Bool {
+***REMOVED******REMOVED***guard let currentCamera, location.horizontalAccuracy < 5 else { return false ***REMOVED***
 ***REMOVED******REMOVED***guard let sr = currentCamera.location.spatialReference else { return false ***REMOVED***
-***REMOVED******REMOVED***guard let currentLocationPosition = GeometryEngine.project(currentLocation.position, into: sr) else { return false ***REMOVED***
+***REMOVED******REMOVED***guard let currentPosition = GeometryEngine.project(location.position, into: sr) else { return false ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Measure the distance between the location datasource's reported location
+***REMOVED******REMOVED******REMOVED*** and the camera's current location.
 ***REMOVED******REMOVED***guard let result = GeometryEngine.geodeticDistance(
 ***REMOVED******REMOVED******REMOVED***from: currentCamera.location,
-***REMOVED******REMOVED******REMOVED***to: currentLocationPosition,
+***REMOVED******REMOVED******REMOVED***to: currentPosition,
 ***REMOVED******REMOVED******REMOVED***distanceUnit: .meters,
 ***REMOVED******REMOVED******REMOVED***azimuthUnit: nil,
 ***REMOVED******REMOVED******REMOVED***curveType: .geodesic

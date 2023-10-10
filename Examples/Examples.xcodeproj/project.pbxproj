@@ -16,7 +16,7 @@
 		75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */; ***REMOVED***;
 		75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */; ***REMOVED***;
 		882899FD2AB5099300A0BDC1 /* FlyoverExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */; ***REMOVED***;
-		885554952ACB4D9600ECBB4A /* WorldScaleExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885554942ACB4D9600ECBB4A /* WorldScaleExampleView.swift */; ***REMOVED***;
+		885554952ACB4D9600ECBB4A /* WorldTrackingExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885554942ACB4D9600ECBB4A /* WorldTrackingExampleView.swift */; ***REMOVED***;
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; ***REMOVED***;
 		E4624A25278CE815000D2A38 /* FloorFilterExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */; ***REMOVED***;
 		E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */; ***REMOVED***;
@@ -56,7 +56,7 @@
 		75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalebarExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyoverExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
-		885554942ACB4D9600ECBB4A /* WorldScaleExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorldScaleExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
+		885554942ACB4D9600ECBB4A /* WorldTrackingExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorldTrackingExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		885554962ACF6D3F00ECBB4A /* AR Session 2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; name = "AR Session 2.mov"; path = "../../../../Downloads/AR Session 2.mov"; sourceTree = "<group>"; ***REMOVED***;
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
@@ -113,7 +113,7 @@
 				75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */,
 				882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */,
 				1CC376D32ABA0B3700A83300 /* TableTopExampleView.swift */,
-				885554942ACB4D9600ECBB4A /* WorldScaleExampleView.swift */,
+				885554942ACB4D9600ECBB4A /* WorldTrackingExampleView.swift */,
 			);
 			name = Examples;
 			sourceTree = "<group>";
@@ -292,7 +292,7 @@
 				4D19FCB52881C8F3002601E8 /* PopupExampleView.swift in Sources */,
 				882899FD2AB5099300A0BDC1 /* FlyoverExampleView.swift in Sources */,
 				E48A73462658227100F5C118 /* ExampleView.swift in Sources */,
-				885554952ACB4D9600ECBB4A /* WorldScaleExampleView.swift in Sources */,
+				885554952ACB4D9600ECBB4A /* WorldTrackingExampleView.swift in Sources */,
 				E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */,
 				E4C389D526B8A12C002BC255 /* BasemapGalleryExampleView.swift in Sources */,
 				75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */,

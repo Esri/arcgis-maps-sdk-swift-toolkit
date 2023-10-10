@@ -15,7 +15,7 @@
 ***REMOVED***
 ***REMOVED***Toolkit
 
-struct WorldScaleExampleView: View {
+struct WorldTrackingExampleView: View {
 ***REMOVED***@State private var scene: ArcGIS.Scene = {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Creates an elevation source from Terrain3D REST service.
 ***REMOVED******REMOVED******REMOVED***let elevationServiceURL = URL(string: "https:***REMOVED***elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!
@@ -35,7 +35,7 @@ struct WorldScaleExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***WorldScaleSceneView2 { proxy in
+***REMOVED******REMOVED******REMOVED***WorldTrackingSceneView { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
