@@ -200,10 +200,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If the location becomes off by over a certain threshold, then update the camera location.
 ***REMOVED******REMOVED***let threshold = 2.0
-***REMOVED******REMOVED***if result.distance.value > threshold {
-***REMOVED******REMOVED******REMOVED***return true
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return false
+***REMOVED******REMOVED***return result.distance.value > threshold ? true : false
 ***REMOVED***
 ***REMOVED***
