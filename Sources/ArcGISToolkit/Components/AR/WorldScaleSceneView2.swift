@@ -111,6 +111,9 @@ public struct WorldScaleSceneView2: View {
         .onAppear {
             arViewProxy.session.run(configuration, options: [.resetTracking])
         }
+        .onDisappear {
+            arViewProxy.session.pause()
+        }
         .task {
             do {
                 try await locationDatasSource.start()
@@ -156,7 +159,6 @@ public struct WorldScaleSceneView2: View {
                 roll: 0
             )
             cameraController.transformationMatrix = .identity
-            arViewProxy.session.run(configuration, options: [.resetTracking])
         }
     }
     
