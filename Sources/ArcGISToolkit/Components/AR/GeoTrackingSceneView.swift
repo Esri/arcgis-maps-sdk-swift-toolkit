@@ -22,7 +22,7 @@ enum GeotrackingLocationAvailability {
 }
 
 /// A scene view that provides an augmented reality world scale experience.
-public struct WorldScaleSceneView: View {
+public struct GeoTrackingSceneView: View {
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
     /// The proxy for the scene view.
