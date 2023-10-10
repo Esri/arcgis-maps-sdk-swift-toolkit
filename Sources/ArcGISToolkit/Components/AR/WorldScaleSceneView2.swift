@@ -116,12 +116,6 @@ public struct WorldScaleSceneView2: View {
                 try await locationDatasSource.start()
                 await withTaskGroup(of: Void.self) { group in
                     group.addTask {
-                        for await heading in locationDatasSource.headings {
-                            self.currentHeading = heading
-                            //await updateSceneView()
-                        }
-                    }
-                    group.addTask {
                         for await location in locationDatasSource.locations {
                             self.currentLocation = location
                             await updateSceneView()
@@ -139,14 +133,14 @@ public struct WorldScaleSceneView2: View {
     
     @MainActor
     func updateSceneView() {
-        guard let currentHeading, let currentLocation else { return }
+        guard let currentLocation else { return }
         
         if !initialCameraIsSet {
             cameraController.originCamera = Camera(
                 latitude: currentLocation.position.y,
                 longitude: currentLocation.position.x,
                 altitude: 5,
-                heading: currentHeading,
+                heading: 0,
                 pitch: 90,
                 roll: 0
             )
@@ -157,7 +151,7 @@ public struct WorldScaleSceneView2: View {
                 latitude: currentLocation.position.y,
                 longitude: currentLocation.position.x,
                 altitude: 5,
-                heading: currentHeading,
+                heading: 0,
                 pitch: 90,
                 roll: 0
             )
@@ -167,20 +161,10 @@ public struct WorldScaleSceneView2: View {
     }
     
     func shouldUpdateCamera() -> Bool {
-        guard let currentLocation, let currentCamera else { return false }
-        
-//        guard let currentHeading else { return false }
-//        if fabs(Self.delta(currentCamera.heading, currentHeading)) > 20 {
-//            print("-- heading: \(currentCamera.heading) to \(currentHeading)")
-//            return true
-//        }
+        guard let currentLocation, let currentCamera, currentLocation.horizontalAccuracy < 5 else { return false }
         
         guard let sr = currentCamera.location.spatialReference else { return false }
         guard let currentLocationPosition = GeometryEngine.project(currentLocation.position, into: sr) else { return false }
-        
-        if currentLocation.horizontalAccuracy > 5 {
-            return false
-        }
         
         if let result = GeometryEngine.geodeticDistance(
             from: currentCamera.location,
@@ -199,13 +183,6 @@ public struct WorldScaleSceneView2: View {
     @ViewBuilder func statusView(for status: String) -> some View {
         Text(status)
             .multilineTextAlignment(.center)
-    }
-    
-    private static func delta(_ angle1: Double, _ angle2: Double) -> Double {
-        var delta = angle2 - angle1
-        while (delta < -180) { delta += 360 }
-        while (delta > 180) { delta -= 360 }
-        return delta
     }
 }
 
