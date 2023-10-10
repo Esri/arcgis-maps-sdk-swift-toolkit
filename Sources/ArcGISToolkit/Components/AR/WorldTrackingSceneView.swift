@@ -104,7 +104,8 @@ public struct WorldTrackingSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED***if !statusText.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***statusView(for: statusText)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(statusText)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
@@ -135,6 +136,8 @@ public struct WorldTrackingSceneView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ If necessary, updates the scene view's camera controller for a new location coming
+***REMOVED******REMOVED***/ from the location datasource.
 ***REMOVED***@MainActor
 ***REMOVED***private func updateSceneView(for location: Location) {
 ***REMOVED******REMOVED******REMOVED*** Make sure either the initial camera is not set, or we need to update the camera.
@@ -157,6 +160,8 @@ public struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***initialCameraIsSet = true
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Returns a Boolean value indicating if the camera should be updated for a location
+***REMOVED******REMOVED***/ coming in from the location datasource.
 ***REMOVED***func shouldUpdateCamera(for location: Location) -> Bool {
 ***REMOVED******REMOVED***guard let currentCamera, location.horizontalAccuracy < 5 else { return false ***REMOVED***
 ***REMOVED******REMOVED***guard let sr = currentCamera.location.spatialReference else { return false ***REMOVED***
@@ -181,11 +186,6 @@ public struct WorldTrackingSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return false
-***REMOVED***
-***REMOVED***
-***REMOVED***@ViewBuilder func statusView(for status: String) -> some View {
-***REMOVED******REMOVED***Text(status)
-***REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED***
 ***REMOVED***
 
