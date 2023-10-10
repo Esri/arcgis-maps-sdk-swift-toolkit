@@ -104,7 +104,8 @@ public struct WorldTrackingSceneView: View {
         }
         .overlay(alignment: .top) {
             if !statusText.isEmpty {
-                statusView(for: statusText)
+                Text(statusText)
+                    .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(8)
                     .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
@@ -135,6 +136,8 @@ public struct WorldTrackingSceneView: View {
         }
     }
     
+    /// If necessary, updates the scene view's camera controller for a new location coming
+    /// from the location datasource.
     @MainActor
     private func updateSceneView(for location: Location) {
         // Make sure either the initial camera is not set, or we need to update the camera.
@@ -157,6 +160,8 @@ public struct WorldTrackingSceneView: View {
         initialCameraIsSet = true
     }
     
+    /// Returns a Boolean value indicating if the camera should be updated for a location
+    /// coming in from the location datasource.
     func shouldUpdateCamera(for location: Location) -> Bool {
         guard let currentCamera, location.horizontalAccuracy < 5 else { return false }
         guard let sr = currentCamera.location.spatialReference else { return false }
@@ -181,11 +186,6 @@ public struct WorldTrackingSceneView: View {
         }
         
         return false
-    }
-    
-    @ViewBuilder func statusView(for status: String) -> some View {
-        Text(status)
-            .multilineTextAlignment(.center)
     }
 }
 
