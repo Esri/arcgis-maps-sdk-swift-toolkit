@@ -867,6 +867,48 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** TODO: Finish implementation, pending design issue resolution
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test case 3.5: Required Value
+***REMOVED***func testCase_3_5() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let clearButton = app.buttons["Required Combo Box Clear Button"]
+***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Required Combo Box"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Combo Box Value"]
+***REMOVED******REMOVED***let firstOptionButton = app.buttons["String 1"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
+***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***"Pine"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***clearButton.isHittable,
+***REMOVED******REMOVED******REMOVED***"The clear button isn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***clearButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** TODO: Finish implementation, pending merge of #459
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Test case 4: Radio Buttons input type
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 4.1: Test regular selection
