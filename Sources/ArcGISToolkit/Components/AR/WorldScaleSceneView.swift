@@ -180,9 +180,11 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ coming in from the location datasource.
 ***REMOVED***func shouldUpdateCamera(for location: Location) -> Bool {
 ***REMOVED******REMOVED******REMOVED*** Do not update unless the horizontal accuracy is less than a threshold.
-***REMOVED******REMOVED***guard let currentCamera, location.horizontalAccuracy < 5 else { return false ***REMOVED***
-***REMOVED******REMOVED***guard let sr = currentCamera.location.spatialReference else { return false ***REMOVED***
-***REMOVED******REMOVED***guard let currentPosition = GeometryEngine.project(location.position, into: sr) else { return false ***REMOVED***
+***REMOVED******REMOVED***guard let currentCamera,
+***REMOVED******REMOVED******REMOVED***  location.horizontalAccuracy < 5,
+***REMOVED******REMOVED******REMOVED***  let spatialReference = currentCamera.location.spatialReference,
+***REMOVED******REMOVED******REMOVED***  let currentPosition = GeometryEngine.project(location.position, into: spatialReference)
+***REMOVED******REMOVED***else { return false ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Measure the distance between the location datasource's reported location
 ***REMOVED******REMOVED******REMOVED*** and the camera's current location.
