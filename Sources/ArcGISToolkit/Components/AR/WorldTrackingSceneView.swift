@@ -16,7 +16,7 @@ import SwiftUI
 import ArcGIS
 
 /// A scene view that provides an augmented reality world scale experience.
-public struct WorldScaleSceneView2: View {
+public struct WorldTrackingSceneView: View {
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
     /// The proxy for the scene view.
@@ -29,8 +29,6 @@ public struct WorldScaleSceneView2: View {
     @State private var statusText: String = ""
     /// The location datasource that is used to access the device location.
     @State private var locationDatasSource = SystemLocationDataSource()
-    /// The current location.
-    @State private var currentLocation: Location?
     /// A Boolean value indicating if the camera was initially set.
     @State private var initialCameraIsSet = false
     /// The current camera of the scene view.
@@ -125,8 +123,7 @@ public struct WorldScaleSceneView2: View {
                 await withTaskGroup(of: Void.self) { group in
                     group.addTask {
                         for await location in locationDatasSource.locations {
-                            self.currentLocation = location
-                            await updateSceneView()
+                            await updateSceneView(for: location)
                         }
                     }
                 }
@@ -139,11 +136,18 @@ public struct WorldScaleSceneView2: View {
     }
     
     @MainActor
-    private func updateSceneView() {
-        guard let currentLocation else { return }
-        guard (!initialCameraIsSet || shouldUpdateCamera()) else { return }
+    private func updateSceneView(for location: Location) {
+        // Make sure either the initial camera is not set, or we need to update the camera.
+        guard (!initialCameraIsSet || shouldUpdateCamera(for: location)) else { return }
         
-        updateOriginCamera(with: currentLocation)
+        cameraController.originCamera = Camera(
+            latitude: location.position.y,
+            longitude: location.position.x,
+            altitude: 5,
+            heading: 0,
+            pitch: 90,
+            roll: 0
+        )
         
         // We have to do this or the error gets bigger and bigger.
         cameraController.transformationMatrix = .identity
@@ -153,25 +157,16 @@ public struct WorldScaleSceneView2: View {
         initialCameraIsSet = true
     }
     
-    @MainActor
-    private func updateOriginCamera(with location: Location) {
-        cameraController.originCamera = Camera(
-            latitude: location.position.y,
-            longitude: location.position.x,
-            altitude: 5,
-            heading: 0,
-            pitch: 90,
-            roll: 0
-        )
-    }
-    
-    func shouldUpdateCamera() -> Bool {
-        guard let currentLocation, let currentCamera, currentLocation.horizontalAccuracy < 5 else { return false }
+    func shouldUpdateCamera(for location: Location) -> Bool {
+        guard let currentCamera, location.horizontalAccuracy < 5 else { return false }
         guard let sr = currentCamera.location.spatialReference else { return false }
-        guard let currentLocationPosition = GeometryEngine.project(currentLocation.position, into: sr) else { return false }
+        guard let currentPosition = GeometryEngine.project(location.position, into: sr) else { return false }
+        
+        // Measure the distance between the location datasource's reported location
+        // and the camera's current location.
         guard let result = GeometryEngine.geodeticDistance(
             from: currentCamera.location,
-            to: currentLocationPosition,
+            to: currentPosition,
             distanceUnit: .meters,
             azimuthUnit: nil,
             curveType: .geodesic
