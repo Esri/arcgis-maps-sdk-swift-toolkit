@@ -830,10 +830,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***/ Test case 3.4: Picker with a noValueLabel row
 ***REMOVED***func testCase_3_4() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo String"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Value"]
-***REMOVED******REMOVED***let firstOptionButton = app.buttons["String 1"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***
@@ -871,10 +869,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***func testCase_3_5() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let clearButton = app.buttons["Required Combo Box Clear Button"]
-***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Required Combo Box"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Combo Box Value"]
-***REMOVED******REMOVED***let firstOptionButton = app.buttons["String 1"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***
