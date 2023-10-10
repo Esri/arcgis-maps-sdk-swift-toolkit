@@ -15,7 +15,7 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-struct FormExampleView: View {
+struct FormViewExampleView: View {
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
@@ -89,7 +89,7 @@ struct FormExampleView: View {
 ***REMOVED***
 ***REMOVED***
 
-extension FormExampleView {
+extension FormViewExampleView {
 ***REMOVED******REMOVED***/ Identifies features, if any, at the current screen point.
 ***REMOVED******REMOVED***/ - Parameter proxy: The proxy to use for identification.
 ***REMOVED******REMOVED***/ - Returns: The first identified feature.
@@ -112,7 +112,7 @@ extension FormExampleView {
 ***REMOVED***
 ***REMOVED***
 
-private extension FormExampleView {
+private extension FormViewExampleView {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the form controls should be shown directly in the form's presenting container.
 ***REMOVED***var useControlsInForm: Bool {
 ***REMOVED******REMOVED***verticalSizeClass == .compact ||
@@ -124,5 +124,4 @@ private extension FormExampleView {
 private extension URL {
 ***REMOVED***static var sampleData: Self {
 ***REMOVED******REMOVED***.init(string: <#URL#>)!
-***REMOVED***
 ***REMOVED***
