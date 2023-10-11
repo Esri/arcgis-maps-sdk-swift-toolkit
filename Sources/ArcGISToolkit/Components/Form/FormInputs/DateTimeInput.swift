@@ -91,7 +91,6 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***date = try? Date(newValue, strategy: .arcGISDateParseStrategy)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** TODO: make sure this triggers `.onChange(of: date)`
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
