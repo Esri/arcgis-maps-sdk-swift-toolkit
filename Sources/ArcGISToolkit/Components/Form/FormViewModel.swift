@@ -26,22 +26,74 @@ public class FormViewModel: ObservableObject {
     /// The service feature table which holds the feature being edited in the form.
     @Published private var table: ServiceFeatureTable?
     
-    /// The structure of the form.
-    @Published var formDefinition: FeatureFormDefinition?
+    /// The feature form.
+    @Published private var featureForm: FeatureForm?
     
     /// The name of the current focused field, if one exists.
     @Published var focusedFieldName: String?
+    
+    /// The expression evaluation task.
+    var evaluateTask: Task<Void, Never>? = nil
+    
+    /// The group of visibility tasks.
+    private var isVisibleTasks = [Task<Void, Never>]()
+    
+    /// The list of visible form elements.
+    @Published var visibleElements = [FormElement]()
     
     /// Initializes a form view model.
     public init() {}
     
     /// Prepares the feature for editing in the form.
     /// - Parameter feature: The feature to be edited in the form.
-    public func startEditing(_ feature: ArcGISFeature) {
+    public func startEditing(_ feature: ArcGISFeature, featureForm: FeatureForm) {
         self.feature = feature
+        self.featureForm = featureForm
         if let table = feature.table as? ServiceFeatureTable {
             self.database = table.serviceGeodatabase
             self.table = table
+        }
+    }
+    
+    deinit {
+        clearIsVisibleTasks()
+    }
+    
+    func initializeIsVisibleTasks() {
+        guard let featureForm else { return }
+        clearIsVisibleTasks()
+        
+        // Kick off tasks to monitor isVisible for each element.
+        featureForm.elements.forEach { element in
+            let newTask = Task.detached { [unowned self] in
+                for await _ in element.$isVisible {
+                    await MainActor.run {
+                        self.updateVisibleElements()
+                    }
+                }
+            }
+            isVisibleTasks.append(newTask)
+        }
+    }
+    
+    /// A detached task observing visibility changes.
+    private func updateVisibleElements() {
+        guard let featureForm else { return }
+        visibleElements = featureForm.elements.filter { $0.isVisible }
+    }
+    
+    /// Cancels and removes tasks.
+    private func clearIsVisibleTasks() {
+        isVisibleTasks.forEach { task in
+            task.cancel()
+        }
+        isVisibleTasks.removeAll()
+    }
+    
+    internal func evaluateExpressions() {
+        evaluateTask?.cancel()
+        evaluateTask = Task {
+            try? await featureForm?.evaluateExpressions()
         }
     }
     
