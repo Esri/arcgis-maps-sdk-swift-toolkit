@@ -41,9 +41,6 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/ The description of the text input field.
 ***REMOVED***private let description: String
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the text input field is required.
-***REMOVED***private let isRequired: Bool
-***REMOVED***
 ***REMOVED******REMOVED***/ The allowable length of text in the text input field.
 ***REMOVED***private let lengthRange: ClosedRange<Int>
 ***REMOVED***
@@ -71,7 +68,6 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.isFocused = isFocused
 ***REMOVED******REMOVED***self.description = element.description
-***REMOVED******REMOVED***self.isRequired = element.isRequired
 ***REMOVED******REMOVED***self.rangeDomain = rangeDomain
 ***REMOVED******REMOVED***self.fieldType = fieldType
 ***REMOVED******REMOVED***
@@ -191,7 +187,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***validationError = nil
 ***REMOVED******REMOVED***
-***REMOVED*** else if text.count == .zero && isRequired && !focused {
+***REMOVED*** else if text.count == .zero && element.isRequired && !focused {
 ***REMOVED******REMOVED******REMOVED***validationError = .emptyWhenRequired
 ***REMOVED*** else if !lengthRange.contains(text.count) {
 ***REMOVED******REMOVED******REMOVED***validationError = .minOrMaxUnmet
