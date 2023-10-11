@@ -39,7 +39,7 @@ extension ExampleList {
             AnyExample("Bookmarks", content: BookmarksExampleView()),
             AnyExample("Compass", content: CompassExampleView()),
             AnyExample("Floor Filter", content: FloorFilterExampleView()),
-            AnyExample("Form", content: FormExampleView()),
+            AnyExample("FormView", content: FormViewExampleView()),
             AnyExample("Overview Map", content: OverviewMapExampleView()),
             AnyExample("Popup", content: PopupExampleView()),
             AnyExample("Scalebar", content: ScalebarExampleView()),
