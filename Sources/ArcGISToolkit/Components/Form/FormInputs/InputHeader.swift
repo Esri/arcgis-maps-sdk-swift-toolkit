@@ -16,15 +16,21 @@ import ArcGIS
 
 /// A view shown at the top of a field element in a form.
 struct InputHeader: View {
-    /// The form element the header is for.
+    /// The name of the form element.
     let label: String
+    
+    /// A Boolean value indicating whether the a value for the input is required.
     let isRequired: Bool
     
+    /// - Parameter element: The form element the header is for.
     init(element: FieldFormElement) {
         self.label = element.label
         self.isRequired = element.isRequired
     }
     
+    /// - Parameters:
+    ///   - label: The name of the form element.
+    ///   - isRequired: A Boolean value indicating whether the a value for the input is required.
     init(label: String, isRequired: Bool) {
         self.label = label
         self.isRequired = isRequired

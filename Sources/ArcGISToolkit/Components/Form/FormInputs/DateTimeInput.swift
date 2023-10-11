@@ -91,7 +91,6 @@ struct DateTimeInput: View {
             } else {
                 date = try? Date(newValue, strategy: .arcGISDateParseStrategy)
             }
-            // TODO: make sure this triggers `.onChange(of: date)`
         }
     }
     
