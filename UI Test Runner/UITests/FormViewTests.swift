@@ -977,6 +977,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let noValueButton = app.buttons["No Value"]
+***REMOVED******REMOVED***let optionsButton = app.images["Combo No Value False Options Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED******REMOVED***
@@ -999,7 +1000,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***""
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***fieldValue.tap()
+***REMOVED******REMOVED***optionsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(
 ***REMOVED******REMOVED******REMOVED***noValueButton.exists,
@@ -1007,6 +1008,12 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***firstOption.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***doneButton.exists,
+***REMOVED******REMOVED******REMOVED***"The done button doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***doneButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
