@@ -14,6 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view for date/time input.
 struct DateTimeInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
@@ -37,7 +38,10 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the view.
 ***REMOVED***private let input: DateTimePickerFormInput
-***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***/ The model for the input.
+***REMOVED***@StateObject var inputModel: FormInputModel
+
 ***REMOVED******REMOVED***/ Creates a view for a date (and time if applicable) input.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
@@ -47,6 +51,9 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = input
+***REMOVED******REMOVED***_inputModel = StateObject(
+***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -60,22 +67,30 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***if element.value.isEmpty {
+***REMOVED******REMOVED******REMOVED***if inputModel.value.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***date = try? Date(element.value, strategy: .arcGISDateParseStrategy)
+***REMOVED******REMOVED******REMOVED******REMOVED***date = try? Date(inputModel.value, strategy: .arcGISDateParseStrategy)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { newDate in
-***REMOVED******REMOVED******REMOVED***guard let currentDate = try? Date(element.value, strategy: .arcGISDateParseStrategy),
+***REMOVED******REMOVED******REMOVED***guard let currentDate = try? Date(inputModel.value, strategy: .arcGISDateParseStrategy),
 ***REMOVED******REMOVED******REMOVED******REMOVED***  newDate != currentDate else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***requiredValueMissing = element.isRequired && newDate == nil
+***REMOVED******REMOVED******REMOVED***requiredValueMissing = inputModel.isRequired && newDate == nil
 ***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
+***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.focusedFieldName) { newFocusedFieldName in
 ***REMOVED******REMOVED******REMOVED***isEditing = newFocusedFieldName == element.fieldName
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
+***REMOVED******REMOVED******REMOVED***if newValue.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***date = try? Date(newValue, strategy: .arcGISDateParseStrategy)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -100,7 +115,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isEditing {
 ***REMOVED******REMOVED******REMOVED******REMOVED***todayOrNowButton
-***REMOVED******REMOVED*** else if true/*element.editable*/ {
+***REMOVED******REMOVED*** else if inputModel.isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
@@ -111,12 +126,11 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.padding([.vertical], 1.5)
-***REMOVED******REMOVED***.formTextInputStyle()
+***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard element.editable else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***guard inputModel.isEditable else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if dateRange.contains(.now) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = .now
