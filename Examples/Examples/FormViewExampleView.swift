@@ -41,14 +41,15 @@ struct FormViewExampleView: View {
                 }
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy),
-                       let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
-                        featureForm = FeatureForm(feature: feature, definition: formDefinition)
-                        formViewModel.startEditing(feature)
-                        isPresented = featureForm != nil
+                       let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition,
+                       let featureForm = FeatureForm(feature: feature, definition: formDefinition) {
+                        self.featureForm = featureForm
+                        formViewModel.startEditing(feature, featureForm: featureForm)
                     }
+                    isPresented = featureForm != nil
                 }
                 .ignoresSafeArea(.keyboard)
-                
+            
                 .floatingPanel(
                     selectedDetent: .constant(.half),
                     horizontalAlignment: .leading,
@@ -57,7 +58,7 @@ struct FormViewExampleView: View {
                     FormView(featureForm: featureForm)
                         .padding()
                 }
-                
+            
                 .environmentObject(formViewModel)
                 .navigationBarBackButtonHidden(isPresented)
                 .toolbar {

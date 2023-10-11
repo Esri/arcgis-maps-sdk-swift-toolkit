@@ -19,8 +19,17 @@ import SwiftUI
 public struct FormView: View {
     @Environment(\.formElementPadding) var elementPadding
     
+    /// The model for the ancestral form view.
+    @EnvironmentObject var model: FormViewModel
+    
     /// The form's configuration.
-    private var featureForm: FeatureForm?
+    private let featureForm: FeatureForm?
+    
+    /// A Boolean value indicating whether an evaluation is running.
+    @State var isEvaluating = true
+    
+    /// A list of the visible elements in the form.
+    @State var visibleElements = [FormElement]()
     
     /// Initializes a form view.
     /// - Parameter featureForm: The form's configuration.
@@ -30,12 +39,29 @@ public struct FormView: View {
     
     public var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
-                FormHeader(title: featureForm?.title)
-                    .padding([.bottom], elementPadding)
-                ForEach(featureForm?.elements ?? [], id: \.label) { element in
-                    makeElement(element)
+            if isEvaluating {
+                ProgressView()
+            } else {
+                VStack(alignment: .leading) {
+                    FormHeader(title: featureForm?.title)
+                        .padding([.bottom], elementPadding)
+                    ForEach(model.visibleElements, id: \.id) { element in
+                        makeElement(element)
+                    }
                 }
+            }
+        }
+        .onChange(of: model.visibleElements) { _ in
+            visibleElements = model.visibleElements
+        }
+        .task {
+            do {
+                isEvaluating = true
+                try await featureForm?.evaluateExpressions()
+                isEvaluating = false
+                model.initializeIsVisibleTasks()
+            } catch {
+                print("error evaluating expressions: \(error.localizedDescription)")
             }
         }
     }
@@ -74,7 +100,9 @@ extension FormView {
         default:
             EmptyView()
         }
-        Divider()
+        if element.isVisible {
+            Divider()
+        }
     }
     
     /// Makes UI for a group form element.
