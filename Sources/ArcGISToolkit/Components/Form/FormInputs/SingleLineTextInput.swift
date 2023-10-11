@@ -36,6 +36,9 @@ struct SingleLineTextInput: View {
     /// The input configuration of the view.
     private let input: TextBoxFormInput
     
+    /// The model for the input.
+    @StateObject var inputModel: FormInputModel
+    
     /// Creates a view for single line text input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
@@ -45,6 +48,10 @@ struct SingleLineTextInput: View {
         self.featureForm = featureForm
         self.element = element
         self.input = input
+        
+        _inputModel = StateObject(
+            wrappedValue: FormInputModel(fieldFormElement: element)
+        )
     }
     
     var body: some View {
@@ -55,6 +62,7 @@ struct SingleLineTextInput: View {
             TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
                 .keyboardType(keyboardType)
                 .focused($isFocused)
+                .disabled(!inputModel.isEditable)
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
                         if UIDevice.current.userInterfaceIdiom == .phone, isFocused, fieldType.isNumeric {
@@ -64,7 +72,7 @@ struct SingleLineTextInput: View {
                     }
                 }
                 .accessibilityIdentifier("\(element.label) Text Field")
-            if !text.isEmpty {
+            if !text.isEmpty && inputModel.isEditable {
                 ClearButton { text.removeAll() }
                     .accessibilityIdentifier("\(element.label) Clear Button")
             }
@@ -88,6 +96,10 @@ struct SingleLineTextInput: View {
             }
         }
         .onChange(of: text) { newValue in
+            guard newValue != inputModel.value else {
+                return
+            }
+            
             // Note: this will be replaced by `element.updateValue()`, which will
             // handle all the following logic internally.
             if fieldType.isFloatingPoint {
@@ -102,6 +114,10 @@ struct SingleLineTextInput: View {
                 // Text field
                 featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
             }
+            model.evaluateExpressions()
+        }
+        .onChange(of: inputModel.value) { newValue in
+            text = newValue
         }
     }
 }
