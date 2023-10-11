@@ -42,7 +42,7 @@ struct FormViewTestView: View {
                 try? await feature.load()
                 guard let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition else { return }
                 featureForm = FeatureForm(feature: feature, definition: formDefinition)
-                formViewModel.startEditing(feature)
+                formViewModel.startEditing(feature, featureForm: featureForm!)
                 isPresented = true
             }
             .ignoresSafeArea(.keyboard)
