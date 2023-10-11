@@ -36,6 +36,9 @@ struct SingleLineTextInput: View {
     /// The input configuration of the view.
     private let input: TextBoxFormInput
     
+    /// The model for the input.
+    @StateObject var inputModel: FormInputModel
+    
     /// Creates a view for single line text input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
@@ -45,6 +48,10 @@ struct SingleLineTextInput: View {
         self.featureForm = featureForm
         self.element = element
         self.input = input
+        
+        _inputModel = StateObject(
+            wrappedValue: FormInputModel(fieldFormElement: element)
+        )
     }
     
     var body: some View {
@@ -53,19 +60,31 @@ struct SingleLineTextInput: View {
         // Secondary foreground color is used across input views for consistency.
         HStack {
             TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
+                .keyboardType(keyboardType)
                 .focused($isFocused)
+                .disabled(!inputModel.isEditable)
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        if UIDevice.current.userInterfaceIdiom == .phone, isFocused, fieldType.isNumeric {
+                            positiveNegativeButton
+                            Spacer()
+                        }
+                    }
+                }
                 .accessibilityIdentifier("\(element.label) Text Field")
-            if !text.isEmpty {
+            if !text.isEmpty && inputModel.isEditable {
                 ClearButton { text.removeAll() }
                     .accessibilityIdentifier("\(element.label) Clear Button")
             }
         }
-        .formTextInputStyle()
+        .formInputStyle()
         TextInputFooter(
-            currentLength: text.count,
+            text: text,
             isFocused: isFocused,
             element: element,
-            input: input
+            input: input,
+            rangeDomain: rangeDomain,
+            fieldType: fieldType
         )
         .padding([.bottom], elementPadding)
         .onAppear {
@@ -77,10 +96,64 @@ struct SingleLineTextInput: View {
             }
         }
         .onChange(of: text) { newValue in
-            guard newValue != element.value else {
+            guard newValue != inputModel.value else {
                 return
             }
-            featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+            
+            // Note: this will be replaced by `element.updateValue()`, which will
+            // handle all the following logic internally.
+            if fieldType.isFloatingPoint {
+                // Note: this should handle other decimal types as well, if they exist (float?)
+                let value = Double(newValue)
+                featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
+            } else if fieldType.isNumeric {
+                // Note: this should handle more than just Int32
+                let value = Int32(newValue)
+                featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
+            } else {
+                // Text field
+                featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+            }
+            model.evaluateExpressions()
+        }
+        .onChange(of: inputModel.value) { newValue in
+            text = newValue
+        }
+    }
+}
+
+private extension SingleLineTextInput {
+    /// The field type of the text input.
+    var fieldType: FieldType {
+        featureForm!.feature.table!.field(named: element.fieldName)!.type!
+    }
+    
+    /// The keyboard type to use depending on where the input is numeric and decimal.
+    var keyboardType: UIKeyboardType {
+        fieldType.isNumeric ? (fieldType.isFloatingPoint ? .decimalPad : .numberPad) : .default
+    }
+    
+    /// The button that allows a user to switch the numeric value between positive and negative.
+    var positiveNegativeButton: some View {
+        Button {
+            if let value = Int(text) {
+                text = String(value * -1)
+            } else if let value = Float(text) {
+                text = String(value * -1)
+            } else if let value = Double(text) {
+                text = String(value * -1)
+            }
+        } label: {
+            Image(systemName: "plus.forwardslash.minus")
+        }
+    }
+    
+    /// The range of valid values for a numeric input field.
+    var rangeDomain: RangeDomain? {
+        if let field = featureForm?.feature.table?.field(named: element.fieldName) {
+            return field.domain as? RangeDomain
+        } else {
+            return nil
         }
         .onChange(of: model.lastScroll) { _ in
             if isFocused { isFocused = false }
