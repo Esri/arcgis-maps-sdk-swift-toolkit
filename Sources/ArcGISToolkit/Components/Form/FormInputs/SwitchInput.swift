@@ -21,6 +21,9 @@ import SwiftUI
 struct SwitchInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
+    /// The model for the ancestral form view.
+    @EnvironmentObject var model: FormViewModel
+    
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
     /// In this scenario a ``ComboBoxInput`` should be used instead.
@@ -44,6 +47,9 @@ struct SwitchInput: View {
     /// The input configuration of the field.
     private let input: SwitchFormInput
     
+    /// The model for the input.
+    @StateObject var inputModel: FormInputModel
+    
     /// Creates a view for a switch input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
@@ -53,6 +59,10 @@ struct SwitchInput: View {
         self.featureForm = featureForm
         self.element = element
         self.input = input
+        
+        _inputModel = StateObject(
+            wrappedValue: FormInputModel(fieldFormElement: element)
+        )
     }
     
     var body: some View {
@@ -65,7 +75,7 @@ struct SwitchInput: View {
             )
         } else {
             Group {
-                InputHeader(element: element)
+                InputHeader(label: element.label, isRequired: inputModel.isRequired)
                     .padding([.top], elementPadding)
                 HStack {
                     Text(switchState ? input.onValue.name : input.offValue.name)
@@ -77,6 +87,7 @@ struct SwitchInput: View {
                 .formInputStyle()
                 InputFooter(element: element, requiredValueMissing: requiredValueMissing)
             }
+            .disabled(!inputModel.isEditable)
             .padding([.bottom], elementPadding)
             .onAppear {
                 if element.value.isEmpty {
@@ -86,8 +97,17 @@ struct SwitchInput: View {
                 }
             }
             .onChange(of: switchState) { newValue in
+                // Convert value to bool
+                let inputModelValue = inputModel.value == input.onValue.name
+                guard newValue != (inputModelValue) else {
+                    return
+                }
                 let codedValue = newValue ? input.onValue : input.offValue
                 featureForm?.feature.setAttributeValue(codedValue.code, forKey: element.fieldName)
+                model.evaluateExpressions()
+            }
+            .onChange(of: inputModel.value) { newValue in
+                selectedValue = newValue == input.onValue.name
             }
         }
     }

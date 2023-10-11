@@ -21,6 +21,9 @@ import SwiftUI
 struct RadioButtonsInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
+    /// The model for the ancestral form view.
+    @EnvironmentObject var model: FormViewModel
+    
     /// The set of options in the input.
     @State private var codedValues = [CodedValue]()
     
@@ -43,6 +46,9 @@ struct RadioButtonsInput: View {
     /// The input configuration of the field.
     private let input: RadioButtonsFormInput
     
+    /// The model for the input.
+    @StateObject var inputModel: FormInputModel
+    
     /// Creates a view for a date (and time if applicable) input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
@@ -52,6 +58,10 @@ struct RadioButtonsInput: View {
         self.featureForm = featureForm
         self.element = element
         self.input = input
+        
+        _inputModel = StateObject(
+            wrappedValue: FormInputModel(fieldFormElement: element)
+        )
     }
     
     var body: some View {
@@ -64,7 +74,7 @@ struct RadioButtonsInput: View {
             )
         } else {
             Group {
-                InputHeader(element: element)
+                InputHeader(label: element.label, isRequired: inputModel.isRequired)
                     .padding([.top], elementPadding)
                 
                 VStack(alignment: .leading, spacing: .zero) {
@@ -88,6 +98,7 @@ struct RadioButtonsInput: View {
                         }
                     }
                 }
+                .disabled(!inputModel.isEditable)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color(uiColor: .tertiarySystemFill))
@@ -111,6 +122,12 @@ struct RadioButtonsInput: View {
                 }
                 requiredValueMissing = element.isRequired && newValue == nil
                 featureForm?.feature.setAttributeValue(newValue?.code ?? "", forKey: element.fieldName)
+                
+                model.evaluateExpressions()
+            }
+            .onChange(of: inputModel.value) { newValue in
+                let codedValues = featureForm!.codedValues(fieldName: element.fieldName)
+                selectedValue = codedValues.first { $0.name == newValue }
             }
         }
     }
