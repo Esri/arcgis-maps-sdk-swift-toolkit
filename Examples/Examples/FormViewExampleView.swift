@@ -15,7 +15,7 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-struct FormExampleView: View {
+struct FormViewExampleView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
     /// The `Map` displayed in the `MapView`.
@@ -50,7 +50,6 @@ struct FormExampleView: View {
                 }
                 .ignoresSafeArea(.keyboard)
             
-            // Or present a FormView in a Floating Panel (provided via the Toolkit)
                 .floatingPanel(
                     selectedDetent: .constant(.half),
                     horizontalAlignment: .leading,
@@ -67,7 +66,7 @@ struct FormExampleView: View {
                     // buttons can be merged and hoisted up as the root content of the toolbar.
                     
                     ToolbarItem(placement: .navigationBarLeading) {
-                        if isPresented && !useControlsInForm {
+                        if isPresented {
                             Button("Cancel", role: .cancel) {
                                 formViewModel.undoEdits()
                                 isPresented = false
@@ -76,7 +75,7 @@ struct FormExampleView: View {
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        if isPresented && !useControlsInForm {
+                        if isPresented {
                             Button("Submit") {
                                 Task {
                                     await formViewModel.submitChanges()
@@ -90,7 +89,7 @@ struct FormExampleView: View {
     }
 }
 
-extension FormExampleView {
+extension FormViewExampleView {
     /// Identifies features, if any, at the current screen point.
     /// - Parameter proxy: The proxy to use for identification.
     /// - Returns: The first identified feature.
@@ -113,17 +112,8 @@ extension FormExampleView {
     }
 }
 
-private extension FormExampleView {
-    /// A Boolean value indicating whether the form controls should be shown directly in the form's presenting container.
-    var useControlsInForm: Bool {
-        verticalSizeClass == .compact ||
-        UIDevice.current.userInterfaceIdiom == .mac ||
-        UIDevice.current.userInterfaceIdiom == .pad
-    }
-}
-
 private extension URL {
     static var sampleData: Self {
-        .init(string: <#URL#>)!
+        .init(string: "")!
     }
 }
