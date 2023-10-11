@@ -834,6 +834,7 @@ final class FormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Combo String Value"]
         let formTitle = app.staticTexts["comboBox"]
         let formViewTestsButton = app.buttons["FormView Tests"]
+        let noValueButton = app.buttons["No value"]
         
         app.launch()
             
@@ -861,6 +862,13 @@ final class FormViewTests: XCTestCase {
         )
         
         fieldValue.tap()
+        
+        XCTAssertTrue(
+            noValueButton.exists,
+            "The no value button doesn't exist."
+        )
+        
+        noValueButton.tap()
         
         // TODO: Finish implementation, pending design issue resolution
     }
