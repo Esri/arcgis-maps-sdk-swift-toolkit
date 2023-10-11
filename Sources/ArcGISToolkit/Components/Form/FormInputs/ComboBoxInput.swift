@@ -161,7 +161,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if element.value.isEmpty && !element.isRequired {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !element.isRequired {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if noValueOption == .show {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
