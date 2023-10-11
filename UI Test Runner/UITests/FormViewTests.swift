@@ -834,6 +834,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED******REMOVED***
@@ -861,6 +862,13 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***noValueButton.exists,
+***REMOVED******REMOVED******REMOVED***"The no value button doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***noValueButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** TODO: Finish implementation, pending design issue resolution
 ***REMOVED***
