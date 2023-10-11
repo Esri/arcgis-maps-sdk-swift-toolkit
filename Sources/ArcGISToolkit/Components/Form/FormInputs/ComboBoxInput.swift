@@ -161,7 +161,7 @@ struct ComboBoxInput: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
                 List {
-                    if element.value.isEmpty && !element.isRequired {
+                    if !element.isRequired {
                         if noValueOption == .show {
                             HStack {
                                 Button {
