@@ -830,6 +830,7 @@ final class FormViewTests: XCTestCase {
     /// Test case 3.4: Picker with a noValueLabel row
     func testCase_3_4() {
         let app = XCUIApplication()
+        let doneButton = app.buttons["Done"]
         let fieldTitle = app.staticTexts["Combo String"]
         let fieldValue = app.staticTexts["Combo String Value"]
         let formTitle = app.staticTexts["comboBox"]
@@ -870,7 +871,17 @@ final class FormViewTests: XCTestCase {
         
         noValueButton.tap()
         
-        // TODO: Finish implementation, pending design issue resolution
+        XCTAssertTrue(
+            doneButton.exists,
+            "The done button doesn't exist."
+        )
+        
+        doneButton.tap()
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "No value"
+        )
     }
     
     /// Test case 3.5: Required Value
