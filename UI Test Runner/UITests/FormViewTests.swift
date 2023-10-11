@@ -977,6 +977,7 @@ final class FormViewTests: XCTestCase {
         let formTitle = app.staticTexts["comboBox"]
         let formViewTestsButton = app.buttons["FormView Tests"]
         let noValueButton = app.buttons["No Value"]
+        let optionsButton = app.images["Combo No Value False Options Button"]
         
         app.launch()
             
@@ -999,7 +1000,7 @@ final class FormViewTests: XCTestCase {
             ""
         )
         
-        fieldValue.tap()
+        optionsButton.tap()
         
         XCTAssertFalse(
             noValueButton.exists,
@@ -1007,6 +1008,12 @@ final class FormViewTests: XCTestCase {
         )
         
         firstOption.tap()
+        
+        XCTAssertTrue(
+            doneButton.exists,
+            "The done button doesn't exist."
+        )
+        
         doneButton.tap()
         
         XCTAssertEqual(
