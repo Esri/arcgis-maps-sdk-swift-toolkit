@@ -19,8 +19,17 @@
 public struct FormView: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
+***REMOVED******REMOVED***/ The model for the ancestral form view.
+***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***
 ***REMOVED******REMOVED***/ The form's configuration.
-***REMOVED***private var featureForm: FeatureForm?
+***REMOVED***private let featureForm: FeatureForm?
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether an evaluation is running.
+***REMOVED***@State var isEvaluating = true
+***REMOVED***
+***REMOVED******REMOVED***/ A list of the visible elements in the form.
+***REMOVED***@State var visibleElements = [FormElement]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameter featureForm: The form's configuration.
@@ -30,12 +39,29 @@ public struct FormView: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: featureForm?.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(featureForm?.elements ?? [], id: \.label) { element in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
+***REMOVED******REMOVED******REMOVED***if isEvaluating {
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: featureForm?.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.id) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: model.visibleElements) { _ in
+***REMOVED******REMOVED******REMOVED***visibleElements = model.visibleElements
+***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***isEvaluating = true
+***REMOVED******REMOVED******REMOVED******REMOVED***try await featureForm?.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED******REMOVED***isEvaluating = false
+***REMOVED******REMOVED******REMOVED******REMOVED***model.initializeIsVisibleTasks()
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("error evaluating expressions: \(error.localizedDescription)")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -74,7 +100,9 @@ extension FormView {
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
-***REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED***if element.isVisible {
+***REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Makes UI for a group form element.
