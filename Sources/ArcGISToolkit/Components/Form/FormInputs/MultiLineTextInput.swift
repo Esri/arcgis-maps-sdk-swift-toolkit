@@ -43,6 +43,9 @@ struct MultiLineTextInput: View {
     /// The input configuration of the view.
     private let input: TextAreaFormInput
     
+    /// The model for the input.
+    @StateObject var inputModel: FormInputModel
+    
     /// Creates a view for text input spanning multiple lines.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
@@ -52,19 +55,25 @@ struct MultiLineTextInput: View {
         self.featureForm = featureForm
         self.element =  element
         self.input = input
+        
+        _inputModel = StateObject(
+            wrappedValue: FormInputModel(fieldFormElement: element)
+        )
     }
     
     var body: some View {
-        InputHeader(element: element)
+        InputHeader(label: element.label, isRequired: inputModel.isRequired)
             .padding([.top], elementPadding)
         HStack(alignment: .bottom) {
             if #available(iOS 16.0, *) {
                 TextEditor(text: $text)
                     .scrollContentBackground(.hidden)
+                    .disabled(!inputModel.isEditable)
             } else {
                 TextEditor(text: $text)
+                    .disabled(!inputModel.isEditable)
             }
-            if isFocused && !text.isEmpty {
+            if isFocused && !text.isEmpty && inputModel.isEditable {
                 ClearButton { text.removeAll() }
             }
         }
@@ -109,7 +118,11 @@ struct MultiLineTextInput: View {
                     return
                 }
                 featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+                model.evaluateExpressions()
             }
+        }
+        .onChange(of: inputModel.value) { newValue in
+            text = newValue
         }
     }
 }
