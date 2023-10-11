@@ -852,7 +852,7 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTExpectFailure(
-            "The design specifies the value should be String 3 but the value is actually `String 7`"
+            "The design specifies the value should be String 3 but the actual current value may differ."
         )
         
         XCTAssertEqual(
