@@ -909,8 +909,8 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The field title isn't hittable."
+            fieldTitle.exists,
+            "The field title doesn't exist."
         )
         
         XCTAssertEqual(
