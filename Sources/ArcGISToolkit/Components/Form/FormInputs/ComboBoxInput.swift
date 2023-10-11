@@ -107,13 +107,15 @@ struct ComboBoxInput: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
                     .accessibilityIdentifier("\(element.label) Value")
-                if !inputModel.isRequired && inputModel.isEditable && selectedValue != nil {
-                    ClearButton { selectedValue = nil }
-                        .accessibilityIdentifier("\(element.label) Clear Button")
-                } else {
-                    Image(systemName: "list.bullet")
-                        .foregroundColor(.secondary)
-                        .accessibilityIdentifier("\(element.label) Options Button")
+                if inputModel.isEditable {
+                    if selectedValue == nil {
+                        Image(systemName: "list.bullet")
+                            .foregroundColor(.secondary)
+                            .accessibilityIdentifier("\(element.label) Options Button")
+                    } else {
+                        ClearButton { selectedValue = nil }
+                            .accessibilityIdentifier("\(element.label) Clear Button")
+                    }
                 }
             }
             .formInputStyle()
