@@ -15,8 +15,14 @@
 import ArcGIS
 import SwiftUI
 
+/// A view for numerical value input.
+///
+/// This is the preferable input type for long lists of coded value domains.
 struct ComboBoxInput: View {
     @Environment(\.formElementPadding) var elementPadding
+    
+    /// The model for the ancestral form view.
+    @EnvironmentObject var model: FormViewModel
     
     /// The set of options in the combo box.
     @State private var codedValues = [CodedValue]()
@@ -39,8 +45,14 @@ struct ComboBoxInput: View {
     /// The input's parent element.
     private let element: FieldFormElement
     
-    /// The input configuration of the view.
-    private let input: ComboBoxFormInput
+    /// The text used to represent a `nil` value.
+    private let noValueLabel: String
+    
+    /// The display state value for `nil` value options.
+    private let noValueOption: FormInputNoValueOption
+    
+    /// The model for the input.
+    @StateObject var inputModel: FormInputModel
     
     /// A subset of coded values with names containing `filterPhrase` or all of the coded values
     /// if `filterPhrase` is empty.
@@ -60,12 +72,34 @@ struct ComboBoxInput: View {
     init(featureForm: FeatureForm?, element: FieldFormElement, input: ComboBoxFormInput) {
         self.featureForm = featureForm
         self.element = element
-        self.input = input
+        self.noValueLabel = input.noValueLabel
+        self.noValueOption = input.noValueOption
+        
+        _inputModel = StateObject(
+            wrappedValue: FormInputModel(fieldFormElement: element)
+        )
+    }
+    
+    /// Creates a view for a combo box input.
+    /// - Parameters:
+    ///   - featureForm: The feature form containing the input.
+    ///   - element: The input's parent element.
+    ///   - noValueLabel: The text used to represent a `nil` value.
+    ///   - noValueOption: The display state value for `nil` value options.
+    init(featureForm: FeatureForm?, element: FieldFormElement, noValueLabel: String, noValueOption: FormInputNoValueOption) {
+        self.featureForm = featureForm
+        self.element = element
+        self.noValueLabel = noValueLabel
+        self.noValueOption = noValueOption
+        
+        _inputModel = StateObject(
+            wrappedValue: FormInputModel(fieldFormElement: element)
+        )
     }
     
     var body: some View {
         VStack(alignment: .leading) {
-            InputHeader(element: element)
+            InputHeader(label: element.label, isRequired: inputModel.isRequired)
                 .padding([.top], elementPadding)
             
             HStack {
@@ -73,19 +107,19 @@ struct ComboBoxInput: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
                     .accessibilityIdentifier("\(element.label) Value")
-                
                 if selectedValue == nil {
                     Image(systemName: "list.bullet")
                         .foregroundColor(.secondary)
                         .accessibilityIdentifier("\(element.label) Options Button")
-                } else if !element.isRequired {
+                } else if !inputModel.isRequired && inputModel.isEditable  {
                     ClearButton { selectedValue = nil }
                         .accessibilityIdentifier("\(element.label) Clear Button")
                 }
             }
-            .formTextInputStyle()
-            .sheet(isPresented: $isPresented) {
-                pickerRoot
+            .formInputStyle()
+            // Pass `matchingValues` via a capture list so that the sheet receives up-to-date values.
+            .sheet(isPresented: $isPresented) { [matchingValues] in
+                makePicker(for: matchingValues)
             }
             .onTapGesture {
                 isPresented = true
@@ -99,85 +133,89 @@ struct ComboBoxInput: View {
             selectedValue = codedValues.first { $0.name == element.value }
         }
         .onChange(of: selectedValue) { newValue in
-            guard let current = codedValues.first(where: { $0.name == element.value }),
-                  current != newValue else {
+            guard newValue?.name != inputModel.value else {
                 return
             }
+
             requiredValueMissing = element.isRequired && newValue == nil
             featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
+            model.evaluateExpressions()
         }
-    }
-    
-    /// The root of the picker view.
-    ///
-    /// Adds navigation context to support toolbar items and other visual elements in the picker.
-    /// - Note `NavigationView` is deprecated after iOS 17.0.
-    @ViewBuilder var pickerRoot: some View {
-        if #available(iOS 16, macCatalyst 16, *) {
-            NavigationStack {
-                picker
-            }
-        } else {
-            NavigationView {
-                picker
-            }
+        .onChange(of: inputModel.value) { newValue in
+            let codedValues = featureForm!.codedValues(fieldName: element.fieldName)
+            selectedValue = codedValues.first { $0.name == newValue }
         }
     }
     
     /// The view that allows the user to filter and select coded values by name.
-    var picker: some View {
-        VStack {
-            Text(element.description)
-                .foregroundColor(.secondary)
-                .font(.subheadline)
-                .padding(.horizontal)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Divider()
-            List {
-                if element.value.isEmpty && !element.isRequired {
-                    if input.noValueOption == .show {
+    ///
+    /// Adds navigation context to support toolbar items and other visual elements in the picker.
+    /// - Note `NavigationView` is deprecated after iOS 17.0.
+    func makePicker(for values: [CodedValue]) -> some View {
+        let picker = {
+            VStack {
+                Text(element.description)
+                    .foregroundColor(.secondary)
+                    .font(.subheadline)
+                    .padding(.horizontal)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Divider()
+                List {
+                    if element.value.isEmpty && !element.isRequired {
+                        if noValueOption == .show {
+                            HStack {
+                                Button {
+                                    selectedValue = nil
+                                } label: {
+                                    Text(noValueLabel.isEmpty ? String.noValue : noValueLabel)
+                                        .italic()
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                if selectedValue == nil {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.accentColor)
+                                }
+                            }
+                        }
+                    }
+                    ForEach(values, id: \.self) { codedValue in
                         HStack {
-                            Button {
-                                selectedValue = nil
-                            } label: {
-                                Text(input.noValueLabel.isEmpty ? String.noValue : input.noValueLabel)
-                                    .italic()
-                                    .foregroundStyle(.secondary)
+                            Button(codedValue.name) {
+                                selectedValue = codedValue
                             }
                             Spacer()
-                            if selectedValue == nil {
+                            if codedValue == selectedValue {
                                 Image(systemName: "checkmark")
                                     .foregroundColor(.accentColor)
                             }
                         }
                     }
                 }
-                ForEach(matchingValues, id: \.self) { codedValue in
-                    HStack {
-                        Button(codedValue.name) {
-                            selectedValue = codedValue
-                        }
-                        Spacer()
-                        if codedValue == selectedValue {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(.accentColor)
+                .listStyle(.plain)
+                .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: .filter)
+                .navigationTitle(element.label)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            isPresented = false
+                        } label: {
+                            Text.done
+                                .fontWeight(.semibold)
                         }
                     }
                 }
             }
-            .listStyle(.plain)
-            .searchable(text: $filterPhrase, placement: .navigationBarDrawer, prompt: .filter)
-            .navigationTitle(element.label)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        isPresented = false
-                    } label: {
-                        Text.done
-                            .fontWeight(.semibold)
-                    }
-                }
+        }
+        
+        if #available(iOS 16, macCatalyst 16, *) {
+            return NavigationStack {
+                picker()
+            }
+        } else {
+            return NavigationView {
+                picker()
             }
         }
     }
@@ -189,11 +227,11 @@ extension ComboBoxInput {
         guard !element.isRequired else {
             return .enterValue
         }
-        switch (input.noValueOption, input.noValueLabel.isEmpty) {
+        switch (noValueOption, noValueLabel.isEmpty) {
         case (.show, true):
             return .noValue
         case (.show, false):
-            return input.noValueLabel
+            return noValueLabel
         case (.hide, _):
             return ""
         }

@@ -12,21 +12,17 @@
 // limitations under the License.
 
 import SwiftUI
+import ArcGIS
 
-/// SwiftUI `TextEditor` and `TextField` views have different styling. `TextField`s have
-/// `textFieldStyle` and `TextEditor`s do not. This modifier allows for common styling.
-struct FormTextInputStyle: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .padding(4)
-            .background(Color(uiColor: .tertiarySystemFill))
-            .cornerRadius(10)
+extension FormElement: Equatable {
+    public static func == (lhs: ArcGIS.FormElement, rhs: ArcGIS.FormElement) -> Bool {
+        lhs === rhs
     }
 }
 
-extension View {
-    /// Adds a common padding and background around form field text elements.
-    func formTextInputStyle() -> some View {
-        modifier(FormTextInputStyle())
+extension FormElement {
+    /// The id of the element.
+    public var id: ObjectIdentifier {
+        ObjectIdentifier(self)
     }
 }

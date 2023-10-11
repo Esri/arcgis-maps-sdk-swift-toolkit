@@ -14,9 +14,14 @@
 
 import ArcGIS
 
-extension FieldFormElement {
-    /// - Note: This property added temporarily in lieu of finalized API.
-    var isRequired: Bool {
-        requiredExpressionName.contains("true")
+extension FieldType {
+    /// A Boolean value indicating whether the field has a numeric data type.
+    var isNumeric: Bool {
+        self == .float32 || self == .float64 || self == .int16 || self == .int32 || self == .int64
+    }
+    
+    /// A Boolean value indicating whether the field has a floating point data type.
+    var isFloatingPoint: Bool {
+        self == .float32 || self == .float64
     }
 }

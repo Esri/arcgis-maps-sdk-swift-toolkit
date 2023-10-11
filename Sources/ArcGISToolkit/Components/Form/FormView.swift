@@ -23,7 +23,13 @@ public struct FormView: View {
     @EnvironmentObject var model: FormViewModel
     
     /// The form's configuration.
-    private var featureForm: FeatureForm?
+    private let featureForm: FeatureForm?
+    
+    /// A Boolean value indicating whether an evaluation is running.
+    @State var isEvaluating = true
+    
+    /// A list of the visible elements in the form.
+    @State var visibleElements = [FormElement]()
     
     /// Initializes a form view.
     /// - Parameter featureForm: The form's configuration.
@@ -33,11 +39,15 @@ public struct FormView: View {
     
     public var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
-                FormHeader(title: featureForm?.title)
-                    .padding([.bottom], elementPadding)
-                ForEach(featureForm?.elements ?? [], id: \.label) { element in
-                    makeElement(element)
+            if isEvaluating {
+                ProgressView()
+            } else {
+                VStack(alignment: .leading) {
+                    FormHeader(title: featureForm?.title)
+                        .padding([.bottom], elementPadding)
+                    ForEach(model.visibleElements, id: \.id) { element in
+                        makeElement(element)
+                    }
                 }
             }
         }
@@ -47,6 +57,19 @@ public struct FormView: View {
                     model.lastScroll = $0.time
                 }
         )
+        .onChange(of: model.visibleElements) { _ in
+            visibleElements = model.visibleElements
+        }
+        .task {
+            do {
+                isEvaluating = true
+                try await featureForm?.evaluateExpressions()
+                isEvaluating = false
+                model.initializeIsVisibleTasks()
+            } catch {
+                print("error evaluating expressions: \(error.localizedDescription)")
+            }
+        }
     }
 }
 
@@ -72,6 +95,10 @@ extension FormView {
             ComboBoxInput(featureForm: featureForm, element: element, input: `input`)
         case let `input` as DateTimePickerFormInput:
             DateTimeInput(featureForm: featureForm, element: element, input: `input`)
+        case let `input` as RadioButtonsFormInput:
+            RadioButtonsInput(featureForm: featureForm, element: element, input: `input`)
+        case let `input` as SwitchFormInput:
+            SwitchInput(featureForm: featureForm, element: element, input: `input`)
         case let `input` as TextAreaFormInput:
             MultiLineTextInput(featureForm: featureForm, element: element, input: `input`)
         case let `input` as TextBoxFormInput:
@@ -79,7 +106,9 @@ extension FormView {
         default:
             EmptyView()
         }
-        Divider()
+        if element.isVisible {
+            Divider()
+        }
     }
     
     /// Makes UI for a group form element.

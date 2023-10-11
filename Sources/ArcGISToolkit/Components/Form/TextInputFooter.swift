@@ -16,18 +16,24 @@ import ArcGIS
 
 /// A view shown at the bottom of each text input element in a form.
 struct TextInputFooter: View {
-    /// An error that is present when a length constraint is not met.
-    @State private var validationError: LengthError?
+    /// An error present when a validation constraint is unmet.
+    @State private var validationError: TextValidationError?
     
     /// A Boolean value indicating whether the text input field has previously satisfied the minimum
     /// length at any point in time.
     @State private var hasPreviouslySatisfiedMinimum: Bool
     
+    /// The current text in the text input field.
+    private let text: String
+    
     /// The current length of the text in the text input field.
     private let currentLength: Int
     
-    /// The input's parent element.
+    /// The footer's parent element.
     private let element: FieldFormElement
+    
+    /// The field type of the text input.
+    private let fieldType: FieldType
     
     /// A Boolean value indicating whether the text input field is focused.
     private let isFocused: Bool
@@ -35,44 +41,49 @@ struct TextInputFooter: View {
     /// The description of the text input field.
     private let description: String
     
-    /// A Boolean value indicating whether the text input field is required.
-    private let isRequired: Bool
+    /// The allowable length of text in the text input field.
+    private let lengthRange: ClosedRange<Int>
     
-    /// The maximum allowable length of text in the text input field.
-    private let maxLength: Int
-    
-    /// The minimum allowable length of text in the text input field.
-    private let minLength: Int
+    /// The allowable range of numeric values in the text input field.
+    private let rangeDomain: RangeDomain?
     
     /// Creates a footer shown at the bottom of each text input element in a form.
     /// - Parameters:
-    ///   - currentLength: The current length of the text in the text input field.
+    ///   - text: The current text in the text input field.
     ///   - isFocused: A Boolean value indicating whether the text input field is focused.
-    ///   - element: The input's parent element.
+    ///   - element: The footer's parent element.
     ///   - input: A form input that provides length constraints for the text input.
+    ///   - rangeDomain: The allowable range of numeric values in the text input field.
+    ///   - fieldType: The field type of the text input.
     init(
-        currentLength: Int,
+        text: String,
         isFocused: Bool,
         element: FieldFormElement,
-        input: FormInput
+        input: FormInput,
+        rangeDomain: RangeDomain? = nil,
+        fieldType: FieldType
     ) {
-        self.currentLength = currentLength
+        self.text = text
+        self.currentLength = text.count
         self.element = element
         self.isFocused = isFocused
         self.description = element.description
-        self.isRequired = element.isRequired
+        self.rangeDomain = rangeDomain
+        self.fieldType = fieldType
         
         switch input {
         case let input as TextBoxFormInput:
-            self.maxLength = input.maxLength
-            self.minLength = input.minLength
-            _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
+            lengthRange = input.minLength...input.maxLength
+            _hasPreviouslySatisfiedMinimum = State(
+                initialValue: !fieldType.isNumeric && currentLength >= input.minLength
+            )
         case let input as TextAreaFormInput:
-            self.maxLength = input.maxLength
-            self.minLength = input.minLength
-            _hasPreviouslySatisfiedMinimum = State(initialValue: currentLength >= input.minLength)
+            lengthRange = input.minLength...input.maxLength
+            _hasPreviouslySatisfiedMinimum = State(
+                initialValue: !fieldType.isNumeric && currentLength >= input.minLength
+            )
         default:
-            fatalError("TextInputFooter can only be used with TextAreaFormInput or TextBoxFormInput")
+            fatalError("\(Self.self) can only be used with \(TextAreaFormInput.self) or \(TextBoxFormInput.self)")
         }
     }
     
@@ -83,25 +94,25 @@ struct TextInputFooter: View {
                     .accessibilityIdentifier("\(element.label) Footer")
             }
             Spacer()
-            if isFocused, description.isEmpty || validationError != nil {
+            if isFocused, description.isEmpty || validationError != nil, !fieldType.isNumeric {
                 Text(currentLength, format: .number)
                     .accessibilityIdentifier("\(element.label) Character Indicator")
             }
         }
         .font(.footnote)
         .foregroundColor(validationError == nil ? .secondary : .red)
-        .onChange(of: currentLength) { newLength in
-            if !hasPreviouslySatisfiedMinimum {
-                if newLength >= minLength {
+        .onChange(of: text) { newText in
+            if !hasPreviouslySatisfiedMinimum && !fieldType.isNumeric {
+                if newText.count >= lengthRange.lowerBound {
                     hasPreviouslySatisfiedMinimum = true
                 }
             } else {
-                validate(length: newLength, focused: isFocused)
+                validate(text: newText, focused: isFocused)
             }
         }
         .onChange(of: isFocused) { newIsFocused in
             if hasPreviouslySatisfiedMinimum || !newIsFocused {
-                validate(length: currentLength, focused: newIsFocused)
+                validate(text: text, focused: newIsFocused)
             }
         }
     }
@@ -118,8 +129,8 @@ extension TextInputFooter {
             return nil
         case (.none, false, _):
             return Text(description)
-        case (.some(let lengthError), _, _):
-            switch (lengthError, scheme) {
+        case (.some(let validationError), _, _):
+            switch (validationError, scheme) {
             case (.emptyWhenRequired, .max):
                 return .required
             default:
@@ -131,9 +142,9 @@ extension TextInputFooter {
     /// The length validation scheme performed on the text input, determined by the minimum and
     /// maximum lengths.
     var scheme: LengthValidationScheme {
-        if minLength == 0 {
+        if lengthRange.lowerBound == 0 {
             return .max
-        } else if minLength == maxLength {
+        } else if lengthRange.lowerBound == lengthRange.upperBound {
             return .exact
         } else {
             return .minAndMax
@@ -142,23 +153,43 @@ extension TextInputFooter {
     
     /// The length validation text, dependent on the length validation scheme.
     var validationText: Text {
-        switch scheme {
-        case .max:
-            return maximumText
-        case .minAndMax:
-            return minAndMaxText
-        case .exact:
-            return exactText
+        if fieldType.isNumeric {
+            if validationError == .nonInteger {
+                return expectedInteger
+            } else if  validationError == .nonDecimal {
+                return expectedDecimal
+            } else {
+                return rangeDomain == nil ? Text("") : minAndMaxValue
+            }
+        } else {
+            switch scheme {
+            case .max:
+                return maximumText
+            case .minAndMax:
+                return minAndMaxText
+            case .exact:
+                return exactText
+            }
         }
     }
     
     /// Checks for any validation errors and updates the value of `validationError`.
-    /// - Parameter length: The length of text to use for validation.
+    /// - Parameter text: The text to use for validation.
     /// - Parameter focused: The focus state to use for validation.
-    func validate(length: Int, focused: Bool) {
-        if length == .zero && isRequired && !focused {
+    func validate(text: String, focused: Bool) {
+        if fieldType.isNumeric {
+            if !fieldType.isFloatingPoint && !text.isInteger {
+                validationError = .nonInteger
+            } else if fieldType.isFloatingPoint && !text.isDecimal {
+                validationError = .nonDecimal
+            } else if !(rangeDomain?.contains(text) ?? false) {
+                validationError = .outOfRange
+            } else {
+                validationError = nil
+            }
+        } else if text.count == .zero && element.isRequired && !focused {
             validationError = .emptyWhenRequired
-        } else if length < minLength || length > maxLength {
+        } else if !lengthRange.contains(text.count) {
             validationError = .minOrMaxUnmet
         } else {
             validationError = nil
@@ -167,20 +198,37 @@ extension TextInputFooter {
     
     /// Text indicating a field's exact number of allowed characters.
     /// - Note: This is intended to be used in instances where the character minimum and maximum are
-    /// identical, such as an ID field; the implementation uses `minLength` but it could just as
-    /// well use `maxLength`.
+    /// identical, such as an ID field.
     var exactText: Text {
         Text(
-            "Enter \(minLength) characters",
+            "Enter \(lengthRange.lowerBound) characters",
             bundle: .toolkitModule,
             comment: "Text indicating the user should enter a field's exact number of required characters."
+        )
+    }
+    
+    /// Text indicating a field's value must be convertible to a number.
+    var expectedDecimal: Text {
+        Text(
+            "Value must be a number",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field's value must be convertible to a number."
+        )
+    }
+    
+    /// Text indicating a field's value must be convertible to a whole number.
+    var expectedInteger: Text {
+        Text(
+            "Value must be a whole number",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field's value must be convertible to a whole number."
         )
     }
     
     /// Text indicating a field's maximum number of allowed characters.
     var maximumText: Text {
         Text(
-            "Maximum \(maxLength) characters",
+            "Maximum \(lengthRange.lowerBound) characters",
             bundle: .toolkitModule,
             comment: "Text indicating a field's maximum number of allowed characters."
         )
@@ -189,9 +237,70 @@ extension TextInputFooter {
     /// Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters.
     var minAndMaxText: Text {
         Text(
-            "Enter \(minLength) to \(maxLength) characters",
+            "Enter \(lengthRange.lowerBound) to \(lengthRange.upperBound) characters",
             bundle: .toolkitModule,
             comment: "Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters."
         )
+    }
+    
+    /// Text indicating a field's number value is not in the correct range of acceptable values.
+    var minAndMaxValue: Text {
+        let minAndMax = rangeDomain?.displayableMinAndMax
+        if let minAndMax {
+            return Text(
+                "Enter value from \(minAndMax.min) to \(minAndMax.max)",
+                bundle: .toolkitModule,
+                comment: "Text indicating a field's number value is not in the correct range of acceptable values."
+            )
+        } else {
+            return Text(
+                "Enter value in the allowed range",
+                bundle: .toolkitModule,
+                comment: "Text indicating a field's number value is not in the correct range of acceptable values."
+            )
+        }
+    }
+}
+
+private extension String {
+    /// A Boolean value indicating that the string contains no alphabetic or special characters and
+    /// can be cast to numeric value.
+    var isInteger: Bool {
+        return Int(self) != nil
+    }
+    
+    /// A Boolean value indicating that the string be cast to decimal value.
+    var isDecimal: Bool {
+        return Double(self) != nil
+    }
+}
+
+extension RangeDomain {
+    /// String representations of the minimum and maximum value of the range domain.
+    var displayableMinAndMax: (min: String, max: String)? {
+        if let min = minValue as? Double, let max = maxValue as? Double {
+            return (String(min), String(max))
+        } else if let min = minValue as? Int, let max = maxValue as? Int {
+            return (String(min), String(max))
+        } else if let min = minValue as? Int32, let max = maxValue as? Int32 {
+            return (String(min), String(max))
+        } else {
+            return nil
+        }
+    }
+    
+    /// Determines if the text's numeric value is within the range domain.
+    /// - Parameter value: Text with a numeric value.
+    /// - Returns: A Boolean value indicating whether the text's numeric value is within the range domain.
+    func contains(_ value: String) -> Bool {
+        if let min = minValue as? Double, let max = maxValue as? Double, let v = Double(value) {
+            return (min...max).contains(v)
+        } else if let min = minValue as? Int, let max = maxValue as? Int, let v = Int(value) {
+            return (min...max).contains(v)
+        } else if let min = minValue as? Int32, let max = maxValue as? Int32, let v = Int32(value)  {
+            return (min...max).contains(v)
+        } else {
+            return false
+        }
     }
 }

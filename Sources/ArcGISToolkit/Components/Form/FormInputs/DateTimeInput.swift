@@ -14,6 +14,7 @@
 import SwiftUI
 import ArcGIS
 
+/// A view for date/time input.
 struct DateTimeInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
@@ -37,7 +38,10 @@ struct DateTimeInput: View {
     
     /// The input configuration of the view.
     private let input: DateTimePickerFormInput
-    
+        
+    /// The model for the input.
+    @StateObject var inputModel: FormInputModel
+
     /// Creates a view for a date (and time if applicable) input.
     /// - Parameters:
     ///   - featureForm: The feature form containing the input.
@@ -47,6 +51,9 @@ struct DateTimeInput: View {
         self.featureForm = featureForm
         self.element = element
         self.input = input
+        _inputModel = StateObject(
+            wrappedValue: FormInputModel(fieldFormElement: element)
+        )
     }
     
     var body: some View {
@@ -60,22 +67,30 @@ struct DateTimeInput: View {
         }
         .padding([.bottom], elementPadding)
         .onAppear {
-            if element.value.isEmpty {
+            if inputModel.value.isEmpty {
                 date = nil
             } else {
-                date = try? Date(element.value, strategy: .arcGISDateParseStrategy)
+                date = try? Date(inputModel.value, strategy: .arcGISDateParseStrategy)
             }
         }
         .onChange(of: date) { newDate in
-            guard let currentDate = try? Date(element.value, strategy: .arcGISDateParseStrategy),
+            guard let currentDate = try? Date(inputModel.value, strategy: .arcGISDateParseStrategy),
                   newDate != currentDate else {
                 return
             }
-            requiredValueMissing = element.isRequired && newDate == nil
+            requiredValueMissing = inputModel.isRequired && newDate == nil
             featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
+            model.evaluateExpressions()
         }
         .onChange(of: model.focusedFieldName) { newFocusedFieldName in
             isEditing = newFocusedFieldName == element.fieldName
+        }
+        .onChange(of: inputModel.value) { newValue in
+            if newValue.isEmpty {
+                date = nil
+            } else {
+                date = try? Date(newValue, strategy: .arcGISDateParseStrategy)
+            }
         }
     }
     
@@ -100,7 +115,7 @@ struct DateTimeInput: View {
             
             if isEditing {
                 todayOrNowButton
-            } else if true/*element.editable*/ {
+            } else if inputModel.isEditable {
                 if date == nil {
                     Image(systemName: "calendar")
                         .foregroundColor(.secondary)
@@ -111,12 +126,11 @@ struct DateTimeInput: View {
                 }
             }
         }
-        .padding([.vertical], 1.5)
-        .formTextInputStyle()
+        .formInputStyle()
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {
-//                guard element.editable else { return }
+                guard inputModel.isEditable else { return }
                 if date == nil {
                     if dateRange.contains(.now) {
                         date = .now
