@@ -888,10 +888,14 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***func testCase_3_5() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let clearButton = app.buttons["Required Combo Box Clear Button"]
-***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Required Combo Box"]
+***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Required Combo Box *"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Combo Box Value"]
+***REMOVED******REMOVED***let footer = app.staticTexts["Required Combo Box Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
+***REMOVED******REMOVED***let oakButton = app.buttons["Oak"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED******REMOVED***
@@ -921,7 +925,46 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***clearButton.tap()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** TODO: Finish implementation, pending merge of #459
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***"Enter Value"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***footer.exists,
+***REMOVED******REMOVED******REMOVED***"The footer doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***footer.label,
+***REMOVED******REMOVED******REMOVED***"Required"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***fieldValue.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***noValueButton.exists,
+***REMOVED******REMOVED******REMOVED***"The no value button exists but it should not."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***oakButton.exists,
+***REMOVED******REMOVED******REMOVED***"The Oak button doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***oakButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***doneButton.exists,
+***REMOVED******REMOVED******REMOVED***"The done button doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***doneButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***fieldValue.label,
+***REMOVED******REMOVED******REMOVED***"Oak"
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 3.6: noValueOption is 'Hide'
