@@ -206,6 +206,7 @@ struct ComboBoxInput: View {
                             Text.done
                                 .fontWeight(.semibold)
                         }
+                        .buttonStyle(.plain)
                     }
                 }
             }
