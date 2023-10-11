@@ -888,10 +888,14 @@ final class FormViewTests: XCTestCase {
     func testCase_3_5() {
         let app = XCUIApplication()
         let clearButton = app.buttons["Required Combo Box Clear Button"]
-        let fieldTitle = app.staticTexts["Required Combo Box"]
+        let doneButton = app.buttons["Done"]
+        let fieldTitle = app.staticTexts["Required Combo Box *"]
         let fieldValue = app.staticTexts["Required Combo Box Value"]
+        let footer = app.staticTexts["Required Combo Box Footer"]
         let formTitle = app.staticTexts["comboBox"]
         let formViewTestsButton = app.buttons["FormView Tests"]
+        let noValueButton = app.buttons["No value"]
+        let oakButton = app.buttons["Oak"]
         
         app.launch()
             
@@ -921,7 +925,46 @@ final class FormViewTests: XCTestCase {
         
         clearButton.tap()
         
-        // TODO: Finish implementation, pending merge of #459
+        XCTAssertEqual(
+            fieldValue.label,
+            "Enter Value"
+        )
+        
+        XCTAssertTrue(
+            footer.exists,
+            "The footer doesn't exist."
+        )
+        
+        XCTAssertEqual(
+            footer.label,
+            "Required"
+        )
+        
+        fieldValue.tap()
+        
+        XCTAssertFalse(
+            noValueButton.exists,
+            "The no value button exists but it should not."
+        )
+        
+        XCTAssertTrue(
+            oakButton.exists,
+            "The Oak button doesn't exist."
+        )
+        
+        oakButton.tap()
+        
+        XCTAssertTrue(
+            doneButton.exists,
+            "The done button doesn't exist."
+        )
+        
+        doneButton.tap()
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "Oak"
+        )
     }
     
     /// Test case 3.6: noValueOption is 'Hide'
