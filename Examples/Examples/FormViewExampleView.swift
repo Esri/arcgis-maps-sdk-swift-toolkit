@@ -114,6 +114,6 @@ extension FormViewExampleView {
 
 private extension URL {
     static var sampleData: Self {
-        .init(string: "")!
+        .init(string: "<#URL#>")!
     }
 }
