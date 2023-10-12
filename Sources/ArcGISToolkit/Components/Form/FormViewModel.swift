@@ -32,9 +32,6 @@ public class FormViewModel: ObservableObject {
     /// The name of the current focused field, if one exists.
     @Published var focusedFieldName: String?
     
-    /// The last time the form was scrolled.
-    @Published var lastScroll: Date?
-    
     /// The expression evaluation task.
     var evaluateTask: Task<Void, Never>? = nil
     
