@@ -121,9 +121,6 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: model.lastScroll) { _ in
-***REMOVED******REMOVED******REMOVED***if isFocused { isFocused = false ***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
 ***REMOVED******REMOVED******REMOVED***text = newValue
 ***REMOVED***

@@ -51,12 +51,7 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.gesture(
-***REMOVED******REMOVED******REMOVED***DragGesture()
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.lastScroll = $0.time
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.scrollDismissesKeyboard()
 ***REMOVED******REMOVED***.onChange(of: model.visibleElements) { _ in
 ***REMOVED******REMOVED******REMOVED***visibleElements = model.visibleElements
 ***REMOVED***
@@ -120,6 +115,18 @@ extension FormView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension View {
+***REMOVED******REMOVED***/ - Returns: A view that immediately dismisses the keyboard upon scroll.
+***REMOVED***func scrollDismissesKeyboard() -> some View {
+***REMOVED******REMOVED***if #available(iOS 16.0, *) {
+***REMOVED******REMOVED******REMOVED***return self
+***REMOVED******REMOVED******REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return self
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -155,8 +155,5 @@ private extension SingleLineTextInput {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: model.lastScroll) { _ in
-***REMOVED******REMOVED******REMOVED***if isFocused { isFocused = false ***REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
