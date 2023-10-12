@@ -121,9 +121,6 @@ struct MultiLineTextInput: View {
                 model.evaluateExpressions()
             }
         }
-        .onChange(of: model.lastScroll) { _ in
-            if isFocused { isFocused = false }
-        }
         .onChange(of: inputModel.value) { newValue in
             text = newValue
         }

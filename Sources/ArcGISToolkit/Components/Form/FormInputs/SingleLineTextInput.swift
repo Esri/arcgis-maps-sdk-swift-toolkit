@@ -155,8 +155,5 @@ private extension SingleLineTextInput {
         } else {
             return nil
         }
-        .onChange(of: model.lastScroll) { _ in
-            if isFocused { isFocused = false }
-        }
     }
 }

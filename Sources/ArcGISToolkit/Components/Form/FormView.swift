@@ -51,12 +51,7 @@ public struct FormView: View {
                 }
             }
         }
-        .gesture(
-            DragGesture()
-                .onChanged {
-                    model.lastScroll = $0.time
-                }
-        )
+        .scrollDismissesKeyboard()
         .onChange(of: model.visibleElements) { _ in
             visibleElements = model.visibleElements
         }
@@ -120,6 +115,18 @@ extension FormView {
                     makeFieldElement(element)
                 }
             }
+        }
+    }
+}
+
+private extension View {
+    /// - Returns: A view that immediately dismisses the keyboard upon scroll.
+    func scrollDismissesKeyboard() -> some View {
+        if #available(iOS 16.0, *) {
+            return self
+                .scrollDismissesKeyboard(.immediately)
+        } else {
+            return self
         }
     }
 }
