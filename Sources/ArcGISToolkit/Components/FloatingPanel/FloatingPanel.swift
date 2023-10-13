@@ -133,10 +133,8 @@ struct FloatingPanel<Content>: View where Content: View {
                 let proposedHeight = height + ((isCompact ? -1 : +1) * deltaY)
                 
                 if shouldSendResign {
-                    if proposedHeight < height {
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                        shouldSendResign = false
-                    }
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    shouldSendResign = false
                 }
                 
                 handleColor = .activeHandleColor
