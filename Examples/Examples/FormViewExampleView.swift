@@ -16,7 +16,8 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FormViewExampleView: View {
-    @Environment(\.verticalSizeClass) var verticalSizeClass
+    /// The height to present the form at.
+    @State private var detent: FloatingPanelDetent = .full
     
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
@@ -51,7 +52,7 @@ struct FormViewExampleView: View {
                 .ignoresSafeArea(.keyboard)
             
                 .floatingPanel(
-                    selectedDetent: .constant(.half),
+                    selectedDetent: $detent,
                     horizontalAlignment: .leading,
                     isPresented: $isPresented
                 ) {
