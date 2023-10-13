@@ -13,9 +13,10 @@
 
 import ArcGIS
 import BackgroundTasks
+import Combine
 import Foundation
 import OSLog
-import SwiftUI
+import UIKit
 
 /// An object that manages saving and loading jobs so that they can continue to run if the
 /// app is backgrounded or even terminated.
