@@ -29,7 +29,12 @@ let package = Package(
 ***REMOVED******REMOVED***),
 ***REMOVED***],
 ***REMOVED***dependencies: [
-***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.2.0"))
+***REMOVED******REMOVED******REMOVED***.package(url: "https:***REMOVED***devtopia.esri.com/runtime/swift-daily.git", branch: "main")
+***REMOVED******REMOVED***.package(name: "arcgis-maps-sdk-swift", path: "../swift/ArcGIS"),
+***REMOVED******REMOVED***.package(
+***REMOVED******REMOVED******REMOVED***url: "https:***REMOVED***github.com/pointfreeco/swift-snapshot-testing",
+***REMOVED******REMOVED******REMOVED***from: "1.12.0"
+***REMOVED******REMOVED***)
 ***REMOVED***],
 ***REMOVED***targets: [
 ***REMOVED******REMOVED***.target(
@@ -40,7 +45,10 @@ let package = Package(
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***.testTarget(
 ***REMOVED******REMOVED******REMOVED***name: "ArcGISToolkitTests",
-***REMOVED******REMOVED******REMOVED***dependencies: ["ArcGISToolkit"]
+***REMOVED******REMOVED******REMOVED***dependencies: [
+***REMOVED******REMOVED******REMOVED******REMOVED***"ArcGISToolkit",
+***REMOVED******REMOVED******REMOVED******REMOVED***.product(name: "SnapshotTesting", package: "swift-snapshot-testing")
+***REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED***)
 ***REMOVED***]
 )
