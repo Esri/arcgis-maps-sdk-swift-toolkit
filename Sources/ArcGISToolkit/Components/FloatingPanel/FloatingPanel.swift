@@ -133,10 +133,8 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight = height + ((isCompact ? -1 : +1) * deltaY)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if shouldSendResign {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if proposedHeight < height {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldSendResign = false
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldSendResign = false
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .activeHandleColor
