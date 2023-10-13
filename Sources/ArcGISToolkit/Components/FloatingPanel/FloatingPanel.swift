@@ -48,6 +48,10 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .infinity
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the resignFirstResponder should be sent for the current
+***REMOVED******REMOVED***/ drag gesture.
+***REMOVED***@State private var shouldSendResign = true
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the panel should be configured for a compact environment.
 ***REMOVED***private var isCompact: Bool {
 ***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
@@ -127,6 +131,12 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.onChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let deltaY = $0.location.y - (latestDragGesture?.location.y ?? $0.location.y)
 ***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight = height + ((isCompact ? -1 : +1) * deltaY)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if shouldSendResign {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldSendResign = false
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .activeHandleColor
 ***REMOVED******REMOVED******REMOVED******REMOVED***height = min(max(.minHeight, proposedHeight), maximumHeight)
 ***REMOVED******REMOVED******REMOVED******REMOVED***latestDragGesture = $0
@@ -149,6 +159,8 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .defaultHandleColor
 ***REMOVED******REMOVED******REMOVED******REMOVED***latestDragGesture = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***shouldSendResign = true
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
