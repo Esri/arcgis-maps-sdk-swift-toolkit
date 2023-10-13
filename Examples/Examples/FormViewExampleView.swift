@@ -16,7 +16,8 @@
 ***REMOVED***
 
 struct FormViewExampleView: View {
-***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
+***REMOVED******REMOVED***/ The height to present the form at.
+***REMOVED***@State private var detent: FloatingPanelDetent = .full
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
 ***REMOVED***@State private var map = Map(url: .sampleData)!
@@ -51,7 +52,7 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: .constant(.half),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $detent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
