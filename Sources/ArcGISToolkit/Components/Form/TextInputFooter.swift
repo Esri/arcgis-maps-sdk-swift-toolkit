@@ -228,7 +228,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ Text indicating a field's maximum number of allowed characters.
 ***REMOVED***var maximumText: Text {
 ***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Maximum \(lengthRange.lowerBound) characters",
+***REMOVED******REMOVED******REMOVED***"Maximum \(lengthRange.upperBound) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's maximum number of allowed characters."
 ***REMOVED******REMOVED***)
