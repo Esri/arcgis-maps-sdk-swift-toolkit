@@ -48,6 +48,10 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .infinity
     
+    /// A Boolean value indicating whether the resignFirstResponder should be sent for the current
+    /// drag gesture.
+    @State private var shouldSendResign = true
+    
     /// A Boolean value indicating whether the panel should be configured for a compact environment.
     private var isCompact: Bool {
         horizontalSizeClass == .compact && verticalSizeClass == .regular
@@ -127,6 +131,12 @@ struct FloatingPanel<Content>: View where Content: View {
             .onChanged {
                 let deltaY = $0.location.y - (latestDragGesture?.location.y ?? $0.location.y)
                 let proposedHeight = height + ((isCompact ? -1 : +1) * deltaY)
+                
+                if shouldSendResign {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    shouldSendResign = false
+                }
+                
                 handleColor = .activeHandleColor
                 height = min(max(.minHeight, proposedHeight), maximumHeight)
                 latestDragGesture = $0
@@ -149,6 +159,8 @@ struct FloatingPanel<Content>: View where Content: View {
                 }
                 handleColor = .defaultHandleColor
                 latestDragGesture = nil
+                
+                shouldSendResign = true
             }
     }
     
