@@ -22,7 +22,3 @@ struct UITestRunner: App {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***init() {
-***REMOVED******REMOVED***ArcGISEnvironment.apiKey = APIKey("<#APIKey#>")
-***REMOVED***
-***REMOVED***
