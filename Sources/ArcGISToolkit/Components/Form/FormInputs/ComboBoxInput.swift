@@ -107,13 +107,15 @@ struct ComboBoxInput: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
                     .accessibilityIdentifier("\(element.label) Value")
-                if selectedValue == nil {
-                    Image(systemName: "list.bullet")
-                        .foregroundColor(.secondary)
-                        .accessibilityIdentifier("\(element.label) Options Button")
-                } else if !inputModel.isRequired && inputModel.isEditable  {
-                    ClearButton { selectedValue = nil }
-                        .accessibilityIdentifier("\(element.label) Clear Button")
+                if inputModel.isEditable {
+                    if selectedValue == nil {
+                        Image(systemName: "list.bullet")
+                            .foregroundColor(.secondary)
+                            .accessibilityIdentifier("\(element.label) Options Button")
+                    } else {
+                        ClearButton { selectedValue = nil }
+                            .accessibilityIdentifier("\(element.label) Clear Button")
+                    }
                 }
             }
             .formInputStyle()
@@ -161,7 +163,7 @@ struct ComboBoxInput: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
                 List {
-                    if element.value.isEmpty && !element.isRequired {
+                    if !element.isRequired {
                         if noValueOption == .show {
                             HStack {
                                 Button {
@@ -204,6 +206,7 @@ struct ComboBoxInput: View {
                             Text.done
                                 .fontWeight(.semibold)
                         }
+                        .buttonStyle(.plain)
                     }
                 }
             }
