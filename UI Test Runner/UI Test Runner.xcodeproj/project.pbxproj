@@ -38,7 +38,7 @@
 				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE)",
 			);
 			runOncePerArchitecture = 0;
-			script = "\"${SRCROOT***REMOVED***/Scripts/masquerade\" -i \"${INPUT_FILE_PATH***REMOVED***\" -o \"${SCRIPT_OUTPUT_FILE_0***REMOVED***\" -s \"${SCRIPT_INPUT_FILE_0***REMOVED***\" -f\n";
+			script = "\"${SRCROOT***REMOVED***/../Scripts/masquerade\" -i \"${INPUT_FILE_PATH***REMOVED***\" -o \"${SCRIPT_OUTPUT_FILE_0***REMOVED***\" -s \"${SCRIPT_INPUT_FILE_0***REMOVED***\" -f\n";
 		***REMOVED***;
 /* End PBXBuildRule section */
 
