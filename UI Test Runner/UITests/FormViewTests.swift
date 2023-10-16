@@ -867,6 +867,201 @@ final class FormViewTests: XCTestCase {
         )
     }
     
+    /// Test case 3.4: Picker with a noValueLabel row
+    func testCase_3_4() {
+        let app = XCUIApplication()
+        let doneButton = app.buttons["Done"]
+        let fieldTitle = app.staticTexts["Combo String"]
+        let fieldValue = app.staticTexts["Combo String Value"]
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let noValueButton = app.buttons["No value"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title isn't hittable."
+        )
+        
+        XCTExpectFailure(
+            "The design specifies the value should be String 3 but the actual current value may differ."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "String 3"
+        )
+        
+        fieldValue.tap()
+        
+        XCTAssertTrue(
+            noValueButton.exists,
+            "The no value button doesn't exist."
+        )
+        
+        noValueButton.tap()
+        
+        XCTAssertTrue(
+            doneButton.exists,
+            "The done button doesn't exist."
+        )
+        
+        doneButton.tap()
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "No value"
+        )
+    }
+    
+    /// Test case 3.5: Required Value
+    func testCase_3_5() {
+        let app = XCUIApplication()
+        let clearButton = app.buttons["Required Combo Box Clear Button"]
+        let doneButton = app.buttons["Done"]
+        let fieldTitle = app.staticTexts["Required Combo Box *"]
+        let fieldValue = app.staticTexts["Required Combo Box Value"]
+        let footer = app.staticTexts["Required Combo Box Footer"]
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let noValueButton = app.buttons["No value"]
+        let oakButton = app.buttons["Oak"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.exists,
+            "The field title doesn't exist."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "Pine"
+        )
+        
+        XCTAssertTrue(
+            clearButton.isHittable,
+            "The clear button isn't hittable."
+        )
+        
+        clearButton.tap()
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "Enter Value"
+        )
+        
+        XCTAssertTrue(
+            footer.exists,
+            "The footer doesn't exist."
+        )
+        
+        XCTAssertEqual(
+            footer.label,
+            "Required"
+        )
+        
+        fieldValue.tap()
+        
+        XCTAssertFalse(
+            noValueButton.exists,
+            "The no value button exists but it should not."
+        )
+        
+        XCTAssertTrue(
+            oakButton.exists,
+            "The Oak button doesn't exist."
+        )
+        
+        oakButton.tap()
+        
+        XCTAssertTrue(
+            doneButton.exists,
+            "The done button doesn't exist."
+        )
+        
+        doneButton.tap()
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "Oak"
+        )
+    }
+    
+    /// Test case 3.6: noValueOption is 'Hide'
+    func testCase_3_6() {
+        let app = XCUIApplication()
+        let doneButton = app.buttons["Done"]
+        let fieldTitle = app.staticTexts["Combo No Value False"]
+        let fieldValue = app.staticTexts["Combo No Value False Value"]
+        let firstOption = app.buttons["First"]
+        let formTitle = app.staticTexts["comboBox"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let noValueButton = app.buttons["No Value"]
+        let optionsButton = app.images["Combo No Value False Options Button"]
+        
+        app.launch()
+            
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            fieldTitle.isHittable,
+            "The field title isn't hittable."
+        )
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            ""
+        )
+        
+        optionsButton.tap()
+        
+        XCTAssertFalse(
+            noValueButton.exists,
+            "No Value exists as an option but it shouldn't."
+        )
+        
+        firstOption.tap()
+        
+        XCTAssertTrue(
+            doneButton.exists,
+            "The done button doesn't exist."
+        )
+        
+        doneButton.tap()
+        
+        XCTAssertEqual(
+            fieldValue.label,
+            "First"
+        )
+    }
+    
     // - MARK: Test case 4: Radio Buttons input type
     
     /// Test case 4.1: Test regular selection
