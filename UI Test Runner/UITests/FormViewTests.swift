@@ -18,6 +18,20 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***continueAfterFailure = false
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Sets the map and feature based on the current test case.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - app: The current application.
+***REMOVED******REMOVED***/   - id: The name of the test case.
+***REMOVED***func selectTestCase(_ app: XCUIApplication, id: String = #function) {
+***REMOVED******REMOVED***let testCase = String(id.dropLast(2))
+***REMOVED******REMOVED***let testCaseButton = app.buttons[testCase]
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***testCaseButton.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The button doesn't exist for \(testCase)"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***testCaseButton.tap()
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Test case 1: Text Box with no hint, no description, value not required
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 1.1: unfocused and focused state, no value
@@ -34,6 +48,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -103,6 +119,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -187,6 +205,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -277,6 +297,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
@@ -334,6 +356,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -404,6 +428,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
@@ -471,6 +497,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
@@ -531,6 +559,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase( app)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
@@ -585,6 +615,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -643,6 +675,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
@@ -683,6 +717,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -742,6 +778,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
@@ -783,6 +821,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -845,6 +885,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
@@ -899,6 +941,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
@@ -935,6 +979,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
@@ -973,6 +1019,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
