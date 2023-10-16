@@ -1,0 +1,34 @@
+@Tutorial(time: 10) {
+***REMOVED***@Intro(title: "FlyoverSceneView Tutorial") {
+***REMOVED******REMOVED***`FlyoverSceneView` provides an augmented reality fly over experience.
+***REMOVED******REMOVED***@Image(source: FlyoverSceneView, alt: "An image of .")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Section(title: "Using the FlyoverSceneView") {
+***REMOVED******REMOVED***@ContentAndMedia {
+***REMOVED******REMOVED******REMOVED***@Image(source: FlyoverSceneView, alt: "An image of the Authenticator component.")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Steps {
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a `FlyoverSceneView`. Specify the initial location of the scene view's
+***REMOVED******REMOVED******REMOVED******REMOVED***camera and the tranlation factor. The translation factor determines how many meters 
+***REMOVED******REMOVED******REMOVED******REMOVED***the scene view translates as the device moves in the AR experience.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FlyoverExampleView.swift", file: FlyoverSceneViewStep1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a `SceneView` to the `FlyoverSceneView` closure. The closure builds and overlays 
+***REMOVED******REMOVED******REMOVED******REMOVED***the scene view on top of the augmented reality video feed. Specify the `scene` state 
+***REMOVED******REMOVED******REMOVED******REMOVED***variable.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FlyoverExampleView.swift", file: FlyoverSceneViewStep2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Use the `SceneView.onSingleTapGesture` view modifer and scene view proxy to perform an 
+***REMOVED******REMOVED******REMOVED******REMOVED***identify operation to identify geoElements at the tapped screen point with a given tolerance.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FlyoverExampleView.swift", file: FlyoverSceneViewStep3)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
