@@ -1,0 +1,34 @@
+@Tutorial(time: 10) {
+    @Intro(title: "FlyoverSceneView Tutorial") {
+        `FlyoverSceneView` provides an augmented reality fly over experience.
+        @Image(source: FlyoverSceneView, alt: "An image of .")
+    }
+    
+    @Section(title: "Using the FlyoverSceneView") {
+        @ContentAndMedia {
+            @Image(source: FlyoverSceneView, alt: "An image of the Authenticator component.")
+        }
+        
+        @Steps {
+            @Step {
+                Initialize a `FlyoverSceneView`. Specify the initial location of the scene view's
+                camera and the tranlation factor. The translation factor determines how many meters 
+                the scene view translates as the device moves in the AR experience.
+                @Code(name: "FlyoverExampleView.swift", file: FlyoverSceneViewStep1)
+            }
+            
+            @Step {
+                Add a `SceneView` to the `FlyoverSceneView` closure. The closure builds and overlays 
+                the scene view on top of the augmented reality video feed. Specify the `scene` state 
+                variable.
+                @Code(name: "FlyoverExampleView.swift", file: FlyoverSceneViewStep2)
+            }
+            
+            @Step {
+                Use the `SceneView.onSingleTapGesture` view modifer and scene view proxy to perform an 
+                identify operation to identify geoElements at the tapped screen point with a given tolerance.
+                @Code(name: "FlyoverExampleView.swift", file: FlyoverSceneViewStep3)
+            }
+        }
+    }
+}
