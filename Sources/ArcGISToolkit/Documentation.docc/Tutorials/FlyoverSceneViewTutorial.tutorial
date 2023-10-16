@@ -1,12 +1,12 @@
 @Tutorial(time: 10) {
     @Intro(title: "FlyoverSceneView Tutorial") {
         `FlyoverSceneView` provides an augmented reality fly over experience.
-        @Image(source: FlyoverSceneView, alt: "An image of .")
+        @Image(source: FlyoverSceneView, alt: "An image of a fly over AR experience.")
     }
     
     @Section(title: "Using the FlyoverSceneView") {
         @ContentAndMedia {
-            @Image(source: FlyoverSceneView, alt: "An image of the Authenticator component.")
+            @Image(source: FlyoverSceneView, alt: "An image of a fly over AR experience.")
         }
         
         @Steps {
