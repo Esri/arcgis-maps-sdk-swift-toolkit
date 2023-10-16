@@ -21,8 +21,4 @@ struct UITestRunner: App {
             Tests()
         }
     }
-    
-    init() {
-        ArcGISEnvironment.apiKey = APIKey("<#APIKey#>")
-    }
 }
