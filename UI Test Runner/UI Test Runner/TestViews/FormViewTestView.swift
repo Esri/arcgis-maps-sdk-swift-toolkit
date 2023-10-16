@@ -34,10 +34,21 @@ struct FormViewTestView: View {
 ***REMOVED***@State private var testCase: TestCase?
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***if let map, let testCase {
-***REMOVED******REMOVED******REMOVED***makeMapView(map, testCase)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***testCaseSelector
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if let map, let testCase {
+***REMOVED******REMOVED******REMOVED******REMOVED***makeMapView(map, testCase)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***testCaseSelector
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
+***REMOVED******REMOVED******REMOVED******REMOVED***try! await TokenCredential.credential(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: URL(string: "https:***REMOVED***\(String.formViewTestDataDomain!)")!,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username: String.formViewTestDataUsername!,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***password: String.formViewTestDataPassword!
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
