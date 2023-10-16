@@ -1,12 +1,12 @@
 @Tutorial(time: 10) {
 ***REMOVED***@Intro(title: "FlyoverSceneView Tutorial") {
 ***REMOVED******REMOVED***`FlyoverSceneView` provides an augmented reality fly over experience.
-***REMOVED******REMOVED***@Image(source: FlyoverSceneView, alt: "An image of .")
+***REMOVED******REMOVED***@Image(source: FlyoverSceneView, alt: "An image of a fly over AR experience.")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Section(title: "Using the FlyoverSceneView") {
 ***REMOVED******REMOVED***@ContentAndMedia {
-***REMOVED******REMOVED******REMOVED***@Image(source: FlyoverSceneView, alt: "An image of the Authenticator component.")
+***REMOVED******REMOVED******REMOVED***@Image(source: FlyoverSceneView, alt: "An image of a fly over AR experience.")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {
