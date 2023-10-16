@@ -1,0 +1,44 @@
+@Tutorial(time: 10) {
+***REMOVED***@Intro(title: "TableTopSceneView Tutorial") {
+***REMOVED******REMOVED***`TableTopSceneView` provides an augmented reality table top experience.
+***REMOVED******REMOVED***@Image(source: TableTopSceneView, alt: "An image of a table top AR experience.")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Section(title: "Using the TableTopSceneView") {
+***REMOVED******REMOVED***@ContentAndMedia {
+***REMOVED******REMOVED******REMOVED***@Image(source: TableTopSceneView, alt: "An image of a table top AR experience.")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Steps {
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a `TableTopSceneView`. Specify the anchor point, translation factor,
+***REMOVED******REMOVED******REMOVED******REMOVED***and clipping distance. 
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***The anchor point is the location point of the ArcGIS Scene that is anchored on a 
+***REMOVED******REMOVED******REMOVED******REMOVED***physical surface. The translation factor determines how many meters the scene view
+***REMOVED******REMOVED******REMOVED******REMOVED***translates as the device moves in the AR experience. The clipping distance is the 
+***REMOVED******REMOVED******REMOVED******REMOVED***distance in meters that the ArcGIS Scene data will be clipped to.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a `SceneView` to the `TableTopSceneView` closure. The closure builds and overlays 
+***REMOVED******REMOVED******REMOVED******REMOVED***the scene view on top of the augmented reality video feed. Specify the `scene` state 
+***REMOVED******REMOVED******REMOVED******REMOVED***variable.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Set the `scene.baseSurface.navigationConstraint` to `.unconstrained` to enable viewing 
+***REMOVED******REMOVED******REMOVED******REMOVED***the scene from below. Set the `scene.baseSurface.opacity` to zero to make the basemap transparent.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep3)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Use the `SceneView.onSingleTapGesture` view modifer and scene view proxy to perform an 
+***REMOVED******REMOVED******REMOVED******REMOVED***identify operation to identify geoElements at the tapped screen point with a given tolerance.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep4)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
