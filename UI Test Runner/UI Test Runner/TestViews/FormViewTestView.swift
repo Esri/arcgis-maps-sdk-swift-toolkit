@@ -34,10 +34,21 @@ struct FormViewTestView: View {
     @State private var testCase: TestCase?
     
     var body: some View {
-        if let map, let testCase {
-            makeMapView(map, testCase)
-        } else {
-            testCaseSelector
+        Group {
+            if let map, let testCase {
+                makeMapView(map, testCase)
+            } else {
+                testCaseSelector
+            }
+        }
+        .task {
+            ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
+                try! await TokenCredential.credential(
+                    for: URL(string: "https://\(String.formViewTestDataDomain!)")!,
+                    username: String.formViewTestDataUsername!,
+                    password: String.formViewTestDataPassword!
+                )
+            )
         }
     }
 }
