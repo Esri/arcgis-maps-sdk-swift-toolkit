@@ -103,7 +103,7 @@ struct MultiLineTextInput: View {
         )
         .padding([.bottom], elementPadding)
         .onAppear {
-            let text = element.value
+            let text = element.formattedValue
             if !text.isEmpty {
                 isPlaceholder = false
                 self.text = text
@@ -114,10 +114,10 @@ struct MultiLineTextInput: View {
         }
         .onChange(of: text) { newValue in
             if !isPlaceholder {
-                guard newValue != element.value else {
+                guard newValue != element.formattedValue else {
                     return
                 }
-                featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+                try? element.updateValue(newValue)
                 model.evaluateExpressions()
             }
         }

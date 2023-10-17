@@ -79,7 +79,7 @@ struct DateTimeInput: View {
                 return
             }
             requiredValueMissing = inputModel.isRequired && newDate == nil
-            featureForm?.feature.setAttributeValue(newDate, forKey: element.fieldName)
+            try? element.updateValue(newDate)
             model.evaluateExpressions()
         }
         .onChange(of: model.focusedFieldName) { newFocusedFieldName in

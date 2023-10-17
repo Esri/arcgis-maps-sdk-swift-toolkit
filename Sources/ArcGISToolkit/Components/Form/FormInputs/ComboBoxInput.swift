@@ -132,15 +132,15 @@ struct ComboBoxInput: View {
         .padding([.bottom], elementPadding)
         .onAppear {
             codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-            selectedValue = codedValues.first { $0.name == element.value }
+            selectedValue = codedValues.first { $0.name == element.formattedValue }
         }
         .onChange(of: selectedValue) { newValue in
             guard newValue?.name != inputModel.value else {
                 return
             }
-
+            
             requiredValueMissing = element.isRequired && newValue == nil
-            featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
+            try? element.updateValue(newValue?.code)
             model.evaluateExpressions()
         }
         .onChange(of: inputModel.value) { newValue in
