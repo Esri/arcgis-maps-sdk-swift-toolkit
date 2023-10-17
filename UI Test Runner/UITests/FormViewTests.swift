@@ -908,7 +908,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***noValueButton.exists,
+***REMOVED******REMOVED******REMOVED***noValueButton.waitForExistence(timeout: 1),
 ***REMOVED******REMOVED******REMOVED***"The no value button doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
