@@ -41,7 +41,7 @@ public class FormInputModel: ObservableObject {
         element = fieldFormElement
         isRequired = element.isRequired
         isEditable = element.isEditable
-        value = element.value
+        value = element.formattedValue
         
         // Kick off tasks to monitor required, editable and value.
         tasks.append(
@@ -86,9 +86,9 @@ public class FormInputModel: ObservableObject {
     /// A detached task observing changes in the value.
     private var observeValueTask: Task<Void, Never> {
         Task.detached { [unowned self] in
-            for await value in element.$value {
+            for await _ in element.$value {
                 await MainActor.run {
-                    self.value = value
+                    self.value = element.formattedValue
                 }
             }
         }

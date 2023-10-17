@@ -88,7 +88,7 @@ struct SingleLineTextInput: View {
         )
         .padding([.bottom], elementPadding)
         .onAppear {
-            text = element.value
+            text = String(describing: element.value ?? "")
         }
         .onChange(of: isFocused) { newFocus in
             if newFocus {
@@ -100,20 +100,7 @@ struct SingleLineTextInput: View {
                 return
             }
             
-            // Note: this will be replaced by `element.updateValue()`, which will
-            // handle all the following logic internally.
-            if fieldType.isFloatingPoint {
-                // Note: this should handle other decimal types as well, if they exist (float?)
-                let value = Double(newValue)
-                featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
-            } else if fieldType.isNumeric {
-                // Note: this should handle more than just Int32
-                let value = Int32(newValue)
-                featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
-            } else {
-                // Text field
-                featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
-            }
+            try? element.updateValue(newValue)
             model.evaluateExpressions()
         }
         .onChange(of: inputModel.value) { newValue in

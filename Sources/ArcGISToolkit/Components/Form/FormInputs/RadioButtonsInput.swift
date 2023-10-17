@@ -110,18 +110,19 @@ struct RadioButtonsInput: View {
             .padding([.bottom], elementPadding)
             .onAppear {
                 codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-                if let selectedValue = codedValues.first(where: { $0.name == element.value }) {
+                if let selectedValue = codedValues.first(where: { $0.name == element.formattedValue }) {
                     self.selectedValue = selectedValue
-                } else if !element.value.isEmpty {
+                } else if !element.formattedValue.isEmpty {
                     fallbackToComboBox = true
                 }
             }
             .onChange(of: selectedValue) { newValue in
-                guard codedValues.first(where: { $0.name == element.value }) != newValue else {
+                guard codedValues.first(where: { $0.name == element.formattedValue }) != newValue else {
                     return
                 }
+                
                 requiredValueMissing = element.isRequired && newValue == nil
-                featureForm?.feature.setAttributeValue(newValue?.code ?? "", forKey: element.fieldName)
+                try? element.updateValue(newValue)
                 
                 model.evaluateExpressions()
             }

@@ -90,7 +90,7 @@ struct SwitchInput: View {
             .disabled(!inputModel.isEditable)
             .padding([.bottom], elementPadding)
             .onAppear {
-                if element.value.isEmpty {
+                if element.formattedValue.isEmpty {
                     fallbackToComboBox = true
                 } else {
                     switchState = isOn
@@ -103,7 +103,7 @@ struct SwitchInput: View {
                     return
                 }
                 let codedValue = newValue ? input.onValue : input.offValue
-                featureForm?.feature.setAttributeValue(codedValue.code, forKey: element.fieldName)
+                try? element.updateValue(codedValue)
                 model.evaluateExpressions()
             }
             .onChange(of: inputModel.value) { newValue in
@@ -121,21 +121,21 @@ extension SwitchInput {
     var isOn: Bool {
         switch input.onValue.code {
         case let value as Double:
-            return Double(element.value) == value
+            return Double(element.formattedValue) == value
         case let value as Float:
-            return Float(element.value) == value
+            return Float(element.formattedValue) == value
         case let value as Int:
-            return Int(element.value) == value
+            return Int(element.formattedValue) == value
         case let value as Int8:
-            return Int8(element.value) == value
+            return Int8(element.formattedValue) == value
         case let value as Int16:
-            return Int16(element.value) == value
+            return Int16(element.formattedValue) == value
         case let value as Int32:
-            return Int32(element.value) == value
+            return Int32(element.formattedValue) == value
         case let value as Int64:
-            return Int64(element.value) == value
+            return Int64(element.formattedValue) == value
         case let value as String:
-            return element.value == value
+            return element.formattedValue == value
         default:
             return false
         }
