@@ -31,7 +31,7 @@ struct TableTopExampleView: View {
 ***REMOVED******REMOVED******REMOVED***anchorPoint: anchorPoint,
 ***REMOVED******REMOVED******REMOVED***translationFactor: 1_000,
 ***REMOVED******REMOVED******REMOVED***clippingDistance: 400
-***REMOVED******REMOVED***) { proxy in
+***REMOVED******REMOVED***) { _ in
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
 ***REMOVED***
 ***REMOVED***

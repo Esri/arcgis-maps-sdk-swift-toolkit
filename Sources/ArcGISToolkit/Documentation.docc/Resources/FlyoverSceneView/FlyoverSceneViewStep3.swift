@@ -23,7 +23,7 @@ struct FlyoverExampleView: View {
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task.detached {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let results = try await proxy.identifyLayers(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let results = try await sceneViewProxy.identifyLayers(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***screenPoint: screen,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tolerance: 20
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
