@@ -91,7 +91,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***footer.label,
 ***REMOVED******REMOVED******REMOVED***"Maximum 256 characters"
 ***REMOVED******REMOVED***)
-***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***characterIndicator.exists,
 ***REMOVED******REMOVED******REMOVED***"The character indicator doesn't exist."
@@ -429,7 +429,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let nowButton = app.buttons["Launch Date and Time for Apollo 11 Now Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
@@ -498,7 +498,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let todayButton = app.buttons["Launch Date for Apollo 11 Today Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
@@ -560,7 +560,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let nowButton = app.buttons["Launch Date Time End Now Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
@@ -617,7 +617,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let julyFirstButton = datePicker.collectionViews.staticTexts["1"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
@@ -676,7 +676,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
@@ -719,7 +719,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let footer = app.staticTexts["Combo String Footer"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
@@ -779,7 +779,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let optionsButton = app.images["Combo Integer Options Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
@@ -823,7 +823,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
@@ -1025,7 +1025,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let optionsButton = app.images["Combo No Value False Options Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
@@ -1139,7 +1139,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let switchView = app.switches["switch integer Switch"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
@@ -1178,7 +1178,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let switchView = app.switches["switch string Switch"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
@@ -1218,7 +1218,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
