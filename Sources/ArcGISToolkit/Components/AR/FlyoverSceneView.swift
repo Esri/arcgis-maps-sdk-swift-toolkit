@@ -82,8 +82,8 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/ be effectively viewed in augmented reality. One such property is the camera controller.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***initialLocation: Point,
-***REMOVED******REMOVED***initialHeading: Double? = nil,
 ***REMOVED******REMOVED***translationFactor: Double,
+***REMOVED******REMOVED***initialHeading: Double? = nil,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***let camera = Camera(
