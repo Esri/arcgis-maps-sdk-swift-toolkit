@@ -1029,6 +1029,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
@@ -1036,8 +1038,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***fieldTitle.isHittable,
-***REMOVED******REMOVED******REMOVED***"The field title isn't hittable."
+***REMOVED******REMOVED******REMOVED***fieldTitle.exists,
+***REMOVED******REMOVED******REMOVED***"The field title doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
