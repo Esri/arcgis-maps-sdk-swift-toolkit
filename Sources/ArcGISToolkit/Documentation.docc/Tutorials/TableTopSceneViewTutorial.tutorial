@@ -36,7 +36,7 @@
             
             @Step {
                 Use the `SceneView.onSingleTapGesture` view modifer and scene view proxy to perform an 
-                identify operation to identify geoElements at the tapped screen point with a given tolerance.
+                identify operation to identify geo elements at the tapped screen point with a given tolerance.
                 @Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep4)
             }
         }
