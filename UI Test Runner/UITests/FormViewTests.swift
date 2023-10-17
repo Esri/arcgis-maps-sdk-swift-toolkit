@@ -583,7 +583,17 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The footer doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***nowButton.isHittable,
+***REMOVED******REMOVED******REMOVED***"The Now button wasn't hittable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***nowButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***fieldValue.isHittable,
+***REMOVED******REMOVED******REMOVED***"The field wasn't hittable."
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
 ***REMOVED******REMOVED***
@@ -1049,14 +1059,19 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***optionsButton.tap()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***firstOption.waitForExistence(timeout: 1),
+***REMOVED******REMOVED******REMOVED***"The First option doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(
 ***REMOVED******REMOVED******REMOVED***noValueButton.exists,
 ***REMOVED******REMOVED******REMOVED***"No Value exists as an option but it shouldn't."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***firstOption.exists,
-***REMOVED******REMOVED******REMOVED***"The First option doesn't exist."
+***REMOVED******REMOVED******REMOVED***firstOption.isHittable,
+***REMOVED******REMOVED******REMOVED***"The First option isn't hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***firstOption.tap()
