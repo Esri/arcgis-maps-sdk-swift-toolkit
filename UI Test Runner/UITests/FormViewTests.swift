@@ -883,9 +883,11 @@ final class FormViewTests: XCTestCase {
         let noValueButton = app.buttons["No value"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
+        
+        selectTestCase(app)
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
@@ -896,10 +898,6 @@ final class FormViewTests: XCTestCase {
         XCTAssertTrue(
             fieldTitle.isHittable,
             "The field title isn't hittable."
-        )
-        
-        XCTExpectFailure(
-            "The design specifies the value should be String 3 but the actual current value may differ."
         )
         
         XCTAssertEqual(
@@ -943,7 +941,7 @@ final class FormViewTests: XCTestCase {
         let oakButton = app.buttons["Oak"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
