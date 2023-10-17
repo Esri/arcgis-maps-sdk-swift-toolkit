@@ -5,10 +5,10 @@
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Chapter(name: "Augmented Reality") {
-***REMOVED******REMOVED***Augmented reality experinces overlay ArcGIS Scene imagery over a camera feed of the
-***REMOVED******REMOVED***physical world. The following views provide augemnted reality experinces 
+***REMOVED******REMOVED***Augmented reality experiences overlay ArcGIS Scene imagery over a camera feed of the
+***REMOVED******REMOVED***physical world. The following views provide augmented reality experiences 
 ***REMOVED******REMOVED***for common AR patterns including Flyover and TableTop AR.
-***REMOVED******REMOVED***@Image(source: FlyoverSceneView, alt: "An image of.")
+***REMOVED******REMOVED***@Image(source: FlyoverSceneView, alt: "An image of a fly over AR experience.")
 ***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:FlyoverSceneViewTutorial")
 ***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:TableTopSceneViewTutorial")
 ***REMOVED***
