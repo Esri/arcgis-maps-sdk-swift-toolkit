@@ -1054,6 +1054,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"No Value exists as an option but it shouldn't."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***firstOption.exists,
+***REMOVED******REMOVED******REMOVED***"The First option doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***firstOption.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
