@@ -88,7 +88,7 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***text = element.value
+***REMOVED******REMOVED******REMOVED***text = String(describing: element.value ?? "")
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { newFocus in
 ***REMOVED******REMOVED******REMOVED***if newFocus {
@@ -100,20 +100,7 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Note: this will be replaced by `element.updateValue()`, which will
-***REMOVED******REMOVED******REMOVED******REMOVED*** handle all the following logic internally.
-***REMOVED******REMOVED******REMOVED***if fieldType.isFloatingPoint {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this should handle other decimal types as well, if they exist (float?)
-***REMOVED******REMOVED******REMOVED******REMOVED***let value = Double(newValue)
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
-***REMOVED******REMOVED*** else if fieldType.isNumeric {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this should handle more than just Int32
-***REMOVED******REMOVED******REMOVED******REMOVED***let value = Int32(newValue)
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text field
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***try? element.updateValue(newValue)
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
