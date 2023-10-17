@@ -908,7 +908,7 @@ final class FormViewTests: XCTestCase {
         fieldValue.tap()
         
         XCTAssertTrue(
-            noValueButton.exists,
+            noValueButton.waitForExistence(timeout: 1),
             "The no value button doesn't exist."
         )
         
