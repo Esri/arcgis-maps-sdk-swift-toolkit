@@ -1207,6 +1207,11 @@ final class FormViewTests: XCTestCase {
             "1"
         )
         
+        XCTAssertTrue(
+            switchView.isHittable,
+            "The switch isn't hittable."
+        )
+        
         switchView.tap()
         
         XCTAssertEqual(
