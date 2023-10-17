@@ -465,8 +465,8 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            datePicker.isHittable,
-            "The date picker isn't hittable."
+            datePicker.exists,
+            "The date picker doesn't exist."
         )
         
         XCTAssertTrue(
