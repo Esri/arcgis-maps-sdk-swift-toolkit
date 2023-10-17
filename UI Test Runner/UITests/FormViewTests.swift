@@ -1080,7 +1080,7 @@ final class FormViewTests: XCTestCase {
         let formViewTestsButton = app.buttons["FormView Tests"]
         let dogOption = app.buttons["Radio Button Text dog"]
         let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
-        let noValueOption = app.buttons["Radio Button Text No value"]
+        let noValueOption = app.buttons["Radio Button Text No Value"]
         
         app.launch()
         
