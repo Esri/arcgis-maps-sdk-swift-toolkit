@@ -36,11 +36,11 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - initialLatitude: The initial latitude of the scene view's camera.
 ***REMOVED******REMOVED***/   - initialLongitude: The initial longitude of the scene view's camera.
-***REMOVED******REMOVED***/   - initialHeading: The initial heading of the scene view's camera. A value of `nil` means
-***REMOVED******REMOVED***/   the scene view's heading will be initially oriented to compass heading.
 ***REMOVED******REMOVED***/   - initialAltitude: The initial altitude of the scene view's camera.
 ***REMOVED******REMOVED***/   - translationFactor: The translation factor that defines how much the scene view translates
 ***REMOVED******REMOVED***/   as the device moves.
+***REMOVED******REMOVED***/   - initialHeading: The initial heading of the scene view's camera. A value of `nil` means
+***REMOVED******REMOVED***/   the scene view's heading will be initially oriented to compass heading.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
 ***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
@@ -49,8 +49,8 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***initialLatitude: Double,
 ***REMOVED******REMOVED***initialLongitude: Double,
 ***REMOVED******REMOVED***initialAltitude: Double,
-***REMOVED******REMOVED***initialHeading: Double? = nil,
 ***REMOVED******REMOVED***translationFactor: Double,
+***REMOVED******REMOVED***initialHeading: Double? = nil,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***let camera = Camera(
@@ -63,8 +63,8 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***initialCamera: camera,
-***REMOVED******REMOVED******REMOVED***shouldOrientToCompass: initialHeading == nil,
 ***REMOVED******REMOVED******REMOVED***translationFactor: translationFactor,
+***REMOVED******REMOVED******REMOVED***shouldOrientToCompass: initialHeading == nil,
 ***REMOVED******REMOVED******REMOVED***sceneView: sceneView
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -72,10 +72,10 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - initialLocation: The initial location of the scene view's camera.
-***REMOVED******REMOVED***/   - initialHeading: The initial heading of the scene view's camera. A value of `nil` means
-***REMOVED******REMOVED***/   the scene view's heading will be initially oriented to compass heading.
 ***REMOVED******REMOVED***/   - translationFactor: The translation factor that defines how much the scene view translates
 ***REMOVED******REMOVED***/   as the device moves.
+***REMOVED******REMOVED***/   - initialHeading: The initial heading of the scene view's camera. A value of `nil` means
+***REMOVED******REMOVED***/   the scene view's heading will be initially oriented to compass heading.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
 ***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
@@ -94,8 +94,8 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***initialCamera: camera,
-***REMOVED******REMOVED******REMOVED***shouldOrientToCompass: initialHeading == nil,
 ***REMOVED******REMOVED******REMOVED***translationFactor: translationFactor,
+***REMOVED******REMOVED******REMOVED***shouldOrientToCompass: initialHeading == nil,
 ***REMOVED******REMOVED******REMOVED***sceneView: sceneView
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -103,23 +103,23 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - initialCamera: The initial camera.
-***REMOVED******REMOVED***/   - shouldOrientToCompass: A Boolean value indicating whether to orient the scene view's
-***REMOVED******REMOVED***/   initial heading to compass heading.
 ***REMOVED******REMOVED***/   - translationFactor: The translation factor that defines how much the scene view translates
 ***REMOVED******REMOVED***/   as the device moves.
+***REMOVED******REMOVED***/   - shouldOrientToCompass: A Boolean value indicating whether to orient the scene view's
+***REMOVED******REMOVED***/   initial heading to compass heading.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
 ***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
 ***REMOVED******REMOVED***/ be effectively viewed in augmented reality. One such property is the camera controller.
 ***REMOVED***private init(
 ***REMOVED******REMOVED***initialCamera: Camera,
-***REMOVED******REMOVED***shouldOrientToCompass: Bool,
 ***REMOVED******REMOVED***translationFactor: Double,
+***REMOVED******REMOVED***shouldOrientToCompass: Bool,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
-***REMOVED******REMOVED***self.translationFactor = translationFactor
 ***REMOVED******REMOVED***self.shouldOrientToCompass = shouldOrientToCompass
+***REMOVED******REMOVED***self.translationFactor = translationFactor
 ***REMOVED******REMOVED***self.initialCamera = initialCamera
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
