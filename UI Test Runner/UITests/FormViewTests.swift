@@ -1080,7 +1080,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let dogOption = app.buttons["Radio Button Text dog"]
 ***REMOVED******REMOVED***let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
-***REMOVED******REMOVED***let noValueOption = app.buttons["Radio Button Text No value"]
+***REMOVED******REMOVED***let noValueOption = app.buttons["Radio Button Text No Value"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
