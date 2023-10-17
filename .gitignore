@@ -4,6 +4,7 @@ xcuserdata/
 /*.xcodeproj
 DerivedData/
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+**/.secrets
 
 ## Swift Package Manager
 # Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
