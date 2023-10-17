@@ -465,8 +465,8 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***datePicker.isHittable,
-***REMOVED******REMOVED******REMOVED***"The date picker isn't hittable."
+***REMOVED******REMOVED******REMOVED***datePicker.exists,
+***REMOVED******REMOVED******REMOVED***"The date picker doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
