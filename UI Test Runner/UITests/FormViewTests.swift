@@ -1136,6 +1136,7 @@ final class FormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["switch integer"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["FormView Tests"]
+        let switchLabel = app.staticTexts["switch integer Switch Label"]
         let switchView = app.switches["switch integer Switch"]
         
         app.launch()
@@ -1157,14 +1158,14 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            switchView.label,
+            switchLabel.label,
             "2"
         )
         
         switchView.tap()
         
         XCTAssertEqual(
-            switchView.label,
+            switchLabel.label,
             "1"
         )
     }
@@ -1175,6 +1176,7 @@ final class FormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["switch string"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["FormView Tests"]
+        let switchLabel = app.staticTexts["switch string Switch Label"]
         let switchView = app.switches["switch string Switch"]
         
         app.launch()
@@ -1196,15 +1198,14 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            switchView.label,
+            switchLabel.label,
             "1"
         )
         
         switchView.tap()
         
-        
         XCTAssertEqual(
-            switchView.label,
+            switchLabel.label,
             "2"
         )
     }
