@@ -36,11 +36,11 @@ public struct FlyoverSceneView: View {
     /// - Parameters:
     ///   - initialLatitude: The initial latitude of the scene view's camera.
     ///   - initialLongitude: The initial longitude of the scene view's camera.
-    ///   - initialHeading: The initial heading of the scene view's camera. A value of `nil` means
-    ///   the scene view's heading will be initially oriented to compass heading.
     ///   - initialAltitude: The initial altitude of the scene view's camera.
     ///   - translationFactor: The translation factor that defines how much the scene view translates
     ///   as the device moves.
+    ///   - initialHeading: The initial heading of the scene view's camera. A value of `nil` means
+    ///   the scene view's heading will be initially oriented to compass heading.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     /// - Remark: The provided scene view will have certain properties overridden in order to
@@ -49,8 +49,8 @@ public struct FlyoverSceneView: View {
         initialLatitude: Double,
         initialLongitude: Double,
         initialAltitude: Double,
-        initialHeading: Double? = nil,
         translationFactor: Double,
+        initialHeading: Double? = nil,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         let camera = Camera(
@@ -63,8 +63,8 @@ public struct FlyoverSceneView: View {
         )
         self.init(
             initialCamera: camera,
-            shouldOrientToCompass: initialHeading == nil,
             translationFactor: translationFactor,
+            shouldOrientToCompass: initialHeading == nil,
             sceneView: sceneView
         )
     }
@@ -72,10 +72,10 @@ public struct FlyoverSceneView: View {
     /// Creates a fly over scene view.
     /// - Parameters:
     ///   - initialLocation: The initial location of the scene view's camera.
-    ///   - initialHeading: The initial heading of the scene view's camera. A value of `nil` means
-    ///   the scene view's heading will be initially oriented to compass heading.
     ///   - translationFactor: The translation factor that defines how much the scene view translates
     ///   as the device moves.
+    ///   - initialHeading: The initial heading of the scene view's camera. A value of `nil` means
+    ///   the scene view's heading will be initially oriented to compass heading.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     /// - Remark: The provided scene view will have certain properties overridden in order to
@@ -94,8 +94,8 @@ public struct FlyoverSceneView: View {
         )
         self.init(
             initialCamera: camera,
-            shouldOrientToCompass: initialHeading == nil,
             translationFactor: translationFactor,
+            shouldOrientToCompass: initialHeading == nil,
             sceneView: sceneView
         )
     }
@@ -103,23 +103,23 @@ public struct FlyoverSceneView: View {
     /// Creates a fly over scene view.
     /// - Parameters:
     ///   - initialCamera: The initial camera.
-    ///   - shouldOrientToCompass: A Boolean value indicating whether to orient the scene view's
-    ///   initial heading to compass heading.
     ///   - translationFactor: The translation factor that defines how much the scene view translates
     ///   as the device moves.
+    ///   - shouldOrientToCompass: A Boolean value indicating whether to orient the scene view's
+    ///   initial heading to compass heading.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     /// - Remark: The provided scene view will have certain properties overridden in order to
     /// be effectively viewed in augmented reality. One such property is the camera controller.
     private init(
         initialCamera: Camera,
-        shouldOrientToCompass: Bool,
         translationFactor: Double,
+        shouldOrientToCompass: Bool,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         self.sceneViewBuilder = sceneView
-        self.translationFactor = translationFactor
         self.shouldOrientToCompass = shouldOrientToCompass
+        self.translationFactor = translationFactor
         self.initialCamera = initialCamera
         
         let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
