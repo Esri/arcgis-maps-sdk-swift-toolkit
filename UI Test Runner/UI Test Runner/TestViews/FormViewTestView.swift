@@ -156,7 +156,6 @@ private extension FormViewTestView {
         .init(id: "testCase_1_3", objectID: 1, url: makeURL(for: String.formViewTestDataCase_1_x!)),
         .init(id: "testCase_1_4", objectID: 1, url: makeURL(for: String.formViewTestDataCase_1_4!)),
         .init(id: "testCase_2_1", objectID: 1, url: makeURL(for: String.formViewTestDataCase_2_x!)),
-        .init(id: "testCase_2_1", objectID: 1, url: makeURL(for: String.formViewTestDataCase_2_x!)),
         .init(id: "testCase_2_2", objectID: 1, url: makeURL(for: String.formViewTestDataCase_2_x!)),
         .init(id: "testCase_2_3", objectID: 1, url: makeURL(for: String.formViewTestDataCase_2_x!)),
         .init(id: "testCase_2_4", objectID: 1, url: makeURL(for: String.formViewTestDataCase_2_x!)),
