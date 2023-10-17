@@ -306,8 +306,13 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***textField.value as? String,
+***REMOVED******REMOVED******REMOVED***""
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***footer.label,
-***REMOVED******REMOVED******REMOVED***"Range domain  2-5"
+***REMOVED******REMOVED******REMOVED***"Range domain 2-5"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***textField.tap()
@@ -325,7 +330,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***footer.label,
-***REMOVED******REMOVED******REMOVED***"Range domain  2-5"
+***REMOVED******REMOVED******REMOVED***"Range domain 2-5"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Highlight/select the current value and replace it
