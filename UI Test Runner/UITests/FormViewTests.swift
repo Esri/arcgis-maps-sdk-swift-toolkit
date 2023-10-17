@@ -91,7 +91,7 @@ final class FormViewTests: XCTestCase {
             footer.label,
             "Maximum 256 characters"
         )
-    
+        
         XCTAssertTrue(
             characterIndicator.exists,
             "The character indicator doesn't exist."
@@ -429,7 +429,7 @@ final class FormViewTests: XCTestCase {
         let nowButton = app.buttons["Launch Date and Time for Apollo 11 Now Button"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -498,7 +498,7 @@ final class FormViewTests: XCTestCase {
         let todayButton = app.buttons["Launch Date for Apollo 11 Today Button"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -560,7 +560,7 @@ final class FormViewTests: XCTestCase {
         let nowButton = app.buttons["Launch Date Time End Now Button"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -617,7 +617,7 @@ final class FormViewTests: XCTestCase {
         let julyFirstButton = datePicker.collectionViews.staticTexts["1"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -676,7 +676,7 @@ final class FormViewTests: XCTestCase {
         let formViewTestsButton = app.buttons["FormView Tests"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -719,7 +719,7 @@ final class FormViewTests: XCTestCase {
         let footer = app.staticTexts["Combo String Footer"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -779,7 +779,7 @@ final class FormViewTests: XCTestCase {
         let optionsButton = app.images["Combo Integer Options Button"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -823,7 +823,7 @@ final class FormViewTests: XCTestCase {
         let formViewTestsButton = app.buttons["FormView Tests"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -1025,7 +1025,7 @@ final class FormViewTests: XCTestCase {
         let optionsButton = app.images["Combo No Value False Options Button"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -1139,7 +1139,7 @@ final class FormViewTests: XCTestCase {
         let switchView = app.switches["switch integer Switch"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -1178,7 +1178,7 @@ final class FormViewTests: XCTestCase {
         let switchView = app.switches["switch string Switch"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -1218,7 +1218,7 @@ final class FormViewTests: XCTestCase {
         let formViewTestsButton = app.buttons["FormView Tests"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
