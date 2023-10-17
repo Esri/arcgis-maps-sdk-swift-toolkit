@@ -583,7 +583,17 @@ final class FormViewTests: XCTestCase {
             "The footer doesn't exist."
         )
         
+        XCTAssertTrue(
+            nowButton.isHittable,
+            "The Now button wasn't hittable."
+        )
+        
         nowButton.tap()
+        
+        XCTAssertTrue(
+            fieldValue.isHittable,
+            "The field wasn't hittable."
+        )
         
         fieldValue.tap()
         
@@ -1049,14 +1059,19 @@ final class FormViewTests: XCTestCase {
         
         optionsButton.tap()
         
+        XCTAssertTrue(
+            firstOption.waitForExistence(timeout: 1),
+            "The First option doesn't exist."
+        )
+        
         XCTAssertFalse(
             noValueButton.exists,
             "No Value exists as an option but it shouldn't."
         )
         
         XCTAssertTrue(
-            firstOption.exists,
-            "The First option doesn't exist."
+            firstOption.isHittable,
+            "The First option isn't hittable."
         )
         
         firstOption.tap()
