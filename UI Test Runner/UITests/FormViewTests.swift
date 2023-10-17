@@ -1054,6 +1054,11 @@ final class FormViewTests: XCTestCase {
             "No Value exists as an option but it shouldn't."
         )
         
+        XCTAssertTrue(
+            firstOption.exists,
+            "The First option doesn't exist."
+        )
+        
         firstOption.tap()
         
         XCTAssertTrue(
