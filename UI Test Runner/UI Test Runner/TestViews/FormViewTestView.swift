@@ -120,6 +120,7 @@ private extension FormViewTestView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.testCase = testCase
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map = Map(url: .init(string: testCase.url)!)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
