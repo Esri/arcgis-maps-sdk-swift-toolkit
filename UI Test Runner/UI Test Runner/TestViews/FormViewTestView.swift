@@ -120,6 +120,7 @@ private extension FormViewTestView {
                     self.testCase = testCase
                     map = Map(url: .init(string: testCase.url)!)
                 }
+                .buttonStyle(.plain)
             }
         }
     }
