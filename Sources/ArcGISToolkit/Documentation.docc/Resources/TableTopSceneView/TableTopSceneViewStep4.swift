@@ -31,11 +31,11 @@ struct TableTopExampleView: View {
             anchorPoint: anchorPoint,
             translationFactor: 1_000,
             clippingDistance: 400
-        ) { proxy in
+        ) { sceneViewProxy in
             SceneView(scene: scene)
                 .onSingleTapGesture { screen, _ in
                     Task.detached {
-                        let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
+                        let results = try await sceneViewProxy.identifyLayers(screenPoint: screen, tolerance: 20)
                         print("\(results.count) identify result(s).")
                     }
                 }
