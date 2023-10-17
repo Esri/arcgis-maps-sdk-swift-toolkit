@@ -306,8 +306,13 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertEqual(
+            textField.value as? String,
+            ""
+        )
+        
+        XCTAssertEqual(
             footer.label,
-            "Range domain  2-5"
+            "Range domain 2-5"
         )
         
         textField.tap()
@@ -325,7 +330,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertEqual(
             footer.label,
-            "Range domain  2-5"
+            "Range domain 2-5"
         )
         
         // Highlight/select the current value and replace it
