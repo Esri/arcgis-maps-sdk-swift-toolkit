@@ -28,6 +28,7 @@ public class FormInputModel: ObservableObject {
 ***REMOVED******REMOVED***/ The value of the input.
 ***REMOVED***@Published var value: Any?
 ***REMOVED***
+***REMOVED******REMOVED***/ The formatted value of the input.
 ***REMOVED***@Published var formattedValue: String
 ***REMOVED***
 ***REMOVED***private var element: FieldFormElement
