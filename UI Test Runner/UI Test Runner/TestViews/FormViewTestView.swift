@@ -118,7 +118,7 @@ private extension FormViewTestView {
             ForEach(cases) { testCase in
                 Button(testCase.id) {
                     self.testCase = testCase
-                    map = Map(url: .init(string: testCase.url)!)
+                    map = Map(url: testCase.url)
                 }
                 .buttonStyle(.plain)
             }
@@ -140,37 +140,43 @@ private extension FormViewTestView {
         /// The object ID of the feature being tested.
         let objectID: Int
         /// The test data location.
-        let url: String
-    }
-    
-    /// Makes a URL a for test data.
-    /// - Parameter id: A portal item ID.
-    /// - Returns: A URL for Form View test data with the given portal item ID.
-    func makeURL(for id: String) -> String {
-        String("https://\(String.formViewTestDataDomain!)/home/item.html?id=\(id)")
+        let url: URL
+        
+        /// Creates a FormView test case.
+        /// - Parameters:
+        ///   - name: The name of the test case.
+        ///   - objectID: The object ID of the feature being tested.
+        ///   - portalID: The portal ID of the test data.
+        init(_ name: String, objectID: Int, portalID: String) {
+            self.id = name
+            self.objectID = objectID
+            self.url = .init(
+                string: String("https://\(String.formViewTestDataDomain!)/home/item.html?id=\(portalID)")
+            )!
+        }
     }
     
     /// The set of all Form View UI test cases.
     var cases: [TestCase] {[
-        .init(id: "testCase_1_1", objectID: 1, url: makeURL(for: String.formViewTestDataCase_1_x!)),
-        .init(id: "testCase_1_2", objectID: 1, url: makeURL(for: String.formViewTestDataCase_1_x!)),
-        .init(id: "testCase_1_3", objectID: 1, url: makeURL(for: String.formViewTestDataCase_1_x!)),
-        .init(id: "testCase_1_4", objectID: 1, url: makeURL(for: String.formViewTestDataCase_1_4!)),
-        .init(id: "testCase_2_1", objectID: 1, url: makeURL(for: String.formViewTestDataCase_2_x!)),
-        .init(id: "testCase_2_2", objectID: 1, url: makeURL(for: String.formViewTestDataCase_2_x!)),
-        .init(id: "testCase_2_3", objectID: 1, url: makeURL(for: String.formViewTestDataCase_2_x!)),
-        .init(id: "testCase_2_4", objectID: 1, url: makeURL(for: String.formViewTestDataCase_2_x!)),
-        .init(id: "testCase_2_5", objectID: 1, url: makeURL(for: String.formViewTestDataCase_2_x!)),
-        .init(id: "testCase_2_6", objectID: 1, url: makeURL(for: String.formViewTestDataCase_2_x!)),
-        .init(id: "testCase_3_1", objectID: 2, url: makeURL(for: String.formViewTestDataCase_3_x!)),
-        .init(id: "testCase_3_2", objectID: 2, url: makeURL(for: String.formViewTestDataCase_3_x!)),
-        .init(id: "testCase_3_3", objectID: 2, url: makeURL(for: String.formViewTestDataCase_3_x!)),
-        .init(id: "testCase_3_4", objectID: 2, url: makeURL(for: String.formViewTestDataCase_3_x!)),
-        .init(id: "testCase_3_5", objectID: 2, url: makeURL(for: String.formViewTestDataCase_3_x!)),
-        .init(id: "testCase_3_6", objectID: 2, url: makeURL(for: String.formViewTestDataCase_3_x!)),
-        .init(id: "testCase_4_1", objectID: 1, url: makeURL(for: String.formViewTestDataCase_4_x!)),
-        .init(id: "testCase_5_1", objectID: 1, url: makeURL(for: String.formViewTestDataCase_5_x!)),
-        .init(id: "testCase_5_2", objectID: 1, url: makeURL(for: String.formViewTestDataCase_5_x!)),
-        .init(id: "testCase_5_3", objectID: 1, url: makeURL(for: String.formViewTestDataCase_5_x!)),
+        .init("testCase_1_1", objectID: 1, portalID: String.formViewTestDataCase_1_x!),
+        .init("testCase_1_2", objectID: 1, portalID: String.formViewTestDataCase_1_x!),
+        .init("testCase_1_3", objectID: 1, portalID: String.formViewTestDataCase_1_x!),
+        .init("testCase_1_4", objectID: 1, portalID: String.formViewTestDataCase_1_4!),
+        .init("testCase_2_1", objectID: 1, portalID: String.formViewTestDataCase_2_x!),
+        .init("testCase_2_2", objectID: 1, portalID: String.formViewTestDataCase_2_x!),
+        .init("testCase_2_3", objectID: 1, portalID: String.formViewTestDataCase_2_x!),
+        .init("testCase_2_4", objectID: 1, portalID: String.formViewTestDataCase_2_x!),
+        .init("testCase_2_5", objectID: 1, portalID: String.formViewTestDataCase_2_x!),
+        .init("testCase_2_6", objectID: 1, portalID: String.formViewTestDataCase_2_x!),
+        .init("testCase_3_1", objectID: 2, portalID: String.formViewTestDataCase_3_x!),
+        .init("testCase_3_2", objectID: 2, portalID: String.formViewTestDataCase_3_x!),
+        .init("testCase_3_3", objectID: 2, portalID: String.formViewTestDataCase_3_x!),
+        .init("testCase_3_4", objectID: 2, portalID: String.formViewTestDataCase_3_x!),
+        .init("testCase_3_5", objectID: 2, portalID: String.formViewTestDataCase_3_x!),
+        .init("testCase_3_6", objectID: 2, portalID: String.formViewTestDataCase_3_x!),
+        .init("testCase_4_1", objectID: 1, portalID: String.formViewTestDataCase_4_x!),
+        .init("testCase_5_1", objectID: 1, portalID: String.formViewTestDataCase_5_x!),
+        .init("testCase_5_2", objectID: 1, portalID: String.formViewTestDataCase_5_x!),
+        .init("testCase_5_3", objectID: 1, portalID: String.formViewTestDataCase_5_x!),
     ]}
 }
