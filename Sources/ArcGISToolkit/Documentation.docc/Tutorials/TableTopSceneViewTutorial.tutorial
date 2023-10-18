@@ -29,8 +29,7 @@
             }
             
             @Step {
-                Set the `scene.baseSurface.navigationConstraint` to `.unconstrained` to enable viewing 
-                the scene from below. Set the `scene.baseSurface.opacity` to zero to make the basemap transparent.
+                Set the `scene.baseSurface.opacity` to zero to make the basemap transparent.
                 @Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep3)
             }
             

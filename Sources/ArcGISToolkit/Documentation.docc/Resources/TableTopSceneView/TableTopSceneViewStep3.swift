@@ -15,7 +15,6 @@ struct TableTopExampleView: View {
         let scene = Scene()
         scene.baseSurface = surface
         scene.addOperationalLayer(buildingsLayer)
-        scene.baseSurface.navigationConstraint = .unconstrained
         scene.baseSurface.opacity = 0
         return scene
     }()
