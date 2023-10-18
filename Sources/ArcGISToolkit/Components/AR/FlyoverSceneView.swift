@@ -27,8 +27,6 @@ public struct FlyoverSceneView: View {
 ***REMOVED***private let shouldOrientToCompass: Bool
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-***REMOVED******REMOVED***/ The configuration used for the AR session.
-***REMOVED***private let configuration: ARConfiguration
 ***REMOVED******REMOVED***/ The camera controller that we will set on the scene view.
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The current interface orientation.
@@ -127,11 +125,6 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
 ***REMOVED******REMOVED***cameraController.translationFactor = translationFactor
 ***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***configuration = ARPositionalTrackingConfiguration()
-***REMOVED******REMOVED***if shouldOrientToCompass {
-***REMOVED******REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -139,6 +132,10 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let configuration = ARPositionalTrackingConfiguration()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if shouldOrientToCompass {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***session.start(configuration: configuration)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear { session.pause() ***REMOVED***
