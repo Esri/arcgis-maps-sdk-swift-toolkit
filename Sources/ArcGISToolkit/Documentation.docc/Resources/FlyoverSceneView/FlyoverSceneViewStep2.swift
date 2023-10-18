@@ -19,7 +19,7 @@ struct FlyoverExampleView: View {
                 spatialReference: .wgs84
             ),
             translationFactor: 1_000
-        ) { sceneViewProxy in
+        ) { _ in
             SceneView(scene: scene)
         }
     }
