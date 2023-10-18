@@ -89,9 +89,9 @@ public class FormInputModel: ObservableObject {
 ***REMOVED******REMOVED***/ A detached task observing changes in the value.
 ***REMOVED***private var observeValueTask: Task<Void, Never> {
 ***REMOVED******REMOVED***Task.detached { [unowned self] in
-***REMOVED******REMOVED******REMOVED***for await _ in element.$value {
+***REMOVED******REMOVED******REMOVED***for await value in element.$value {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.value = element.value
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.value = value
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.formattedValue = element.formattedValue
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
