@@ -15,7 +15,6 @@ struct TableTopExampleView: View {
 ***REMOVED******REMOVED***let scene = Scene()
 ***REMOVED******REMOVED***scene.baseSurface = surface
 ***REMOVED******REMOVED***scene.addOperationalLayer(buildingsLayer)
-***REMOVED******REMOVED***scene.baseSurface.navigationConstraint = .unconstrained
 ***REMOVED******REMOVED***scene.baseSurface.opacity = 0
 ***REMOVED******REMOVED***return scene
 ***REMOVED***()
