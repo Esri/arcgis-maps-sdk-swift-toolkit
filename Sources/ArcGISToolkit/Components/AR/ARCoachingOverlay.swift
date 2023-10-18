@@ -16,7 +16,7 @@ import ARKit
 
 ***REMOVED***/ A SwiftUI version of an ARCoachingOverlayView view.
 struct ARCoachingOverlay: UIViewRepresentable {
-***REMOVED******REMOVED***/ The data source for an AR sesison.
+***REMOVED******REMOVED***/ The data source for an AR session.
 ***REMOVED***var sessionProvider: ARSessionProviding?
 ***REMOVED******REMOVED***/ The goal for the coaching overlay.
 ***REMOVED***var goal: ARCoachingOverlayView.Goal
