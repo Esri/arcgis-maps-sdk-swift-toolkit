@@ -21,8 +21,8 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ The feature form containing the input.
-***REMOVED***private var featureForm: FeatureForm?
+***REMOVED******REMOVED***/ The model for the input.
+***REMOVED***@StateObject var inputModel: FormInputModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
@@ -43,18 +43,12 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED***/ The input configuration of the view.
 ***REMOVED***private let input: TextAreaFormInput
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the input.
-***REMOVED***@StateObject var inputModel: FormInputModel
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for text input spanning multiple lines.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
 ***REMOVED******REMOVED***/   - element: The input's parent element.
-***REMOVED******REMOVED***/   - input: The input configuration of the view.
-***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: TextAreaFormInput) {
-***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED***init(element: FieldFormElement) {
 ***REMOVED******REMOVED***self.element =  element
-***REMOVED******REMOVED***self.input = input
+***REMOVED******REMOVED***self.input = element.input as! TextAreaFormInput
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_inputModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
@@ -103,26 +97,23 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***let text = element.formattedValue
-***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
-***REMOVED******REMOVED******REMOVED******REMOVED***self.text = text
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
-***REMOVED******REMOVED******REMOVED******REMOVED***self.text = element.hint
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let text = inputModel.formattedValue
+***REMOVED******REMOVED******REMOVED***isPlaceholder = text.isEmpty
+***REMOVED******REMOVED******REMOVED***self.text = isPlaceholder ? element.hint : text
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: text) { newValue in
-***REMOVED******REMOVED******REMOVED***if !isPlaceholder {
-***REMOVED******REMOVED******REMOVED******REMOVED***guard newValue != element.formattedValue else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***try? element.updateValue(newValue)
-***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED***.onChange(of: text) { text in
+***REMOVED******REMOVED******REMOVED***guard !isPlaceholder else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(text)
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
-***REMOVED******REMOVED******REMOVED***text = newValue
+***REMOVED******REMOVED***.onChange(of: inputModel.formattedValue) { formattedValue in
+***REMOVED******REMOVED******REMOVED***let text = formattedValue
+***REMOVED******REMOVED******REMOVED***isPlaceholder = text.isEmpty
+***REMOVED******REMOVED******REMOVED***self.text = isPlaceholder ? element.hint : text
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -130,6 +121,6 @@ struct MultiLineTextInput: View {
 private extension MultiLineTextInput {
 ***REMOVED******REMOVED***/ The field type of the text input.
 ***REMOVED***var fieldType: FieldType {
-***REMOVED******REMOVED***featureForm!.feature.table!.field(named: element.fieldName)!.type!
+***REMOVED******REMOVED***model.featureForm!.feature.table!.field(named: element.fieldName)!.type!
 ***REMOVED***
 ***REMOVED***

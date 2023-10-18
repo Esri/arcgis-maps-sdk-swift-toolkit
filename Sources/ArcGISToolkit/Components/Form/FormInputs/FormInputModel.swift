@@ -26,7 +26,9 @@ public class FormInputModel: ObservableObject {
 ***REMOVED***@Published var isEditable: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The value of the input.
-***REMOVED***@Published var value: String
+***REMOVED***@Published var value: Any?
+***REMOVED***
+***REMOVED***@Published var formattedValue: String
 ***REMOVED***
 ***REMOVED***private var element: FieldFormElement
 ***REMOVED***
@@ -41,7 +43,8 @@ public class FormInputModel: ObservableObject {
 ***REMOVED******REMOVED***element = fieldFormElement
 ***REMOVED******REMOVED***isRequired = element.isRequired
 ***REMOVED******REMOVED***isEditable = element.isEditable
-***REMOVED******REMOVED***value = element.formattedValue
+***REMOVED******REMOVED***value = element.value
+***REMOVED******REMOVED***formattedValue = element.formattedValue
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Kick off tasks to monitor required, editable and value.
 ***REMOVED******REMOVED***tasks.append(
@@ -88,7 +91,8 @@ public class FormInputModel: ObservableObject {
 ***REMOVED******REMOVED***Task.detached { [unowned self] in
 ***REMOVED******REMOVED******REMOVED***for await _ in element.$value {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.value = element.formattedValue
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.value = element.value
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.formattedValue = element.formattedValue
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
