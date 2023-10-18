@@ -23,6 +23,8 @@ public struct FlyoverSceneView: View {
 ***REMOVED***private let initialCamera: Camera
 ***REMOVED******REMOVED***/ The translation factor.
 ***REMOVED***private let translationFactor: Double
+***REMOVED******REMOVED***/ A Boolean value indicating whether to orient the scene view's initial heading to compass heading.
+***REMOVED***private let shouldOrientToCompass: Bool
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ The camera controller that we will set on the scene view.
@@ -37,6 +39,8 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/   - initialAltitude: The initial altitude of the scene view's camera.
 ***REMOVED******REMOVED***/   - translationFactor: The translation factor that defines how much the scene view translates
 ***REMOVED******REMOVED***/   as the device moves.
+***REMOVED******REMOVED***/   - initialHeading: The initial heading of the scene view's camera. A value of `nil` means
+***REMOVED******REMOVED***/   the scene view's heading will be initially oriented to compass heading.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
 ***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
@@ -46,17 +50,23 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***initialLongitude: Double,
 ***REMOVED******REMOVED***initialAltitude: Double,
 ***REMOVED******REMOVED***translationFactor: Double,
+***REMOVED******REMOVED***initialHeading: Double? = nil,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***let camera = Camera(
 ***REMOVED******REMOVED******REMOVED***latitude: initialLatitude,
 ***REMOVED******REMOVED******REMOVED***longitude: initialLongitude,
 ***REMOVED******REMOVED******REMOVED***altitude: initialAltitude,
-***REMOVED******REMOVED******REMOVED***heading: 0,
+***REMOVED******REMOVED******REMOVED***heading: initialHeading ?? 0,
 ***REMOVED******REMOVED******REMOVED***pitch: 90,
 ***REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***self.init(initialCamera: camera, translationFactor: translationFactor, sceneView: sceneView)
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***initialCamera: camera,
+***REMOVED******REMOVED******REMOVED***translationFactor: translationFactor,
+***REMOVED******REMOVED******REMOVED***shouldOrientToCompass: initialHeading == nil,
+***REMOVED******REMOVED******REMOVED***sceneView: sceneView
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
@@ -64,6 +74,8 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/   - initialLocation: The initial location of the scene view's camera.
 ***REMOVED******REMOVED***/   - translationFactor: The translation factor that defines how much the scene view translates
 ***REMOVED******REMOVED***/   as the device moves.
+***REMOVED******REMOVED***/   - initialHeading: The initial heading of the scene view's camera. A value of `nil` means
+***REMOVED******REMOVED***/   the scene view's heading will be initially oriented to compass heading.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
 ***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
@@ -71,10 +83,21 @@ public struct FlyoverSceneView: View {
 ***REMOVED***public init(
 ***REMOVED******REMOVED***initialLocation: Point,
 ***REMOVED******REMOVED***translationFactor: Double,
+***REMOVED******REMOVED***initialHeading: Double? = nil,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
-***REMOVED******REMOVED***let camera = Camera(location: initialLocation, heading: 0, pitch: 90, roll: 0)
-***REMOVED******REMOVED***self.init(initialCamera: camera, translationFactor: translationFactor, sceneView: sceneView)
+***REMOVED******REMOVED***let camera = Camera(
+***REMOVED******REMOVED******REMOVED***location: initialLocation,
+***REMOVED******REMOVED******REMOVED***heading: initialHeading ?? 0,
+***REMOVED******REMOVED******REMOVED***pitch: 90,
+***REMOVED******REMOVED******REMOVED***roll: 0
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***initialCamera: camera,
+***REMOVED******REMOVED******REMOVED***translationFactor: translationFactor,
+***REMOVED******REMOVED******REMOVED***shouldOrientToCompass: initialHeading == nil,
+***REMOVED******REMOVED******REMOVED***sceneView: sceneView
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
@@ -82,6 +105,8 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/   - initialCamera: The initial camera.
 ***REMOVED******REMOVED***/   - translationFactor: The translation factor that defines how much the scene view translates
 ***REMOVED******REMOVED***/   as the device moves.
+***REMOVED******REMOVED***/   - shouldOrientToCompass: A Boolean value indicating whether to orient the scene view's
+***REMOVED******REMOVED***/   initial heading to compass heading.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
 ***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
@@ -89,9 +114,11 @@ public struct FlyoverSceneView: View {
 ***REMOVED***private init(
 ***REMOVED******REMOVED***initialCamera: Camera,
 ***REMOVED******REMOVED***translationFactor: Double,
+***REMOVED******REMOVED***shouldOrientToCompass: Bool,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
+***REMOVED******REMOVED***self.shouldOrientToCompass = shouldOrientToCompass
 ***REMOVED******REMOVED***self.translationFactor = translationFactor
 ***REMOVED******REMOVED***self.initialCamera = initialCamera
 ***REMOVED******REMOVED***
@@ -104,7 +131,13 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear { session.start() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let configuration = ARPositionalTrackingConfiguration()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if shouldOrientToCompass {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***session.start(configuration: configuration)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear { session.pause() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: session.currentFrame) { frame in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let frame, let interfaceOrientation else { return ***REMOVED***
@@ -127,21 +160,17 @@ public struct FlyoverSceneView: View {
 
 ***REMOVED***/ An observable object that wraps an `ARSession` and provides the current frame.
 private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate {
-***REMOVED******REMOVED***/ The configuration used for the AR session.
-***REMOVED***private let configuration: ARConfiguration
-***REMOVED***
 ***REMOVED******REMOVED***/ The backing AR session.
 ***REMOVED***private let session = ARSession()
 ***REMOVED***
 ***REMOVED***override init() {
-***REMOVED******REMOVED***configuration = ARPositionalTrackingConfiguration()
-***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
 ***REMOVED******REMOVED***super.init()
 ***REMOVED******REMOVED***session.delegate = self
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Starts the AR session.
-***REMOVED***func start() {
+***REMOVED******REMOVED***/ Starts the AR session by running a given configuration.
+***REMOVED******REMOVED***/ - Parameter configuration: The AR configuration to run.
+***REMOVED***func start(configuration: ARConfiguration) {
 ***REMOVED******REMOVED***session.run(configuration)
 ***REMOVED***
 ***REMOVED***
