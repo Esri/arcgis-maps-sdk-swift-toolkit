@@ -28,6 +28,7 @@ public class FormInputModel: ObservableObject {
     /// The value of the input.
     @Published var value: Any?
     
+    /// The formatted value of the input.
     @Published var formattedValue: String
     
     private var element: FieldFormElement
