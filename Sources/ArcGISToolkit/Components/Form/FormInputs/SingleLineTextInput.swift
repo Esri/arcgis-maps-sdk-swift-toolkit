@@ -18,11 +18,11 @@ import ArcGIS
 struct SingleLineTextInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The feature form containing the input.
-    private var featureForm: FeatureForm?
-    
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
+    
+    /// The model for the input.
+    @StateObject var inputModel: FormInputModel
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
@@ -36,18 +36,12 @@ struct SingleLineTextInput: View {
     /// The input configuration of the view.
     private let input: TextBoxFormInput
     
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
-    
     /// Creates a view for single line text input.
     /// - Parameters:
-    ///   - featureForm: The feature form containing the input.
     ///   - element: The input's parent element.
-    ///   - input: The input configuration of the view.
-    init(featureForm: FeatureForm?, element: FieldFormElement, input: TextBoxFormInput) {
-        self.featureForm = featureForm
+    init(element: FieldFormElement) {
         self.element = element
-        self.input = input
+        self.input = element.input as! TextBoxFormInput
         
         _inputModel = StateObject(
             wrappedValue: FormInputModel(fieldFormElement: element)
@@ -87,24 +81,24 @@ struct SingleLineTextInput: View {
             fieldType: fieldType
         )
         .padding([.bottom], elementPadding)
-        .onAppear {
-            text = String(describing: element.value ?? "")
-        }
         .onChange(of: isFocused) { newFocus in
             if newFocus {
                 model.focusedFieldName = element.fieldName
             }
         }
-        .onChange(of: text) { newValue in
-            guard newValue != inputModel.value else {
-                return
+        .onAppear {
+            text = inputModel.formattedValue
+        }
+        .onChange(of: text) { text in
+            do {
+                try element.updateValue(text)
+            } catch {
+                print(error.localizedDescription)
             }
-            
-            try? element.updateValue(newValue)
             model.evaluateExpressions()
         }
-        .onChange(of: inputModel.value) { newValue in
-            text = newValue
+        .onChange(of: inputModel.formattedValue) { formattedValue in
+            self.text = formattedValue
         }
     }
 }
@@ -112,7 +106,7 @@ struct SingleLineTextInput: View {
 private extension SingleLineTextInput {
     /// The field type of the text input.
     var fieldType: FieldType {
-        featureForm!.feature.table!.field(named: element.fieldName)!.type!
+        model.featureForm!.feature.table!.field(named: element.fieldName)!.type!
     }
     
     /// The keyboard type to use depending on where the input is numeric and decimal.
@@ -137,7 +131,7 @@ private extension SingleLineTextInput {
     
     /// The range of valid values for a numeric input field.
     var rangeDomain: RangeDomain? {
-        if let field = featureForm?.feature.table?.field(named: element.fieldName) {
+        if let field = model.featureForm?.feature.table?.field(named: element.fieldName) {
             return field.domain as? RangeDomain
         } else {
             return nil
