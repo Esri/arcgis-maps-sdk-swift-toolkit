@@ -12,7 +12,7 @@
         @Steps {
             @Step {
                 Initialize a `FlyoverSceneView`. Specify the initial location of the scene view's
-                camera and the tranlation factor. The translation factor determines how many meters 
+                camera and the translation factor. The translation factor determines how many meters 
                 the scene view translates as the device moves in the AR experience.
                 @Code(name: "FlyoverExampleView.swift", file: FlyoverSceneViewStep1)
             }
