@@ -29,7 +29,7 @@ struct TableTopExampleView: View {
             anchorPoint: anchorPoint,
             translationFactor: 1_000,
             clippingDistance: 400
-        ) { _ in
+        ) { sceneViewProxy in
             SceneView(scene: scene)
         }
     }
