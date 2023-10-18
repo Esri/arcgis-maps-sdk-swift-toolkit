@@ -89,9 +89,9 @@ public class FormInputModel: ObservableObject {
     /// A detached task observing changes in the value.
     private var observeValueTask: Task<Void, Never> {
         Task.detached { [unowned self] in
-            for await _ in element.$value {
+            for await value in element.$value {
                 await MainActor.run {
-                    self.value = element.value
+                    self.value = value
                     self.formattedValue = element.formattedValue
                 }
             }
