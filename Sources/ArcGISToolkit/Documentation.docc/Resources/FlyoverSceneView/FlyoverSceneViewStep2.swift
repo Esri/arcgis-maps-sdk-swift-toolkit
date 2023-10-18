@@ -19,7 +19,7 @@ struct FlyoverExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***translationFactor: 1_000
-***REMOVED******REMOVED***) { sceneViewProxy in
+***REMOVED******REMOVED***) { _ in
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
 ***REMOVED***
 ***REMOVED***
