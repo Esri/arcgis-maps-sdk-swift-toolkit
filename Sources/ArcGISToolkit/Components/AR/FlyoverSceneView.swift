@@ -27,8 +27,6 @@ public struct FlyoverSceneView: View {
     private let shouldOrientToCompass: Bool
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-    /// The configuration used for the AR session.
-    private let configuration: ARConfiguration
     /// The camera controller that we will set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
     /// The current interface orientation.
@@ -127,11 +125,6 @@ public struct FlyoverSceneView: View {
         let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
         cameraController.translationFactor = translationFactor
         _cameraController = .init(initialValue: cameraController)
-        
-        configuration = ARPositionalTrackingConfiguration()
-        if shouldOrientToCompass {
-            configuration.worldAlignment = .gravityAndHeading
-        }
     }
     
     public var body: some View {
@@ -139,6 +132,10 @@ public struct FlyoverSceneView: View {
             sceneViewBuilder(sceneViewProxy)
                 .cameraController(cameraController)
                 .onAppear {
+                    let configuration = ARPositionalTrackingConfiguration()
+                    if shouldOrientToCompass {
+                        configuration.worldAlignment = .gravityAndHeading
+                    }
                     session.start(configuration: configuration)
                 }
                 .onDisappear { session.pause() }
