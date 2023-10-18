@@ -21,12 +21,14 @@ public struct FlyoverSceneView: View {
     @StateObject private var session = ObservableARSession()
     /// The initial camera.
     private let initialCamera: Camera
-    /// A Boolean value indicating whether to orient the scene view's initial heading to compass heading.
-    private let shouldOrientToCompass: Bool
     /// The translation factor.
     private let translationFactor: Double
+    /// A Boolean value indicating whether to orient the scene view's initial heading to compass heading.
+    private let shouldOrientToCompass: Bool
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
+    /// The configuration used for the AR session.
+    private let configuration: ARConfiguration
     /// The camera controller that we will set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
     /// The current interface orientation.
@@ -125,6 +127,11 @@ public struct FlyoverSceneView: View {
         let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
         cameraController.translationFactor = translationFactor
         _cameraController = .init(initialValue: cameraController)
+        
+        configuration = ARPositionalTrackingConfiguration()
+        if shouldOrientToCompass {
+            configuration.worldAlignment = .gravityAndHeading
+        }
     }
     
     public var body: some View {
@@ -132,10 +139,7 @@ public struct FlyoverSceneView: View {
             sceneViewBuilder(sceneViewProxy)
                 .cameraController(cameraController)
                 .onAppear {
-                    if shouldOrientToCompass {
-                        session.configuration.worldAlignment = .gravityAndHeading
-                    }
-                    session.start()
+                    session.start(configuration: configuration)
                 }
                 .onDisappear { session.pause() }
                 .onChange(of: session.currentFrame) { frame in
@@ -159,20 +163,17 @@ public struct FlyoverSceneView: View {
 
 /// An observable object that wraps an `ARSession` and provides the current frame.
 private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate {
-    /// The configuration used for the AR session.
-    let configuration: ARConfiguration
-    
     /// The backing AR session.
     private let session = ARSession()
     
     override init() {
-        configuration = ARPositionalTrackingConfiguration()
         super.init()
         session.delegate = self
     }
     
-    /// Starts the AR session.
-    func start() {
+    /// Starts the AR session by running a given configuration.
+    /// - Parameter configuration: The AR configuration to run.
+    func start(configuration: ARConfiguration) {
         session.run(configuration)
     }
     
