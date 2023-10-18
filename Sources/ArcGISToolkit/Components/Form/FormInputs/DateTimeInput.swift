@@ -21,8 +21,8 @@ struct DateTimeInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// The feature form containing the input.
-    private var featureForm: FeatureForm?
+    /// The model for the input.
+    @StateObject var inputModel: FormInputModel
     
     /// The current date selection.
     @State private var date: Date?
@@ -38,19 +38,13 @@ struct DateTimeInput: View {
     
     /// The input configuration of the view.
     private let input: DateTimePickerFormInput
-        
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
-
+    
     /// Creates a view for a date (and time if applicable) input.
     /// - Parameters:
-    ///   - featureForm: The feature form containing the input.
     ///   - element: The input's parent element.
-    ///   - input: The input configuration of the view.
-    init(featureForm: FeatureForm?, element: FieldFormElement, input: DateTimePickerFormInput) {
-        self.featureForm = featureForm
+    init(element: FieldFormElement) {
         self.element = element
-        self.input = input
+        self.input = element.input as! DateTimePickerFormInput
         _inputModel = StateObject(
             wrappedValue: FormInputModel(fieldFormElement: element)
         )
@@ -66,30 +60,30 @@ struct DateTimeInput: View {
             InputFooter(element: element, requiredValueMissing: requiredValueMissing)
         }
         .padding([.bottom], elementPadding)
-        .onAppear {
-            if inputModel.value.isEmpty {
-                date = nil
-            } else {
-                date = try? Date(inputModel.value, strategy: .arcGISDateParseStrategy)
-            }
-        }
-        .onChange(of: date) { newDate in
-            guard let currentDate = try? Date(inputModel.value, strategy: .arcGISDateParseStrategy),
-                  newDate != currentDate else {
-                return
-            }
-            requiredValueMissing = inputModel.isRequired && newDate == nil
-            try? element.updateValue(newDate)
-            model.evaluateExpressions()
-        }
         .onChange(of: model.focusedFieldName) { newFocusedFieldName in
             isEditing = newFocusedFieldName == element.fieldName
         }
-        .onChange(of: inputModel.value) { newValue in
-            if newValue.isEmpty {
+        .onAppear {
+            if inputModel.formattedValue.isEmpty {
                 date = nil
             } else {
-                date = try? Date(newValue, strategy: .arcGISDateParseStrategy)
+                date = try? Date(inputModel.formattedValue, strategy: .arcGISDateParseStrategy)
+            }
+        }
+        .onChange(of: date) { date in
+            requiredValueMissing = inputModel.isRequired && date == nil
+            do {
+                try element.updateValue(date)
+            } catch {
+                print(error.localizedDescription)
+            }
+            model.evaluateExpressions()
+        }
+        .onChange(of: inputModel.formattedValue) { formattedValue in
+            if formattedValue.isEmpty {
+                date = nil
+            } else {
+                date = try? Date(formattedValue, strategy: .arcGISDateParseStrategy)
             }
         }
     }

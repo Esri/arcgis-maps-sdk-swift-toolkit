@@ -26,7 +26,9 @@ public class FormInputModel: ObservableObject {
     @Published var isEditable: Bool
     
     /// The value of the input.
-    @Published var value: String
+    @Published var value: Any?
+    
+    @Published var formattedValue: String
     
     private var element: FieldFormElement
     
@@ -41,7 +43,8 @@ public class FormInputModel: ObservableObject {
         element = fieldFormElement
         isRequired = element.isRequired
         isEditable = element.isEditable
-        value = element.formattedValue
+        value = element.value
+        formattedValue = element.formattedValue
         
         // Kick off tasks to monitor required, editable and value.
         tasks.append(
@@ -88,7 +91,8 @@ public class FormInputModel: ObservableObject {
         Task.detached { [unowned self] in
             for await _ in element.$value {
                 await MainActor.run {
-                    self.value = element.formattedValue
+                    self.value = element.value
+                    self.formattedValue = element.formattedValue
                 }
             }
         }

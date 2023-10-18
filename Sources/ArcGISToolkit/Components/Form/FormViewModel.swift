@@ -27,7 +27,7 @@ public class FormViewModel: ObservableObject {
     @Published private var table: ServiceFeatureTable?
     
     /// The feature form.
-    @Published private var featureForm: FeatureForm?
+    @Published var featureForm: FeatureForm?
     
     /// The name of the current focused field, if one exists.
     @Published var focusedFieldName: String?
