@@ -21,12 +21,14 @@ public struct FlyoverSceneView: View {
 ***REMOVED***@StateObject private var session = ObservableARSession()
 ***REMOVED******REMOVED***/ The initial camera.
 ***REMOVED***private let initialCamera: Camera
-***REMOVED******REMOVED***/ A Boolean value indicating whether to orient the scene view's initial heading to compass heading.
-***REMOVED***private let shouldOrientToCompass: Bool
 ***REMOVED******REMOVED***/ The translation factor.
 ***REMOVED***private let translationFactor: Double
+***REMOVED******REMOVED***/ A Boolean value indicating whether to orient the scene view's initial heading to compass heading.
+***REMOVED***private let shouldOrientToCompass: Bool
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
+***REMOVED******REMOVED***/ The configuration used for the AR session.
+***REMOVED***private let configuration: ARConfiguration
 ***REMOVED******REMOVED***/ The camera controller that we will set on the scene view.
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The current interface orientation.
@@ -125,6 +127,11 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController(originCamera: initialCamera)
 ***REMOVED******REMOVED***cameraController.translationFactor = translationFactor
 ***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***configuration = ARPositionalTrackingConfiguration()
+***REMOVED******REMOVED***if shouldOrientToCompass {
+***REMOVED******REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -132,10 +139,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if shouldOrientToCompass {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***session.configuration.worldAlignment = .gravityAndHeading
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***session.start()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***session.start(configuration: configuration)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear { session.pause() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: session.currentFrame) { frame in
@@ -159,20 +163,17 @@ public struct FlyoverSceneView: View {
 
 ***REMOVED***/ An observable object that wraps an `ARSession` and provides the current frame.
 private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate {
-***REMOVED******REMOVED***/ The configuration used for the AR session.
-***REMOVED***let configuration: ARConfiguration
-***REMOVED***
 ***REMOVED******REMOVED***/ The backing AR session.
 ***REMOVED***private let session = ARSession()
 ***REMOVED***
 ***REMOVED***override init() {
-***REMOVED******REMOVED***configuration = ARPositionalTrackingConfiguration()
 ***REMOVED******REMOVED***super.init()
 ***REMOVED******REMOVED***session.delegate = self
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Starts the AR session.
-***REMOVED***func start() {
+***REMOVED******REMOVED***/ Starts the AR session by running a given configuration.
+***REMOVED******REMOVED***/ - Parameter configuration: The AR configuration to run.
+***REMOVED***func start(configuration: ARConfiguration) {
 ***REMOVED******REMOVED***session.run(configuration)
 ***REMOVED***
 ***REMOVED***
