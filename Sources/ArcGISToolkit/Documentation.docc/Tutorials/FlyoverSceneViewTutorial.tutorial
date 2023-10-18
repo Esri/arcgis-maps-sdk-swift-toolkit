@@ -23,12 +23,6 @@
                 variable.
                 @Code(name: "FlyoverExampleView.swift", file: FlyoverSceneViewStep2)
             }
-            
-            @Step {
-                Use the `SceneView.onSingleTapGesture` view modifer and scene view proxy to perform an 
-                identify operation to identify geoElements at the tapped screen point with a given tolerance.
-                @Code(name: "FlyoverExampleView.swift", file: FlyoverSceneViewStep3)
-            }
         }
     }
 }

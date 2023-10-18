@@ -32,12 +32,6 @@
                 Set the `scene.baseSurface.opacity` to zero to make the basemap transparent.
                 @Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep3)
             }
-            
-            @Step {
-                Use the `SceneView.onSingleTapGesture` view modifer and scene view proxy to perform an 
-                identify operation to identify geo elements at the tapped screen point with a given tolerance.
-                @Code(name: "TableTopExampleView.swift", file: TableTopSceneViewStep4)
-            }
         }
     }
 }
