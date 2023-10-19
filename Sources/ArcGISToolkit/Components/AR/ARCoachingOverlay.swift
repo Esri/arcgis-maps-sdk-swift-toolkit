@@ -16,7 +16,7 @@ import SwiftUI
 
 /// A SwiftUI version of an ARCoachingOverlayView view.
 struct ARCoachingOverlay: UIViewRepresentable {
-    /// The data source for an AR sesison.
+    /// The data source for an AR session.
     var sessionProvider: ARSessionProviding?
     /// The goal for the coaching overlay.
     var goal: ARCoachingOverlayView.Goal
