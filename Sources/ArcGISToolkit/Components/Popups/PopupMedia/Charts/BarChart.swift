@@ -49,14 +49,14 @@ struct BarChart: View {
                 if isColumnChart {
                     // Vertical bars.
                     BarMark(
-                        x: .value("Field", $0.label),
-                        y: .value("Value", $0.value)
+                        x: .value(String.field, $0.label),
+                        y: .value(String.value, $0.value)
                     )
                 } else {
                     // Horizontal bars.
                     BarMark(
-                        x: .value("Value", $0.value),
-                        y: .value("Field", $0.label)
+                        x: .value(String.value, $0.value),
+                        y: .value(String.field, $0.label)
                     )
                 }
             }

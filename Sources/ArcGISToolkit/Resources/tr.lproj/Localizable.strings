@@ -1,2 +1,294 @@
-/* No comment provided by engineer. */
+/* A label declaring the number of starting points selected for a utility network trace. */
+"%lld selected" = "%lld seçildi";
+
+/* An alert message indicating that a certificate is required to access
+content on a remote host. The variable is the host that prompted the challenge. */
+"A certificate is required to access content on %@." = "%@ üzerindeki içeriğe erişmek için bir sertifika gerekiyor.";
+
+/* A button to add new utility trace starting points. */
+"Add new" = "Yeni ekle";
+
+/* A section header for advanced options. */
+"Advanced Options" = "Gelişmiş Seçenekler";
+
+/* A reference to all of the sites defined in a floor aware map. */
+"All sites" = "Tüm siteler";
+
+/* A message describing the outcome of clearing all utility network trace results. */
+"All the trace inputs and results will be lost." = "Tüm izleme girişleri ve sonuçları kaybedilecek.";
+
+/* A button indicating the user accepts a potentially dangerous action. */
+"Allow" = "İzin ver";
+
+/* A fallback message to display when an image cannot be loaded. */
+"An error occurred loading the image: %@." = "Görüntü yüklenirken bir hata oluştu: %@.";
+
+/* A label in reference to attachments in a popup. */
+"Attachments" = "Ekler";
+
+/* A label in reference to the attributes of a geo element. */
+"Attributes" = "Öznitelikler";
+
+/* A label indicating authentication is required to proceed. */
+"Authentication Required" = "Kimlik Doğrulama Gerekiyor";
+
+/* A label in reference to bookmarks contained in a map or scene. */
+"Bookmarks" = "Yer imleri";
+
+/* A label for a button to open the system file browser. */
+"Browse" = "Gözat";
+
+/* A label for a button to cancel an operation. */
+"Cancel" = "İptal";
+
+/* A label for a button to cancel the starting point selection operation. */
+"Cancel starting point selection" = "Başlangıç noktası seçimini iptal et";
+
+/* A label indicating that a certificate is required to proceed. */
+"Certificate Required" = "Sertifika Gerekli";
+
+/* A label indicating that the remote host's certificate is not trusted. */
+"Certificate Trust Warning" = "Sertifika Güven Uyarısı";
+
+/* A directive to clear all of the completed utility network traces. */
+"Clear all results" = "Tüm sonuçları temizle";
+
+/* A label in reference to the color used to display utility trace result graphics. */
+"Color" = "Renk";
+
+/* An compass description to be read by a screen reader describing the
+current heading. The first variable being a degree value and the
+second being a corresponding cardinal direction (north, northeast,
+east, etc.). */
+"Compass, heading %lld degrees %@" = "Pusula, başlık %lld derece %@";
+
+/* A label for a button used to continue the authentication operation. */
+"Continue" = "Devam et";
+
+/* A label indicating a certificate file was inaccessible. */
+"Could not access the certificate file." = "Sertifika dosyasına erişilemedi.";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Tehlike: '%@' tarafından sağlanan sertifika güvenilir bir otorite tarafından imzalanmamış.";
+
+/* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Sil";
+
+/* A button to close the bookmark selection menu. */
+"Done" = "Tamam";
+
+/* A message indicating that the user attempted to use a single utility
+network element for more than one trace starting point. */
+"Duplicate starting points cannot be added." = "Yinelenen başlangıç noktaları eklenemez.";
+
+/* A label indicating an element could not be identified as a starting point
+for a utility network trace. */
+"Element could not be identified." = "Öge tanımlanamadı.";
+
+/* A label in reference to an error that occurred during a utility network trace. */
+"Error" = "Hata";
+
+/* A message indicating that some error occurred while importing a chosen
+network certificate. */
+"Error importing certificate" = "Sertifikayı içe aktarırken hata";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
+"Error loading basemap." = "Altlık harita yüklenirken hata.";
+
+/* A label indicating popup expressions are being evaluated. */
+"Evaluating popup expressions" = "Açılır menü ifadeleri değerlendiriliyor";
+
+/* A message indicating that the chosen utility network element wasn't able
+to be used as a trace starting point. */
+"Failed to set starting point" = "Başlangıç noktası ayarlanamadı";
+
+/* A label in reference to utility elements returned as results of a utility network
+trace operation. */
+"Feature Results" = "Detay Sonuçları";
+
+/* A field in a set of data contained in a popup. */
+"Field" = "Alan";
+
+/* A label in reference to fields in a set of data contained in a popup. */
+"Fields" = "Alanlar";
+
+/* A field allowing the user to filter a list of facilities by name. A
+facility contains one or more levels in a floor-aware map or scene. */
+"Filter facilities" = "Tesisleri filtrele";
+
+/* A field allowing the user to filter a list of sites by name. A site
+contains one or more facilities in a floor-aware map or scene. */
+"Filter sites" = "Siteleri filtrele";
+
+/* A hint for the user on what to search for in a search bar. */
+"Find a place or address" = "Bir yer veya adres bul";
+
+/* A label in reference to a fractional distance along an edge style utility network element. */
+"Fraction Along Edge" = "Kenar Boyunca Kesir";
+
+/* A label in reference to function outputs returned as results of a utility network
+trace operation. */
+"Function Results" = "İşlev Sonuçları";
+
+/* A label in reference to media elements contained within a popup. */
+"Media" = "Ortam";
+
+/* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
+"Mode" = "Mod";
+
+/* A label in reference to the user defined name for an individual utility network trace. */
+"Name" = "Adı";
+
+/* A label in reference to a specific utility network. */
+"Network" = "Ağ";
+
+/* A label for a button to show new utility network trace configuration options. */
+"New trace" = "Yeni iz";
+
+/* A label indicating that no bookmarks are available for selection. */
+"No bookmarks" = "Yer işareti yok";
+
+/* A statement that no utility trace configurations are available. */
+"No configurations available." = "Kullanılabilir yapılandırma yok.";
+
+/* A statement that no sites or facilities with names matching a filter phrase were found. */
+"No matches found." = "Eşleşme bulunamadı.";
+
+/* A message to show when there are no results or suggestions. */
+"No results found" = "Herhangi bir sonuç bulunamadı";
+
+/* A label indicating that no utility named trace configurations are available. */
+"No trace types found." = "İz türü bulunamadı.";
+
+/* A label indicating that no utility networks are available. */
+"No utility networks found." = "Utility network bulunamadı.";
+
+/* A label indicating that no utility network trace configuration has been selected. */
+"None selected" = "Hiçbiri seçilmedi";
+
+/* A trace function output result was not provided. */
+"Not Available" = "Kullanılamıyor";
+
+/* A string identifying a utility network object. */
+"Object ID: %@" = "Nesne Kimliği: %@";
+
+/* A label for button to proceed with an operation. */
+"OK" = "Tamam";
+
+/* A label in reference to a credential password. */
+"Password" = "Parola";
+
+/* A label indicating that a password is required to proceed with an operation. */
+"Password Required" = "Parola Gerekiyor";
+
+/* A label requesting the password associated with the chosen certificate. */
+"Please enter a password for the chosen certificate." = "Seçilen sertifika için lütfen bir parola girin.";
+
+/* A label indicating that at least one starting location is required for the
+chosen utility network trace configuration. */
+"Please set at least 1 starting location." = "Lütfen en az 1 başlangıç konumu ayarlayın.";
+
+/* A label indicating that at least two starting locations are required for the
+chosen utility network trace configuration. */
+"Please set at least 2 starting locations." = "Lütfen en az 2 başlangıç konumu ayarlayın.";
+
+/* An error message shown when a popup cannot be displayed. The
+variable provides additional data. */
+"Popup evaluation failed: %@" = "Açılır menü değerlendirilemedi: %@";
+
+/* A label for button to show when the user has panned the map away
+from the original search location. 'Here' is in reference to the
+current visible extent of the map or scene. */
+"Repeat Search Here" = "Aramayı Burada Tekrarla";
+
+/* A label for a button to show utility network trace results. */
+"Results" = "Sonuçlar";
+
+/* A label in reference to a search query entered by the user. */
+"Search Query" = "Arama Sorgusu";
+
+/* A label prompting the user to make a selection from the available bookmarks. */
+"Select a bookmark" = "Bir yer işareti seç";
+
+/* A label directing the user to select a facility. A facility contains one
+or more levels in a floor-aware map or scene. */
+"Select a facility" = "Bir tesis seç";
+
+/* A label in reference to all of the sites in a floor-aware map or scene. */
+"Sites" = "Siteler";
+
+/* A label indicating the spatial reference of the chosen basemap doesn't
+match the spatial reference of the map or scene. */
+"Spatial reference mismatch." = "Mekansal referans eşleşmiyor.";
+
+/* A label in reference to the utility elements chosen as starting points for a utility
+network trace operation. */
+"Starting Points" = "Başlangıç Noktaları";
+
+/* A label indicating that tapping an image will reveal
+additional information. */
+"Tap on the image for more information." = "Daha fazla bilgi için görüntüye dokunun.";
+
+/* A label in reference to the chosen terminal configuration of a utility network element. */
+"Terminal Configuration" = "Terminal Yapılandırması";
+
+/* A label for development purposes only. This is not user visible. */
+"test" = "test";
+
+/* A label indicating the chosen basemap doesn't have a spatial reference. */
+"The basemap does not have a spatial reference." = "Altlık haritada bir mekansal referans yok.";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to
+load for an unknown reason. */
+"The basemap failed to load for an unknown reason." = "Bilinmeyen bir nedenle altlık harita yüklenemedi.";
+
+/* A label indicating the spatial reference of the chosen basemap doesn't
+match the spatial reference of the map. */
+"The basemap has a spatial reference that is incompatible with the map." = "Altlık haritada, haritayla uyumlu olmayan bir mekansal referans var.";
+
+/* A label indicating the chosen file or given password was invalid. */
+"The certificate file or password was invalid." = "Sertifika dosyası veya parola geçersiz.";
+
+/* A label indicating the chosen file was invalid. */
+"The certificate file was invalid." = "Sertifika dosyası geçersiz.";
+
+/* A label indicating the map doesn't have a spatial reference. */
+"The map does not have a spatial reference." = "Haritada bir mekansal referans yok.";
+
+/* A label indicating the given password was invalid. */
+"The password was invalid." = "Parola geçersiz.";
+
+/* Description of error thrown when a remote image could not be loaded. */
+"The URL could not be reached or did not contain image data." = "URL adresine erişilemedi veya adres görüntü verisi içermiyor.";
+
+/* A label for a button to begin a utility network trace operation. */
+"Trace" = "İz";
+
+/* A label indicating the index of the trace being viewed out of the total number of traces completed. */
+"Trace %1$lld of %2$lld" = "İz %1$lld / %2$lld";
+
+/* A label in reference to a utility network trace configuration. */
+"Trace Configuration" = "İz Yapılandırması";
+
+/* A label for a button allowing the user to retry an operation. */
+"Try Again" = "Yeniden Dene";
+
+/* A label to use in place of a utility element asset type name. */
+"Unnamed Asset Type" = "Adsız Varlık Türü";
+
+/* A label in reference to a credential username. */
+"Username" = "Kullanıcı adı";
+
+/* A value in a set of data contained in a popup. */
+"Value" = "Değer";
+
+/* A label explaining that credentials are required to authenticate with specified host.
+The host is indicated in the variable. */
+"You must sign in to access '%@'" = "\"%@\"a erişmek için oturum açmanız gerekiyor";
+
+/* A button to change the map to the extent of the selected trace. */
+"Zoom To" = "Yakınlaştır";
+
+/* A user option specifying that a map should automatically change to show completed trace results. */
+"Zoom to result" = "Sonuca yakınlaştır";
+

@@ -119,13 +119,22 @@ extension CertificateImportError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidData:
-            return String(localized: "The certificate file was invalid.", bundle: .toolkitModule)
+            return String(
+                localized: "The certificate file was invalid.",
+                bundle: .toolkitModule,
+                comment: "A label indicating the chosen file was invalid."
+            )
         case .invalidPassword:
-            return String(localized: "The password was invalid.", bundle: .toolkitModule)
+            return String(
+                localized: "The password was invalid.",
+                bundle: .toolkitModule,
+                comment: "A label indicating the given password was invalid."
+            )
         default:
             return SecCopyErrorMessageString(rawValue, nil) as String? ?? String(
                 localized: "The certificate file or password was invalid.",
-                bundle: .toolkitModule
+                bundle: .toolkitModule,
+                comment: "A label indicating the chosen file or given password was invalid."
             )
         }
     }
@@ -135,7 +144,11 @@ extension CertificatePickerViewModel.CertificateError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .couldNotAccessCertificateFile:
-            return String(localized: "Could not access the certificate file.", bundle: .toolkitModule)
+            return String(
+                localized: "Could not access the certificate file.",
+                bundle: .toolkitModule,
+                comment: "A label indicating a certificate file was inaccessible."
+            )
         case .importError(let error):
             return error.localizedDescription
         case .other(let error):
@@ -177,20 +190,26 @@ struct CertificatePickerViewModifier: ViewModifier {
                 fields: .password,
                 message: String(
                     localized: "Please enter a password for the chosen certificate.",
-                    bundle: .toolkitModule
+                    bundle: .toolkitModule,
+                    comment: "A label requesting the password associated with the chosen certificate."
                 ),
                 title: String(
                     localized: "Password Required",
-                    bundle: .toolkitModule
+                    bundle: .toolkitModule,
+                    comment: "A label indicating that a password is required to proceed with an operation."
                 ),
                 cancelAction: .init(
-                    title: String(localized: "Cancel", bundle: .toolkitModule),
+                    title: String.cancel,
                     handler: { _, _ in
                         viewModel.cancel()
                     }
                 ),
                 continueAction: .init(
-                    title: String(localized: "OK", bundle: .toolkitModule),
+                    title: String(
+                        localized: "OK",
+                        bundle: .toolkitModule,
+                        comment: "A label for button to proceed with an operation."
+                    ),
                     handler: { _, password in
                         viewModel.proceedToUseCertificate(withPassword: password)
                     }
@@ -219,17 +238,21 @@ private extension View {
     ) -> some View {
         sheet(isPresented: isPresented) {
             VStack(alignment: .center) {
-                Text("Certificate Required", bundle: .toolkitModule)
-                    .font(.title)
-                    .multilineTextAlignment(.center)
-                    .padding(.vertical)
+                Text(
+                    "Certificate Required",
+                    bundle: .toolkitModule,
+                    comment: "A label indicating that a certificate is required to proceed."
+                )
+                .font(.title)
+                .multilineTextAlignment(.center)
+                .padding(.vertical)
                 Text(
                     "A certificate is required to access content on \(viewModel.challengingHost).",
                     bundle: .toolkitModule,
                     comment: """
                              An alert message indicating that a certificate is required to access
                              content on a remote host. The variable is the host that prompted the challenge.
-                    """
+                             """
                 )
                 .font(.subheadline)
                 .foregroundColor(.secondary)
@@ -241,7 +264,7 @@ private extension View {
                         isPresented.wrappedValue = false
                         viewModel.cancel()
                     } label: {
-                        Text("Cancel", bundle: .toolkitModule)
+                        Text(String.cancel)
                             .padding(.horizontal)
                     }
                     .buttonStyle(.bordered)
@@ -250,8 +273,12 @@ private extension View {
                         isPresented.wrappedValue = false
                         viewModel.proceedToPicker()
                     } label: {
-                        Text("Browse", bundle: .toolkitModule)
-                            .padding(.horizontal)
+                        Text(
+                            "Browse",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button to open the system file browser."
+                        )
+                        .padding(.horizontal)
                     }
                     .buttonStyle(.borderedProminent)
                     Spacer()
@@ -299,15 +326,23 @@ private extension View {
     ) -> some View {
         sheet(isPresented: isPresented) {
             VStack(alignment: .center) {
-                Text("Error importing certificate", bundle: .toolkitModule)
-                    .font(.title)
-                    .multilineTextAlignment(.center)
-                    .padding(.vertical)
+                Text(
+                    "Error importing certificate",
+                    bundle: .toolkitModule,
+                    comment: """
+                             A message indicating that some error occurred while importing a chosen
+                             network certificate.
+                             """
+                )
+                .font(.title)
+                .multilineTextAlignment(.center)
+                .padding(.vertical)
                 
                 Text(
                     viewModel.certificateError?.localizedDescription ?? String(
                         localized: "The certificate file or password was invalid.",
-                        bundle: .toolkitModule
+                        bundle: .toolkitModule,
+                        comment: "A label indicating the chosen file or given password was invalid."
                     )
                 )
                 .font(.subheadline)
@@ -320,7 +355,7 @@ private extension View {
                         isPresented.wrappedValue = false
                         viewModel.cancel()
                     } label: {
-                        Text("Cancel", bundle: .toolkitModule)
+                        Text(String.cancel)
                             .padding(.horizontal)
                     }
                     .buttonStyle(.bordered)
@@ -329,8 +364,12 @@ private extension View {
                         isPresented.wrappedValue = false
                         viewModel.proceedToPicker()
                     } label: {
-                        Text("Try Again", bundle: .toolkitModule)
-                            .padding(.horizontal)
+                        Text(
+                            "Try Again",
+                            bundle: .toolkitModule,
+                            comment: "A label for a button allowing the user to retry an operation."
+                        )
+                        .padding(.horizontal)
                     }
                     .buttonStyle(.borderedProminent)
                     Spacer()

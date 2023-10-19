@@ -34,11 +34,19 @@ struct BookmarksHeader: View {
         HStack(alignment: .top) {
             Image(systemName: "bookmark")
             VStack(alignment: .leading) {
-                Text("Bookmarks", bundle: .toolkitModule)
-                    .font(.headline)
-                Text("Select a bookmark", bundle: .toolkitModule)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                Text(
+                    "Bookmarks",
+                    bundle: .toolkitModule,
+                    comment: "A label in reference to bookmarks contained in a map or scene."
+                )
+                .font(.headline)
+                Text(
+                    "Select a bookmark",
+                    bundle: .toolkitModule,
+                    comment: "A label prompting the user to make a selection from the available bookmarks."
+                )
+                .font(.subheadline)
+                .foregroundColor(.secondary)
             }
             .frame(
                 maxWidth: .infinity,

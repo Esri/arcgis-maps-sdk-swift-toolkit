@@ -27,7 +27,7 @@ extension View {
         _ sequence: S,
         perform action: ((S.Element) -> Void)?
     ) -> some View where S: AsyncSequence {
-        if let action = action {
+        if let action {
             task {
                 do {
                     for try await element in sequence {

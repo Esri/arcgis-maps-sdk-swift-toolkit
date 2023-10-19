@@ -60,10 +60,15 @@ public struct SearchField: View {
             
             // Search text field
             TextField(
-                "Search Query",
                 text: query,
                 prompt: Text(prompt)
-            )
+            ) {
+                Text(
+                    "Search Query",
+                    bundle: .toolkitModule,
+                    comment: "A label in reference to a search query entered by the user."
+                )
+            }
             .focused(isFocused)
             
             // Delete text button
