@@ -18,7 +18,7 @@ import SwiftUI
 /// A model for an input in a form.
 ///
 /// - Since: 200.3
-public class FormInputModel: ObservableObject {
+class FormInputModel: ObservableObject {
     /// A Boolean value indicating whether a value in the input is required.
     @Published var isRequired: Bool
     
