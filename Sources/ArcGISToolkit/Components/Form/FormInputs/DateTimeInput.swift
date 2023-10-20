@@ -67,7 +67,7 @@ struct DateTimeInput: View {
             if inputModel.formattedValue.isEmpty {
                 date = nil
             } else {
-                date = try? Date(inputModel.formattedValue, strategy: .arcGISDateParseStrategy)
+                date = inputModel.value as? Date
             }
         }
         .onChange(of: date) { date in
@@ -83,7 +83,7 @@ struct DateTimeInput: View {
             if formattedValue.isEmpty {
                 date = nil
             } else {
-                date = try? Date(formattedValue, strategy: .arcGISDateParseStrategy)
+                date = inputModel.value as? Date
             }
         }
     }
@@ -198,16 +198,6 @@ struct DateTimeInput: View {
             input.includeTime ? Text.now : .today
         }
         .accessibilityIdentifier("\(element.label) \(input.includeTime ? "Now" : "Today") Button")
-    }
-}
-
-private extension ParseStrategy where Self == Date.ParseStrategy {
-    /// A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
-    static var arcGISDateParseStrategy: Self {
-        .fixed(
-            format: "\(year: .defaultDigits)-\(month: .defaultDigits)-\(day: .defaultDigits)T\(hour: .defaultDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .defaultDigits):\(second: .defaultDigits)",
-            timeZone: .current
-        )
     }
 }
 
