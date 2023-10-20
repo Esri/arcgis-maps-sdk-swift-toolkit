@@ -51,6 +51,11 @@ struct SwitchInput: View {
     /// - Parameters:
     ///   - element: The field's parent element.
     init(element: FieldFormElement) {
+        precondition(
+            element.input is SwitchFormInput,
+            "\(Self.self).\(#function) element's input must be \(SwitchFormInput.self)."
+        )
+        
         self.element = element
         self.input = element.input as! SwitchFormInput
         

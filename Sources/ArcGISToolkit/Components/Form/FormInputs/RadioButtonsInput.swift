@@ -50,6 +50,11 @@ struct RadioButtonsInput: View {
     /// - Parameters:
     ///   - element: The field's parent element.
     init(element: FieldFormElement) {
+        precondition(
+            element.input is RadioButtonsFormInput,
+            "\(Self.self).\(#function) element's input must be \(RadioButtonsFormInput.self)."
+        )
+        
         self.element = element
         self.input = element.input as! RadioButtonsFormInput
         

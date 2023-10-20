@@ -40,6 +40,11 @@ struct SingleLineTextInput: View {
     /// - Parameters:
     ///   - element: The input's parent element.
     init(element: FieldFormElement) {
+        precondition(
+            element.input is TextBoxFormInput,
+            "\(Self.self).\(#function) element's input must be \(TextBoxFormInput.self)."
+        )
+        
         self.element = element
         self.input = element.input as! TextBoxFormInput
         

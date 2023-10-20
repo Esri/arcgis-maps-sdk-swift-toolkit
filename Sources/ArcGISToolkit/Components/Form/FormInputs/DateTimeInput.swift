@@ -43,8 +43,14 @@ struct DateTimeInput: View {
     /// - Parameters:
     ///   - element: The input's parent element.
     init(element: FieldFormElement) {
+        precondition(
+            element.input is DateTimePickerFormInput,
+            "\(Self.self).\(#function) element's input must be \(DateTimePickerFormInput.self)."
+        )
+        
         self.element = element
         self.input = element.input as! DateTimePickerFormInput
+        
         _inputModel = StateObject(
             wrappedValue: FormInputModel(fieldFormElement: element)
         )
