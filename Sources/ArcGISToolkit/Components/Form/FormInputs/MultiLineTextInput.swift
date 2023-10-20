@@ -47,6 +47,11 @@ struct MultiLineTextInput: View {
     /// - Parameters:
     ///   - element: The input's parent element.
     init(element: FieldFormElement) {
+        precondition(
+            element.input is TextAreaFormInput,
+            "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self)."
+        )
+        
         self.element =  element
         self.input = element.input as! TextAreaFormInput
         
