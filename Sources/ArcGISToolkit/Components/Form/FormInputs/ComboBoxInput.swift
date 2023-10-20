@@ -65,8 +65,12 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The input's parent element.
 ***REMOVED***init(element: FieldFormElement) {
-***REMOVED******REMOVED***self.element = element
+***REMOVED******REMOVED***precondition(
+***REMOVED******REMOVED******REMOVED***element.input is ComboBoxFormInput,
+***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(ComboBoxFormInput.self)."
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***let input = element.input as! ComboBoxFormInput
 ***REMOVED******REMOVED***self.noValueLabel = input.noValueLabel
 ***REMOVED******REMOVED***self.noValueOption = input.noValueOption

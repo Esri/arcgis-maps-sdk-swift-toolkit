@@ -47,6 +47,11 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The input's parent element.
 ***REMOVED***init(element: FieldFormElement) {
+***REMOVED******REMOVED***precondition(
+***REMOVED******REMOVED******REMOVED***element.input is TextAreaFormInput,
+***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self)."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.element =  element
 ***REMOVED******REMOVED***self.input = element.input as! TextAreaFormInput
 ***REMOVED******REMOVED***
