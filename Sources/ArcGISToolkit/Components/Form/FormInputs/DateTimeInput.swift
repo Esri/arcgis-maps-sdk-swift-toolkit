@@ -67,7 +67,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***if inputModel.formattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***date = try? Date(inputModel.formattedValue, strategy: .arcGISDateParseStrategy)
+***REMOVED******REMOVED******REMOVED******REMOVED***date = inputModel.value as? Date
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { date in
@@ -83,7 +83,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***if formattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***date = try? Date(formattedValue, strategy: .arcGISDateParseStrategy)
+***REMOVED******REMOVED******REMOVED******REMOVED***date = inputModel.value as? Date
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -198,16 +198,6 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***input.includeTime ? Text.now : .today
 ***REMOVED***
 ***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(input.includeTime ? "Now" : "Today") Button")
-***REMOVED***
-***REMOVED***
-
-private extension ParseStrategy where Self == Date.ParseStrategy {
-***REMOVED******REMOVED***/ A parse strategy for date/time strings with a yyyy-MM-dd'T'HH:mm:ss format.
-***REMOVED***static var arcGISDateParseStrategy: Self {
-***REMOVED******REMOVED***.fixed(
-***REMOVED******REMOVED******REMOVED***format: "\(year: .defaultDigits)-\(month: .defaultDigits)-\(day: .defaultDigits)T\(hour: .defaultDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .defaultDigits):\(second: .defaultDigits)",
-***REMOVED******REMOVED******REMOVED***timeZone: .current
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
