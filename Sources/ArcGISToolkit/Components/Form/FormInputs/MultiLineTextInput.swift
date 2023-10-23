@@ -21,8 +21,8 @@ struct MultiLineTextInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// The feature form containing the input.
-    private var featureForm: FeatureForm?
+    /// The model for the input.
+    @StateObject var inputModel: FormInputModel
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
@@ -43,18 +43,17 @@ struct MultiLineTextInput: View {
     /// The input configuration of the view.
     private let input: TextAreaFormInput
     
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
-    
     /// Creates a view for text input spanning multiple lines.
     /// - Parameters:
-    ///   - featureForm: The feature form containing the input.
     ///   - element: The input's parent element.
-    ///   - input: The input configuration of the view.
-    init(featureForm: FeatureForm?, element: FieldFormElement, input: TextAreaFormInput) {
-        self.featureForm = featureForm
+    init(element: FieldFormElement) {
+        precondition(
+            element.input is TextAreaFormInput,
+            "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self)."
+        )
+        
         self.element =  element
-        self.input = input
+        self.input = element.input as! TextAreaFormInput
         
         _inputModel = StateObject(
             wrappedValue: FormInputModel(fieldFormElement: element)
@@ -103,26 +102,23 @@ struct MultiLineTextInput: View {
         )
         .padding([.bottom], elementPadding)
         .onAppear {
-            let text = element.value
-            if !text.isEmpty {
-                isPlaceholder = false
-                self.text = text
-            } else {
-                isPlaceholder = true
-                self.text = element.hint
-            }
+            let text = inputModel.formattedValue
+            isPlaceholder = text.isEmpty
+            self.text = isPlaceholder ? element.hint : text
         }
-        .onChange(of: text) { newValue in
-            if !isPlaceholder {
-                guard newValue != element.value else {
-                    return
-                }
-                featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
-                model.evaluateExpressions()
+        .onChange(of: text) { text in
+            guard !isPlaceholder else { return }
+            do {
+                try element.updateValue(text)
+            } catch {
+                print(error.localizedDescription)
             }
+            model.evaluateExpressions()
         }
-        .onChange(of: inputModel.value) { newValue in
-            text = newValue
+        .onChange(of: inputModel.formattedValue) { formattedValue in
+            let text = formattedValue
+            isPlaceholder = text.isEmpty
+            self.text = isPlaceholder ? element.hint : text
         }
     }
 }
@@ -130,6 +126,6 @@ struct MultiLineTextInput: View {
 private extension MultiLineTextInput {
     /// The field type of the text input.
     var fieldType: FieldType {
-        featureForm!.feature.table!.field(named: element.fieldName)!.type!
+        model.featureForm!.feature.table!.field(named: element.fieldName)!.type!
     }
 }
