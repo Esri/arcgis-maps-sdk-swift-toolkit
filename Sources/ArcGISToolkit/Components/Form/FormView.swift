@@ -15,6 +15,7 @@
 ***REMOVED***
 
 ***REMOVED***/ Forms allow users to edit information about GIS features.
+***REMOVED***/
 ***REMOVED***/ - Since: 200.3
 public struct FormView: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
@@ -86,18 +87,18 @@ extension FormView {
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
 ***REMOVED******REMOVED***switch element.input {
-***REMOVED******REMOVED***case let `input` as ComboBoxFormInput:
-***REMOVED******REMOVED******REMOVED***ComboBoxInput(featureForm: featureForm, element: element, input: `input`)
-***REMOVED******REMOVED***case let `input` as DateTimePickerFormInput:
-***REMOVED******REMOVED******REMOVED***DateTimeInput(featureForm: featureForm, element: element, input: `input`)
-***REMOVED******REMOVED***case let `input` as RadioButtonsFormInput:
-***REMOVED******REMOVED******REMOVED***RadioButtonsInput(featureForm: featureForm, element: element, input: `input`)
-***REMOVED******REMOVED***case let `input` as SwitchFormInput:
-***REMOVED******REMOVED******REMOVED***SwitchInput(featureForm: featureForm, element: element, input: `input`)
-***REMOVED******REMOVED***case let `input` as TextAreaFormInput:
-***REMOVED******REMOVED******REMOVED***MultiLineTextInput(featureForm: featureForm, element: element, input: `input`)
-***REMOVED******REMOVED***case let `input` as TextBoxFormInput:
-***REMOVED******REMOVED******REMOVED***SingleLineTextInput(featureForm: featureForm, element: element, input: `input`)
+***REMOVED******REMOVED***case is ComboBoxFormInput:
+***REMOVED******REMOVED******REMOVED***ComboBoxInput(element: element)
+***REMOVED******REMOVED***case is DateTimePickerFormInput:
+***REMOVED******REMOVED******REMOVED***DateTimeInput(element: element)
+***REMOVED******REMOVED***case is TextAreaFormInput:
+***REMOVED******REMOVED******REMOVED***MultiLineTextInput(element: element)
+***REMOVED******REMOVED***case is RadioButtonsFormInput:
+***REMOVED******REMOVED******REMOVED***RadioButtonsInput(element: element)
+***REMOVED******REMOVED***case is TextBoxFormInput:
+***REMOVED******REMOVED******REMOVED***SingleLineTextInput(element: element)
+***REMOVED******REMOVED***case is SwitchFormInput:
+***REMOVED******REMOVED******REMOVED***SwitchInput(element: element)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***

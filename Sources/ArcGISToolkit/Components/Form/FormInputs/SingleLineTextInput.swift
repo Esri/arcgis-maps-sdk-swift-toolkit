@@ -18,11 +18,11 @@
 struct SingleLineTextInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ The feature form containing the input.
-***REMOVED***private var featureForm: FeatureForm?
-***REMOVED***
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***
+***REMOVED******REMOVED***/ The model for the input.
+***REMOVED***@StateObject var inputModel: FormInputModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
@@ -36,18 +36,17 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED***/ The input configuration of the view.
 ***REMOVED***private let input: TextBoxFormInput
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the input.
-***REMOVED***@StateObject var inputModel: FormInputModel
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for single line text input.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
 ***REMOVED******REMOVED***/   - element: The input's parent element.
-***REMOVED******REMOVED***/   - input: The input configuration of the view.
-***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: TextBoxFormInput) {
-***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED***init(element: FieldFormElement) {
+***REMOVED******REMOVED***precondition(
+***REMOVED******REMOVED******REMOVED***element.input is TextBoxFormInput,
+***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(TextBoxFormInput.self)."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.element = element
-***REMOVED******REMOVED***self.input = input
+***REMOVED******REMOVED***self.input = element.input as! TextBoxFormInput
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_inputModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
@@ -87,37 +86,24 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED***fieldType: fieldType
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***text = element.value
-***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { newFocus in
 ***REMOVED******REMOVED******REMOVED***if newFocus {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = element.fieldName
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: text) { newValue in
-***REMOVED******REMOVED******REMOVED***guard newValue != inputModel.value else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Note: this will be replaced by `element.updateValue()`, which will
-***REMOVED******REMOVED******REMOVED******REMOVED*** handle all the following logic internally.
-***REMOVED******REMOVED******REMOVED***if fieldType.isFloatingPoint {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this should handle other decimal types as well, if they exist (float?)
-***REMOVED******REMOVED******REMOVED******REMOVED***let value = Double(newValue)
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
-***REMOVED******REMOVED*** else if fieldType.isNumeric {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this should handle more than just Int32
-***REMOVED******REMOVED******REMOVED******REMOVED***let value = Int32(newValue)
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(value, forKey: element.fieldName)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text field
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue, forKey: element.fieldName)
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***text = inputModel.formattedValue
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: text) { text in
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(text)
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
-***REMOVED******REMOVED******REMOVED***text = newValue
+***REMOVED******REMOVED***.onChange(of: inputModel.formattedValue) { formattedValue in
+***REMOVED******REMOVED******REMOVED***self.text = formattedValue
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -125,7 +111,7 @@ struct SingleLineTextInput: View {
 private extension SingleLineTextInput {
 ***REMOVED******REMOVED***/ The field type of the text input.
 ***REMOVED***var fieldType: FieldType {
-***REMOVED******REMOVED***featureForm!.feature.table!.field(named: element.fieldName)!.type!
+***REMOVED******REMOVED***model.featureForm!.feature.table!.field(named: element.fieldName)!.type!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.
@@ -150,7 +136,7 @@ private extension SingleLineTextInput {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The range of valid values for a numeric input field.
 ***REMOVED***var rangeDomain: RangeDomain? {
-***REMOVED******REMOVED***if let field = featureForm?.feature.table?.field(named: element.fieldName) {
+***REMOVED******REMOVED***if let field = model.featureForm?.feature.table?.field(named: element.fieldName) {
 ***REMOVED******REMOVED******REMOVED***return field.domain as? RangeDomain
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return nil

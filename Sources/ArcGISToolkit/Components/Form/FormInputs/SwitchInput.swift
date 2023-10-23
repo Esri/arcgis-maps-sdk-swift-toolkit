@@ -24,6 +24,9 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ The model for the input.
+***REMOVED***@StateObject var inputModel: FormInputModel
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the current value doesn't exist as an option in the domain.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ In this scenario a ``ComboBoxInput`` should be used instead.
@@ -33,7 +36,7 @@ struct SwitchInput: View {
 ***REMOVED***@State private var requiredValueMissing = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the switch is toggled on or off.
-***REMOVED***@State private var switchState: Bool = false
+***REMOVED***@State private var isOn: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The value represented by the switch.
 ***REMOVED***@State private var selectedValue: Bool?
@@ -41,24 +44,20 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***/ The field's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/ The feature form containing the input.
-***REMOVED***private var featureForm: FeatureForm?
-***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the field.
 ***REMOVED***private let input: SwitchFormInput
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the input.
-***REMOVED***@StateObject var inputModel: FormInputModel
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a switch input.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
 ***REMOVED******REMOVED***/   - element: The field's parent element.
-***REMOVED******REMOVED***/   - input: The input configuration of the field.
-***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: SwitchFormInput) {
-***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED***init(element: FieldFormElement) {
+***REMOVED******REMOVED***precondition(
+***REMOVED******REMOVED******REMOVED***element.input is SwitchFormInput,
+***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(SwitchFormInput.self)."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.element = element
-***REMOVED******REMOVED***self.input = input
+***REMOVED******REMOVED***self.input = element.input as! SwitchFormInput
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_inputModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
@@ -68,7 +67,6 @@ struct SwitchInput: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if fallbackToComboBox {
 ***REMOVED******REMOVED******REMOVED***ComboBoxInput(
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm: featureForm,
 ***REMOVED******REMOVED******REMOVED******REMOVED***element: element,
 ***REMOVED******REMOVED******REMOVED******REMOVED***noValueLabel: .noValue,
 ***REMOVED******REMOVED******REMOVED******REMOVED***noValueOption: .show
@@ -78,9 +76,9 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(switchState ? input.onValue.name : input.offValue.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(isOn ? input.onValue.name : input.offValue.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle("", isOn: $switchState)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle("", isOn: $isOn)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.switch)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch")
 ***REMOVED******REMOVED******REMOVED***
@@ -90,54 +88,23 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***if element.value.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***if element.formattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switchState = isOn
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isOn = input.onValue.name == inputModel.formattedValue
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: switchState) { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Convert value to bool
-***REMOVED******REMOVED******REMOVED******REMOVED***let inputModelValue = inputModel.value == input.onValue.name
-***REMOVED******REMOVED******REMOVED******REMOVED***guard newValue != (inputModelValue) else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***.onChange(of: isOn) { isOn in
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(isOn ? input.onValue.code : input.offValue.code)
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let codedValue = newValue ? input.onValue : input.offValue
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(codedValue.code, forKey: element.fieldName)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = newValue == input.onValue.name
+***REMOVED******REMOVED******REMOVED***.onChange(of: inputModel.formattedValue) { formattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***isOn = formattedValue == input.onValue.name
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension SwitchInput {
-***REMOVED******REMOVED***/ A Boolean value indicating whether the switch is toggled on or off.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ Element values are provided as Strings whereas input on/off value codes may be a number of
-***REMOVED******REMOVED***/ types. We must cast the element value string to the correct type to perform an accurate check.
-***REMOVED***var isOn: Bool {
-***REMOVED******REMOVED***switch input.onValue.code {
-***REMOVED******REMOVED***case let value as Double:
-***REMOVED******REMOVED******REMOVED***return Double(element.value) == value
-***REMOVED******REMOVED***case let value as Float:
-***REMOVED******REMOVED******REMOVED***return Float(element.value) == value
-***REMOVED******REMOVED***case let value as Int:
-***REMOVED******REMOVED******REMOVED***return Int(element.value) == value
-***REMOVED******REMOVED***case let value as Int8:
-***REMOVED******REMOVED******REMOVED***return Int8(element.value) == value
-***REMOVED******REMOVED***case let value as Int16:
-***REMOVED******REMOVED******REMOVED***return Int16(element.value) == value
-***REMOVED******REMOVED***case let value as Int32:
-***REMOVED******REMOVED******REMOVED***return Int32(element.value) == value
-***REMOVED******REMOVED***case let value as Int64:
-***REMOVED******REMOVED******REMOVED***return Int64(element.value) == value
-***REMOVED******REMOVED***case let value as String:
-***REMOVED******REMOVED******REMOVED***return element.value == value
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
