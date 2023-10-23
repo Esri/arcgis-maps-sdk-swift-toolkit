@@ -104,7 +104,14 @@ extension FormViewExampleView {
            })
             .cancellationToNil()?
             .get()
-            .first {
+            .first(where: { result in
+                if let feature = result.geoElements.first as? ArcGISFeature,
+                   let _ = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
+                    return true
+                } else {
+                    return false
+                }
+            }) {
             return identifyLayerResult.geoElements.first as? ArcGISFeature
         }
         return nil
