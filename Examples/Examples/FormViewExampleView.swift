@@ -96,18 +96,23 @@ extension FormViewExampleView {
     /// - Returns: The first identified feature.
     func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
         if let screenPoint = identifyScreenPoint,
-           let feature = try? await Result(awaiting: {
-               try await proxy.identify(
-                on: map.operationalLayers.first!,
+           let identifyLayerResult = try? await Result(awaiting: {
+               try await proxy.identifyLayers(
                 screenPoint: screenPoint,
                 tolerance: 10
                )
            })
             .cancellationToNil()?
             .get()
-            .geoElements
-            .first as? ArcGISFeature {
-            return feature
+            .first(where: { result in
+                if let feature = result.geoElements.first as? ArcGISFeature,
+                   (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
+                    return true
+                } else {
+                    return false
+                }
+            }) {
+            return identifyLayerResult.geoElements.first as? ArcGISFeature
         }
         return nil
     }
