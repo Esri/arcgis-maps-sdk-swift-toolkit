@@ -106,7 +106,7 @@ extension FormViewExampleView {
             .get()
             .first(where: { result in
                 if let feature = result.geoElements.first as? ArcGISFeature,
-                   let _ = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
+                   (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
                     return true
                 } else {
                     return false
