@@ -15,6 +15,7 @@ import ArcGIS
 import SwiftUI
 
 /// Forms allow users to edit information about GIS features.
+///
 /// - Since: 200.3
 public struct FormView: View {
     @Environment(\.formElementPadding) var elementPadding
@@ -86,18 +87,18 @@ extension FormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
         switch element.input {
-        case let `input` as ComboBoxFormInput:
-            ComboBoxInput(featureForm: featureForm, element: element, input: `input`)
-        case let `input` as DateTimePickerFormInput:
-            DateTimeInput(featureForm: featureForm, element: element, input: `input`)
-        case let `input` as RadioButtonsFormInput:
-            RadioButtonsInput(featureForm: featureForm, element: element, input: `input`)
-        case let `input` as SwitchFormInput:
-            SwitchInput(featureForm: featureForm, element: element, input: `input`)
-        case let `input` as TextAreaFormInput:
-            MultiLineTextInput(featureForm: featureForm, element: element, input: `input`)
-        case let `input` as TextBoxFormInput:
-            SingleLineTextInput(featureForm: featureForm, element: element, input: `input`)
+        case is ComboBoxFormInput:
+            ComboBoxInput(element: element)
+        case is DateTimePickerFormInput:
+            DateTimeInput(element: element)
+        case is TextAreaFormInput:
+            MultiLineTextInput(element: element)
+        case is RadioButtonsFormInput:
+            RadioButtonsInput(element: element)
+        case is TextBoxFormInput:
+            SingleLineTextInput(element: element)
+        case is SwitchFormInput:
+            SwitchInput(element: element)
         default:
             EmptyView()
         }

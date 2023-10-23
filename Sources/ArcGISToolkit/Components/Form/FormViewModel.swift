@@ -15,7 +15,7 @@ import ArcGIS
 import Combine
 import SwiftUI
 
-/// - Since: 200.2
+/// - Since: 200.3
 public class FormViewModel: ObservableObject {
     /// The geodatabase which holds the table and feature being edited in the form.
     @Published private var database: ServiceGeodatabase?
@@ -27,7 +27,7 @@ public class FormViewModel: ObservableObject {
     @Published private var table: ServiceFeatureTable?
     
     /// The feature form.
-    @Published private var featureForm: FeatureForm?
+    @Published var featureForm: FeatureForm?
     
     /// The name of the current focused field, if one exists.
     @Published var focusedFieldName: String?
