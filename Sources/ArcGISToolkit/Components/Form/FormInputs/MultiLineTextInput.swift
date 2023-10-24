@@ -116,7 +116,6 @@ private extension MultiLineTextInput {
 ***REMOVED******REMOVED***.background(.clear)
 ***REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED***.foregroundColor(isPlaceholder ? .secondary : .primary)
-***REMOVED******REMOVED***.frame(minHeight: 75, maxHeight: 150)
 ***REMOVED******REMOVED***.onChange(of: isFocused) { focused in
 ***REMOVED******REMOVED******REMOVED***if focused && isPlaceholder {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
