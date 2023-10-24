@@ -86,9 +86,9 @@ struct SingleLineTextInput: View {
             fieldType: fieldType
         )
         .padding([.bottom], elementPadding)
-        .onChange(of: isFocused) { newFocus in
-            if newFocus {
-                model.focusedFieldName = element.fieldName
+        .onChange(of: isFocused) { isFocused in
+            if isFocused {
+                model.focusedElement = element.id
             }
         }
         .onAppear {
