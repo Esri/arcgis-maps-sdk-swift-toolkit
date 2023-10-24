@@ -56,27 +56,11 @@ struct SingleLineTextInput: View {
     var body: some View {
         InputHeader(element: element)
             .padding([.top], elementPadding)
-        // Secondary foreground color is used across input views for consistency.
-        HStack {
-            TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
-                .keyboardType(keyboardType)
-                .focused($isFocused)
-                .disabled(!inputModel.isEditable)
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        if UIDevice.current.userInterfaceIdiom == .phone, isFocused, fieldType.isNumeric {
-                            positiveNegativeButton
-                            Spacer()
-                        }
-                    }
-                }
-                .accessibilityIdentifier("\(element.label) Text Field")
-            if !text.isEmpty && inputModel.isEditable {
-                ClearButton { text.removeAll() }
-                    .accessibilityIdentifier("\(element.label) Clear Button")
-            }
+        if inputModel.isEditable {
+            textField
+        } else {
+            Text(text.isEmpty ? "--" : text)
         }
-        .formInputStyle()
         TextInputFooter(
             text: text,
             isFocused: isFocused,
@@ -141,5 +125,29 @@ private extension SingleLineTextInput {
         } else {
             return nil
         }
+    }
+    
+    /// The body of the text input when the element is editable.
+    var textField: some View {
+        HStack {
+            // Secondary foreground color is used across input views for consistency.
+            TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
+                .keyboardType(keyboardType)
+                .focused($isFocused)
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        if UIDevice.current.userInterfaceIdiom == .phone, isFocused, fieldType.isNumeric {
+                            positiveNegativeButton
+                            Spacer()
+                        }
+                    }
+                }
+                .accessibilityIdentifier("\(element.label) Text Field")
+            if !text.isEmpty && inputModel.isEditable {
+                ClearButton { text.removeAll() }
+                    .accessibilityIdentifier("\(element.label) Clear Button")
+            }
+        }
+        .formInputStyle()
     }
 }

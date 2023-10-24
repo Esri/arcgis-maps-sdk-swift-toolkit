@@ -63,36 +63,11 @@ struct MultiLineTextInput: View {
     var body: some View {
         InputHeader(label: element.label, isRequired: inputModel.isRequired)
             .padding([.top], elementPadding)
-        HStack(alignment: .bottom) {
-            if #available(iOS 16.0, *) {
-                TextEditor(text: $text)
-                    .scrollContentBackground(.hidden)
-                    .disabled(!inputModel.isEditable)
-            } else {
-                TextEditor(text: $text)
-                    .disabled(!inputModel.isEditable)
-            }
-            if isFocused && !text.isEmpty && inputModel.isEditable {
-                ClearButton { text.removeAll() }
-            }
+        if inputModel.isEditable {
+            textEditor
+        } else {
+            Text(text.isEmpty ? "--" : text)
         }
-        .background(.clear)
-        .focused($isFocused)
-        .foregroundColor(isPlaceholder ? .secondary : .primary)
-        .frame(minHeight: 75, maxHeight: 150)
-        .onChange(of: isFocused) { focused in
-            if focused && isPlaceholder {
-                isPlaceholder = false
-                text = ""
-            } else if !focused && text.isEmpty {
-                isPlaceholder = true
-                text = element.hint
-            }
-            if focused {
-                model.focusedFieldName = element.fieldName
-            }
-        }
-        .formInputStyle()
         TextInputFooter(
             text: isPlaceholder ? "" : text,
             isFocused: isFocused,
@@ -127,5 +102,45 @@ private extension MultiLineTextInput {
     /// The field type of the text input.
     var fieldType: FieldType {
         model.featureForm!.feature.table!.field(named: element.fieldName)!.type!
+    }
+    
+    /// The body of the text input when the element is editable.
+    var textEditor: some View {
+        HStack(alignment: .bottom) {
+            TextEditor(text: $text)
+                .scrollContentBackgroundHidden()
+            if isFocused && !text.isEmpty && inputModel.isEditable {
+                ClearButton { text.removeAll() }
+            }
+        }
+        .background(.clear)
+        .focused($isFocused)
+        .foregroundColor(isPlaceholder ? .secondary : .primary)
+        .frame(minHeight: 75, maxHeight: 150)
+        .onChange(of: isFocused) { focused in
+            if focused && isPlaceholder {
+                isPlaceholder = false
+                text = ""
+            } else if !focused && text.isEmpty {
+                isPlaceholder = true
+                text = element.hint
+            }
+            if focused {
+                model.focusedFieldName = element.fieldName
+            }
+        }
+        .formInputStyle()
+    }
+}
+
+private extension View {
+    /// - Returns: A view with the scroll content background hidden.
+    func scrollContentBackgroundHidden() -> some View {
+        if #available(iOS 16.0, *) {
+            return self
+                .scrollContentBackground(.hidden)
+        } else {
+            return self
+        }
     }
 }
