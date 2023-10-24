@@ -89,7 +89,9 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isFocused {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element.id
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED*** else if model.focusedElement == element {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = nil
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formInputStyle()

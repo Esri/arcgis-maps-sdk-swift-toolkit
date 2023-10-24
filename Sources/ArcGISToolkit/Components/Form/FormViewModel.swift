@@ -29,8 +29,8 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The feature form.
 ***REMOVED***@Published var featureForm: FeatureForm?
 ***REMOVED***
-***REMOVED******REMOVED***/ The id of the current focused element, if one exists.
-***REMOVED***@Published var focusedElement: ObjectIdentifier?
+***REMOVED******REMOVED***/ The current focused element, if one exists.
+***REMOVED***@Published var focusedElement: FormElement?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The expression evaluation task.
 ***REMOVED***var evaluateTask: Task<Void, Never>? = nil
