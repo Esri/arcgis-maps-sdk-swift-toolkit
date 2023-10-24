@@ -80,16 +80,16 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED***.foregroundColor(isPlaceholder ? .secondary : .primary)
 ***REMOVED******REMOVED***.frame(minHeight: 75, maxHeight: 150)
-***REMOVED******REMOVED***.onChange(of: isFocused) { focused in
-***REMOVED******REMOVED******REMOVED***if focused && isPlaceholder {
+***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
+***REMOVED******REMOVED******REMOVED***if isFocused && isPlaceholder {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = ""
-***REMOVED******REMOVED*** else if !focused && text.isEmpty {
+***REMOVED******REMOVED*** else if !isFocused && text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if focused {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = element.fieldName
+***REMOVED******REMOVED******REMOVED***if isFocused {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element.id
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formInputStyle()

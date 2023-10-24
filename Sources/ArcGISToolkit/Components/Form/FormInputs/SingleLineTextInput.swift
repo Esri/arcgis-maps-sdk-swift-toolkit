@@ -86,9 +86,9 @@ struct SingleLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED***fieldType: fieldType
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
-***REMOVED******REMOVED***.onChange(of: isFocused) { newFocus in
-***REMOVED******REMOVED******REMOVED***if newFocus {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = element.fieldName
+***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
+***REMOVED******REMOVED******REMOVED***if isFocused {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element.id
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
