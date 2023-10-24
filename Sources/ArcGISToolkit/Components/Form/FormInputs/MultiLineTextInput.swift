@@ -116,7 +116,6 @@ private extension MultiLineTextInput {
         .background(.clear)
         .focused($isFocused)
         .foregroundColor(isPlaceholder ? .secondary : .primary)
-        .frame(minHeight: 75, maxHeight: 150)
         .onChange(of: isFocused) { focused in
             if focused && isPlaceholder {
                 isPlaceholder = false
