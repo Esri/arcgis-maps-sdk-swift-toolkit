@@ -29,8 +29,8 @@ public class FormViewModel: ObservableObject {
     /// The feature form.
     @Published var featureForm: FeatureForm?
     
-    /// The id of the current focused element, if one exists.
-    @Published var focusedElement: ObjectIdentifier?
+    /// The current focused element, if one exists.
+    @Published var focusedElement: FormElement?
     
     /// The expression evaluation task.
     var evaluateTask: Task<Void, Never>? = nil
