@@ -88,7 +88,9 @@ struct SingleLineTextInput: View {
         .padding([.bottom], elementPadding)
         .onChange(of: isFocused) { isFocused in
             if isFocused {
-                model.focusedElement = element.id
+                model.focusedElement = element
+            } else if model.focusedElement == element {
+                model.focusedElement = nil
             }
         }
         .onAppear {

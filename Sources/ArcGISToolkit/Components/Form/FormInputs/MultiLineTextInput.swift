@@ -89,7 +89,9 @@ struct MultiLineTextInput: View {
                 text = element.hint
             }
             if isFocused {
-                model.focusedElement = element.id
+                model.focusedElement = element
+            } else if model.focusedElement == element {
+                model.focusedElement = nil
             }
         }
         .formInputStyle()
