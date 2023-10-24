@@ -63,36 +63,11 @@ struct MultiLineTextInput: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED***HStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if isFocused && !text.isEmpty && inputModel.isEditable {
-***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***if inputModel.isEditable {
+***REMOVED******REMOVED******REMOVED***textEditor
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
 ***REMOVED***
-***REMOVED******REMOVED***.background(.clear)
-***REMOVED******REMOVED***.focused($isFocused)
-***REMOVED******REMOVED***.foregroundColor(isPlaceholder ? .secondary : .primary)
-***REMOVED******REMOVED***.frame(minHeight: 75, maxHeight: 150)
-***REMOVED******REMOVED***.onChange(of: isFocused) { focused in
-***REMOVED******REMOVED******REMOVED***if focused && isPlaceholder {
-***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
-***REMOVED******REMOVED******REMOVED******REMOVED***text = ""
-***REMOVED******REMOVED*** else if !focused && text.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
-***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if focused {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = element.fieldName
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED***TextInputFooter(
 ***REMOVED******REMOVED******REMOVED***text: isPlaceholder ? "" : text,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
@@ -127,5 +102,45 @@ private extension MultiLineTextInput {
 ***REMOVED******REMOVED***/ The field type of the text input.
 ***REMOVED***var fieldType: FieldType {
 ***REMOVED******REMOVED***model.featureForm!.feature.table!.field(named: element.fieldName)!.type!
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The body of the text input when the element is editable.
+***REMOVED***var textEditor: some View {
+***REMOVED******REMOVED***HStack(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
+***REMOVED******REMOVED******REMOVED******REMOVED***.scrollContentBackgroundHidden()
+***REMOVED******REMOVED******REMOVED***if isFocused && !text.isEmpty && inputModel.isEditable {
+***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.background(.clear)
+***REMOVED******REMOVED***.focused($isFocused)
+***REMOVED******REMOVED***.foregroundColor(isPlaceholder ? .secondary : .primary)
+***REMOVED******REMOVED***.frame(minHeight: 75, maxHeight: 150)
+***REMOVED******REMOVED***.onChange(of: isFocused) { focused in
+***REMOVED******REMOVED******REMOVED***if focused && isPlaceholder {
+***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
+***REMOVED******REMOVED******REMOVED******REMOVED***text = ""
+***REMOVED******REMOVED*** else if !focused && text.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
+***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if focused {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = element.fieldName
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.formInputStyle()
+***REMOVED***
+***REMOVED***
+
+private extension View {
+***REMOVED******REMOVED***/ - Returns: A view with the scroll content background hidden.
+***REMOVED***func scrollContentBackgroundHidden() -> some View {
+***REMOVED******REMOVED***if #available(iOS 16.0, *) {
+***REMOVED******REMOVED******REMOVED***return self
+***REMOVED******REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return self
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

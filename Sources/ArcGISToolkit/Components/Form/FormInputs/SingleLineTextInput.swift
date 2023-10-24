@@ -56,27 +56,11 @@ struct SingleLineTextInput: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***InputHeader(element: element)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across input views for consistency.
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
-***REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
-***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isFocused)
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
-***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .phone, isFocused, fieldType.isNumeric {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***positiveNegativeButton
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Field")
-***REMOVED******REMOVED******REMOVED***if !text.isEmpty && inputModel.isEditable {
-***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***if inputModel.isEditable {
+***REMOVED******REMOVED******REMOVED***textField
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
 ***REMOVED***
-***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED***TextInputFooter(
 ***REMOVED******REMOVED******REMOVED***text: text,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
@@ -141,5 +125,29 @@ private extension SingleLineTextInput {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The body of the text input when the element is editable.
+***REMOVED***var textField: some View {
+***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Secondary foreground color is used across input views for consistency.
+***REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, prompt: Text(element.hint).foregroundColor(.secondary))
+***REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
+***REMOVED******REMOVED******REMOVED******REMOVED***.focused($isFocused)
+***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .phone, isFocused, fieldType.isNumeric {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***positiveNegativeButton
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Field")
+***REMOVED******REMOVED******REMOVED***if !text.isEmpty && inputModel.isEditable {
+***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED***
 ***REMOVED***
