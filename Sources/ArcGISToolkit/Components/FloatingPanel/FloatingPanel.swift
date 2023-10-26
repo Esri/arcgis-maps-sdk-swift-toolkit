@@ -152,7 +152,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let speed = abs(velocity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***let newDetent = bestDetent(given: height, travelingAt: velocity)
-***REMOVED******REMOVED******REMOVED******REMOVED***let targetHeight = heightFor(detent: newDetent)
+***REMOVED******REMOVED******REMOVED******REMOVED***let targetHeight = heightFor(detent: newDetent) - .handleFrameHeight
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***let distanceAhead = abs(height - targetHeight)
 ***REMOVED******REMOVED******REMOVED******REMOVED***let travelTime = min(0.35, distanceAhead / speed)
