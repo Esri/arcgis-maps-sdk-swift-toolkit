@@ -32,6 +32,8 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The name of the current focused field, if one exists.
 ***REMOVED***@Published var focusedFieldName: String?
 ***REMOVED***
+***REMOVED***@Published var groupElementModels: [String: GroupElementModel] = [:]
+***REMOVED***
 ***REMOVED******REMOVED***/ The expression evaluation task.
 ***REMOVED***var evaluateTask: Task<Void, Never>? = nil
 ***REMOVED***
@@ -57,6 +59,15 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***deinit {
 ***REMOVED******REMOVED***clearIsVisibleTasks()
+***REMOVED***
+***REMOVED***
+***REMOVED***func setupGroupModels() {
+***REMOVED******REMOVED***featureForm?.elements.forEach { element in
+***REMOVED******REMOVED******REMOVED***if let groupElement = element as? GroupFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED***let model = GroupElementModel(groupElement: groupElement)
+***REMOVED******REMOVED******REMOVED******REMOVED***groupElementModels.updateValue(model, forKey: element.label)
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func initializeIsVisibleTasks() {

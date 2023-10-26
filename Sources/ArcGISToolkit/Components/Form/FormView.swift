@@ -62,6 +62,7 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await featureForm?.evaluateExpressions()
 ***REMOVED******REMOVED******REMOVED******REMOVED***isEvaluating = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.initializeIsVisibleTasks()
+***REMOVED******REMOVED******REMOVED******REMOVED***model.setupGroupModels()
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("error evaluating expressions: \(error.localizedDescription)")
 ***REMOVED******REMOVED***
@@ -110,10 +111,12 @@ extension FormView {
 ***REMOVED******REMOVED***/ Makes UI for a group form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeGroupElement(_ element: GroupFormElement) -> some View {
-***REMOVED******REMOVED***DisclosureGroup(element.label) {
-***REMOVED******REMOVED******REMOVED***ForEach(element.formElements, id: \.label) { formElement in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let element = formElement as? FieldFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFieldElement(element)
+***REMOVED******REMOVED***if let groupModel = model.groupElementModels[element.label] {
+***REMOVED******REMOVED******REMOVED***DisclosureGroup(element.label/*isExpanded: groupModel.$isExpanded*/) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(element.formElements, id: \.label) { formElement in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = formElement as? FieldFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFieldElement(element)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
