@@ -24,6 +24,12 @@
 ***REMOVED***/ dedicated search panel. They will also be primarily simple containers
 ***REMOVED***/ that clients will fill with their own content.
 struct FloatingPanel<Content>: View where Content: View {
+***REMOVED******REMOVED***/ The height of a geo-view's attribution bar.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ When the panel is detached from the bottom of the screen (non-compact) this value allows
+***REMOVED******REMOVED***/ the panel to be aligned correctly between the top of a geo-view and the top of the its
+***REMOVED******REMOVED***/ attribution bar.
+***REMOVED***let attributionBarHeight: CGFloat
 ***REMOVED******REMOVED***/ The background color of the floating panel.
 ***REMOVED***let backgroundColor: Color
 ***REMOVED******REMOVED***/ A binding to the currently selected detent.
@@ -42,11 +48,14 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The height of the content.
 ***REMOVED***@State private var height: CGFloat = .minHeight
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the keyboard is open.
+***REMOVED***@State private var keyboardIsOpen = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The latest recorded drag gesture value.
 ***REMOVED***@State private var latestDragGesture: DragGesture.Value?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
-***REMOVED***@State private var maximumHeight: CGFloat = .infinity
+***REMOVED***@State private var maximumHeight: CGFloat = .zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the resignFirstResponder should be sent for the current
 ***REMOVED******REMOVED***/ drag gesture.
@@ -68,62 +77,57 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipped()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 25 : 10)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set frame width to infinity to prevent horizontal shrink on dismissal.
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
 ***REMOVED******REMOVED******REMOVED***.clipShape(
 ***REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorners(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***corners: isCompact ? [.topLeft, .topRight] : [.allCorners],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***corners: isCompact ? [.topLeft, .topRight] : .allCorners,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 10
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.shadow(radius: 10)
 ***REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED***width: geometryProxy.size.width,
-***REMOVED******REMOVED******REMOVED******REMOVED***height: geometryProxy.size.height,
+***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
+***REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
 ***REMOVED******REMOVED******REMOVED******REMOVED***alignment: isCompact ? .bottom : .top
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.animation(.easeInOut, value: isPresented)
-***REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = $0.height
-***REMOVED******REMOVED******REMOVED******REMOVED***if height > maximumHeight {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = maximumHeight
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.animation(.default, value: attributionBarHeight)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = isPresented ? heightFor(detent: selectedDetent) : .zero
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: isPresented) { isPresented in
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = isPresented ? heightFor(detent: selectedDetent) : .zero
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: geometryProxy.size.height) { height in
+***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = height
+***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: selectedDetent) { selectedDetent in
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: selectedDetent)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: isPresented) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: selectedDetent) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: .full)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***keyboardIsOpen = true
+***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: selectedDetent)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***keyboardIsOpen = false
+***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.padding([.leading, .top, .trailing], isCompact ? 0 : 10)
-***REMOVED******REMOVED***.padding([.bottom], isCompact ? 0 : 50)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** If non-compact, add uniform padding around all edges.
+***REMOVED******REMOVED***.padding(.all, isCompact ? 0 : .externalPadding)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** If non-compact, and the keyboard isn't open add padding for the attribution bar.
+***REMOVED******REMOVED***.padding(.bottom, !isCompact && !keyboardIsOpen ? attributionBarHeight : 0)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var drag: some Gesture {
@@ -218,11 +222,11 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***func heightFor(detent: FloatingPanelDetent) -> CGFloat {
 ***REMOVED******REMOVED***switch detent {
 ***REMOVED******REMOVED***case .summary:
-***REMOVED******REMOVED******REMOVED***return max(.minHeight, maximumHeight * 0.15)
+***REMOVED******REMOVED******REMOVED***return max(.minHeight, maximumHeight * 0.25)
 ***REMOVED******REMOVED***case .half:
-***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.4
+***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.5
 ***REMOVED******REMOVED***case .full:
-***REMOVED******REMOVED******REMOVED***return maximumHeight * (isCompact ? 0.90 : 1.0)
+***REMOVED******REMOVED******REMOVED***return maximumHeight
 ***REMOVED******REMOVED***case let .fraction(fraction):
 ***REMOVED******REMOVED******REMOVED***return min(maximumHeight, max(.minHeight, maximumHeight * fraction))
 ***REMOVED******REMOVED***case let .height(height):
@@ -230,12 +234,26 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Updates height to an appropriate value.
+***REMOVED***func updateHeight() {
+***REMOVED******REMOVED***let newHeight: CGFloat = {
+***REMOVED******REMOVED******REMOVED***if !isPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED***return .zero
+***REMOVED******REMOVED*** else if keyboardIsOpen {
+***REMOVED******REMOVED******REMOVED******REMOVED***return heightFor(detent: .full)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return heightFor(detent: selectedDetent)
+***REMOVED******REMOVED***
+***REMOVED***()
+***REMOVED******REMOVED***withAnimation { height = max(0, (newHeight - .handleFrameHeight))  ***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Configures a handle view.
 ***REMOVED******REMOVED***/ - Returns: A configured handle view, suitable for placement in the panel.
 ***REMOVED***@ViewBuilder func makeHandleView() -> some View {
 ***REMOVED******REMOVED***Handle(color: handleColor)
 ***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
-***REMOVED******REMOVED******REMOVED***.frame(height: 30)
+***REMOVED******REMOVED******REMOVED***.frame(height: .handleFrameHeight)
 ***REMOVED******REMOVED******REMOVED***.gesture(drag)
 ***REMOVED******REMOVED******REMOVED***.zIndex(1)
 ***REMOVED***
@@ -254,6 +272,12 @@ private struct Handle: View {
 ***REMOVED***
 
 private extension CGFloat {
+***REMOVED******REMOVED***/ The amount of padding around the floating panel.
+***REMOVED***static let externalPadding: CGFloat = 10
+***REMOVED***
+***REMOVED******REMOVED***/ THe height of the area containing the handle.
+***REMOVED***static let handleFrameHeight: CGFloat = 30
+***REMOVED***
 ***REMOVED***static let minHeight: CGFloat = 66
 ***REMOVED***
 
