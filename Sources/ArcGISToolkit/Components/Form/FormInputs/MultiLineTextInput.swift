@@ -94,6 +94,12 @@ struct MultiLineTextInput: View {
                 model.focusedElement = nil
             }
         }
+        .onChange(of: model.focusedElement) { focusedElement in
+            // Another form input took focus
+            if focusedElement != element {
+                isFocused  = false
+            }
+        }
         .formInputStyle()
         TextInputFooter(
             text: isPlaceholder ? "" : text,
