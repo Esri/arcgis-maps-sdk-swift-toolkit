@@ -147,74 +147,19 @@ struct FloatingPanel<Content>: View where Content: View {
                 latestDragGesture = $0
             }
             .onEnded {
-                let deltaY = $0.location.y - latestDragGesture!.location.y
-                let deltaTime = $0.time.timeIntervalSince(latestDragGesture!.time)
-                let velocity = deltaY / deltaTime
-                let speed = abs(velocity)
+                let predictedEndLocation = $0.predictedEndLocation.y
+                let inferredHeight = isCompact ? maximumHeight - predictedEndLocation : predictedEndLocation
                 
-                let newDetent = bestDetent(given: height, travelingAt: velocity)
-                let targetHeight = heightFor(detent: newDetent) - .handleFrameHeight
+                selectedDetent = [.summary, .half, .full]
+                    .map { (detent: $0, height: heightFor(detent: $0)) }
+                    .min { abs(inferredHeight - $0.height) < abs(inferredHeight - $1.height) }!
+                    .detent
                 
-                let distanceAhead = abs(height - targetHeight)
-                let travelTime = min(0.35, distanceAhead / speed)
-                
-                withAnimation(.easeOut(duration: travelTime)) {
-                    selectedDetent = newDetent
-                    height = targetHeight
-                }
+                updateHeight()
                 handleColor = .defaultHandleColor
                 latestDragGesture = nil
-                
                 shouldSendResign = true
             }
-    }
-    
-    /// Determines the best detent based on the provided metrics.
-    /// - Parameters:
-    ///   - currentHeight: The height target for the detent.
-    ///   - velocity: The velocity of travel to the new detent.
-    /// - Returns: The best detent based on the provided metrics.
-    func bestDetent(given currentHeight: CGFloat, travelingAt velocity: Double) -> FloatingPanelDetent {
-        let lowSpeedThreshold = 100.0
-        let highSpeedThreshold = 2000.0
-        let isExpanding = (isCompact && velocity <= 0) || (!isCompact && velocity > 0)
-        let speed = abs(velocity)
-        let allDetents = [FloatingPanelDetent.summary, .full, .half]
-            .map { (detent: $0, height: heightFor(detent: $0)) }
-        // If the speed was low, choose the closest detent, regardless of direction.
-        guard speed > lowSpeedThreshold else {
-            return allDetents.min {
-                abs(currentHeight - $0.height) < abs(currentHeight - $1.height)
-            }?.detent ?? selectedDetent
-        }
-        // Generate a new set of detents, filtering out those that would produce a height in the
-        // opposite direction of the gesture, and sorting them in order of closest to furthest from
-        // the current height.
-        let candidateDetents = allDetents
-            .filter { (detent, height) in
-                if isExpanding {
-                    return height >= currentHeight
-                } else {
-                    return height < currentHeight
-                }
-            }
-            .sorted {
-                if isExpanding {
-                    return $0.1 < $1.1
-                } else {
-                    return $1.1 < $0.1
-                }
-            }
-        
-        // If the gesture had high speed, select the last candidate detent (the one that would
-        // produce the greatest size difference from the current height). Otherwise, choose the
-        // first candidate detent (the one that would produce the least size difference from the
-        // current height).
-        if speed >= highSpeedThreshold {
-            return candidateDetents.last?.0 ?? selectedDetent
-        } else {
-            return candidateDetents.first?.0 ?? selectedDetent
-        }
     }
     
     /// Calculates the height for the `detent`.
