@@ -102,6 +102,7 @@ struct FloatingPanel<Content>: View where Content: View {
             .animation(.default, value: attributionBarHeight)
             .onAppear {
                 updateHeight()
+                maximumHeight = geometryProxy.size.height
             }
             .onChange(of: geometryProxy.size.height) { height in
                 maximumHeight = height
