@@ -94,6 +94,12 @@ struct MultiLineTextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = nil
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
+***REMOVED******REMOVED******REMOVED******REMOVED*** Another form input took focus
+***REMOVED******REMOVED******REMOVED***if focusedElement != element {
+***REMOVED******REMOVED******REMOVED******REMOVED***isFocused  = false
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED***TextInputFooter(
 ***REMOVED******REMOVED******REMOVED***text: isPlaceholder ? "" : text,
