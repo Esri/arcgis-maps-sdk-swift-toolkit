@@ -101,8 +101,8 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.animation(.easeInOut, value: isPresented)
 ***REMOVED******REMOVED******REMOVED***.animation(.default, value: attributionBarHeight)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = geometryProxy.size.height
+***REMOVED******REMOVED******REMOVED******REMOVED***updateHeight()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: geometryProxy.size.height) { height in
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = height
