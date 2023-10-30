@@ -24,6 +24,9 @@ struct SwitchInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
+    /// The model for the input.
+    @StateObject var inputModel: FormInputModel
+    
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
     /// In this scenario a ``ComboBoxInput`` should be used instead.
@@ -33,7 +36,7 @@ struct SwitchInput: View {
     @State private var requiredValueMissing = false
     
     /// A Boolean value indicating whether the switch is toggled on or off.
-    @State private var switchState: Bool = false
+    @State private var isOn: Bool = false
     
     /// The value represented by the switch.
     @State private var selectedValue: Bool?
@@ -41,24 +44,20 @@ struct SwitchInput: View {
     /// The field's parent element.
     private let element: FieldFormElement
     
-    /// The feature form containing the input.
-    private var featureForm: FeatureForm?
-    
     /// The input configuration of the field.
     private let input: SwitchFormInput
     
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
-    
     /// Creates a view for a switch input.
     /// - Parameters:
-    ///   - featureForm: The feature form containing the input.
     ///   - element: The field's parent element.
-    ///   - input: The input configuration of the field.
-    init(featureForm: FeatureForm?, element: FieldFormElement, input: SwitchFormInput) {
-        self.featureForm = featureForm
+    init(element: FieldFormElement) {
+        precondition(
+            element.input is SwitchFormInput,
+            "\(Self.self).\(#function) element's input must be \(SwitchFormInput.self)."
+        )
+        
         self.element = element
-        self.input = input
+        self.input = element.input as! SwitchFormInput
         
         _inputModel = StateObject(
             wrappedValue: FormInputModel(fieldFormElement: element)
@@ -68,7 +67,6 @@ struct SwitchInput: View {
     var body: some View {
         if fallbackToComboBox {
             ComboBoxInput(
-                featureForm: featureForm,
                 element: element,
                 noValueLabel: .noValue,
                 noValueOption: .show
@@ -78,9 +76,9 @@ struct SwitchInput: View {
                 InputHeader(label: element.label, isRequired: inputModel.isRequired)
                     .padding([.top], elementPadding)
                 HStack {
-                    Text(switchState ? input.onValue.name : input.offValue.name)
+                    Text(isOn ? input.onValue.name : input.offValue.name)
                     Spacer()
-                    Toggle("", isOn: $switchState)
+                    Toggle("", isOn: $isOn)
                         .toggleStyle(.switch)
                         .accessibilityIdentifier("\(element.label) Switch")
                 }
@@ -90,54 +88,23 @@ struct SwitchInput: View {
             .disabled(!inputModel.isEditable)
             .padding([.bottom], elementPadding)
             .onAppear {
-                if element.value.isEmpty {
+                if element.formattedValue.isEmpty {
                     fallbackToComboBox = true
                 } else {
-                    switchState = isOn
+                    isOn = input.onValue.name == inputModel.formattedValue
                 }
             }
-            .onChange(of: switchState) { newValue in
-                // Convert value to bool
-                let inputModelValue = inputModel.value == input.onValue.name
-                guard newValue != (inputModelValue) else {
-                    return
+            .onChange(of: isOn) { isOn in
+                do {
+                    try element.updateValue(isOn ? input.onValue.code : input.offValue.code)
+                } catch {
+                    print(error.localizedDescription)
                 }
-                let codedValue = newValue ? input.onValue : input.offValue
-                featureForm?.feature.setAttributeValue(codedValue.code, forKey: element.fieldName)
                 model.evaluateExpressions()
             }
-            .onChange(of: inputModel.value) { newValue in
-                selectedValue = newValue == input.onValue.name
+            .onChange(of: inputModel.formattedValue) { formattedValue in
+                isOn = formattedValue == input.onValue.name
             }
-        }
-    }
-}
-
-extension SwitchInput {
-    /// A Boolean value indicating whether the switch is toggled on or off.
-    ///
-    /// Element values are provided as Strings whereas input on/off value codes may be a number of
-    /// types. We must cast the element value string to the correct type to perform an accurate check.
-    var isOn: Bool {
-        switch input.onValue.code {
-        case let value as Double:
-            return Double(element.value) == value
-        case let value as Float:
-            return Float(element.value) == value
-        case let value as Int:
-            return Int(element.value) == value
-        case let value as Int8:
-            return Int8(element.value) == value
-        case let value as Int16:
-            return Int16(element.value) == value
-        case let value as Int32:
-            return Int32(element.value) == value
-        case let value as Int64:
-            return Int64(element.value) == value
-        case let value as String:
-            return element.value == value
-        default:
-            return false
         }
     }
 }

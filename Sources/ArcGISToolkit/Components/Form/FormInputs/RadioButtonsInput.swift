@@ -24,6 +24,9 @@ struct RadioButtonsInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
+    /// The model for the input.
+    @StateObject var inputModel: FormInputModel
+    
     /// The set of options in the input.
     @State private var codedValues = [CodedValue]()
     
@@ -40,24 +43,20 @@ struct RadioButtonsInput: View {
     /// The field's parent element.
     private let element: FieldFormElement
     
-    /// The feature form containing the input.
-    private var featureForm: FeatureForm?
-    
     /// The input configuration of the field.
     private let input: RadioButtonsFormInput
     
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
-    
     /// Creates a view for a date (and time if applicable) input.
     /// - Parameters:
-    ///   - featureForm: The feature form containing the input.
     ///   - element: The field's parent element.
-    ///   - input: The input configuration of the field.
-    init(featureForm: FeatureForm?, element: FieldFormElement, input: RadioButtonsFormInput) {
-        self.featureForm = featureForm
+    init(element: FieldFormElement) {
+        precondition(
+            element.input is RadioButtonsFormInput,
+            "\(Self.self).\(#function) element's input must be \(RadioButtonsFormInput.self)."
+        )
+        
         self.element = element
-        self.input = input
+        self.input = element.input as! RadioButtonsFormInput
         
         _inputModel = StateObject(
             wrappedValue: FormInputModel(fieldFormElement: element)
@@ -67,7 +66,6 @@ struct RadioButtonsInput: View {
     var body: some View {
         if fallbackToComboBox {
             ComboBoxInput(
-                featureForm: featureForm,
                 element: element,
                 noValueLabel: input.noValueLabel,
                 noValueOption: input.noValueOption
@@ -109,25 +107,24 @@ struct RadioButtonsInput: View {
             }
             .padding([.bottom], elementPadding)
             .onAppear {
-                codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-                if let selectedValue = codedValues.first(where: { $0.name == element.value }) {
+                codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
+                if let selectedValue = codedValues.first(where: { $0.name == element.formattedValue }) {
                     self.selectedValue = selectedValue
-                } else if !element.value.isEmpty {
+                } else if !element.formattedValue.isEmpty {
                     fallbackToComboBox = true
                 }
             }
-            .onChange(of: selectedValue) { newValue in
-                guard codedValues.first(where: { $0.name == element.value }) != newValue else {
-                    return
+            .onChange(of: selectedValue) { selectedValue in
+                requiredValueMissing = inputModel.isRequired && selectedValue == nil
+                do {
+                    try element.updateValue(selectedValue?.code)
+                } catch {
+                    print(error.localizedDescription)
                 }
-                requiredValueMissing = element.isRequired && newValue == nil
-                featureForm?.feature.setAttributeValue(newValue?.code ?? "", forKey: element.fieldName)
-                
                 model.evaluateExpressions()
             }
-            .onChange(of: inputModel.value) { newValue in
-                let codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-                selectedValue = codedValues.first { $0.name == newValue }
+            .onChange(of: inputModel.formattedValue) { formattedValue in
+                selectedValue = codedValues.first { $0.name == formattedValue }
             }
         }
     }

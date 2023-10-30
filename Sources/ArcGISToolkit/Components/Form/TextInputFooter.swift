@@ -42,7 +42,7 @@ struct TextInputFooter: View {
     private let description: String
     
     /// The allowable length of text in the text input field.
-    private let lengthRange: ClosedRange<Int>
+    private let lengthRange: ClosedRange<Int>?
     
     /// The allowable range of numeric values in the text input field.
     private let rangeDomain: RangeDomain?
@@ -73,7 +73,7 @@ struct TextInputFooter: View {
         
         switch input {
         case let input as TextBoxFormInput:
-            lengthRange = input.minLength...input.maxLength
+            lengthRange = fieldType == .text ? input.minLength...input.maxLength : nil
             _hasPreviouslySatisfiedMinimum = State(
                 initialValue: !fieldType.isNumeric && currentLength >= input.minLength
             )
@@ -103,7 +103,7 @@ struct TextInputFooter: View {
         .foregroundColor(validationError == nil ? .secondary : .red)
         .onChange(of: text) { newText in
             if !hasPreviouslySatisfiedMinimum && !fieldType.isNumeric {
-                if newText.count >= lengthRange.lowerBound {
+                if newText.count >= lengthRange!.lowerBound {
                     hasPreviouslySatisfiedMinimum = true
                 }
             } else {
@@ -142,9 +142,9 @@ extension TextInputFooter {
     /// The length validation scheme performed on the text input, determined by the minimum and
     /// maximum lengths.
     var scheme: LengthValidationScheme {
-        if lengthRange.lowerBound == 0 {
+        if lengthRange?.lowerBound == 0 {
             return .max
-        } else if lengthRange.lowerBound == lengthRange.upperBound {
+        } else if lengthRange?.lowerBound == lengthRange?.upperBound {
             return .exact
         } else {
             return .minAndMax
@@ -189,7 +189,7 @@ extension TextInputFooter {
             }
         } else if text.count == .zero && element.isRequired && !focused {
             validationError = .emptyWhenRequired
-        } else if !lengthRange.contains(text.count) {
+        } else if !(lengthRange?.contains(text.count) ?? false) {
             validationError = .minOrMaxUnmet
         } else {
             validationError = nil
@@ -201,7 +201,7 @@ extension TextInputFooter {
     /// identical, such as an ID field.
     var exactText: Text {
         Text(
-            "Enter \(lengthRange.lowerBound) characters",
+            "Enter \(lengthRange!.lowerBound) characters",
             bundle: .toolkitModule,
             comment: "Text indicating the user should enter a field's exact number of required characters."
         )
@@ -228,7 +228,7 @@ extension TextInputFooter {
     /// Text indicating a field's maximum number of allowed characters.
     var maximumText: Text {
         Text(
-            "Maximum \(lengthRange.upperBound) characters",
+            "Maximum \(lengthRange!.upperBound) characters",
             bundle: .toolkitModule,
             comment: "Text indicating a field's maximum number of allowed characters."
         )
@@ -237,7 +237,7 @@ extension TextInputFooter {
     /// Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters.
     var minAndMaxText: Text {
         Text(
-            "Enter \(lengthRange.lowerBound) to \(lengthRange.upperBound) characters",
+            "Enter \(lengthRange!.lowerBound) to \(lengthRange!.upperBound) characters",
             bundle: .toolkitModule,
             comment: "Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters."
         )
