@@ -24,6 +24,9 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ The model for the input.
+***REMOVED***@StateObject var inputModel: FormInputModel
+***REMOVED***
 ***REMOVED******REMOVED***/ The set of options in the input.
 ***REMOVED***@State private var codedValues = [CodedValue]()
 ***REMOVED***
@@ -40,24 +43,20 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ The field's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/ The feature form containing the input.
-***REMOVED***private var featureForm: FeatureForm?
-***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the field.
 ***REMOVED***private let input: RadioButtonsFormInput
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the input.
-***REMOVED***@StateObject var inputModel: FormInputModel
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a date (and time if applicable) input.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
 ***REMOVED******REMOVED***/   - element: The field's parent element.
-***REMOVED******REMOVED***/   - input: The input configuration of the field.
-***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: RadioButtonsFormInput) {
-***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED***init(element: FieldFormElement) {
+***REMOVED******REMOVED***precondition(
+***REMOVED******REMOVED******REMOVED***element.input is RadioButtonsFormInput,
+***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(RadioButtonsFormInput.self)."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.element = element
-***REMOVED******REMOVED***self.input = input
+***REMOVED******REMOVED***self.input = element.input as! RadioButtonsFormInput
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_inputModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
@@ -67,7 +66,6 @@ struct RadioButtonsInput: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if fallbackToComboBox {
 ***REMOVED******REMOVED******REMOVED***ComboBoxInput(
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm: featureForm,
 ***REMOVED******REMOVED******REMOVED******REMOVED***element: element,
 ***REMOVED******REMOVED******REMOVED******REMOVED***noValueLabel: input.noValueLabel,
 ***REMOVED******REMOVED******REMOVED******REMOVED***noValueOption: input.noValueOption
@@ -109,25 +107,24 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = codedValues.first(where: { $0.name == element.value ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
+***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = codedValues.first(where: { $0.name == element.formattedValue ***REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.selectedValue = selectedValue
-***REMOVED******REMOVED******REMOVED*** else if !element.value.isEmpty {
+***REMOVED******REMOVED******REMOVED*** else if !element.formattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: selectedValue) { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***guard codedValues.first(where: { $0.name == element.value ***REMOVED***) != newValue else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***requiredValueMissing = inputModel.isRequired && selectedValue == nil
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(selectedValue?.code)
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***requiredValueMissing = element.isRequired && newValue == nil
-***REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue?.code ?? "", forKey: element.fieldName)
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***let codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == newValue ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: inputModel.formattedValue) { formattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == formattedValue ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

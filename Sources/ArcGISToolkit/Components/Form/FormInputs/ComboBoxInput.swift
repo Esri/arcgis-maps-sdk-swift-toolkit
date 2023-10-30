@@ -24,6 +24,9 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ The model for the input.
+***REMOVED***@StateObject var inputModel: FormInputModel
+***REMOVED***
 ***REMOVED******REMOVED***/ The set of options in the combo box.
 ***REMOVED***@State private var codedValues = [CodedValue]()
 ***REMOVED***
@@ -39,9 +42,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
 ***REMOVED***
-***REMOVED******REMOVED***/ The feature form containing the input.
-***REMOVED***private var featureForm: FeatureForm?
-***REMOVED***
 ***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
@@ -50,9 +50,6 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The display state value for `nil` value options.
 ***REMOVED***private let noValueOption: FormInputNoValueOption
-***REMOVED***
-***REMOVED******REMOVED***/ The model for the input.
-***REMOVED***@StateObject var inputModel: FormInputModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A subset of coded values with names containing `filterPhrase` or all of the coded values
 ***REMOVED******REMOVED***/ if `filterPhrase` is empty.
@@ -66,12 +63,15 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a combo box input.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
 ***REMOVED******REMOVED***/   - element: The input's parent element.
-***REMOVED******REMOVED***/   - input: The input configuration of the view.
-***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, input: ComboBoxFormInput) {
-***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED***init(element: FieldFormElement) {
+***REMOVED******REMOVED***precondition(
+***REMOVED******REMOVED******REMOVED***element.input is ComboBoxFormInput,
+***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(ComboBoxFormInput.self)."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.element = element
+***REMOVED******REMOVED***let input = element.input as! ComboBoxFormInput
 ***REMOVED******REMOVED***self.noValueLabel = input.noValueLabel
 ***REMOVED******REMOVED***self.noValueOption = input.noValueOption
 ***REMOVED******REMOVED***
@@ -82,12 +82,10 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a combo box input.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - featureForm: The feature form containing the input.
 ***REMOVED******REMOVED***/   - element: The input's parent element.
 ***REMOVED******REMOVED***/   - noValueLabel: The text used to represent a `nil` value.
 ***REMOVED******REMOVED***/   - noValueOption: The display state value for `nil` value options.
-***REMOVED***init(featureForm: FeatureForm?, element: FieldFormElement, noValueLabel: String, noValueOption: FormInputNoValueOption) {
-***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED***init(element: FieldFormElement, noValueLabel: String, noValueOption: FormInputNoValueOption) {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.noValueLabel = noValueLabel
 ***REMOVED******REMOVED***self.noValueOption = noValueOption
@@ -131,21 +129,21 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == element.value ***REMOVED***
+***REMOVED******REMOVED******REMOVED***codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
+***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == inputModel.formattedValue ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: selectedValue) { newValue in
-***REMOVED******REMOVED******REMOVED***guard newValue?.name != inputModel.value else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
+***REMOVED******REMOVED******REMOVED***requiredValueMissing = inputModel.isRequired && selectedValue == nil
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(selectedValue?.code)
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED***
-
-***REMOVED******REMOVED******REMOVED***requiredValueMissing = element.isRequired && newValue == nil
-***REMOVED******REMOVED******REMOVED***featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: inputModel.value) { newValue in
-***REMOVED******REMOVED******REMOVED***let codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == newValue ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: inputModel.formattedValue) { _ in
+***REMOVED******REMOVED******REMOVED***let codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
+***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == inputModel.formattedValue ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

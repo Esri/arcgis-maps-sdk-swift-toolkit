@@ -18,7 +18,7 @@ import Combine
 ***REMOVED***/ A model for an input in a form.
 ***REMOVED***/
 ***REMOVED***/ - Since: 200.3
-public class FormInputModel: ObservableObject {
+class FormInputModel: ObservableObject {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether a value in the input is required.
 ***REMOVED***@Published var isRequired: Bool
 ***REMOVED***
@@ -26,7 +26,10 @@ public class FormInputModel: ObservableObject {
 ***REMOVED***@Published var isEditable: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The value of the input.
-***REMOVED***@Published var value: String
+***REMOVED***@Published var value: Any?
+***REMOVED***
+***REMOVED******REMOVED***/ The formatted value of the input.
+***REMOVED***@Published var formattedValue: String
 ***REMOVED***
 ***REMOVED***private var element: FieldFormElement
 ***REMOVED***
@@ -42,6 +45,7 @@ public class FormInputModel: ObservableObject {
 ***REMOVED******REMOVED***isRequired = element.isRequired
 ***REMOVED******REMOVED***isEditable = element.isEditable
 ***REMOVED******REMOVED***value = element.value
+***REMOVED******REMOVED***formattedValue = element.formattedValue
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Kick off tasks to monitor required, editable and value.
 ***REMOVED******REMOVED***tasks.append(
@@ -89,6 +93,7 @@ public class FormInputModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***for await value in element.$value {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.value = value
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.formattedValue = element.formattedValue
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

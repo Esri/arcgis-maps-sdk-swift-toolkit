@@ -15,7 +15,7 @@
 import Combine
 ***REMOVED***
 
-***REMOVED***/ - Since: 200.2
+***REMOVED***/ - Since: 200.3
 public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The geodatabase which holds the table and feature being edited in the form.
 ***REMOVED***@Published private var database: ServiceGeodatabase?
@@ -27,7 +27,7 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***@Published private var table: ServiceFeatureTable?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The feature form.
-***REMOVED***@Published private var featureForm: FeatureForm?
+***REMOVED***@Published var featureForm: FeatureForm?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name of the current focused field, if one exists.
 ***REMOVED***@Published var focusedFieldName: String?
@@ -53,6 +53,7 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***self.database = table.serviceGeodatabase
 ***REMOVED******REMOVED******REMOVED***self.table = table
 ***REMOVED***
+***REMOVED******REMOVED***visibleElements = []
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***deinit {
