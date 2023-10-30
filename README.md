@@ -23,6 +23,10 @@ To use Toolkit in your project:
 * **[SearchView](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/searchview)** - Displays a search experience for geo views.
 * **[UtilityNetworkTrace](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/utilitynetworktrace)** - Runs traces on a web map published with a utility network and trace configurations.
 
+## View Modifiers
+
+In addition, the toolkit also contains various helpful view modifiers that enable you to jump-start your development.
+
 ## Requirements
 * ArcGIS Maps SDK for Swift
 * Xcode 14.1 (or newer)
