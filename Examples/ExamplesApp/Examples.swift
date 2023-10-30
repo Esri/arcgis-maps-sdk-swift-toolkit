@@ -47,6 +47,7 @@ extension ExampleList {
 ***REMOVED******REMOVED******REMOVED***AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Bookmarks", content: BookmarksExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Compass", content: CompassExampleView()),
+***REMOVED******REMOVED******REMOVED***AnyExample("Dynamic Entity Arcade Callout", content: DynamicEntityArcadeCalloutExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Floor Filter", content: FloorFilterExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Overview Map", content: OverviewMapExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Popup", content: PopupExampleView()),
