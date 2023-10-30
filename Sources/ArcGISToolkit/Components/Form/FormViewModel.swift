@@ -53,6 +53,7 @@ public class FormViewModel: ObservableObject {
             self.database = table.serviceGeodatabase
             self.table = table
         }
+        visibleElements = []
     }
     
     deinit {
