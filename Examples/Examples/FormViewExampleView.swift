@@ -34,9 +34,15 @@ struct FormViewExampleView: View {
     /// The form being edited in the form view.
     @State private var featureForm: FeatureForm?
     
+    /// The height of the map view's attribution bar.
+    @State private var attributionBarHeight: CGFloat = 0
+    
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
+                .onAttributionBarHeightChanged {
+                    attributionBarHeight = $0
+                }
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
                 }
@@ -52,6 +58,7 @@ struct FormViewExampleView: View {
                 .ignoresSafeArea(.keyboard)
             
                 .floatingPanel(
+                    attributionBarHeight: attributionBarHeight,
                     selectedDetent: $detent,
                     horizontalAlignment: .leading,
                     isPresented: $isPresented
