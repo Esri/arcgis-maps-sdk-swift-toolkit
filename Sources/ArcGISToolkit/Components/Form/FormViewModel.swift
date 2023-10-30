@@ -55,6 +55,7 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***self.database = table.serviceGeodatabase
 ***REMOVED******REMOVED******REMOVED***self.table = table
 ***REMOVED***
+***REMOVED******REMOVED***visibleElements = []
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***deinit {
