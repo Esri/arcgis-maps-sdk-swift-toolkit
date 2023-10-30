@@ -80,16 +80,24 @@ struct MultiLineTextInput: View {
         .focused($isFocused)
         .foregroundColor(isPlaceholder ? .secondary : .primary)
         .frame(minHeight: 75, maxHeight: 150)
-        .onChange(of: isFocused) { focused in
-            if focused && isPlaceholder {
+        .onChange(of: isFocused) { isFocused in
+            if isFocused && isPlaceholder {
                 isPlaceholder = false
                 text = ""
-            } else if !focused && text.isEmpty {
+            } else if !isFocused && text.isEmpty {
                 isPlaceholder = true
                 text = element.hint
             }
-            if focused {
-                model.focusedFieldName = element.fieldName
+            if isFocused {
+                model.focusedElement = element
+            } else if model.focusedElement == element {
+                model.focusedElement = nil
+            }
+        }
+        .onChange(of: model.focusedElement) { focusedElement in
+            // Another form input took focus
+            if focusedElement != element {
+                isFocused  = false
             }
         }
         .formInputStyle()
