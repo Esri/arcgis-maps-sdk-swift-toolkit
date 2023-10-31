@@ -63,11 +63,38 @@ struct MultiLineTextInput: View {
     var body: some View {
         InputHeader(label: element.label, isRequired: inputModel.isRequired)
             .padding([.top], elementPadding)
-        if inputModel.isEditable {
-            textEditor
-        } else {
-            Text(text.isEmpty ? "--" : text)
+        Group {
+            if inputModel.isEditable {
+                textEditor
+            } else {
+                Text(text.isEmpty ? "--" : text)
+            }
         }
+        .background(.clear)
+        .focused($isFocused)
+        .foregroundColor(isPlaceholder ? .secondary : .primary)
+        .frame(minHeight: 75, maxHeight: 150)
+        .onChange(of: isFocused) { isFocused in
+            if isFocused && isPlaceholder {
+                isPlaceholder = false
+                text = ""
+            } else if !isFocused && text.isEmpty {
+                isPlaceholder = true
+                text = element.hint
+            }
+            if isFocused {
+                model.focusedElement = element
+            } else if model.focusedElement == element {
+                model.focusedElement = nil
+            }
+        }
+        .onChange(of: model.focusedElement) { focusedElement in
+            // Another form input took focus
+            if focusedElement != element {
+                isFocused  = false
+            }
+        }
+        .formInputStyle()
         TextInputFooter(
             text: isPlaceholder ? "" : text,
             isFocused: isFocused,
@@ -125,7 +152,7 @@ private extension MultiLineTextInput {
                 text = element.hint
             }
             if focused {
-                model.focusedFieldName = element.fieldName
+                model.focusedElement = element
             }
         }
         .formInputStyle()

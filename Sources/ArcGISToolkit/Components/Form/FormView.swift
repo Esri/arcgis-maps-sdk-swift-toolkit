@@ -39,22 +39,29 @@ public struct FormView: View {
     }
     
     public var body: some View {
-        ScrollView {
-            if isEvaluating {
-                ProgressView()
-            } else {
-                VStack(alignment: .leading) {
-                    FormHeader(title: featureForm?.title)
-                        .padding([.bottom], elementPadding)
-                    ForEach(model.visibleElements, id: \.id) { element in
-                        makeElement(element)
+        ScrollViewReader { scrollViewProxy in
+            ScrollView {
+                if isEvaluating {
+                    ProgressView()
+                } else {
+                    VStack(alignment: .leading) {
+                        FormHeader(title: featureForm?.title)
+                            .padding([.bottom], elementPadding)
+                        ForEach(model.visibleElements, id: \.self) { element in
+                            makeElement(element)
+                        }
                     }
+                }
+            }
+            .onChange(of: model.focusedElement) { focusedElement in
+                if let focusedElement {
+                    withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
             }
         }
         .scrollDismissesKeyboard(
             // Allow tall multiline text fields to be scrolled
-            immediately: model.focusedElement.input is TextAreaFormInput ? false : true
+            immediately: (model.focusedElement as? FieldFormElement)?.input is TextAreaFormInput ? false : true
         )
         .onChange(of: model.visibleElements) { _ in
             visibleElements = model.visibleElements
