@@ -109,8 +109,16 @@ private extension MultiLineTextInput {
     /// The body of the text input when the element is editable.
     var textEditor: some View {
         HStack(alignment: .bottom) {
-            TextEditor(text: $text)
-                .scrollContentBackgroundHidden()
+            Group {
+                if #available(iOS 16.0, *) {
+                    // Use a vertical text field
+                    TextField(element.label, text: $text, axis: .vertical)
+                } else {
+                    TextEditor(text: $text)
+                        .frame(height: 400)
+                }
+            }
+            .scrollContentBackgroundHidden()
             if isFocused && !text.isEmpty && inputModel.isEditable {
                 ClearButton { text.removeAll() }
             }
