@@ -39,22 +39,29 @@ public struct FormView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED***if isEvaluating {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: featureForm?.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.id) { element in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
+***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
+***REMOVED******REMOVED******REMOVED***ScrollView {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isEvaluating {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: featureForm?.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.scrollDismissesKeyboard(
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Allow tall multiline text fields to be scrolled
-***REMOVED******REMOVED******REMOVED***immediately: model.focusedElement.input is TextAreaFormInput ? false : true
+***REMOVED******REMOVED******REMOVED***immediately: (model.focusedElement as? FieldFormElement)?.input is TextAreaFormInput ? false : true
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.onChange(of: model.visibleElements) { _ in
 ***REMOVED******REMOVED******REMOVED***visibleElements = model.visibleElements

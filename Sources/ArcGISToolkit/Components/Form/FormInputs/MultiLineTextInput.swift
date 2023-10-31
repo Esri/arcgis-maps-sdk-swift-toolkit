@@ -63,11 +63,38 @@ struct MultiLineTextInput: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED***if inputModel.isEditable {
-***REMOVED******REMOVED******REMOVED***textEditor
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if inputModel.isEditable {
+***REMOVED******REMOVED******REMOVED******REMOVED***textEditor
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.background(.clear)
+***REMOVED******REMOVED***.focused($isFocused)
+***REMOVED******REMOVED***.foregroundColor(isPlaceholder ? .secondary : .primary)
+***REMOVED******REMOVED***.frame(minHeight: 75, maxHeight: 150)
+***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
+***REMOVED******REMOVED******REMOVED***if isFocused && isPlaceholder {
+***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
+***REMOVED******REMOVED******REMOVED******REMOVED***text = ""
+***REMOVED******REMOVED*** else if !isFocused && text.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
+***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if isFocused {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED*** else if model.focusedElement == element {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = nil
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
+***REMOVED******REMOVED******REMOVED******REMOVED*** Another form input took focus
+***REMOVED******REMOVED******REMOVED***if focusedElement != element {
+***REMOVED******REMOVED******REMOVED******REMOVED***isFocused  = false
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED***TextInputFooter(
 ***REMOVED******REMOVED******REMOVED***text: isPlaceholder ? "" : text,
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
@@ -125,7 +152,7 @@ private extension MultiLineTextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if focused {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = element.fieldName
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formInputStyle()

@@ -34,9 +34,15 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED***/ The form being edited in the form view.
 ***REMOVED***@State private var featureForm: FeatureForm?
 ***REMOVED***
+***REMOVED******REMOVED***/ The height of the map view's attribution bar.
+***REMOVED***@State private var attributionBarHeight: CGFloat = 0
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in
 ***REMOVED******REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identifyScreenPoint = screenPoint
 ***REMOVED******REMOVED******REMOVED***
@@ -52,6 +58,7 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $detent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented

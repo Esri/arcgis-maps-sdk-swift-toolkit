@@ -28,6 +28,7 @@ public extension View {
 ***REMOVED******REMOVED***/ The floating panel allows for interaction with background contents, unlike native sheets or popovers.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - attributionBarHeight: The height of a geo-view's attribution bar.
 ***REMOVED******REMOVED***/   - backgroundColor: The background color of the floating panel.
 ***REMOVED******REMOVED***/   - selectedDetent: A binding to the currently selected detent.
 ***REMOVED******REMOVED***/   - horizontalAlignment: The horizontal alignment of the floating panel.
@@ -37,6 +38,7 @@ public extension View {
 ***REMOVED******REMOVED***/ - Returns: A dynamic view with a presentation style similar to that of a sheet in compact
 ***REMOVED******REMOVED***/ environments and a popover otherwise.
 ***REMOVED***func floatingPanel<Content>(
+***REMOVED******REMOVED***attributionBarHeight: CGFloat = 0,
 ***REMOVED******REMOVED***backgroundColor: Color = Color(uiColor: .systemBackground),
 ***REMOVED******REMOVED***selectedDetent: Binding<FloatingPanelDetent> = .constant(.half),
 ***REMOVED******REMOVED***horizontalAlignment: HorizontalAlignment = .trailing,
@@ -46,6 +48,7 @@ public extension View {
 ***REMOVED***) -> some View where Content: View {
 ***REMOVED******REMOVED***modifier(
 ***REMOVED******REMOVED******REMOVED***FloatingPanelModifier(
+***REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: backgroundColor,
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: selectedDetent,
 ***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: horizontalAlignment,
@@ -66,6 +69,13 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
 ***REMOVED***private var isCompact: Bool {
 ***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The height of a geo-view's attribution bar.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ When the panel is detached from the bottom of the screen this value allows
+***REMOVED******REMOVED***/ the panel to be aligned correctly between the top of a geo-view and the top of the
+***REMOVED******REMOVED***/ its attribution bar.
+***REMOVED***let attributionBarHeight: CGFloat
 ***REMOVED***
 ***REMOVED******REMOVED***/ The background color of the floating panel.
 ***REMOVED***let backgroundColor: Color
@@ -89,12 +99,15 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: Alignment(horizontal: horizontalAlignment, vertical: .top)) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: backgroundColor,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: selectedDetent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content: panelContent
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.all, edges: .bottom)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** When the panel is anchored to the bottom of the screen (compact) ignore the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** device's bottom safe area.
+***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.container, edges: isCompact ? .bottom : [])
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: isCompact ? .infinity : maxWidth)
 ***REMOVED******REMOVED***
 ***REMOVED***
