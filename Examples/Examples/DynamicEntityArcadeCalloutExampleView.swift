@@ -35,130 +35,75 @@ extension DynamicEntityArcadeCalloutExampleView {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***map = Map(basemapStyle: .arcGISOceans)
 ***REMOVED******REMOVED******REMOVED***map.addOperationalLayer(layer)
+***REMOVED******REMOVED******REMOVED***map.initialViewpoint = Viewpoint(boundingGeometry: Envelope.saltLake)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+private extension Envelope {
+***REMOVED*** ***REMOVED***/ An envelope around the Salt Lake City area.
+***REMOVED*** static let saltLake = Envelope(
+***REMOVED******REMOVED*** xRange: -12475445.104735145...(-12436309.346470555),
+***REMOVED******REMOVED*** yRange: 4922143.160533925...4993908.647699355,
+***REMOVED******REMOVED*** spatialReference: .webMercator
+***REMOVED*** )
+ ***REMOVED***
 
 ***REMOVED***/ A view that shows how to display and show a callout for a dynamic entity layer
 ***REMOVED***/ where the information that you want to display is derived from an arcade expression.
 struct DynamicEntityArcadeCalloutExampleView: View {
 ***REMOVED******REMOVED***/ The map information for this example.
 ***REMOVED***@State private var mapInfo = MapInfo()
-***REMOVED******REMOVED***/ The callout placement.
-***REMOVED***@State private var placement: CalloutPlacement?
+***REMOVED***
+***REMOVED***@State private var popup: IdentifiableBox<Popup>?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED***MapView(map: mapInfo.map)
-***REMOVED******REMOVED******REMOVED******REMOVED***.callout(placement: $placement) { placement in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let dynamicEntity = placement.geoElement! as! DynamicEntity
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VehicleCallout(dynamicEntity: dynamicEntity)
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { point, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let result = try? await proxy.identify(on: mapInfo.layer, screenPoint: point, tolerance: 12),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let observation = result.geoElements.first as? DynamicEntityObservation,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let entity = observation.dynamicEntity
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***placement = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let result = try? await proxy.identify(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***on: mapInfo.layer,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***screenPoint: point,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tolerance: 12
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***placement = .geoElement(entity)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popup = result.popups.first.map { IdentifiableBox(wrapped: $0) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***try? await mapInfo.layer.load()
+***REMOVED******REMOVED******REMOVED***try? await mapInfo.layer.dataSource.load()
+***REMOVED******REMOVED******REMOVED***let pd = PopupDefinition()
+***REMOVED******REMOVED******REMOVED***let ds = mapInfo.layer.dataSource as! ArcGISStreamService
+***REMOVED******REMOVED******REMOVED***let fields = ds.info!.fields
+***REMOVED******REMOVED******REMOVED***let popupFields = fields.map {
+***REMOVED******REMOVED******REMOVED******REMOVED***let pf = PopupField()
+***REMOVED******REMOVED******REMOVED******REMOVED***pf.fieldName = $0.name
+***REMOVED******REMOVED******REMOVED******REMOVED***pf.isVisible = true
+***REMOVED******REMOVED******REMOVED******REMOVED***return pf
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***pd.addFields(popupFields)
+***REMOVED******REMOVED******REMOVED***let element = FieldsPopupElement(fields: popupFields)
+***REMOVED******REMOVED******REMOVED***element.title = "fields"
+***REMOVED******REMOVED******REMOVED***pd.addElement(element)
+***REMOVED******REMOVED******REMOVED***pd.title = "Vehicle"
+***REMOVED******REMOVED******REMOVED***mapInfo.layer.popupDefinition = pd
+***REMOVED***
+***REMOVED******REMOVED***.sheet(item: $popup) { popup in
+***REMOVED******REMOVED******REMOVED***PopupView(popup: popup.wrapped)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A callout view for showing the details of a dynamic entity vehicle.
-struct VehicleCallout: View {
-***REMOVED******REMOVED***/ The dynamic entity that represents a vehicle.
-***REMOVED***let dynamicEntity: DynamicEntity
+struct IdentifiableBox<T: AnyObject>: Identifiable {
+***REMOVED***let wrapped: T
 ***REMOVED***
-***REMOVED******REMOVED***/ The name of the vehicle.
-***REMOVED***@State private var name: String = ""
-***REMOVED***
-***REMOVED******REMOVED***/ The location of the vehicle.
-***REMOVED***@State private var location: String = ""
-***REMOVED***
-***REMOVED******REMOVED***/ The heading of the vehicle.
-***REMOVED***@State private var heading: Double = .nan
-***REMOVED***
-***REMOVED******REMOVED***/ The speed of the vehicle.
-***REMOVED***@State private var speed: Double = .nan
-***REMOVED***
-***REMOVED******REMOVED***/ Creates a vehicle callout view.
-***REMOVED******REMOVED***/ - Parameter dynamicEntity: The dynamic entity vehicle.
-***REMOVED***init(dynamicEntity: DynamicEntity) {
-***REMOVED******REMOVED***self.dynamicEntity = dynamicEntity
-***REMOVED***
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***VStack(alignment: .center, spacing: 6) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.evaluateArcadeExpression("$feature.vehiclename", for: dynamicEntity) { evaluation in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name = evaluation.stringValue
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(location)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.evaluateArcadeExpression(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"concatenate(\"(\", Round($feature.point_x,6), \", \", Round($feature.point_y,6), \")\")",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: dynamicEntity
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) { evaluation in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***location = evaluation.stringValue
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if !speed.isNaN {
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: 44)
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(spacing: 6) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(speed, format: .number.precision(.fractionLength(0)))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("MPH")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if !heading.isNaN {
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: 44)
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(spacing: 6) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.up.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(.degrees(heading))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let measurement = Measurement<UnitAngle>(value: heading, unit: .degrees).formatted()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(measurement)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption2)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onReceive(dynamicEntity.changes) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED*** Update heading and speed as they change.
-***REMOVED******REMOVED******REMOVED***updateHeadingAndSpeed()
-***REMOVED***
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Show initial heading and speed.
-***REMOVED******REMOVED******REMOVED***updateHeadingAndSpeed()
-***REMOVED***
-***REMOVED******REMOVED***.padding(10)
-***REMOVED******REMOVED***.id(ObjectIdentifier(dynamicEntity))
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Updates the heading and the speed from the dynamic entity.
-***REMOVED***private func updateHeadingAndSpeed() {
-***REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED***heading = dynamicEntity.attributes["heading"] as? Double ?? .nan
-***REMOVED***
-***REMOVED******REMOVED***speed = dynamicEntity.attributes["speed"] as? Double ?? .nan
-***REMOVED***
-***REMOVED***
-
-extension Result<ArcadeEvaluationResult, Error> {
-***REMOVED******REMOVED***/ The evaluation as a string. If the evaluation results in an error, `nil`,
-***REMOVED******REMOVED***/ or a type other than a string, then an empty string is returned.
-***REMOVED***var stringValue: String {
-***REMOVED******REMOVED***((try? get())?.result(as: .string) as? String) ?? ""
+***REMOVED***var id: ObjectIdentifier {
+***REMOVED******REMOVED***ObjectIdentifier(wrapped)
 ***REMOVED***
 ***REMOVED***
