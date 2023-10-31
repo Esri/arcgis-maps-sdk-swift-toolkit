@@ -35,130 +35,75 @@ extension DynamicEntityArcadeCalloutExampleView {
             
             map = Map(basemapStyle: .arcGISOceans)
             map.addOperationalLayer(layer)
+            map.initialViewpoint = Viewpoint(boundingGeometry: Envelope.saltLake)
         }
     }
 }
+
+private extension Envelope {
+     /// An envelope around the Salt Lake City area.
+     static let saltLake = Envelope(
+         xRange: -12475445.104735145...(-12436309.346470555),
+         yRange: 4922143.160533925...4993908.647699355,
+         spatialReference: .webMercator
+     )
+ }
 
 /// A view that shows how to display and show a callout for a dynamic entity layer
 /// where the information that you want to display is derived from an arcade expression.
 struct DynamicEntityArcadeCalloutExampleView: View {
     /// The map information for this example.
     @State private var mapInfo = MapInfo()
-    /// The callout placement.
-    @State private var placement: CalloutPlacement?
+    
+    @State private var popup: IdentifiableBox<Popup>?
     
     var body: some View {
         MapViewReader { proxy in
             MapView(map: mapInfo.map)
-                .callout(placement: $placement) { placement in
-                    let dynamicEntity = placement.geoElement! as! DynamicEntity
-                    VehicleCallout(dynamicEntity: dynamicEntity)
-                }
                 .onSingleTapGesture { point, _ in
                     Task {
-                        guard let result = try? await proxy.identify(on: mapInfo.layer, screenPoint: point, tolerance: 12),
-                              let observation = result.geoElements.first as? DynamicEntityObservation,
-                              let entity = observation.dynamicEntity
-                        else {
-                            placement = nil
+                        guard let result = try? await proxy.identify(
+                            on: mapInfo.layer,
+                            screenPoint: point,
+                            tolerance: 12
+                        ) else {
                             return
                         }
-                        withAnimation {
-                            placement = .geoElement(entity)
-                        }
+                        
+                        popup = result.popups.first.map { IdentifiableBox(wrapped: $0) }
                     }
                 }
+        }
+        .task {
+            try? await mapInfo.layer.load()
+            try? await mapInfo.layer.dataSource.load()
+            let pd = PopupDefinition()
+            let ds = mapInfo.layer.dataSource as! ArcGISStreamService
+            let fields = ds.info!.fields
+            let popupFields = fields.map {
+                let pf = PopupField()
+                pf.fieldName = $0.name
+                pf.isVisible = true
+                return pf
+            }
+            pd.addFields(popupFields)
+            let element = FieldsPopupElement(fields: popupFields)
+            element.title = "fields"
+            pd.addElement(element)
+            pd.title = "Vehicle"
+            mapInfo.layer.popupDefinition = pd
+        }
+        .sheet(item: $popup) { popup in
+            PopupView(popup: popup.wrapped)
+                .padding()
         }
     }
 }
 
-/// A callout view for showing the details of a dynamic entity vehicle.
-struct VehicleCallout: View {
-    /// The dynamic entity that represents a vehicle.
-    let dynamicEntity: DynamicEntity
+struct IdentifiableBox<T: AnyObject>: Identifiable {
+    let wrapped: T
     
-    /// The name of the vehicle.
-    @State private var name: String = ""
-    
-    /// The location of the vehicle.
-    @State private var location: String = ""
-    
-    /// The heading of the vehicle.
-    @State private var heading: Double = .nan
-    
-    /// The speed of the vehicle.
-    @State private var speed: Double = .nan
-    
-    /// Creates a vehicle callout view.
-    /// - Parameter dynamicEntity: The dynamic entity vehicle.
-    init(dynamicEntity: DynamicEntity) {
-        self.dynamicEntity = dynamicEntity
-    }
-    
-    var body: some View {
-        HStack {
-            VStack(alignment: .center, spacing: 6) {
-                Text(name)
-                    .bold()
-                    .evaluateArcadeExpression("$feature.vehiclename", for: dynamicEntity) { evaluation in
-                        name = evaluation.stringValue
-                    }
-                Text(location)
-                    .font(.caption2)
-                    .evaluateArcadeExpression(
-                        "concatenate(\"(\", Round($feature.point_x,6), \", \", Round($feature.point_y,6), \")\")",
-                        for: dynamicEntity
-                    ) { evaluation in
-                        location = evaluation.stringValue
-                    }
-            }
-            if !speed.isNaN {
-                Divider()
-                    .frame(maxHeight: 44)
-                VStack(spacing: 6) {
-                    Text(speed, format: .number.precision(.fractionLength(0)))
-                        .bold()
-                    Text("MPH")
-                        .font(.caption2)
-                }
-            }
-            if !heading.isNaN {
-                Divider()
-                    .frame(maxHeight: 44)
-                VStack(spacing: 6) {
-                    Image(systemName: "arrow.up.circle")
-                        .rotationEffect(.degrees(heading))
-                    let measurement = Measurement<UnitAngle>(value: heading, unit: .degrees).formatted()
-                    Text(measurement)
-                        .font(.caption2)
-                }
-            }
-        }
-        .onReceive(dynamicEntity.changes) { _ in
-            // Update heading and speed as they change.
-            updateHeadingAndSpeed()
-        }
-        .onAppear {
-            // Show initial heading and speed.
-            updateHeadingAndSpeed()
-        }
-        .padding(10)
-        .id(ObjectIdentifier(dynamicEntity))
-    }
-    
-    /// Updates the heading and the speed from the dynamic entity.
-    private func updateHeadingAndSpeed() {
-        withAnimation {
-            heading = dynamicEntity.attributes["heading"] as? Double ?? .nan
-        }
-        speed = dynamicEntity.attributes["speed"] as? Double ?? .nan
-    }
-}
-
-extension Result<ArcadeEvaluationResult, Error> {
-    /// The evaluation as a string. If the evaluation results in an error, `nil`,
-    /// or a type other than a string, then an empty string is returned.
-    var stringValue: String {
-        ((try? get())?.result(as: .string) as? String) ?? ""
+    var id: ObjectIdentifier {
+        ObjectIdentifier(wrapped)
     }
 }
