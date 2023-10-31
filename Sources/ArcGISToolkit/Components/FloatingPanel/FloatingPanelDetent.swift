@@ -17,9 +17,9 @@ import Foundation
 public enum FloatingPanelDetent: Equatable {
 ***REMOVED******REMOVED***/ A height based upon a fraction of the maximum height.
 ***REMOVED***case fraction(_ fraction: CGFloat)
-***REMOVED******REMOVED***/ A height just less than the maximum height.
+***REMOVED******REMOVED***/ The maximum height.
 ***REMOVED***case full
-***REMOVED******REMOVED***/ A height roughly half of the maximum height.
+***REMOVED******REMOVED***/ Half of the maximum height.
 ***REMOVED***case half
 ***REMOVED******REMOVED***/ A height based upon a fixed value.
 ***REMOVED***case height(_ height: CGFloat)
