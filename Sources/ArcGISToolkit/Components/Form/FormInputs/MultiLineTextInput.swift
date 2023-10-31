@@ -109,8 +109,16 @@ private extension MultiLineTextInput {
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
 ***REMOVED***var textEditor: some View {
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
-***REMOVED******REMOVED******REMOVED******REMOVED***.scrollContentBackgroundHidden()
+***REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Use a vertical text field
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(element.label, text: $text, axis: .vertical)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: 400)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.scrollContentBackgroundHidden()
 ***REMOVED******REMOVED******REMOVED***if isFocused && !text.isEmpty && inputModel.isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
 ***REMOVED******REMOVED***
