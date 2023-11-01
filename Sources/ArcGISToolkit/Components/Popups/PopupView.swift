@@ -41,6 +41,7 @@ import ArcGIS
 /// - Displays media (images and charts) full-screen.
 /// - Supports hyperlinks in text, media, and fields elements.
 /// - Fully supports dark mode, as do all Toolkit components.
+/// - Supports auto-refresh for popups where the geo element is a dynamic entity.
 ///
 /// **Behavior**
 ///
@@ -71,7 +72,7 @@ public struct PopupView: View {
     private var showCloseButton = false
     
     /// The result of evaluating the popup expressions.
-    @State private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    @State private var evaluation: Evaluation?
 
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>?
@@ -98,11 +99,8 @@ public struct PopupView: View {
             }
             Divider()
             Group {
-                if let evaluateExpressionsResult {
-                    switch evaluateExpressionsResult {
-                    case .success(_):
-                        PopupElementList(popupElements: popup.evaluatedElements)
-                    case .failure(let error):
+                if let evaluation {
+                    if let error = evaluation.error {
                         Text(
                             "Popup evaluation failed: \(error.localizedDescription)",
                             bundle: .toolkitModule,
@@ -111,6 +109,8 @@ public struct PopupView: View {
                                      variable provides additional data.
                                      """
                         )
+                    } else {
+                        PopupElementList(popupElements: evaluation.elements)
                     }
                 } else {
                     HStack(alignment: .center, spacing: 10) {
@@ -126,13 +126,37 @@ public struct PopupView: View {
             }
         }
         .task(id: ObjectIdentifier(popup)) {
-            evaluateExpressionsResult = nil
-            evaluateExpressionsResult = await Result {
-                try await popup.evaluateExpressions()
+            // Initial evaluation for a newly assigned popup.
+            evaluation = nil
+            await evaluateExpressions()
+        }
+        .task(id: ObjectIdentifier(popup)) {
+            // If the popup is showing for a dynamic entity, then observe
+            // the changes and update the popup accordingly.
+            guard let dynamicEntity = popup.geoElement as? DynamicEntity else { return }
+            for await changes in dynamicEntity.changes {
+                if changes.dynamicEntityWasPurged {
+                    break
+                }
+                if changes.receivedObservation != nil {
+                    await evaluateExpressions()
+                }
             }
         }
     }
     
+    /// Evaluates the arcade expressions and updates the evaluation property.
+    private func evaluateExpressions() async {
+        do {
+            _ = try await popup.evaluateExpressions()
+            evaluation = Evaluation(elements: popup.evaluatedElements)
+        } catch {
+            evaluation = Evaluation(error: error)
+        }
+    }
+}
+
+extension PopupView {
     private struct PopupElementList: View {
         let popupElements: [PopupElement]
         
@@ -155,6 +179,25 @@ public struct PopupView: View {
                 .listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
             }
             .listStyle(.plain)
+        }
+    }
+}
+
+extension PopupView {
+    /// An object used to hold the result of evaluating the expressions of a popup.
+    private final class Evaluation {
+        /// The evaluated elements.
+        let elements: [PopupElement]
+        /// The error that occurred during evaluation, if any.
+        let error: Error?
+        
+        /// Creates an evaluation.
+        /// - Parameters:
+        ///   - elements: The evaluated elements.
+        ///   - error: The error that occurred during evaluation, if any.
+        init(elements: [PopupElement] = [], error: Error? = nil) {
+            self.elements = elements
+            self.error = error
         }
     }
 }
