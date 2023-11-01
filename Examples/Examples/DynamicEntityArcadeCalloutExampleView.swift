@@ -55,7 +55,16 @@ struct DynamicEntityArcadeCalloutExampleView: View {
     /// The map information for this example.
     @State private var mapInfo = MapInfo()
     
-    @State private var popup: IdentifiableBox<Popup>?
+    /// The popup to be shown as the result of the layer identify operation.
+    @State private var popup: Popup? {
+        didSet { showPopup = popup != nil }
+    }
+    
+    /// A Boolean value specifying whether the popup view should be shown or not.
+    @State private var showPopup = false
+    
+    /// The detent value specifying the initial `FloatingPanelDetent`.  Defaults to "full".
+    @State private var floatingPanelDetent: FloatingPanelDetent = .half
     
     var body: some View {
         MapViewReader { proxy in
@@ -70,7 +79,14 @@ struct DynamicEntityArcadeCalloutExampleView: View {
                             return
                         }
                         
-                        popup = result.popups.first.map { IdentifiableBox(wrapped: $0) }
+                        if let result = result.geoElements.first {
+                            if let de = result as? DynamicEntity {
+                                print("-- de")
+                            } else if let obs = result as? DynamicEntityObservation {
+                                print("-- obs")
+                                popup = Popup(geoElement: obs.dynamicEntity!, definition: mapInfo.layer.popupDefinition!)
+                            }
+                        }
                     }
                 }
         }
@@ -93,17 +109,14 @@ struct DynamicEntityArcadeCalloutExampleView: View {
             pd.title = "Vehicle"
             mapInfo.layer.popupDefinition = pd
         }
-        .sheet(item: $popup) { popup in
-            PopupView(popup: popup.wrapped)
+        .floatingPanel(
+            selectedDetent: $floatingPanelDetent,
+            horizontalAlignment: .leading,
+            isPresented: $showPopup
+        ) { [popup] in
+            PopupView(popup: popup!, isPresented: $showPopup)
+                .showCloseButton(true)
                 .padding()
         }
-    }
-}
-
-struct IdentifiableBox<T: AnyObject>: Identifiable {
-    let wrapped: T
-    
-    var id: ObjectIdentifier {
-        ObjectIdentifier(wrapped)
     }
 }

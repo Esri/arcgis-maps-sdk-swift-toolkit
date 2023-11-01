@@ -71,7 +71,7 @@ public struct PopupView: View {
     private var showCloseButton = false
     
     /// The result of evaluating the popup expressions.
-    @State private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    @State private var evaluation: PopupEvaluation?
 
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>?
@@ -125,10 +125,31 @@ public struct PopupView: View {
                 }
             }
         }
+        .onChange(of: evaluateExpressionsResult) { _ in
+            print("-- changed")
+        }
         .task(id: ObjectIdentifier(popup)) {
             evaluateExpressionsResult = nil
             evaluateExpressionsResult = await Result {
                 try await popup.evaluateExpressions()
+                return popup.evaluatedElements
+            }
+            
+            if let dynamicEntity = popup.geoElement as? DynamicEntity {
+                Task {
+                    for await changes in dynamicEntity.changes {
+                        if changes.dynamicEntityWasPurged {
+                            break
+                        }
+                        if changes.receivedObservation != nil {
+                            evaluateExpressionsResult = await Result {
+                                print("-- re-evaluated...")
+                                try await popup.evaluateExpressions()
+                                return popup.evaluatedElements
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -156,6 +177,12 @@ public struct PopupView: View {
             }
             .listStyle(.plain)
         }
+    }
+}
+
+private final class PopupEvaluation: Equatable {
+    static func == (lhs: PopupEvaluation, rhs: PopupEvaluation) -> Bool {
+        lhs === rhs
     }
 }
 
