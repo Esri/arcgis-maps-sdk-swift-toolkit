@@ -41,6 +41,7 @@
 ***REMOVED***/ - Displays media (images and charts) full-screen.
 ***REMOVED***/ - Supports hyperlinks in text, media, and fields elements.
 ***REMOVED***/ - Fully supports dark mode, as do all Toolkit components.
+***REMOVED***/ - Supports auto-refresh for popups where the geo element is a dynamic entity.
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
@@ -71,7 +72,7 @@ public struct PopupView: View {
 ***REMOVED***private var showCloseButton = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The result of evaluating the popup expressions.
-***REMOVED***@State private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+***REMOVED***@State private var evaluation: Evaluation?
 
 ***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
 ***REMOVED***private var isPresented: Binding<Bool>?
@@ -98,11 +99,8 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let evaluateExpressionsResult {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch evaluateExpressionsResult {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .success(_):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementList(popupElements: popup.evaluatedElements)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED******REMOVED***if let evaluation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let error = evaluation.error {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Popup evaluation failed: \(error.localizedDescription)",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
@@ -111,6 +109,8 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** variable provides additional data.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementList(popupElements: evaluation.elements)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
@@ -126,13 +126,37 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: ObjectIdentifier(popup)) {
-***REMOVED******REMOVED******REMOVED***evaluateExpressionsResult = nil
-***REMOVED******REMOVED******REMOVED***evaluateExpressionsResult = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await popup.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED******REMOVED*** Initial evaluation for a newly assigned popup.
+***REMOVED******REMOVED******REMOVED***evaluation = nil
+***REMOVED******REMOVED******REMOVED***await evaluateExpressions()
+***REMOVED***
+***REMOVED******REMOVED***.task(id: ObjectIdentifier(popup)) {
+***REMOVED******REMOVED******REMOVED******REMOVED*** If the popup is showing for a dynamic entity, then observe
+***REMOVED******REMOVED******REMOVED******REMOVED*** the changes and update the popup accordingly.
+***REMOVED******REMOVED******REMOVED***guard let dynamicEntity = popup.geoElement as? DynamicEntity else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***for await changes in dynamicEntity.changes {
+***REMOVED******REMOVED******REMOVED******REMOVED***if changes.dynamicEntityWasPurged {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if changes.receivedObservation != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await evaluateExpressions()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Evaluates the arcade expressions and updates the evaluation property.
+***REMOVED***private func evaluateExpressions() async {
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***_ = try await popup.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED***evaluation = Evaluation(elements: popup.evaluatedElements)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***evaluation = Evaluation(error: error)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension PopupView {
 ***REMOVED***private struct PopupElementList: View {
 ***REMOVED******REMOVED***let popupElements: [PopupElement]
 ***REMOVED******REMOVED***
@@ -155,6 +179,25 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listRowInsets(.init(top: 8, leading: 0, bottom: 8, trailing: 0))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension PopupView {
+***REMOVED******REMOVED***/ An object used to hold the result of evaluating the expressions of a popup.
+***REMOVED***private final class Evaluation {
+***REMOVED******REMOVED******REMOVED***/ The evaluated elements.
+***REMOVED******REMOVED***let elements: [PopupElement]
+***REMOVED******REMOVED******REMOVED***/ The error that occurred during evaluation, if any.
+***REMOVED******REMOVED***let error: Error?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Creates an evaluation.
+***REMOVED******REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED******REMOVED***/   - elements: The evaluated elements.
+***REMOVED******REMOVED******REMOVED***/   - error: The error that occurred during evaluation, if any.
+***REMOVED******REMOVED***init(elements: [PopupElement] = [], error: Error? = nil) {
+***REMOVED******REMOVED******REMOVED***self.elements = elements
+***REMOVED******REMOVED******REMOVED***self.error = error
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
