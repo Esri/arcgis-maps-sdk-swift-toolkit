@@ -71,7 +71,7 @@ public struct PopupView: View {
 ***REMOVED***private var showCloseButton = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The result of evaluating the popup expressions.
-***REMOVED***@State private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+***REMOVED***@State private var evaluation: PopupEvaluation?
 
 ***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
 ***REMOVED***private var isPresented: Binding<Bool>?
@@ -125,10 +125,31 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: evaluateExpressionsResult) { _ in
+***REMOVED******REMOVED******REMOVED***print("-- changed")
+***REMOVED***
 ***REMOVED******REMOVED***.task(id: ObjectIdentifier(popup)) {
 ***REMOVED******REMOVED******REMOVED***evaluateExpressionsResult = nil
 ***REMOVED******REMOVED******REMOVED***evaluateExpressionsResult = await Result {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await popup.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED******REMOVED***return popup.evaluatedElements
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if let dynamicEntity = popup.geoElement as? DynamicEntity {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await changes in dynamicEntity.changes {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if changes.dynamicEntityWasPurged {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if changes.receivedObservation != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***evaluateExpressionsResult = await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("-- re-evaluated...")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await popup.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return popup.evaluatedElements
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -156,6 +177,12 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private final class PopupEvaluation: Equatable {
+***REMOVED***static func == (lhs: PopupEvaluation, rhs: PopupEvaluation) -> Bool {
+***REMOVED******REMOVED***lhs === rhs
 ***REMOVED***
 ***REMOVED***
 
