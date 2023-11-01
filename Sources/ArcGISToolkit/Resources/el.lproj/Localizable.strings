@@ -225,6 +225,10 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Σημεία Έναρξης";
 
+/* An instruction to the user to tap on a horizontal surface to
+place an ArcGIS Scene. */
+"Tap a surface to place the scene" = "Đ_Tap a surface to place the scene_________________ớ";
+
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "Πατήστε στην εικόνα για περισσότερες πληροφορίες.";
