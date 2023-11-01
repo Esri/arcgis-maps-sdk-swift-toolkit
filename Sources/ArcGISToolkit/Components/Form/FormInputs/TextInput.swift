@@ -33,8 +33,12 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether placeholder text is shown, thereby indicating the
 ***REMOVED******REMOVED***/ presence of a value.
 ***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ - Note: As of Swift 5.9, SwiftUI text editors do not have built-in placeholder functionality
-***REMOVED******REMOVED***/ so it must be implemented manually.
+***REMOVED******REMOVED***/ If iOS 16.0 minimum APIs are not supported we use a TextField for single line entry and a
+***REMOVED******REMOVED***/ TextEditor for multiline entry. TextEditors don't have placeholder support so instead we
+***REMOVED******REMOVED***/ replace empty text with the configured placeholder message and adjust the font
+***REMOVED******REMOVED***/ color.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Once iOS 16.0 is the minimum supported platform this property can be removed.
 ***REMOVED***@State private var isPlaceholder = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input's parent element.
@@ -73,19 +77,19 @@ struct TextInput: View {
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***let text = inputModel.formattedValue
-***REMOVED******REMOVED******REMOVED***isPlaceholder = text.isEmpty
+***REMOVED******REMOVED******REMOVED***isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
 ***REMOVED******REMOVED******REMOVED***self.text = isPlaceholder ? element.hint : text
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: inputModel.formattedValue) { formattedValue in
 ***REMOVED******REMOVED******REMOVED***let text = formattedValue
-***REMOVED******REMOVED******REMOVED***isPlaceholder = text.isEmpty
+***REMOVED******REMOVED******REMOVED***isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
 ***REMOVED******REMOVED******REMOVED***self.text = isPlaceholder ? element.hint : text
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
 ***REMOVED******REMOVED******REMOVED***if isFocused && isPlaceholder {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = ""
-***REMOVED******REMOVED*** else if !isFocused && text.isEmpty {
+***REMOVED******REMOVED*** else if !isFocused && text.isEmpty && !iOS16MinimumIsSupported {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint
 ***REMOVED******REMOVED***
@@ -114,6 +118,15 @@ struct TextInput: View {
 ***REMOVED***
 
 private extension TextInput {
+***REMOVED******REMOVED***/ A Boolean value indicating whether iOS 16.0 minimum APIs are supported.
+***REMOVED***var iOS16MinimumIsSupported: Bool {
+***REMOVED******REMOVED***if #available(iOS 16.0, *) {
+***REMOVED******REMOVED******REMOVED***return true
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return false
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The field type of the text input.
 ***REMOVED***var fieldType: FieldType {
 ***REMOVED******REMOVED***model.featureForm!.feature.table!.field(named: element.fieldName)!.type!
@@ -162,8 +175,6 @@ private extension TextInput {
 ***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED***
 ***REMOVED***
-
-private extension TextInput {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the input is multiline or not.
 ***REMOVED***var isMultiline: Bool {
 ***REMOVED******REMOVED***element.input is TextAreaFormInput
