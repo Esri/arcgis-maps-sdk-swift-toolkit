@@ -29,8 +29,8 @@ public class FormViewModel: ObservableObject {
     /// The feature form.
     @Published var featureForm: FeatureForm?
     
-    /// The name of the current focused field, if one exists.
-    @Published var focusedFieldName: String?
+    /// The current focused element, if one exists.
+    @Published var focusedElement: FormElement?
     
     @Published var groupElementModels: [String: GroupElementModel] = [:]
     

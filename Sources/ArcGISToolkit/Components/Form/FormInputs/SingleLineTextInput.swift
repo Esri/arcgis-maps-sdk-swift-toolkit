@@ -86,9 +86,17 @@ struct SingleLineTextInput: View {
             fieldType: fieldType
         )
         .padding([.bottom], elementPadding)
-        .onChange(of: isFocused) { newFocus in
-            if newFocus {
-                model.focusedFieldName = element.fieldName
+        .onChange(of: isFocused) { isFocused in
+            if isFocused {
+                model.focusedElement = element
+            } else if model.focusedElement == element {
+                model.focusedElement = nil
+            }
+        }
+        .onChange(of: model.focusedElement) { focusedElement in
+            // Another form input took focus
+            if focusedElement != element {
+                isFocused  = false
             }
         }
         .onAppear {
