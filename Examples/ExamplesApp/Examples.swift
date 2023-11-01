@@ -50,6 +50,7 @@ extension ExampleList {
             AnyExample("Floor Filter", content: FloorFilterExampleView()),
             AnyExample("Overview Map", content: OverviewMapExampleView()),
             AnyExample("Popup", content: PopupExampleView()),
+            AnyExample("Popup Dynamic Entity", content: PopupDynamicEntityExampleView()),
             AnyExample("Scalebar", content: ScalebarExampleView()),
             AnyExample("Search", content: SearchExampleView()),
             AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
