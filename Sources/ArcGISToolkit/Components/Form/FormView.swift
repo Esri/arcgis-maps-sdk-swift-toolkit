@@ -101,14 +101,12 @@ extension FormView {
             ComboBoxInput(element: element)
         case is DateTimePickerFormInput:
             DateTimeInput(element: element)
-        case is TextAreaFormInput:
-            MultiLineTextInput(element: element)
         case is RadioButtonsFormInput:
             RadioButtonsInput(element: element)
-        case is TextBoxFormInput:
-            SingleLineTextInput(element: element)
         case is SwitchFormInput:
             SwitchInput(element: element)
+        case is TextAreaFormInput, is TextBoxFormInput:
+            TextInput(element: element)
         default:
             EmptyView()
         }
