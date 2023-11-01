@@ -15,7 +15,7 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-extension DynamicEntityArcadeCalloutExampleView {
+extension PopupDynamicEntityExampleView {
     /// An object that contains map information for the dynamic entity arcade callout example view.
     final class MapInfo {
         let layer: DynamicEntityLayer
@@ -51,7 +51,7 @@ private extension Envelope {
 
 /// A view that shows how to display and show a callout for a dynamic entity layer
 /// where the information that you want to display is derived from an arcade expression.
-struct DynamicEntityArcadeCalloutExampleView: View {
+struct PopupDynamicEntityExampleView: View {
     /// The map information for this example.
     @State private var mapInfo = MapInfo()
     
