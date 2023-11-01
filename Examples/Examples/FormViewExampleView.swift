@@ -100,7 +100,8 @@ struct FormViewExampleView: View {
 extension FormViewExampleView {
 ***REMOVED******REMOVED***/ Identifies features, if any, at the current screen point.
 ***REMOVED******REMOVED***/ - Parameter proxy: The proxy to use for identification.
-***REMOVED******REMOVED***/ - Returns: The first identified feature.
+***REMOVED******REMOVED***/ - Returns: The first identified feature in a layer with
+***REMOVED******REMOVED***/ a feature form definition.
 ***REMOVED***func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
 ***REMOVED******REMOVED***guard let identifyScreenPoint else { return nil ***REMOVED***
 ***REMOVED******REMOVED***let identifyResult = try? await proxy.identifyLayers(
