@@ -79,13 +79,11 @@ struct PopupDynamicEntityExampleView: View {
                             return
                         }
                         
-                        if let result = result.geoElements.first {
-                            if let de = result as? DynamicEntity {
-                                print("-- de")
-                            } else if let obs = result as? DynamicEntityObservation {
-                                print("-- obs")
-                                popup = Popup(geoElement: obs.dynamicEntity!, definition: mapInfo.layer.popupDefinition!)
-                            }
+                        if let observation = result.geoElements.first as? DynamicEntityObservation,
+                           let dynamicEntity = observation.dynamicEntity {
+                            popup = Popup(geoElement: dynamicEntity, definition: mapInfo.layer.popupDefinition!)
+                        } else {
+                            popup = nil
                         }
                     }
                 }
