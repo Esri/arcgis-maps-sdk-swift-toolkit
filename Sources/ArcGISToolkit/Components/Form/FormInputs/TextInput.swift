@@ -33,8 +33,12 @@ struct TextInput: View {
     /// A Boolean value indicating whether placeholder text is shown, thereby indicating the
     /// presence of a value.
     ///
-    /// - Note: As of Swift 5.9, SwiftUI text editors do not have built-in placeholder functionality
-    /// so it must be implemented manually.
+    /// If iOS 16.0 minimum APIs are not supported we use a TextField for single line entry and a
+    /// TextEditor for multiline entry. TextEditors don't have placeholder support so instead we
+    /// replace empty text with the configured placeholder message and adjust the font
+    /// color.
+    ///
+    /// Once iOS 16.0 is the minimum supported platform this property can be removed.
     @State private var isPlaceholder = false
     
     /// The input's parent element.
@@ -73,19 +77,19 @@ struct TextInput: View {
         .padding([.bottom], elementPadding)
         .onAppear {
             let text = inputModel.formattedValue
-            isPlaceholder = text.isEmpty
+            isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
             self.text = isPlaceholder ? element.hint : text
         }
         .onChange(of: inputModel.formattedValue) { formattedValue in
             let text = formattedValue
-            isPlaceholder = text.isEmpty
+            isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
             self.text = isPlaceholder ? element.hint : text
         }
         .onChange(of: isFocused) { isFocused in
             if isFocused && isPlaceholder {
                 isPlaceholder = false
                 text = ""
-            } else if !isFocused && text.isEmpty {
+            } else if !isFocused && text.isEmpty && !iOS16MinimumIsSupported {
                 isPlaceholder = true
                 text = element.hint
             }
@@ -114,6 +118,15 @@ struct TextInput: View {
 }
 
 private extension TextInput {
+    /// A Boolean value indicating whether iOS 16.0 minimum APIs are supported.
+    var iOS16MinimumIsSupported: Bool {
+        if #available(iOS 16.0, *) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     /// The field type of the text input.
     var fieldType: FieldType {
         model.featureForm!.feature.table!.field(named: element.fieldName)!.type!
@@ -161,9 +174,7 @@ private extension TextInput {
         }
         .formInputStyle()
     }
-}
-
-private extension TextInput {
+    
     /// A Boolean value indicating whether the input is multiline or not.
     var isMultiline: Bool {
         element.input is TextAreaFormInput
