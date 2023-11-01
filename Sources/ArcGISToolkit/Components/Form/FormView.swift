@@ -101,14 +101,12 @@ extension FormView {
 ***REMOVED******REMOVED******REMOVED***ComboBoxInput(element: element)
 ***REMOVED******REMOVED***case is DateTimePickerFormInput:
 ***REMOVED******REMOVED******REMOVED***DateTimeInput(element: element)
-***REMOVED******REMOVED***case is TextAreaFormInput:
-***REMOVED******REMOVED******REMOVED***MultiLineTextInput(element: element)
 ***REMOVED******REMOVED***case is RadioButtonsFormInput:
 ***REMOVED******REMOVED******REMOVED***RadioButtonsInput(element: element)
-***REMOVED******REMOVED***case is TextBoxFormInput:
-***REMOVED******REMOVED******REMOVED***SingleLineTextInput(element: element)
 ***REMOVED******REMOVED***case is SwitchFormInput:
 ***REMOVED******REMOVED******REMOVED***SwitchInput(element: element)
+***REMOVED******REMOVED***case is TextAreaFormInput, is TextBoxFormInput:
+***REMOVED******REMOVED******REMOVED***TextInput(element: element)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
