@@ -41,6 +41,7 @@
 ***REMOVED***/ - Displays media (images and charts) full-screen.
 ***REMOVED***/ - Supports hyperlinks in text, media, and fields elements.
 ***REMOVED***/ - Fully supports dark mode, as do all Toolkit components.
+***REMOVED***/ - Supports auto-refresh for popups where the geo element is a dynamic entity.
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
