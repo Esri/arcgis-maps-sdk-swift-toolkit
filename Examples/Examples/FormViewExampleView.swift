@@ -102,15 +102,11 @@ extension FormViewExampleView {
 ***REMOVED******REMOVED***/ - Parameter proxy: The proxy to use for identification.
 ***REMOVED******REMOVED***/ - Returns: The first identified feature.
 ***REMOVED***func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
-***REMOVED******REMOVED***if let screenPoint = identifyScreenPoint,
-***REMOVED******REMOVED***   let identifyLayerResult = try? await Result(awaiting: {
-***REMOVED******REMOVED******REMOVED***   try await proxy.identifyLayers(
-***REMOVED******REMOVED******REMOVED******REMOVED***screenPoint: screenPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***tolerance: 10
-***REMOVED******REMOVED******REMOVED***   )
-   ***REMOVED***)
-***REMOVED******REMOVED******REMOVED***.cancellationToNil()?
-***REMOVED******REMOVED******REMOVED***.get()
+***REMOVED******REMOVED***guard let identifyScreenPoint else { return nil ***REMOVED***
+***REMOVED******REMOVED***let identifyResult = try? await proxy.identifyLayers(
+***REMOVED******REMOVED******REMOVED***screenPoint: identifyScreenPoint,
+***REMOVED******REMOVED******REMOVED***tolerance: 10
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.first(where: { result in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let feature = result.geoElements.first as? ArcGISFeature,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
@@ -118,10 +114,8 @@ extension FormViewExampleView {
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***return identifyLayerResult.geoElements.first as? ArcGISFeature
-***REMOVED***
-***REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***return identifyResult?.geoElements.first as? ArcGISFeature
 ***REMOVED***
 ***REMOVED***
 
