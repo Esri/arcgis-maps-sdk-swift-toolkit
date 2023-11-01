@@ -15,7 +15,7 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-extension DynamicEntityArcadeCalloutExampleView {
+extension PopupDynamicEntityExampleView {
 ***REMOVED******REMOVED***/ An object that contains map information for the dynamic entity arcade callout example view.
 ***REMOVED***final class MapInfo {
 ***REMOVED******REMOVED***let layer: DynamicEntityLayer
@@ -51,7 +51,7 @@ private extension Envelope {
 
 ***REMOVED***/ A view that shows how to display and show a callout for a dynamic entity layer
 ***REMOVED***/ where the information that you want to display is derived from an arcade expression.
-struct DynamicEntityArcadeCalloutExampleView: View {
+struct PopupDynamicEntityExampleView: View {
 ***REMOVED******REMOVED***/ The map information for this example.
 ***REMOVED***@State private var mapInfo = MapInfo()
 ***REMOVED***
