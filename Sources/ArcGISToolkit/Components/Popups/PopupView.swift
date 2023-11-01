@@ -41,6 +41,7 @@ import ArcGIS
 /// - Displays media (images and charts) full-screen.
 /// - Supports hyperlinks in text, media, and fields elements.
 /// - Fully supports dark mode, as do all Toolkit components.
+/// - Supports auto-refresh for popups where the geo element is a dynamic entity.
 ///
 /// **Behavior**
 ///
