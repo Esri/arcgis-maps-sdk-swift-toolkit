@@ -55,6 +55,8 @@ struct GroupView<Content>: View where Content: View {
                     viewCreator(element)
                 }
             }
+            // Reapply leading alignment for content within the DisclosureGroup
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .onAppear {
             element.formElements.forEach { element in
