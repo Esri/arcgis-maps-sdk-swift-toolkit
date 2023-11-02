@@ -49,22 +49,14 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if visibleElements.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Using an EmptyView here instead will cause onAppear to not run
-***REMOVED******REMOVED******REMOVED******REMOVED***Color.clear
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: .zero)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(self.element.label, isExpanded: $isExpanded) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(visibleElements, id: \.label) { formElement in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = formElement as? FieldFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewCreator(element)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reapply leading alignment for content within the DisclosureGroup
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED***DisclosureGroup(self.element.label, isExpanded: $isExpanded) {
+***REMOVED******REMOVED******REMOVED***ForEach(visibleElements, id: \.label) { formElement in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let element = formElement as? FieldFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewCreator(element)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Reapply leading alignment for content within the DisclosureGroup
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***element.formElements.forEach { element in
@@ -76,7 +68,8 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***isVisibleTasks.append(newTask)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED***isVisibleTasks.forEach { task in
 ***REMOVED******REMOVED******REMOVED******REMOVED***task.cancel()
