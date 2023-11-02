@@ -55,6 +55,8 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewCreator(element)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Reapply leading alignment for content within the DisclosureGroup
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***element.formElements.forEach { element in
