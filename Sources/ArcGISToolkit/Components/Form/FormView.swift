@@ -69,7 +69,6 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await featureForm?.evaluateExpressions()
 ***REMOVED******REMOVED******REMOVED******REMOVED***isEvaluating = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.initializeIsVisibleTasks()
-***REMOVED******REMOVED******REMOVED******REMOVED***model.setupGroupModels()
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("error evaluating expressions: \(error.localizedDescription)")
 ***REMOVED******REMOVED***
@@ -85,7 +84,7 @@ extension FormView {
 ***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED***case let element as GroupFormElement:
-***REMOVED******REMOVED******REMOVED***makeGroupElement(element)
+***REMOVED******REMOVED******REMOVED***GroupView(element: element, viewCreator: { makeFieldElement($0) ***REMOVED***)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
@@ -112,20 +111,6 @@ extension FormView {
 ***REMOVED***
 ***REMOVED******REMOVED***if element.isVisible {
 ***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Makes UI for a group form element.
-***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
-***REMOVED***@ViewBuilder func makeGroupElement(_ element: GroupFormElement) -> some View {
-***REMOVED******REMOVED***if let groupModel = model.groupElementModels[element.label] {
-***REMOVED******REMOVED******REMOVED***DisclosureGroup(element.label/*isExpanded: groupModel.$isExpanded*/) {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(element.formElements, id: \.label) { formElement in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = formElement as? FieldFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFieldElement(element)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
