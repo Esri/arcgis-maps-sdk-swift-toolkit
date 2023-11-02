@@ -69,7 +69,6 @@ public struct FormView: View {
                 try await featureForm?.evaluateExpressions()
                 isEvaluating = false
                 model.initializeIsVisibleTasks()
-                model.setupGroupModels()
             } catch {
                 print("error evaluating expressions: \(error.localizedDescription)")
             }
@@ -85,7 +84,7 @@ extension FormView {
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as GroupFormElement:
-            makeGroupElement(element)
+            GroupView(element: element, viewCreator: { makeFieldElement($0) })
         default:
             EmptyView()
         }
@@ -112,20 +111,6 @@ extension FormView {
         }
         if element.isVisible {
             Divider()
-        }
-    }
-    
-    /// Makes UI for a group form element.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeGroupElement(_ element: GroupFormElement) -> some View {
-        if let groupModel = model.groupElementModels[element.label] {
-            DisclosureGroup(element.label/*isExpanded: groupModel.$isExpanded*/) {
-                ForEach(element.formElements, id: \.label) { formElement in
-                    if let element = formElement as? FieldFormElement {
-                        makeFieldElement(element)
-                    }
-                }
-            }
         }
     }
 }
