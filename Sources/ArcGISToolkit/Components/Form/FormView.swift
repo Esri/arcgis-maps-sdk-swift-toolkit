@@ -109,7 +109,8 @@ extension FormView {
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
-***REMOVED******REMOVED***if element.isVisible {
+***REMOVED******REMOVED******REMOVED*** BarcodeScannerFormInput is not currently supported
+***REMOVED******REMOVED***if element.isVisible && !(element.input is BarcodeScannerFormInput) {
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
