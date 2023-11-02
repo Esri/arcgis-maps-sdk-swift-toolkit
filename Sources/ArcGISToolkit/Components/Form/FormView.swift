@@ -109,7 +109,8 @@ extension FormView {
         default:
             EmptyView()
         }
-        if element.isVisible {
+        // BarcodeScannerFormInput is not currently supported
+        if element.isVisible && !(element.input is BarcodeScannerFormInput) {
             Divider()
         }
     }
