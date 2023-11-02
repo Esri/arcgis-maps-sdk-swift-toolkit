@@ -49,22 +49,14 @@ struct GroupView<Content>: View where Content: View {
     }
     
     var body: some View {
-        Group {
-            if visibleElements.isEmpty {
-                // Using an EmptyView here instead will cause onAppear to not run
-                Color.clear
-                    .frame(maxHeight: .zero)
-            } else {
-                DisclosureGroup(self.element.label, isExpanded: $isExpanded) {
-                    ForEach(visibleElements, id: \.label) { formElement in
-                        if let element = formElement as? FieldFormElement {
-                            viewCreator(element)
-                        }
-                    }
-                    // Reapply leading alignment for content within the DisclosureGroup
-                    .frame(maxWidth: .infinity, alignment: .leading)
+        DisclosureGroup(self.element.label, isExpanded: $isExpanded) {
+            ForEach(visibleElements, id: \.label) { formElement in
+                if let element = formElement as? FieldFormElement {
+                    viewCreator(element)
                 }
             }
+            // Reapply leading alignment for content within the DisclosureGroup
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .onAppear {
             element.formElements.forEach { element in
@@ -76,7 +68,8 @@ struct GroupView<Content>: View where Content: View {
                     }
                 }
                 isVisibleTasks.append(newTask)
-            }        }
+            }
+        }
         .onDisappear {
             isVisibleTasks.forEach { task in
                 task.cancel()
