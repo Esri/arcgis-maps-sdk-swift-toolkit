@@ -72,7 +72,6 @@ struct TextInput: View {
             text: isPlaceholder ? "" : text,
             isFocused: isFocused,
             element: element,
-            input: element.input,
             fieldType: fieldType
         )
         .padding([.bottom], elementPadding)
