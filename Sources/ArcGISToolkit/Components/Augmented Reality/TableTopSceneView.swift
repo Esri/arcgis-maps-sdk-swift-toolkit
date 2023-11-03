@@ -24,9 +24,9 @@ public struct TableTopSceneView: View {
     /// The initial transformation for the scene's camera controller.
     @State private var initialTransformation: TransformationMatrix? = nil
     /// The camera controller that will be set on the scene view.
-    @State var cameraController: TransformationMatrixCameraController
+    @State private var cameraController: TransformationMatrixCameraController
     /// The current interface orientation.
-    @State var interfaceOrientation: InterfaceOrientation?
+    @State private var interfaceOrientation: InterfaceOrientation?
     /// The help text to guide the user through an AR experience.
     @State private var helpText: String = ""
     /// A Boolean value that indicates whether the coaching overlay view is active.
