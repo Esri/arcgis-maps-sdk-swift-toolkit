@@ -65,6 +65,8 @@ struct TextInput: View {
             textField
         } else {
             Text(text.isEmpty ? "--" : text)
+                .padding([.horizontal], 10)
+                .padding([.vertical], 5)
         }
         TextInputFooter(
             text: isPlaceholder ? "" : text,
