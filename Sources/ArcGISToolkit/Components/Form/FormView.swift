@@ -70,11 +70,11 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isEvaluating = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await featureForm?.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED******REMOVED***isEvaluating = false
+***REMOVED******REMOVED******REMOVED******REMOVED***model.initializeIsVisibleTasks()
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("error evaluating expressions: \(error.localizedDescription)")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***model.initializeIsVisibleTasks()
-***REMOVED******REMOVED******REMOVED***isEvaluating = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
