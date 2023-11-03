@@ -22,8 +22,8 @@ import XCTest
         
         let view = FlyoverSceneView(
             initialLocation: .init(
-                latitude: 0,
-                longitude: 0
+                latitude: 34.056397,
+                longitude: -117.195646
             ),
             translationFactor: 1_000
         ) { _ in
@@ -31,21 +31,15 @@ import XCTest
         }
         
         let initialCamera = view.initialCamera
-        XCTAssertEqual(initialCamera.location.x, 0)
-        XCTAssertEqual(initialCamera.location.y, 0)
+        XCTAssertEqual(initialCamera.location.x, -117.195646)
+        XCTAssertEqual(initialCamera.location.y, 34.056397)
         XCTAssertEqual(initialCamera.heading, 0)
         XCTAssertEqual(initialCamera.pitch, 90)
         XCTAssertEqual(initialCamera.roll, 0)
         
         XCTAssertEqual(view.translationFactor, 1_000)
-        
-        let cameraController = view.getCameraController()
-        XCTAssertTrue(cameraController is TransformationMatrixCameraController)
-        
         XCTAssertTrue(view.shouldOrientToCompass)
-        
-        let interfaceOrientation = view.getInterfaceOrientation()
-        XCTAssertEqual(interfaceOrientation, .none)
+        XCTAssertEqual(view.interfaceOrientation, .none)
     }
     
     func testFlyoverLocationInit() throws {
@@ -53,8 +47,8 @@ import XCTest
         
         let view = FlyoverSceneView(
             initialLocation: .init(
-                latitude: 0,
-                longitude: 0
+                latitude: 34.056397,
+                longitude: -117.195646
             ),
             translationFactor: 1_000,
             initialHeading: 90
@@ -63,29 +57,23 @@ import XCTest
         }
         
         let initialCamera = view.initialCamera
-        XCTAssertEqual(initialCamera.location.x, 0)
-        XCTAssertEqual(initialCamera.location.y, 0)
+        XCTAssertEqual(initialCamera.location.x, -117.195646)
+        XCTAssertEqual(initialCamera.location.y, 34.056397)
         XCTAssertEqual(initialCamera.heading, 90)
         XCTAssertEqual(initialCamera.pitch, 90)
         XCTAssertEqual(initialCamera.roll, 0)
         
         XCTAssertEqual(view.translationFactor, 1_000)
-        
-        let cameraController = view.getCameraController()
-        XCTAssertTrue(cameraController is TransformationMatrixCameraController)
-        
         XCTAssertFalse(view.shouldOrientToCompass)
-        
-        let interfaceOrientation = view.getInterfaceOrientation()
-        XCTAssertEqual(interfaceOrientation, .none)
+        XCTAssertEqual(view.interfaceOrientation, .none)
     }
     
     func testFlyoverLatLongInitWithDefaults() throws {
         let sceneView = SceneView(scene: Scene())
         
         let view = FlyoverSceneView(
-            initialLatitude: 0,
-            initialLongitude: 0,
+            initialLatitude: 34.056397,
+            initialLongitude: -117.195646,
             initialAltitude: 1_000,
             translationFactor: 1_000
         ) { _ in
@@ -93,29 +81,23 @@ import XCTest
         }
         
         let initialCamera = view.initialCamera
-        XCTAssertEqual(initialCamera.location.x, 0)
-        XCTAssertEqual(initialCamera.location.y, 0)
+        XCTAssertEqual(initialCamera.location.x, -117.195646)
+        XCTAssertEqual(initialCamera.location.y, 34.056397)
         XCTAssertEqual(initialCamera.heading, 0)
         XCTAssertEqual(initialCamera.pitch, 90)
         XCTAssertEqual(initialCamera.roll, 0)
         
         XCTAssertEqual(view.translationFactor, 1_000)
-        
-        let cameraController = view.getCameraController()
-        XCTAssertTrue(cameraController is TransformationMatrixCameraController)
-        
         XCTAssertTrue(view.shouldOrientToCompass)
-        
-        let interfaceOrientation = view.getInterfaceOrientation()
-        XCTAssertEqual(interfaceOrientation, .none)
+        XCTAssertEqual(view.interfaceOrientation, .none)
     }
     
     func testFlyoverLatLongInit() throws {
         let sceneView = SceneView(scene: Scene())
         
         let view = FlyoverSceneView(
-            initialLatitude: 0,
-            initialLongitude: 0,
+            initialLatitude: 34.056397,
+            initialLongitude: -117.195646,
             initialAltitude: 1_000,
             translationFactor: 1_000,
             initialHeading: 180
@@ -124,51 +106,43 @@ import XCTest
         }
         
         let initialCamera = view.initialCamera
-        XCTAssertEqual(initialCamera.location.x, 0)
-        XCTAssertEqual(initialCamera.location.y, 0)
+        XCTAssertEqual(initialCamera.location.x, -117.195646)
+        XCTAssertEqual(initialCamera.location.y, 34.056397)
         XCTAssertEqual(initialCamera.heading, 180)
         XCTAssertEqual(initialCamera.pitch, 90)
         XCTAssertEqual(initialCamera.roll, 0)
         
         XCTAssertEqual(view.translationFactor, 1_000)
-        
-        let cameraController = view.getCameraController()
-        XCTAssertTrue(cameraController is TransformationMatrixCameraController)
-        
         XCTAssertFalse(view.shouldOrientToCompass)
-        
-        let interfaceOrientation = view.getInterfaceOrientation()
-        XCTAssertEqual(interfaceOrientation, .none)
+        XCTAssertEqual(view.interfaceOrientation, .none)
     }
     
     func testTableTopInit() throws {
         let sceneView = SceneView(scene: Scene())
         
         let view = TableTopSceneView(
-            anchorPoint: .init(latitude: 0, longitude: 0),
+            anchorPoint: .init(latitude: 34.056397, longitude: -117.195646),
             translationFactor: 1_000,
             clippingDistance: 1_000
         ) { _ in
             sceneView
         }
         
-        let initialCamera = view.getCameraController().originCamera
-        XCTAssertEqual(initialCamera.location.x, 0)
-        XCTAssertEqual(initialCamera.location.y, 0)
+        let initialCamera = view.cameraController.originCamera
+        XCTAssertEqual(initialCamera.location.x, -117.195646)
+        XCTAssertEqual(initialCamera.location.y, 34.056397, accuracy: 0.001)
         XCTAssertEqual(initialCamera.heading, 0, accuracy: 0.001)
         XCTAssertEqual(initialCamera.pitch, 90, accuracy: 0.001)
         XCTAssertEqual(initialCamera.roll, 0, accuracy: 0.001)
         
-        XCTAssertEqual(view.anchorPoint.x, 0)
-        XCTAssertEqual(view.anchorPoint.y, 0)
+        XCTAssertEqual(view.anchorPoint.x, -117.195646)
+        XCTAssertEqual(view.anchorPoint.y, 34.056397)
         
         XCTAssertEqual(view.translationFactor, 1_000)
         XCTAssertEqual(view.clippingDistance, 1_000)
         XCTAssertFalse(view.initialTransformationIsSet)
         XCTAssertFalse(view.coachingOverlayIsHidden)
-        
-        let interfaceOrientation = view.getInterfaceOrientation()
-        XCTAssertEqual(interfaceOrientation, .none)
+        XCTAssertEqual(view.interfaceOrientation, .none)
     }
     
     func testTableTopARCoachingOverlayViewModifier() throws {

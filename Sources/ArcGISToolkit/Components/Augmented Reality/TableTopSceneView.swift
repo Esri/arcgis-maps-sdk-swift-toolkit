@@ -24,9 +24,9 @@ public struct TableTopSceneView: View {
     /// The initial transformation for the scene's camera controller.
     @State private var initialTransformation: TransformationMatrix? = nil
     /// The camera controller that will be set on the scene view.
-    @State private var cameraController: TransformationMatrixCameraController
+    @State var cameraController: TransformationMatrixCameraController
     /// The current interface orientation.
-    @State private var interfaceOrientation: InterfaceOrientation?
+    @State var interfaceOrientation: InterfaceOrientation?
     /// The help text to guide the user through an AR experience.
     @State private var helpText: String = ""
     /// A Boolean value that indicates whether the coaching overlay view is active.
@@ -344,15 +344,5 @@ private extension String {
                  place an ArcGIS Scene.
                  """
         )
-    }
-}
-
-extension TableTopSceneView {
-    func getCameraController() -> TransformationMatrixCameraController {
-        return cameraController
-    }
-    
-    func getInterfaceOrientation() -> InterfaceOrientation? {
-        return interfaceOrientation
     }
 }
