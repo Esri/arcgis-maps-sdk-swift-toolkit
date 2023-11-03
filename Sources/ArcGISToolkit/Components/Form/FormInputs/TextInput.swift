@@ -73,7 +73,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
 ***REMOVED******REMOVED******REMOVED***element: element,
 ***REMOVED******REMOVED******REMOVED***input: element.input,
-***REMOVED******REMOVED******REMOVED***rangeDomain: isMultiline ? nil : element.domain as? RangeDomain,
 ***REMOVED******REMOVED******REMOVED***fieldType: fieldType
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
