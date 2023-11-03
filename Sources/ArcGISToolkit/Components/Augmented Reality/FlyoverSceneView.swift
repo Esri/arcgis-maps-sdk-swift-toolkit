@@ -187,3 +187,25 @@ private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate
 ***REMOVED******REMOVED***currentFrame = frame
 ***REMOVED***
 ***REMOVED***
+
+extension FlyoverSceneView {
+***REMOVED***func getInitialCamera() -> Camera {
+***REMOVED******REMOVED***return initialCamera
+***REMOVED***
+***REMOVED***
+***REMOVED***func getTranslationFactor() -> Double {
+***REMOVED******REMOVED***return translationFactor
+***REMOVED***
+***REMOVED***
+***REMOVED***func getCameraController() -> CameraController {
+***REMOVED******REMOVED***return cameraController
+***REMOVED***
+***REMOVED***
+***REMOVED***func getShouldOrientToCompass() -> Bool {
+***REMOVED******REMOVED***return shouldOrientToCompass
+***REMOVED***
+***REMOVED***
+***REMOVED***func getInterfaceOrientation() -> InterfaceOrientation? {
+***REMOVED******REMOVED***return interfaceOrientation
+***REMOVED***
+***REMOVED***

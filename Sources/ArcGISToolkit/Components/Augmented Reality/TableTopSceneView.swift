@@ -346,3 +346,29 @@ private extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+
+extension TableTopSceneView {
+***REMOVED***func getCameraController() -> TransformationMatrixCameraController {
+***REMOVED******REMOVED***return cameraController
+***REMOVED***
+***REMOVED***
+***REMOVED***func getTranslationFactor() -> Double {
+***REMOVED******REMOVED***return translationFactor
+***REMOVED***
+***REMOVED***
+***REMOVED***func getClippingDistance() -> Double? {
+***REMOVED******REMOVED***return clippingDistance
+***REMOVED***
+***REMOVED***
+***REMOVED***func getInterfaceOrientation() -> InterfaceOrientation? {
+***REMOVED******REMOVED***return interfaceOrientation
+***REMOVED***
+***REMOVED***
+***REMOVED***func getInitialTransformationIsSet() -> Bool {
+***REMOVED******REMOVED***return initialTransformationIsSet
+***REMOVED***
+***REMOVED***
+***REMOVED***func getCoachingOverlayIsHidden() -> Bool {
+***REMOVED******REMOVED***return coachingOverlayIsHidden
+***REMOVED***
+***REMOVED***
