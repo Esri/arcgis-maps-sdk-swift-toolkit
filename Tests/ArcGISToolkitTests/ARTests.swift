@@ -30,21 +30,19 @@ import XCTest
             sceneView
         }
         
-        let initialCamera = view.getInitialCamera()
+        let initialCamera = view.initialCamera
         XCTAssertEqual(initialCamera.location.x, 0)
         XCTAssertEqual(initialCamera.location.y, 0)
         XCTAssertEqual(initialCamera.heading, 0)
         XCTAssertEqual(initialCamera.pitch, 90)
         XCTAssertEqual(initialCamera.roll, 0)
         
-        let translationFactor = view.getTranslationFactor()
-        XCTAssertEqual(translationFactor, 1_000)
+        XCTAssertEqual(view.translationFactor, 1_000)
         
         let cameraController = view.getCameraController()
         XCTAssertTrue(cameraController is TransformationMatrixCameraController)
         
-        let shouldOrientToCompass = view.getShouldOrientToCompass()
-        XCTAssertTrue(shouldOrientToCompass)
+        XCTAssertTrue(view.shouldOrientToCompass)
         
         let interfaceOrientation = view.getInterfaceOrientation()
         XCTAssertEqual(interfaceOrientation, .none)
@@ -64,21 +62,19 @@ import XCTest
             sceneView
         }
         
-        let initialCamera = view.getInitialCamera()
+        let initialCamera = view.initialCamera
         XCTAssertEqual(initialCamera.location.x, 0)
         XCTAssertEqual(initialCamera.location.y, 0)
         XCTAssertEqual(initialCamera.heading, 90)
         XCTAssertEqual(initialCamera.pitch, 90)
         XCTAssertEqual(initialCamera.roll, 0)
         
-        let translationFactor = view.getTranslationFactor()
-        XCTAssertEqual(translationFactor, 1_000)
+        XCTAssertEqual(view.translationFactor, 1_000)
         
         let cameraController = view.getCameraController()
         XCTAssertTrue(cameraController is TransformationMatrixCameraController)
         
-        let shouldOrientToCompass = view.getShouldOrientToCompass()
-        XCTAssertFalse(shouldOrientToCompass)
+        XCTAssertFalse(view.shouldOrientToCompass)
         
         let interfaceOrientation = view.getInterfaceOrientation()
         XCTAssertEqual(interfaceOrientation, .none)
@@ -96,21 +92,19 @@ import XCTest
             sceneView
         }
         
-        let initialCamera = view.getInitialCamera()
+        let initialCamera = view.initialCamera
         XCTAssertEqual(initialCamera.location.x, 0)
         XCTAssertEqual(initialCamera.location.y, 0)
         XCTAssertEqual(initialCamera.heading, 0)
         XCTAssertEqual(initialCamera.pitch, 90)
         XCTAssertEqual(initialCamera.roll, 0)
         
-        let translationFactor = view.getTranslationFactor()
-        XCTAssertEqual(translationFactor, 1_000)
+        XCTAssertEqual(view.translationFactor, 1_000)
         
         let cameraController = view.getCameraController()
         XCTAssertTrue(cameraController is TransformationMatrixCameraController)
         
-        let shouldOrientToCompass = view.getShouldOrientToCompass()
-        XCTAssertTrue(shouldOrientToCompass)
+        XCTAssertTrue(view.shouldOrientToCompass)
         
         let interfaceOrientation = view.getInterfaceOrientation()
         XCTAssertEqual(interfaceOrientation, .none)
@@ -129,21 +123,19 @@ import XCTest
             sceneView
         }
         
-        let initialCamera = view.getInitialCamera()
+        let initialCamera = view.initialCamera
         XCTAssertEqual(initialCamera.location.x, 0)
         XCTAssertEqual(initialCamera.location.y, 0)
         XCTAssertEqual(initialCamera.heading, 180)
         XCTAssertEqual(initialCamera.pitch, 90)
         XCTAssertEqual(initialCamera.roll, 0)
         
-        let translationFactor = view.getTranslationFactor()
-        XCTAssertEqual(translationFactor, 1_000)
+        XCTAssertEqual(view.translationFactor, 1_000)
         
         let cameraController = view.getCameraController()
         XCTAssertTrue(cameraController is TransformationMatrixCameraController)
         
-        let shouldOrientToCompass = view.getShouldOrientToCompass()
-        XCTAssertFalse(shouldOrientToCompass)
+        XCTAssertFalse(view.shouldOrientToCompass)
         
         let interfaceOrientation = view.getInterfaceOrientation()
         XCTAssertEqual(interfaceOrientation, .none)
@@ -160,25 +152,20 @@ import XCTest
             sceneView
         }
         
-        let cameraController = view.getCameraController()
-        let initialCamera = cameraController.originCamera
+        let initialCamera = view.getCameraController().originCamera
         XCTAssertEqual(initialCamera.location.x, 0)
         XCTAssertEqual(initialCamera.location.y, 0)
         XCTAssertEqual(initialCamera.heading, 0, accuracy: 0.001)
         XCTAssertEqual(initialCamera.pitch, 90, accuracy: 0.001)
         XCTAssertEqual(initialCamera.roll, 0, accuracy: 0.001)
         
-        let translationFactor = view.getTranslationFactor()
-        XCTAssertEqual(translationFactor, 1_000)
+        XCTAssertEqual(view.anchorPoint.x, 0)
+        XCTAssertEqual(view.anchorPoint.y, 0)
         
-        let clippingDistance = try XCTUnwrap(view.getClippingDistance())
-        XCTAssertEqual(clippingDistance, 1_000)
-        
-        let initialTransformationIsSet = view.getInitialTransformationIsSet()
-        XCTAssertFalse(initialTransformationIsSet)
-        
-        let coachingOverlayIsHidden = view.getCoachingOverlayIsHidden()
-        XCTAssertFalse(coachingOverlayIsHidden)
+        XCTAssertEqual(view.translationFactor, 1_000)
+        XCTAssertEqual(view.clippingDistance, 1_000)
+        XCTAssertFalse(view.initialTransformationIsSet)
+        XCTAssertFalse(view.coachingOverlayIsHidden)
         
         let interfaceOrientation = view.getInterfaceOrientation()
         XCTAssertEqual(interfaceOrientation, .none)
@@ -196,7 +183,6 @@ import XCTest
         }
         .coachingOverlayHidden(true)
         
-        let coachingOverlayIsHidden = view.getCoachingOverlayIsHidden()
-        XCTAssertTrue(coachingOverlayIsHidden)
+        XCTAssertTrue(view.coachingOverlayIsHidden)
     }
 }
