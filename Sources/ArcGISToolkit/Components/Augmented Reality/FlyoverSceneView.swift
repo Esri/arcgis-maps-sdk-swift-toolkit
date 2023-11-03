@@ -20,11 +20,11 @@ public struct FlyoverSceneView: View {
     /// The AR session.
     @StateObject private var session = ObservableARSession()
     /// The initial camera.
-    private let initialCamera: Camera
+    let initialCamera: Camera
     /// The translation factor.
-    private let translationFactor: Double
+    let translationFactor: Double
     /// A Boolean value indicating whether to orient the scene view's initial heading to compass heading.
-    private let shouldOrientToCompass: Bool
+    let shouldOrientToCompass: Bool
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The camera controller that we will set on the scene view.
