@@ -70,11 +70,11 @@ public struct FormView: View {
             do {
                 isEvaluating = true
                 try await featureForm?.evaluateExpressions()
+                isEvaluating = false
+                model.initializeIsVisibleTasks()
             } catch {
                 print("error evaluating expressions: \(error.localizedDescription)")
             }
-            model.initializeIsVisibleTasks()
-            isEvaluating = false
         }
     }
 }
