@@ -1,0 +1,80 @@
+***REMOVED*** Copyright 2023 Esri.
+***REMOVED***
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED***
+***REMOVED***   http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ Displays a group form element and manages the visibility of the elements within the group.
+struct GroupView<Content>: View where Content: View {
+***REMOVED******REMOVED***/ A Boolean value indicating whether the group is expanded or collapsed.
+***REMOVED***@State private var isExpanded: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ The list of visible group elements.
+***REMOVED***@State private  var visibleElements = [FormElement]()
+***REMOVED***
+***REMOVED******REMOVED***/ The group form element.
+***REMOVED***@State private var element: GroupFormElement
+***REMOVED***
+***REMOVED******REMOVED***/ The group of visibility tasks.
+***REMOVED***@State private var isVisibleTasks = [Task<Void, Never>]()
+***REMOVED***
+***REMOVED******REMOVED***/ The method to build an element in the group.
+***REMOVED***private let viewCreator: (FieldFormElement) -> Content
+***REMOVED***
+***REMOVED******REMOVED***/ Filters the group's elements by visibility.
+***REMOVED***private func updateVisibleElements() {
+***REMOVED******REMOVED***visibleElements = element.formElements.filter { $0.isVisible ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ - Creates a view for a group form element and manages the visibility of the elements within
+***REMOVED******REMOVED***/ the group.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - element: The group form element.
+***REMOVED******REMOVED***/   - viewCreator: The method to build an element in the group.
+***REMOVED***init(element: GroupFormElement, viewCreator: @escaping (FieldFormElement) -> Content) {
+***REMOVED******REMOVED***self.element = element
+***REMOVED******REMOVED***self.isExpanded = element.initialState != .collapsed
+***REMOVED******REMOVED***self.viewCreator = viewCreator
+***REMOVED***
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***DisclosureGroup(self.element.label, isExpanded: $isExpanded) {
+***REMOVED******REMOVED******REMOVED***ForEach(visibleElements, id: \.label) { formElement in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let element = formElement as? FieldFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewCreator(element)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Reapply leading alignment for content within the DisclosureGroup
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED***
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***element.formElements.forEach { element in
+***REMOVED******REMOVED******REMOVED******REMOVED***let newTask = Task.detached { [self] in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await _ in element.$isVisible {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.updateVisibleElements()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***isVisibleTasks.append(newTask)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED***isVisibleTasks.forEach { task in
+***REMOVED******REMOVED******REMOVED******REMOVED***task.cancel()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***isVisibleTasks.removeAll()
+***REMOVED***
+***REMOVED***
+***REMOVED***

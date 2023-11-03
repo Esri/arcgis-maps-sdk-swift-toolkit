@@ -87,7 +87,7 @@ extension FormView {
 ***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED***case let element as GroupFormElement:
-***REMOVED******REMOVED******REMOVED***makeGroupElement(element)
+***REMOVED******REMOVED******REMOVED***GroupView(element: element, viewCreator: { makeFieldElement($0) ***REMOVED***)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
@@ -110,20 +110,9 @@ extension FormView {
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
-***REMOVED******REMOVED***if element.isVisible {
+***REMOVED******REMOVED******REMOVED*** BarcodeScannerFormInput is not currently supported
+***REMOVED******REMOVED***if element.isVisible && !(element.input is BarcodeScannerFormInput) {
 ***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Makes UI for a group form element.
-***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
-***REMOVED***@ViewBuilder func makeGroupElement(_ element: GroupFormElement) -> some View {
-***REMOVED******REMOVED***DisclosureGroup(element.label) {
-***REMOVED******REMOVED******REMOVED***ForEach(element.formElements, id: \.label) { formElement in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let element = formElement as? FieldFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFieldElement(element)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
