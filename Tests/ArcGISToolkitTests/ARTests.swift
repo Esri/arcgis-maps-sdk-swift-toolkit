@@ -30,21 +30,19 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***sceneView
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let initialCamera = view.getInitialCamera()
+***REMOVED******REMOVED***let initialCamera = view.initialCamera
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.heading, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.pitch, 90)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.roll, 0)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let translationFactor = view.getTranslationFactor()
-***REMOVED******REMOVED***XCTAssertEqual(translationFactor, 1_000)
+***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraController = view.getCameraController()
 ***REMOVED******REMOVED***XCTAssertTrue(cameraController is TransformationMatrixCameraController)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let shouldOrientToCompass = view.getShouldOrientToCompass()
-***REMOVED******REMOVED***XCTAssertTrue(shouldOrientToCompass)
+***REMOVED******REMOVED***XCTAssertTrue(view.shouldOrientToCompass)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let interfaceOrientation = view.getInterfaceOrientation()
 ***REMOVED******REMOVED***XCTAssertEqual(interfaceOrientation, .none)
@@ -64,21 +62,19 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***sceneView
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let initialCamera = view.getInitialCamera()
+***REMOVED******REMOVED***let initialCamera = view.initialCamera
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.heading, 90)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.pitch, 90)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.roll, 0)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let translationFactor = view.getTranslationFactor()
-***REMOVED******REMOVED***XCTAssertEqual(translationFactor, 1_000)
+***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraController = view.getCameraController()
 ***REMOVED******REMOVED***XCTAssertTrue(cameraController is TransformationMatrixCameraController)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let shouldOrientToCompass = view.getShouldOrientToCompass()
-***REMOVED******REMOVED***XCTAssertFalse(shouldOrientToCompass)
+***REMOVED******REMOVED***XCTAssertFalse(view.shouldOrientToCompass)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let interfaceOrientation = view.getInterfaceOrientation()
 ***REMOVED******REMOVED***XCTAssertEqual(interfaceOrientation, .none)
@@ -96,21 +92,19 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***sceneView
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let initialCamera = view.getInitialCamera()
+***REMOVED******REMOVED***let initialCamera = view.initialCamera
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.heading, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.pitch, 90)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.roll, 0)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let translationFactor = view.getTranslationFactor()
-***REMOVED******REMOVED***XCTAssertEqual(translationFactor, 1_000)
+***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraController = view.getCameraController()
 ***REMOVED******REMOVED***XCTAssertTrue(cameraController is TransformationMatrixCameraController)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let shouldOrientToCompass = view.getShouldOrientToCompass()
-***REMOVED******REMOVED***XCTAssertTrue(shouldOrientToCompass)
+***REMOVED******REMOVED***XCTAssertTrue(view.shouldOrientToCompass)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let interfaceOrientation = view.getInterfaceOrientation()
 ***REMOVED******REMOVED***XCTAssertEqual(interfaceOrientation, .none)
@@ -129,21 +123,19 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***sceneView
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let initialCamera = view.getInitialCamera()
+***REMOVED******REMOVED***let initialCamera = view.initialCamera
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.heading, 180)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.pitch, 90)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.roll, 0)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let translationFactor = view.getTranslationFactor()
-***REMOVED******REMOVED***XCTAssertEqual(translationFactor, 1_000)
+***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraController = view.getCameraController()
 ***REMOVED******REMOVED***XCTAssertTrue(cameraController is TransformationMatrixCameraController)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let shouldOrientToCompass = view.getShouldOrientToCompass()
-***REMOVED******REMOVED***XCTAssertFalse(shouldOrientToCompass)
+***REMOVED******REMOVED***XCTAssertFalse(view.shouldOrientToCompass)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let interfaceOrientation = view.getInterfaceOrientation()
 ***REMOVED******REMOVED***XCTAssertEqual(interfaceOrientation, .none)
@@ -160,25 +152,20 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***sceneView
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraController = view.getCameraController()
-***REMOVED******REMOVED***let initialCamera = cameraController.originCamera
+***REMOVED******REMOVED***let initialCamera = view.getCameraController().originCamera
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.heading, 0, accuracy: 0.001)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.pitch, 90, accuracy: 0.001)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.roll, 0, accuracy: 0.001)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let translationFactor = view.getTranslationFactor()
-***REMOVED******REMOVED***XCTAssertEqual(translationFactor, 1_000)
+***REMOVED******REMOVED***XCTAssertEqual(view.anchorPoint.x, 0)
+***REMOVED******REMOVED***XCTAssertEqual(view.anchorPoint.y, 0)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let clippingDistance = try XCTUnwrap(view.getClippingDistance())
-***REMOVED******REMOVED***XCTAssertEqual(clippingDistance, 1_000)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let initialTransformationIsSet = view.getInitialTransformationIsSet()
-***REMOVED******REMOVED***XCTAssertFalse(initialTransformationIsSet)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let coachingOverlayIsHidden = view.getCoachingOverlayIsHidden()
-***REMOVED******REMOVED***XCTAssertFalse(coachingOverlayIsHidden)
+***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
+***REMOVED******REMOVED***XCTAssertEqual(view.clippingDistance, 1_000)
+***REMOVED******REMOVED***XCTAssertFalse(view.initialTransformationIsSet)
+***REMOVED******REMOVED***XCTAssertFalse(view.coachingOverlayIsHidden)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let interfaceOrientation = view.getInterfaceOrientation()
 ***REMOVED******REMOVED***XCTAssertEqual(interfaceOrientation, .none)
@@ -196,7 +183,6 @@ import XCTest
 ***REMOVED***
 ***REMOVED******REMOVED***.coachingOverlayHidden(true)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let coachingOverlayIsHidden = view.getCoachingOverlayIsHidden()
-***REMOVED******REMOVED***XCTAssertTrue(coachingOverlayIsHidden)
+***REMOVED******REMOVED***XCTAssertTrue(view.coachingOverlayIsHidden)
 ***REMOVED***
 ***REMOVED***

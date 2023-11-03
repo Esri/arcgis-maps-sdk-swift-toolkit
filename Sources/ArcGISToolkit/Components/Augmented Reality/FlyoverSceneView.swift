@@ -20,11 +20,11 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/ The AR session.
 ***REMOVED***@StateObject private var session = ObservableARSession()
 ***REMOVED******REMOVED***/ The initial camera.
-***REMOVED***private let initialCamera: Camera
+***REMOVED***let initialCamera: Camera
 ***REMOVED******REMOVED***/ The translation factor.
-***REMOVED***private let translationFactor: Double
+***REMOVED***let translationFactor: Double
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to orient the scene view's initial heading to compass heading.
-***REMOVED***private let shouldOrientToCompass: Bool
+***REMOVED***let shouldOrientToCompass: Bool
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ The camera controller that we will set on the scene view.
@@ -189,20 +189,8 @@ private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate
 ***REMOVED***
 
 extension FlyoverSceneView {
-***REMOVED***func getInitialCamera() -> Camera {
-***REMOVED******REMOVED***return initialCamera
-***REMOVED***
-***REMOVED***
-***REMOVED***func getTranslationFactor() -> Double {
-***REMOVED******REMOVED***return translationFactor
-***REMOVED***
-***REMOVED***
 ***REMOVED***func getCameraController() -> CameraController {
 ***REMOVED******REMOVED***return cameraController
-***REMOVED***
-***REMOVED***
-***REMOVED***func getShouldOrientToCompass() -> Bool {
-***REMOVED******REMOVED***return shouldOrientToCompass
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func getInterfaceOrientation() -> InterfaceOrientation? {
