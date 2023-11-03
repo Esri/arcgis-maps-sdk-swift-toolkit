@@ -87,7 +87,7 @@ extension FormView {
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as GroupFormElement:
-            makeGroupElement(element)
+            GroupView(element: element, viewCreator: { makeFieldElement($0) })
         default:
             EmptyView()
         }
@@ -110,20 +110,9 @@ extension FormView {
         default:
             EmptyView()
         }
-        if element.isVisible {
+        // BarcodeScannerFormInput is not currently supported
+        if element.isVisible && !(element.input is BarcodeScannerFormInput) {
             Divider()
-        }
-    }
-    
-    /// Makes UI for a group form element.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeGroupElement(_ element: GroupFormElement) -> some View {
-        DisclosureGroup(element.label) {
-            ForEach(element.formElements, id: \.label) { formElement in
-                if let element = formElement as? FieldFormElement {
-                    makeFieldElement(element)
-                }
-            }
         }
     }
 }
