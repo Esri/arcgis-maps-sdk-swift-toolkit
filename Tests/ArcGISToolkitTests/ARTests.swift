@@ -39,7 +39,6 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
 ***REMOVED******REMOVED***XCTAssertTrue(view.shouldOrientToCompass)
-***REMOVED******REMOVED***XCTAssertEqual(view.interfaceOrientation, .none)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testFlyoverLocationInit() throws {
@@ -65,7 +64,6 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
 ***REMOVED******REMOVED***XCTAssertFalse(view.shouldOrientToCompass)
-***REMOVED******REMOVED***XCTAssertEqual(view.interfaceOrientation, .none)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testFlyoverLatLongInitWithDefaults() throws {
@@ -89,7 +87,6 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
 ***REMOVED******REMOVED***XCTAssertTrue(view.shouldOrientToCompass)
-***REMOVED******REMOVED***XCTAssertEqual(view.interfaceOrientation, .none)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testFlyoverLatLongInit() throws {
@@ -114,7 +111,6 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
 ***REMOVED******REMOVED***XCTAssertFalse(view.shouldOrientToCompass)
-***REMOVED******REMOVED***XCTAssertEqual(view.interfaceOrientation, .none)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testTableTopInit() throws {
@@ -128,13 +124,6 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***sceneView
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let initialCamera = view.cameraController.originCamera
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, -117.195646)
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 34.056397, accuracy: 0.001)
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.heading, 0, accuracy: 0.001)
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.pitch, 90, accuracy: 0.001)
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.roll, 0, accuracy: 0.001)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(view.anchorPoint.x, -117.195646)
 ***REMOVED******REMOVED***XCTAssertEqual(view.anchorPoint.y, 34.056397)
 ***REMOVED******REMOVED***
@@ -142,7 +131,6 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertEqual(view.clippingDistance, 1_000)
 ***REMOVED******REMOVED***XCTAssertFalse(view.initialTransformationIsSet)
 ***REMOVED******REMOVED***XCTAssertFalse(view.coachingOverlayIsHidden)
-***REMOVED******REMOVED***XCTAssertEqual(view.interfaceOrientation, .none)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testTableTopARCoachingOverlayViewModifier() throws {
