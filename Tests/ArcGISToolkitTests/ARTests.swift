@@ -17,7 +17,7 @@ import XCTest
 @testable import ArcGISToolkit
 
 @MainActor final class ARTests: XCTestCase {
-    func testFlyOverLocationInitWithDefaults() throws {
+    func testFlyoverLocationInitWithDefaults() throws {
         let sceneView = SceneView(scene: Scene())
         
         let view = FlyoverSceneView(
@@ -50,7 +50,7 @@ import XCTest
         XCTAssertEqual(interfaceOrientation, .none)
     }
     
-    func testFlyOverLocationInit() throws {
+    func testFlyoverLocationInit() throws {
         let sceneView = SceneView(scene: Scene())
         
         let view = FlyoverSceneView(
@@ -84,7 +84,7 @@ import XCTest
         XCTAssertEqual(interfaceOrientation, .none)
     }
     
-    func testFlyOverLatLongInitWithDefaults() throws {
+    func testFlyoverLatLongInitWithDefaults() throws {
         let sceneView = SceneView(scene: Scene())
         
         let view = FlyoverSceneView(
@@ -116,7 +116,7 @@ import XCTest
         XCTAssertEqual(interfaceOrientation, .none)
     }
     
-    func testFlyOverLatLongInit() throws {
+    func testFlyoverLatLongInit() throws {
         let sceneView = SceneView(scene: Scene())
         
         let view = FlyoverSceneView(
