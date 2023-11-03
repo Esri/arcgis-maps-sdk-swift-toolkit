@@ -73,7 +73,6 @@ struct TextInput: View {
             isFocused: isFocused,
             element: element,
             input: element.input,
-            rangeDomain: isMultiline ? nil : element.domain as? RangeDomain,
             fieldType: fieldType
         )
         .padding([.bottom], elementPadding)
