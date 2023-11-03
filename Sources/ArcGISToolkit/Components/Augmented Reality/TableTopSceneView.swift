@@ -32,19 +32,19 @@ public struct TableTopSceneView: View {
     /// A Boolean value that indicates whether the coaching overlay view is active.
     @State private var coachingOverlayIsActive: Bool = true
     /// A Boolean value that indicates whether to hide the coaching overlay view.
-    private var coachingOverlayIsHidden: Bool = false
+    var coachingOverlayIsHidden: Bool = false
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The configuration for the AR session.
     private let configuration: ARWorldTrackingConfiguration
     /// A Boolean value indicating that the scene's initial transformation has been set.
-    private var initialTransformationIsSet: Bool { initialTransformation != nil }
+    var initialTransformationIsSet: Bool { initialTransformation != nil }
     /// The anchor point for the scene view.
-    private let anchorPoint: Point
+    let anchorPoint: Point
     /// The translation factor for the scene's camera controller.
-    private let translationFactor: Double
+    let translationFactor: Double
     /// The clipping distance for the scene's camera controller.
-    private let clippingDistance: Double?
+    let clippingDistance: Double?
     
     /// Creates a table top scene view.
     /// - Parameters:
@@ -352,23 +352,7 @@ extension TableTopSceneView {
         return cameraController
     }
     
-    func getTranslationFactor() -> Double {
-        return translationFactor
-    }
-    
-    func getClippingDistance() -> Double? {
-        return clippingDistance
-    }
-    
     func getInterfaceOrientation() -> InterfaceOrientation? {
         return interfaceOrientation
-    }
-    
-    func getInitialTransformationIsSet() -> Bool {
-        return initialTransformationIsSet
-    }
-    
-    func getCoachingOverlayIsHidden() -> Bool {
-        return coachingOverlayIsHidden
     }
 }
