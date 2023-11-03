@@ -59,7 +59,10 @@ public struct FormView: View {
                 }
             }
         }
-        .scrollDismissesKeyboard()
+        .scrollDismissesKeyboard(
+            // Allow tall multiline text fields to be scrolled
+            immediately: (model.focusedElement as? FieldFormElement)?.input is TextAreaFormInput ? false : true
+        )
         .onChange(of: model.visibleElements) { _ in
             visibleElements = model.visibleElements
         }
@@ -98,14 +101,12 @@ extension FormView {
             ComboBoxInput(element: element)
         case is DateTimePickerFormInput:
             DateTimeInput(element: element)
-        case is TextAreaFormInput:
-            MultiLineTextInput(element: element)
         case is RadioButtonsFormInput:
             RadioButtonsInput(element: element)
-        case is TextBoxFormInput:
-            SingleLineTextInput(element: element)
         case is SwitchFormInput:
             SwitchInput(element: element)
+        case is TextAreaFormInput, is TextBoxFormInput:
+            TextInput(element: element)
         default:
             EmptyView()
         }
@@ -117,11 +118,14 @@ extension FormView {
 }
 
 private extension View {
-    /// - Returns: A view that immediately dismisses the keyboard upon scroll.
-    func scrollDismissesKeyboard() -> some View {
+    /// Configures the behavior in which scrollable content interacts with the software keyboard.
+    /// - Returns: A view that dismisses the keyboard when the  scroll.
+    /// - Parameter immediately: A Boolean value that will cause the keyboard to the keyboard to
+    /// dismiss as soon as scrolling starts when `true` and interactively when `false`.
+    func scrollDismissesKeyboard(immediately: Bool) -> some View {
         if #available(iOS 16.0, *) {
             return self
-                .scrollDismissesKeyboard(.immediately)
+                .scrollDismissesKeyboard(immediately ? .immediately : .interactively)
         } else {
             return self
         }
