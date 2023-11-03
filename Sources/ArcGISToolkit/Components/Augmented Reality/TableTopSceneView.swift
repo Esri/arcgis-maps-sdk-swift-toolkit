@@ -346,3 +346,29 @@ private extension String {
         )
     }
 }
+
+extension TableTopSceneView {
+    func getCameraController() -> TransformationMatrixCameraController {
+        return cameraController
+    }
+    
+    func getTranslationFactor() -> Double {
+        return translationFactor
+    }
+    
+    func getClippingDistance() -> Double? {
+        return clippingDistance
+    }
+    
+    func getInterfaceOrientation() -> InterfaceOrientation? {
+        return interfaceOrientation
+    }
+    
+    func getInitialTransformationIsSet() -> Bool {
+        return initialTransformationIsSet
+    }
+    
+    func getCoachingOverlayIsHidden() -> Bool {
+        return coachingOverlayIsHidden
+    }
+}
