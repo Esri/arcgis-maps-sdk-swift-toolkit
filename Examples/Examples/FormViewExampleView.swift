@@ -64,7 +64,7 @@ struct FormViewExampleView: View {
                     isPresented: $isPresented
                 ) {
                     FormView(featureForm: featureForm)
-                        .padding()
+                        .padding([.horizontal])
                 }
             
                 .environmentObject(formViewModel)
