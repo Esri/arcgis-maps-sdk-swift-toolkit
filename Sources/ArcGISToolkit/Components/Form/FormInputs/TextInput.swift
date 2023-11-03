@@ -73,7 +73,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
 ***REMOVED******REMOVED******REMOVED***element: element,
 ***REMOVED******REMOVED******REMOVED***input: element.input,
-***REMOVED******REMOVED******REMOVED***rangeDomain: isMultiline ? nil : rangeDomain,
+***REMOVED******REMOVED******REMOVED***rangeDomain: isMultiline ? nil : element.domain as? RangeDomain,
 ***REMOVED******REMOVED******REMOVED***fieldType: fieldType
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
@@ -199,15 +199,6 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "plus.forwardslash.minus")
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The range of valid values for a numeric input field.
-***REMOVED***var rangeDomain: RangeDomain? {
-***REMOVED******REMOVED***if let field = model.featureForm?.feature.table?.field(named: element.fieldName) {
-***REMOVED******REMOVED******REMOVED***return field.domain as? RangeDomain
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
