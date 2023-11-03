@@ -53,14 +53,12 @@ struct TextInputFooter: View {
     ///   - isFocused: A Boolean value indicating whether the text input field is focused.
     ///   - element: The footer's parent element.
     ///   - input: A form input that provides length constraints for the text input.
-    ///   - rangeDomain: The allowable range of numeric values in the text input field.
     ///   - fieldType: The field type of the text input.
     init(
         text: String,
         isFocused: Bool,
         element: FieldFormElement,
         input: FormInput,
-        rangeDomain: RangeDomain? = nil,
         fieldType: FieldType
     ) {
         self.text = text
@@ -68,7 +66,7 @@ struct TextInputFooter: View {
         self.element = element
         self.isFocused = isFocused
         self.description = element.description
-        self.rangeDomain = rangeDomain
+        self.rangeDomain = element.input is TextAreaFormInput ? nil : element.domain as? RangeDomain
         self.fieldType = fieldType
         
         switch input {
