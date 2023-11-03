@@ -17,7 +17,7 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 @MainActor final class ARTests: XCTestCase {
-***REMOVED***func testFlyOverLocationInitWithDefaults() throws {
+***REMOVED***func testFlyoverLocationInitWithDefaults() throws {
 ***REMOVED******REMOVED***let sceneView = SceneView(scene: Scene())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = FlyoverSceneView(
@@ -50,7 +50,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertEqual(interfaceOrientation, .none)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testFlyOverLocationInit() throws {
+***REMOVED***func testFlyoverLocationInit() throws {
 ***REMOVED******REMOVED***let sceneView = SceneView(scene: Scene())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = FlyoverSceneView(
@@ -84,7 +84,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertEqual(interfaceOrientation, .none)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testFlyOverLatLongInitWithDefaults() throws {
+***REMOVED***func testFlyoverLatLongInitWithDefaults() throws {
 ***REMOVED******REMOVED***let sceneView = SceneView(scene: Scene())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = FlyoverSceneView(
@@ -116,7 +116,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertEqual(interfaceOrientation, .none)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testFlyOverLatLongInit() throws {
+***REMOVED***func testFlyoverLatLongInit() throws {
 ***REMOVED******REMOVED***let sceneView = SceneView(scene: Scene())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = FlyoverSceneView(
