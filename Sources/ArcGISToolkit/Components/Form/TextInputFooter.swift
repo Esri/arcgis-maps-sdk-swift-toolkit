@@ -52,13 +52,11 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/   - text: The current text in the text input field.
 ***REMOVED******REMOVED***/   - isFocused: A Boolean value indicating whether the text input field is focused.
 ***REMOVED******REMOVED***/   - element: The footer's parent element.
-***REMOVED******REMOVED***/   - input: A form input that provides length constraints for the text input.
 ***REMOVED******REMOVED***/   - fieldType: The field type of the text input.
 ***REMOVED***init(
 ***REMOVED******REMOVED***text: String,
 ***REMOVED******REMOVED***isFocused: Bool,
 ***REMOVED******REMOVED***element: FieldFormElement,
-***REMOVED******REMOVED***input: FormInput,
 ***REMOVED******REMOVED***fieldType: FieldType
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.text = text
@@ -69,7 +67,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***self.rangeDomain = element.input is TextAreaFormInput ? nil : element.domain as? RangeDomain
 ***REMOVED******REMOVED***self.fieldType = fieldType
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch input {
+***REMOVED******REMOVED***switch element.input {
 ***REMOVED******REMOVED***case let input as TextBoxFormInput:
 ***REMOVED******REMOVED******REMOVED***lengthRange = fieldType == .text ? input.minLength...input.maxLength : nil
 ***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(
