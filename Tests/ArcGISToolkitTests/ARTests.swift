@@ -22,8 +22,8 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = FlyoverSceneView(
 ***REMOVED******REMOVED******REMOVED***initialLocation: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED***latitude: 0,
-***REMOVED******REMOVED******REMOVED******REMOVED***longitude: 0
+***REMOVED******REMOVED******REMOVED******REMOVED***latitude: 34.056397,
+***REMOVED******REMOVED******REMOVED******REMOVED***longitude: -117.195646
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***translationFactor: 1_000
 ***REMOVED******REMOVED***) { _ in
@@ -31,21 +31,15 @@ import XCTest
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let initialCamera = view.initialCamera
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, 0)
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 0)
+***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, -117.195646)
+***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 34.056397)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.heading, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.pitch, 90)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.roll, 0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraController = view.getCameraController()
-***REMOVED******REMOVED***XCTAssertTrue(cameraController is TransformationMatrixCameraController)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(view.shouldOrientToCompass)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let interfaceOrientation = view.getInterfaceOrientation()
-***REMOVED******REMOVED***XCTAssertEqual(interfaceOrientation, .none)
+***REMOVED******REMOVED***XCTAssertEqual(view.interfaceOrientation, .none)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testFlyoverLocationInit() throws {
@@ -53,8 +47,8 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = FlyoverSceneView(
 ***REMOVED******REMOVED******REMOVED***initialLocation: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED***latitude: 0,
-***REMOVED******REMOVED******REMOVED******REMOVED***longitude: 0
+***REMOVED******REMOVED******REMOVED******REMOVED***latitude: 34.056397,
+***REMOVED******REMOVED******REMOVED******REMOVED***longitude: -117.195646
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***translationFactor: 1_000,
 ***REMOVED******REMOVED******REMOVED***initialHeading: 90
@@ -63,29 +57,23 @@ import XCTest
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let initialCamera = view.initialCamera
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, 0)
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 0)
+***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, -117.195646)
+***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 34.056397)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.heading, 90)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.pitch, 90)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.roll, 0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraController = view.getCameraController()
-***REMOVED******REMOVED***XCTAssertTrue(cameraController is TransformationMatrixCameraController)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(view.shouldOrientToCompass)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let interfaceOrientation = view.getInterfaceOrientation()
-***REMOVED******REMOVED***XCTAssertEqual(interfaceOrientation, .none)
+***REMOVED******REMOVED***XCTAssertEqual(view.interfaceOrientation, .none)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testFlyoverLatLongInitWithDefaults() throws {
 ***REMOVED******REMOVED***let sceneView = SceneView(scene: Scene())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = FlyoverSceneView(
-***REMOVED******REMOVED******REMOVED***initialLatitude: 0,
-***REMOVED******REMOVED******REMOVED***initialLongitude: 0,
+***REMOVED******REMOVED******REMOVED***initialLatitude: 34.056397,
+***REMOVED******REMOVED******REMOVED***initialLongitude: -117.195646,
 ***REMOVED******REMOVED******REMOVED***initialAltitude: 1_000,
 ***REMOVED******REMOVED******REMOVED***translationFactor: 1_000
 ***REMOVED******REMOVED***) { _ in
@@ -93,29 +81,23 @@ import XCTest
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let initialCamera = view.initialCamera
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, 0)
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 0)
+***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, -117.195646)
+***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 34.056397)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.heading, 0)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.pitch, 90)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.roll, 0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraController = view.getCameraController()
-***REMOVED******REMOVED***XCTAssertTrue(cameraController is TransformationMatrixCameraController)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(view.shouldOrientToCompass)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let interfaceOrientation = view.getInterfaceOrientation()
-***REMOVED******REMOVED***XCTAssertEqual(interfaceOrientation, .none)
+***REMOVED******REMOVED***XCTAssertEqual(view.interfaceOrientation, .none)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testFlyoverLatLongInit() throws {
 ***REMOVED******REMOVED***let sceneView = SceneView(scene: Scene())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = FlyoverSceneView(
-***REMOVED******REMOVED******REMOVED***initialLatitude: 0,
-***REMOVED******REMOVED******REMOVED***initialLongitude: 0,
+***REMOVED******REMOVED******REMOVED***initialLatitude: 34.056397,
+***REMOVED******REMOVED******REMOVED***initialLongitude: -117.195646,
 ***REMOVED******REMOVED******REMOVED***initialAltitude: 1_000,
 ***REMOVED******REMOVED******REMOVED***translationFactor: 1_000,
 ***REMOVED******REMOVED******REMOVED***initialHeading: 180
@@ -124,51 +106,43 @@ import XCTest
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let initialCamera = view.initialCamera
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, 0)
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 0)
+***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, -117.195646)
+***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 34.056397)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.heading, 180)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.pitch, 90)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.roll, 0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraController = view.getCameraController()
-***REMOVED******REMOVED***XCTAssertTrue(cameraController is TransformationMatrixCameraController)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(view.shouldOrientToCompass)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let interfaceOrientation = view.getInterfaceOrientation()
-***REMOVED******REMOVED***XCTAssertEqual(interfaceOrientation, .none)
+***REMOVED******REMOVED***XCTAssertEqual(view.interfaceOrientation, .none)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testTableTopInit() throws {
 ***REMOVED******REMOVED***let sceneView = SceneView(scene: Scene())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = TableTopSceneView(
-***REMOVED******REMOVED******REMOVED***anchorPoint: .init(latitude: 0, longitude: 0),
+***REMOVED******REMOVED******REMOVED***anchorPoint: .init(latitude: 34.056397, longitude: -117.195646),
 ***REMOVED******REMOVED******REMOVED***translationFactor: 1_000,
 ***REMOVED******REMOVED******REMOVED***clippingDistance: 1_000
 ***REMOVED******REMOVED***) { _ in
 ***REMOVED******REMOVED******REMOVED***sceneView
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let initialCamera = view.getCameraController().originCamera
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, 0)
-***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 0)
+***REMOVED******REMOVED***let initialCamera = view.cameraController.originCamera
+***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.x, -117.195646)
+***REMOVED******REMOVED***XCTAssertEqual(initialCamera.location.y, 34.056397, accuracy: 0.001)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.heading, 0, accuracy: 0.001)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.pitch, 90, accuracy: 0.001)
 ***REMOVED******REMOVED***XCTAssertEqual(initialCamera.roll, 0, accuracy: 0.001)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertEqual(view.anchorPoint.x, 0)
-***REMOVED******REMOVED***XCTAssertEqual(view.anchorPoint.y, 0)
+***REMOVED******REMOVED***XCTAssertEqual(view.anchorPoint.x, -117.195646)
+***REMOVED******REMOVED***XCTAssertEqual(view.anchorPoint.y, 34.056397)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(view.translationFactor, 1_000)
 ***REMOVED******REMOVED***XCTAssertEqual(view.clippingDistance, 1_000)
 ***REMOVED******REMOVED***XCTAssertFalse(view.initialTransformationIsSet)
 ***REMOVED******REMOVED***XCTAssertFalse(view.coachingOverlayIsHidden)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let interfaceOrientation = view.getInterfaceOrientation()
-***REMOVED******REMOVED***XCTAssertEqual(interfaceOrientation, .none)
+***REMOVED******REMOVED***XCTAssertEqual(view.interfaceOrientation, .none)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testTableTopARCoachingOverlayViewModifier() throws {

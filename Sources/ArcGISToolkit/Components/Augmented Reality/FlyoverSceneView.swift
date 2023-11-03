@@ -30,7 +30,7 @@ public struct FlyoverSceneView: View {
 ***REMOVED******REMOVED***/ The camera controller that we will set on the scene view.
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The current interface orientation.
-***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
+***REMOVED***@State var interfaceOrientation: InterfaceOrientation?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a fly over scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -185,15 +185,5 @@ private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate
 ***REMOVED***
 ***REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
 ***REMOVED******REMOVED***currentFrame = frame
-***REMOVED***
-***REMOVED***
-
-extension FlyoverSceneView {
-***REMOVED***func getCameraController() -> CameraController {
-***REMOVED******REMOVED***return cameraController
-***REMOVED***
-***REMOVED***
-***REMOVED***func getInterfaceOrientation() -> InterfaceOrientation? {
-***REMOVED******REMOVED***return interfaceOrientation
 ***REMOVED***
 ***REMOVED***
