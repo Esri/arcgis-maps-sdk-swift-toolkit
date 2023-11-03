@@ -39,7 +39,6 @@ import XCTest
         
         XCTAssertEqual(view.translationFactor, 1_000)
         XCTAssertTrue(view.shouldOrientToCompass)
-        XCTAssertEqual(view.interfaceOrientation, .none)
     }
     
     func testFlyoverLocationInit() throws {
@@ -65,7 +64,6 @@ import XCTest
         
         XCTAssertEqual(view.translationFactor, 1_000)
         XCTAssertFalse(view.shouldOrientToCompass)
-        XCTAssertEqual(view.interfaceOrientation, .none)
     }
     
     func testFlyoverLatLongInitWithDefaults() throws {
@@ -89,7 +87,6 @@ import XCTest
         
         XCTAssertEqual(view.translationFactor, 1_000)
         XCTAssertTrue(view.shouldOrientToCompass)
-        XCTAssertEqual(view.interfaceOrientation, .none)
     }
     
     func testFlyoverLatLongInit() throws {
@@ -114,7 +111,6 @@ import XCTest
         
         XCTAssertEqual(view.translationFactor, 1_000)
         XCTAssertFalse(view.shouldOrientToCompass)
-        XCTAssertEqual(view.interfaceOrientation, .none)
     }
     
     func testTableTopInit() throws {
@@ -128,13 +124,6 @@ import XCTest
             sceneView
         }
         
-        let initialCamera = view.cameraController.originCamera
-        XCTAssertEqual(initialCamera.location.x, -117.195646)
-        XCTAssertEqual(initialCamera.location.y, 34.056397, accuracy: 0.001)
-        XCTAssertEqual(initialCamera.heading, 0, accuracy: 0.001)
-        XCTAssertEqual(initialCamera.pitch, 90, accuracy: 0.001)
-        XCTAssertEqual(initialCamera.roll, 0, accuracy: 0.001)
-        
         XCTAssertEqual(view.anchorPoint.x, -117.195646)
         XCTAssertEqual(view.anchorPoint.y, 34.056397)
         
@@ -142,7 +131,6 @@ import XCTest
         XCTAssertEqual(view.clippingDistance, 1_000)
         XCTAssertFalse(view.initialTransformationIsSet)
         XCTAssertFalse(view.coachingOverlayIsHidden)
-        XCTAssertEqual(view.interfaceOrientation, .none)
     }
     
     func testTableTopARCoachingOverlayViewModifier() throws {

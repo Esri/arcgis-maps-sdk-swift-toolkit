@@ -30,7 +30,7 @@ public struct FlyoverSceneView: View {
     /// The camera controller that we will set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
     /// The current interface orientation.
-    @State var interfaceOrientation: InterfaceOrientation?
+    @State private var interfaceOrientation: InterfaceOrientation?
     
     /// Creates a fly over scene view.
     /// - Parameters:
