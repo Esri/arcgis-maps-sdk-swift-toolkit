@@ -4,6 +4,15 @@
         development. It is built off of the new ArcGIS Maps SDK for Swift.
     }
     
+    @Chapter(name: "Augmented Reality") {
+        Augmented reality experiences overlay ArcGIS Scene imagery over a camera feed of the
+        physical world. The following views provide augmented reality experiences 
+        for common AR patterns including Flyover and TableTop AR.
+        @Image(source: FlyoverSceneView, alt: "An image of a fly over AR experience.")
+        @TutorialReference(tutorial: "doc:FlyoverSceneViewTutorial")
+        @TutorialReference(tutorial: "doc:TableTopSceneViewTutorial")
+    }
+    
     @Chapter(name: "Authenticator") {
         The `Authenticator` is a configurable object that handles authentication challenges. It will
         display a user interface when network and ArcGIS authentication challenges occur.
