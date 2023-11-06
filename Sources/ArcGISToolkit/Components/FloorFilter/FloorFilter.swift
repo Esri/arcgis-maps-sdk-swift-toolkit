@@ -29,7 +29,7 @@
 ***REMOVED***/
 ***REMOVED***/ - Automatically hides the floor browsing view when the associated map or scene is not floor-aware.
 ***REMOVED***/ - Selects the facility in view automatically (can be configured through the
-***REMOVED***/ ``FloorFilterAutomaticSelectionMode ``).
+***REMOVED***/ ``FloorFilterAutomaticSelectionMode``).
 ***REMOVED***/ - Shows the selected facility's levels in proper vertical order.
 ***REMOVED***/ - Filters the map/scene content to show the selected level.
 ***REMOVED***/ - Allows browsing the full floor-aware hierarchy of sites, facilities, and levels.
