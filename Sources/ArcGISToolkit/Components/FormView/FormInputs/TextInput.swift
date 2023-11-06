@@ -67,6 +67,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal], 10)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 5)
+***REMOVED******REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
 ***REMOVED***
 ***REMOVED******REMOVED***TextInputFooter(
 ***REMOVED******REMOVED******REMOVED***text: isPlaceholder ? "" : text,
