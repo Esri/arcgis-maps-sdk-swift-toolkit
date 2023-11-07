@@ -36,6 +36,9 @@ let package = Package(
             name: "ArcGISToolkit",
             dependencies: [
                 .product(name: "ArcGIS", package: "arcgis-maps-sdk-swift")
+            ],
+            resources: [
+                .copy("PrivacyInfo.xcprivacy")
             ]
         ),
         .testTarget(
