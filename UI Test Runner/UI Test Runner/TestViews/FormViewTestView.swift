@@ -41,15 +41,6 @@ struct FormViewTestView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***testCaseSelector
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
-***REMOVED******REMOVED******REMOVED******REMOVED***try! await TokenCredential.credential(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: URL(string: "https:***REMOVED***\(String.formViewTestDataDomain!)")!,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username: String.formViewTestDataUsername!,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***password: String.formViewTestDataPassword!
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
