@@ -18,6 +18,9 @@ import SwiftUI
 struct FormViewTestView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
+    /// The height of the map view's attribution bar.
+    @State private var attributionBarHeight: CGFloat = 0
+    
     /// The `Map` displayed in the `MapView`.
     @State private var map: Map?
     
@@ -51,6 +54,9 @@ private extension FormViewTestView {
     ///   - testCase: The test definition.
     func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
         MapView(map: map)
+            .onAttributionBarHeightChanged {
+                attributionBarHeight = $0
+            }
             .task {
                 try? await map.load()
                 let featureLayer = map.operationalLayers.first as? FeatureLayer
@@ -67,6 +73,7 @@ private extension FormViewTestView {
             .ignoresSafeArea(.keyboard)
         
             .floatingPanel(
+                attributionBarHeight: attributionBarHeight,
                 selectedDetent: .constant(.full),
                 horizontalAlignment: .leading,
                 isPresented: $isPresented
@@ -149,25 +156,34 @@ private extension FormViewTestView {
     
     /// The set of all Form View UI test cases.
     var cases: [TestCase] {[
-        .init("testCase_1_1", objectID: 1, portalID: String.formViewTestDataCase_1_x!),
-        .init("testCase_1_2", objectID: 1, portalID: String.formViewTestDataCase_1_x!),
-        .init("testCase_1_3", objectID: 1, portalID: String.formViewTestDataCase_1_x!),
-        .init("testCase_1_4", objectID: 1, portalID: String.formViewTestDataCase_1_4!),
-        .init("testCase_2_1", objectID: 1, portalID: String.formViewTestDataCase_2_x!),
-        .init("testCase_2_2", objectID: 1, portalID: String.formViewTestDataCase_2_x!),
-        .init("testCase_2_3", objectID: 1, portalID: String.formViewTestDataCase_2_x!),
-        .init("testCase_2_4", objectID: 1, portalID: String.formViewTestDataCase_2_x!),
-        .init("testCase_2_5", objectID: 1, portalID: String.formViewTestDataCase_2_x!),
-        .init("testCase_2_6", objectID: 1, portalID: String.formViewTestDataCase_2_x!),
-        .init("testCase_3_1", objectID: 2, portalID: String.formViewTestDataCase_3_x!),
-        .init("testCase_3_2", objectID: 2, portalID: String.formViewTestDataCase_3_x!),
-        .init("testCase_3_3", objectID: 2, portalID: String.formViewTestDataCase_3_x!),
-        .init("testCase_3_4", objectID: 2, portalID: String.formViewTestDataCase_3_x!),
-        .init("testCase_3_5", objectID: 2, portalID: String.formViewTestDataCase_3_x!),
-        .init("testCase_3_6", objectID: 2, portalID: String.formViewTestDataCase_3_x!),
-        .init("testCase_4_1", objectID: 1, portalID: String.formViewTestDataCase_4_x!),
-        .init("testCase_5_1", objectID: 1, portalID: String.formViewTestDataCase_5_x!),
-        .init("testCase_5_2", objectID: 1, portalID: String.formViewTestDataCase_5_x!),
-        .init("testCase_5_3", objectID: 1, portalID: String.formViewTestDataCase_5_x!),
+        .init("testCase_1_1", objectID: 1, portalID: .inputValidationMapID),
+        .init("testCase_1_2", objectID: 1, portalID: .inputValidationMapID),
+        .init("testCase_1_3", objectID: 1, portalID: .inputValidationMapID),
+        .init("testCase_1_4", objectID: 1, portalID: .rangeDomainMapID),
+        .init("testCase_2_1", objectID: 1, portalID: .dateMapID),
+        .init("testCase_2_2", objectID: 1, portalID: .dateMapID),
+        .init("testCase_2_3", objectID: 1, portalID: .dateMapID),
+        .init("testCase_2_4", objectID: 1, portalID: .dateMapID),
+        .init("testCase_2_5", objectID: 1, portalID: .dateMapID),
+        .init("testCase_2_6", objectID: 1, portalID: .dateMapID),
+        .init("testCase_3_1", objectID: 2, portalID: .comboBoxMapID),
+        .init("testCase_3_2", objectID: 2, portalID: .comboBoxMapID),
+        .init("testCase_3_3", objectID: 2, portalID: .comboBoxMapID),
+        .init("testCase_3_4", objectID: 2, portalID: .comboBoxMapID),
+        .init("testCase_3_5", objectID: 2, portalID: .comboBoxMapID),
+        .init("testCase_3_6", objectID: 2, portalID: .comboBoxMapID),
+        .init("testCase_4_1", objectID: 1, portalID: .radioButtonMapID),
+        .init("testCase_5_1", objectID: 1, portalID: .switchMapID),
+        .init("testCase_5_2", objectID: 1, portalID: .switchMapID),
+        .init("testCase_5_3", objectID: 1, portalID: .switchMapID)
     ]}
+}
+
+private extension String {
+    static let comboBoxMapID = "ed930cf0eb724ea49c6bccd8fd3dd9af"
+    static let dateMapID = "ec09090060664cbda8d814e017337837"
+    static let inputValidationMapID = "5d69e2301ad14ec8a73b568dfc29450a"
+    static let radioButtonMapID = "476e9b4180234961809485c8eff83d5d"
+    static let rangeDomainMapID = "bb4c5e81740e4e7296943988c78a7ea6"
+    static let switchMapID = "ff98f13b32b349adb55da5528d9174dc"
 }
