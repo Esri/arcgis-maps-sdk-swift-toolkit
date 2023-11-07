@@ -151,7 +151,7 @@ private extension FormViewTestView {
 ***REMOVED******REMOVED******REMOVED***self.id = name
 ***REMOVED******REMOVED******REMOVED***self.objectID = objectID
 ***REMOVED******REMOVED******REMOVED***self.url = .init(
-***REMOVED******REMOVED******REMOVED******REMOVED***string: String("https:***REMOVED***\(String.formViewTestDataDomain!)/home/item.html?id=\(portalID)")
+***REMOVED******REMOVED******REMOVED******REMOVED***string: String("https:***REMOVED***arcgis.com/home/item.html?id=\(portalID)")
 ***REMOVED******REMOVED******REMOVED***)!
 ***REMOVED***
 ***REMOVED***
