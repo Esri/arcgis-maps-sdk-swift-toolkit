@@ -32,19 +32,19 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the coaching overlay view is active.
 ***REMOVED***@State private var coachingOverlayIsActive: Bool = true
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether to hide the coaching overlay view.
-***REMOVED***private var coachingOverlayIsHidden: Bool = false
+***REMOVED***var coachingOverlayIsHidden: Bool = false
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ The configuration for the AR session.
 ***REMOVED***private let configuration: ARWorldTrackingConfiguration
 ***REMOVED******REMOVED***/ A Boolean value indicating that the scene's initial transformation has been set.
-***REMOVED***private var initialTransformationIsSet: Bool { initialTransformation != nil ***REMOVED***
+***REMOVED***var initialTransformationIsSet: Bool { initialTransformation != nil ***REMOVED***
 ***REMOVED******REMOVED***/ The anchor point for the scene view.
-***REMOVED***private let anchorPoint: Point
+***REMOVED***let anchorPoint: Point
 ***REMOVED******REMOVED***/ The translation factor for the scene's camera controller.
-***REMOVED***private let translationFactor: Double
+***REMOVED***let translationFactor: Double
 ***REMOVED******REMOVED***/ The clipping distance for the scene's camera controller.
-***REMOVED***private let clippingDistance: Double?
+***REMOVED***let clippingDistance: Double?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a table top scene view.
 ***REMOVED******REMOVED***/ - Parameters:

@@ -66,8 +66,8 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
-***REMOVED******REMOVED***.onChange(of: model.focusedFieldName) { newFocusedFieldName in
-***REMOVED******REMOVED******REMOVED***isEditing = newFocusedFieldName == element.fieldName
+***REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
+***REMOVED******REMOVED******REMOVED***isEditing = focusedElement == element
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***if inputModel.formattedValue.isEmpty {
@@ -141,7 +141,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***isEditing.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedFieldName = isEditing ? element.fieldName : nil
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = isEditing ? element : nil
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

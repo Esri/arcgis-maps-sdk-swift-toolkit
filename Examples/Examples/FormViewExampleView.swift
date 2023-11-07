@@ -34,9 +34,15 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED***/ The form being edited in the form view.
 ***REMOVED***@State private var featureForm: FeatureForm?
 ***REMOVED***
+***REMOVED******REMOVED***/ The height of the map view's attribution bar.
+***REMOVED***@State private var attributionBarHeight: CGFloat = 0
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in
 ***REMOVED******REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identifyScreenPoint = screenPoint
 ***REMOVED******REMOVED******REMOVED***
@@ -52,12 +58,13 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $detent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView(featureForm: featureForm)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal])
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
@@ -93,17 +100,14 @@ struct FormViewExampleView: View {
 extension FormViewExampleView {
 ***REMOVED******REMOVED***/ Identifies features, if any, at the current screen point.
 ***REMOVED******REMOVED***/ - Parameter proxy: The proxy to use for identification.
-***REMOVED******REMOVED***/ - Returns: The first identified feature.
+***REMOVED******REMOVED***/ - Returns: The first identified feature in a layer with
+***REMOVED******REMOVED***/ a feature form definition.
 ***REMOVED***func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
-***REMOVED******REMOVED***if let screenPoint = identifyScreenPoint,
-***REMOVED******REMOVED***   let identifyLayerResult = try? await Result(awaiting: {
-***REMOVED******REMOVED******REMOVED***   try await proxy.identifyLayers(
-***REMOVED******REMOVED******REMOVED******REMOVED***screenPoint: screenPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***tolerance: 10
-***REMOVED******REMOVED******REMOVED***   )
-   ***REMOVED***)
-***REMOVED******REMOVED******REMOVED***.cancellationToNil()?
-***REMOVED******REMOVED******REMOVED***.get()
+***REMOVED******REMOVED***guard let identifyScreenPoint else { return nil ***REMOVED***
+***REMOVED******REMOVED***let identifyResult = try? await proxy.identifyLayers(
+***REMOVED******REMOVED******REMOVED***screenPoint: identifyScreenPoint,
+***REMOVED******REMOVED******REMOVED***tolerance: 10
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.first(where: { result in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let feature = result.geoElements.first as? ArcGISFeature,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
@@ -111,10 +115,8 @@ extension FormViewExampleView {
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***return identifyLayerResult.geoElements.first as? ArcGISFeature
-***REMOVED***
-***REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***return identifyResult?.geoElements.first as? ArcGISFeature
 ***REMOVED***
 ***REMOVED***
 

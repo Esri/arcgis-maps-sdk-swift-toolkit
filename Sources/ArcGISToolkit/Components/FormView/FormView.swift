@@ -39,20 +39,30 @@ public struct FormView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED***if isEvaluating {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: featureForm?.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.id) { element in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
+***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
+***REMOVED******REMOVED******REMOVED***ScrollView {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isEvaluating {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: featureForm?.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.scrollDismissesKeyboard()
+***REMOVED******REMOVED***.scrollDismissesKeyboard(
+***REMOVED******REMOVED******REMOVED******REMOVED*** Allow tall multiline text fields to be scrolled
+***REMOVED******REMOVED******REMOVED***immediately: (model.focusedElement as? FieldFormElement)?.input is TextAreaFormInput ? false : true
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.onChange(of: model.visibleElements) { _ in
 ***REMOVED******REMOVED******REMOVED***visibleElements = model.visibleElements
 ***REMOVED***
@@ -60,11 +70,11 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isEvaluating = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await featureForm?.evaluateExpressions()
-***REMOVED******REMOVED******REMOVED******REMOVED***isEvaluating = false
-***REMOVED******REMOVED******REMOVED******REMOVED***model.initializeIsVisibleTasks()
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("error evaluating expressions: \(error.localizedDescription)")
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***model.initializeIsVisibleTasks()
+***REMOVED******REMOVED******REMOVED***isEvaluating = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -77,7 +87,7 @@ extension FormView {
 ***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED***case let element as GroupFormElement:
-***REMOVED******REMOVED******REMOVED***makeGroupElement(element)
+***REMOVED******REMOVED******REMOVED***GroupView(element: element, viewCreator: { makeFieldElement($0) ***REMOVED***)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
@@ -91,41 +101,31 @@ extension FormView {
 ***REMOVED******REMOVED******REMOVED***ComboBoxInput(element: element)
 ***REMOVED******REMOVED***case is DateTimePickerFormInput:
 ***REMOVED******REMOVED******REMOVED***DateTimeInput(element: element)
-***REMOVED******REMOVED***case is TextAreaFormInput:
-***REMOVED******REMOVED******REMOVED***MultiLineTextInput(element: element)
 ***REMOVED******REMOVED***case is RadioButtonsFormInput:
 ***REMOVED******REMOVED******REMOVED***RadioButtonsInput(element: element)
-***REMOVED******REMOVED***case is TextBoxFormInput:
-***REMOVED******REMOVED******REMOVED***SingleLineTextInput(element: element)
 ***REMOVED******REMOVED***case is SwitchFormInput:
 ***REMOVED******REMOVED******REMOVED***SwitchInput(element: element)
+***REMOVED******REMOVED***case is TextAreaFormInput, is TextBoxFormInput:
+***REMOVED******REMOVED******REMOVED***TextInput(element: element)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED***
-***REMOVED******REMOVED***if element.isVisible {
+***REMOVED******REMOVED******REMOVED*** BarcodeScannerFormInput is not currently supported
+***REMOVED******REMOVED***if element.isVisible && !(element.input is BarcodeScannerFormInput) {
 ***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Makes UI for a group form element.
-***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
-***REMOVED***@ViewBuilder func makeGroupElement(_ element: GroupFormElement) -> some View {
-***REMOVED******REMOVED***DisclosureGroup(element.label) {
-***REMOVED******REMOVED******REMOVED***ForEach(element.formElements, id: \.label) { formElement in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let element = formElement as? FieldFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFieldElement(element)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 private extension View {
-***REMOVED******REMOVED***/ - Returns: A view that immediately dismisses the keyboard upon scroll.
-***REMOVED***func scrollDismissesKeyboard() -> some View {
+***REMOVED******REMOVED***/ Configures the behavior in which scrollable content interacts with the software keyboard.
+***REMOVED******REMOVED***/ - Returns: A view that dismisses the keyboard when the  scroll.
+***REMOVED******REMOVED***/ - Parameter immediately: A Boolean value that will cause the keyboard to the keyboard to
+***REMOVED******REMOVED***/ dismiss as soon as scrolling starts when `true` and interactively when `false`.
+***REMOVED***func scrollDismissesKeyboard(immediately: Bool) -> some View {
 ***REMOVED******REMOVED***if #available(iOS 16.0, *) {
 ***REMOVED******REMOVED******REMOVED***return self
-***REMOVED******REMOVED******REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
+***REMOVED******REMOVED******REMOVED******REMOVED***.scrollDismissesKeyboard(immediately ? .immediately : .interactively)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return self
 ***REMOVED***
