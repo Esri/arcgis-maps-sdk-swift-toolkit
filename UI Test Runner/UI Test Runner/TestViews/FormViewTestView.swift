@@ -41,15 +41,6 @@ struct FormViewTestView: View {
                 testCaseSelector
             }
         }
-        .task {
-            ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
-                try! await TokenCredential.credential(
-                    for: URL(string: "https://\(String.formViewTestDataDomain!)")!,
-                    username: String.formViewTestDataUsername!,
-                    password: String.formViewTestDataPassword!
-                )
-            )
-        }
     }
 }
 
