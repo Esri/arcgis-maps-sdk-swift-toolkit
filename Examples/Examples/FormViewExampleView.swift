@@ -34,9 +34,15 @@ struct FormViewExampleView: View {
     /// The form being edited in the form view.
     @State private var featureForm: FeatureForm?
     
+    /// The height of the map view's attribution bar.
+    @State private var attributionBarHeight: CGFloat = 0
+    
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
+                .onAttributionBarHeightChanged {
+                    attributionBarHeight = $0
+                }
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
                 }
@@ -52,12 +58,13 @@ struct FormViewExampleView: View {
                 .ignoresSafeArea(.keyboard)
             
                 .floatingPanel(
+                    attributionBarHeight: attributionBarHeight,
                     selectedDetent: $detent,
                     horizontalAlignment: .leading,
                     isPresented: $isPresented
                 ) {
                     FormView(featureForm: featureForm)
-                        .padding()
+                        .padding([.horizontal])
                 }
             
                 .environmentObject(formViewModel)
@@ -93,17 +100,14 @@ struct FormViewExampleView: View {
 extension FormViewExampleView {
     /// Identifies features, if any, at the current screen point.
     /// - Parameter proxy: The proxy to use for identification.
-    /// - Returns: The first identified feature.
+    /// - Returns: The first identified feature in a layer with
+    /// a feature form definition.
     func identifyFeature(with proxy: MapViewProxy) async -> ArcGISFeature? {
-        if let screenPoint = identifyScreenPoint,
-           let identifyLayerResult = try? await Result(awaiting: {
-               try await proxy.identifyLayers(
-                screenPoint: screenPoint,
-                tolerance: 10
-               )
-           })
-            .cancellationToNil()?
-            .get()
+        guard let identifyScreenPoint else { return nil }
+        let identifyResult = try? await proxy.identifyLayers(
+            screenPoint: identifyScreenPoint,
+            tolerance: 10
+        )
             .first(where: { result in
                 if let feature = result.geoElements.first as? ArcGISFeature,
                    (feature.table?.layer as? FeatureLayer)?.featureFormDefinition != nil {
@@ -111,10 +115,8 @@ extension FormViewExampleView {
                 } else {
                     return false
                 }
-            }) {
-            return identifyLayerResult.geoElements.first as? ArcGISFeature
-        }
-        return nil
+            })
+        return identifyResult?.geoElements.first as? ArcGISFeature
     }
 }
 
