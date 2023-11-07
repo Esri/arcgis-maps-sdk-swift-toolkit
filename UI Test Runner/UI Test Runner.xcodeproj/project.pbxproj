@@ -23,25 +23,6 @@
 		75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildRule section */
-		75073AB82ADDB92E0092EBB0 /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			filePatterns = "*.masque";
-			fileType = pattern.proxy;
-			inputFiles = (
-				"$(SRCROOT)/.secrets",
-			);
-			isEditable = 1;
-			name = "Generate Swift Code from Secrets";
-			outputFiles = (
-				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE)",
-			);
-			runOncePerArchitecture = 0;
-			script = "\"${SRCROOT}/../Scripts/masquerade\" -i \"${INPUT_FILE_PATH}\" -o \"${SCRIPT_OUTPUT_FILE_0}\" -s \"${SCRIPT_INPUT_FILE_0}\" -f\n";
-		};
-/* End PBXBuildRule section */
-
 /* Begin PBXContainerItemProxy section */
 		7552A76F2A573DFB0023DA5A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -174,7 +155,6 @@
 				7552A74E2A573CBB0023DA5A /* Resources */,
 			);
 			buildRules = (
-				75073AB82ADDB92E0092EBB0 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
