@@ -151,7 +151,7 @@ private extension FormViewTestView {
             self.id = name
             self.objectID = objectID
             self.url = .init(
-                string: String("https://\(String.formViewTestDataDomain!)/home/item.html?id=\(portalID)")
+                string: String("https://arcgis.com/home/item.html?id=\(portalID)")
             )!
         }
     }
