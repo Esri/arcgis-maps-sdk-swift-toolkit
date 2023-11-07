@@ -47,27 +47,6 @@ The *ArcGIS Maps SDK for Swift Toolkit* has a *Target SDK* version of *15.0*, me
 
 Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS Platform services, including basemaps, and therefore require an API Key to be set in `ExamplesApp.swift`. Please see the [setup guide](https://developers.arcgis.com/swift/get-started/#3-access-services-and-content-with-an-api-key/) for more information.
 
-## Configure Secrets
-
-The Toolkit's UI Test Runner application uses a file (`/UI Test Runner/.secrets`) that contains information necessary to run a portion of its tests.
-
-1. Create a hidden secrets file in the project file's directory.
-
-```
-touch UI\ Test\ Runner/.secrets
-```
-
-2. Add any necessary keys and values to this new file which uses the following format:
-
-```
-key1=value1
-key2=value2
-keyN=valueN
-…
-```
-
-In keeping with best-practices, this isolates secrets from source code by generating and compiling an `AppSecrets.swift` source code file at build time using a custom build rule. To learn more about `masquerade`, consult the [documentation](https://github.com/Esri/data-collection-ios/tree/main/docs#masquerade) of Esri's Data Collection app.
-
 ## Additional Resources
 
 * [Toolkit Tutorials](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/toolkittutorials)
