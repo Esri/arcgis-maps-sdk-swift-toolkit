@@ -450,7 +450,7 @@ final class FormViewTests: XCTestCase {
         
         let localDate = Calendar.current.date(
             from: DateComponents(
-                timeZone: .gmt, year: 1969, month: 7, day: 8, hour: 3, minute: 17
+                timeZone: .gmt, year: 1969, month: 7, day: 16, hour: 13, minute: 32
             )
         )
         
@@ -461,7 +461,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertEqual(
             footer.label,
-            "Enter the launch date and time (July 7, 1969 20:17 UTC)"
+            "Enter the launch date and time (July 16, 1969 13:32 UTC)"
         )
         
         XCTAssertTrue(
