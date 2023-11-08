@@ -18,7 +18,7 @@ import SwiftUI
 /// A model for an input in a form.
 ///
 /// - Since: 200.3
-public class FormInputModel: ObservableObject {
+class FormInputModel: ObservableObject {
     /// A Boolean value indicating whether a value in the input is required.
     @Published var isRequired: Bool
     
@@ -26,7 +26,10 @@ public class FormInputModel: ObservableObject {
     @Published var isEditable: Bool
     
     /// The value of the input.
-    @Published var value: String
+    @Published var value: Any?
+    
+    /// The formatted value of the input.
+    @Published var formattedValue: String
     
     private var element: FieldFormElement
     
@@ -42,6 +45,7 @@ public class FormInputModel: ObservableObject {
         isRequired = element.isRequired
         isEditable = element.isEditable
         value = element.value
+        formattedValue = element.formattedValue
         
         // Kick off tasks to monitor required, editable and value.
         tasks.append(
@@ -89,6 +93,7 @@ public class FormInputModel: ObservableObject {
             for await value in element.$value {
                 await MainActor.run {
                     self.value = value
+                    self.formattedValue = element.formattedValue
                 }
             }
         }

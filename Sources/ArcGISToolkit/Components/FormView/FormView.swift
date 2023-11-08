@@ -15,6 +15,7 @@ import ArcGIS
 import SwiftUI
 
 /// Forms allow users to edit information about GIS features.
+///
 /// - Since: 200.3
 public struct FormView: View {
     @Environment(\.formElementPadding) var elementPadding
@@ -38,20 +39,30 @@ public struct FormView: View {
     }
     
     public var body: some View {
-        ScrollView {
-            if isEvaluating {
-                ProgressView()
-            } else {
-                VStack(alignment: .leading) {
-                    FormHeader(title: featureForm?.title)
-                        .padding([.bottom], elementPadding)
-                    ForEach(model.visibleElements, id: \.id) { element in
-                        makeElement(element)
+        ScrollViewReader { scrollViewProxy in
+            ScrollView {
+                if isEvaluating {
+                    ProgressView()
+                } else {
+                    VStack(alignment: .leading) {
+                        FormHeader(title: featureForm?.title)
+                            .padding([.bottom], elementPadding)
+                        ForEach(model.visibleElements, id: \.self) { element in
+                            makeElement(element)
+                        }
                     }
                 }
             }
+            .onChange(of: model.focusedElement) { focusedElement in
+                if let focusedElement {
+                    withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
+                }
+            }
         }
-        .scrollDismissesKeyboard()
+        .scrollDismissesKeyboard(
+            // Allow tall multiline text fields to be scrolled
+            immediately: (model.focusedElement as? FieldFormElement)?.input is TextAreaFormInput ? false : true
+        )
         .onChange(of: model.visibleElements) { _ in
             visibleElements = model.visibleElements
         }
@@ -59,11 +70,11 @@ public struct FormView: View {
             do {
                 isEvaluating = true
                 try await featureForm?.evaluateExpressions()
-                isEvaluating = false
-                model.initializeIsVisibleTasks()
             } catch {
                 print("error evaluating expressions: \(error.localizedDescription)")
             }
+            model.initializeIsVisibleTasks()
+            isEvaluating = false
         }
     }
 }
@@ -76,7 +87,7 @@ extension FormView {
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as GroupFormElement:
-            makeGroupElement(element)
+            GroupView(element: element, viewCreator: { makeFieldElement($0) })
         default:
             EmptyView()
         }
@@ -86,45 +97,35 @@ extension FormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
         switch element.input {
-        case let `input` as ComboBoxFormInput:
-            ComboBoxInput(featureForm: featureForm, element: element, input: `input`)
-        case let `input` as DateTimePickerFormInput:
-            DateTimeInput(featureForm: featureForm, element: element, input: `input`)
-        case let `input` as RadioButtonsFormInput:
-            RadioButtonsInput(featureForm: featureForm, element: element, input: `input`)
-        case let `input` as SwitchFormInput:
-            SwitchInput(featureForm: featureForm, element: element, input: `input`)
-        case let `input` as TextAreaFormInput:
-            MultiLineTextInput(featureForm: featureForm, element: element, input: `input`)
-        case let `input` as TextBoxFormInput:
-            SingleLineTextInput(featureForm: featureForm, element: element, input: `input`)
+        case is ComboBoxFormInput:
+            ComboBoxInput(element: element)
+        case is DateTimePickerFormInput:
+            DateTimeInput(element: element)
+        case is RadioButtonsFormInput:
+            RadioButtonsInput(element: element)
+        case is SwitchFormInput:
+            SwitchInput(element: element)
+        case is TextAreaFormInput, is TextBoxFormInput:
+            TextInput(element: element)
         default:
             EmptyView()
         }
-        if element.isVisible {
+        // BarcodeScannerFormInput is not currently supported
+        if element.isVisible && !(element.input is BarcodeScannerFormInput) {
             Divider()
-        }
-    }
-    
-    /// Makes UI for a group form element.
-    /// - Parameter element: The element to generate UI for.
-    @ViewBuilder func makeGroupElement(_ element: GroupFormElement) -> some View {
-        DisclosureGroup(element.label) {
-            ForEach(element.formElements, id: \.label) { formElement in
-                if let element = formElement as? FieldFormElement {
-                    makeFieldElement(element)
-                }
-            }
         }
     }
 }
 
 private extension View {
-    /// - Returns: A view that immediately dismisses the keyboard upon scroll.
-    func scrollDismissesKeyboard() -> some View {
+    /// Configures the behavior in which scrollable content interacts with the software keyboard.
+    /// - Returns: A view that dismisses the keyboard when the  scroll.
+    /// - Parameter immediately: A Boolean value that will cause the keyboard to the keyboard to
+    /// dismiss as soon as scrolling starts when `true` and interactively when `false`.
+    func scrollDismissesKeyboard(immediately: Bool) -> some View {
         if #available(iOS 16.0, *) {
             return self
-                .scrollDismissesKeyboard(.immediately)
+                .scrollDismissesKeyboard(immediately ? .immediately : .interactively)
         } else {
             return self
         }

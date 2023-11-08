@@ -116,7 +116,7 @@ public enum SearchOutcome {
             )
             let currentExtentAvg = (lastExtent.width + lastExtent.height) / 2.0
             let threshold = currentExtentAvg * 0.25
-            isEligibleForRequery = (centerDiff ?? 0.0) > threshold
+            isEligibleForRequery = centerDiff > threshold
         }
     }
     
