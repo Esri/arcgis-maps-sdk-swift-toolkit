@@ -42,7 +42,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
-***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
+***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -113,7 +113,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let returnButton = app.buttons["Return"]
-***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
+***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -199,7 +199,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let returnButton = app.buttons["Return"]
-***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
+***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -290,7 +290,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let footer = app.staticTexts["numbers Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Domain"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
-***REMOVED******REMOVED***let textField = app.textFields["numbers Text Field"]
+***REMOVED******REMOVED***let textField = app.textFields["numbers Text Input"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
