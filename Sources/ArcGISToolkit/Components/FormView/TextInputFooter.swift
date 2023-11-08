@@ -42,7 +42,7 @@ struct TextInputFooter: View {
 ***REMOVED***private let description: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The allowable length of text in the text input field.
-***REMOVED***private let lengthRange: ClosedRange<Int>
+***REMOVED***private let lengthRange: ClosedRange<Int>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The allowable range of numeric values in the text input field.
 ***REMOVED***private let rangeDomain: RangeDomain?
@@ -52,15 +52,11 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***/   - text: The current text in the text input field.
 ***REMOVED******REMOVED***/   - isFocused: A Boolean value indicating whether the text input field is focused.
 ***REMOVED******REMOVED***/   - element: The footer's parent element.
-***REMOVED******REMOVED***/   - input: A form input that provides length constraints for the text input.
-***REMOVED******REMOVED***/   - rangeDomain: The allowable range of numeric values in the text input field.
 ***REMOVED******REMOVED***/   - fieldType: The field type of the text input.
 ***REMOVED***init(
 ***REMOVED******REMOVED***text: String,
 ***REMOVED******REMOVED***isFocused: Bool,
 ***REMOVED******REMOVED***element: FieldFormElement,
-***REMOVED******REMOVED***input: FormInput,
-***REMOVED******REMOVED***rangeDomain: RangeDomain? = nil,
 ***REMOVED******REMOVED***fieldType: FieldType
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.text = text
@@ -68,12 +64,12 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.isFocused = isFocused
 ***REMOVED******REMOVED***self.description = element.description
-***REMOVED******REMOVED***self.rangeDomain = rangeDomain
+***REMOVED******REMOVED***self.rangeDomain = element.input is TextAreaFormInput ? nil : element.domain as? RangeDomain
 ***REMOVED******REMOVED***self.fieldType = fieldType
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch input {
+***REMOVED******REMOVED***switch element.input {
 ***REMOVED******REMOVED***case let input as TextBoxFormInput:
-***REMOVED******REMOVED******REMOVED***lengthRange = input.minLength...input.maxLength
+***REMOVED******REMOVED******REMOVED***lengthRange = fieldType == .text ? input.minLength...input.maxLength : nil
 ***REMOVED******REMOVED******REMOVED***_hasPreviouslySatisfiedMinimum = State(
 ***REMOVED******REMOVED******REMOVED******REMOVED***initialValue: !fieldType.isNumeric && currentLength >= input.minLength
 ***REMOVED******REMOVED******REMOVED***)
@@ -103,7 +99,7 @@ struct TextInputFooter: View {
 ***REMOVED******REMOVED***.foregroundColor(validationError == nil ? .secondary : .red)
 ***REMOVED******REMOVED***.onChange(of: text) { newText in
 ***REMOVED******REMOVED******REMOVED***if !hasPreviouslySatisfiedMinimum && !fieldType.isNumeric {
-***REMOVED******REMOVED******REMOVED******REMOVED***if newText.count >= lengthRange.lowerBound {
+***REMOVED******REMOVED******REMOVED******REMOVED***if newText.count >= lengthRange!.lowerBound {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***hasPreviouslySatisfiedMinimum = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
@@ -142,9 +138,9 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ The length validation scheme performed on the text input, determined by the minimum and
 ***REMOVED******REMOVED***/ maximum lengths.
 ***REMOVED***var scheme: LengthValidationScheme {
-***REMOVED******REMOVED***if lengthRange.lowerBound == 0 {
+***REMOVED******REMOVED***if lengthRange?.lowerBound == 0 {
 ***REMOVED******REMOVED******REMOVED***return .max
-***REMOVED*** else if lengthRange.lowerBound == lengthRange.upperBound {
+***REMOVED*** else if lengthRange?.lowerBound == lengthRange?.upperBound {
 ***REMOVED******REMOVED******REMOVED***return .exact
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return .minAndMax
@@ -189,7 +185,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***
 ***REMOVED*** else if text.count == .zero && element.isRequired && !focused {
 ***REMOVED******REMOVED******REMOVED***validationError = .emptyWhenRequired
-***REMOVED*** else if !lengthRange.contains(text.count) {
+***REMOVED*** else if !(lengthRange?.contains(text.count) ?? false) {
 ***REMOVED******REMOVED******REMOVED***validationError = .minOrMaxUnmet
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***validationError = nil
@@ -201,7 +197,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ identical, such as an ID field.
 ***REMOVED***var exactText: Text {
 ***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange.lowerBound) characters",
+***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange!.lowerBound) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Text indicating the user should enter a field's exact number of required characters."
 ***REMOVED******REMOVED***)
@@ -228,7 +224,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ Text indicating a field's maximum number of allowed characters.
 ***REMOVED***var maximumText: Text {
 ***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Maximum \(lengthRange.upperBound) characters",
+***REMOVED******REMOVED******REMOVED***"Maximum \(lengthRange!.upperBound) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's maximum number of allowed characters."
 ***REMOVED******REMOVED***)
@@ -237,7 +233,7 @@ extension TextInputFooter {
 ***REMOVED******REMOVED***/ Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters.
 ***REMOVED***var minAndMaxText: Text {
 ***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange.lowerBound) to \(lengthRange.upperBound) characters",
+***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange!.lowerBound) to \(lengthRange!.upperBound) characters",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters."
 ***REMOVED******REMOVED***)

@@ -16,6 +16,9 @@
 ***REMOVED***
 
 struct FloatingPanelExampleView: View {
+***REMOVED******REMOVED***/ The height of the map view's attribution bar.
+***REMOVED***@State private var attributionBarHeight: CGFloat = 0
+***REMOVED***
 ***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
 ***REMOVED***@StateObject private var dataModel = MapDataModel(
 ***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISImagery)
@@ -38,7 +41,15 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***map: dataModel.map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: initialViewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.floatingPanel(selectedDetent: $selectedDetent, isPresented: isPresented) {
+***REMOVED******REMOVED***.onAttributionBarHeightChanged {
+***REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
+***REMOVED***
+***REMOVED******REMOVED***.ignoresSafeArea(.keyboard, edges: .bottom)
+***REMOVED******REMOVED***.floatingPanel(
+***REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
+***REMOVED******REMOVED******REMOVED***selectedDetent: $selectedDetent,
+***REMOVED******REMOVED******REMOVED***isPresented: isPresented
+***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***switch demoContent {
 ***REMOVED******REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanelListDemoContent(selectedDetent: $selectedDetent)

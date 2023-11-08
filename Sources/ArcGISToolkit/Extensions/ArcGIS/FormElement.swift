@@ -20,6 +20,13 @@ extension FormElement: Equatable {
 ***REMOVED***
 ***REMOVED***
 
+extension FormElement: Hashable {
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(description)
+***REMOVED******REMOVED***hasher.combine(label)
+***REMOVED***
+***REMOVED***
+
 extension FormElement {
 ***REMOVED******REMOVED***/ The id of the element.
 ***REMOVED***public var id: ObjectIdentifier {
