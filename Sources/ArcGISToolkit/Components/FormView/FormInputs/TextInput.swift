@@ -168,7 +168,7 @@ private extension TextInput {
                 }
             }
             .scrollContentBackgroundHidden()
-            if isFocused && !text.isEmpty && inputModel.isEditable {
+            if !text.isEmpty && inputModel.isEditable {
                 ClearButton { text.removeAll() }
                     .accessibilityIdentifier("\(element.label) Clear Button")
             }
