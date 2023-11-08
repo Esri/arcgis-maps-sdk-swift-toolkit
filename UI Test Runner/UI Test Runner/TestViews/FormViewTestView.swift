@@ -161,7 +161,7 @@ private extension FormViewTestView {
         .init("testCase_1_3", objectID: 1, portalID: .inputValidationMapID),
         .init("testCase_1_4", objectID: 1, portalID: .rangeDomainMapID),
         .init("testCase_2_1", objectID: 1, portalID: .dateMapID),
-        .init("testCase_2_2", objectID: 1, portalID: .dateMapID),
+        .init("testCase_2_2", objectID: 2, portalID: .dateMapID),
         .init("testCase_2_3", objectID: 1, portalID: .dateMapID),
         .init("testCase_2_4", objectID: 1, portalID: .dateMapID),
         .init("testCase_2_5", objectID: 1, portalID: .dateMapID),
