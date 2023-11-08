@@ -42,7 +42,7 @@ final class FormViewTests: XCTestCase {
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
         let formViewTestsButton = app.buttons["FormView Tests"]
-        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
+        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
         app.launch()
         
@@ -113,7 +113,7 @@ final class FormViewTests: XCTestCase {
         let formTitle = app.staticTexts["InputValidation"]
         let formViewTestsButton = app.buttons["FormView Tests"]
         let returnButton = app.buttons["Return"]
-        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
+        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
         app.launch()
         
@@ -199,7 +199,7 @@ final class FormViewTests: XCTestCase {
         let formTitle = app.staticTexts["InputValidation"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let returnButton = app.buttons["Return"]
-        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
+        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
         app.launch()
         
@@ -290,7 +290,7 @@ final class FormViewTests: XCTestCase {
         let footer = app.staticTexts["numbers Footer"]
         let formTitle = app.staticTexts["Domain"]
         let formViewTestsButton = app.buttons["FormView Tests"]
-        let textField = app.textFields["numbers Text Field"]
+        let textField = app.textFields["numbers Text Input"]
         
         app.launch()
         
