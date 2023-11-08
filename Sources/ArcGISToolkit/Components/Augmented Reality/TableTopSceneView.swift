@@ -248,7 +248,7 @@ private extension View {
             }
         } else {
             return self.gesture(
-                DragGesture()
+                DragGesture(minimumDistance: 0)
                     .onEnded { dragAttributes in
                         action(dragAttributes.location)
                     }
