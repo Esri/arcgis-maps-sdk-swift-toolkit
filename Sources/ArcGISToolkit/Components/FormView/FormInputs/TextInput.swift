@@ -168,7 +168,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.scrollContentBackgroundHidden()
-***REMOVED******REMOVED******REMOVED***if isFocused && !text.isEmpty && inputModel.isEditable {
+***REMOVED******REMOVED******REMOVED***if !text.isEmpty && inputModel.isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED***
