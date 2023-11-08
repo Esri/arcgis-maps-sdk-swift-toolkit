@@ -24,6 +24,9 @@ struct ComboBoxInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
+    /// The model for the input.
+    @StateObject var inputModel: FormInputModel
+    
     /// The set of options in the combo box.
     @State private var codedValues = [CodedValue]()
     
@@ -39,9 +42,6 @@ struct ComboBoxInput: View {
     /// The selected option.
     @State private var selectedValue: CodedValue?
     
-    /// The feature form containing the input.
-    private var featureForm: FeatureForm?
-    
     /// The input's parent element.
     private let element: FieldFormElement
     
@@ -50,9 +50,6 @@ struct ComboBoxInput: View {
     
     /// The display state value for `nil` value options.
     private let noValueOption: FormInputNoValueOption
-    
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
     
     /// A subset of coded values with names containing `filterPhrase` or all of the coded values
     /// if `filterPhrase` is empty.
@@ -66,12 +63,15 @@ struct ComboBoxInput: View {
     
     /// Creates a view for a combo box input.
     /// - Parameters:
-    ///   - featureForm: The feature form containing the input.
     ///   - element: The input's parent element.
-    ///   - input: The input configuration of the view.
-    init(featureForm: FeatureForm?, element: FieldFormElement, input: ComboBoxFormInput) {
-        self.featureForm = featureForm
+    init(element: FieldFormElement) {
+        precondition(
+            element.input is ComboBoxFormInput,
+            "\(Self.self).\(#function) element's input must be \(ComboBoxFormInput.self)."
+        )
+        
         self.element = element
+        let input = element.input as! ComboBoxFormInput
         self.noValueLabel = input.noValueLabel
         self.noValueOption = input.noValueOption
         
@@ -82,12 +82,10 @@ struct ComboBoxInput: View {
     
     /// Creates a view for a combo box input.
     /// - Parameters:
-    ///   - featureForm: The feature form containing the input.
     ///   - element: The input's parent element.
     ///   - noValueLabel: The text used to represent a `nil` value.
     ///   - noValueOption: The display state value for `nil` value options.
-    init(featureForm: FeatureForm?, element: FieldFormElement, noValueLabel: String, noValueOption: FormInputNoValueOption) {
-        self.featureForm = featureForm
+    init(element: FieldFormElement, noValueLabel: String, noValueOption: FormInputNoValueOption) {
         self.element = element
         self.noValueLabel = noValueLabel
         self.noValueOption = noValueOption
@@ -131,21 +129,21 @@ struct ComboBoxInput: View {
         }
         .padding([.bottom], elementPadding)
         .onAppear {
-            codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-            selectedValue = codedValues.first { $0.name == element.value }
+            codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
+            selectedValue = codedValues.first { $0.name == inputModel.formattedValue }
         }
-        .onChange(of: selectedValue) { newValue in
-            guard newValue?.name != inputModel.value else {
-                return
+        .onChange(of: selectedValue) { selectedValue in
+            requiredValueMissing = inputModel.isRequired && selectedValue == nil
+            do {
+                try element.updateValue(selectedValue?.code)
+            } catch {
+                print(error.localizedDescription)
             }
-
-            requiredValueMissing = element.isRequired && newValue == nil
-            featureForm?.feature.setAttributeValue(newValue?.code, forKey: element.fieldName)
             model.evaluateExpressions()
         }
-        .onChange(of: inputModel.value) { newValue in
-            let codedValues = featureForm!.codedValues(fieldName: element.fieldName)
-            selectedValue = codedValues.first { $0.name == newValue }
+        .onChange(of: inputModel.formattedValue) { _ in
+            let codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
+            selectedValue = codedValues.first { $0.name == inputModel.formattedValue }
         }
     }
     
