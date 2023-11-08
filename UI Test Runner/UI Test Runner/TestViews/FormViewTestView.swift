@@ -18,8 +18,11 @@ import SwiftUI
 struct FormViewTestView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
+    /// The height of the map view's attribution bar.
+    @State private var attributionBarHeight: CGFloat = 0
+    
     /// The `Map` displayed in the `MapView`.
-    @State private var map = Map(url: .sampleData)!
+    @State private var map: Map?
     
     /// A Boolean value indicating whether or not the form is displayed.
     @State private var isPresented = false
@@ -30,13 +33,35 @@ struct FormViewTestView: View {
     /// The form being edited in the form view.
     @State private var featureForm: FeatureForm?
     
+    /// The current test case.
+    @State private var testCase: TestCase?
+    
     var body: some View {
+        Group {
+            if let map, let testCase {
+                makeMapView(map, testCase)
+            } else {
+                testCaseSelector
+            }
+        }
+    }
+}
+
+private extension FormViewTestView {
+    /// Make the main test UI.
+    /// - Parameters:
+    ///   - map: The map under test.
+    ///   - testCase: The test definition.
+    func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
         MapView(map: map)
+            .onAttributionBarHeightChanged {
+                attributionBarHeight = $0
+            }
             .task {
                 try? await map.load()
                 let featureLayer = map.operationalLayers.first as? FeatureLayer
                 let parameters = QueryParameters()
-                parameters.addObjectID(1)
+                parameters.addObjectID(testCase.objectID)
                 let result = try? await featureLayer?.featureTable?.queryFeatures(using: parameters)
                 guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else { return }
                 try? await feature.load()
@@ -48,6 +73,7 @@ struct FormViewTestView: View {
             .ignoresSafeArea(.keyboard)
         
             .floatingPanel(
+                attributionBarHeight: attributionBarHeight,
                 selectedDetent: .constant(.full),
                 horizontalAlignment: .leading,
                 isPresented: $isPresented
@@ -83,19 +109,81 @@ struct FormViewTestView: View {
                 }
             }
     }
-}
-
-private extension FormViewTestView {
-    /// A Boolean value indicating whether the form controls should be shown directly in the form's presenting container.
+    
+    /// Test case selection UI.
+    var testCaseSelector: some View {
+        ScrollView {
+            ForEach(cases) { testCase in
+                Button(testCase.id) {
+                    self.testCase = testCase
+                    map = Map(url: testCase.url)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+    
+    /// A Boolean value indicating whether the form controls should be shown directly in the form's
+    ///  presenting container.
     var useControlsInForm: Bool {
         verticalSizeClass == .compact ||
         UIDevice.current.userInterfaceIdiom == .mac ||
         UIDevice.current.userInterfaceIdiom == .pad
     }
+    
+    /// Test conditions for a Form View.
+    struct TestCase: Identifiable {
+        /// The name of the test case.
+        let id: String
+        /// The object ID of the feature being tested.
+        let objectID: Int
+        /// The test data location.
+        let url: URL
+        
+        /// Creates a FormView test case.
+        /// - Parameters:
+        ///   - name: The name of the test case.
+        ///   - objectID: The object ID of the feature being tested.
+        ///   - portalID: The portal ID of the test data.
+        init(_ name: String, objectID: Int, portalID: String) {
+            self.id = name
+            self.objectID = objectID
+            self.url = .init(
+                string: String("https://arcgis.com/home/item.html?id=\(portalID)")
+            )!
+        }
+    }
+    
+    /// The set of all Form View UI test cases.
+    var cases: [TestCase] {[
+        .init("testCase_1_1", objectID: 1, portalID: .inputValidationMapID),
+        .init("testCase_1_2", objectID: 1, portalID: .inputValidationMapID),
+        .init("testCase_1_3", objectID: 1, portalID: .inputValidationMapID),
+        .init("testCase_1_4", objectID: 1, portalID: .rangeDomainMapID),
+        .init("testCase_2_1", objectID: 1, portalID: .dateMapID),
+        .init("testCase_2_2", objectID: 1, portalID: .dateMapID),
+        .init("testCase_2_3", objectID: 1, portalID: .dateMapID),
+        .init("testCase_2_4", objectID: 1, portalID: .dateMapID),
+        .init("testCase_2_5", objectID: 1, portalID: .dateMapID),
+        .init("testCase_2_6", objectID: 1, portalID: .dateMapID),
+        .init("testCase_3_1", objectID: 2, portalID: .comboBoxMapID),
+        .init("testCase_3_2", objectID: 2, portalID: .comboBoxMapID),
+        .init("testCase_3_3", objectID: 2, portalID: .comboBoxMapID),
+        .init("testCase_3_4", objectID: 2, portalID: .comboBoxMapID),
+        .init("testCase_3_5", objectID: 2, portalID: .comboBoxMapID),
+        .init("testCase_3_6", objectID: 2, portalID: .comboBoxMapID),
+        .init("testCase_4_1", objectID: 1, portalID: .radioButtonMapID),
+        .init("testCase_5_1", objectID: 1, portalID: .switchMapID),
+        .init("testCase_5_2", objectID: 1, portalID: .switchMapID),
+        .init("testCase_5_3", objectID: 1, portalID: .switchMapID)
+    ]}
 }
 
-private extension URL {
-    static var sampleData: Self {
-        .init(string: <#URL#>)!
-    }
+private extension String {
+    static let comboBoxMapID = "ed930cf0eb724ea49c6bccd8fd3dd9af"
+    static let dateMapID = "ec09090060664cbda8d814e017337837"
+    static let inputValidationMapID = "5d69e2301ad14ec8a73b568dfc29450a"
+    static let radioButtonMapID = "476e9b4180234961809485c8eff83d5d"
+    static let rangeDomainMapID = "bb4c5e81740e4e7296943988c78a7ea6"
+    static let switchMapID = "ff98f13b32b349adb55da5528d9174dc"
 }
