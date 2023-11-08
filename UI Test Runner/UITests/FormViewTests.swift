@@ -450,7 +450,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let localDate = Calendar.current.date(
 ***REMOVED******REMOVED******REMOVED***from: DateComponents(
-***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 1969, month: 7, day: 8, hour: 3, minute: 17
+***REMOVED******REMOVED******REMOVED******REMOVED***timeZone: .gmt, year: 1969, month: 7, day: 16, hour: 13, minute: 32
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -461,7 +461,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***footer.label,
-***REMOVED******REMOVED******REMOVED***"Enter the launch date and time (July 7, 1969 20:17 UTC)"
+***REMOVED******REMOVED******REMOVED***"Enter the launch date and time (July 16, 1969 13:32 UTC)"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
