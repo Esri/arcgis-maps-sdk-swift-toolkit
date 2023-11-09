@@ -247,8 +247,10 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***action(screenPoint)
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Use a drag gesture with a minimum dragging distance of zero so the
+***REMOVED******REMOVED******REMOVED******REMOVED*** gesture is recognized with a single tap.
 ***REMOVED******REMOVED******REMOVED***return self.gesture(
-***REMOVED******REMOVED******REMOVED******REMOVED***DragGesture()
+***REMOVED******REMOVED******REMOVED******REMOVED***DragGesture(minimumDistance: 0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onEnded { dragAttributes in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(dragAttributes.location)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
