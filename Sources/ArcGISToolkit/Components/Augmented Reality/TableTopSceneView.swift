@@ -247,8 +247,10 @@ private extension View {
                 action(screenPoint)
             }
         } else {
+            // Use a drag gesture with a minimum dragging distance of zero so the
+            // gesture is recognized with a single tap.
             return self.gesture(
-                DragGesture()
+                DragGesture(minimumDistance: 0)
                     .onEnded { dragAttributes in
                         action(dragAttributes.location)
                     }
