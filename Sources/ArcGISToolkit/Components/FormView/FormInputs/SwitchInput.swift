@@ -77,6 +77,7 @@ struct SwitchInput: View {
                     .padding([.top], elementPadding)
                 HStack {
                     Text(isOn ? input.onValue.name : input.offValue.name)
+                        .accessibilityIdentifier("\(element.label) Switch Label")
                     Spacer()
                     Toggle("", isOn: $isOn)
                         .toggleStyle(.switch)
