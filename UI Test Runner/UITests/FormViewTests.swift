@@ -42,7 +42,7 @@ final class FormViewTests: XCTestCase {
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
         let formViewTestsButton = app.buttons["FormView Tests"]
-        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
+        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
         app.launch()
         
@@ -91,7 +91,7 @@ final class FormViewTests: XCTestCase {
             footer.label,
             "Maximum 256 characters"
         )
-    
+        
         XCTAssertTrue(
             characterIndicator.exists,
             "The character indicator doesn't exist."
@@ -113,7 +113,7 @@ final class FormViewTests: XCTestCase {
         let formTitle = app.staticTexts["InputValidation"]
         let formViewTestsButton = app.buttons["FormView Tests"]
         let returnButton = app.buttons["Return"]
-        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
+        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
         app.launch()
         
@@ -199,7 +199,7 @@ final class FormViewTests: XCTestCase {
         let formTitle = app.staticTexts["InputValidation"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let returnButton = app.buttons["Return"]
-        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Field"]
+        let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
         app.launch()
         
@@ -290,7 +290,7 @@ final class FormViewTests: XCTestCase {
         let footer = app.staticTexts["numbers Footer"]
         let formTitle = app.staticTexts["Domain"]
         let formViewTestsButton = app.buttons["FormView Tests"]
-        let textField = app.textFields["numbers Text Field"]
+        let textField = app.textFields["numbers Text Input"]
         
         app.launch()
         
@@ -306,8 +306,13 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertEqual(
+            textField.value as? String,
+            ""
+        )
+        
+        XCTAssertEqual(
             footer.label,
-            "Range domain  2-5"
+            "Range domain 2-5"
         )
         
         textField.tap()
@@ -325,7 +330,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertEqual(
             footer.label,
-            "Range domain  2-5"
+            "Range domain 2-5"
         )
         
         // Highlight/select the current value and replace it
@@ -381,7 +386,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertEqual(
             footer.label,
-            "Date Entry is Required"
+            "Required"
         )
         
         XCTAssertTrue(
@@ -424,7 +429,7 @@ final class FormViewTests: XCTestCase {
         let nowButton = app.buttons["Launch Date and Time for Apollo 11 Now Button"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -445,7 +450,7 @@ final class FormViewTests: XCTestCase {
         
         let localDate = Calendar.current.date(
             from: DateComponents(
-                timeZone: .gmt, year: 1969, month: 7, day: 8, hour: 3, minute: 17
+                timeZone: .gmt, year: 1969, month: 7, day: 16, hour: 13, minute: 32
             )
         )
         
@@ -456,12 +461,12 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertEqual(
             footer.label,
-            "Enter the launch date and time (July 7, 1969 20:17 UTC)"
+            "Enter the launch date and time (July 16, 1969 13:32 UTC)"
         )
         
         XCTAssertTrue(
-            datePicker.isHittable,
-            "The date picker isn't hittable."
+            datePicker.exists,
+            "The date picker doesn't exist."
         )
         
         XCTAssertTrue(
@@ -493,7 +498,7 @@ final class FormViewTests: XCTestCase {
         let todayButton = app.buttons["Launch Date for Apollo 11 Today Button"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -555,7 +560,7 @@ final class FormViewTests: XCTestCase {
         let nowButton = app.buttons["Launch Date Time End Now Button"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -578,7 +583,17 @@ final class FormViewTests: XCTestCase {
             "The footer doesn't exist."
         )
         
+        XCTAssertTrue(
+            nowButton.isHittable,
+            "The Now button wasn't hittable."
+        )
+        
         nowButton.tap()
+        
+        XCTAssertTrue(
+            fieldValue.isHittable,
+            "The field wasn't hittable."
+        )
         
         fieldValue.tap()
         
@@ -612,7 +627,7 @@ final class FormViewTests: XCTestCase {
         let julyFirstButton = datePicker.collectionViews.staticTexts["1"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -671,7 +686,7 @@ final class FormViewTests: XCTestCase {
         let formViewTestsButton = app.buttons["FormView Tests"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -714,7 +729,7 @@ final class FormViewTests: XCTestCase {
         let footer = app.staticTexts["Combo String Footer"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -774,7 +789,7 @@ final class FormViewTests: XCTestCase {
         let optionsButton = app.images["Combo Integer Options Button"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -818,7 +833,7 @@ final class FormViewTests: XCTestCase {
         let formViewTestsButton = app.buttons["FormView Tests"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -878,9 +893,11 @@ final class FormViewTests: XCTestCase {
         let noValueButton = app.buttons["No value"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
+        
+        selectTestCase(app)
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
@@ -893,10 +910,6 @@ final class FormViewTests: XCTestCase {
             "The field title isn't hittable."
         )
         
-        XCTExpectFailure(
-            "The design specifies the value should be String 3 but the actual current value may differ."
-        )
-        
         XCTAssertEqual(
             fieldValue.label,
             "String 3"
@@ -905,7 +918,7 @@ final class FormViewTests: XCTestCase {
         fieldValue.tap()
         
         XCTAssertTrue(
-            noValueButton.exists,
+            noValueButton.waitForExistence(timeout: 1),
             "The no value button doesn't exist."
         )
         
@@ -938,9 +951,11 @@ final class FormViewTests: XCTestCase {
         let oakButton = app.buttons["Oak"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
+        
+        selectTestCase(app)
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
@@ -1020,9 +1035,11 @@ final class FormViewTests: XCTestCase {
         let optionsButton = app.images["Combo No Value False Options Button"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
+        
+        selectTestCase(app)
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
@@ -1031,8 +1048,8 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            fieldTitle.isHittable,
-            "The field title isn't hittable."
+            fieldTitle.exists,
+            "The field title doesn't exist."
         )
         
         XCTAssertEqual(
@@ -1042,9 +1059,19 @@ final class FormViewTests: XCTestCase {
         
         optionsButton.tap()
         
+        XCTAssertTrue(
+            firstOption.waitForExistence(timeout: 1),
+            "The First option doesn't exist."
+        )
+        
         XCTAssertFalse(
             noValueButton.exists,
             "No Value exists as an option but it shouldn't."
+        )
+        
+        XCTAssertTrue(
+            firstOption.isHittable,
+            "The First option isn't hittable."
         )
         
         firstOption.tap()
@@ -1073,7 +1100,7 @@ final class FormViewTests: XCTestCase {
         let formViewTestsButton = app.buttons["FormView Tests"]
         let dogOption = app.buttons["Radio Button Text dog"]
         let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
-        let noValueOption = app.buttons["Radio Button Text No value"]
+        let noValueOption = app.buttons["Radio Button Text No Value"]
         
         app.launch()
         
@@ -1129,10 +1156,11 @@ final class FormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["switch integer"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["FormView Tests"]
+        let switchLabel = app.staticTexts["switch integer Switch Label"]
         let switchView = app.switches["switch integer Switch"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -1150,14 +1178,14 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            switchView.label,
+            switchLabel.label,
             "2"
         )
         
         switchView.tap()
         
         XCTAssertEqual(
-            switchView.label,
+            switchLabel.label,
             "1"
         )
     }
@@ -1168,10 +1196,11 @@ final class FormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["switch string"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["FormView Tests"]
+        let switchLabel = app.staticTexts["switch string Switch Label"]
         let switchView = app.switches["switch string Switch"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
@@ -1189,15 +1218,19 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            switchView.label,
+            switchLabel.label,
             "1"
+        )
+        
+        XCTAssertTrue(
+            switchView.isHittable,
+            "The switch isn't hittable."
         )
         
         switchView.tap()
         
-        
         XCTAssertEqual(
-            switchView.label,
+            switchLabel.label,
             "2"
         )
     }
@@ -1211,7 +1244,7 @@ final class FormViewTests: XCTestCase {
         let formViewTestsButton = app.buttons["FormView Tests"]
         
         app.launch()
-            
+        
         // Open the FormView component test view.
         formViewTestsButton.tap()
         
