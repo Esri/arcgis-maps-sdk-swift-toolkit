@@ -1266,6 +1266,100 @@ final class FormViewTests: XCTestCase {
             "The combo box doesn't exist."
         )
     }
+    
+    /// Test case 6.1: Test initially expanded and collapsed
+    func testCase_6_1() {
+        let app = XCUIApplication()
+        let collapsedGroupFirstElement = app.staticTexts["Single Line Text"]
+        let collapsedGroup = app.disclosureTriangles["Group with Multiple Form Elements 2"]
+        let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
+        let expandedGroup = app.disclosureTriangles["Group with Multiple Form Elements"]
+        let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        
+        app.launch()
+        
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            expandedGroup.exists,
+            "The first group header doesn't exist."
+        )
+        
+        // Confirm the first element of the expanded group exists.
+        XCTAssertTrue(
+            expandedGroupFirstElement.exists,
+            "The first group element doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            collapsedGroup.exists,
+            "The collapsed group header doesn't exist."
+        )
+        
+        // Confirm the first element of the collapsed group doesn't exist.
+        XCTAssertFalse(
+            collapsedGroupFirstElement.exists,
+            "The first group element exists but should be hidden."
+        )
+    }
+    
+    /// Test case 6.2: Test visibility of empty group
+    func testCase_6_2() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
+        let formViewTestsButton = app.buttons["FormView Tests"]
+        let showElementsButton = app.buttons["show invisible form element"]
+        let hiddenElementsGroup = app.disclosureTriangles["Group with children that are visible dependent"]
+        let groupElement = app.staticTexts["single line text 3"]
+        
+        app.launch()
+        
+        // Open the FormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(
+            hiddenElementsGroup.exists,
+            "The group header doesn't exist."
+        )
+        
+        // Confirm the first element of the conditional group doesn't exist.
+        XCTAssertFalse(
+            groupElement.exists,
+            "The first group element exists but should be hidden."
+        )
+        
+        // Confirm the option to show the elements exists.
+        XCTAssertTrue(
+            showElementsButton.exists,
+            "The show group elements button doesn't exist."
+        )
+        
+        showElementsButton.tap()
+        
+        // Confirm the first element of the conditional group doesn't exist.
+        XCTAssertTrue(
+            groupElement.exists,
+            "The first group element doesn't exist."
+        )
+    }
 }
 
 private extension String {
