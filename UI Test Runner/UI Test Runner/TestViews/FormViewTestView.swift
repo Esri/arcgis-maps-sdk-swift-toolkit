@@ -175,7 +175,9 @@ private extension FormViewTestView {
 ***REMOVED******REMOVED***.init("testCase_4_1", objectID: 1, portalID: .radioButtonMapID),
 ***REMOVED******REMOVED***.init("testCase_5_1", objectID: 1, portalID: .switchMapID),
 ***REMOVED******REMOVED***.init("testCase_5_2", objectID: 1, portalID: .switchMapID),
-***REMOVED******REMOVED***.init("testCase_5_3", objectID: 1, portalID: .switchMapID)
+***REMOVED******REMOVED***.init("testCase_5_3", objectID: 1, portalID: .switchMapID),
+***REMOVED******REMOVED***.init("testCase_6_1", objectID: 1, portalID: .groupElementMapID),
+***REMOVED******REMOVED***.init("testCase_6_2", objectID: 2, portalID: .groupElementMapID)
 ***REMOVED***]***REMOVED***
 ***REMOVED***
 
@@ -186,4 +188,5 @@ private extension String {
 ***REMOVED***static let radioButtonMapID = "476e9b4180234961809485c8eff83d5d"
 ***REMOVED***static let rangeDomainMapID = "bb4c5e81740e4e7296943988c78a7ea6"
 ***REMOVED***static let switchMapID = "ff98f13b32b349adb55da5528d9174dc"
+***REMOVED***static let groupElementMapID = "97495f67bd2e442dbbac485232375b07"
 ***REMOVED***
