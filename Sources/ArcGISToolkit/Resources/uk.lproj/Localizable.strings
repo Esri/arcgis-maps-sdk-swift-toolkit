@@ -227,7 +227,7 @@ network trace operation. */
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
-"Tap a surface to place the scene" = "ґ_Tap a surface to place the scene_________________Ї";
+"Tap a surface to place the scene" = "Торкніться поверхні, щоб розмістити сцену";
 
 /* A label indicating that tapping an image will reveal
 additional information. */
