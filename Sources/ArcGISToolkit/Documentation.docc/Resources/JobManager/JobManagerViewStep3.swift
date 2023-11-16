@@ -20,17 +20,14 @@ struct JobManagerTutorialView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.linear)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Start Job", action: job.start)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(status != .notStarted)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***jobManager.jobs.removeAll()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.job = nil
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Remove Job")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(status == .started)
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***jobManager.jobs.removeAll()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.job = nil
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Start New Job")
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(status == .started)
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(status == .started ? 0.0 : 1.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.task() {
