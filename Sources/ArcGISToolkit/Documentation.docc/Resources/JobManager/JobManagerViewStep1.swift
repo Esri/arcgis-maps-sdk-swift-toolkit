@@ -31,6 +31,7 @@ struct JobManagerTutorialView: View {
                                 print("Error creating offline map job: \(error)")
                             }
                             job = jobManager.jobs.first
+                            job?.start()
                             isAddingOfflineMapJob = false
                         }
                     } label: {

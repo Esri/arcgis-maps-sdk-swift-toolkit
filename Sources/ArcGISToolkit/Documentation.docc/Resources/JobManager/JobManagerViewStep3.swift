@@ -20,17 +20,14 @@ struct JobManagerTutorialView: View {
                 ProgressView(job.progress)
                     .progressViewStyle(.linear)
                     .padding()
-                HStack {
-                    Button("Start Job", action: job.start)
-                        .disabled(status != .notStarted)
-                    Button {
-                        jobManager.jobs.removeAll()
-                        self.job = nil
-                    } label: {
-                        Text("Remove Job")
-                    }
-                    .disabled(status == .started)
+                Button {
+                    jobManager.jobs.removeAll()
+                    self.job = nil
+                } label: {
+                    Text("Start New Job")
                 }
+                .disabled(status == .started)
+                .opacity(status == .started ? 0.0 : 1.0)
                 .buttonStyle(.bordered)
                 .padding()
                 .task() {
