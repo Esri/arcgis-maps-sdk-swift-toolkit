@@ -47,7 +47,7 @@
 ***REMOVED***@Chapter(name: "JobManager") {
 ***REMOVED******REMOVED***The `JobManager` manages saving and loading jobs so that they can continue to run if the 
 ***REMOVED******REMOVED***app is backgrounded or even terminated.
-***REMOVED******REMOVED***@Image(source: JobManager, alt: "An image of the JobManager component.")
+***REMOVED******REMOVED***@Image(source: JobManagerTutorial, alt: "An image of the JobManager component.")
 ***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:JobManagerTutorial")
 ***REMOVED***
 ***REMOVED***
