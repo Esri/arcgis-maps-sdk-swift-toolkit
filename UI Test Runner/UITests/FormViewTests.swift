@@ -1267,6 +1267,100 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test case 6.1: Test initially expanded and collapsed
+***REMOVED***func testCase_6_1() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let collapsedGroupFirstElement = app.staticTexts["Single Line Text"]
+***REMOVED******REMOVED***let collapsedGroup = app.disclosureTriangles["Group with Multiple Form Elements 2"]
+***REMOVED******REMOVED***let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
+***REMOVED******REMOVED***let expandedGroup = app.disclosureTriangles["Group with Multiple Form Elements"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***expandedGroup.exists,
+***REMOVED******REMOVED******REMOVED***"The first group header doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Confirm the first element of the expanded group exists.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***expandedGroupFirstElement.exists,
+***REMOVED******REMOVED******REMOVED***"The first group element doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***collapsedGroup.exists,
+***REMOVED******REMOVED******REMOVED***"The collapsed group header doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Confirm the first element of the collapsed group doesn't exist.
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***collapsedGroupFirstElement.exists,
+***REMOVED******REMOVED******REMOVED***"The first group element exists but should be hidden."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 6.2: Test visibility of empty group
+***REMOVED***func testCase_6_2() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let showElementsButton = app.buttons["show invisible form element"]
+***REMOVED******REMOVED***let hiddenElementsGroup = app.disclosureTriangles["Group with children that are visible dependent"]
+***REMOVED******REMOVED***let groupElement = app.staticTexts["single line text 3"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***hiddenElementsGroup.exists,
+***REMOVED******REMOVED******REMOVED***"The group header doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Confirm the first element of the conditional group doesn't exist.
+***REMOVED******REMOVED***XCTAssertFalse(
+***REMOVED******REMOVED******REMOVED***groupElement.exists,
+***REMOVED******REMOVED******REMOVED***"The first group element exists but should be hidden."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Confirm the option to show the elements exists.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***showElementsButton.exists,
+***REMOVED******REMOVED******REMOVED***"The show group elements button doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***showElementsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Confirm the first element of the conditional group doesn't exist.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***groupElement.exists,
+***REMOVED******REMOVED******REMOVED***"The first group element doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 
 private extension String {
 ***REMOVED******REMOVED***/ 257 characters of Lorem ipsum text
