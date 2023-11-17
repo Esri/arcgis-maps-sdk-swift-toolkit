@@ -18,3 +18,7 @@ the device to focus on specific content in the scene. To learn more about using 
 `TableTopSceneView` provides an augmented reality table top experience where ArcGIS Scene content
 is anchored to a physical surface. To learn more about using the TableTopSceneView see the 
 [TableTopSceneView Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/tabletopsceneviewtutorial).
+
+###### Requirements
+* Set the [`Privacy - Camera Usage Description`](https:***REMOVED***developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription) property in the app's **info.plist** to request camera permissions.
+* To restrict your app to installing only on devices that support ARKit, add `arkit` to the required device capabilities section of the app's **info.plist**.
