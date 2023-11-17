@@ -225,6 +225,10 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "起點";
 
+/* An instruction to the user to tap on a horizontal surface to
+place an ArcGIS Scene. */
+"Tap a surface to place the scene" = "點選表面以放置場景";
+
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "點擊圖像以取得更多資訊。";
