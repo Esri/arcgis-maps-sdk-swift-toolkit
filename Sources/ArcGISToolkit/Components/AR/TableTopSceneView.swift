@@ -82,76 +82,79 @@ public struct TableTopSceneView: View {
     
     public var body: some View {
         ZStack {
-            ARSwiftUIView(proxy: arViewProxy)
-                .onDidUpdateFrame { _, frame in
-                    guard let sceneViewProxy, let interfaceOrientation else { return }
-                    sceneViewProxy.updateCamera(
-                        frame: frame,
-                        cameraController: cameraController,
-                        orientation: interfaceOrientation,
-                        initialTransformation: initialTransformation
-                    )
-                    sceneViewProxy.setFieldOfView(
-                        for: frame,
-                        orientation: interfaceOrientation
-                    )
-                }
-                .onAddNode { renderer, node, anchor in
-                    addPlane(renderer: renderer, node: node, anchor: anchor)
-                }
-                .onUpdateNode { _, node, anchor in
-                    updatePlane(with: node, for: anchor)
-                }
-                .onSingleTapGesture { screenPoint in
-                    guard let sceneViewProxy,
-                          !initialTransformationIsSet
-                    else { return }
-                    
-                    if let transformation = sceneViewProxy.initialTransformation(
-                        for: arViewProxy,
-                        using: screenPoint
-                    ) {
-                        initialTransformation = transformation
-                        withAnimation {
-                            helpText = ""
-                        }
-                    }
-                }
-                .onAppear {
-                    arViewProxy.session.run(configuration)
-                }
-                .onDisappear {
-                    arViewProxy.session.pause()
-                }
-            
-            if !coachingOverlayIsHidden {
-                ARCoachingOverlay(goal: .horizontalPlane)
-                    .sessionProvider(arViewProxy)
-                    .active(coachingOverlayIsActive)
-                    .allowsHitTesting(false)
-                    .overlay (alignment: .top) {
-                        if !helpText.isEmpty {
-                            Text(helpText)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding(8)
-                                .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
-                        }
-                    }
-            }
-            
             SceneViewReader { proxy in
+                
+                    ARSwiftUIView(proxy: arViewProxy)
+                        .onDidUpdateFrame { _, frame in
+                            guard let sceneViewProxy, let interfaceOrientation else { return }
+                            sceneViewProxy.updateCamera(
+                                frame: frame,
+                                cameraController: cameraController,
+                                orientation: interfaceOrientation,
+                                initialTransformation: initialTransformation
+                            )
+                            sceneViewProxy.setFieldOfView(
+                                for: frame,
+                                orientation: interfaceOrientation
+                            )
+                        }
+                        .onAddNode { renderer, node, anchor in
+                            addPlane(renderer: renderer, node: node, anchor: anchor)
+                        }
+                        .onUpdateNode { _, node, anchor in
+                            updatePlane(with: node, for: anchor)
+                        }
+                        .onSingleTapGesture { screenPoint in
+                            guard let sceneViewProxy,
+                                  !initialTransformationIsSet
+                            else { return }
+                            
+                            if let transformation = sceneViewProxy.initialTransformation(
+                                for: arViewProxy,
+                                using: screenPoint
+                            ) {
+                                initialTransformation = transformation
+                                withAnimation {
+                                    helpText = ""
+                                }
+                            }
+                        }
+                        .onAppear {
+                            arViewProxy.session.run(configuration)
+                        }
+                        .onDisappear {
+                            arViewProxy.session.pause()
+                        }
+                
                 sceneViewBuilder(proxy)
                     .cameraController(cameraController)
                     .attributionBarHidden(true)
                     .spaceEffect(.transparent)
                     .atmosphereEffect(.off)
                     .onAppear {
+                        proxy.setFieldOfView(angle: 45)
                         // Capture scene view proxy as a workaround for a bug where
                         // preferences set for `ARSwiftUIView` are not honored. The
                         // issue has been logged with a bug report with ID FB13188508.
                         self.sceneViewProxy = proxy
                     }
                     .opacity(initialTransformationIsSet ? 1 : 0)
+                
+                
+//                if !coachingOverlayIsHidden {
+//                    ARCoachingOverlay(goal: .horizontalPlane)
+//                        .sessionProvider(arViewProxy)
+//                        .active(coachingOverlayIsActive)
+//                        .allowsHitTesting(false)
+//                        .overlay (alignment: .top) {
+//                            if !helpText.isEmpty {
+//                                Text(helpText)
+//                                    .frame(maxWidth: .infinity, alignment: .center)
+//                                    .padding(8)
+//                                    .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+//                            }
+//                        }
+//                }
             }
         }
         .onChange(of: anchorPoint) { anchorPoint in
@@ -345,4 +348,17 @@ private extension String {
                  """
         )
     }
+}
+
+struct BackgroundView: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIButton {
+        UIButton()
+    }
+
+    func updateUIView(_ uiView: UIButton, context: Context) {
+    }
+    
+    func makeCoordinator() -> Coordinator { Coordinator() }
+    
+    class Coordinator { init() {} }
 }
