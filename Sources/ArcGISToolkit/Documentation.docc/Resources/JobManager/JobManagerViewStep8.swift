@@ -38,6 +38,9 @@ struct JobManagerTutorialView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.task() {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await jobStatus in job.$status {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***status = jobStatus
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if status == .failed || status == .succeeded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***notifyJobCompleted()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
@@ -74,6 +77,9 @@ struct JobManagerTutorialView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let error {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if job == nil, jobManager.jobs.count > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED***job = jobManager.jobs.first
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

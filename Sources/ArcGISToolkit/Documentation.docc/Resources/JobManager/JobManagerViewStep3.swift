@@ -13,7 +13,7 @@ struct JobManagerTutorialView: View {
 ***REMOVED***@State private var isAddingOfflineMapJob = false
 ***REMOVED******REMOVED***/ The job's status.
 ***REMOVED***@State private var status: Job.Status = .notStarted
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if let job {
@@ -51,6 +51,7 @@ struct JobManagerTutorialView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Error creating offline map job: \(error)")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***job = jobManager.jobs.first
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***job?.start()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isAddingOfflineMapJob = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
