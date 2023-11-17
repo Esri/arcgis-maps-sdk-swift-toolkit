@@ -78,6 +78,9 @@ struct JobManagerTutorialView: View {
                     print(error.localizedDescription)
                 }
             }
+            if job == nil, jobManager.jobs.count > 0 {
+                job = jobManager.jobs.first
+            }
         }
     }
     /// Posts a local notification that the job completed.
