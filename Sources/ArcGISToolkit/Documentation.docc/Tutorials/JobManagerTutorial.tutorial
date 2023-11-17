@@ -99,7 +99,7 @@
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Now we'll turn our attention to handling the app getting terminated while jobs are running. In the tutorial app, add code to a task that will run if the app gets launched because a download finished.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Add a backgroundTask that responds to the URLSession that gets set up by the SDK in the ArcGISEnvironment. This is the task that will run if the URL session completes a download after the app has been terminated. In the background task, handle the background URL session events. Also, resume any jobs that have been paused; this will also recreate any URL sessions that finished while the app was in the background.
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a backgroundTask that responds to the URLSession that gets set up by the SDK in the ArcGISEnvironment. This is the task that will run if the URL session completes a download after the app has been terminated. In the background task, handle the background URL session events. Also, resume any jobs that have been paused; this will also recreate any URL sessions that finished while the app was in the background. Note: background operation only works on a device not connected to the debugger.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "JobManagerTutorialApp.swift", file: JobManagerAppStep2, previousFile: JobManagerAppStep1)
 ***REMOVED******REMOVED***
