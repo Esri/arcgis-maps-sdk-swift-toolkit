@@ -13,29 +13,26 @@ struct JobManagerTutorialView: View {
     @State private var isAddingOfflineMapJob = false
     /// The job's status.
     @State private var status: Job.Status = .notStarted
-
+    
     init() {
         // Ask the job manager to schedule background status checks for every 30 seconds.
         jobManager.preferredBackgroundStatusCheckSchedule = .regularInterval(interval: 30)
     }
-
+    
     var body: some View {
         VStack {
             if let job {
                 ProgressView(job.progress)
                     .progressViewStyle(.linear)
                     .padding()
-                HStack {
-                    Button("Start Job", action: job.start)
-                        .disabled(status != .notStarted)
-                    Button {
-                        jobManager.jobs.removeAll()
-                        self.job = nil
-                    } label: {
-                        Text("Remove Job")
-                    }
-                    .disabled(status == .started)
+                Button {
+                    jobManager.jobs.removeAll()
+                    self.job = nil
+                } label: {
+                    Text("Start New Job")
                 }
+                .disabled(status == .started)
+                .opacity(status == .started ? 0.0 : 1.0)
                 .buttonStyle(.bordered)
                 .padding()
                 .task() {
@@ -62,6 +59,7 @@ struct JobManagerTutorialView: View {
                                 print("Error creating offline map job: \(error)")
                             }
                             job = jobManager.jobs.first
+                            job?.start()
                             isAddingOfflineMapJob = false
                         }
                     } label: {
@@ -70,7 +68,7 @@ struct JobManagerTutorialView: View {
                     .buttonStyle(.bordered)
                     .disabled(isAddingOfflineMapJob)
                     .padding()
-
+                    
                 }
             }
         }

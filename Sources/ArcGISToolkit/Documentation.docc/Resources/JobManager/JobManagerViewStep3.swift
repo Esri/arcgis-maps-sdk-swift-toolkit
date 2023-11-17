@@ -13,7 +13,7 @@ struct JobManagerTutorialView: View {
     @State private var isAddingOfflineMapJob = false
     /// The job's status.
     @State private var status: Job.Status = .notStarted
-
+    
     var body: some View {
         VStack {
             if let job {
@@ -51,6 +51,7 @@ struct JobManagerTutorialView: View {
                                 print("Error creating offline map job: \(error)")
                             }
                             job = jobManager.jobs.first
+                            job?.start()
                             isAddingOfflineMapJob = false
                         }
                     } label: {
