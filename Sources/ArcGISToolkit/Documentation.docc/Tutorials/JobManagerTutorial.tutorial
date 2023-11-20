@@ -83,7 +83,7 @@
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Now tell the background task scheduler the identifier of the task that we want to run in the background. This is done in the project info for the app target. Add "com.esri.ArcGISToolkit.jobManager.statusCheck" as the first item in the Permitted Background Task Scheduler Identifiers.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***The job manager will register a background task with this identifier and submit a request to be allotted periodic background processing time. In this tutorial we will ask to be given time every 30 seconds. When the app gets background time is at the operating system's digression; it may or may not be anywhere close to 30 seconds.
+***REMOVED******REMOVED******REMOVED******REMOVED***The job manager will register a background task with this identifier and submit a request to be allotted periodic background processing time. In this tutorial we will ask to be given time every 30 seconds. When the app gets background time is at the operating system's discretion; it may or may not be anywhere close to 30 seconds.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: JobManagerTutorialPermittedIdentifiers, alt: "An image of the list of Permitted Background Task Scheduler Identifiers.")
 ***REMOVED******REMOVED***
