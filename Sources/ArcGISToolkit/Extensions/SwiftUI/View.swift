@@ -13,6 +13,30 @@
 
 import SwiftUI
 
+/// A modifier which monitors UIResponder keyboard notifications.
+///
+/// This modifier makes it easy to monitor state changes of the device keyboard.
+struct KeyboardStateChangedModifier: ViewModifier {
+    /// The closure to perform when the keyboard state has changed.
+    var action: (KeyboardState, CGFloat) -> Void
+    
+    @ViewBuilder func body(content: Content) -> some View {
+        content
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) {
+                action(.opening, ($0.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect).height)
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) {
+                action(.open, ($0.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect).height)
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+                action(.closing, .zero)
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
+                action(.closed, .zero)
+            }
+    }
+}
+
 /// A modifier which displays a background and shadow for a view. Used to represent a selected view.
 struct SelectedModifier: ViewModifier {
     /// A Boolean value that indicates whether view should display as selected.
@@ -34,6 +58,12 @@ struct SelectedModifier: ViewModifier {
 }
 
 extension View {
+    /// Sets a closure to perform when the keyboard state has changed.
+    /// - Parameter action: The closure to perform when the keyboard state has changed.
+    @ViewBuilder func onKeyboardStateChanged(_ action: @escaping (KeyboardState, CGFloat) -> Void) -> some View {
+        modifier(KeyboardStateChangedModifier(action: action))
+    }
+    
     /// Returns a new `View` that allows a parent `View` to be informed of a child view's size.
     /// - Parameter perform: The closure to be executed when the content size of the receiver
     /// changes.
@@ -79,6 +109,34 @@ extension View {
         task { @MainActor in
             try? await Task.sleep(nanoseconds: nanoseconds)
             action()
+        }
+    }
+}
+
+extension View {
+    /// Adds an action to perform when this view detects data emitted by the
+    /// given async sequence. If `action` is `nil`, then the async sequence is not observed.
+    /// The `action` closure is captured the first time the view appears.
+    /// - Parameters:
+    ///   - sequence: The async sequence to observe.
+    ///   - action: The action to perform when a value is emitted by `sequence`.
+    ///   The value emitted by `sequence` is passed as a parameter to `action`.
+    ///   The `action` is called on the `MainActor`.
+    /// - Returns: A view that triggers `action` when `sequence` emits a value.
+    @MainActor @ViewBuilder func onReceive<S>(
+        _ sequence: S,
+        perform action: ((S.Element) -> Void)?
+    ) -> some View where S: AsyncSequence {
+        if let action {
+            task {
+                do {
+                    for try await element in sequence {
+                        action(element)
+                    }
+                } catch {}
+            }
+        } else {
+            self
         }
     }
 }
