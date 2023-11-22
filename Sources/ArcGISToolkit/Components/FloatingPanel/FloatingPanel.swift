@@ -48,18 +48,17 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The height of the content.
     @State private var height: CGFloat = .minHeight
     
-    /// A Boolean value indicating whether the keyboard is open.
-    @State private var keyboardIsOpen = false
+    /// The current height of the device keyboard.
+    @State private var keyboardHeight: CGFloat = 0
+    
+    /// The current state of the device keyboard.
+    @State private var keyboardState: KeyboardState = .closed
     
     /// The latest recorded drag gesture value.
     @State private var latestDragGesture: DragGesture.Value?
     
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .zero
-    
-    /// A Boolean value indicating whether the resignFirstResponder should be sent for the current
-    /// drag gesture.
-    @State private var shouldSendResign = true
     
     /// A Boolean value indicating whether the panel should be configured for a compact environment.
     private var isCompact: Bool {
@@ -75,6 +74,7 @@ struct FloatingPanel<Content>: View where Content: View {
                         Divider()
                     }
                     content()
+                        .padding(.bottom, isCompact ? keyboardHeight - geometryProxy.safeAreaInsets.bottom : .zero)
                         .frame(height: height)
                         .clipped()
                     if !isCompact {
@@ -114,21 +114,27 @@ struct FloatingPanel<Content>: View where Content: View {
             .onChange(of: selectedDetent) { _ in
                 updateHeight()
             }
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
-                keyboardIsOpen = true
-                updateHeight()
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
-                keyboardIsOpen = false
+            .onKeyboardStateChanged { state, height in
+                keyboardState = state
+                keyboardHeight = height
                 updateHeight()
             }
         }
+        
+        // Disable automatic keyboard avoidance. The panel will handle keyboard avoidance via
+        // padding applied to the bottom of the content. This allows the panel to maintain a
+        // constant height as they keyboard closes.
+        .ignoresSafeArea(.keyboard)
+        
+        // If compact, ignore the device's bottom safe area so content reaches the physical bottom
+        // edge of the screen.
+        .ignoresSafeArea(.container, edges: isCompact && keyboardState == .closed ? .bottom : [])
         
         // If non-compact, add uniform padding around all edges.
         .padding(.all, isCompact ? 0 : .externalPadding)
         
         // If non-compact, and the keyboard isn't open add padding for the attribution bar.
-        .padding(.bottom, !isCompact && !keyboardIsOpen ? attributionBarHeight : 0)
+        .padding(.bottom, !isCompact && !(keyboardState == .open) ? attributionBarHeight : 0)
     }
     
     var drag: some Gesture {
@@ -136,11 +142,6 @@ struct FloatingPanel<Content>: View where Content: View {
             .onChanged {
                 let deltaY = $0.location.y - (latestDragGesture?.location.y ?? $0.location.y)
                 let proposedHeight = height + ((isCompact ? -1 : +1) * deltaY)
-                
-                if shouldSendResign {
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    shouldSendResign = false
-                }
                 
                 handleColor = .activeHandleColor
                 height = min(max(.minHeight, proposedHeight), maximumHeight)
@@ -155,10 +156,14 @@ struct FloatingPanel<Content>: View where Content: View {
                     .min { abs(inferredHeight - $0.height) < abs(inferredHeight - $1.height) }!
                     .detent
                 
+                if $0.translation.height.magnitude > 100 {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
+                
                 updateHeight()
+                
                 handleColor = .defaultHandleColor
                 latestDragGesture = nil
-                shouldSendResign = true
             }
     }
     
@@ -185,13 +190,13 @@ struct FloatingPanel<Content>: View where Content: View {
         let newHeight: CGFloat = {
             if !isPresented {
                 return .zero
-            } else if keyboardIsOpen {
+            } else if keyboardState == .opening || keyboardState == .open {
                 return heightFor(detent: .full)
             } else {
                 return heightFor(detent: selectedDetent)
             }
         }()
-        withAnimation { height = max(0, (newHeight - .handleFrameHeight))  }
+        withAnimation { height = max(0, (newHeight - .handleFrameHeight)) }
     }
     
     /// Configures a handle view.
