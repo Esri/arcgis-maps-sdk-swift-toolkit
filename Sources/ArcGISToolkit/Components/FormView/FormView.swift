@@ -53,8 +53,8 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement {
+***REMOVED******REMOVED******REMOVED***.task(id: model.focusedElement) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement = model.focusedElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
