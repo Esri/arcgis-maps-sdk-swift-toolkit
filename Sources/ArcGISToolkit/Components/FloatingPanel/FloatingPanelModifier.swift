@@ -105,9 +105,6 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
                     isPresented: isPresented,
                     content: panelContent
                 )
-                // When the panel is anchored to the bottom of the screen (compact) ignore the
-                // device's bottom safe area.
-                .ignoresSafeArea(.container, edges: isCompact ? .bottom : [])
                 .frame(maxWidth: isCompact ? .infinity : maxWidth)
             }
     }
