@@ -13,6 +13,30 @@
 
 ***REMOVED***
 
+***REMOVED***/ A modifier which monitors UIResponder keyboard notifications.
+***REMOVED***/
+***REMOVED***/ This modifier makes it easy to monitor state changes of the device keyboard.
+struct KeyboardStateChangedModifier: ViewModifier {
+***REMOVED******REMOVED***/ The closure to perform when the keyboard state has changed.
+***REMOVED***var action: (KeyboardState, CGFloat) -> Void
+***REMOVED***
+***REMOVED***@ViewBuilder func body(content: Content) -> some View {
+***REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) {
+***REMOVED******REMOVED******REMOVED******REMOVED***action(.opening, ($0.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect).height)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) {
+***REMOVED******REMOVED******REMOVED******REMOVED***action(.open, ($0.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect).height)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***action(.closing, .zero)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***action(.closed, .zero)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***/ A modifier which displays a background and shadow for a view. Used to represent a selected view.
 struct SelectedModifier: ViewModifier {
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether view should display as selected.
@@ -34,6 +58,12 @@ struct SelectedModifier: ViewModifier {
 ***REMOVED***
 
 extension View {
+***REMOVED******REMOVED***/ Sets a closure to perform when the keyboard state has changed.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the keyboard state has changed.
+***REMOVED***@ViewBuilder func onKeyboardStateChanged(_ action: @escaping (KeyboardState, CGFloat) -> Void) -> some View {
+***REMOVED******REMOVED***modifier(KeyboardStateChangedModifier(action: action))
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Returns a new `View` that allows a parent `View` to be informed of a child view's size.
 ***REMOVED******REMOVED***/ - Parameter perform: The closure to be executed when the content size of the receiver
 ***REMOVED******REMOVED***/ changes.
