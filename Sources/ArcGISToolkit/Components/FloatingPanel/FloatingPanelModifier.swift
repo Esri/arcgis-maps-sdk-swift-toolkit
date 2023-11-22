@@ -105,9 +105,6 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content: panelContent
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** When the panel is anchored to the bottom of the screen (compact) ignore the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** device's bottom safe area.
-***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.container, edges: isCompact ? .bottom : [])
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: isCompact ? .infinity : maxWidth)
 ***REMOVED******REMOVED***
 ***REMOVED***
