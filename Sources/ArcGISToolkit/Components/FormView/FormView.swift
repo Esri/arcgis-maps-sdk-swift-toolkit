@@ -53,8 +53,8 @@ public struct FormView: View {
                     }
                 }
             }
-            .onChange(of: model.focusedElement) { focusedElement in
-                if let focusedElement {
+            .task(id: model.focusedElement) {
+                if let focusedElement = model.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
             }
