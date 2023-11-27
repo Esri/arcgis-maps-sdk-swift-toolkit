@@ -17,7 +17,7 @@ import SwiftUI
 
 struct FormViewExampleView: View {
     /// A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
-    @State private var cancelConfirmationIsShowing = false
+    @State private var isCancelConfirmationPresented = false
     
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
