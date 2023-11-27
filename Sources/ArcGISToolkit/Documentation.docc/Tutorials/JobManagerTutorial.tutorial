@@ -8,7 +8,7 @@
     @Section(title: "Getting started with the JobManager") {
         @ContentAndMedia {
             @Image(source: JobManagerTutorial, alt: "An image of the JobManager component.")
-            In this tutorial you will use a job that generates an offline map. The job will connect to a service, ask the service to generate an offline map and then download the map.
+            In this tutorial you will use a job that generates an offline map. The job will connect to a service, ask the service to generate an offline map, poll the status of the job, and then download the offline map once it is ready.
         }
         
         @Steps {
@@ -23,9 +23,9 @@
             }
             
             @Step {
-                Add two extensions containing helper functions for making the job.
+                Add an extensions containing the helper function for making the job.
                 
-                The first function gets the map from the portal and calls the second function.  The second function uses a task to make the generate offline map job.
+                The function makes a map from a URL, then uses a task to make the generate offline map job.
                 
                 @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep2, previousFile: JobManagerViewStep1)
             }
@@ -33,7 +33,7 @@
             @Step {
                 Make the UI that will show when a job has been added to the job manager.
                 
-                To begin, add a state variable for the job status. Just after the check to see if we have a job, add a progress view that will show the progress of the job. Next, add a button remove the job from the job manager and start over; give it the title "Start New Job". Last add a task to keep track of the job status in the status state variable.
+                To begin, add a state variable for the job status. Just after the check to see if we have a job, add a progress view that will show the progress of the job. Next, add a button to remove the job from the job manager and start over; give it the title "Start New Job". Last add a task to keep track of the job status in the status state variable.
                 
                 @Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep3, previousFile: JobManagerViewStep2) {
                     @Image(source: JobManagerTutorial, alt: "An Image of an iPhone app with a progress bar and Start New Job button.")
@@ -43,7 +43,7 @@
             @Step {
                 Let's look at what we have so far. When the "Take Map Offline" button is tapped, a job is added to the job manager and the job is started.
                 
-                The first thing the job does is connect to the specified server to kick off the process that will make a mobile map package. Jobs are intended to be used with longer running service tasks. Once the task on the server is started the job waits and polls.
+                The first thing the job does is connect to the specified server to kick off the process that will make a mobile map package. Jobs are intended to be used with longer running service tasks. Once the task on the server is started the job waits and occasionally polls the service for the status of the service task.
 
                 @Image(source: JobManagerTutorialJobStart, alt: "An image of the app UI with a progress bar four percent done.")
             }
@@ -73,7 +73,7 @@
             }
             
             @Step {
-                Adding background tasks begins with some project setting. Enable the kind of background processing needed by the app in the Background Modes. The job manager uses "Background fetch".
+                Adding background tasks begins with some project settings. Enable the kind of background processing needed by the app in the Background Modes. The job manager uses "Background fetch".
                 
                 The job manager registers a background task to allow all of it's jobs to check the status of the work happening on the servers. Getting the status is a lightweight operation that requires "Background fetch" mode.
                 
@@ -97,7 +97,7 @@
             }
             
             @Step {
-                Now we'll turn our attention to handling the app getting terminated while jobs are running. In the tutorial app, add code to a task that will run if the app gets launched because a download finished.
+                The operating system may determine to terminate your app if the app is suspended. We'll now turn our attention to handling that situation occurring while jobs are running. In the tutorial app, add code to a task that will run if the app gets launched because a download finished.
                 
                 Add a backgroundTask that responds to the URLSession that gets set up by the SDK in the ArcGISEnvironment. This is the task that will run if the URL session completes a download after the app has been terminated. In the background task, handle the background URL session events. Also, resume any jobs that have been paused; this will also recreate any URL sessions that finished while the app was in the background. Note: background operation only works on a device not connected to the debugger.
                 
