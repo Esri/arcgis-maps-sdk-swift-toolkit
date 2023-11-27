@@ -73,16 +73,16 @@ struct FormViewExampleView: View {
                     FormView(featureForm: featureForm)
                         .padding([.horizontal])
                 }
-            
-                .alert("Cancel editing?", isPresented: $isCancelConfirmationPresented) {
-                    Button("Cancel editing", role: .destructive) {
-                        formViewModel.undoEdits()
-                        featureForm = nil
-                        isFormPresented = false
-                    }
-                    Button("Continue editing", role: .cancel) { }
+                .alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
+                        Button("Discard edits", role: .destructive) {
+                            formViewModel.undoEdits()
+                            featureForm = nil
+                            isFormPresented = false
+                        }
+                        Button("Continue editing", role: .cancel) { }
+                } message: {
+                    Text("Updates to this feature will be lost.")
                 }
-            
                 .environmentObject(formViewModel)
                 .navigationBarBackButtonHidden(isFormPresented)
                 .toolbar {
@@ -92,8 +92,7 @@ struct FormViewExampleView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         if isFormPresented {
                             Button("Cancel", role: .cancel) {
-                                formViewModel.undoEdits()
-                                isFormPresented = false
+                                isCancelConfirmationPresented = true
                             }
                         }
                     }
