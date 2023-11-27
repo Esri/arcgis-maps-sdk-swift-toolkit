@@ -23,7 +23,7 @@
             }
             
             @Step {
-                Add an extensions containing the helper function for making the job.
+                Add an extension containing the helper function for making the job.
                 
                 The function makes a map from a URL, then uses a task to make the generate offline map job.
                 
