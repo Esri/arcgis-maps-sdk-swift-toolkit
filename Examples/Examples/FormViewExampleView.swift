@@ -17,7 +17,7 @@
 
 struct FormViewExampleView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
-***REMOVED***@State private var cancelConfirmationIsShowing = false
+***REMOVED***@State private var isCancelConfirmationPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The height to present the form at.
 ***REMOVED***@State private var detent: FloatingPanelDetent = .full
