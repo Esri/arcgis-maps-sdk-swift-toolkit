@@ -104,7 +104,7 @@ struct FormViewExampleView: View {
                             Button("Submit") {
                                 Task {
                                     await formViewModel.submitChanges()
-                                    isFormPresented = false
+                                    featureForm = nil
                                 }
                             }
                         }
