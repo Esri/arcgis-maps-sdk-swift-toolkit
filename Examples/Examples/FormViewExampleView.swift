@@ -16,9 +16,6 @@
 ***REMOVED***
 
 struct FormViewExampleView: View {
-***REMOVED******REMOVED***/ A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
-***REMOVED***@State private var isCancelConfirmationPresented = false
-***REMOVED***
 ***REMOVED******REMOVED***/ The height to present the form at.
 ***REMOVED***@State private var detent: FloatingPanelDetent = .full
 ***REMOVED***
@@ -27,6 +24,9 @@ struct FormViewExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The point on the screen the user tapped on to identify a feature.
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
+***REMOVED***@State private var isCancelConfirmationPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the form is displayed.
 ***REMOVED***@State private var isPresented = false
@@ -48,7 +48,7 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelConfirmationIsShowing = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCancelConfirmationPresented = true
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identifyScreenPoint = screenPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -74,7 +74,7 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal])
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.alert("Cancel editing?", isPresented: $cancelConfirmationIsShowing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***.alert("Cancel editing?", isPresented: $isCancelConfirmationPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel editing", role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.undoEdits()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm = nil
