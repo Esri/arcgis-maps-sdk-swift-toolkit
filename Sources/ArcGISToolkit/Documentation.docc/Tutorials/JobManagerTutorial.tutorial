@@ -23,7 +23,7 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Add an extensions containing the helper function for making the job.
+***REMOVED******REMOVED******REMOVED******REMOVED***Add an extension containing the helper function for making the job.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***The function makes a map from a URL, then uses a task to make the generate offline map job.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
