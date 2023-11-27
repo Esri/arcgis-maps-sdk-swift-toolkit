@@ -35,7 +35,11 @@ struct FormViewExampleView: View {
 ***REMOVED***@StateObject private var formViewModel = FormViewModel()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The form being edited in the form view.
-***REMOVED***@State private var featureForm: FeatureForm?
+***REMOVED***@State private var featureForm: FeatureForm? {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***isFormPresented = featureForm != nil
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The height of the map view's attribution bar.
 ***REMOVED***@State private var attributionBarHeight: CGFloat = 0
@@ -60,7 +64,6 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.startEditing(feature, featureForm: featureForm)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFormPresented = featureForm != nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
 ***REMOVED******REMOVED******REMOVED***
@@ -77,7 +80,6 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard edits", role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.undoEdits()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm = nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFormPresented = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Continue editing", role: .cancel) { ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** message: {
