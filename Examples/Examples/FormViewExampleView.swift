@@ -29,7 +29,7 @@ struct FormViewExampleView: View {
     @State private var isCancelConfirmationPresented = false
     
     /// A Boolean value indicating whether or not the form is displayed.
-    @State private var isPresented = false
+    @State private var isFormPresented = false
     
     /// The form view model provides a channel of communication between the form view and its host.
     @StateObject private var formViewModel = FormViewModel()
@@ -47,7 +47,7 @@ struct FormViewExampleView: View {
                     attributionBarHeight = $0
                 }
                 .onSingleTapGesture { screenPoint, _ in
-                    if isPresented {
+                    if isFormPresented {
                         isCancelConfirmationPresented = true
                     } else {
                         identifyScreenPoint = screenPoint
@@ -60,7 +60,7 @@ struct FormViewExampleView: View {
                         self.featureForm = featureForm
                         formViewModel.startEditing(feature, featureForm: featureForm)
                     }
-                    isPresented = featureForm != nil
+                    isFormPresented = featureForm != nil
                 }
                 .ignoresSafeArea(.keyboard)
             
@@ -68,7 +68,7 @@ struct FormViewExampleView: View {
                     attributionBarHeight: attributionBarHeight,
                     selectedDetent: $detent,
                     horizontalAlignment: .leading,
-                    isPresented: $isPresented
+                    isPresented: $isFormPresented
                 ) {
                     FormView(featureForm: featureForm)
                         .padding([.horizontal])
@@ -78,32 +78,32 @@ struct FormViewExampleView: View {
                     Button("Cancel editing", role: .destructive) {
                         formViewModel.undoEdits()
                         featureForm = nil
-                        isPresented = false
+                        isFormPresented = false
                     }
                     Button("Continue editing", role: .cancel) { }
                 }
             
                 .environmentObject(formViewModel)
-                .navigationBarBackButtonHidden(isPresented)
+                .navigationBarBackButtonHidden(isFormPresented)
                 .toolbar {
                     // Once iOS 16.0 is the minimum supported, the two conditionals to show the
                     // buttons can be merged and hoisted up as the root content of the toolbar.
                     
                     ToolbarItem(placement: .navigationBarLeading) {
-                        if isPresented {
+                        if isFormPresented {
                             Button("Cancel", role: .cancel) {
                                 formViewModel.undoEdits()
-                                isPresented = false
+                                isFormPresented = false
                             }
                         }
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        if isPresented {
+                        if isFormPresented {
                             Button("Submit") {
                                 Task {
                                     await formViewModel.submitChanges()
-                                    isPresented = false
+                                    isFormPresented = false
                                 }
                             }
                         }
