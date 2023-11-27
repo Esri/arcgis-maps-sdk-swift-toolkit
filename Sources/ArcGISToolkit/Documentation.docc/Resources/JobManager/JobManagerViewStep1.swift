@@ -40,7 +40,6 @@ struct JobManagerTutorialView: View {
                     .buttonStyle(.bordered)
                     .disabled(isAddingOfflineMapJob)
                     .padding()
-                    
                 }
             }
         }
