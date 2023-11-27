@@ -16,9 +16,6 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FormViewExampleView: View {
-    /// A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
-    @State private var isCancelConfirmationPresented = false
-    
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
     
@@ -27,6 +24,9 @@ struct FormViewExampleView: View {
     
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
+    
+    /// A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
+    @State private var isCancelConfirmationPresented = false
     
     /// A Boolean value indicating whether or not the form is displayed.
     @State private var isPresented = false
@@ -48,7 +48,7 @@ struct FormViewExampleView: View {
                 }
                 .onSingleTapGesture { screenPoint, _ in
                     if isPresented {
-                        cancelConfirmationIsShowing = true
+                        isCancelConfirmationPresented = true
                     } else {
                         identifyScreenPoint = screenPoint
                     }
@@ -74,7 +74,7 @@ struct FormViewExampleView: View {
                         .padding([.horizontal])
                 }
             
-                .alert("Cancel editing?", isPresented: $cancelConfirmationIsShowing) {
+                .alert("Cancel editing?", isPresented: $isCancelConfirmationPresented) {
                     Button("Cancel editing", role: .destructive) {
                         formViewModel.undoEdits()
                         featureForm = nil
