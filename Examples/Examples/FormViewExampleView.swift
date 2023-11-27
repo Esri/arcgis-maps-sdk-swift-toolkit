@@ -35,7 +35,11 @@ struct FormViewExampleView: View {
     @StateObject private var formViewModel = FormViewModel()
     
     /// The form being edited in the form view.
-    @State private var featureForm: FeatureForm?
+    @State private var featureForm: FeatureForm? {
+        didSet {
+            isFormPresented = featureForm != nil
+        }
+    }
     
     /// The height of the map view's attribution bar.
     @State private var attributionBarHeight: CGFloat = 0
@@ -60,7 +64,6 @@ struct FormViewExampleView: View {
                         self.featureForm = featureForm
                         formViewModel.startEditing(feature, featureForm: featureForm)
                     }
-                    isFormPresented = featureForm != nil
                 }
                 .ignoresSafeArea(.keyboard)
             
@@ -77,7 +80,6 @@ struct FormViewExampleView: View {
                         Button("Discard edits", role: .destructive) {
                             formViewModel.undoEdits()
                             featureForm = nil
-                            isFormPresented = false
                         }
                         Button("Continue editing", role: .cancel) { }
                 } message: {
