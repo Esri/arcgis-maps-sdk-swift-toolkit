@@ -29,7 +29,7 @@ struct FormViewExampleView: View {
 ***REMOVED***@State private var isCancelConfirmationPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the form is displayed.
-***REMOVED***@State private var isPresented = false
+***REMOVED***@State private var isFormPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The form view model provides a channel of communication between the form view and its host.
 ***REMOVED***@StateObject private var formViewModel = FormViewModel()
@@ -47,7 +47,7 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isFormPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCancelConfirmationPresented = true
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identifyScreenPoint = screenPoint
@@ -60,7 +60,7 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.startEditing(feature, featureForm: featureForm)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = featureForm != nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFormPresented = featureForm != nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
 ***REMOVED******REMOVED******REMOVED***
@@ -68,7 +68,7 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $detent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isFormPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView(featureForm: featureForm)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal])
@@ -78,32 +78,32 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel editing", role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.undoEdits()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm = nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFormPresented = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Continue editing", role: .cancel) { ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(isPresented)
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(isFormPresented)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Once iOS 16.0 is the minimum supported, the two conditionals to show the
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** buttons can be merged and hoisted up as the root content of the toolbar.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isFormPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.undoEdits()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFormPresented = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isFormPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Submit") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await formViewModel.submitChanges()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFormPresented = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
