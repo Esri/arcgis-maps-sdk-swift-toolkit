@@ -1274,6 +1274,7 @@ final class FormViewTests: XCTestCase {
         let collapsedGroup = app.disclosureTriangles["Group with Multiple Form Elements 2"]
         let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
         let expandedGroup = app.disclosureTriangles["Group with Multiple Form Elements"]
+        let expandedGroupDescription = app.staticTexts["Group with Multiple Form Elements Description"]
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         let formViewTestsButton = app.buttons["FormView Tests"]
         
@@ -1293,6 +1294,16 @@ final class FormViewTests: XCTestCase {
         XCTAssertTrue(
             expandedGroup.exists,
             "The first group header doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            expandedGroupDescription.exists,
+            "The expanded group's description doesn't exist."
+        )
+        
+        XCTAssertEqual(
+            expandedGroupDescription.label,
+            "This Group is 'Expand initial state'\nThis group is Visible"
         )
         
         // Confirm the first element of the expanded group exists.
@@ -1320,6 +1331,7 @@ final class FormViewTests: XCTestCase {
         let formViewTestsButton = app.buttons["FormView Tests"]
         let showElementsButton = app.buttons["show invisible form element"]
         let hiddenElementsGroup = app.disclosureTriangles["Group with children that are visible dependent"]
+        let hiddenElementsGroupDescription = app.staticTexts["Group with children that are visible dependent Description"]
         let groupElement = app.staticTexts["single line text 3"]
         
         app.launch()
@@ -1338,6 +1350,16 @@ final class FormViewTests: XCTestCase {
         XCTAssertTrue(
             hiddenElementsGroup.exists,
             "The group header doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            hiddenElementsGroupDescription.exists,
+            "The expanded group's description doesn't exist."
+        )
+        
+        XCTAssertEqual(
+            hiddenElementsGroupDescription.label,
+            "The Form Elements in this group need the Radio button \"show invisible form elements\" to be selected, if you want to see them"
         )
         
         // Confirm the first element of the conditional group doesn't exist.
