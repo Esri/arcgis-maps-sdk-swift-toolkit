@@ -50,9 +50,15 @@ struct GroupView<Content>: View where Content: View {
     
     var body: some View {
         DisclosureGroup(self.element.label, isExpanded: $isExpanded) {
-            ForEach(visibleElements, id: \.label) { formElement in
-                if let element = formElement as? FieldFormElement {
-                    viewCreator(element)
+            Group {
+                Text(element.description)
+                    .accessibilityIdentifier("\(element.label) Description")
+                    .font(.subheadline)
+                Divider()
+                ForEach(visibleElements, id: \.label) { formElement in
+                    if let element = formElement as? FieldFormElement {
+                        viewCreator(element)
+                    }
                 }
             }
             // Reapply leading alignment for content within the DisclosureGroup
