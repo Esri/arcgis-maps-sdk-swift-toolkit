@@ -25,14 +25,21 @@ struct FormViewExampleView: View {
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
     
+    /// A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
+    @State private var isCancelConfirmationPresented = false
+    
     /// A Boolean value indicating whether or not the form is displayed.
-    @State private var isPresented = false
+    @State private var isFormPresented = false
     
     /// The form view model provides a channel of communication between the form view and its host.
     @StateObject private var formViewModel = FormViewModel()
     
     /// The form being edited in the form view.
-    @State private var featureForm: FeatureForm?
+    @State private var featureForm: FeatureForm? {
+        didSet {
+            isFormPresented = featureForm != nil
+        }
+    }
     
     /// The height of the map view's attribution bar.
     @State private var attributionBarHeight: CGFloat = 0
@@ -44,7 +51,11 @@ struct FormViewExampleView: View {
                     attributionBarHeight = $0
                 }
                 .onSingleTapGesture { screenPoint, _ in
-                    identifyScreenPoint = screenPoint
+                    if isFormPresented {
+                        isCancelConfirmationPresented = true
+                    } else {
+                        identifyScreenPoint = screenPoint
+                    }
                 }
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy),
@@ -53,7 +64,6 @@ struct FormViewExampleView: View {
                         self.featureForm = featureForm
                         formViewModel.startEditing(feature, featureForm: featureForm)
                     }
-                    isPresented = featureForm != nil
                 }
                 .ignoresSafeArea(.keyboard)
             
@@ -61,33 +71,40 @@ struct FormViewExampleView: View {
                     attributionBarHeight: attributionBarHeight,
                     selectedDetent: $detent,
                     horizontalAlignment: .leading,
-                    isPresented: $isPresented
+                    isPresented: $isFormPresented
                 ) {
                     FormView(featureForm: featureForm)
                         .padding([.horizontal])
                 }
-            
+                .alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
+                        Button("Discard edits", role: .destructive) {
+                            formViewModel.undoEdits()
+                            featureForm = nil
+                        }
+                        Button("Continue editing", role: .cancel) { }
+                } message: {
+                    Text("Updates to this feature will be lost.")
+                }
                 .environmentObject(formViewModel)
-                .navigationBarBackButtonHidden(isPresented)
+                .navigationBarBackButtonHidden(isFormPresented)
                 .toolbar {
                     // Once iOS 16.0 is the minimum supported, the two conditionals to show the
                     // buttons can be merged and hoisted up as the root content of the toolbar.
                     
                     ToolbarItem(placement: .navigationBarLeading) {
-                        if isPresented {
+                        if isFormPresented {
                             Button("Cancel", role: .cancel) {
-                                formViewModel.undoEdits()
-                                isPresented = false
+                                isCancelConfirmationPresented = true
                             }
                         }
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        if isPresented {
+                        if isFormPresented {
                             Button("Submit") {
                                 Task {
                                     await formViewModel.submitChanges()
-                                    isPresented = false
+                                    featureForm = nil
                                 }
                             }
                         }
