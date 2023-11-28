@@ -38,6 +38,7 @@ extension ExampleList {
         examples: [
             AnyExample("Flyover", content: FlyoverExampleView()),
             AnyExample("Tabletop", content: TableTopExampleView())
+            //AnyExample("Tabletop", content: DestinationView())
         ]
     )
     

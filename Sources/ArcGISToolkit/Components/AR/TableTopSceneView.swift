@@ -18,7 +18,7 @@ import ArcGIS
 /// A scene view that provides an augmented reality table top experience.
 public struct TableTopSceneView: View {
     
-    @State var map = Map(basemapStyle: .arcGISTopographic)
+    //@State var map = Map(basemapStyle: .arcGISTopographic)
     
     /// Creates a table top scene view.
     /// - Parameters:
@@ -40,16 +40,30 @@ public struct TableTopSceneView: View {
     ) {
     }
     
+    public init() {}
+    
     public var body: some View {
         ZStack {
             MapViewReader { proxy in
                 BackgroundView()
-                MapView(map: map)
+                MapView()
                     .onAppear {
                         _ = proxy.wrapAroundIsEnabled
                     }
             }
         }
+        
+//            MapViewReader { proxy in
+//                VStack {
+//                    Toggle(isOn: .constant(false)) { Text("Foo") }
+//                    MapView()
+//                    Button {
+//                        proxy.doSomething()
+//                    } label: {
+//                        Text("Do Something")
+//                    }
+//                }
+//            }
     }
 
     
@@ -69,8 +83,7 @@ struct BackgroundView: UIViewRepresentable {
         UIButton()
     }
 
-    func updateUIView(_ uiView: UIButton, context: Context) {
-    }
+    func updateUIView(_ uiView: UIButton, context: Context) {}
     
     func makeCoordinator() -> Coordinator { Coordinator() }
     
