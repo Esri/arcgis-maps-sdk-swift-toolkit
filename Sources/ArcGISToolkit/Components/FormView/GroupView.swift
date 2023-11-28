@@ -52,6 +52,7 @@ struct GroupView<Content>: View where Content: View {
         DisclosureGroup(self.element.label, isExpanded: $isExpanded) {
             Group {
                 Text(element.description)
+                    .accessibilityIdentifier("\(element.label) Description")
                     .font(.subheadline)
                 Divider()
                 ForEach(visibleElements, id: \.label) { formElement in
