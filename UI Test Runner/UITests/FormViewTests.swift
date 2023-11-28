@@ -1274,6 +1274,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let collapsedGroup = app.disclosureTriangles["Group with Multiple Form Elements 2"]
 ***REMOVED******REMOVED***let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
 ***REMOVED******REMOVED***let expandedGroup = app.disclosureTriangles["Group with Multiple Form Elements"]
+***REMOVED******REMOVED***let expandedGroupDescription = app.staticTexts["Group with Multiple Form Elements Description"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***
@@ -1293,6 +1294,16 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***expandedGroup.exists,
 ***REMOVED******REMOVED******REMOVED***"The first group header doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***expandedGroupDescription.exists,
+***REMOVED******REMOVED******REMOVED***"The expanded group's description doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***expandedGroupDescription.label,
+***REMOVED******REMOVED******REMOVED***"This Group is 'Expand initial state'\nThis group is Visible"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Confirm the first element of the expanded group exists.
@@ -1320,6 +1331,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
 ***REMOVED******REMOVED***let showElementsButton = app.buttons["show invisible form element"]
 ***REMOVED******REMOVED***let hiddenElementsGroup = app.disclosureTriangles["Group with children that are visible dependent"]
+***REMOVED******REMOVED***let hiddenElementsGroupDescription = app.staticTexts["Group with children that are visible dependent Description"]
 ***REMOVED******REMOVED***let groupElement = app.staticTexts["single line text 3"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -1338,6 +1350,16 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***hiddenElementsGroup.exists,
 ***REMOVED******REMOVED******REMOVED***"The group header doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***hiddenElementsGroupDescription.exists,
+***REMOVED******REMOVED******REMOVED***"The expanded group's description doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***hiddenElementsGroupDescription.label,
+***REMOVED******REMOVED******REMOVED***"The Form Elements in this group need the Radio button \"show invisible form elements\" to be selected, if you want to see them"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Confirm the first element of the conditional group doesn't exist.
