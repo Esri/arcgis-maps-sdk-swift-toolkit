@@ -53,6 +53,13 @@
         @TutorialReference(tutorial: "doc:FloorFilterTutorial")
     }
     
+    @Chapter(name: "JobManager") {
+        The `JobManager` manages saving and loading jobs so that they can continue to run if the 
+        app is backgrounded or even terminated.
+        @Image(source: JobManagerTutorial, alt: "An image of the JobManager component.")
+        @TutorialReference(tutorial: "doc:JobManagerTutorial")
+    }
+    
     @Chapter(name: "OverviewMap") {
         `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map")
         superimposed on an existing `GeoView`, which shows a representation of the current 
