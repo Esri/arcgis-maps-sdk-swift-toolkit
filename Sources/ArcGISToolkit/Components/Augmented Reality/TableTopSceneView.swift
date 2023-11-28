@@ -19,8 +19,6 @@ import ArcGIS
 public struct TableTopSceneView: View {
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
-    /// The proxy for the scene view.
-    @State private var sceneViewProxy: SceneViewProxy?
     /// The initial transformation for the scene's camera controller.
     @State private var initialTransformation: TransformationMatrix? = nil
     /// The camera controller that will be set on the scene view.
@@ -81,76 +79,68 @@ public struct TableTopSceneView: View {
     }
     
     public var body: some View {
-        ZStack {
-            ARSwiftUIView(proxy: arViewProxy)
-                .onDidUpdateFrame { _, frame in
-                    guard let sceneViewProxy, let interfaceOrientation else { return }
-                    sceneViewProxy.updateCamera(
-                        frame: frame,
-                        cameraController: cameraController,
-                        orientation: interfaceOrientation,
-                        initialTransformation: initialTransformation
-                    )
-                    sceneViewProxy.setFieldOfView(
-                        for: frame,
-                        orientation: interfaceOrientation
-                    )
-                }
-                .onAddNode { renderer, node, anchor in
-                    addPlane(renderer: renderer, node: node, anchor: anchor)
-                }
-                .onUpdateNode { _, node, anchor in
-                    updatePlane(with: node, for: anchor)
-                }
-                .onSingleTapGesture { screenPoint in
-                    guard let sceneViewProxy,
-                          !initialTransformationIsSet
-                    else { return }
-                    
-                    if let transformation = sceneViewProxy.initialTransformation(
-                        for: arViewProxy,
-                        using: screenPoint
-                    ) {
-                        initialTransformation = transformation
-                        withAnimation {
-                            helpText = ""
+        SceneViewReader { sceneViewProxy in
+            ZStack {
+                ARSwiftUIView(proxy: arViewProxy)
+                    .onDidUpdateFrame { _, frame in
+                        guard let interfaceOrientation else { return }
+                        sceneViewProxy.updateCamera(
+                            frame: frame,
+                            cameraController: cameraController,
+                            orientation: interfaceOrientation,
+                            initialTransformation: initialTransformation
+                        )
+                        sceneViewProxy.setFieldOfView(
+                            for: frame,
+                            orientation: interfaceOrientation
+                        )
+                    }
+                    .onAddNode { renderer, node, anchor in
+                        addPlane(renderer: renderer, node: node, anchor: anchor)
+                    }
+                    .onUpdateNode { _, node, anchor in
+                        updatePlane(with: node, for: anchor)
+                    }
+                    .onSingleTapGesture { screenPoint in
+                        guard !initialTransformationIsSet else { return }
+                        
+                        if let transformation = sceneViewProxy.initialTransformation(
+                            for: arViewProxy,
+                            using: screenPoint
+                        ) {
+                            initialTransformation = transformation
+                            withAnimation {
+                                helpText = ""
+                            }
                         }
                     }
-                }
-                .onAppear {
-                    arViewProxy.session.run(configuration)
-                }
-                .onDisappear {
-                    arViewProxy.session.pause()
-                }
-            
-            if !coachingOverlayIsHidden {
-                ARCoachingOverlay(goal: .horizontalPlane)
-                    .sessionProvider(arViewProxy)
-                    .active(coachingOverlayIsActive)
-                    .allowsHitTesting(false)
-                    .overlay (alignment: .top) {
-                        if !helpText.isEmpty {
-                            Text(helpText)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding(8)
-                                .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
-                        }
+                    .onAppear {
+                        arViewProxy.session.run(configuration)
                     }
-            }
-            
-            SceneViewReader { proxy in
-                sceneViewBuilder(proxy)
+                    .onDisappear {
+                        arViewProxy.session.pause()
+                    }
+                
+                if !coachingOverlayIsHidden {
+                    ARCoachingOverlay(goal: .horizontalPlane)
+                        .sessionProvider(arViewProxy)
+                        .active(coachingOverlayIsActive)
+                        .allowsHitTesting(false)
+                        .overlay (alignment: .top) {
+                            if !helpText.isEmpty {
+                                Text(helpText)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .padding(8)
+                                    .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+                            }
+                        }
+                }
+                
+                sceneViewBuilder(sceneViewProxy)
                     .cameraController(cameraController)
                     .attributionBarHidden(true)
                     .spaceEffect(.transparent)
                     .atmosphereEffect(.off)
-                    .onAppear {
-                        // Capture scene view proxy as a workaround for a bug where
-                        // preferences set for `ARSwiftUIView` are not honored. The
-                        // issue has been logged with a bug report with ID FB13188508.
-                        self.sceneViewProxy = proxy
-                    }
                     .opacity(initialTransformationIsSet ? 1 : 0)
             }
         }
