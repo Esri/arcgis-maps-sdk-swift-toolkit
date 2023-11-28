@@ -43,7 +43,7 @@
             @Step {
                 Let's look at what we have so far. When the "Take Map Offline" button is tapped, a job is added to the job manager and the job is started.
                 
-                The first thing the job does is connect to the specified server to kick off the process that will make a mobile map package. Jobs are intended to be used with longer running service tasks. Once the task on the server is started the job waits and occasionally polls the service for the status of the service task.
+                The first thing the job does is connect to the specified server to kick off the process that will make a mobile map package. Jobs are intended to be used with longer running service tasks. Once the work on the server is started the job waits and occasionally polls the service for the status of the service work.
 
                 @Image(source: JobManagerTutorialJobStart, alt: "An image of the app UI with a progress bar four percent done.")
             }
