@@ -43,7 +43,7 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED***let loading = try XCTUnwrap(isBasemapLoading)
 ***REMOVED******REMOVED***XCTAssertFalse(loading, "Item is not loading.")
 ***REMOVED******REMOVED***XCTAssertIdentical(item.basemap, basemap)
-***REMOVED******REMOVED***XCTAssertEqual(item.name, "ArcGIS:LightGray")
+***REMOVED******REMOVED***XCTAssertEqual(item.name, "ArcGIS Light Gray")
 ***REMOVED******REMOVED***XCTAssertNil(item.description)
 ***REMOVED******REMOVED***XCTAssertNotNil(item.thumbnail)
 ***REMOVED******REMOVED***XCTAssertNil(item.loadBasemapError)
