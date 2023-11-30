@@ -43,7 +43,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(selectABookmarkText.exists, "The Select a bookmark text wasn't found.")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select a bookmark and confirm the component notified the test view of the selection.
-***REMOVED******REMOVED***XCTAssertTrue(giantSequoiasButton.exists, "The Giant Sequoias button wasn't found.")
+***REMOVED******REMOVED***XCTAssertTrue(giantSequoiasButton.waitForExistence(timeout: 1.0), "The Giant Sequoias button wasn't found.")
 ***REMOVED******REMOVED***giantSequoiasButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Confirm the selection was made.
@@ -63,7 +63,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***bookmarksButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select a bookmark and confirm the component notified the test view of the new selection.
-***REMOVED******REMOVED***XCTAssertTrue(historicLaddsButton.exists, "The Historic Ladd's button wasn't found.")
+***REMOVED******REMOVED***XCTAssertTrue(historicLaddsButton.waitForExistence(timeout: 1.0), "The Historic Ladd's button wasn't found.")
 ***REMOVED******REMOVED***historicLaddsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Confirm the selection was made.
