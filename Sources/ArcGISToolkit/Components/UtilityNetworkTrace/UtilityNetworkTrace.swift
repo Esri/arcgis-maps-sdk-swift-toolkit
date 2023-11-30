@@ -215,8 +215,7 @@ public struct UtilityNetworkTrace: View {
                             }
                         } label: {
                             Text(elements.count, format: .number)
-                                // Provide horizontal padding to avoid disclosure triangles in Catalyst
-                                .padding([.horizontal], 4)
+                                .catalystPadding()
                         }
                     }
                 }
@@ -269,8 +268,7 @@ public struct UtilityNetworkTrace: View {
                         networksList
                     } label: {
                         Text(viewModel.network?.name ?? .noneSelected)
-                            // Provide horizontal padding to avoid disclosure triangles in Catalyst
-                            .padding([.horizontal], 4)
+                            .catalystPadding()
                     }
                 }
             }
@@ -285,8 +283,7 @@ public struct UtilityNetworkTrace: View {
                     configurationsList
                 } label: {
                     Text(viewModel.pendingTrace.configuration?.name ?? .noneSelected)
-                        // Provide horizontal padding to avoid disclosure triangles in Catalyst
-                        .padding([.horizontal], 4)
+                        .catalystPadding()
                 }
             }
             Section(String.startingPointsTitle) {
@@ -309,8 +306,7 @@ public struct UtilityNetworkTrace: View {
                             bundle: .toolkitModule,
                             comment: "A label declaring the number of starting points selected for a utility network trace."
                         )
-                        // Provide horizontal padding to avoid disclosure triangles in Catalyst
-                        .padding([.horizontal], 4)
+                        .catalystPadding()
                     }
                 }
             }
@@ -336,8 +332,7 @@ public struct UtilityNetworkTrace: View {
                     Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
                 } label: {
                     Text(String.advancedOptionsHeaderLabel)
-                        // Provide horizontal padding to avoid disclosure triangles in Catalyst
-                        .padding([.horizontal], 4)
+                        .catalystPadding()
                 }
             }
         }
@@ -404,8 +399,7 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             .font(.title3)
-            // Provide horizontal padding for Menus in Catalyst
-            .padding([.horizontal])
+            .catalystPadding()
         }
         if activeDetent != .summary {
             List {
@@ -433,8 +427,7 @@ public struct UtilityNetworkTrace: View {
                         }
                     } label: {
                         Text(viewModel.selectedTrace?.elementResults.count ?? 0, format: .number)
-                            // Provide horizontal padding to avoid disclosure triangles in Catalyst
-                            .padding([.horizontal], 4)
+                            .catalystPadding()
                     }
                 }
                 Section(String.functionResultsSectionTitle) {
@@ -469,8 +462,7 @@ public struct UtilityNetworkTrace: View {
                         }
                     } label: {
                         Text(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0, format: .number)
-                            // Provide horizontal padding to avoid disclosure triangles in Catalyst
-                            .padding([.horizontal], 4)
+                            .catalystPadding()
                     }
                 }
                 Section {
@@ -494,8 +486,7 @@ public struct UtilityNetworkTrace: View {
                         )
                     } label: {
                         Text(String.advancedOptionsHeaderLabel)
-                            // Provide horizontal padding to avoid disclosure triangles in Catalyst
-                            .padding([.horizontal], 4)
+                            .catalystPadding()
                     }
                 }
             }
@@ -543,8 +534,7 @@ public struct UtilityNetworkTrace: View {
             }
         }
         .font(.title3)
-        // Provide horizontal padding for Menus in Catalyst
-        .padding([.horizontal])
+        .catalystPadding()
         List {
             if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
                 Section(String.fractionAlongEdgeSectionTitle) {
