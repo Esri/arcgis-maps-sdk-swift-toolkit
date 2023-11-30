@@ -215,6 +215,8 @@ public struct UtilityNetworkTrace: View {
                             }
                         } label: {
                             Text(elements.count, format: .number)
+                                // Provide horizontal padding to avoid disclosure triangles in Catalyst
+                                .padding([.horizontal], 4)
                         }
                     }
                 }
@@ -227,7 +229,7 @@ public struct UtilityNetworkTrace: View {
         if viewModel.configurations.isEmpty {
             Text(String.noConfigurationsAvailable)
         } else {
-            ForEach(viewModel.configurations, id: \.name) { configuration in
+            ForEach(viewModel.configurations.sorted { $0.name < $1.name }, id: \.name) { configuration in
                 Button {
                     viewModel.setPendingTrace(configuration: configuration)
                     currentActivity = .creatingTrace(nil)
@@ -258,27 +260,32 @@ public struct UtilityNetworkTrace: View {
             if viewModel.networks.count > 1 {
                 Section(String.networkSectionLabel) {
                     DisclosureGroup(
-                        viewModel.network?.name ?? .noneSelected,
-                        isExpanded: Binding(
-                            get: { isFocused(traceCreationActivity: .viewingNetworkOptions) },
-                            set: { currentActivity = .creatingTrace($0 ? .viewingNetworkOptions : nil) }
-                        )
-                    ) {
-                        networksList
-                    }
+                        isExpanded: Binding { 
+                            isFocused(traceCreationActivity: .viewingNetworkOptions)
+                        } set: {
+                            currentActivity = .creatingTrace($0 ? .viewingNetworkOptions : nil)
+                        }) {
+                            networksList
+                        } label: {
+                            Text(viewModel.network?.name ?? .noneSelected)
+                                // Provide horizontal padding to avoid disclosure triangles in Catalyst
+                                .padding([.horizontal], 4)
+                        }
                 }
             }
             Section(String.traceConfigurationSectionLabel) {
                 DisclosureGroup(
-                    viewModel.pendingTrace.configuration?.name ?? .noneSelected,
                     isExpanded: Binding {
                         isFocused(traceCreationActivity: .viewingTraceConfigurations)
                     } set: {
                         currentActivity = .creatingTrace($0 ? .viewingTraceConfigurations : nil)
+                    }) {
+                        configurationsList
+                    } label: {
+                        Text(viewModel.pendingTrace.configuration?.name ?? .noneSelected)
+                            // Provide horizontal padding to avoid disclosure triangles in Catalyst
+                            .padding([.horizontal], 4)
                     }
-                ) {
-                    configurationsList
-                }
             }
             Section(String.startingPointsTitle) {
                 Button(String.addNewButtonLabel) {
@@ -300,12 +307,13 @@ public struct UtilityNetworkTrace: View {
                             bundle: .toolkitModule,
                             comment: "A label declaring the number of starting points selected for a utility network trace."
                         )
+                        // Provide horizontal padding to avoid disclosure triangles in Catalyst
+                        .padding([.horizontal], 4)
                     }
                 }
             }
             Section {
                 DisclosureGroup(
-                    String.advancedOptionsHeaderLabel,
                     isExpanded: Binding {
                         isFocused(traceCreationActivity: .viewingAdvancedOptions)
                     } set: {
@@ -323,6 +331,10 @@ public struct UtilityNetworkTrace: View {
                         }
                         ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
                         Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
+                    }, label: {
+                        Text(String.advancedOptionsHeaderLabel)
+                            // Provide horizontal padding to avoid disclosure triangles in Catalyst
+                            .padding([.horizontal], 4)
                     }
                 )
             }
@@ -390,6 +402,8 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             .font(.title3)
+            // Provide horizontal padding for Menus in Catalyst
+            .padding([.horizontal])
         }
         if activeDetent != .summary {
             List {
@@ -417,6 +431,8 @@ public struct UtilityNetworkTrace: View {
                         }
                     } label: {
                         Text(viewModel.selectedTrace?.elementResults.count ?? 0, format: .number)
+                            // Provide horizontal padding to avoid disclosure triangles in Catalyst
+                            .padding([.horizontal], 4)
                     }
                 }
                 Section(String.functionResultsSectionTitle) {
@@ -451,11 +467,12 @@ public struct UtilityNetworkTrace: View {
                         }
                     } label: {
                         Text(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0, format: .number)
+                            // Provide horizontal padding to avoid disclosure triangles in Catalyst
+                            .padding([.horizontal], 4)
                     }
                 }
                 Section {
                     DisclosureGroup(
-                        String.advancedOptionsHeaderLabel,
                         isExpanded: Binding {
                             isFocused(traceViewingActivity: .viewingAdvancedOptions)
                         } set: {
@@ -473,6 +490,10 @@ public struct UtilityNetworkTrace: View {
                                 }
                             }
                         )
+                    } label: {
+                        Text(String.advancedOptionsHeaderLabel)
+                            // Provide horizontal padding to avoid disclosure triangles in Catalyst
+                            .padding([.horizontal], 4)
                     }
                 }
             }
@@ -520,6 +541,8 @@ public struct UtilityNetworkTrace: View {
             }
         }
         .font(.title3)
+        // Provide horizontal padding for Menus in Catalyst
+        .padding([.horizontal])
         List {
             if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
                 Section(String.fractionAlongEdgeSectionTitle) {
