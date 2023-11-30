@@ -43,7 +43,7 @@ final class BookmarksTests: XCTestCase {
         XCTAssertTrue(selectABookmarkText.exists, "The Select a bookmark text wasn't found.")
         
         // Select a bookmark and confirm the component notified the test view of the selection.
-        XCTAssertTrue(giantSequoiasButton.exists, "The Giant Sequoias button wasn't found.")
+        XCTAssertTrue(giantSequoiasButton.waitForExistence(timeout: 1.0), "The Giant Sequoias button wasn't found.")
         giantSequoiasButton.tap()
         
         // Confirm the selection was made.
@@ -63,7 +63,7 @@ final class BookmarksTests: XCTestCase {
         bookmarksButton.tap()
         
         // Select a bookmark and confirm the component notified the test view of the new selection.
-        XCTAssertTrue(historicLaddsButton.exists, "The Historic Ladd's button wasn't found.")
+        XCTAssertTrue(historicLaddsButton.waitForExistence(timeout: 1.0), "The Historic Ladd's button wasn't found.")
         historicLaddsButton.tap()
         
         // Confirm the selection was made.
