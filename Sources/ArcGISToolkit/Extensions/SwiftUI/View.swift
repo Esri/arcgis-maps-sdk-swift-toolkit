@@ -80,6 +80,12 @@ extension View {
         .onPreferenceChange(SizePreferenceKey.self, perform: perform)
     }
     
+    /// Adds horizontal padding if the target environment is Mac Catalyst.
+    func catalystPadding() -> some View {
+        return self
+            .padding(isMacCatalyst ? [.horizontal] : [])
+    }
+    
     /// View modifier used to denote the view is selected.
     /// - Parameter isSelected: `true` if the view is selected, `false` otherwise.
     /// - Returns: The modified view.
