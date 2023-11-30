@@ -80,6 +80,12 @@ extension View {
 ***REMOVED******REMOVED***.onPreferenceChange(SizePreferenceKey.self, perform: perform)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Adds horizontal padding if the target environment is Mac Catalyst.
+***REMOVED***func catalystPadding() -> some View {
+***REMOVED******REMOVED***return self
+***REMOVED******REMOVED******REMOVED***.padding(isMacCatalyst ? [.horizontal] : [])
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ View modifier used to denote the view is selected.
 ***REMOVED******REMOVED***/ - Parameter isSelected: `true` if the view is selected, `false` otherwise.
 ***REMOVED******REMOVED***/ - Returns: The modified view.
