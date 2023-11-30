@@ -260,17 +260,18 @@ public struct UtilityNetworkTrace: View {
             if viewModel.networks.count > 1 {
                 Section(String.networkSectionLabel) {
                     DisclosureGroup(
-                        isExpanded: Binding { 
+                        isExpanded: Binding {
                             isFocused(traceCreationActivity: .viewingNetworkOptions)
                         } set: {
                             currentActivity = .creatingTrace($0 ? .viewingNetworkOptions : nil)
-                        }) {
-                            networksList
-                        } label: {
-                            Text(viewModel.network?.name ?? .noneSelected)
-                                // Provide horizontal padding to avoid disclosure triangles in Catalyst
-                                .padding([.horizontal], 4)
                         }
+                    ) {
+                        networksList
+                    } label: {
+                        Text(viewModel.network?.name ?? .noneSelected)
+                            // Provide horizontal padding to avoid disclosure triangles in Catalyst
+                            .padding([.horizontal], 4)
+                    }
                 }
             }
             Section(String.traceConfigurationSectionLabel) {
@@ -279,13 +280,14 @@ public struct UtilityNetworkTrace: View {
                         isFocused(traceCreationActivity: .viewingTraceConfigurations)
                     } set: {
                         currentActivity = .creatingTrace($0 ? .viewingTraceConfigurations : nil)
-                    }) {
-                        configurationsList
-                    } label: {
-                        Text(viewModel.pendingTrace.configuration?.name ?? .noneSelected)
-                            // Provide horizontal padding to avoid disclosure triangles in Catalyst
-                            .padding([.horizontal], 4)
                     }
+                ) {
+                    configurationsList
+                } label: {
+                    Text(viewModel.pendingTrace.configuration?.name ?? .noneSelected)
+                        // Provide horizontal padding to avoid disclosure triangles in Catalyst
+                        .padding([.horizontal], 4)
+                }
             }
             Section(String.startingPointsTitle) {
                 Button(String.addNewButtonLabel) {
@@ -318,25 +320,25 @@ public struct UtilityNetworkTrace: View {
                         isFocused(traceCreationActivity: .viewingAdvancedOptions)
                     } set: {
                         currentActivity = .creatingTrace($0 ? .viewingAdvancedOptions : nil)
-                    }, content: {
-                        HStack {
-                            Text(String.nameLabel)
-                            Spacer()
-                            TextField(String.nameLabel, text: $viewModel.pendingTrace.name)
+                    }
+                ) {
+                    HStack {
+                        Text(String.nameLabel)
+                        Spacer()
+                        TextField(String.nameLabel, text: $viewModel.pendingTrace.name)
                             .onSubmit {
                                 viewModel.pendingTrace.userDidSpecifyName = true
                             }
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(.blue)
-                        }
-                        ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
-                        Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
-                    }, label: {
-                        Text(String.advancedOptionsHeaderLabel)
-                            // Provide horizontal padding to avoid disclosure triangles in Catalyst
-                            .padding([.horizontal], 4)
                     }
-                )
+                    ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
+                    Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
+                } label: {
+                    Text(String.advancedOptionsHeaderLabel)
+                        // Provide horizontal padding to avoid disclosure triangles in Catalyst
+                        .padding([.horizontal], 4)
+                }
             }
         }
         Button(String.traceButtonLabel) {
