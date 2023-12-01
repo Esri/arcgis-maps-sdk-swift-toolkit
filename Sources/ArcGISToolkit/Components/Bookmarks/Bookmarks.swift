@@ -51,6 +51,9 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ An error that occurred while loading the geo model.
 ***REMOVED***@State private var loadingError: Error?
 ***REMOVED***
+***REMOVED******REMOVED***/ Indicates if bookmarks have loaded and are ready for display.
+***REMOVED***@State private var isGeoModelLoaded = false
+***REMOVED***
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
 ***REMOVED***@Binding private var isPresented: Bool
 ***REMOVED***
@@ -117,7 +120,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED*** else if let loadingError {
 ***REMOVED******REMOVED******REMOVED***makeErrorMessage(with: loadingError)
-***REMOVED*** else if geoModel != nil {
+***REMOVED*** else if geoModel != nil && !isGeoModelLoaded {
 ***REMOVED******REMOVED******REMOVED***loading
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***noBookmarks
@@ -204,6 +207,7 @@ extension Bookmarks {
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await geoModel?.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks = geoModel?.bookmarks ?? []
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isGeoModelLoaded = true
 ***REMOVED******REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***loadingError = error
 ***REMOVED******REMOVED******REMOVED***
