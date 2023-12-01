@@ -24,6 +24,7 @@ struct UtilityNetworkTraceExampleView: View {
     @Environment(\.verticalSizeClass)
     private var verticalSizeClass: UserInterfaceSizeClass?
     
+    /// A Boolean value indicating whether the environment is compact.
     private var isCompact: Bool {
         horizontalSizeClass == .compact && verticalSizeClass == .regular
     }
