@@ -19,7 +19,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test general usage of the Bookmarks component.
-***REMOVED***func testBookmarks() throws {
+***REMOVED***func testCase1() throws {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -27,13 +27,18 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***let bookmarksButton = app.buttons["Bookmarks"].firstMatch
 ***REMOVED******REMOVED***let selectABookmarkText = app.staticTexts["Select a bookmark"]
 ***REMOVED******REMOVED***let giantSequoiasButton = app.buttons["Giant Sequoias of Willamette Blvd"].firstMatch
-***REMOVED******REMOVED***let giantSequoiasLabel = app.staticTexts["Giant Sequoias of Willamette Blvd"]
+***REMOVED******REMOVED***let giantSequoiasLabel = app.staticTexts["Giant Sequoias of Willamette Blvd"].firstMatch
 ***REMOVED******REMOVED***let historicLaddsButton = app.buttons["Historic Ladd's Addition"].firstMatch
 ***REMOVED******REMOVED***let historicLaddsLabel = app.staticTexts["Historic Ladd's Addition"]
+***REMOVED******REMOVED***let bookmarksTestCase1Button = app.buttons["Bookmarks Test Case 1"]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test view.
+***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test views.
 ***REMOVED******REMOVED***XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
 ***REMOVED******REMOVED***bookmarksTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test view.
+***REMOVED******REMOVED***XCTAssertTrue(bookmarksTestCase1Button.exists, "The Bookmarks Test Case 1 button wasn't found.")
+***REMOVED******REMOVED***bookmarksTestCase1Button.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Open the bookmark selection view.
 ***REMOVED******REMOVED***XCTAssertTrue(bookmarksButton.exists, "The Bookmarks button wasn't found.")
@@ -71,5 +76,65 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***historicLaddsLabel.exists,
 ***REMOVED******REMOVED******REMOVED***"The Historic Ladd's label confirming the bookmark selection wasn't found."
 ***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test using the Bookmarks component with a map with no bookmarks defined.
+***REMOVED***func testCase2() throws {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
+***REMOVED******REMOVED***let bookmarksTestCase2Button = app.buttons["Bookmarks Test Case 2"]
+***REMOVED******REMOVED***let noBookmarks = app.staticTexts["No bookmarks"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test views.
+***REMOVED******REMOVED***XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
+***REMOVED******REMOVED***bookmarksTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test view.
+***REMOVED******REMOVED***XCTAssertTrue(bookmarksTestCase2Button.exists, "The Bookmarks Test Case 2 button wasn't found.")
+***REMOVED******REMOVED***bookmarksTestCase2Button.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(noBookmarks.waitForExistence(timeout: 5.0), "The \"No Bookmarks\" text wasn't found.")
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test using the Bookmarks component no bookmarks defined.
+***REMOVED***func testCase3() throws {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
+***REMOVED******REMOVED***let bookmarksTestCase3Button = app.buttons["Bookmarks Test Case 3"]
+***REMOVED******REMOVED***let noBookmarks = app.staticTexts["No bookmarks"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test views.
+***REMOVED******REMOVED***XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
+***REMOVED******REMOVED***bookmarksTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test view.
+***REMOVED******REMOVED***XCTAssertTrue(bookmarksTestCase3Button.exists, "The Bookmarks Test Case 3 button wasn't found.")
+***REMOVED******REMOVED***bookmarksTestCase3Button.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(noBookmarks.exists, "The \"No Bookmarks\" text wasn't found.")
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test using the Bookmarks component with bookmarks provided directly.
+***REMOVED***func testCase4() throws {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
+***REMOVED******REMOVED***let bookmarksTestCase4Button = app.buttons["Bookmarks Test Case 4"]
+***REMOVED******REMOVED***let redlandsButton = app.buttons["Redlands"].firstMatch
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test views.
+***REMOVED******REMOVED***XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
+***REMOVED******REMOVED***bookmarksTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test view.
+***REMOVED******REMOVED***XCTAssertTrue(bookmarksTestCase4Button.exists, "The Bookmarks Test Case 4 button wasn't found.")
+***REMOVED******REMOVED***bookmarksTestCase4Button.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(redlandsButton.exists, "The Redlands button wasn't found.")
 ***REMOVED***
 ***REMOVED***
