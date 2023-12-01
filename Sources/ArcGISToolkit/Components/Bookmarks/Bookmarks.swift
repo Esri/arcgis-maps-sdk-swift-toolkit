@@ -170,6 +170,9 @@ extension Bookmarks {
     }
     
     /// A view that shows the list of bookmarks.
+    ///
+    /// - Note: Once the minimum supported platform is 16.4 or greater, the `ScrollView`, `VStack`
+    /// and `ForEach` can be replaced with a `List` with `scrollContentBackground(.hidden)` applied.
     private var list: some View {
         ScrollView {
             VStack(alignment: .leading) {
