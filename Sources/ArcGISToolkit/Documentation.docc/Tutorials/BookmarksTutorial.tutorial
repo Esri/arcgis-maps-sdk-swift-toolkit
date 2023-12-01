@@ -13,18 +13,22 @@
         @Steps {
             @Step {
                 To begin, set up the parent view.
-                Initialize a map that contains preset bookmarks and add a member to track viewpoint changes.
-                Add a `MapView` to the body of the view, passing in the map and viewpoint. Track viewpoint changes with the `onViewpointChanged` modifier. Wrap the `MapView` in a `MapViewReader` to allow for programatic animated viewpoint changes.
+                
+                Initialize a map that contains preset bookmarks.
+                Add a `MapView` to the body of the view, passing in the map.
+                Wrap the `MapView` in a `MapViewReader` to allow for programatic animated viewpoint changes.
                 @Code(name: "BookmarksExampleView.swift", file: BookmarksStep1)
             }
             
             @Step {
-                Add a toolbar button to open the bookmark selector. The property `showingBookmarks` will control when the gallery is shown or hidden.
+                Add a toolbar button to open the bookmark selector. 
+                
+                The property `showingBookmarks` will control when the bookmarks are shown or hidden.
                 @Code(name: "BookmarksExampleView.swift", file: BookmarksStep2)
             }
             
             @Step {
-                Host the bookmark selector inside of a popover.
+                Host the Bookmarks component inside of a popover.
                 @Code(name: "BookmarksExampleView.swift", file: BookmarksStep3)
             }
             
