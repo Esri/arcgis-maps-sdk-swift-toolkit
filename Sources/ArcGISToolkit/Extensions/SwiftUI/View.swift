@@ -80,10 +80,15 @@ extension View {
 ***REMOVED******REMOVED***.onPreferenceChange(SizePreferenceKey.self, perform: perform)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Adds horizontal padding if the target environment is Mac Catalyst.
-***REMOVED***func catalystPadding() -> some View {
+***REMOVED******REMOVED***/ Adds an equal padding amount to the horizontal edges of this view if the target environment
+***REMOVED******REMOVED***/ is Mac Catalyst.
+***REMOVED******REMOVED***/ - Parameter length: An amount, given in points, to pad this view on the horizontal edges.
+***REMOVED******REMOVED***/ If you set the value to nil, SwiftUI uses a platform-specific default amount.
+***REMOVED******REMOVED***/ The default value of this parameter is nil.
+***REMOVED******REMOVED***/ - Returns: A view that’s padded by the specified amount on the horizontal edges.
+***REMOVED***func catalystPadding(_ length: CGFloat? = nil) -> some View {
 ***REMOVED******REMOVED***return self
-***REMOVED******REMOVED******REMOVED***.padding(isMacCatalyst ? [.horizontal] : [])
+***REMOVED******REMOVED******REMOVED***.padding(isMacCatalyst ? [.horizontal] : [], length)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ View modifier used to denote the view is selected.
