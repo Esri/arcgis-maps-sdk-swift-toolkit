@@ -170,6 +170,9 @@ extension Bookmarks {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view that shows the list of bookmarks.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Note: Once the minimum supported platform is 16.4 or greater, the `ScrollView`, `VStack`
+***REMOVED******REMOVED***/ and `ForEach` can be replaced with a `List` with `scrollContentBackground(.hidden)` applied.
 ***REMOVED***private var list: some View {
 ***REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
