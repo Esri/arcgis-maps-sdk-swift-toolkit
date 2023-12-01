@@ -19,7 +19,7 @@ final class BookmarksTests: XCTestCase {
     }
     
     /// Test general usage of the Bookmarks component.
-    func testBookmarks() throws {
+    func testCase1() throws {
         let app = XCUIApplication()
         app.launch()
         
@@ -27,13 +27,18 @@ final class BookmarksTests: XCTestCase {
         let bookmarksButton = app.buttons["Bookmarks"].firstMatch
         let selectABookmarkText = app.staticTexts["Select a bookmark"]
         let giantSequoiasButton = app.buttons["Giant Sequoias of Willamette Blvd"].firstMatch
-        let giantSequoiasLabel = app.staticTexts["Giant Sequoias of Willamette Blvd"]
+        let giantSequoiasLabel = app.staticTexts["Giant Sequoias of Willamette Blvd"].firstMatch
         let historicLaddsButton = app.buttons["Historic Ladd's Addition"].firstMatch
         let historicLaddsLabel = app.staticTexts["Historic Ladd's Addition"]
+        let bookmarksTestCase1Button = app.buttons["Bookmarks Test Case 1"]
         
-        // Open the Bookmarks component test view.
+        // Open the Bookmarks component test views.
         XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
         bookmarksTestsButton.tap()
+        
+        // Open the Bookmarks component test view.
+        XCTAssertTrue(bookmarksTestCase1Button.exists, "The Bookmarks Test Case 1 button wasn't found.")
+        bookmarksTestCase1Button.tap()
         
         // Open the bookmark selection view.
         XCTAssertTrue(bookmarksButton.exists, "The Bookmarks button wasn't found.")
@@ -71,5 +76,65 @@ final class BookmarksTests: XCTestCase {
             historicLaddsLabel.exists,
             "The Historic Ladd's label confirming the bookmark selection wasn't found."
         )
+    }
+    
+    /// Test using the Bookmarks component with a map with no bookmarks defined.
+    func testCase2() throws {
+        let app = XCUIApplication()
+        app.launch()
+        
+        let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
+        let bookmarksTestCase2Button = app.buttons["Bookmarks Test Case 2"]
+        let noBookmarks = app.staticTexts["No bookmarks"]
+        
+        // Open the Bookmarks component test views.
+        XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
+        bookmarksTestsButton.tap()
+        
+        // Open the Bookmarks component test view.
+        XCTAssertTrue(bookmarksTestCase2Button.exists, "The Bookmarks Test Case 2 button wasn't found.")
+        bookmarksTestCase2Button.tap()
+        
+        XCTAssertTrue(noBookmarks.waitForExistence(timeout: 5.0), "The \"No Bookmarks\" text wasn't found.")
+    }
+    
+    /// Test using the Bookmarks component no bookmarks defined.
+    func testCase3() throws {
+        let app = XCUIApplication()
+        app.launch()
+        
+        let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
+        let bookmarksTestCase3Button = app.buttons["Bookmarks Test Case 3"]
+        let noBookmarks = app.staticTexts["No bookmarks"]
+        
+        // Open the Bookmarks component test views.
+        XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
+        bookmarksTestsButton.tap()
+        
+        // Open the Bookmarks component test view.
+        XCTAssertTrue(bookmarksTestCase3Button.exists, "The Bookmarks Test Case 3 button wasn't found.")
+        bookmarksTestCase3Button.tap()
+        
+        XCTAssertTrue(noBookmarks.exists, "The \"No Bookmarks\" text wasn't found.")
+    }
+    
+    /// Test using the Bookmarks component with bookmarks provided directly.
+    func testCase4() throws {
+        let app = XCUIApplication()
+        app.launch()
+        
+        let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
+        let bookmarksTestCase4Button = app.buttons["Bookmarks Test Case 4"]
+        let redlandsButton = app.buttons["Redlands"].firstMatch
+        
+        // Open the Bookmarks component test views.
+        XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
+        bookmarksTestsButton.tap()
+        
+        // Open the Bookmarks component test view.
+        XCTAssertTrue(bookmarksTestCase4Button.exists, "The Bookmarks Test Case 4 button wasn't found.")
+        bookmarksTestCase4Button.tap()
+        
+        XCTAssertTrue(redlandsButton.exists, "The Redlands button wasn't found.")
     }
 }
