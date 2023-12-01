@@ -43,7 +43,7 @@ final class BasemapGalleryItemTests: XCTestCase {
         let loading = try XCTUnwrap(isBasemapLoading)
         XCTAssertFalse(loading, "Item is not loading.")
         XCTAssertIdentical(item.basemap, basemap)
-        XCTAssertEqual(item.name, "ArcGIS:LightGray")
+        XCTAssertEqual(item.name, "ArcGIS Light Gray")
         XCTAssertNil(item.description)
         XCTAssertNotNil(item.thumbnail)
         XCTAssertNil(item.loadBasemapError)
