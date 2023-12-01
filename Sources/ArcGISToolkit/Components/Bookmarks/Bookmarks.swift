@@ -51,6 +51,9 @@ public struct Bookmarks: View {
     /// An error that occurred while loading the geo model.
     @State private var loadingError: Error?
     
+    /// Indicates if bookmarks have loaded and are ready for display.
+    @State private var isGeoModelLoaded = false
+    
     /// Determines if the bookmarks list is currently shown or not.
     @Binding private var isPresented: Bool
     
@@ -117,7 +120,7 @@ public struct Bookmarks: View {
                 }
         } else if let loadingError {
             makeErrorMessage(with: loadingError)
-        } else if geoModel != nil {
+        } else if geoModel != nil && !isGeoModelLoaded {
             loading
         } else {
             noBookmarks
@@ -204,6 +207,7 @@ extension Bookmarks {
                 do {
                     try await geoModel?.load()
                     bookmarks = geoModel?.bookmarks ?? []
+                    isGeoModelLoaded = true
                 } catch {
                     loadingError = error
                 }
