@@ -215,7 +215,7 @@ public struct UtilityNetworkTrace: View {
                             }
                         } label: {
                             Text(elements.count, format: .number)
-                                .catalystPadding()
+                                .catalystPadding(4)
                         }
                     }
                 }
@@ -268,7 +268,7 @@ public struct UtilityNetworkTrace: View {
                         networksList
                     } label: {
                         Text(viewModel.network?.name ?? .noneSelected)
-                            .catalystPadding()
+                            .catalystPadding(4)
                     }
                 }
             }
@@ -283,7 +283,7 @@ public struct UtilityNetworkTrace: View {
                     configurationsList
                 } label: {
                     Text(viewModel.pendingTrace.configuration?.name ?? .noneSelected)
-                        .catalystPadding()
+                        .catalystPadding(4)
                 }
             }
             Section(String.startingPointsTitle) {
@@ -306,7 +306,7 @@ public struct UtilityNetworkTrace: View {
                             bundle: .toolkitModule,
                             comment: "A label declaring the number of starting points selected for a utility network trace."
                         )
-                        .catalystPadding()
+                        .catalystPadding(4)
                     }
                 }
             }
@@ -332,7 +332,7 @@ public struct UtilityNetworkTrace: View {
                     Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
                 } label: {
                     Text(String.advancedOptionsHeaderLabel)
-                        .catalystPadding()
+                        .catalystPadding(4)
                 }
             }
         }
@@ -427,7 +427,7 @@ public struct UtilityNetworkTrace: View {
                         }
                     } label: {
                         Text(viewModel.selectedTrace?.elementResults.count ?? 0, format: .number)
-                            .catalystPadding()
+                            .catalystPadding(4)
                     }
                 }
                 Section(String.functionResultsSectionTitle) {
@@ -462,7 +462,7 @@ public struct UtilityNetworkTrace: View {
                         }
                     } label: {
                         Text(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0, format: .number)
-                            .catalystPadding()
+                            .catalystPadding(4)
                     }
                 }
                 Section {
@@ -486,7 +486,7 @@ public struct UtilityNetworkTrace: View {
                         )
                     } label: {
                         Text(String.advancedOptionsHeaderLabel)
-                            .catalystPadding()
+                            .catalystPadding(4)
                     }
                 }
             }
