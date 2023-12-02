@@ -17,8 +17,8 @@ import SwiftUI
 /// A type that can be used to make a view responsive to horizontal and vertical size classes.
 ///
 /// Use the `CompactAware` protocol to easily detect compact environments in views. Simply add two
-/// `@Environment` property wrappers for .horizontalSizeClass and .verticalSizeClass to conforming
-/// views and access ``isCompact`` where needed.
+/// `@Environment` property wrappers for `.horizontalSizeClass` and `.verticalSizeClass` to
+/// conforming views and use ``isCompact`` where needed.
 public protocol CompactAware {
     var horizontalSizeClass: UserInterfaceSizeClass? { get }
     var verticalSizeClass: UserInterfaceSizeClass? { get }
