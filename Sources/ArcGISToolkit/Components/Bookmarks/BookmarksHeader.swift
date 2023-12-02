@@ -21,12 +21,6 @@ struct BookmarksHeader: View {
 ***REMOVED***@Environment(\.verticalSizeClass)
 ***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
 ***REMOVED***
-***REMOVED******REMOVED***/ If `true`, the bookmarks will display as sheet.
-***REMOVED******REMOVED***/ If `false`, the bookmarks will display as a popover.
-***REMOVED***private var isCompact: Bool {
-***REMOVED******REMOVED***return horizontalSizeClass == .compact || verticalSizeClass == .compact
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
 ***REMOVED***@Binding var isPresented: Bool
 ***REMOVED***
@@ -52,7 +46,7 @@ struct BookmarksHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
 ***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***if isCompact {
+***REMOVED******REMOVED******REMOVED***if horizontalSizeClass == .compact || verticalSizeClass == .compact {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.toggle()

@@ -14,7 +14,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying details for pie chart popup media.
-struct PieChart: View {
+struct PieChart: View, CompactAware {
 ***REMOVED******REMOVED***/ The view model for the pie chart.
 ***REMOVED***@ObservedObject private var viewModel: PieChartModel
 ***REMOVED***
@@ -26,7 +26,7 @@ struct PieChart: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value denoting if the view should be shown as regular width.
 ***REMOVED***var isRegularWidth: Bool {
-***REMOVED******REMOVED***!(horizontalSizeClass == .compact && verticalSizeClass == .regular)
+***REMOVED******REMOVED***!isCompact
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `PieChart`.

@@ -23,7 +23,7 @@
 ***REMOVED***/ or persistent, where the information is always displayed, for example a
 ***REMOVED***/ dedicated search panel. They will also be primarily simple containers
 ***REMOVED***/ that clients will fill with their own content.
-struct FloatingPanel<Content>: View where Content: View {
+struct FloatingPanel<Content>: View, CompactAware where Content: View {
 ***REMOVED******REMOVED***/ The height of a geo-view's attribution bar.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ When the panel is detached from the bottom of the screen (non-compact) this value allows
@@ -39,8 +39,8 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
 ***REMOVED***let content: () -> Content
 ***REMOVED***
-***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
-***REMOVED***@Environment(\.verticalSizeClass) private var verticalSizeClass
+***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
+***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
 ***REMOVED******REMOVED***/ The color of the handle.
 ***REMOVED***@State private var handleColor: Color = .defaultHandleColor
@@ -59,11 +59,6 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .zero
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the panel should be configured for a compact environment.
-***REMOVED***private var isCompact: Bool {
-***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
-***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in

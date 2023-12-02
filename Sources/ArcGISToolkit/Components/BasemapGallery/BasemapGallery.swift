@@ -51,7 +51,7 @@
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [BasemapGalleryExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BasemapGalleryExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `BasemapGallery` see the [BasemapGallery Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/basemapgallerytutorial).
-public struct BasemapGallery: View {
+public struct BasemapGallery: View, CompactAware {
 ***REMOVED******REMOVED***/ The view style of the gallery.
 ***REMOVED***public enum Style {
 ***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid when there is an appropriate
@@ -100,13 +100,13 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ Set using the `style` modifier.
 ***REMOVED***private var style: Style = .automatic()
 ***REMOVED***
-***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
-***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
+***REMOVED***@Environment(\.horizontalSizeClass) public var horizontalSizeClass
+***REMOVED***@Environment(\.verticalSizeClass) public var verticalSizeClass
 ***REMOVED***
 ***REMOVED******REMOVED***/ If `true`, the gallery will display as if the device is in a regular-width orientation.
 ***REMOVED******REMOVED***/ If `false`, the gallery will display as if the device is in a compact-width orientation.
 ***REMOVED***private var isRegularWidth: Bool {
-***REMOVED******REMOVED***!(horizontalSizeClass == .compact && verticalSizeClass == .regular)
+***REMOVED******REMOVED***!isCompact
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show an error alert.

@@ -17,17 +17,12 @@
 
 ***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with
 ***REMOVED***/ a utility network and trace configurations.
-struct UtilityNetworkTraceExampleView: View {
+struct UtilityNetworkTraceExampleView: View, CompactAware {
 ***REMOVED***@Environment(\.horizontalSizeClass)
-***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
+***REMOVED***var horizontalSizeClass: UserInterfaceSizeClass?
 ***REMOVED***
 ***REMOVED***@Environment(\.verticalSizeClass)
-***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the environment is compact.
-***REMOVED***private var isCompact: Bool {
-***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
-***REMOVED***
+***REMOVED***var verticalSizeClass: UserInterfaceSizeClass?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map with the utility networks.
 ***REMOVED***@State private var map = makeMap()

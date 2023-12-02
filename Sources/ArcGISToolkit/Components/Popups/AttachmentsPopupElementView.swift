@@ -16,7 +16,7 @@
 import QuickLook
 
 ***REMOVED***/ A view displaying an `AttachmentsPopupElement`.
-struct AttachmentsPopupElementView: View {
+struct AttachmentsPopupElementView: View, CompactAware {
 ***REMOVED******REMOVED***/ The `PopupElement` to display.
 ***REMOVED***var popupElement: AttachmentsPopupElement
 ***REMOVED***
@@ -25,7 +25,7 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value denoting if the view should be shown as regular width.
 ***REMOVED***var isRegularWidth: Bool {
-***REMOVED******REMOVED***!(horizontalSizeClass == .compact && verticalSizeClass == .regular)
+***REMOVED******REMOVED***!isCompact
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The states of loading attachments.

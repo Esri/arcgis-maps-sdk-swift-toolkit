@@ -59,7 +59,7 @@
 ***REMOVED***/ To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [SearchExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `SearchView` see the [SearchView Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/searchviewtutorial).
-public struct SearchView: View {
+public struct SearchView: View, CompactAware {
 ***REMOVED******REMOVED***/ Creates a `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - sources: A collection of search sources to be used.
@@ -126,8 +126,8 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***viewModel.sources
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
-***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
+***REMOVED***@Environment(\.horizontalSizeClass) public var horizontalSizeClass
+***REMOVED***@Environment(\.verticalSizeClass) public var verticalSizeClass
 ***REMOVED***
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/ Defaults to "Find a place or address". Note: this is set using the
@@ -164,7 +164,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ underlying map below the list on an iPhone in portrait orientation (and certain iPad multitasking
 ***REMOVED******REMOVED***/ configurations).  If `false`, will draw the results list view full size.
 ***REMOVED***private var useHalfHeightResults: Bool {
-***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
+***REMOVED******REMOVED***isCompact
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
