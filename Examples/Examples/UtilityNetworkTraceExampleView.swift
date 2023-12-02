@@ -17,17 +17,12 @@ import SwiftUI
 
 /// A demonstration of the utility network trace tool which runs traces on a web map published with
 /// a utility network and trace configurations.
-struct UtilityNetworkTraceExampleView: View {
+struct UtilityNetworkTraceExampleView: View, CompactAware {
     @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass: UserInterfaceSizeClass?
+    var horizontalSizeClass: UserInterfaceSizeClass?
     
     @Environment(\.verticalSizeClass)
-    private var verticalSizeClass: UserInterfaceSizeClass?
-    
-    /// A Boolean value indicating whether the environment is compact.
-    private var isCompact: Bool {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular
-    }
+    var verticalSizeClass: UserInterfaceSizeClass?
     
     /// The map with the utility networks.
     @State private var map = makeMap()

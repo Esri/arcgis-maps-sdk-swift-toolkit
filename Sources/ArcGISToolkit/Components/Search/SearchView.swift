@@ -59,7 +59,7 @@ import ArcGIS
 /// To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [SearchExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
 /// in the project. To learn more about using the `SearchView` see the [SearchView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/searchviewtutorial).
-public struct SearchView: View {
+public struct SearchView: View, CompactAware {
     /// Creates a `SearchView`.
     /// - Parameters:
     ///   - sources: A collection of search sources to be used.
@@ -126,8 +126,8 @@ public struct SearchView: View {
         viewModel.sources
     }
     
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @Environment(\.horizontalSizeClass) public var horizontalSizeClass
+    @Environment(\.verticalSizeClass) public var verticalSizeClass
     
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
@@ -164,7 +164,7 @@ public struct SearchView: View {
     /// underlying map below the list on an iPhone in portrait orientation (and certain iPad multitasking
     /// configurations).  If `false`, will draw the results list view full size.
     private var useHalfHeightResults: Bool {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular
+        isCompact
     }
     
     /// Determines whether the results lists are displayed.

@@ -23,7 +23,7 @@ import SwiftUI
 /// or persistent, where the information is always displayed, for example a
 /// dedicated search panel. They will also be primarily simple containers
 /// that clients will fill with their own content.
-struct FloatingPanel<Content>: View where Content: View {
+struct FloatingPanel<Content>: View, CompactAware where Content: View {
     /// The height of a geo-view's attribution bar.
     ///
     /// When the panel is detached from the bottom of the screen (non-compact) this value allows
@@ -39,8 +39,8 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The content shown in the floating panel.
     let content: () -> Content
     
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     
     /// The color of the handle.
     @State private var handleColor: Color = .defaultHandleColor
@@ -59,11 +59,6 @@ struct FloatingPanel<Content>: View where Content: View {
     
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .zero
-    
-    /// A Boolean value indicating whether the panel should be configured for a compact environment.
-    private var isCompact: Bool {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular
-    }
     
     var body: some View {
         GeometryReader { geometryProxy in
