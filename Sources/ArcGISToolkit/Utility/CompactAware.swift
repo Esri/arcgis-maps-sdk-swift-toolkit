@@ -17,8 +17,8 @@
 ***REMOVED***/ A type that can be used to make a view responsive to horizontal and vertical size classes.
 ***REMOVED***/
 ***REMOVED***/ Use the `CompactAware` protocol to easily detect compact environments in views. Simply add two
-***REMOVED***/ `@Environment` property wrappers for .horizontalSizeClass and .verticalSizeClass to conforming
-***REMOVED***/ views and access ``isCompact`` where needed.
+***REMOVED***/ `@Environment` property wrappers for `.horizontalSizeClass` and `.verticalSizeClass` to
+***REMOVED***/ conforming views and use ``isCompact`` where needed.
 public protocol CompactAware {
 ***REMOVED***var horizontalSizeClass: UserInterfaceSizeClass? { get ***REMOVED***
 ***REMOVED***var verticalSizeClass: UserInterfaceSizeClass? { get ***REMOVED***
