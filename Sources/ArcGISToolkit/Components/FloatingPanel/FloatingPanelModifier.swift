@@ -61,14 +61,12 @@ public extension View {
 }
 
 /// Overlays a floating panel on the parent content.
-private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelContent: View {
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) var verticalSizeClass
+private struct FloatingPanelModifier<PanelContent>: ViewModifier, CompactAware where PanelContent: View {
+    @Environment(\.horizontalSizeClass) 
+    var horizontalSizeClass
     
-    /// A Boolean value indicating whether the environment is compact.
-    private var isCompact: Bool {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular
-    }
+    @Environment(\.verticalSizeClass)
+    var verticalSizeClass
     
     /// The height of a geo-view's attribution bar.
     ///

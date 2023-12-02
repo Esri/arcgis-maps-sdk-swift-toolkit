@@ -16,7 +16,7 @@ import ArcGIS
 import QuickLook
 
 /// A view displaying an `AttachmentsPopupElement`.
-struct AttachmentsPopupElementView: View {
+struct AttachmentsPopupElementView: View, CompactAware {
     /// The `PopupElement` to display.
     var popupElement: AttachmentsPopupElement
     
@@ -25,7 +25,7 @@ struct AttachmentsPopupElementView: View {
     
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
-        !(horizontalSizeClass == .compact && verticalSizeClass == .regular)
+        !isCompact
     }
     
     /// The states of loading attachments.

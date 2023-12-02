@@ -14,7 +14,7 @@
 import SwiftUI
 
 /// A view displaying details for pie chart popup media.
-struct PieChart: View {
+struct PieChart: View, CompactAware {
     /// The view model for the pie chart.
     @ObservedObject private var viewModel: PieChartModel
     
@@ -26,7 +26,7 @@ struct PieChart: View {
     
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
-        !(horizontalSizeClass == .compact && verticalSizeClass == .regular)
+        !isCompact
     }
     
     /// Creates a `PieChart`.

@@ -21,12 +21,6 @@ struct BookmarksHeader: View {
     @Environment(\.verticalSizeClass)
     private var verticalSizeClass: UserInterfaceSizeClass?
     
-    /// If `true`, the bookmarks will display as sheet.
-    /// If `false`, the bookmarks will display as a popover.
-    private var isCompact: Bool {
-        return horizontalSizeClass == .compact || verticalSizeClass == .compact
-    }
-    
     /// Determines if the bookmarks list is currently shown or not.
     @Binding var isPresented: Bool
     
@@ -52,7 +46,7 @@ struct BookmarksHeader: View {
                 maxWidth: .infinity,
                 alignment: .leading
             )
-            if isCompact {
+            if horizontalSizeClass == .compact || verticalSizeClass == .compact {
                 Spacer()
                 Button {
                     isPresented.toggle()
