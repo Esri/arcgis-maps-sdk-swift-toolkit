@@ -76,6 +76,7 @@ struct AttachmentsPopupElementView: View {
                             title: popupElement.displayTitle,
                             description: popupElement.description
                         )
+                        .catalystPadding(4)
                     }
                 }
             }

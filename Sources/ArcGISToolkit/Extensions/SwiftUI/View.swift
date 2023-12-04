@@ -80,6 +80,17 @@ extension View {
         .onPreferenceChange(SizePreferenceKey.self, perform: perform)
     }
     
+    /// Adds an equal padding amount to the horizontal edges of this view if the target environment
+    /// is Mac Catalyst.
+    /// - Parameter length: An amount, given in points, to pad this view on the horizontal edges.
+    /// If you set the value to nil, SwiftUI uses a platform-specific default amount.
+    /// The default value of this parameter is nil.
+    /// - Returns: A view that’s padded by the specified amount on the horizontal edges.
+    func catalystPadding(_ length: CGFloat? = nil) -> some View {
+        return self
+            .padding(isMacCatalyst ? [.horizontal] : [], length)
+    }
+    
     /// View modifier used to denote the view is selected.
     /// - Parameter isSelected: `true` if the view is selected, `false` otherwise.
     /// - Returns: The modified view.
