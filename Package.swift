@@ -1,4 +1,4 @@
-***REMOVED*** swift-tools-version:5.7
+***REMOVED*** swift-tools-version:5.9
 ***REMOVED*** The swift-tools-version declares the minimum version of Swift required to build this package.
 ***REMOVED***.
 
@@ -29,13 +29,16 @@ let package = Package(
 ***REMOVED******REMOVED***),
 ***REMOVED***],
 ***REMOVED***dependencies: [
-***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.2.0"))
+***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.3.0"))
 ***REMOVED***],
 ***REMOVED***targets: [
 ***REMOVED******REMOVED***.target(
 ***REMOVED******REMOVED******REMOVED***name: "ArcGISToolkit",
 ***REMOVED******REMOVED******REMOVED***dependencies: [
 ***REMOVED******REMOVED******REMOVED******REMOVED***.product(name: "ArcGIS", package: "arcgis-maps-sdk-swift")
+***REMOVED******REMOVED******REMOVED***],
+***REMOVED******REMOVED******REMOVED***resources: [
+***REMOVED******REMOVED******REMOVED******REMOVED***.copy("PrivacyInfo.xcprivacy")
 ***REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***.testTarget(

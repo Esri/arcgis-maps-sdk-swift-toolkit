@@ -18,7 +18,7 @@ struct Tests: View {
 ***REMOVED******REMOVED***NavigationView {
 ***REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Tests", destination: BookmarksTestView())
+***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("FormView Tests", destination: FormViewTestView())
 ***REMOVED******REMOVED***

@@ -33,6 +33,7 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.displayTitle,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -13,9 +13,13 @@
 		7552A7562A573CBB0023DA5A /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7552A573CBB0023DA5A /* Tests.swift */; ***REMOVED***;
 		7552A7582A573CBD0023DA5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7552A7572A573CBD0023DA5A /* Assets.xcassets */; ***REMOVED***;
 		7552A75B2A573CBD0023DA5A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7552A75A2A573CBD0023DA5A /* Preview Assets.xcassets */; ***REMOVED***;
-		7552A7622A573D810023DA5A /* BookmarksTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7612A573D810023DA5A /* BookmarksTestView.swift */; ***REMOVED***;
+		7552A7622A573D810023DA5A /* BookmarksTestCase1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7612A573D810023DA5A /* BookmarksTestCase1View.swift */; ***REMOVED***;
 		7552A76C2A573DFB0023DA5A /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A76B2A573DFB0023DA5A /* BookmarksTests.swift */; ***REMOVED***;
 		7552A7762A573E900023DA5A /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = 7552A7752A573E900023DA5A /* ArcGISToolkit */; ***REMOVED***;
+		7584B7552B1A79DD00772AB7 /* BookmarksTestViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7584B7542B1A79DD00772AB7 /* BookmarksTestViews.swift */; ***REMOVED***;
+		7584B7572B1A7AF100772AB7 /* BookmarksTestCase2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7584B7562B1A7AF100772AB7 /* BookmarksTestCase2View.swift */; ***REMOVED***;
+		7584B7592B1A817A00772AB7 /* BookmarksTestCase3View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7584B7582B1A817A00772AB7 /* BookmarksTestCase3View.swift */; ***REMOVED***;
+		7584B75B2B1A824300772AB7 /* BookmarksTestCase4View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7584B75A2B1A824300772AB7 /* BookmarksTestCase4View.swift */; ***REMOVED***;
 		75B236692A5CB49B00AEFACE /* BasemapGalleryTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */; ***REMOVED***;
 		75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */; ***REMOVED***;
 		75B2366D2A5CC78C00AEFACE /* FloorFilterTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */; ***REMOVED***;
@@ -40,10 +44,14 @@
 		7552A7552A573CBB0023DA5A /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; ***REMOVED***;
 		7552A7572A573CBD0023DA5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; ***REMOVED***;
 		7552A75A2A573CBD0023DA5A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; ***REMOVED***;
-		7552A7612A573D810023DA5A /* BookmarksTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestView.swift; sourceTree = "<group>"; ***REMOVED***;
+		7552A7612A573D810023DA5A /* BookmarksTestCase1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase1View.swift; sourceTree = "<group>"; ***REMOVED***;
 		7552A7642A573DA00023DA5A /* arcgis-maps-sdk-swift-toolkit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "arcgis-maps-sdk-swift-toolkit"; path = ..; sourceTree = "<group>"; ***REMOVED***;
 		7552A7692A573DFB0023DA5A /* UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; ***REMOVED***;
 		7552A76B2A573DFB0023DA5A /* BookmarksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTests.swift; sourceTree = "<group>"; ***REMOVED***;
+		7584B7542B1A79DD00772AB7 /* BookmarksTestViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestViews.swift; sourceTree = "<group>"; ***REMOVED***;
+		7584B7562B1A7AF100772AB7 /* BookmarksTestCase2View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase2View.swift; sourceTree = "<group>"; ***REMOVED***;
+		7584B7582B1A817A00772AB7 /* BookmarksTestCase3View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase3View.swift; sourceTree = "<group>"; ***REMOVED***;
+		7584B75A2B1A824300772AB7 /* BookmarksTestCase4View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase4View.swift; sourceTree = "<group>"; ***REMOVED***;
 		75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasemapGalleryTestView.swift; sourceTree = "<group>"; ***REMOVED***;
 		75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasemapGalleryTests.swift; sourceTree = "<group>"; ***REMOVED***;
 		75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterTestView.swift; sourceTree = "<group>"; ***REMOVED***;
@@ -129,11 +137,23 @@
 			path = UITests;
 			sourceTree = "<group>";
 		***REMOVED***;
+		7584B7532B1A798B00772AB7 /* BookmarksTestViews */ = {
+			isa = PBXGroup;
+			children = (
+				7552A7612A573D810023DA5A /* BookmarksTestCase1View.swift */,
+				7584B7562B1A7AF100772AB7 /* BookmarksTestCase2View.swift */,
+				7584B7582B1A817A00772AB7 /* BookmarksTestCase3View.swift */,
+				7584B75A2B1A824300772AB7 /* BookmarksTestCase4View.swift */,
+				7584B7542B1A79DD00772AB7 /* BookmarksTestViews.swift */,
+			);
+			path = BookmarksTestViews;
+			sourceTree = "<group>";
+		***REMOVED***;
 		75B236672A5CB32700AEFACE /* TestViews */ = {
 			isa = PBXGroup;
 			children = (
 				75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */,
-				7552A7612A573D810023DA5A /* BookmarksTestView.swift */,
+				7584B7532B1A798B00772AB7 /* BookmarksTestViews */,
 				75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */,
 				75022F932A7AC289000ED7B7 /* FormViewTestView.swift */,
 			);
@@ -246,8 +266,12 @@
 				7552A7562A573CBB0023DA5A /* Tests.swift in Sources */,
 				75022F942A7AC289000ED7B7 /* FormViewTestView.swift in Sources */,
 				7552A7542A573CBB0023DA5A /* UITestRunner.swift in Sources */,
+				7584B7552B1A79DD00772AB7 /* BookmarksTestViews.swift in Sources */,
 				75B2366D2A5CC78C00AEFACE /* FloorFilterTestView.swift in Sources */,
-				7552A7622A573D810023DA5A /* BookmarksTestView.swift in Sources */,
+				7552A7622A573D810023DA5A /* BookmarksTestCase1View.swift in Sources */,
+				7584B7592B1A817A00772AB7 /* BookmarksTestCase3View.swift in Sources */,
+				7584B7572B1A7AF100772AB7 /* BookmarksTestCase2View.swift in Sources */,
+				7584B75B2B1A824300772AB7 /* BookmarksTestCase4View.swift in Sources */,
 				75B236692A5CB49B00AEFACE /* BasemapGalleryTestView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -408,7 +432,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.2.0;
+				MARKETING_VERSION = 200.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-ui-test-runner.UI-Test-Runner";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -440,7 +464,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 200.2.0;
+				MARKETING_VERSION = 200.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-ui-test-runner.UI-Test-Runner";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
