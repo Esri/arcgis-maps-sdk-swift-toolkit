@@ -46,7 +46,9 @@
 ***REMOVED***/ in the project. To learn more about using the `Bookmarks` component see the [Bookmarks Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/bookmarkstutorial).
 public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ A list of selectable bookmarks.
-***REMOVED***@State private var bookmarks: [Bookmark]
+***REMOVED***private let _bookmarks: [Bookmark]
+***REMOVED***
+***REMOVED***@State private var displayedBookmarks: [Bookmark] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ An error that occurred while loading the geo model.
 ***REMOVED***@State private var loadingError: Error?
@@ -85,7 +87,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***_isPresented = isPresented
-***REMOVED******REMOVED***self.bookmarks = bookmarks
+***REMOVED******REMOVED***_bookmarks = bookmarks
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***
@@ -103,37 +105,48 @@ public struct Bookmarks: View {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.geoModel = geoModel
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
-***REMOVED******REMOVED***self.bookmarks = []
+***REMOVED******REMOVED***_bookmarks = []
 ***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
-***REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
-***REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED***if !bookmarks.isEmpty {
-***REMOVED******REMOVED******REMOVED***list
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedBookmark) { selectedBookmark in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedBookmark {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectBookmark(selectedBookmark)
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
+***REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED***if !displayedBookmarks.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***list
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedBookmark) { selectedBookmark in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedBookmark {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectBookmark(selectedBookmark)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED*** else if let loadingError {
-***REMOVED******REMOVED******REMOVED***makeErrorMessage(with: loadingError)
-***REMOVED*** else if geoModel != nil && !isGeoModelLoaded {
-***REMOVED******REMOVED******REMOVED***loading
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***noBookmarks
+***REMOVED******REMOVED*** else if let loadingError {
+***REMOVED******REMOVED******REMOVED******REMOVED***makeErrorMessage(with: loadingError)
+***REMOVED******REMOVED*** else if geoModel != nil && !isGeoModelLoaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***loading
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***noBookmarks
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Push content to the top edge.
+***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Push content to the top edge.
-***REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED***.task(id: geoModel) {
+***REMOVED******REMOVED******REMOVED***if geoModel?.loadStatus != .loaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await geoModel?.load()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***self.displayedBookmarks = geoModel?.bookmarks ?? []
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: _bookmarks) { bookmarks in
+***REMOVED******REMOVED******REMOVED***self.displayedBookmarks = bookmarks
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 extension Bookmarks {
 ***REMOVED******REMOVED***/ The list of bookmarks sorted alphabetically.
 ***REMOVED***var sortedBookmarks: [Bookmark] {
-***REMOVED******REMOVED***bookmarks.sorted { $0.name <  $1.name ***REMOVED***
+***REMOVED******REMOVED***displayedBookmarks.sorted { $0.name <  $1.name ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets an action to perform when the bookmark selection changes.
@@ -203,15 +216,15 @@ extension Bookmarks {
 ***REMOVED***private var loading: some View {
 ***REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await geoModel?.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks = geoModel?.bookmarks ?? []
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isGeoModelLoaded = true
-***REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***loadingError = error
+***REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await geoModel?.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks = geoModel?.bookmarks ?? []
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isGeoModelLoaded = true
+***REMOVED******REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***loadingError = error
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view that is shown when no bookmarks are present.
