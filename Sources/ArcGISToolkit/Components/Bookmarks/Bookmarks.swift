@@ -46,7 +46,9 @@ import SwiftUI
 /// in the project. To learn more about using the `Bookmarks` component see the [Bookmarks Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/bookmarkstutorial).
 public struct Bookmarks: View {
     /// A list of selectable bookmarks.
-    @State private var bookmarks: [Bookmark]
+    private let _bookmarks: [Bookmark]
+    
+    @State private var displayedBookmarks: [Bookmark] = []
     
     /// An error that occurred while loading the geo model.
     @State private var loadingError: Error?
@@ -85,7 +87,7 @@ public struct Bookmarks: View {
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
         _isPresented = isPresented
-        self.bookmarks = bookmarks
+        _bookmarks = bookmarks
         self.viewpoint = viewpoint
     }
     
@@ -103,37 +105,48 @@ public struct Bookmarks: View {
     ) {
         self.geoModel = geoModel
         self.viewpoint = viewpoint
-        self.bookmarks = []
+        _bookmarks = []
         _isPresented = isPresented
     }
     
     public var body: some View {
-        BookmarksHeader(isPresented: $isPresented)
-            .padding([.horizontal, .top])
-        Divider()
-        if !bookmarks.isEmpty {
-            list
-                .onChange(of: selectedBookmark) { selectedBookmark in
-                    if let selectedBookmark {
-                        selectBookmark(selectedBookmark)
+        Group {
+            BookmarksHeader(isPresented: $isPresented)
+                .padding([.horizontal, .top])
+            Divider()
+            if !displayedBookmarks.isEmpty {
+                list
+                    .onChange(of: selectedBookmark) { selectedBookmark in
+                        if let selectedBookmark {
+                            selectBookmark(selectedBookmark)
+                        }
                     }
-                }
-        } else if let loadingError {
-            makeErrorMessage(with: loadingError)
-        } else if geoModel != nil && !isGeoModelLoaded {
-            loading
-        } else {
-            noBookmarks
+            } else if let loadingError {
+                makeErrorMessage(with: loadingError)
+            } else if geoModel != nil && !isGeoModelLoaded {
+                loading
+            } else {
+                noBookmarks
+            }
+            // Push content to the top edge.
+            Spacer()
         }
-        // Push content to the top edge.
-        Spacer()
+        .task(id: geoModel) {
+            if geoModel?.loadStatus != .loaded {
+                try? await geoModel?.load()
+            }
+            self.displayedBookmarks = geoModel?.bookmarks ?? []
+        }
+        .onChange(of: _bookmarks) { bookmarks in
+            self.displayedBookmarks = bookmarks
+        }
     }
 }
 
 extension Bookmarks {
     /// The list of bookmarks sorted alphabetically.
     var sortedBookmarks: [Bookmark] {
-        bookmarks.sorted { $0.name <  $1.name }
+        displayedBookmarks.sorted { $0.name <  $1.name }
     }
     
     /// Sets an action to perform when the bookmark selection changes.
@@ -203,15 +216,15 @@ extension Bookmarks {
     private var loading: some View {
         ProgressView()
             .padding()
-            .task {
-                do {
-                    try await geoModel?.load()
-                    bookmarks = geoModel?.bookmarks ?? []
-                    isGeoModelLoaded = true
-                } catch {
-                    loadingError = error
-                }
-            }
+//            .task {
+//                do {
+//                    try await geoModel?.load()
+//                    bookmarks = geoModel?.bookmarks ?? []
+//                    isGeoModelLoaded = true
+//                } catch {
+//                    loadingError = error
+//                }
+//            }
     }
     
     /// A view that is shown when no bookmarks are present.
