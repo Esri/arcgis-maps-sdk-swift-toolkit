@@ -85,7 +85,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***_isPresented = isPresented
-***REMOVED******REMOVED***self.bookmarks = bookmarks
+***REMOVED******REMOVED***_bookmarks = State(initialValue: bookmarks)
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***
@@ -103,7 +103,7 @@ public struct Bookmarks: View {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.geoModel = geoModel
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
-***REMOVED******REMOVED***self.bookmarks = []
+***REMOVED******REMOVED***_bookmarks = State(initialValue: [])
 ***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED***
 ***REMOVED***
