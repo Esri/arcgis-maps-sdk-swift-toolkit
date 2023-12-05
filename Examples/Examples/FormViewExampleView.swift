@@ -16,6 +16,11 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FormViewExampleView: View {
+    /// The size of the usable area provided to the `FormView`.
+    ///
+    /// Use this to help avoid covering the feature being edited with the form.
+    @State private var contentSize: CGSize?
+    
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
     
@@ -57,24 +62,41 @@ struct FormViewExampleView: View {
                         identifyScreenPoint = screenPoint
                     }
                 }
+                .contentInsets(
+                    .init(
+                        top: .zero,
+                        leading: isFormPresented && /*!isCompact*/true ? contentSize?.width ?? .zero : .zero,
+                        bottom: isFormPresented && /*isCompact*/false && detent != .full ? contentSize?.height ?? .zero : .zero,
+                        trailing: .zero
+                    )
+                )
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy),
                        let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition,
                        let featureForm = FeatureForm(feature: feature, definition: formDefinition) {
                         self.featureForm = featureForm
                         formViewModel.startEditing(feature, featureForm: featureForm)
+                        if let geometry = feature.geometry {
+                            await mapViewProxy.setViewpoint(
+                                Viewpoint(boundingGeometry: geometry)
+                            )
+                        }
                     }
                 }
                 .ignoresSafeArea(.keyboard)
-            
                 .floatingPanel(
                     attributionBarHeight: attributionBarHeight,
                     selectedDetent: $detent,
                     horizontalAlignment: .leading,
                     isPresented: $isFormPresented
                 ) {
-                    FormView(featureForm: featureForm)
-                        .padding([.horizontal])
+                    GeometryReader { geometryProxy in
+                        FormView(featureForm: featureForm)
+                            .padding([.horizontal])
+                            .onChange(of: geometryProxy.size) {
+                                contentSize = $0
+                            }
+                    }
                 }
                 .alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
                         Button("Discard edits", role: .destructive) {
