@@ -23,6 +23,11 @@ struct FeatureFormExampleView: View {
     /// A Boolean value indicating whether the alert confirming the user's intent to cancel is presented.
     @State private var cancelConfirmationIsPresented = false
     
+    /// The size of the usable area provided to the `FeatureFormView`.
+    ///
+    /// Use this to help avoid covering the feature being edited with the form.
+    @State private var contentSize: CGSize?
+    
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
     
@@ -51,10 +56,23 @@ struct FeatureFormExampleView: View {
                         identifyScreenPoint = screenPoint
                     }
                 }
+                .contentInsets(
+                    .init(
+                        top: .zero,
+                        leading: isFormPresented && /*!isCompact*/true ? contentSize?.width ?? .zero : .zero,
+                        bottom: isFormPresented && /*isCompact*/false && detent != .full ? contentSize?.height ?? .zero : .zero,
+                        trailing: .zero
+                    )
+                )
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy),
                        let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
                         model.featureForm = FeatureForm(feature: feature, definition: formDefinition)
+                        if let geometry = feature.geometry {
+                            await mapViewProxy.setViewpoint(
+                                Viewpoint(boundingGeometry: geometry)
+                            )
+                        }
                     }
                 }
                 .ignoresSafeArea(.keyboard)
@@ -65,10 +83,15 @@ struct FeatureFormExampleView: View {
                     isPresented: $model.isFormPresented
                 ) {
                     if let featureForm = model.featureForm {
-                        FeatureFormView(featureForm: featureForm)
-                            .validationErrors(validationErrorVisibility)
-                            .padding(.horizontal)
-                            .padding(.top, 16)
+                        GeometryReader { geometryProxy in
+                            FeatureFormView(featureForm: featureForm)
+                                .validationErrors(validationErrorVisibility)
+                                .padding(.horizontal)
+                                .padding(.top, 16)
+                                .onChange(of: geometryProxy.size) {
+                                    contentSize = $0
+                                }
+                        }
                     }
                 }
                 .onChange(of: model.isFormPresented) { isFormPresented in
