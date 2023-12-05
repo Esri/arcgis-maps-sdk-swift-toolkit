@@ -45,10 +45,8 @@ import SwiftUI
 /// and refer to [BookmarksExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
 /// in the project. To learn more about using the `Bookmarks` component see the [Bookmarks Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/bookmarkstutorial).
 public struct Bookmarks: View {
-    /// A list of selectable bookmarks.
-    private let _bookmarks: [Bookmark]
-    
-    @State private var displayedBookmarks: [Bookmark] = []
+    /// The bookmarks presented in the list.
+    @State private var bookmarks: [Bookmark] = []
     
     /// An error that occurred while loading the geo model.
     @State private var loadingError: Error?
@@ -63,7 +61,10 @@ public struct Bookmarks: View {
     @State private var selectedBookmark: Bookmark? = nil
     
     /// A map or scene model containing bookmarks.
-    private var geoModel: GeoModel?
+    private let geoModel: GeoModel?
+    
+    /// The list of bookmarks provided via the initializer.
+    private let initialBookmarks: [Bookmark]
     
     /// User defined action to be performed when a bookmark is selected.
     ///
@@ -87,7 +88,8 @@ public struct Bookmarks: View {
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
         _isPresented = isPresented
-        _bookmarks = bookmarks
+        self.geoModel = nil
+        self.initialBookmarks = bookmarks
         self.viewpoint = viewpoint
     }
     
@@ -103,10 +105,10 @@ public struct Bookmarks: View {
         geoModel: GeoModel,
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
-        self.geoModel = geoModel
-        self.viewpoint = viewpoint
-        _bookmarks = []
         _isPresented = isPresented
+        self.geoModel = geoModel
+        self.initialBookmarks = []
+        self.viewpoint = viewpoint
     }
     
     public var body: some View {
@@ -114,13 +116,8 @@ public struct Bookmarks: View {
             BookmarksHeader(isPresented: $isPresented)
                 .padding([.horizontal, .top])
             Divider()
-            if !displayedBookmarks.isEmpty {
+            if !bookmarks.isEmpty {
                 list
-                    .onChange(of: selectedBookmark) { selectedBookmark in
-                        if let selectedBookmark {
-                            selectBookmark(selectedBookmark)
-                        }
-                    }
             } else if let loadingError {
                 makeErrorMessage(with: loadingError)
             } else if geoModel != nil && !isGeoModelLoaded {
@@ -131,24 +128,33 @@ public struct Bookmarks: View {
             // Push content to the top edge.
             Spacer()
         }
+        .onChange(of: bookmarks) { _ in
+            bookmarks.sort { $0.name <  $1.name }
+        }
+        .onChange(of: initialBookmarks) { bookmarks in
+            self.bookmarks = bookmarks
+        }
+        .onChange(of: selectedBookmark) { selectedBookmark in
+            if let selectedBookmark {
+                selectBookmark(selectedBookmark)
+            }
+        }
         .task(id: geoModel) {
             if geoModel?.loadStatus != .loaded {
-                try? await geoModel?.load()
+                isGeoModelLoaded = false
+                do {
+                    try await geoModel?.load()
+                    isGeoModelLoaded = true
+                } catch {
+                    loadingError = error
+                }
             }
-            self.displayedBookmarks = geoModel?.bookmarks ?? []
-        }
-        .onChange(of: _bookmarks) { bookmarks in
-            self.displayedBookmarks = bookmarks
+            bookmarks = geoModel?.bookmarks ?? []
         }
     }
 }
 
 extension Bookmarks {
-    /// The list of bookmarks sorted alphabetically.
-    var sortedBookmarks: [Bookmark] {
-        displayedBookmarks.sorted { $0.name <  $1.name }
-    }
-    
     /// Sets an action to perform when the bookmark selection changes.
     /// - Parameter action: The action to perform when the bookmark selection has changed.
     public func onSelectionChanged(
@@ -192,7 +198,7 @@ extension Bookmarks {
     private var list: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                ForEach(sortedBookmarks, id: \.self) { bookmark in
+                ForEach(bookmarks, id: \.self) { bookmark in
                     Button {
                         selectedBookmark = bookmark
                     } label: {
@@ -203,7 +209,7 @@ extension Bookmarks {
                     }
                     .buttonStyle(.plain)
                     .padding(4)
-                    if bookmark != sortedBookmarks.last {
+                    if bookmark != bookmarks.last {
                         Divider()
                     }
                 }
@@ -216,15 +222,6 @@ extension Bookmarks {
     private var loading: some View {
         ProgressView()
             .padding()
-//            .task {
-//                do {
-//                    try await geoModel?.load()
-//                    bookmarks = geoModel?.bookmarks ?? []
-//                    isGeoModelLoaded = true
-//                } catch {
-//                    loadingError = error
-//                }
-//            }
     }
     
     /// A view that is shown when no bookmarks are present.
