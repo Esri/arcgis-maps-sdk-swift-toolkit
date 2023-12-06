@@ -14,19 +14,18 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying details for pie chart popup media.
-struct PieChart: View, CompactAware {
+struct PieChart: View {
 ***REMOVED******REMOVED***/ The view model for the pie chart.
 ***REMOVED***@ObservedObject private var viewModel: PieChartModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value determining whether to show the legend for the chart.
 ***REMOVED***let showLegend: Bool
 ***REMOVED***
-***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
-***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
+***REMOVED***@Environment(\.isPortraitOrientation) var isPortraitOrientation
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value denoting if the view should be shown as regular width.
 ***REMOVED***var isRegularWidth: Bool {
-***REMOVED******REMOVED***!isCompact
+***REMOVED******REMOVED***!isPortraitOrientation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `PieChart`.
