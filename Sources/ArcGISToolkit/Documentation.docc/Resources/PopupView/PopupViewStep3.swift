@@ -23,9 +23,7 @@ struct PopupExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
-***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***MapView(map: dataModel.map)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***MapView(map: dataModel.map)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

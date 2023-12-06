@@ -25,6 +25,8 @@ public extension Result where Failure == Error {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Converts the result to a `nil` in the case of a user cancelled error.
 ***REMOVED******REMOVED***/ - Returns: `Self` or `nil` if there was a cancellation error.
+***REMOVED******REMOVED***/ - Attention: Deprecated at 200.3.
+***REMOVED***@available(*, deprecated, message: "Check the 'failure' case for 'CancellationError' instead.")
 ***REMOVED***func cancellationToNil() -> Self? {
 ***REMOVED******REMOVED***guard case .failure(_ as CancellationError) = self else {
 ***REMOVED******REMOVED******REMOVED***return self

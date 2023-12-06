@@ -1,2 +1,298 @@
-/* No comment provided by engineer. */
+/* A label declaring the number of starting points selected for a utility network trace. */
+"%lld selected" = "%lld valgt";
+
+/* An alert message indicating that a certificate is required to access
+content on a remote host. The variable is the host that prompted the challenge. */
+"A certificate is required to access content on %@." = "Et certifikat er påkrævet for at få adgang til indhold på %@.";
+
+/* A button to add new utility trace starting points. */
+"Add new" = "Tilføj ny";
+
+/* A section header for advanced options. */
+"Advanced Options" = "Avancerede indstillinger";
+
+/* A reference to all of the sites defined in a floor aware map. */
+"All sites" = "Alle websteder";
+
+/* A message describing the outcome of clearing all utility network trace results. */
+"All the trace inputs and results will be lost." = "Alle sporings-input og -resultater vil gå tabt.";
+
+/* A button indicating the user accepts a potentially dangerous action. */
+"Allow" = "Tillad";
+
+/* A fallback message to display when an image cannot be loaded. */
+"An error occurred loading the image: %@." = "Der opstod en fejl under indlæsning af billedet: %@.";
+
+/* A label in reference to attachments in a popup. */
+"Attachments" = "Vedhæftninger";
+
+/* A label in reference to the attributes of a geo element. */
+"Attributes" = "Atributter";
+
+/* A label indicating authentication is required to proceed. */
+"Authentication Required" = "Godkendelse påkrævet";
+
+/* A label in reference to bookmarks contained in a map or scene. */
+"Bookmarks" = "Bogmærker";
+
+/* A label for a button to open the system file browser. */
+"Browse" = "Gennemse";
+
+/* A label for a button to cancel an operation. */
+"Cancel" = "Annullér";
+
+/* A label for a button to cancel the starting point selection operation. */
+"Cancel starting point selection" = "Annullér valg af startpunkt";
+
+/* A label indicating that a certificate is required to proceed. */
+"Certificate Required" = "Certifikat påkrævet";
+
+/* A label indicating that the remote host's certificate is not trusted. */
+"Certificate Trust Warning" = "Der er et problem med dette sikkerhedscertifikat";
+
+/* A directive to clear all of the completed utility network traces. */
+"Clear all results" = "Ryd alle resultater";
+
+/* A label in reference to the color used to display utility trace result graphics. */
+"Color" = "Farve";
+
+/* An compass description to be read by a screen reader describing the
+current heading. The first variable being a degree value and the
+second being a corresponding cardinal direction (north, northeast,
+east, etc.). */
+"Compass, heading %lld degrees %@" = "Kompas, kurs %lld grader %@";
+
+/* A label for a button used to continue the authentication operation. */
+"Continue" = "Fortsæt";
+
+/* A label indicating a certificate file was inaccessible. */
+"Could not access the certificate file." = "Kunne ikke få adgang til certifikatfilen.";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Advarsel: Certifikatet angivet af '%@' er ikke signeret af en pålidelig myndighed.";
+
+/* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Slet";
+
+/* A button to close the bookmark selection menu. */
+"Done" = "Udført";
+
+/* A message indicating that the user attempted to use a single utility
+network element for more than one trace starting point. */
+"Duplicate starting points cannot be added." = "Dobbelt forekommende startpunkter kan ikke tilføjes.";
+
+/* A label indicating an element could not be identified as a starting point
+for a utility network trace. */
+"Element could not be identified." = "Element kunne ikke identificeres.";
+
+/* A label in reference to an error that occurred during a utility network trace. */
+"Error" = "Fejl";
+
+/* A message indicating that some error occurred while importing a chosen
+network certificate. */
+"Error importing certificate" = "Fejl ved import certifikat";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
+"Error loading basemap." = "Fejl under indlæsning af baggrundskort.";
+
+/* A label indicating popup expressions are being evaluated. */
+"Evaluating popup expressions" = "Evaluering af pop-up-udtryk.";
+
+/* A message indicating that the chosen utility network element wasn't able
+to be used as a trace starting point. */
+"Failed to set starting point" = "Kunne ikke indstille startpunkt";
+
+/* A label in reference to utility elements returned as results of a utility network
+trace operation. */
+"Feature Results" = "Objektresultater";
+
+/* A field in a set of data contained in a popup. */
+"Field" = "Felt";
+
+/* A label in reference to fields in a set of data contained in a popup. */
+"Fields" = "Felter";
+
+/* A field allowing the user to filter a list of facilities by name. A
+facility contains one or more levels in a floor-aware map or scene. */
+"Filter facilities" = "Filtrer faciliteter";
+
+/* A field allowing the user to filter a list of sites by name. A site
+contains one or more facilities in a floor-aware map or scene. */
+"Filter sites" = "Filtrer websteder";
+
+/* A hint for the user on what to search for in a search bar. */
+"Find a place or address" = "Find sted eller adresse";
+
+/* A label in reference to a fractional distance along an edge style utility network element. */
+"Fraction Along Edge" = "Fraktion langs kanten";
+
+/* A label in reference to function outputs returned as results of a utility network
+trace operation. */
+"Function Results" = "Funktionsresultater";
+
+/* A label in reference to media elements contained within a popup. */
+"Media" = "Medier";
+
+/* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
+"Mode" = "Tilstand";
+
+/* A label in reference to the user defined name for an individual utility network trace. */
+"Name" = "Navn";
+
+/* A label in reference to a specific utility network. */
+"Network" = "Netværk";
+
+/* A label for a button to show new utility network trace configuration options. */
+"New trace" = "Ny sporing";
+
+/* A label indicating that no bookmarks are available for selection. */
+"No bookmarks" = "Ingen bogmærker";
+
+/* A statement that no utility trace configurations are available. */
+"No configurations available." = "Ingen konfigurationer tilgængelige";
+
+/* A statement that no sites or facilities with names matching a filter phrase were found. */
+"No matches found." = "Ingen matches fundet.";
+
+/* A message to show when there are no results or suggestions. */
+"No results found" = "Der blev ikke fundet nogen resultater";
+
+/* A label indicating that no utility named trace configurations are available. */
+"No trace types found." = "Ingen sporingstyper fundet";
+
+/* A label indicating that no utility networks are available. */
+"No utility networks found." = "Ingen forsyningsnetværk fundet.";
+
+/* A label indicating that no utility network trace configuration has been selected. */
+"None selected" = "Ingen valgt";
+
+/* A trace function output result was not provided. */
+"Not Available" = "Ikke tilgængelig";
+
+/* A string identifying a utility network object. */
+"Object ID: %@" = "Objekt-id: %@";
+
+/* A label for button to proceed with an operation. */
+"OK" = "OK";
+
+/* A label in reference to a credential password. */
+"Password" = "Adgangskode";
+
+/* A label indicating that a password is required to proceed with an operation. */
+"Password Required" = "Adgangskode kræves";
+
+/* A label requesting the password associated with the chosen certificate. */
+"Please enter a password for the chosen certificate." = "Indtast adgangskode til det valgte certifikat.";
+
+/* A label indicating that at least one starting location is required for the
+chosen utility network trace configuration. */
+"Please set at least 1 starting location." = "Indstil mindst 1 startposition.";
+
+/* A label indicating that at least two starting locations are required for the
+chosen utility network trace configuration. */
+"Please set at least 2 starting locations." = "Indstil mindst 2 startpositioner.";
+
+/* An error message shown when a popup cannot be displayed. The
+variable provides additional data. */
+"Popup evaluation failed: %@" = "Evaluering af pop-up mislykkedes: %@";
+
+/* A label for button to show when the user has panned the map away
+from the original search location. 'Here' is in reference to the
+current visible extent of the map or scene. */
+"Repeat Search Here" = "Gentag søgning her";
+
+/* A label for a button to show utility network trace results. */
+"Results" = "Resultater";
+
+/* A label in reference to a search query entered by the user. */
+"Search Query" = "Søgeforespørgsel";
+
+/* A label prompting the user to make a selection from the available bookmarks. */
+"Select a bookmark" = "Vælg et bogmærke";
+
+/* A label directing the user to select a facility. A facility contains one
+or more levels in a floor-aware map or scene. */
+"Select a facility" = "Vælg en facilitet";
+
+/* A label in reference to all of the sites in a floor-aware map or scene. */
+"Sites" = "Websteder";
+
+/* A label indicating the spatial reference of the chosen basemap doesn't
+match the spatial reference of the map or scene. */
+"Spatial reference mismatch." = "Uoverensstemmelse i spatial reference.";
+
+/* A label in reference to the utility elements chosen as starting points for a utility
+network trace operation. */
+"Starting Points" = "Startpunkter";
+
+/* An instruction to the user to tap on a horizontal surface to
+place an ArcGIS Scene. */
+"Tap a surface to place the scene" = "Tryk på en overflade for at placere scenen";
+
+/* A label indicating that tapping an image will reveal
+additional information. */
+"Tap on the image for more information." = "Tryk på billedet for mere information.";
+
+/* A label in reference to the chosen terminal configuration of a utility network element. */
+"Terminal Configuration" = "Konfiguration af terminal";
+
+/* A label for development purposes only. This is not user visible. */
+"test" = "test";
+
+/* A label indicating the chosen basemap doesn't have a spatial reference. */
+"The basemap does not have a spatial reference." = "Baggrundskortet har ikke en spatial reference.";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to
+load for an unknown reason. */
+"The basemap failed to load for an unknown reason." = "Baggrundskortet kunne ikke indlæses af ukendt årsag.";
+
+/* A label indicating the spatial reference of the chosen basemap doesn't
+match the spatial reference of the map. */
+"The basemap has a spatial reference that is incompatible with the map." = "Baggrundskortet har en spatial reference, der er inkompatibel med kortet.";
+
+/* A label indicating the chosen file or given password was invalid. */
+"The certificate file or password was invalid." = "Certifikatfilen eller adgangskoden var ugyldig.";
+
+/* A label indicating the chosen file was invalid. */
+"The certificate file was invalid." = "Certifikatfilen var ugyldig.";
+
+/* A label indicating the map doesn't have a spatial reference. */
+"The map does not have a spatial reference." = "Kortet har ikke en spatial reference.";
+
+/* A label indicating the given password was invalid. */
+"The password was invalid." = "Adgangskoden var ugyldig.";
+
+/* Description of error thrown when a remote image could not be loaded. */
+"The URL could not be reached or did not contain image data." = "URL kunne ikke nås eller indeholdt ingen billeddata.";
+
+/* A label for a button to begin a utility network trace operation. */
+"Trace" = "Spor";
+
+/* A label indicating the index of the trace being viewed out of the total number of traces completed. */
+"Trace %1$lld of %2$lld" = "Spor %1$lld af %2$lld";
+
+/* A label in reference to a utility network trace configuration. */
+"Trace Configuration" = "Sporingskonfiguration";
+
+/* A label for a button allowing the user to retry an operation. */
+"Try Again" = "Prøv igen";
+
+/* A label to use in place of a utility element asset type name. */
+"Unnamed Asset Type" = "Ikke-navngivet aktivtype";
+
+/* A label in reference to a credential username. */
+"Username" = "Brugernavn";
+
+/* A value in a set of data contained in a popup. */
+"Value" = "Værdi";
+
+/* A label explaining that credentials are required to authenticate with specified host.
+The host is indicated in the variable. */
+"You must sign in to access '%@'" = "Du skal logge ind for at få adgang til '%@'";
+
+/* A button to change the map to the extent of the selected trace. */
+"Zoom To" = "Zoom til";
+
+/* A user option specifying that a map should automatically change to show completed trace results. */
+"Zoom to result" = "Zoom til resultat";
+

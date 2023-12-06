@@ -33,6 +33,7 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.displayTitle,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -118,6 +119,10 @@ extension PopupMedia: Identifiable {***REMOVED***
 private extension MediaPopupElement {
 ***REMOVED******REMOVED***/ Provides a default title to display if `title` is empty.
 ***REMOVED***var displayTitle: String {
-***REMOVED******REMOVED***title.isEmpty ? String(localized: "Media", bundle: .toolkitModule) : title
+***REMOVED******REMOVED***title.isEmpty ? String(
+***REMOVED******REMOVED******REMOVED***localized: "Media",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label in reference to media elements contained within a popup."
+***REMOVED******REMOVED***) : title
 ***REMOVED***
 ***REMOVED***

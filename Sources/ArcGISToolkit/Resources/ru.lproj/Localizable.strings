@@ -1,2 +1,298 @@
-/* No comment provided by engineer. */
+/* A label declaring the number of starting points selected for a utility network trace. */
+"%lld selected" = "%lld выбрано";
+
+/* An alert message indicating that a certificate is required to access
+content on a remote host. The variable is the host that prompted the challenge. */
+"A certificate is required to access content on %@." = "Для доступа к ресурсам на %@ необходим сертификат";
+
+/* A button to add new utility trace starting points. */
+"Add new" = "Добавить новый";
+
+/* A section header for advanced options. */
+"Advanced Options" = "Дополнительные опции";
+
+/* A reference to all of the sites defined in a floor aware map. */
+"All sites" = "Все сайты";
+
+/* A message describing the outcome of clearing all utility network trace results. */
+"All the trace inputs and results will be lost." = "Все входные данные и результаты трассировки будут потеряны.";
+
+/* A button indicating the user accepts a potentially dangerous action. */
+"Allow" = "Разрешить";
+
+/* A fallback message to display when an image cannot be loaded. */
+"An error occurred loading the image: %@." = "Произошла ошибка при загрузке изображения: %@.";
+
+/* A label in reference to attachments in a popup. */
+"Attachments" = "Вложения";
+
+/* A label in reference to the attributes of a geo element. */
+"Attributes" = "Атрибуты";
+
+/* A label indicating authentication is required to proceed. */
+"Authentication Required" = "Необходима аутентификация";
+
+/* A label in reference to bookmarks contained in a map or scene. */
+"Bookmarks" = "Закладки";
+
+/* A label for a button to open the system file browser. */
+"Browse" = "Обзор";
+
+/* A label for a button to cancel an operation. */
+"Cancel" = "Отмена";
+
+/* A label for a button to cancel the starting point selection operation. */
+"Cancel starting point selection" = "Отменить выборку стартовой точки";
+
+/* A label indicating that a certificate is required to proceed. */
+"Certificate Required" = "Требуется сертификат";
+
+/* A label indicating that the remote host's certificate is not trusted. */
+"Certificate Trust Warning" = "Предупреждение сертификата доверия";
+
+/* A directive to clear all of the completed utility network traces. */
+"Clear all results" = "Очистить все результаты";
+
+/* A label in reference to the color used to display utility trace result graphics. */
+"Color" = "Цвет";
+
+/* An compass description to be read by a screen reader describing the
+current heading. The first variable being a degree value and the
+second being a corresponding cardinal direction (north, northeast,
+east, etc.). */
+"Compass, heading %lld degrees %@" = "Компас, направление %lld градусы %@";
+
+/* A label for a button used to continue the authentication operation. */
+"Continue" = "Продолжить";
+
+/* A label indicating a certificate file was inaccessible. */
+"Could not access the certificate file." = "Не удалось получить доступ к файлу сертификата.";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Опасно: сертификат, предоставленный '%@', не подписан доверенным органом.";
+
+/* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Удалить";
+
+/* A button to close the bookmark selection menu. */
+"Done" = "Готово";
+
+/* A message indicating that the user attempted to use a single utility
+network element for more than one trace starting point. */
+"Duplicate starting points cannot be added." = "Дублирующиеся начальные точки не могут быть добавлены.";
+
+/* A label indicating an element could not be identified as a starting point
+for a utility network trace. */
+"Element could not be identified." = "Невозможно идентифицировать элемент.";
+
+/* A label in reference to an error that occurred during a utility network trace. */
+"Error" = "Ошибка";
+
+/* A message indicating that some error occurred while importing a chosen
+network certificate. */
+"Error importing certificate" = "Ошибка импорта сертификата";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
+"Error loading basemap." = "Ошибка загрузки базовой карты.";
+
+/* A label indicating popup expressions are being evaluated. */
+"Evaluating popup expressions" = "Оценка всплывающих выражений";
+
+/* A message indicating that the chosen utility network element wasn't able
+to be used as a trace starting point. */
+"Failed to set starting point" = "Не удалось установить начальную точку";
+
+/* A label in reference to utility elements returned as results of a utility network
+trace operation. */
+"Feature Results" = "Результаты объекта";
+
+/* A field in a set of data contained in a popup. */
+"Field" = "Поле";
+
+/* A label in reference to fields in a set of data contained in a popup. */
+"Fields" = "Поля";
+
+/* A field allowing the user to filter a list of facilities by name. A
+facility contains one or more levels in a floor-aware map or scene. */
+"Filter facilities" = "Фильтр объектов";
+
+/* A field allowing the user to filter a list of sites by name. A site
+contains one or more facilities in a floor-aware map or scene. */
+"Filter sites" = "Фильтр участков";
+
+/* A hint for the user on what to search for in a search bar. */
+"Find a place or address" = "Найти адрес или место";
+
+/* A label in reference to a fractional distance along an edge style utility network element. */
+"Fraction Along Edge" = "Дробление вдоль ребра";
+
+/* A label in reference to function outputs returned as results of a utility network
+trace operation. */
+"Function Results" = "Результаты функции";
+
+/* A label in reference to media elements contained within a popup. */
+"Media" = "Медиа";
+
+/* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
+"Mode" = "Режим";
+
+/* A label in reference to the user defined name for an individual utility network trace. */
+"Name" = "Имя";
+
+/* A label in reference to a specific utility network. */
+"Network" = "Сеть";
+
+/* A label for a button to show new utility network trace configuration options. */
+"New trace" = "Новая трассировка";
+
+/* A label indicating that no bookmarks are available for selection. */
+"No bookmarks" = "Нет закладок";
+
+/* A statement that no utility trace configurations are available. */
+"No configurations available." = "Нет доступных конфигураций.";
+
+/* A statement that no sites or facilities with names matching a filter phrase were found. */
+"No matches found." = "Совпадения не найдены.";
+
+/* A message to show when there are no results or suggestions. */
+"No results found" = "Результаты не найдены";
+
+/* A label indicating that no utility named trace configurations are available. */
+"No trace types found." = "Типы трассировки не найдены.";
+
+/* A label indicating that no utility networks are available. */
+"No utility networks found." = "Инженерные сети не найдены";
+
+/* A label indicating that no utility network trace configuration has been selected. */
+"None selected" = "Нет выбранных";
+
+/* A trace function output result was not provided. */
+"Not Available" = "Недоступно";
+
+/* A string identifying a utility network object. */
+"Object ID: %@" = "Object ID: %@";
+
+/* A label for button to proceed with an operation. */
+"OK" = "OK";
+
+/* A label in reference to a credential password. */
+"Password" = "Пароль";
+
+/* A label indicating that a password is required to proceed with an operation. */
+"Password Required" = "Требуется пароль";
+
+/* A label requesting the password associated with the chosen certificate. */
+"Please enter a password for the chosen certificate." = "Введите пароль для выбранного сертификата.";
+
+/* A label indicating that at least one starting location is required for the
+chosen utility network trace configuration. */
+"Please set at least 1 starting location." = "Укажите хотя бы одну начальную точку.";
+
+/* A label indicating that at least two starting locations are required for the
+chosen utility network trace configuration. */
+"Please set at least 2 starting locations." = "Укажите хотя бы 2 начальных точки.";
+
+/* An error message shown when a popup cannot be displayed. The
+variable provides additional data. */
+"Popup evaluation failed: %@" = "Оценка всплывающих окон не удалась: %@";
+
+/* A label for button to show when the user has panned the map away
+from the original search location. 'Here' is in reference to the
+current visible extent of the map or scene. */
+"Repeat Search Here" = "Повторить поиск здесь";
+
+/* A label for a button to show utility network trace results. */
+"Results" = "Результаты";
+
+/* A label in reference to a search query entered by the user. */
+"Search Query" = "Запрос поиска";
+
+/* A label prompting the user to make a selection from the available bookmarks. */
+"Select a bookmark" = "Выберите закладку";
+
+/* A label directing the user to select a facility. A facility contains one
+or more levels in a floor-aware map or scene. */
+"Select a facility" = "Выбрать помещение";
+
+/* A label in reference to all of the sites in a floor-aware map or scene. */
+"Sites" = "Сайты";
+
+/* A label indicating the spatial reference of the chosen basemap doesn't
+match the spatial reference of the map or scene. */
+"Spatial reference mismatch." = "Не совпадает пространственная привязка.";
+
+/* A label in reference to the utility elements chosen as starting points for a utility
+network trace operation. */
+"Starting Points" = "Начальные точки";
+
+/* An instruction to the user to tap on a horizontal surface to
+place an ArcGIS Scene. */
+"Tap a surface to place the scene" = "Коснитесь поверхности, чтобы разместить сцену";
+
+/* A label indicating that tapping an image will reveal
+additional information. */
+"Tap on the image for more information." = "Нажмите на изображении для получения дополнительной информации.";
+
+/* A label in reference to the chosen terminal configuration of a utility network element. */
+"Terminal Configuration" = "Настройка терминала";
+
+/* A label for development purposes only. This is not user visible. */
+"test" = "тест";
+
+/* A label indicating the chosen basemap doesn't have a spatial reference. */
+"The basemap does not have a spatial reference." = "Базовая карта не имеет пространственной привязки";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to
+load for an unknown reason. */
+"The basemap failed to load for an unknown reason." = "Не удалось загрузить базовую карту по неизвестной причине.";
+
+/* A label indicating the spatial reference of the chosen basemap doesn't
+match the spatial reference of the map. */
+"The basemap has a spatial reference that is incompatible with the map." = "Пространственная привязка базовой карты несовместима с картой.";
+
+/* A label indicating the chosen file or given password was invalid. */
+"The certificate file or password was invalid." = "Файл сертификата или пароль недопустим.";
+
+/* A label indicating the chosen file was invalid. */
+"The certificate file was invalid." = "Файл сертификата недопустим.";
+
+/* A label indicating the map doesn't have a spatial reference. */
+"The map does not have a spatial reference." = "Карта не имеет пространственной привязки.";
+
+/* A label indicating the given password was invalid. */
+"The password was invalid." = "Недействительный пароль.";
+
+/* Description of error thrown when a remote image could not be loaded. */
+"The URL could not be reached or did not contain image data." = "URL-адрес недоступен или не содержит данных изображения.";
+
+/* A label for a button to begin a utility network trace operation. */
+"Trace" = "Трассировать";
+
+/* A label indicating the index of the trace being viewed out of the total number of traces completed. */
+"Trace %1$lld of %2$lld" = "Трассировать %1$lld из %2$lld";
+
+/* A label in reference to a utility network trace configuration. */
+"Trace Configuration" = "Конфигурация трассировки";
+
+/* A label for a button allowing the user to retry an operation. */
+"Try Again" = "Попробуйте еще раз";
+
+/* A label to use in place of a utility element asset type name. */
+"Unnamed Asset Type" = "Тип устройства без названия";
+
+/* A label in reference to a credential username. */
+"Username" = "Имя пользователя";
+
+/* A value in a set of data contained in a popup. */
+"Value" = "Значение";
+
+/* A label explaining that credentials are required to authenticate with specified host.
+The host is indicated in the variable. */
+"You must sign in to access '%@'" = "Для доступа к '%@' необходимо выполнить вход";
+
+/* A button to change the map to the extent of the selected trace. */
+"Zoom To" = "Приблизить к";
+
+/* A user option specifying that a map should automatically change to show completed trace results. */
+"Zoom to result" = "Приблизить к результату";
+

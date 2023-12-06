@@ -1,17 +1,25 @@
-***REMOVED***.
-
+***REMOVED*** Copyright 2023 Esri.
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+***REMOVED***/ Represents the current state of the device keyboard.
+enum KeyboardState {
+***REMOVED******REMOVED***/ The keyboard will show.
+***REMOVED***case opening
+***REMOVED******REMOVED***/ The keyboard did show.
+***REMOVED***case open
+***REMOVED******REMOVED***/ The keyboard will hide.
+***REMOVED***case closing
+***REMOVED******REMOVED***/ The keyboard did hide.
+***REMOVED***case closed
 ***REMOVED***
-***REMOVED***
-
-extension Graphic: ObservableObject {***REMOVED***
