@@ -52,7 +52,7 @@ import ArcGIS
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [BasemapGalleryExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BasemapGalleryExampleView.swift)
 /// in the project. To learn more about using the `BasemapGallery` see the [BasemapGallery Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/basemapgallerytutorial).
-public struct BasemapGallery: View, CompactAware {
+public struct BasemapGallery: View {
     /// The view style of the gallery.
     public enum Style {
         /// The `BasemapGallery` will display as a grid when there is an appropriate
@@ -101,13 +101,12 @@ public struct BasemapGallery: View, CompactAware {
     /// Set using the `style` modifier.
     private var style: Style = .automatic()
     
-    @Environment(\.horizontalSizeClass) public var horizontalSizeClass
-    @Environment(\.verticalSizeClass) public var verticalSizeClass
+    @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
     /// If `true`, the gallery will display as if the device is in a regular-width orientation.
     /// If `false`, the gallery will display as if the device is in a compact-width orientation.
     private var isRegularWidth: Bool {
-        !isCompact
+        !isPortraitOrientation
     }
     
     /// A Boolean value indicating whether to show an error alert.
