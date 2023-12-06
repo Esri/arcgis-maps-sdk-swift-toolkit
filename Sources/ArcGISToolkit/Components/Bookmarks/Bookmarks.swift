@@ -85,7 +85,7 @@ public struct Bookmarks: View {
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
         _isPresented = isPresented
-        self.bookmarks = bookmarks
+        _bookmarks = State(initialValue: bookmarks)
         self.viewpoint = viewpoint
     }
     
@@ -103,7 +103,7 @@ public struct Bookmarks: View {
     ) {
         self.geoModel = geoModel
         self.viewpoint = viewpoint
-        self.bookmarks = []
+        _bookmarks = State(initialValue: [])
         _isPresented = isPresented
     }
     
