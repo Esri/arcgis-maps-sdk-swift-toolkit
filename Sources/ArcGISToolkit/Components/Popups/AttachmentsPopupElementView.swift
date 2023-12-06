@@ -76,6 +76,7 @@ struct AttachmentsPopupElementView: View {
                             title: popupElement.displayTitle,
                             description: popupElement.description
                         )
+                        .catalystPadding(4)
                     }
                 }
             }
@@ -95,6 +96,10 @@ struct AttachmentsPopupElementView: View {
 private extension AttachmentsPopupElement {
     /// Provides a default title to display if `title` is empty.
     var displayTitle: String {
-        title.isEmpty ? String(localized: "Attachments", bundle: .toolkitModule) : title
+        title.isEmpty ? String(
+            localized: "Attachments",
+            bundle: .toolkitModule,
+            comment: "A label in reference to attachments in a popup."
+        ) : title
     }
 }

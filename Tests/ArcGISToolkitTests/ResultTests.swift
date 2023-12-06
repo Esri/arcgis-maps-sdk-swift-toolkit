@@ -17,6 +17,7 @@ import XCTest
 
 class ResultTests: XCTestCase {
     /// Tests the conversion of a cancellation error result to `nil.`
+    @available(*, deprecated)
     func testCancellationToNil() {
         var result: Result<String, Error> = .success("hello")
         XCTAssertNotNil(result.cancellationToNil())

@@ -17,36 +17,27 @@ struct PopupExampleView: View {
     
     @State private var identifyScreenPoint: CGPoint?
     
-    @State private var popup: Popup?
+    @State private var popup: Popup? {
+        didSet { showPopup = popup != nil }
+    }
     
     @State private var showPopup = false
     
     var body: some View {
         MapViewReader { proxy in
-            VStack {
-                MapView(map: dataModel.map)
-                    .onSingleTapGesture { screenPoint, _ in
-                        identifyScreenPoint = screenPoint
-                    }
-                    .task(id: identifyScreenPoint) {
-                        guard let identifyScreenPoint = identifyScreenPoint,
-                              let identifyResult = await Result(awaiting: {
-                                  try await proxy.identifyLayers(
-                                    screenPoint: identifyScreenPoint,
-                                    tolerance: 10,
-                                    returnPopupsOnly: true
-                                  )
-                              })
-                            .cancellationToNil()
-                        else {
-                            return
-                        }
-                        
-                        self.identifyScreenPoint = nil
-                        self.popup = try? identifyResult.get().first?.popups.first
-                        self.showPopup = self.popup != nil
-                    }
-            }
+            MapView(map: dataModel.map)
+                .onSingleTapGesture { screenPoint, _ in
+                    identifyScreenPoint = screenPoint
+                }
+                .task(id: identifyScreenPoint) {
+                    guard let identifyScreenPoint else { return }
+                    let identifyResult = try? await proxy.identifyLayers(
+                        screenPoint: identifyScreenPoint,
+                        tolerance: 10,
+                        returnPopupsOnly: true
+                    ).first
+                    popup = identifyResult?.popups.first
+                }
         }
     }
 }

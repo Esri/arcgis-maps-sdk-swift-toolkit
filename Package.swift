@@ -1,4 +1,4 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 // Copyright 2021 Esri.
 
@@ -29,13 +29,16 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.2.0"))
+        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.3.0"))
     ],
     targets: [
         .target(
             name: "ArcGISToolkit",
             dependencies: [
                 .product(name: "ArcGIS", package: "arcgis-maps-sdk-swift")
+            ],
+            resources: [
+                .copy("PrivacyInfo.xcprivacy")
             ]
         ),
         .testTarget(

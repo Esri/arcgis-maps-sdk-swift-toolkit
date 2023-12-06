@@ -18,7 +18,7 @@ struct Tests: View {
         NavigationView {
             List {
                 NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-                NavigationLink("Bookmarks Tests", destination: BookmarksTestView())
+                NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
                 NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
             }
         }

@@ -215,6 +215,7 @@ public struct UtilityNetworkTrace: View {
                             }
                         } label: {
                             Text(elements.count, format: .number)
+                                .catalystPadding(4)
                         }
                     }
                 }
@@ -227,7 +228,7 @@ public struct UtilityNetworkTrace: View {
         if viewModel.configurations.isEmpty {
             Text(String.noConfigurationsAvailable)
         } else {
-            ForEach(viewModel.configurations, id: \.name) { configuration in
+            ForEach(viewModel.configurations.sorted { $0.name < $1.name }, id: \.name) { configuration in
                 Button {
                     viewModel.setPendingTrace(configuration: configuration)
                     currentActivity = .creatingTrace(nil)
@@ -258,19 +259,21 @@ public struct UtilityNetworkTrace: View {
             if viewModel.networks.count > 1 {
                 Section(String.networkSectionLabel) {
                     DisclosureGroup(
-                        viewModel.network?.name ?? .noneSelected,
-                        isExpanded: Binding(
-                            get: { isFocused(traceCreationActivity: .viewingNetworkOptions) },
-                            set: { currentActivity = .creatingTrace($0 ? .viewingNetworkOptions : nil) }
-                        )
+                        isExpanded: Binding {
+                            isFocused(traceCreationActivity: .viewingNetworkOptions)
+                        } set: {
+                            currentActivity = .creatingTrace($0 ? .viewingNetworkOptions : nil)
+                        }
                     ) {
                         networksList
+                    } label: {
+                        Text(viewModel.network?.name ?? .noneSelected)
+                            .catalystPadding(4)
                     }
                 }
             }
             Section(String.traceConfigurationSectionLabel) {
                 DisclosureGroup(
-                    viewModel.pendingTrace.configuration?.name ?? .noneSelected,
                     isExpanded: Binding {
                         isFocused(traceCreationActivity: .viewingTraceConfigurations)
                     } set: {
@@ -278,6 +281,9 @@ public struct UtilityNetworkTrace: View {
                     }
                 ) {
                     configurationsList
+                } label: {
+                    Text(viewModel.pendingTrace.configuration?.name ?? .noneSelected)
+                        .catalystPadding(4)
                 }
             }
             Section(String.startingPointsTitle) {
@@ -300,31 +306,34 @@ public struct UtilityNetworkTrace: View {
                             bundle: .toolkitModule,
                             comment: "A label declaring the number of starting points selected for a utility network trace."
                         )
+                        .catalystPadding(4)
                     }
                 }
             }
             Section {
                 DisclosureGroup(
-                    String.advancedOptionsHeaderLabel,
                     isExpanded: Binding {
                         isFocused(traceCreationActivity: .viewingAdvancedOptions)
                     } set: {
                         currentActivity = .creatingTrace($0 ? .viewingAdvancedOptions : nil)
-                    }, content: {
-                        HStack {
-                            Text(String.nameLabel)
-                            Spacer()
-                            TextField(String.nameLabel, text: $viewModel.pendingTrace.name)
+                    }
+                ) {
+                    HStack {
+                        Text(String.nameLabel)
+                        Spacer()
+                        TextField(String.nameLabel, text: $viewModel.pendingTrace.name)
                             .onSubmit {
                                 viewModel.pendingTrace.userDidSpecifyName = true
                             }
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(.blue)
-                        }
-                        ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
-                        Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
                     }
-                )
+                    ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
+                    Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
+                } label: {
+                    Text(String.advancedOptionsHeaderLabel)
+                        .catalystPadding(4)
+                }
             }
         }
         Button(String.traceButtonLabel) {
@@ -390,6 +399,7 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             .font(.title3)
+            .catalystPadding()
         }
         if activeDetent != .summary {
             List {
@@ -417,6 +427,7 @@ public struct UtilityNetworkTrace: View {
                         }
                     } label: {
                         Text(viewModel.selectedTrace?.elementResults.count ?? 0, format: .number)
+                            .catalystPadding(4)
                     }
                 }
                 Section(String.functionResultsSectionTitle) {
@@ -442,7 +453,7 @@ public struct UtilityNetworkTrace: View {
                                             Text(
                                                 "Not Available",
                                                 bundle: .toolkitModule,
-                                                comment: "A trace function output result is not available."
+                                                comment: "A trace function output result was not provided."
                                             )
                                         }
                                     }
@@ -451,11 +462,11 @@ public struct UtilityNetworkTrace: View {
                         }
                     } label: {
                         Text(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0, format: .number)
+                            .catalystPadding(4)
                     }
                 }
                 Section {
                     DisclosureGroup(
-                        String.advancedOptionsHeaderLabel,
                         isExpanded: Binding {
                             isFocused(traceViewingActivity: .viewingAdvancedOptions)
                         } set: {
@@ -473,19 +484,22 @@ public struct UtilityNetworkTrace: View {
                                 }
                             }
                         )
+                    } label: {
+                        Text(String.advancedOptionsHeaderLabel)
+                            .catalystPadding(4)
                     }
                 }
             }
             .padding([.vertical], 2)
-            Button(String.clearAllResultsButtonLabel, role: .destructive) {
+            Button(String.clearAllResults, role: .destructive) {
                 isShowingClearAllResultsConfirmationDialog = true
             }
             .buttonStyle(.bordered)
             .confirmationDialog(
-                String.clearAllResultsQuestion,
+                String.clearAllResults,
                 isPresented: $isShowingClearAllResultsConfirmationDialog
             ) {
-                Button(String.clearAllResultsButtonLabel, role: .destructive) {
+                Button(String.clearAllResults, role: .destructive) {
                     viewModel.deleteAllTraces()
                     currentActivity = .creatingTrace(nil)
                 }
@@ -520,6 +534,7 @@ public struct UtilityNetworkTrace: View {
             }
         }
         .font(.title3)
+        .catalystPadding()
         List {
             if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
                 Section(String.fractionAlongEdgeSectionTitle) {
@@ -715,7 +730,7 @@ public struct UtilityNetworkTrace: View {
     private var currentTraceLabel: String {
         guard let index = viewModel.selectedTraceIndex else { return "Error" }
         return String(
-            localized: "Trace \(index+1, specifier: "%lld") of \(viewModel.completedTraces.count, specifier: "%lld")",
+            localized: "Trace \(index+1, specifier: "%1$lld") of \(viewModel.completedTraces.count, specifier: "%2$lld")",
             bundle: .toolkitModule,
             comment: "A label indicating the index of the trace being viewed out of the total number of traces completed."
         )
@@ -803,22 +818,20 @@ private extension String {
     
     static let attributesSectionTitle = String(
         localized: "Attributes",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to the attributes of a geo element."
     )
     
     static let cancelStartingPointSelection = String(
         localized: "Cancel starting point selection",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button to cancel the starting point selection operation."
     )
     
-    static let clearAllResultsButtonLabel = String(
-        localized: "Clear All Results",
-        bundle: .toolkitModule
-    )
-    
-    static let clearAllResultsQuestion = String(
-        localized: "Clear all results?",
-        bundle: .toolkitModule
+    static let clearAllResults = String(
+        localized: "Clear all results",
+        bundle: .toolkitModule,
+        comment: "A directive to clear all of the completed utility network traces."
     )
     
     static let clearAllResultsMessage = String(
@@ -829,84 +842,109 @@ private extension String {
     
     static let colorLabel = String(
         localized: "Color",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to the color used to display utility trace result graphics."
     )
     
     static let deleteButtonLabel = String(
         localized: "Delete",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button used to delete a utility network trace input component or result."
     )
     
     /// Title for the feature results section
     static let featureResultsTitle = String(
         localized: "Feature Results",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: """
+                 A label in reference to utility elements returned as results of a utility network
+                 trace operation.
+                 """
     )
     
     static let fractionAlongEdgeSectionTitle = String(
         localized: "Fraction Along Edge",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to a fractional distance along an edge style utility network element."
     )
     
     static let functionResultsSectionTitle = String(
         localized: "Function Results",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: """
+                 A label in reference to function outputs returned as results of a utility network
+                 trace operation.
+                 """
     )
     
     static let modePickerTitle = String(
         localized: "Mode",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "The mode in which the utility network trace tool is being used (either creating traces or viewing traces)."
     )
     
     static let nameLabel = String(
         localized: "Name",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to the user defined name for an individual utility network trace."
     )
     
     static let networkSectionLabel = String(
         localized: "Network",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to a specific utility network."
     )
     
     static let newTraceOptionLabel = String(
         localized: "New trace",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button to show new utility network trace configuration options."
     )
     
     static let noConfigurationsAvailable = String(
-        localized: "No configurations available",
-        bundle: .toolkitModule
+        localized: "No configurations available.",
+        bundle: .toolkitModule,
+        comment: "A statement that no utility trace configurations are available."
     )
     
     static let noneSelected = String(
         localized: "None selected",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label indicating that no utility network trace configuration has been selected."
     )
     
     static let resultsOptionLabel = String(
         localized: "Results",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button to show utility network trace results."
     )
     
     /// Title for the starting points section
     static let startingPointsTitle = String(
         localized: "Starting Points",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: """
+                 A label in reference to the utility elements chosen as starting points for a utility
+                 network trace operation.
+                 """
     )
     
     static let terminalConfigurationPickerTitle = String(
         localized: "Terminal Configuration",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to the chosen terminal configuration of a utility network element."
     )
     
     static let traceButtonLabel = String(
         localized: "Trace",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label for a button to begin a utility network trace operation."
     )
     
     static let traceConfigurationSectionLabel = String(
         localized: "Trace Configuration",
-        bundle: .toolkitModule
+        bundle: .toolkitModule,
+        comment: "A label in reference to a utility network trace configuration."
     )
     
     static let unnamedAssetType = String(
