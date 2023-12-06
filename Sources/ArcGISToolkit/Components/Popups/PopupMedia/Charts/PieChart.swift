@@ -14,19 +14,18 @@
 import SwiftUI
 
 /// A view displaying details for pie chart popup media.
-struct PieChart: View, CompactAware {
+struct PieChart: View {
     /// The view model for the pie chart.
     @ObservedObject private var viewModel: PieChartModel
     
     /// A Boolean value determining whether to show the legend for the chart.
     let showLegend: Bool
     
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
-        !isCompact
+        !isPortraitOrientation
     }
     
     /// Creates a `PieChart`.

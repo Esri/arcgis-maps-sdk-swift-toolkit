@@ -60,7 +60,7 @@ import ArcGIS
 /// To see the `SearchView` in action, and for examples of `Search` customization, check out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [SearchExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/SearchExampleView.swift)
 /// in the project. To learn more about using the `SearchView` see the [SearchView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/searchviewtutorial).
-public struct SearchView: View, CompactAware {
+public struct SearchView: View {
     /// Creates a `SearchView`.
     /// - Parameters:
     ///   - sources: A collection of search sources to be used.
@@ -127,8 +127,7 @@ public struct SearchView: View, CompactAware {
         viewModel.sources
     }
     
-    @Environment(\.horizontalSizeClass) public var horizontalSizeClass
-    @Environment(\.verticalSizeClass) public var verticalSizeClass
+    @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
@@ -158,14 +157,14 @@ public struct SearchView: View, CompactAware {
     /// of the device. This will cause the search field to display full-width on an iPhone in portrait
     /// orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
     private var searchBarWidth: CGFloat? {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : 360
+        isPortraitOrientation ? nil : 360
     }
     
     /// If `true`, will draw the results list view at half height, exposing a portion of the
     /// underlying map below the list on an iPhone in portrait orientation (and certain iPad multitasking
     /// configurations).  If `false`, will draw the results list view full size.
     private var useHalfHeightResults: Bool {
-        isCompact
+        isPortraitOrientation
     }
     
     /// Determines whether the results lists are displayed.

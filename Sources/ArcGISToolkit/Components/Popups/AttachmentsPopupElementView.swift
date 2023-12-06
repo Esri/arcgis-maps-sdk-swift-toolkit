@@ -17,16 +17,15 @@ import ArcGIS
 import QuickLook
 
 /// A view displaying an `AttachmentsPopupElement`.
-struct AttachmentsPopupElementView: View, CompactAware {
+struct AttachmentsPopupElementView: View {
     /// The `PopupElement` to display.
     var popupElement: AttachmentsPopupElement
     
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
-        !isCompact
+        !isPortraitOrientation
     }
     
     /// The states of loading attachments.
