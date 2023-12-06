@@ -76,6 +76,7 @@ struct AttachmentsPopupElementView: View, CompactAware {
                             title: popupElement.displayTitle,
                             description: popupElement.description
                         )
+                        .catalystPadding(4)
                     }
                 }
             }
