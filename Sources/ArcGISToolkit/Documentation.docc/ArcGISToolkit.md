@@ -10,12 +10,14 @@ Learn how to use ArcGISToolkit with <doc:ToolkitTutorials>
 
 ### Components
 
+- <doc:AugmentedReality>
 - ``Authenticator``
 - ``BasemapGallery``
 - ``Bookmarks``
 - ``Compass``
 - <doc:FloatingPanel>
 - ``FloorFilter``
+- ``JobManager``
 - ``OverviewMap``
 - ``PopupView``
 - ``Scalebar``

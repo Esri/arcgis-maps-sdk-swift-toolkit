@@ -1,2 +1,298 @@
-/* No comment provided by engineer. */
+/* A label declaring the number of starting points selected for a utility network trace. */
+"%lld selected" = "%lld が選択されました";
+
+/* An alert message indicating that a certificate is required to access
+content on a remote host. The variable is the host that prompted the challenge. */
+"A certificate is required to access content on %@." = "%@ でコンテンツにアクセスするには証明書が必要です。";
+
+/* A button to add new utility trace starting points. */
+"Add new" = "新規追加";
+
+/* A section header for advanced options. */
+"Advanced Options" = "高度なオプション";
+
+/* A reference to all of the sites defined in a floor aware map. */
+"All sites" = "すべてのサイト";
+
+/* A message describing the outcome of clearing all utility network trace results. */
+"All the trace inputs and results will be lost." = "トレースの入力および結果がすべて失われます。";
+
+/* A button indicating the user accepts a potentially dangerous action. */
+"Allow" = "許可";
+
+/* A fallback message to display when an image cannot be loaded. */
+"An error occurred loading the image: %@." = "画像の読み込み中にエラーが発生しました: %@。";
+
+/* A label in reference to attachments in a popup. */
+"Attachments" = "添付ファイル";
+
+/* A label in reference to the attributes of a geo element. */
+"Attributes" = "属性";
+
+/* A label indicating authentication is required to proceed. */
+"Authentication Required" = "認証が必要です";
+
+/* A label in reference to bookmarks contained in a map or scene. */
+"Bookmarks" = "ブックマーク";
+
+/* A label for a button to open the system file browser. */
+"Browse" = "参照";
+
+/* A label for a button to cancel an operation. */
+"Cancel" = "キャンセル";
+
+/* A label for a button to cancel the starting point selection operation. */
+"Cancel starting point selection" = "始点の選択のキャンセル";
+
+/* A label indicating that a certificate is required to proceed. */
+"Certificate Required" = "証明書が必要です";
+
+/* A label indicating that the remote host's certificate is not trusted. */
+"Certificate Trust Warning" = "証明書の信頼性の警告";
+
+/* A directive to clear all of the completed utility network traces. */
+"Clear all results" = "結果をすべて消去";
+
+/* A label in reference to the color used to display utility trace result graphics. */
+"Color" = "色";
+
+/* An compass description to be read by a screen reader describing the
+current heading. The first variable being a degree value and the
+second being a corresponding cardinal direction (north, northeast,
+east, etc.). */
+"Compass, heading %lld degrees %@" = "コンパス、方位角 %lld 度 %@";
+
+/* A label for a button used to continue the authentication operation. */
+"Continue" = "続行";
+
+/* A label indicating a certificate file was inaccessible. */
+"Could not access the certificate file." = "証明書ファイルにアクセスできませんでした。";
+
+/* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
+"Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "危険: %@ が提供する証明書は、信頼された認証機関が署名していません。";
+
+/* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "削除";
+
+/* A button to close the bookmark selection menu. */
+"Done" = "終了";
+
+/* A message indicating that the user attempted to use a single utility
+network element for more than one trace starting point. */
+"Duplicate starting points cannot be added." = "重複する始点を追加することはできません。";
+
+/* A label indicating an element could not be identified as a starting point
+for a utility network trace. */
+"Element could not be identified." = "エレメントを識別できません。";
+
+/* A label in reference to an error that occurred during a utility network trace. */
+"Error" = "エラー";
+
+/* A message indicating that some error occurred while importing a chosen
+network certificate. */
+"Error importing certificate" = "証明書のインポート中にエラーが発生しました";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
+"Error loading basemap." = "ベースマップの読み込み中にエラーが発生しました。";
+
+/* A label indicating popup expressions are being evaluated. */
+"Evaluating popup expressions" = "ポップアップ式を評価しています";
+
+/* A message indicating that the chosen utility network element wasn't able
+to be used as a trace starting point. */
+"Failed to set starting point" = "始点を設定できません";
+
+/* A label in reference to utility elements returned as results of a utility network
+trace operation. */
+"Feature Results" = "フィーチャ結果";
+
+/* A field in a set of data contained in a popup. */
+"Field" = "フィールド";
+
+/* A label in reference to fields in a set of data contained in a popup. */
+"Fields" = "フィールド";
+
+/* A field allowing the user to filter a list of facilities by name. A
+facility contains one or more levels in a floor-aware map or scene. */
+"Filter facilities" = "施設のフィルター処理";
+
+/* A field allowing the user to filter a list of sites by name. A site
+contains one or more facilities in a floor-aware map or scene. */
+"Filter sites" = "サイトのフィルター処理";
+
+/* A hint for the user on what to search for in a search bar. */
+"Find a place or address" = "場所または住所の検索";
+
+/* A label in reference to a fractional distance along an edge style utility network element. */
+"Fraction Along Edge" = "エッジに沿った部分";
+
+/* A label in reference to function outputs returned as results of a utility network
+trace operation. */
+"Function Results" = "関数の結果";
+
+/* A label in reference to media elements contained within a popup. */
+"Media" = "メディア";
+
+/* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
+"Mode" = "モード";
+
+/* A label in reference to the user defined name for an individual utility network trace. */
+"Name" = "名前";
+
+/* A label in reference to a specific utility network. */
+"Network" = "ネットワーク";
+
+/* A label for a button to show new utility network trace configuration options. */
+"New trace" = "新しいトレース";
+
+/* A label indicating that no bookmarks are available for selection. */
+"No bookmarks" = "ブックマークがありません";
+
+/* A statement that no utility trace configurations are available. */
+"No configurations available." = "使用できる構成がありません。";
+
+/* A statement that no sites or facilities with names matching a filter phrase were found. */
+"No matches found." = "一致するものが見つかりません。";
+
+/* A message to show when there are no results or suggestions. */
+"No results found" = "結果が見つかりません";
+
+/* A label indicating that no utility named trace configurations are available. */
+"No trace types found." = "トレース タイプが見つかりません。";
+
+/* A label indicating that no utility networks are available. */
+"No utility networks found." = "ユーティリティ ネットワークが見つかりません。";
+
+/* A label indicating that no utility network trace configuration has been selected. */
+"None selected" = "選択されていません";
+
+/* A trace function output result was not provided. */
+"Not Available" = "利用不可";
+
+/* A string identifying a utility network object. */
+"Object ID: %@" = "Object ID: %@";
+
+/* A label for button to proceed with an operation. */
+"OK" = "OK";
+
+/* A label in reference to a credential password. */
+"Password" = "パスワード";
+
+/* A label indicating that a password is required to proceed with an operation. */
+"Password Required" = "パスワードが必要です";
+
+/* A label requesting the password associated with the chosen certificate. */
+"Please enter a password for the chosen certificate." = "選択した証明書のパスワードを入力してください。";
+
+/* A label indicating that at least one starting location is required for the
+chosen utility network trace configuration. */
+"Please set at least 1 starting location." = "少なくとも 1 つの開始位置を設定してください。";
+
+/* A label indicating that at least two starting locations are required for the
+chosen utility network trace configuration. */
+"Please set at least 2 starting locations." = "少なくとも 2 つの開始位置を設定してください。";
+
+/* An error message shown when a popup cannot be displayed. The
+variable provides additional data. */
+"Popup evaluation failed: %@" = "ポップアップの評価に失敗しました: %@";
+
+/* A label for button to show when the user has panned the map away
+from the original search location. 'Here' is in reference to the
+current visible extent of the map or scene. */
+"Repeat Search Here" = "ここで検索の繰り返し";
+
+/* A label for a button to show utility network trace results. */
+"Results" = "結果";
+
+/* A label in reference to a search query entered by the user. */
+"Search Query" = "検索クエリ";
+
+/* A label prompting the user to make a selection from the available bookmarks. */
+"Select a bookmark" = "ブックマークの選択";
+
+/* A label directing the user to select a facility. A facility contains one
+or more levels in a floor-aware map or scene. */
+"Select a facility" = "施設の選択";
+
+/* A label in reference to all of the sites in a floor-aware map or scene. */
+"Sites" = "サイト";
+
+/* A label indicating the spatial reference of the chosen basemap doesn't
+match the spatial reference of the map or scene. */
+"Spatial reference mismatch." = "空間参照が一致しません。";
+
+/* A label in reference to the utility elements chosen as starting points for a utility
+network trace operation. */
+"Starting Points" = "始点";
+
+/* An instruction to the user to tap on a horizontal surface to
+place an ArcGIS Scene. */
+"Tap a surface to place the scene" = "サーフェスをタップしてシーンを配置します。";
+
+/* A label indicating that tapping an image will reveal
+additional information. */
+"Tap on the image for more information." = "詳細については、画像をタップしてください。";
+
+/* A label in reference to the chosen terminal configuration of a utility network element. */
+"Terminal Configuration" = "ターミナル構成";
+
+/* A label for development purposes only. This is not user visible. */
+"test" = "テスト";
+
+/* A label indicating the chosen basemap doesn't have a spatial reference. */
+"The basemap does not have a spatial reference." = "ベースマップに空間参照がありません。";
+
+/* An error to be displayed when a basemap chosen from the basemap gallery fails to
+load for an unknown reason. */
+"The basemap failed to load for an unknown reason." = "不明な理由でベースマップを読み込めませんでした。";
+
+/* A label indicating the spatial reference of the chosen basemap doesn't
+match the spatial reference of the map. */
+"The basemap has a spatial reference that is incompatible with the map." = "ベースマップの空間参照がマップと互換性がありません。";
+
+/* A label indicating the chosen file or given password was invalid. */
+"The certificate file or password was invalid." = "証明書ファイルまたはパスワードが無効です。";
+
+/* A label indicating the chosen file was invalid. */
+"The certificate file was invalid." = "証明書ファイルが無効です。";
+
+/* A label indicating the map doesn't have a spatial reference. */
+"The map does not have a spatial reference." = "マップに空間参照がありません。";
+
+/* A label indicating the given password was invalid. */
+"The password was invalid." = "パスワードが無効です。";
+
+/* Description of error thrown when a remote image could not be loaded. */
+"The URL could not be reached or did not contain image data." = "URL に到達できなかったか、画像データが含まれていませんでした。";
+
+/* A label for a button to begin a utility network trace operation. */
+"Trace" = "トレース";
+
+/* A label indicating the index of the trace being viewed out of the total number of traces completed. */
+"Trace %1$lld of %2$lld" = "%1$lld/%2$lld のトレース";
+
+/* A label in reference to a utility network trace configuration. */
+"Trace Configuration" = "トレース構成";
+
+/* A label for a button allowing the user to retry an operation. */
+"Try Again" = "再試行";
+
+/* A label to use in place of a utility element asset type name. */
+"Unnamed Asset Type" = "無名のアセット タイプ";
+
+/* A label in reference to a credential username. */
+"Username" = "ユーザー名";
+
+/* A value in a set of data contained in a popup. */
+"Value" = "値";
+
+/* A label explaining that credentials are required to authenticate with specified host.
+The host is indicated in the variable. */
+"You must sign in to access '%@'" = "%@ にアクセスするにはサイン インする必要があります";
+
+/* A button to change the map to the extent of the selected trace. */
+"Zoom To" = "ズーム";
+
+/* A user option specifying that a map should automatically change to show completed trace results. */
+"Zoom to result" = "結果にズーム";
+

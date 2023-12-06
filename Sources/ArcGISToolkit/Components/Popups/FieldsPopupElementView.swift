@@ -43,6 +43,7 @@ struct FieldsPopupElementView: View {
                 title: popupElement.displayTitle,
                 description: popupElement.description
             )
+            .catalystPadding(4)
         }
     }
     
@@ -88,6 +89,10 @@ private struct DisplayField: Hashable, Identifiable {
 private extension FieldsPopupElement {
     /// Provides a default title to display if `title` is empty.
     var displayTitle: String {
-        title.isEmpty ? String(localized: "Fields", bundle: .toolkitModule) : title
+        title.isEmpty ? String(
+            localized: "Fields",
+            bundle: .toolkitModule,
+            comment: "A label in reference to fields in a set of data contained in a popup."
+        ) : title
     }
 }

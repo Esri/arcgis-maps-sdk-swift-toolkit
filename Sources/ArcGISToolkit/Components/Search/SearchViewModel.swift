@@ -11,8 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import Combine
+import SwiftUI
 
 /// Defines how many results to return; one, many, or automatic based on circumstance.
 public enum SearchResultMode {
@@ -115,7 +116,7 @@ public enum SearchOutcome {
             )
             let currentExtentAvg = (lastExtent.width + lastExtent.height) / 2.0
             let threshold = currentExtentAvg * 0.25
-            isEligibleForRequery = (centerDiff ?? 0.0) > threshold
+            isEligibleForRequery = centerDiff > threshold
         }
     }
     

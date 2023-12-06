@@ -24,32 +24,23 @@ import SwiftUI
 /// dedicated search panel. They will also be primarily simple containers
 /// that clients will fill with their own content.
 struct FloatingPanel<Content>: View where Content: View {
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) var verticalSizeClass
-    
+    /// The height of a geo-view's attribution bar.
+    ///
+    /// When the panel is detached from the bottom of the screen (non-compact) this value allows
+    /// the panel to be aligned correctly between the top of a geo-view and the top of the its
+    /// attribution bar.
+    let attributionBarHeight: CGFloat
     /// The background color of the floating panel.
     let backgroundColor: Color
-    
+    /// A binding to the currently selected detent.
+    @Binding var selectedDetent: FloatingPanelDetent
+    /// A binding to a Boolean value that determines whether the view is presented.
+    @Binding var isPresented: Bool
     /// The content shown in the floating panel.
     let content: () -> Content
     
-    /// Creates a `FloatingPanel`.
-    /// - Parameters:
-    ///   - backgroundColor: The background color of the floating panel.
-    ///   - selectedDetent: Controls the height of the panel.
-    ///   - isPresented: A Boolean value indicating if the view is presented.
-    ///   - content: The view shown in the floating panel.
-    init(
-        backgroundColor: Color,
-        selectedDetent: Binding<FloatingPanelDetent>,
-        isPresented: Binding<Bool>,
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self.backgroundColor = backgroundColor
-        self.selectedDetent = selectedDetent
-        self.isPresented = isPresented
-        self.content = content
-    }
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     /// The color of the handle.
     @State private var handleColor: Color = .defaultHandleColor
@@ -57,90 +48,93 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The height of the content.
     @State private var height: CGFloat = .minHeight
     
+    /// The current height of the device keyboard.
+    @State private var keyboardHeight: CGFloat = 0
+    
+    /// The current state of the device keyboard.
+    @State private var keyboardState: KeyboardState = .closed
+    
     /// The latest recorded drag gesture value.
     @State private var latestDragGesture: DragGesture.Value?
     
     /// The maximum allowed height of the content.
-    @State private var maximumHeight: CGFloat = .infinity
+    @State private var maximumHeight: CGFloat = .zero
     
     /// A Boolean value indicating whether the panel should be configured for a compact environment.
     private var isCompact: Bool {
         horizontalSizeClass == .compact && verticalSizeClass == .regular
     }
     
-    /// A binding to a Boolean value that determines whether the view is presented.
-    private var isPresented: Binding<Bool>
-    
-    /// A binding to the currently selected detent.
-    private var selectedDetent: Binding<FloatingPanelDetent>
-    
-    public var body: some View {
+    var body: some View {
         GeometryReader { geometryProxy in
             VStack(spacing: 0) {
-                if isPresented.wrappedValue {
+                if isPresented {
                     if isCompact {
                         makeHandleView()
                         Divider()
                     }
                     content()
+                        .padding(.bottom, isCompact ? keyboardHeight - geometryProxy.safeAreaInsets.bottom : .zero)
                         .frame(height: height)
                         .clipped()
-                        .padding(.bottom, isCompact ? 25 : 10)
                     if !isCompact {
                         Divider()
                         makeHandleView()
                     }
                 }
             }
+            // Set frame width to infinity to prevent horizontal shrink on dismissal.
             .frame(maxWidth: .infinity)
             .background(backgroundColor)
             .clipShape(
                 RoundedCorners(
-                    corners: isCompact ? [.topLeft, .topRight] : [.allCorners],
+                    corners: isCompact ? [.topLeft, .topRight] : .allCorners,
                     radius: 10
                 )
             )
             .shadow(radius: 10)
             .frame(
-                width: geometryProxy.size.width,
-                height: geometryProxy.size.height,
+                maxWidth: .infinity,
+                maxHeight: .infinity,
                 alignment: isCompact ? .bottom : .top
             )
-            .animation(.easeInOut, value: isPresented.wrappedValue)
-            .onSizeChange {
-                maximumHeight = $0.height
-                if height > maximumHeight {
-                    height = maximumHeight
-                }
-            }
+            .animation(.easeInOut, value: isPresented)
+            .animation(.default, value: attributionBarHeight)
             .onAppear {
-                withAnimation {
-                    height = isPresented.wrappedValue ? heightFor(detent: selectedDetent.wrappedValue) : .zero
-                }
+                maximumHeight = geometryProxy.size.height
+                updateHeight()
             }
-            .onChange(of: isPresented.wrappedValue) { isPresented in
-                withAnimation {
-                    height = isPresented ? heightFor(detent: selectedDetent.wrappedValue) : .zero
-                }
+            .onChange(of: geometryProxy.size.height) { height in
+                maximumHeight = height
+                updateHeight()
             }
-            .onChange(of: selectedDetent.wrappedValue) { selectedDetent in
-                withAnimation {
-                    height = heightFor(detent: selectedDetent)
-                }
+            .onChange(of: isPresented) { _ in
+                updateHeight()
             }
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
-                withAnimation {
-                    height = heightFor(detent: .full)
-                }
+            .onChange(of: selectedDetent) { _ in
+                updateHeight()
             }
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
-                withAnimation {
-                    height = heightFor(detent: selectedDetent.wrappedValue)
-                }
+            .onKeyboardStateChanged { state, height in
+                keyboardState = state
+                keyboardHeight = height
+                updateHeight()
             }
         }
-        .padding([.leading, .top, .trailing], isCompact ? 0 : 10)
-        .padding([.bottom], isCompact ? 0 : 50)
+        
+        // Disable automatic keyboard avoidance. The panel will handle keyboard avoidance via
+        // padding applied to the bottom of the content. This allows the panel to maintain a
+        // constant height as they keyboard closes.
+        .ignoresSafeArea(.keyboard)
+        
+        // If compact, ignore the device's bottom safe area so content reaches the physical bottom
+        // edge of the screen.
+        .ignoresSafeArea(.container, edges: isCompact && keyboardState == .closed ? .bottom : [])
+        
+        // If non-compact, add uniform padding around all edges.
+        .padding(.all, isCompact ? 0 : .externalPadding)
+        
+        // If non-compact, and the keyboard isn't open add padding for the attribution bar.
+        .padding(.bottom, !isCompact && !(keyboardState == .open) ? attributionBarHeight : 0)
     }
     
     var drag: some Gesture {
@@ -148,77 +142,29 @@ struct FloatingPanel<Content>: View where Content: View {
             .onChanged {
                 let deltaY = $0.location.y - (latestDragGesture?.location.y ?? $0.location.y)
                 let proposedHeight = height + ((isCompact ? -1 : +1) * deltaY)
+                
                 handleColor = .activeHandleColor
                 height = min(max(.minHeight, proposedHeight), maximumHeight)
                 latestDragGesture = $0
             }
             .onEnded {
-                let deltaY = $0.location.y - latestDragGesture!.location.y
-                let deltaTime = $0.time.timeIntervalSince(latestDragGesture!.time)
-                let velocity = deltaY / deltaTime
-                let speed = abs(velocity)
+                let predictedEndLocation = $0.predictedEndLocation.y
+                let inferredHeight = isCompact ? maximumHeight - predictedEndLocation : predictedEndLocation
                 
-                let newDetent = bestDetent(given: height, travelingAt: velocity)
-                let targetHeight = heightFor(detent: newDetent)
+                selectedDetent = [.summary, .half, .full]
+                    .map { (detent: $0, height: heightFor(detent: $0)) }
+                    .min { abs(inferredHeight - $0.height) < abs(inferredHeight - $1.height) }!
+                    .detent
                 
-                let distanceAhead = abs(height - targetHeight)
-                let travelTime = min(0.35, distanceAhead / speed)
-                
-                withAnimation(.easeOut(duration: travelTime)) {
-                    selectedDetent.wrappedValue = newDetent
-                    height = targetHeight
+                if $0.translation.height.magnitude > 100 {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
+                
+                updateHeight()
+                
                 handleColor = .defaultHandleColor
                 latestDragGesture = nil
             }
-    }
-    
-    /// Determines the best detent based on the provided metrics.
-    /// - Parameters:
-    ///   - currentHeight: The height target for the detent.
-    ///   - velocity: The velocity of travel to the new detent.
-    /// - Returns: The best detent based on the provided metrics.
-    func bestDetent(given currentHeight: CGFloat, travelingAt velocity: Double) -> FloatingPanelDetent {
-        let lowSpeedThreshold = 100.0
-        let highSpeedThreshold = 2000.0
-        let isExpanding = (isCompact && velocity <= 0) || (!isCompact && velocity > 0)
-        let speed = abs(velocity)
-        let allDetents = [FloatingPanelDetent.summary, .full, .half]
-            .map { (detent: $0, height: heightFor(detent: $0)) }
-        // If the speed was low, choose the closest detent, regardless of direction.
-        guard speed > lowSpeedThreshold else {
-            return allDetents.min {
-                abs(currentHeight - $0.height) < abs(currentHeight - $1.height)
-            }?.detent ?? selectedDetent.wrappedValue
-        }
-        // Generate a new set of detents, filtering out those that would produce a height in the
-        // opposite direction of the gesture, and sorting them in order of closest to furthest from
-        // the current height.
-        let candidateDetents = allDetents
-            .filter { (detent, height) in
-                if isExpanding {
-                    return height >= currentHeight
-                } else {
-                    return height < currentHeight
-                }
-            }
-            .sorted {
-                if isExpanding {
-                    return $0.1 < $1.1
-                } else {
-                    return $1.1 < $0.1
-                }
-            }
-        
-        // If the gesture had high speed, select the last candidate detent (the one that would
-        // produce the greatest size difference from the current height). Otherwise, choose the
-        // first candidate detent (the one that would produce the least size difference from the
-        // current height).
-        if speed >= highSpeedThreshold {
-            return candidateDetents.last?.0 ?? selectedDetent.wrappedValue
-        } else {
-            return candidateDetents.first?.0 ?? selectedDetent.wrappedValue
-        }
     }
     
     /// Calculates the height for the `detent`.
@@ -227,11 +173,11 @@ struct FloatingPanel<Content>: View where Content: View {
     func heightFor(detent: FloatingPanelDetent) -> CGFloat {
         switch detent {
         case .summary:
-            return max(.minHeight, maximumHeight * 0.15)
+            return max(.minHeight, maximumHeight * 0.25)
         case .half:
-            return maximumHeight * 0.4
+            return maximumHeight * 0.5
         case .full:
-            return maximumHeight * (isCompact ? 0.90 : 1.0)
+            return maximumHeight
         case let .fraction(fraction):
             return min(maximumHeight, max(.minHeight, maximumHeight * fraction))
         case let .height(height):
@@ -239,12 +185,26 @@ struct FloatingPanel<Content>: View where Content: View {
         }
     }
     
+    /// Updates height to an appropriate value.
+    func updateHeight() {
+        let newHeight: CGFloat = {
+            if !isPresented {
+                return .zero
+            } else if keyboardState == .opening || keyboardState == .open {
+                return heightFor(detent: .full)
+            } else {
+                return heightFor(detent: selectedDetent)
+            }
+        }()
+        withAnimation { height = max(0, (newHeight - .handleFrameHeight)) }
+    }
+    
     /// Configures a handle view.
     /// - Returns: A configured handle view, suitable for placement in the panel.
     @ViewBuilder func makeHandleView() -> some View {
         Handle(color: handleColor)
             .background(backgroundColor)
-            .frame(height: 30)
+            .frame(height: .handleFrameHeight)
             .gesture(drag)
             .zIndex(1)
     }
@@ -263,6 +223,12 @@ private struct Handle: View {
 }
 
 private extension CGFloat {
+    /// The amount of padding around the floating panel.
+    static let externalPadding: CGFloat = 10
+    
+    /// THe height of the area containing the handle.
+    static let handleFrameHeight: CGFloat = 30
+    
     static let minHeight: CGFloat = 66
 }
 
