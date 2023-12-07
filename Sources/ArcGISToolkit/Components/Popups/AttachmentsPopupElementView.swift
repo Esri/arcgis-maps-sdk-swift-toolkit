@@ -21,12 +21,11 @@ struct AttachmentsPopupElementView: View {
     /// The `PopupElement` to display.
     var popupElement: AttachmentsPopupElement
     
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
-        !(horizontalSizeClass == .compact && verticalSizeClass == .regular)
+        !isPortraitOrientation
     }
     
     /// The states of loading attachments.
