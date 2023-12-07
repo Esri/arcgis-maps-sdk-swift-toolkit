@@ -127,8 +127,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***viewModel.sources
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
-***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
+***REMOVED***@Environment(\.isPortraitOrientation) var isPortraitOrientation
 ***REMOVED***
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/ Defaults to "Find a place or address". Note: this is set using the
@@ -158,14 +157,14 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ of the device. This will cause the search field to display full-width on an iPhone in portrait
 ***REMOVED******REMOVED***/ orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
 ***REMOVED***private var searchBarWidth: CGFloat? {
-***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : 360
+***REMOVED******REMOVED***isPortraitOrientation ? nil : 360
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ If `true`, will draw the results list view at half height, exposing a portion of the
 ***REMOVED******REMOVED***/ underlying map below the list on an iPhone in portrait orientation (and certain iPad multitasking
 ***REMOVED******REMOVED***/ configurations).  If `false`, will draw the results list view full size.
 ***REMOVED***private var useHalfHeightResults: Bool {
-***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
+***REMOVED******REMOVED***isPortraitOrientation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.

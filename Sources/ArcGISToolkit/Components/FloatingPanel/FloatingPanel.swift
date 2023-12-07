@@ -40,8 +40,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
 ***REMOVED***let content: () -> Content
 ***REMOVED***
-***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
-***REMOVED***@Environment(\.verticalSizeClass) private var verticalSizeClass
+***REMOVED***@Environment(\.isPortraitOrientation) var isPortraitOrientation
 ***REMOVED***
 ***REMOVED******REMOVED***/ The color of the handle.
 ***REMOVED***@State private var handleColor: Color = .defaultHandleColor
@@ -61,24 +60,19 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .zero
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the panel should be configured for a compact environment.
-***REMOVED***private var isCompact: Bool {
-***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
-***REMOVED***
-***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isPresented {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPortraitOrientation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? keyboardHeight - geometryProxy.safeAreaInsets.bottom : .zero)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isPortraitOrientation ? keyboardHeight - geometryProxy.safeAreaInsets.bottom : .zero)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipped()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isPortraitOrientation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -89,7 +83,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
 ***REMOVED******REMOVED******REMOVED***.clipShape(
 ***REMOVED******REMOVED******REMOVED******REMOVED***RoundedCorners(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***corners: isCompact ? [.topLeft, .topRight] : .allCorners,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***corners: isPortraitOrientation ? [.topLeft, .topRight] : .allCorners,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 10
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
@@ -97,7 +91,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
-***REMOVED******REMOVED******REMOVED******REMOVED***alignment: isCompact ? .bottom : .top
+***REMOVED******REMOVED******REMOVED******REMOVED***alignment: isPortraitOrientation ? .bottom : .top
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.animation(.easeInOut, value: isPresented)
 ***REMOVED******REMOVED******REMOVED***.animation(.default, value: attributionBarHeight)
@@ -129,20 +123,20 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If compact, ignore the device's bottom safe area so content reaches the physical bottom
 ***REMOVED******REMOVED******REMOVED*** edge of the screen.
-***REMOVED******REMOVED***.ignoresSafeArea(.container, edges: isCompact && keyboardState == .closed ? .bottom : [])
+***REMOVED******REMOVED***.ignoresSafeArea(.container, edges: isPortraitOrientation && keyboardState == .closed ? .bottom : [])
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If non-compact, add uniform padding around all edges.
-***REMOVED******REMOVED***.padding(.all, isCompact ? 0 : .externalPadding)
+***REMOVED******REMOVED***.padding(.all, isPortraitOrientation ? 0 : .externalPadding)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If non-compact, and the keyboard isn't open add padding for the attribution bar.
-***REMOVED******REMOVED***.padding(.bottom, !isCompact && !(keyboardState == .open) ? attributionBarHeight : 0)
+***REMOVED******REMOVED***.padding(.bottom, !isPortraitOrientation && !(keyboardState == .open) ? attributionBarHeight : 0)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var drag: some Gesture {
 ***REMOVED******REMOVED***DragGesture(minimumDistance: 0, coordinateSpace: .global)
 ***REMOVED******REMOVED******REMOVED***.onChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let deltaY = $0.location.y - (latestDragGesture?.location.y ?? $0.location.y)
-***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight = height + ((isCompact ? -1 : +1) * deltaY)
+***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight = height + ((isPortraitOrientation ? -1 : +1) * deltaY)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .activeHandleColor
 ***REMOVED******REMOVED******REMOVED******REMOVED***height = min(max(.minHeight, proposedHeight), maximumHeight)
@@ -150,7 +144,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onEnded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let predictedEndLocation = $0.predictedEndLocation.y
-***REMOVED******REMOVED******REMOVED******REMOVED***let inferredHeight = isCompact ? maximumHeight - predictedEndLocation : predictedEndLocation
+***REMOVED******REMOVED******REMOVED******REMOVED***let inferredHeight = isPortraitOrientation ? maximumHeight - predictedEndLocation : predictedEndLocation
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = [.summary, .half, .full]
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.map { (detent: $0, height: heightFor(detent: $0)) ***REMOVED***
