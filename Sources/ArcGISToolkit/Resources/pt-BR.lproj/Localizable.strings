@@ -95,6 +95,10 @@ network certificate. */
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "Erro ao carregar mapa base.";
 
+/* An error message shown when a GeoModel failed to load.
+The variable provides additional data. */
+"Error loading bookmarks: %@" = "ã_Error loading bookmarks: %@____________________________Ç";
+
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Avaliando expressões de pop-up";
 
