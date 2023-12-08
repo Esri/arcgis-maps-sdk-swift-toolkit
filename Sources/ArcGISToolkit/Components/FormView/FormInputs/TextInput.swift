@@ -131,7 +131,7 @@ private extension TextInput {
     
     /// The field type of the text input.
     var fieldType: FieldType {
-        model.featureForm!.feature.table!.field(named: element.fieldName)!.type!
+        model.featureForm.feature.table!.field(named: element.fieldName)!.type!
     }
     
     /// The body of the text input when the element is editable.

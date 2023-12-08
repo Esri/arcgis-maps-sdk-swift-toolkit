@@ -22,21 +22,17 @@ public struct FormView: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// The model for the ancestral form view.
-    @EnvironmentObject var model: FormViewModel
+    @StateObject private var model: FormViewModel
     
-    /// The form's configuration.
-    private let featureForm: FeatureForm?
-    
-    /// A Boolean value indicating whether an evaluation is running.
+    /// A Boolean value indicating whether the initial expression evaluation is running.
     @State var isEvaluating = true
     
-    /// A list of the visible elements in the form.
-    @State var visibleElements = [FormElement]()
-    
     /// Initializes a form view.
-    /// - Parameter featureForm: The form's configuration.
-    public init(featureForm: FeatureForm?) {
-        self.featureForm = featureForm
+    /// - Parameters:
+    ///   - feature: The feature to edit.
+    ///   - featureForm: The feature form defining the editing experience.
+    public init(feature: ArcGISFeature, featureForm: FeatureForm) {
+        _model = StateObject(wrappedValue: FormViewModel(feature: feature, featureForm: featureForm))
     }
     
     public var body: some View {
@@ -46,7 +42,7 @@ public struct FormView: View {
                     ProgressView()
                 } else {
                     VStack(alignment: .leading) {
-                        FormHeader(title: featureForm?.title)
+                        FormHeader(title: model.featureForm.title)
                             .padding([.bottom], elementPadding)
                         ForEach(model.visibleElements, id: \.self) { element in
                             makeElement(element)
@@ -64,17 +60,11 @@ public struct FormView: View {
             // Allow tall multiline text fields to be scrolled
             immediately: (model.focusedElement as? FieldFormElement)?.input is TextAreaFormInput ? false : true
         )
-        .onChange(of: model.visibleElements) { _ in
-            visibleElements = model.visibleElements
-        }
+        .environmentObject(model)
         .task {
-            do {
-                isEvaluating = true
-                try await featureForm?.evaluateExpressions()
-            } catch {
-                print("error evaluating expressions: \(error.localizedDescription)")
-            }
-            model.initializeIsVisibleTasks()
+            // Peform the initial expression evaluation.
+            isEvaluating = true
+            try? await model.initialEvaluation()
             isEvaluating = false
         }
     }

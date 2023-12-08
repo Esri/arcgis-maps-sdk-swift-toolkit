@@ -129,7 +129,7 @@ struct ComboBoxInput: View {
         }
         .padding([.bottom], elementPadding)
         .onAppear {
-            codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
+            codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
             selectedValue = codedValues.first { $0.name == inputModel.formattedValue }
         }
         .onChange(of: selectedValue) { selectedValue in
@@ -142,7 +142,7 @@ struct ComboBoxInput: View {
             model.evaluateExpressions()
         }
         .onChange(of: inputModel.formattedValue) { _ in
-            let codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
+            let codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
             selectedValue = codedValues.first { $0.name == inputModel.formattedValue }
         }
     }

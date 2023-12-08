@@ -16,53 +16,44 @@ import ArcGIS
 import Combine
 import SwiftUI
 
-/// - Since: 200.3
+/// - Since: 200.4
 public class FormViewModel: ObservableObject {
-    /// The geodatabase which holds the table and feature being edited in the form.
-    @Published private var database: ServiceGeodatabase?
-    
     /// The featured being edited in the form.
-    @Published private(set) var feature: ArcGISFeature?
-    
-    /// The service feature table which holds the feature being edited in the form.
-    @Published private var table: ServiceFeatureTable?
+    private(set) var feature: ArcGISFeature
     
     /// The feature form.
-    @Published var featureForm: FeatureForm?
+    private(set) var featureForm: FeatureForm
     
     /// The current focused element, if one exists.
-    @Published var focusedElement: FormElement?
+    @MainActor @Published var focusedElement: FormElement?
     
     /// The expression evaluation task.
-    var evaluateTask: Task<Void, Never>? = nil
+    private var evaluateTask: Task<Void, Never>?
     
     /// The group of visibility tasks.
     private var isVisibleTasks = [Task<Void, Never>]()
     
     /// The list of visible form elements.
-    @Published var visibleElements = [FormElement]()
+    @MainActor @Published var visibleElements = [FormElement]()
     
+    /// The list of expression evaluation errors.
+    @MainActor @Published var expressionEvaluationErrors = [FormExpressionEvaluationError]()
+    
+    /// A Boolean value indicating whether evaluation is running.
+    @MainActor @Published var isEvaluating = true
+
     /// Initializes a form view model.
-    public init() {}
-    
-    /// Prepares the feature for editing in the form.
-    /// - Parameter feature: The feature to be edited in the form.
-    public func startEditing(_ feature: ArcGISFeature, featureForm: FeatureForm) {
+    public init(feature: ArcGISFeature, featureForm: FeatureForm) {
         self.feature = feature
         self.featureForm = featureForm
-        if let table = feature.table as? ServiceFeatureTable {
-            self.database = table.serviceGeodatabase
-            self.table = table
-        }
-        visibleElements = []
     }
     
     deinit {
         clearIsVisibleTasks()
+        evaluateTask?.cancel()
     }
     
     func initializeIsVisibleTasks() {
-        guard let featureForm else { return }
         clearIsVisibleTasks()
         
         // Kick off tasks to monitor isVisible for each element.
@@ -79,8 +70,7 @@ public class FormViewModel: ObservableObject {
     }
     
     /// A detached task observing visibility changes.
-    private func updateVisibleElements() {
-        guard let featureForm else { return }
+    @MainActor private func updateVisibleElements() {
         visibleElements = featureForm.elements.filter { $0.isVisible }
     }
     
@@ -92,36 +82,21 @@ public class FormViewModel: ObservableObject {
         isVisibleTasks.removeAll()
     }
     
-    internal func evaluateExpressions() {
+    @MainActor func initialEvaluation() async throws {
+        let evaluationErrors = try? await featureForm.evaluateExpressions()
+        expressionEvaluationErrors = evaluationErrors ?? []
+        initializeIsVisibleTasks()
+    }
+
+    @MainActor func evaluateExpressions() {
         evaluateTask?.cancel()
+        isEvaluating = true
         evaluateTask = Task {
-            try? await featureForm?.evaluateExpressions()
-        }
-    }
-    
-    /// Reverts any local edits that haven't yet been saved to service geodatabase.
-    public func undoEdits() {
-        print(#file, #function)
-    }
-    
-    /// Submit the changes made to the form.
-    public func submitChanges() async {
-        guard let table, table.isEditable, let feature, let database else {
-            print("A precondition to submit the changes wasn't met.")
-            return
-        }
-        
-        try? await table.update(feature)
-        
-        guard database.hasLocalEdits else {
-            print("No submittable changes found.")
-            return
-        }
-        
-        let results = try? await database.applyEdits()
-        
-        if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
-            print("An error occurred while submitting the changes.")
+            let evaluationErrors = try? await featureForm.evaluateExpressions()
+            await MainActor.run {
+                expressionEvaluationErrors = evaluationErrors ?? []
+                isEvaluating = false
+            }
         }
     }
 }
