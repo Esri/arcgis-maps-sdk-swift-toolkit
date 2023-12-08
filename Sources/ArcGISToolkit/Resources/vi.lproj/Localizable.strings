@@ -95,6 +95,10 @@ network certificate. */
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "Lỗi khi tải bản đồ nền.";
 
+/* An error message shown when a GeoModel failed to load.
+The variable provides additional data. */
+"Error loading bookmarks: %@" = "Đ_Error loading bookmarks: %@____________________________ớ";
+
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Đánh giá biểu thức popup";
 
