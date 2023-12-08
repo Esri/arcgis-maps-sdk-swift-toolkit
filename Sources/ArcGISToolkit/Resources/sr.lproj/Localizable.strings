@@ -95,6 +95,10 @@ network certificate. */
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "Greška pri učitavanju pozadinske mape.";
 
+/* An error message shown when a GeoModel failed to load.
+The variable provides additional data. */
+"Error loading bookmarks: %@" = "Č_Error loading bookmarks: %@____________________________ž";
+
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Ocenjivanje iskačućih izraza";
 
