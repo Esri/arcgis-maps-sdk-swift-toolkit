@@ -131,7 +131,7 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field type of the text input.
 ***REMOVED***var fieldType: FieldType {
-***REMOVED******REMOVED***model.featureForm!.feature.table!.field(named: element.fieldName)!.type!
+***REMOVED******REMOVED***model.featureForm.feature.table!.field(named: element.fieldName)!.type!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
