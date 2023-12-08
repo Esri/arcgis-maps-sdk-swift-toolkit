@@ -95,6 +95,10 @@ network certificate. */
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "베이스맵을 불러오는 동안 오류가 발생했습니다.";
 
+/* An error message shown when a GeoModel failed to load.
+The variable provides additional data. */
+"Error loading bookmarks: %@" = "한_Error loading bookmarks: %@____________________________빠";
+
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "팝업 식 평가";
 

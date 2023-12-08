@@ -95,6 +95,10 @@ network certificate. */
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "Altlık harita yüklenirken hata.";
 
+/* An error message shown when a GeoModel failed to load.
+The variable provides additional data. */
+"Error loading bookmarks: %@" = "ı_Error loading bookmarks: %@____________________________İ";
+
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Açılır menü ifadeleri değerlendiriliyor";
 
