@@ -129,6 +129,7 @@ extension FormViewExampleView {
 private extension URL {
     static var sampleData: Self {
         .init(string: "<#URL#>")!
+    }
 }
 
 /// The model class for the form example view
