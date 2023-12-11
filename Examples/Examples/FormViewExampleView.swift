@@ -52,7 +52,6 @@ struct FormViewExampleView: View {
                     if let feature = await identifyFeature(with: mapViewProxy),
                        let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition,
                        let featureForm = FeatureForm(feature: feature, definition: formDefinition) {
-                        model.feature = feature
                         model.featureForm = featureForm
                     }
                 }
@@ -64,15 +63,14 @@ struct FormViewExampleView: View {
                     horizontalAlignment: .leading,
                     isPresented: $model.isFormPresented
                 ) {
-                    if let feature = model.feature, let featureForm = model.featureForm {
-                        FormView(feature: feature, featureForm: featureForm)
+                    if let featureForm = model.featureForm {
+                        FormView(feature: featureForm.feature, featureForm: featureForm)
                             .padding([.horizontal])
                     }
                 }
                 .alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
                         Button("Discard edits", role: .destructive) {
                             model.undoEdits()
-                            model.featureForm = nil
                         }
                         Button("Continue editing", role: .cancel) { }
                 } message: {
@@ -96,7 +94,6 @@ struct FormViewExampleView: View {
                             Button("Submit") {
                                 Task {
                                     await model.submitChanges()
-                                    model.featureForm = nil
                                 }
                             }
                         }
@@ -132,14 +129,10 @@ extension FormViewExampleView {
 private extension URL {
     static var sampleData: Self {
         .init(string: "<#URL#>")!
-    }
 }
 
 /// The model class for the form example view
 class Model: ObservableObject {
-    /// The featured being edited in the form.
-    @Published var feature: ArcGISFeature?
-
     /// The feature form.
     @Published var featureForm: FeatureForm? {
         didSet {
@@ -153,11 +146,12 @@ class Model: ObservableObject {
     /// Reverts any local edits that haven't yet been saved to service geodatabase.
     func undoEdits() {
         featureForm?.discardEdits()
+        featureForm = nil
     }
     
     /// Submit the changes made to the form.
     func submitChanges() async {
-        guard let feature,
+        guard let feature = featureForm?.feature,
               let table = feature.table as? ServiceFeatureTable,
               table.isEditable,
               let database = table.serviceGeodatabase else {
@@ -177,5 +171,7 @@ class Model: ObservableObject {
         if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
             print("An error occurred while submitting the changes.")
         }
+        
+        featureForm = nil
     }
 }
