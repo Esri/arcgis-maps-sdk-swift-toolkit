@@ -130,6 +130,7 @@ private extension URL {
 ***REMOVED***static var sampleData: Self {
 ***REMOVED******REMOVED***.init(string: "<#URL#>")!
 ***REMOVED***
+***REMOVED***
 
 ***REMOVED***/ The model class for the form example view
 class Model: ObservableObject {
