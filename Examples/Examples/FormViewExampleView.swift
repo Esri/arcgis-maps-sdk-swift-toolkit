@@ -52,7 +52,6 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await identifyFeature(with: mapViewProxy),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let featureForm = FeatureForm(feature: feature, definition: formDefinition) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.feature = feature
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.featureForm = featureForm
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -64,15 +63,14 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $model.isFormPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = model.feature, let featureForm = model.featureForm {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView(feature: feature, featureForm: featureForm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let featureForm = model.featureForm {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView(feature: featureForm.feature, featureForm: featureForm)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal])
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard edits", role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.undoEdits()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.featureForm = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Continue editing", role: .cancel) { ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** message: {
@@ -96,7 +94,6 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Submit") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.submitChanges()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.featureForm = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -133,13 +130,9 @@ private extension URL {
 ***REMOVED***static var sampleData: Self {
 ***REMOVED******REMOVED***.init(string: "<#URL#>")!
 ***REMOVED***
-***REMOVED***
 
 ***REMOVED***/ The model class for the form example view
 class Model: ObservableObject {
-***REMOVED******REMOVED***/ The featured being edited in the form.
-***REMOVED***@Published var feature: ArcGISFeature?
-
 ***REMOVED******REMOVED***/ The feature form.
 ***REMOVED***@Published var featureForm: FeatureForm? {
 ***REMOVED******REMOVED***didSet {
@@ -153,11 +146,12 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***/ Reverts any local edits that haven't yet been saved to service geodatabase.
 ***REMOVED***func undoEdits() {
 ***REMOVED******REMOVED***featureForm?.discardEdits()
+***REMOVED******REMOVED***featureForm = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Submit the changes made to the form.
 ***REMOVED***func submitChanges() async {
-***REMOVED******REMOVED***guard let feature,
+***REMOVED******REMOVED***guard let feature = featureForm?.feature,
 ***REMOVED******REMOVED******REMOVED***  let table = feature.table as? ServiceFeatureTable,
 ***REMOVED******REMOVED******REMOVED***  table.isEditable,
 ***REMOVED******REMOVED******REMOVED***  let database = table.serviceGeodatabase else {
@@ -177,5 +171,7 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
 ***REMOVED******REMOVED******REMOVED***print("An error occurred while submitting the changes.")
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***featureForm = nil
 ***REMOVED***
 ***REMOVED***
