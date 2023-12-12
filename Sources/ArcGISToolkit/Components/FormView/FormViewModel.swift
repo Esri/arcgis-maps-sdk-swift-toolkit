@@ -38,8 +38,9 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether evaluation is running.
 ***REMOVED***@MainActor @Published var isEvaluating = true
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
+***REMOVED******REMOVED***/ - Parameter featureForm: The feature form defining the editing experience.
 ***REMOVED***public init(featureForm: FeatureForm) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED***
