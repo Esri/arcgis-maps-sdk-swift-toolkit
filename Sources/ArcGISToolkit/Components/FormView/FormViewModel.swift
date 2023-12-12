@@ -50,6 +50,7 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***evaluateTask?.cancel()
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Kick off tasks to monitor `isVisible` for each element.
 ***REMOVED***func initializeIsVisibleTasks() {
 ***REMOVED******REMOVED***clearIsVisibleTasks()
 ***REMOVED******REMOVED***
@@ -79,12 +80,14 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***isVisibleTasks.removeAll()
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Performs an initial evaluation of all form expressions.
 ***REMOVED***@MainActor func initialEvaluation() async throws {
 ***REMOVED******REMOVED***let evaluationErrors = try? await featureForm.evaluateExpressions()
 ***REMOVED******REMOVED***expressionEvaluationErrors = evaluationErrors ?? []
 ***REMOVED******REMOVED***initializeIsVisibleTasks()
 ***REMOVED***
 
+***REMOVED******REMOVED***/ Performs an evaluation of all form expressions.
 ***REMOVED***@MainActor func evaluateExpressions() {
 ***REMOVED******REMOVED***evaluateTask?.cancel()
 ***REMOVED******REMOVED***isEvaluating = true
