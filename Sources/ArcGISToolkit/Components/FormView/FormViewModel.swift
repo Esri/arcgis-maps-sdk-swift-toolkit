@@ -18,9 +18,6 @@ import SwiftUI
 
 /// - Since: 200.4
 public class FormViewModel: ObservableObject {
-    /// The featured being edited in the form.
-    private(set) var feature: ArcGISFeature
-    
     /// The feature form.
     private(set) var featureForm: FeatureForm
     
@@ -43,8 +40,7 @@ public class FormViewModel: ObservableObject {
     @MainActor @Published var isEvaluating = true
 
     /// Initializes a form view model.
-    public init(feature: ArcGISFeature, featureForm: FeatureForm) {
-        self.feature = feature
+    public init(featureForm: FeatureForm) {
         self.featureForm = featureForm
     }
     

@@ -29,10 +29,9 @@ public struct FormView: View {
     
     /// Initializes a form view.
     /// - Parameters:
-    ///   - feature: The feature to edit.
     ///   - featureForm: The feature form defining the editing experience.
-    public init(feature: ArcGISFeature, featureForm: FeatureForm) {
-        _model = StateObject(wrappedValue: FormViewModel(feature: feature, featureForm: featureForm))
+    public init(featureForm: FeatureForm) {
+        _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
     }
     
     public var body: some View {
