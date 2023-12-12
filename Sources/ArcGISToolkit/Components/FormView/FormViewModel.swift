@@ -17,12 +17,12 @@ import Combine
 import SwiftUI
 
 /// - Since: 200.4
-public class FormViewModel: ObservableObject {
+@MainActor public class FormViewModel: ObservableObject {
     /// The feature form.
     private(set) var featureForm: FeatureForm
     
     /// The current focused element, if one exists.
-    @MainActor @Published var focusedElement: FormElement?
+    @Published var focusedElement: FormElement?
     
     /// The expression evaluation task.
     private var evaluateTask: Task<Void, Never>?
@@ -31,13 +31,13 @@ public class FormViewModel: ObservableObject {
     private var isVisibleTasks = [Task<Void, Never>]()
     
     /// The list of visible form elements.
-    @MainActor @Published var visibleElements = [FormElement]()
+    @Published var visibleElements = [FormElement]()
     
     /// The list of expression evaluation errors.
-    @MainActor @Published var expressionEvaluationErrors = [FormExpressionEvaluationError]()
+    @Published var expressionEvaluationErrors = [FormExpressionEvaluationError]()
     
     /// A Boolean value indicating whether evaluation is running.
-    @MainActor @Published var isEvaluating = true
+    @Published var isEvaluating = true
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
@@ -46,15 +46,18 @@ public class FormViewModel: ObservableObject {
     }
     
     deinit {
-        clearIsVisibleTasks()
+        // Cancel all `isVisible` tasks.
+        isVisibleTasks.forEach { task in
+            task.cancel()
+        }
+        isVisibleTasks.removeAll()
+        
+        // Cancel expression evaluation.
         evaluateTask?.cancel()
     }
     
     /// Kick off tasks to monitor `isVisible` for each element.
     func initializeIsVisibleTasks() {
-        clearIsVisibleTasks()
-        
-        // Kick off tasks to monitor isVisible for each element.
         featureForm.elements.forEach { element in
             let newTask = Task.detached { [unowned self] in
                 for await _ in element.$isVisible {
@@ -68,27 +71,19 @@ public class FormViewModel: ObservableObject {
     }
     
     /// A detached task observing visibility changes.
-    @MainActor private func updateVisibleElements() {
+    private func updateVisibleElements() {
         visibleElements = featureForm.elements.filter { $0.isVisible }
     }
     
-    /// Cancels and removes tasks.
-    private func clearIsVisibleTasks() {
-        isVisibleTasks.forEach { task in
-            task.cancel()
-        }
-        isVisibleTasks.removeAll()
-    }
-    
     /// Performs an initial evaluation of all form expressions.
-    @MainActor func initialEvaluation() async throws {
+    func initialEvaluation() async throws {
         let evaluationErrors = try? await featureForm.evaluateExpressions()
         expressionEvaluationErrors = evaluationErrors ?? []
         initializeIsVisibleTasks()
     }
 
     /// Performs an evaluation of all form expressions.
-    @MainActor func evaluateExpressions() {
+    func evaluateExpressions() {
         evaluateTask?.cancel()
         isEvaluating = true
         evaluateTask = Task {
