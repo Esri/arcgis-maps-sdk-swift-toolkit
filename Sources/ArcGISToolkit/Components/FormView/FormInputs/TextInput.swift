@@ -114,7 +114,9 @@ struct TextInput: View {
             } catch {
                 print(error.localizedDescription)
             }
-            model.evaluateExpressions()
+            if element.isEditable {
+                model.evaluateExpressions()
+            }
         }
     }
 }
