@@ -62,7 +62,6 @@ public struct FormView: View {
 ***REMOVED******REMOVED***.environmentObject(model)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Perform the initial expression evaluation.
-***REMOVED******REMOVED******REMOVED***isEvaluatingInitialExpressions = true
 ***REMOVED******REMOVED******REMOVED***try? await model.initialEvaluation()
 ***REMOVED******REMOVED******REMOVED***isEvaluatingInitialExpressions = false
 ***REMOVED***
