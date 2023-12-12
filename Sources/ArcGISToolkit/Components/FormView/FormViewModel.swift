@@ -38,8 +38,9 @@ public class FormViewModel: ObservableObject {
     
     /// A Boolean value indicating whether evaluation is running.
     @MainActor @Published var isEvaluating = true
-
+    
     /// Initializes a form view model.
+    /// - Parameter featureForm: The feature form defining the editing experience.
     public init(featureForm: FeatureForm) {
         self.featureForm = featureForm
     }
