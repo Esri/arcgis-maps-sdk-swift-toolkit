@@ -25,7 +25,7 @@ public struct FormView: View {
     @StateObject private var model: FormViewModel
     
     /// A Boolean value indicating whether the initial expression evaluation is running.
-    @State var isEvaluating = true
+    @State var isEvaluatingInitialExpressions = true
     
     /// Initializes a form view.
     /// - Parameters:
@@ -38,7 +38,7 @@ public struct FormView: View {
     public var body: some View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
-                if isEvaluating {
+                if isEvaluatingInitialExpressions {
                     ProgressView()
                 } else {
                     VStack(alignment: .leading) {
@@ -63,9 +63,9 @@ public struct FormView: View {
         .environmentObject(model)
         .task {
             // Perform the initial expression evaluation.
-            isEvaluating = true
+            isEvaluatingInitialExpressions = true
             try? await model.initialEvaluation()
-            isEvaluating = false
+            isEvaluatingInitialExpressions = false
         }
     }
 }
