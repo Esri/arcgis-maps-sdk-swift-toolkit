@@ -25,7 +25,7 @@ public struct FormView: View {
 ***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the initial expression evaluation is running.
-***REMOVED***@State var isEvaluating = true
+***REMOVED***@State var isEvaluatingInitialExpressions = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -38,7 +38,7 @@ public struct FormView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isEvaluating {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isEvaluatingInitialExpressions {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
@@ -63,9 +63,9 @@ public struct FormView: View {
 ***REMOVED******REMOVED***.environmentObject(model)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Perform the initial expression evaluation.
-***REMOVED******REMOVED******REMOVED***isEvaluating = true
+***REMOVED******REMOVED******REMOVED***isEvaluatingInitialExpressions = true
 ***REMOVED******REMOVED******REMOVED***try? await model.initialEvaluation()
-***REMOVED******REMOVED******REMOVED***isEvaluating = false
+***REMOVED******REMOVED******REMOVED***isEvaluatingInitialExpressions = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
