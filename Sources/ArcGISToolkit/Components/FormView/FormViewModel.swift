@@ -17,12 +17,12 @@ import Combine
 ***REMOVED***
 
 ***REMOVED***/ - Since: 200.4
-public class FormViewModel: ObservableObject {
+@MainActor public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The feature form.
 ***REMOVED***private(set) var featureForm: FeatureForm
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current focused element, if one exists.
-***REMOVED***@MainActor @Published var focusedElement: FormElement?
+***REMOVED***@Published var focusedElement: FormElement?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The expression evaluation task.
 ***REMOVED***private var evaluateTask: Task<Void, Never>?
@@ -31,13 +31,13 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***private var isVisibleTasks = [Task<Void, Never>]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The list of visible form elements.
-***REMOVED***@MainActor @Published var visibleElements = [FormElement]()
+***REMOVED***@Published var visibleElements = [FormElement]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The list of expression evaluation errors.
-***REMOVED***@MainActor @Published var expressionEvaluationErrors = [FormExpressionEvaluationError]()
+***REMOVED***@Published var expressionEvaluationErrors = [FormExpressionEvaluationError]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether evaluation is running.
-***REMOVED***@MainActor @Published var isEvaluating = true
+***REMOVED***@Published var isEvaluating = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
 ***REMOVED******REMOVED***/ - Parameter featureForm: The feature form defining the editing experience.
@@ -46,15 +46,18 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***deinit {
-***REMOVED******REMOVED***clearIsVisibleTasks()
+***REMOVED******REMOVED******REMOVED*** Cancel all `isVisible` tasks.
+***REMOVED******REMOVED***isVisibleTasks.forEach { task in
+***REMOVED******REMOVED******REMOVED***task.cancel()
+***REMOVED***
+***REMOVED******REMOVED***isVisibleTasks.removeAll()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Cancel expression evaluation.
 ***REMOVED******REMOVED***evaluateTask?.cancel()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Kick off tasks to monitor `isVisible` for each element.
 ***REMOVED***func initializeIsVisibleTasks() {
-***REMOVED******REMOVED***clearIsVisibleTasks()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Kick off tasks to monitor isVisible for each element.
 ***REMOVED******REMOVED***featureForm.elements.forEach { element in
 ***REMOVED******REMOVED******REMOVED***let newTask = Task.detached { [unowned self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED***for await _ in element.$isVisible {
@@ -68,27 +71,19 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A detached task observing visibility changes.
-***REMOVED***@MainActor private func updateVisibleElements() {
+***REMOVED***private func updateVisibleElements() {
 ***REMOVED******REMOVED***visibleElements = featureForm.elements.filter { $0.isVisible ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Cancels and removes tasks.
-***REMOVED***private func clearIsVisibleTasks() {
-***REMOVED******REMOVED***isVisibleTasks.forEach { task in
-***REMOVED******REMOVED******REMOVED***task.cancel()
-***REMOVED***
-***REMOVED******REMOVED***isVisibleTasks.removeAll()
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Performs an initial evaluation of all form expressions.
-***REMOVED***@MainActor func initialEvaluation() async throws {
+***REMOVED***func initialEvaluation() async throws {
 ***REMOVED******REMOVED***let evaluationErrors = try? await featureForm.evaluateExpressions()
 ***REMOVED******REMOVED***expressionEvaluationErrors = evaluationErrors ?? []
 ***REMOVED******REMOVED***initializeIsVisibleTasks()
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Performs an evaluation of all form expressions.
-***REMOVED***@MainActor func evaluateExpressions() {
+***REMOVED***func evaluateExpressions() {
 ***REMOVED******REMOVED***evaluateTask?.cancel()
 ***REMOVED******REMOVED***isEvaluating = true
 ***REMOVED******REMOVED***evaluateTask = Task {
