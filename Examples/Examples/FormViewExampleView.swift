@@ -64,7 +64,7 @@ struct FormViewExampleView: View {
                     isPresented: $model.isFormPresented
                 ) {
                     if let featureForm = model.featureForm {
-                        FormView(feature: featureForm.feature, featureForm: featureForm)
+                        FormView(featureForm: featureForm)
                             .padding([.horizontal])
                     }
                 }
