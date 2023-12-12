@@ -18,9 +18,6 @@ import Combine
 
 ***REMOVED***/ - Since: 200.4
 public class FormViewModel: ObservableObject {
-***REMOVED******REMOVED***/ The featured being edited in the form.
-***REMOVED***private(set) var feature: ArcGISFeature
-***REMOVED***
 ***REMOVED******REMOVED***/ The feature form.
 ***REMOVED***private(set) var featureForm: FeatureForm
 ***REMOVED***
@@ -43,8 +40,7 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***@MainActor @Published var isEvaluating = true
 
 ***REMOVED******REMOVED***/ Initializes a form view model.
-***REMOVED***public init(feature: ArcGISFeature, featureForm: FeatureForm) {
-***REMOVED******REMOVED***self.feature = feature
+***REMOVED***public init(featureForm: FeatureForm) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
 ***REMOVED***
 ***REMOVED***

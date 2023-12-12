@@ -29,10 +29,9 @@ public struct FormView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - feature: The feature to edit.
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
-***REMOVED***public init(feature: ArcGISFeature, featureForm: FeatureForm) {
-***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(feature: feature, featureForm: featureForm))
+***REMOVED***public init(featureForm: FeatureForm) {
+***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
