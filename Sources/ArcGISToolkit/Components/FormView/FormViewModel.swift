@@ -50,6 +50,7 @@ public class FormViewModel: ObservableObject {
         evaluateTask?.cancel()
     }
     
+    /// Kick off tasks to monitor `isVisible` for each element.
     func initializeIsVisibleTasks() {
         clearIsVisibleTasks()
         
@@ -79,12 +80,14 @@ public class FormViewModel: ObservableObject {
         isVisibleTasks.removeAll()
     }
     
+    /// Performs an initial evaluation of all form expressions.
     @MainActor func initialEvaluation() async throws {
         let evaluationErrors = try? await featureForm.evaluateExpressions()
         expressionEvaluationErrors = evaluationErrors ?? []
         initializeIsVisibleTasks()
     }
 
+    /// Performs an evaluation of all form expressions.
     @MainActor func evaluateExpressions() {
         evaluateTask?.cancel()
         isEvaluating = true
