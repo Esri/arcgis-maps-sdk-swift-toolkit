@@ -29,18 +29,8 @@ struct FormViewExampleView: View {
     /// A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
     @State private var isCancelConfirmationPresented = false
     
-    /// A Boolean value indicating whether or not the form is displayed.
-    @State private var isFormPresented = false
-    
     /// The form view model provides a channel of communication between the form view and its host.
-    @StateObject private var formViewModel = FormViewModel()
-    
-    /// The form being edited in the form view.
-    @State private var featureForm: FeatureForm? {
-        didSet {
-            isFormPresented = featureForm != nil
-        }
-    }
+    @StateObject private var model = Model()
     
     /// The height of the map view's attribution bar.
     @State private var attributionBarHeight: CGFloat = 0
@@ -52,7 +42,7 @@ struct FormViewExampleView: View {
                     attributionBarHeight = $0
                 }
                 .onSingleTapGesture { screenPoint, _ in
-                    if isFormPresented {
+                    if model.isFormPresented {
                         isCancelConfirmationPresented = true
                     } else {
                         identifyScreenPoint = screenPoint
@@ -62,8 +52,7 @@ struct FormViewExampleView: View {
                     if let feature = await identifyFeature(with: mapViewProxy),
                        let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition,
                        let featureForm = FeatureForm(feature: feature, definition: formDefinition) {
-                        self.featureForm = featureForm
-                        formViewModel.startEditing(feature, featureForm: featureForm)
+                        model.featureForm = featureForm
                     }
                 }
                 .ignoresSafeArea(.keyboard)
@@ -72,28 +61,28 @@ struct FormViewExampleView: View {
                     attributionBarHeight: attributionBarHeight,
                     selectedDetent: $detent,
                     horizontalAlignment: .leading,
-                    isPresented: $isFormPresented
+                    isPresented: $model.isFormPresented
                 ) {
-                    FormView(featureForm: featureForm)
-                        .padding([.horizontal])
+                    if let featureForm = model.featureForm {
+                        FormView(featureForm: featureForm)
+                            .padding([.horizontal])
+                    }
                 }
                 .alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
                         Button("Discard edits", role: .destructive) {
-                            formViewModel.undoEdits()
-                            featureForm = nil
+                            model.undoEdits()
                         }
                         Button("Continue editing", role: .cancel) { }
                 } message: {
                     Text("Updates to this feature will be lost.")
                 }
-                .environmentObject(formViewModel)
-                .navigationBarBackButtonHidden(isFormPresented)
+                .navigationBarBackButtonHidden(model.isFormPresented)
                 .toolbar {
                     // Once iOS 16.0 is the minimum supported, the two conditionals to show the
                     // buttons can be merged and hoisted up as the root content of the toolbar.
                     
                     ToolbarItem(placement: .navigationBarLeading) {
-                        if isFormPresented {
+                        if model.isFormPresented {
                             Button("Cancel", role: .cancel) {
                                 isCancelConfirmationPresented = true
                             }
@@ -101,11 +90,10 @@ struct FormViewExampleView: View {
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        if isFormPresented {
+                        if model.isFormPresented {
                             Button("Submit") {
                                 Task {
-                                    await formViewModel.submitChanges()
-                                    featureForm = nil
+                                    await model.submitChanges()
                                 }
                             }
                         }
@@ -141,5 +129,50 @@ extension FormViewExampleView {
 private extension URL {
     static var sampleData: Self {
         .init(string: "<#URL#>")!
+    }
+}
+
+/// The model class for the form example view
+class Model: ObservableObject {
+    /// The feature form.
+    @Published var featureForm: FeatureForm? {
+        didSet {
+            isFormPresented = featureForm != nil
+        }
+    }
+    
+    /// A Boolean value indicating whether or not the form is displayed.
+    @Published var isFormPresented = false
+    
+    /// Reverts any local edits that haven't yet been saved to service geodatabase.
+    func undoEdits() {
+        featureForm?.discardEdits()
+        featureForm = nil
+    }
+    
+    /// Submit the changes made to the form.
+    func submitChanges() async {
+        guard let feature = featureForm?.feature,
+              let table = feature.table as? ServiceFeatureTable,
+              table.isEditable,
+              let database = table.serviceGeodatabase else {
+            print("A precondition to submit the changes wasn't met.")
+            return
+        }
+        
+        try? await table.update(feature)
+        
+        guard database.hasLocalEdits else {
+            print("No submittable changes found.")
+            return
+        }
+        
+        let results = try? await database.applyEdits()
+        
+        if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
+            print("An error occurred while submitting the changes.")
+        }
+        
+        featureForm = nil
     }
 }

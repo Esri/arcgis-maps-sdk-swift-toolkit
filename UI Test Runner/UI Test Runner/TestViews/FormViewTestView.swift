@@ -28,9 +28,6 @@ struct FormViewTestView: View {
     /// A Boolean value indicating whether or not the form is displayed.
     @State private var isPresented = false
     
-    /// The form view model provides a channel of communication between the form view and its host.
-    @StateObject private var formViewModel = FormViewModel()
-    
     /// The form being edited in the form view.
     @State private var featureForm: FeatureForm?
     
@@ -53,7 +50,7 @@ private extension FormViewTestView {
     /// - Parameters:
     ///   - map: The map under test.
     ///   - testCase: The test definition.
-    func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
+    @MainActor func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
         MapView(map: map)
             .onAttributionBarHeightChanged {
                 attributionBarHeight = $0
@@ -68,7 +65,6 @@ private extension FormViewTestView {
                 try? await feature.load()
                 guard let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition else { return }
                 featureForm = FeatureForm(feature: feature, definition: formDefinition)
-                formViewModel.startEditing(feature, featureForm: featureForm!)
                 isPresented = true
             }
             .ignoresSafeArea(.keyboard)
@@ -79,36 +75,10 @@ private extension FormViewTestView {
                 horizontalAlignment: .leading,
                 isPresented: $isPresented
             ) {
-                FormView(featureForm: featureForm)
+                FormView(featureForm: featureForm!)
                     .padding()
             }
-        
-            .environmentObject(formViewModel)
             .navigationBarBackButtonHidden(isPresented)
-            .toolbar {
-                // Once iOS 16.0 is the minimum supported, the two conditionals to show the
-                // buttons can be merged and hoisted up as the root content of the toolbar.
-                
-                ToolbarItem(placement: .navigationBarLeading) {
-                    if isPresented && !useControlsInForm {
-                        Button("Cancel", role: .cancel) {
-                            formViewModel.undoEdits()
-                            isPresented = false
-                        }
-                    }
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    if isPresented && !useControlsInForm {
-                        Button("Submit") {
-                            Task {
-                                await formViewModel.submitChanges()
-                                isPresented = false
-                            }
-                        }
-                    }
-                }
-            }
     }
     
     /// Test case selection UI.
