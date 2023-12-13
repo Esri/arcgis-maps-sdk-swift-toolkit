@@ -59,11 +59,9 @@ import Combine
 ***REMOVED******REMOVED***/ Kick off tasks to monitor `isVisible` for each element.
 ***REMOVED***func initializeIsVisibleTasks() {
 ***REMOVED******REMOVED***featureForm.elements.forEach { element in
-***REMOVED******REMOVED******REMOVED***let newTask = Task.detached { [unowned self] in
+***REMOVED******REMOVED******REMOVED***let newTask = Task { [unowned self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED***for await _ in element.$isVisible {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.updateVisibleElements()
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.updateVisibleElements()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***isVisibleTasks.append(newTask)
