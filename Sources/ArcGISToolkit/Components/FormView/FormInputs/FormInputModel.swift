@@ -19,7 +19,7 @@ import SwiftUI
 /// A model for an input in a form.
 ///
 /// - Since: 200.4
-class FormInputModel: ObservableObject {
+@MainActor class FormInputModel: ObservableObject {
     /// A Boolean value indicating whether a value in the input is required.
     @Published var isRequired: Bool
     
@@ -37,7 +37,10 @@ class FormInputModel: ObservableObject {
     private var tasks = [Task<Void, Never>]()
     
     deinit {
-        clearTasks()
+        tasks.forEach { task in
+            task.cancel()
+        }
+        tasks.removeAll()
     }
     
     /// Initializes a form input model.
@@ -58,44 +61,30 @@ class FormInputModel: ObservableObject {
         )
     }
     
-    /// Cancels and removes tasks.
-    private func clearTasks() {
-        tasks.forEach { task in
-            task.cancel()
-        }
-        tasks.removeAll()
-    }
-    
     /// A detached task observing changes in the required state.
     private var observeIsRequiredTask: Task<Void, Never> {
-        Task.detached { [unowned self] in
+        Task { [unowned self] in
             for await isRequired in element.$isRequired {
-                await MainActor.run {
-                    self.isRequired = isRequired
-                }
+                self.isRequired = isRequired
             }
         }
     }
     
     /// A detached task observing changes in the editable state.
     private var observeIsEditableTask: Task<Void, Never> {
-        Task.detached { [unowned self] in
+        Task { [unowned self] in
             for await isEditable in element.$isEditable {
-                await MainActor.run {
-                    self.isEditable = isEditable
-                }
+                self.isEditable = isEditable
             }
         }
     }
     
     /// A detached task observing changes in the value.
     private var observeValueTask: Task<Void, Never> {
-        Task.detached { [unowned self] in
+        Task { [unowned self] in
             for await value in element.$value {
-                await MainActor.run {
-                    self.value = value
-                    self.formattedValue = element.formattedValue
-                }
+                self.value = value
+                self.formattedValue = element.formattedValue
             }
         }
     }
