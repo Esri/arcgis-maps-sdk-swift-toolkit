@@ -28,9 +28,6 @@ struct FormViewTestView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the form is displayed.
 ***REMOVED***@State private var isPresented = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The form view model provides a channel of communication between the form view and its host.
-***REMOVED***@StateObject private var formViewModel = FormViewModel()
-***REMOVED***
 ***REMOVED******REMOVED***/ The form being edited in the form view.
 ***REMOVED***@State private var featureForm: FeatureForm?
 ***REMOVED***
@@ -53,7 +50,7 @@ private extension FormViewTestView {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - map: The map under test.
 ***REMOVED******REMOVED***/   - testCase: The test definition.
-***REMOVED***func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
+***REMOVED***@MainActor func makeMapView(_ map: Map, _ testCase: TestCase) -> some View {
 ***REMOVED******REMOVED***MapView(map: map)
 ***REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight = $0
@@ -68,7 +65,6 @@ private extension FormViewTestView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await feature.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***featureForm = FeatureForm(feature: feature, definition: formDefinition)
-***REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.startEditing(feature, featureForm: featureForm!)
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
@@ -79,36 +75,10 @@ private extension FormViewTestView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
 ***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FormView(featureForm: featureForm)
+***REMOVED******REMOVED******REMOVED******REMOVED***FormView(featureForm: featureForm!)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.environmentObject(formViewModel)
 ***REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(isPresented)
-***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Once iOS 16.0 is the minimum supported, the two conditionals to show the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** buttons can be merged and hoisted up as the root content of the toolbar.
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented && !useControlsInForm {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.undoEdits()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPresented && !useControlsInForm {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Submit") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await formViewModel.submitChanges()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case selection UI.
