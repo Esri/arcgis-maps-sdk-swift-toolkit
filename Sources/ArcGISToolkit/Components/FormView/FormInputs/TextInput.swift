@@ -114,7 +114,9 @@ struct TextInput: View {
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED***if element.isEditable {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -131,7 +133,7 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field type of the text input.
 ***REMOVED***var fieldType: FieldType {
-***REMOVED******REMOVED***model.featureForm!.feature.table!.field(named: element.fieldName)!.type!
+***REMOVED******REMOVED***model.featureForm.feature.table!.field(named: element.fieldName)!.type!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.

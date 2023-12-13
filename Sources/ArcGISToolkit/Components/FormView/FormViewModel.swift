@@ -16,25 +16,16 @@
 import Combine
 ***REMOVED***
 
-***REMOVED***/ - Since: 200.3
-public class FormViewModel: ObservableObject {
-***REMOVED******REMOVED***/ The geodatabase which holds the table and feature being edited in the form.
-***REMOVED***@Published private var database: ServiceGeodatabase?
-***REMOVED***
-***REMOVED******REMOVED***/ The featured being edited in the form.
-***REMOVED***@Published private(set) var feature: ArcGISFeature?
-***REMOVED***
-***REMOVED******REMOVED***/ The service feature table which holds the feature being edited in the form.
-***REMOVED***@Published private var table: ServiceFeatureTable?
-***REMOVED***
+***REMOVED***/ - Since: 200.4
+@MainActor public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The feature form.
-***REMOVED***@Published var featureForm: FeatureForm?
+***REMOVED***private(set) var featureForm: FeatureForm
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current focused element, if one exists.
 ***REMOVED***@Published var focusedElement: FormElement?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The expression evaluation task.
-***REMOVED***var evaluateTask: Task<Void, Never>? = nil
+***REMOVED***private var evaluateTask: Task<Void, Never>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The group of visibility tasks.
 ***REMOVED***private var isVisibleTasks = [Task<Void, Never>]()
@@ -42,30 +33,31 @@ public class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The list of visible form elements.
 ***REMOVED***@Published var visibleElements = [FormElement]()
 ***REMOVED***
+***REMOVED******REMOVED***/ The list of expression evaluation errors.
+***REMOVED***@Published var expressionEvaluationErrors = [FormExpressionEvaluationError]()
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether evaluation is running.
+***REMOVED***@Published var isEvaluating = true
+***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
-***REMOVED***public init() {***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Prepares the feature for editing in the form.
-***REMOVED******REMOVED***/ - Parameter feature: The feature to be edited in the form.
-***REMOVED***public func startEditing(_ feature: ArcGISFeature, featureForm: FeatureForm) {
-***REMOVED******REMOVED***self.feature = feature
+***REMOVED******REMOVED***/ - Parameter featureForm: The feature form defining the editing experience.
+***REMOVED***public init(featureForm: FeatureForm) {
 ***REMOVED******REMOVED***self.featureForm = featureForm
-***REMOVED******REMOVED***if let table = feature.table as? ServiceFeatureTable {
-***REMOVED******REMOVED******REMOVED***self.database = table.serviceGeodatabase
-***REMOVED******REMOVED******REMOVED***self.table = table
-***REMOVED***
-***REMOVED******REMOVED***visibleElements = []
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***deinit {
-***REMOVED******REMOVED***clearIsVisibleTasks()
+***REMOVED******REMOVED******REMOVED*** Cancel all `isVisible` tasks.
+***REMOVED******REMOVED***isVisibleTasks.forEach { task in
+***REMOVED******REMOVED******REMOVED***task.cancel()
 ***REMOVED***
-***REMOVED***
-***REMOVED***func initializeIsVisibleTasks() {
-***REMOVED******REMOVED***guard let featureForm else { return ***REMOVED***
-***REMOVED******REMOVED***clearIsVisibleTasks()
+***REMOVED******REMOVED***isVisibleTasks.removeAll()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Kick off tasks to monitor isVisible for each element.
+***REMOVED******REMOVED******REMOVED*** Cancel expression evaluation.
+***REMOVED******REMOVED***evaluateTask?.cancel()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Kick off tasks to monitor `isVisible` for each element.
+***REMOVED***func initializeIsVisibleTasks() {
 ***REMOVED******REMOVED***featureForm.elements.forEach { element in
 ***REMOVED******REMOVED******REMOVED***let newTask = Task.detached { [unowned self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED***for await _ in element.$isVisible {
@@ -80,48 +72,26 @@ public class FormViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A detached task observing visibility changes.
 ***REMOVED***private func updateVisibleElements() {
-***REMOVED******REMOVED***guard let featureForm else { return ***REMOVED***
 ***REMOVED******REMOVED***visibleElements = featureForm.elements.filter { $0.isVisible ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Cancels and removes tasks.
-***REMOVED***private func clearIsVisibleTasks() {
-***REMOVED******REMOVED***isVisibleTasks.forEach { task in
-***REMOVED******REMOVED******REMOVED***task.cancel()
+***REMOVED******REMOVED***/ Performs an initial evaluation of all form expressions.
+***REMOVED***func initialEvaluation() async throws {
+***REMOVED******REMOVED***let evaluationErrors = try? await featureForm.evaluateExpressions()
+***REMOVED******REMOVED***expressionEvaluationErrors = evaluationErrors ?? []
+***REMOVED******REMOVED***initializeIsVisibleTasks()
 ***REMOVED***
-***REMOVED******REMOVED***isVisibleTasks.removeAll()
-***REMOVED***
-***REMOVED***
-***REMOVED***internal func evaluateExpressions() {
+
+***REMOVED******REMOVED***/ Performs an evaluation of all form expressions.
+***REMOVED***func evaluateExpressions() {
 ***REMOVED******REMOVED***evaluateTask?.cancel()
+***REMOVED******REMOVED***isEvaluating = true
 ***REMOVED******REMOVED***evaluateTask = Task {
-***REMOVED******REMOVED******REMOVED***try? await featureForm?.evaluateExpressions()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Reverts any local edits that haven't yet been saved to service geodatabase.
-***REMOVED***public func undoEdits() {
-***REMOVED******REMOVED***print(#file, #function)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Submit the changes made to the form.
-***REMOVED***public func submitChanges() async {
-***REMOVED******REMOVED***guard let table, table.isEditable, let feature, let database else {
-***REMOVED******REMOVED******REMOVED***print("A precondition to submit the changes wasn't met.")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***let evaluationErrors = try? await featureForm.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED***await MainActor.run {
+***REMOVED******REMOVED******REMOVED******REMOVED***expressionEvaluationErrors = evaluationErrors ?? []
+***REMOVED******REMOVED******REMOVED******REMOVED***isEvaluating = false
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***try? await table.update(feature)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard database.hasLocalEdits else {
-***REMOVED******REMOVED******REMOVED***print("No submittable changes found.")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let results = try? await database.applyEdits()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
-***REMOVED******REMOVED******REMOVED***print("An error occurred while submitting the changes.")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
