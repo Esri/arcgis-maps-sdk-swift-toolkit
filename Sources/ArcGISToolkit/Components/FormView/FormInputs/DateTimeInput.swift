@@ -16,7 +16,8 @@ import SwiftUI
 import ArcGIS
 
 /// A view for date/time input.
-struct DateTimeInput: View {
+/// - Since: 200.4
+public struct DateTimeInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// The model for the ancestral form view.
@@ -43,7 +44,7 @@ struct DateTimeInput: View {
     /// Creates a view for a date (and time if applicable) input.
     /// - Parameters:
     ///   - element: The input's parent element.
-    init(element: FieldFormElement) {
+    public init(element: FieldFormElement) {
         precondition(
             element.input is DateTimePickerFormInput,
             "\(Self.self).\(#function) element's input must be \(DateTimePickerFormInput.self)."
@@ -57,13 +58,11 @@ struct DateTimeInput: View {
         )
     }
     
-    var body: some View {
-        Group {
+    public var body: some View {
+        VStack(alignment: .leading) {
             InputHeader(element: element)
                 .padding([.top], elementPadding)
-            
             dateEditor
-            
             InputFooter(element: element, requiredValueMissing: requiredValueMissing)
         }
         .padding([.bottom], elementPadding)

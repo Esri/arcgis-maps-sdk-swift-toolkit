@@ -18,7 +18,8 @@ import SwiftUI
 /// A view for numerical value input.
 ///
 /// This is the preferable input type for short lists of coded value domains.
-struct RadioButtonsInput: View {
+/// - Since: 200.4
+public struct RadioButtonsInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// The model for the ancestral form view.
@@ -49,7 +50,7 @@ struct RadioButtonsInput: View {
     /// Creates a view for a date (and time if applicable) input.
     /// - Parameters:
     ///   - element: The field's parent element.
-    init(element: FieldFormElement) {
+    public init(element: FieldFormElement) {
         precondition(
             element.input is RadioButtonsFormInput,
             "\(Self.self).\(#function) element's input must be \(RadioButtonsFormInput.self)."
@@ -63,7 +64,7 @@ struct RadioButtonsInput: View {
         )
     }
     
-    var body: some View {
+    public var body: some View {
         if fallbackToComboBox {
             ComboBoxInput(
                 element: element,
@@ -71,11 +72,11 @@ struct RadioButtonsInput: View {
                 noValueOption: input.noValueOption
             )
         } else {
-            Group {
+            VStack(alignment: .leading) {
                 InputHeader(label: element.label, isRequired: inputModel.isRequired)
                     .padding([.top], elementPadding)
                 
-                VStack(alignment: .leading, spacing: .zero) {
+                VStack(spacing: .zero) {
                     if input.noValueOption == .show {
                         makeRadioButtonRow(
                             placeholderValue,
