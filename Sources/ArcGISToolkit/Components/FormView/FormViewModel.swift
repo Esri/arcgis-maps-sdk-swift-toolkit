@@ -59,11 +59,9 @@ import SwiftUI
     /// Kick off tasks to monitor `isVisible` for each element.
     func initializeIsVisibleTasks() {
         featureForm.elements.forEach { element in
-            let newTask = Task.detached { [unowned self] in
+            let newTask = Task { [unowned self] in
                 for await _ in element.$isVisible {
-                    await MainActor.run {
-                        self.updateVisibleElements()
-                    }
+                    self.updateVisibleElements()
                 }
             }
             isVisibleTasks.append(newTask)
