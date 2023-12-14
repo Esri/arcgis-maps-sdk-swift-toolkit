@@ -41,7 +41,7 @@ public extension View {
     func floatingPanel<Content>(
         attributionBarHeight: CGFloat = 0,
         backgroundColor: Color = Color(uiColor: .systemBackground),
-        selectedDetent: Binding<FloatingPanelDetent> = .constant(.half),
+        selectedDetent: Binding<FloatingPanelDetent>? = nil,
         horizontalAlignment: HorizontalAlignment = .trailing,
         isPresented: Binding<Bool> = .constant(true),
         maxWidth: CGFloat = 400,
@@ -51,7 +51,7 @@ public extension View {
             FloatingPanelModifier(
                 attributionBarHeight: attributionBarHeight,
                 backgroundColor: backgroundColor,
-                selectedDetent: selectedDetent,
+                boundDetent: selectedDetent,
                 horizontalAlignment: horizontalAlignment,
                 isPresented: isPresented,
                 maxWidth: maxWidth,
@@ -75,8 +75,11 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
     /// The background color of the floating panel.
     let backgroundColor: Color
     
-    /// A binding to the currently selected detent.
-    let selectedDetent: Binding<FloatingPanelDetent>
+    /// A user provided detent.
+    let boundDetent: Binding<FloatingPanelDetent>?
+    
+    /// A managed detent when a user bound one isn't provided.
+    @State private var managedDetent: FloatingPanelDetent = .half
     
     /// The horizontal alignment of the floating panel.
     let horizontalAlignment: HorizontalAlignment
@@ -96,7 +99,7 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
                 FloatingPanel(
                     attributionBarHeight: attributionBarHeight,
                     backgroundColor: backgroundColor,
-                    selectedDetent: selectedDetent,
+                    selectedDetent: boundDetent ?? $managedDetent,
                     isPresented: isPresented,
                     content: panelContent
                 )
