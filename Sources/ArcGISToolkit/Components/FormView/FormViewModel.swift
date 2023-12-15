@@ -27,9 +27,9 @@ import SwiftUI
     /// The expression evaluation task.
     private var evaluateTask: Task<Void, Never>?
     
-    /// The group of visibility tasks.
-    private var isVisibleTasks = [Task<Void, Never>]()
-    
+    /// The visibility tasks group.
+    private var isVisibleTask: Task<Void, Never>?
+
     /// The list of visible form elements.
     @Published var visibleElements = [FormElement]()
     
@@ -46,27 +46,23 @@ import SwiftUI
     }
     
     deinit {
-        // Cancel all `isVisible` tasks.
-        isVisibleTasks.forEach { task in
-            task.cancel()
-        }
-        isVisibleTasks.removeAll()
-        
-        // Cancel expression evaluation.
         evaluateTask?.cancel()
+        isVisibleTask?.cancel()
     }
     
     /// Kick off tasks to monitor `isVisible` for each element.
-    func initializeIsVisibleTasks() {
-        featureForm.elements.forEach { element in
-            let newTask = Task.detached { [unowned self] in
-                for await _ in element.$isVisible {
-                    await MainActor.run {
-                        self.updateVisibleElements()
+    private func initializeIsVisibleTasks() {
+        isVisibleTask = Task {
+            await withTaskGroup(of: Void.self) { [unowned self] group in
+                for element in featureForm.elements {
+                    group.addTask {
+                        for await _ in element.$isVisible {
+                            guard !Task.isCancelled else { return }
+                            await self.updateVisibleElements()
+                        }
                     }
                 }
             }
-            isVisibleTasks.append(newTask)
         }
     }
     
@@ -76,7 +72,7 @@ import SwiftUI
     }
     
     /// Performs an initial evaluation of all form expressions.
-    func initialEvaluation() async throws {
+    func initialEvaluation() async {
         let evaluationErrors = try? await featureForm.evaluateExpressions()
         expressionEvaluationErrors = evaluationErrors ?? []
         initializeIsVisibleTasks()
@@ -88,10 +84,8 @@ import SwiftUI
         isEvaluating = true
         evaluateTask = Task {
             let evaluationErrors = try? await featureForm.evaluateExpressions()
-            await MainActor.run {
-                expressionEvaluationErrors = evaluationErrors ?? []
-                isEvaluating = false
-            }
+            expressionEvaluationErrors = evaluationErrors ?? []
+            isEvaluating = false
         }
     }
 }
