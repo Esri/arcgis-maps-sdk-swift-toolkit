@@ -1,10 +1,11 @@
-// Copyright 2022 Esri.
-
+// Copyright 2022 Esri
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,16 +19,8 @@ import SwiftUI
 /// A demonstration of the utility network trace tool which runs traces on a web map published with
 /// a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-    @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass: UserInterfaceSizeClass?
-    
-    @Environment(\.verticalSizeClass)
-    private var verticalSizeClass: UserInterfaceSizeClass?
-    
-    /// A Boolean value indicating whether the environment is compact.
-    private var isCompact: Bool {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular
-    }
+    @Environment(\.isPortraitOrientation)
+    private var isPortraitOrientation
     
     /// The map with the utility networks.
     @State private var map = makeMap()
@@ -83,7 +76,7 @@ struct UtilityNetworkTraceExampleView: View {
                     .floatingPanelDetent($activeDetent)
                     // Manually account for a device's bottom safe area when using a Floating Panel.
                     // See also #518.
-                    .padding(.bottom, isCompact ? geometryProxy.safeAreaInsets.bottom : nil)
+                    .padding(.bottom, isPortraitOrientation ? geometryProxy.safeAreaInsets.bottom : nil)
                 }
             }
         }
@@ -108,5 +101,13 @@ private extension ArcGISCredential {
                 password: "I68VGU^nMurF"
             )
         }
+    }
+}
+
+private extension EnvironmentValues {
+    /// A Boolean value indicating whether this environment has a compact horizontal size class and
+    /// a regular vertical size class.
+    var isPortraitOrientation: Bool {
+        horizontalSizeClass == .compact && verticalSizeClass == .regular
     }
 }
