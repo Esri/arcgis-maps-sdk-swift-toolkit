@@ -33,13 +33,8 @@
             }
             
             @Step {
-                Use the `onSelectionChanged` modifier to track when a bookmark selection is made.
-                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep4)
-            }
-            
-            @Step {
                 Use a task to animate viewpoint changes when the selected bookmark is changed.
-                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep5)
+                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep4)
             }
         }
     }
