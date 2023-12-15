@@ -50,7 +50,7 @@ import SwiftUI
         
         // Kick off tasks to monitor required, editable and value.
         observationTask = Task {
-            await withThrowingTaskGroup(of: Void.self) { group in
+            await withTaskGroup(of: Void.self) { group in
                 // Observe isRequired changes.
                 group.addTask { [unowned self] in
                     for await isRequired in await element.$isRequired {
