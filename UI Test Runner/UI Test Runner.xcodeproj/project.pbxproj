@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75384C112B2D1BD800D97E6C /* BookmarksTestCase5View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */; };
 		7552A7542A573CBB0023DA5A /* UITestRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7532A573CBB0023DA5A /* UITestRunner.swift */; };
 		7552A7562A573CBB0023DA5A /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7552A573CBB0023DA5A /* Tests.swift */; };
 		7552A7582A573CBD0023DA5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7552A7572A573CBD0023DA5A /* Assets.xcassets */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase5View.swift; sourceTree = "<group>"; };
 		7552A7502A573CBB0023DA5A /* UI Test Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "UI Test Runner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7552A7532A573CBB0023DA5A /* UITestRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestRunner.swift; sourceTree = "<group>"; };
 		7552A7552A573CBB0023DA5A /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				7584B7562B1A7AF100772AB7 /* BookmarksTestCase2View.swift */,
 				7584B7582B1A817A00772AB7 /* BookmarksTestCase3View.swift */,
 				7584B75A2B1A824300772AB7 /* BookmarksTestCase4View.swift */,
+				75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */,
 				7584B7542B1A79DD00772AB7 /* BookmarksTestViews.swift */,
 			);
 			path = BookmarksTestViews;
@@ -261,6 +264,7 @@
 				7552A7542A573CBB0023DA5A /* UITestRunner.swift in Sources */,
 				7584B7552B1A79DD00772AB7 /* BookmarksTestViews.swift in Sources */,
 				75B2366D2A5CC78C00AEFACE /* FloorFilterTestView.swift in Sources */,
+				75384C112B2D1BD800D97E6C /* BookmarksTestCase5View.swift in Sources */,
 				7552A7622A573D810023DA5A /* BookmarksTestCase1View.swift in Sources */,
 				7584B7592B1A817A00772AB7 /* BookmarksTestCase3View.swift in Sources */,
 				7584B7572B1A7AF100772AB7 /* BookmarksTestCase2View.swift in Sources */,

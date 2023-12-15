@@ -137,4 +137,33 @@ final class BookmarksTests: XCTestCase {
         
         XCTAssertTrue(redlandsButton.exists, "The Redlands button wasn't found.")
     }
+    
+    /// Test using the Bookmarks component with bookmarks provided directly, creating new bookmarks
+    /// while the component is displayed.
+    func testCase5() throws {
+        let app = XCUIApplication()
+        app.launch()
+        
+        let addNewButton = app.buttons["Add New"].firstMatch
+        let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
+        let bookmarksTestCase5Button = app.buttons["Bookmarks Test Case 5"]
+        let firstBookmark = app.buttons["Bookmark 1"].firstMatch
+        let secondBookmark = app.buttons["Bookmark 2"].firstMatch
+        
+        // Open the Bookmarks component test views.
+        XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
+        bookmarksTestsButton.tap()
+        
+        // Open the Bookmarks component test view.
+        XCTAssertTrue(bookmarksTestCase5Button.exists, "The Bookmarks Test Case 5 button wasn't found.")
+        bookmarksTestCase5Button.tap()
+        
+        XCTAssertTrue(firstBookmark.exists, "The first bookmark wasn't found.")
+        
+        XCTAssertFalse(secondBookmark.exists, "The second bookmark was present before it should've been.")
+        
+        addNewButton.tap()
+        
+        XCTAssertTrue(secondBookmark.exists, "The second bookmark wasn't found.")
+    }
 }
