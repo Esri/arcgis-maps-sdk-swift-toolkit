@@ -1,10 +1,11 @@
-// Copyright 2021 Esri.
-
+// Copyright 2021 Esri
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -126,8 +127,7 @@ public struct SearchView: View {
         viewModel.sources
     }
     
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
@@ -157,14 +157,14 @@ public struct SearchView: View {
     /// of the device. This will cause the search field to display full-width on an iPhone in portrait
     /// orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
     private var searchBarWidth: CGFloat? {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : 360
+        isPortraitOrientation ? nil : 360
     }
     
     /// If `true`, will draw the results list view at half height, exposing a portion of the
     /// underlying map below the list on an iPhone in portrait orientation (and certain iPad multitasking
     /// configurations).  If `false`, will draw the results list view full size.
     private var useHalfHeightResults: Bool {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular
+        isPortraitOrientation
     }
     
     /// Determines whether the results lists are displayed.

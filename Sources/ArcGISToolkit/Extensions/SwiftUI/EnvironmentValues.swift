@@ -1,4 +1,4 @@
-// Copyright 2022 Esri
+// Copyright 2023 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,18 +14,10 @@
 
 import SwiftUI
 
-extension Color {
-    /// Initializes a new color with RGB integer values.
-    /// - Precondition: `red`, `green` and `blue` are values between 0 and 255 inclusive.
-    init(red: Int, green: Int, blue: Int) {
-        let validRange = 0...255
-        precondition(validRange.contains(red))
-        precondition(validRange.contains(green))
-        precondition(validRange.contains(blue))
-        self.init(
-            red: Double(red)/255,
-            green: Double(green)/255,
-            blue: Double(blue)/255
-        )
+extension EnvironmentValues {
+    /// A Boolean value indicating whether this environment has a compact horizontal size class and
+    /// a regular vertical size class.
+    var isPortraitOrientation: Bool {
+        horizontalSizeClass == .compact && verticalSizeClass == .regular
     }
 }
