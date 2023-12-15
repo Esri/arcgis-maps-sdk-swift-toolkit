@@ -27,9 +27,9 @@ import Combine
 ***REMOVED******REMOVED***/ The expression evaluation task.
 ***REMOVED***private var evaluateTask: Task<Void, Never>?
 ***REMOVED***
-***REMOVED******REMOVED***/ The group of visibility tasks.
-***REMOVED***private var isVisibleTasks = [Task<Void, Never>]()
-***REMOVED***
+***REMOVED******REMOVED***/ The visibility tasks group.
+***REMOVED***private var isVisibleTask: Task<Void, Never>?
+
 ***REMOVED******REMOVED***/ The list of visible form elements.
 ***REMOVED***@Published var visibleElements = [FormElement]()
 ***REMOVED***
@@ -46,25 +46,23 @@ import Combine
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***deinit {
-***REMOVED******REMOVED******REMOVED*** Cancel all `isVisible` tasks.
-***REMOVED******REMOVED***isVisibleTasks.forEach { task in
-***REMOVED******REMOVED******REMOVED***task.cancel()
-***REMOVED***
-***REMOVED******REMOVED***isVisibleTasks.removeAll()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Cancel expression evaluation.
 ***REMOVED******REMOVED***evaluateTask?.cancel()
+***REMOVED******REMOVED***isVisibleTask?.cancel()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Kick off tasks to monitor `isVisible` for each element.
-***REMOVED***func initializeIsVisibleTasks() {
-***REMOVED******REMOVED***featureForm.elements.forEach { element in
-***REMOVED******REMOVED******REMOVED***let newTask = Task { [unowned self] in
-***REMOVED******REMOVED******REMOVED******REMOVED***for await _ in element.$isVisible {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.updateVisibleElements()
+***REMOVED***private func initializeIsVisibleTasks() {
+***REMOVED******REMOVED***isVisibleTask = Task {
+***REMOVED******REMOVED******REMOVED***await withThrowingTaskGroup(of: Void.self) { [unowned self] group in
+***REMOVED******REMOVED******REMOVED******REMOVED***for element in featureForm.elements {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await _ in element.$isVisible {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !Task.isCancelled else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.updateVisibleElements()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***isVisibleTasks.append(newTask)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -74,7 +72,7 @@ import Combine
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Performs an initial evaluation of all form expressions.
-***REMOVED***func initialEvaluation() async throws {
+***REMOVED***func initialEvaluation() async {
 ***REMOVED******REMOVED***let evaluationErrors = try? await featureForm.evaluateExpressions()
 ***REMOVED******REMOVED***expressionEvaluationErrors = evaluationErrors ?? []
 ***REMOVED******REMOVED***initializeIsVisibleTasks()
@@ -86,10 +84,8 @@ import Combine
 ***REMOVED******REMOVED***isEvaluating = true
 ***REMOVED******REMOVED***evaluateTask = Task {
 ***REMOVED******REMOVED******REMOVED***let evaluationErrors = try? await featureForm.evaluateExpressions()
-***REMOVED******REMOVED******REMOVED***await MainActor.run {
-***REMOVED******REMOVED******REMOVED******REMOVED***expressionEvaluationErrors = evaluationErrors ?? []
-***REMOVED******REMOVED******REMOVED******REMOVED***isEvaluating = false
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***expressionEvaluationErrors = evaluationErrors ?? []
+***REMOVED******REMOVED******REMOVED***isEvaluating = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

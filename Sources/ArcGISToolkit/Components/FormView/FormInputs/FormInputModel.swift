@@ -34,17 +34,14 @@ import Combine
 ***REMOVED***
 ***REMOVED***private var element: FieldFormElement
 ***REMOVED***
-***REMOVED***private var tasks = [Task<Void, Never>]()
-***REMOVED***
+***REMOVED***private var observationTask: Task<Void, Never>?
+
 ***REMOVED***deinit {
-***REMOVED******REMOVED***tasks.forEach { task in
-***REMOVED******REMOVED******REMOVED***task.cancel()
-***REMOVED***
-***REMOVED******REMOVED***tasks.removeAll()
+***REMOVED******REMOVED***observationTask?.cancel()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form input model.
-***REMOVED***public init(fieldFormElement: FieldFormElement) {
+***REMOVED***init(fieldFormElement: FieldFormElement) {
 ***REMOVED******REMOVED***element = fieldFormElement
 ***REMOVED******REMOVED***isRequired = element.isRequired
 ***REMOVED******REMOVED***isEditable = element.isEditable
@@ -52,39 +49,36 @@ import Combine
 ***REMOVED******REMOVED***formattedValue = element.formattedValue
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Kick off tasks to monitor required, editable and value.
-***REMOVED******REMOVED***tasks.append(
-***REMOVED******REMOVED******REMOVED***contentsOf: [
-***REMOVED******REMOVED******REMOVED******REMOVED***observeIsRequiredTask,
-***REMOVED******REMOVED******REMOVED******REMOVED***observeIsEditableTask,
-***REMOVED******REMOVED******REMOVED******REMOVED***observeValueTask
-***REMOVED******REMOVED******REMOVED***]
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A detached task observing changes in the required state.
-***REMOVED***private var observeIsRequiredTask: Task<Void, Never> {
-***REMOVED******REMOVED***Task { [unowned self] in
-***REMOVED******REMOVED******REMOVED***for await isRequired in element.$isRequired {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.isRequired = isRequired
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A detached task observing changes in the editable state.
-***REMOVED***private var observeIsEditableTask: Task<Void, Never> {
-***REMOVED******REMOVED***Task { [unowned self] in
-***REMOVED******REMOVED******REMOVED***for await isEditable in element.$isEditable {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.isEditable = isEditable
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A detached task observing changes in the value.
-***REMOVED***private var observeValueTask: Task<Void, Never> {
-***REMOVED******REMOVED***Task { [unowned self] in
-***REMOVED******REMOVED******REMOVED***for await value in element.$value {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.value = value
-***REMOVED******REMOVED******REMOVED******REMOVED***self.formattedValue = element.formattedValue
+***REMOVED******REMOVED***observationTask = Task {
+***REMOVED******REMOVED******REMOVED***await withThrowingTaskGroup(of: Void.self) { group in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Observe isRequired changes.
+***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask { [unowned self] in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await isRequired in await element.$isRequired {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !Task.isCancelled else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isRequired = isRequired
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Observe isEditable changes.
+***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask { [unowned self] in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await isEditable in await element.$isEditable {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !Task.isCancelled else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isEditable = isEditable
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Observe value changes.
+***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask { [unowned self] in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await value in await element.$value {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !Task.isCancelled else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.value = value
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.formattedValue = element.formattedValue
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
