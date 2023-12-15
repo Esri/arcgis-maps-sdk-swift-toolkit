@@ -1,4 +1,4 @@
-***REMOVED***
+***REMOVED*** Copyright 2023 Esri
 ***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
@@ -14,21 +14,10 @@
 
 ***REMOVED***
 
-struct ExampleList: View {
-***REMOVED******REMOVED***/ The name of the list of examples.
-***REMOVED***var name: String
+extension EnvironmentValues {
+***REMOVED******REMOVED***/ A Boolean value indicating whether this environment has a compact horizontal size class and
+***REMOVED******REMOVED***/ a regular vertical size class.
+***REMOVED***var isPortraitOrientation: Bool {
+***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
 ***REMOVED***
-***REMOVED******REMOVED***/ The list of examples to display.
-***REMOVED***var examples: [Example]
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***List(examples, id: \.name) { (example) in
-***REMOVED******REMOVED******REMOVED***NavigationLink(example.name, destination: ExampleView(example: example))
-***REMOVED***
-***REMOVED******REMOVED***.navigationBarTitle(Text(name), displayMode: .inline)
-***REMOVED***
-***REMOVED***
-
-extension ExampleList: Identifiable {
-***REMOVED***var id: String { name ***REMOVED***
 ***REMOVED***

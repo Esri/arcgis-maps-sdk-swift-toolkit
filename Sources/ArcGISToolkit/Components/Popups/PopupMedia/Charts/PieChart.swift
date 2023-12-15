@@ -21,12 +21,11 @@ struct PieChart: View {
 ***REMOVED******REMOVED***/ A Boolean value determining whether to show the legend for the chart.
 ***REMOVED***let showLegend: Bool
 ***REMOVED***
-***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
-***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
+***REMOVED***@Environment(\.isPortraitOrientation) var isPortraitOrientation
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value denoting if the view should be shown as regular width.
 ***REMOVED***var isRegularWidth: Bool {
-***REMOVED******REMOVED***!(horizontalSizeClass == .compact && verticalSizeClass == .regular)
+***REMOVED******REMOVED***!isPortraitOrientation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `PieChart`.
