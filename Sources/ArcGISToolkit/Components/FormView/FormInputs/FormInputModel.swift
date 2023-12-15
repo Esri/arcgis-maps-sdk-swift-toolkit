@@ -50,7 +50,7 @@ import Combine
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Kick off tasks to monitor required, editable and value.
 ***REMOVED******REMOVED***observationTask = Task {
-***REMOVED******REMOVED******REMOVED***await withThrowingTaskGroup(of: Void.self) { group in
+***REMOVED******REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Observe isRequired changes.
 ***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask { [unowned self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await isRequired in await element.$isRequired {
