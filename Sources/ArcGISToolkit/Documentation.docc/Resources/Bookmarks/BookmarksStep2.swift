@@ -9,7 +9,7 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED***/ Indicates if the `Bookmarks` component is shown or not.
 ***REMOVED******REMOVED***/ - Remark: This allows a developer to control when the `Bookmarks` component is
 ***REMOVED******REMOVED***/ shown/hidden, whether that be in a group of options or a standalone button.
-***REMOVED***@State var showingBookmarks = false
+***REMOVED***@State private var showingBookmarks = false
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in
@@ -17,7 +17,7 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .primaryAction) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingBookmarks.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingBookmarks = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Show Bookmarks",
