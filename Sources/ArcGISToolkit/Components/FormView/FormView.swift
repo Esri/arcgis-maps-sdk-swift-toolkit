@@ -62,7 +62,7 @@ public struct FormView: View {
         .environmentObject(model)
         .task {
             // Perform the initial expression evaluation.
-            try? await model.initialEvaluation()
+            await model.initialEvaluation()
             isEvaluatingInitialExpressions = false
         }
     }

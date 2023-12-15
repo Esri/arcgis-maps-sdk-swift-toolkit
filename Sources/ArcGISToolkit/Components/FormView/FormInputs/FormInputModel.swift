@@ -19,7 +19,7 @@ import SwiftUI
 /// A model for an input in a form.
 ///
 /// - Since: 200.4
-class FormInputModel: ObservableObject {
+@MainActor class FormInputModel: ObservableObject {
     /// A Boolean value indicating whether a value in the input is required.
     @Published var isRequired: Bool
     
@@ -34,14 +34,14 @@ class FormInputModel: ObservableObject {
     
     private var element: FieldFormElement
     
-    private var tasks = [Task<Void, Never>]()
-    
+    private var observationTask: Task<Void, Never>?
+
     deinit {
-        clearTasks()
+        observationTask?.cancel()
     }
     
     /// Initializes a form input model.
-    public init(fieldFormElement: FieldFormElement) {
+    init(fieldFormElement: FieldFormElement) {
         element = fieldFormElement
         isRequired = element.isRequired
         isEditable = element.isEditable
@@ -49,52 +49,35 @@ class FormInputModel: ObservableObject {
         formattedValue = element.formattedValue
         
         // Kick off tasks to monitor required, editable and value.
-        tasks.append(
-            contentsOf: [
-                observeIsRequiredTask,
-                observeIsEditableTask,
-                observeValueTask
-            ]
-        )
-    }
-    
-    /// Cancels and removes tasks.
-    private func clearTasks() {
-        tasks.forEach { task in
-            task.cancel()
-        }
-        tasks.removeAll()
-    }
-    
-    /// A detached task observing changes in the required state.
-    private var observeIsRequiredTask: Task<Void, Never> {
-        Task.detached { [unowned self] in
-            for await isRequired in element.$isRequired {
-                await MainActor.run {
-                    self.isRequired = isRequired
+        observationTask = Task {
+            await withTaskGroup(of: Void.self) { group in
+                // Observe isRequired changes.
+                group.addTask { [unowned self] in
+                    for await isRequired in await element.$isRequired {
+                        guard !Task.isCancelled else { return }
+                        await MainActor.run {
+                            self.isRequired = isRequired
+                        }
+                    }
                 }
-            }
-        }
-    }
-    
-    /// A detached task observing changes in the editable state.
-    private var observeIsEditableTask: Task<Void, Never> {
-        Task.detached { [unowned self] in
-            for await isEditable in element.$isEditable {
-                await MainActor.run {
-                    self.isEditable = isEditable
+                // Observe isEditable changes.
+                group.addTask { [unowned self] in
+                    for await isEditable in await element.$isEditable {
+                        guard !Task.isCancelled else { return }
+                        await MainActor.run {
+                            self.isEditable = isEditable
+                        }
+                    }
                 }
-            }
-        }
-    }
-    
-    /// A detached task observing changes in the value.
-    private var observeValueTask: Task<Void, Never> {
-        Task.detached { [unowned self] in
-            for await value in element.$value {
-                await MainActor.run {
-                    self.value = value
-                    self.formattedValue = element.formattedValue
+                // Observe value changes.
+                group.addTask { [unowned self] in
+                    for await value in await element.$value {
+                        guard !Task.isCancelled else { return }
+                        await MainActor.run {
+                            self.value = value
+                            self.formattedValue = element.formattedValue
+                        }
+                    }
                 }
             }
         }
