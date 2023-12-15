@@ -34,17 +34,14 @@ import SwiftUI
     
     private var element: FieldFormElement
     
-    private var tasks = [Task<Void, Never>]()
-    
+    private var observationTask: Task<Void, Never>?
+
     deinit {
-        tasks.forEach { task in
-            task.cancel()
-        }
-        tasks.removeAll()
+        observationTask?.cancel()
     }
     
     /// Initializes a form input model.
-    public init(fieldFormElement: FieldFormElement) {
+    init(fieldFormElement: FieldFormElement) {
         element = fieldFormElement
         isRequired = element.isRequired
         isEditable = element.isEditable
@@ -52,39 +49,36 @@ import SwiftUI
         formattedValue = element.formattedValue
         
         // Kick off tasks to monitor required, editable and value.
-        tasks.append(
-            contentsOf: [
-                observeIsRequiredTask,
-                observeIsEditableTask,
-                observeValueTask
-            ]
-        )
-    }
-    
-    /// A detached task observing changes in the required state.
-    private var observeIsRequiredTask: Task<Void, Never> {
-        Task { [unowned self] in
-            for await isRequired in element.$isRequired {
-                self.isRequired = isRequired
-            }
-        }
-    }
-    
-    /// A detached task observing changes in the editable state.
-    private var observeIsEditableTask: Task<Void, Never> {
-        Task { [unowned self] in
-            for await isEditable in element.$isEditable {
-                self.isEditable = isEditable
-            }
-        }
-    }
-    
-    /// A detached task observing changes in the value.
-    private var observeValueTask: Task<Void, Never> {
-        Task { [unowned self] in
-            for await value in element.$value {
-                self.value = value
-                self.formattedValue = element.formattedValue
+        observationTask = Task {
+            await withThrowingTaskGroup(of: Void.self) { group in
+                // Observe isRequired changes.
+                group.addTask { [unowned self] in
+                    for await isRequired in await element.$isRequired {
+                        guard !Task.isCancelled else { return }
+                        await MainActor.run {
+                            self.isRequired = isRequired
+                        }
+                    }
+                }
+                // Observe isEditable changes.
+                group.addTask { [unowned self] in
+                    for await isEditable in await element.$isEditable {
+                        guard !Task.isCancelled else { return }
+                        await MainActor.run {
+                            self.isEditable = isEditable
+                        }
+                    }
+                }
+                // Observe value changes.
+                group.addTask { [unowned self] in
+                    for await value in await element.$value {
+                        guard !Task.isCancelled else { return }
+                        await MainActor.run {
+                            self.value = value
+                            self.formattedValue = element.formattedValue
+                        }
+                    }
+                }
             }
         }
     }
