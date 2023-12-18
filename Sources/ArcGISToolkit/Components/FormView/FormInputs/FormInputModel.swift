@@ -47,13 +47,13 @@ import Combine
 ***REMOVED******REMOVED***isEditable = element.isEditable
 ***REMOVED******REMOVED***value = element.value
 ***REMOVED******REMOVED***formattedValue = element.formattedValue
-***REMOVED******REMOVED***
+
 ***REMOVED******REMOVED******REMOVED*** Kick off tasks to monitor required, editable and value.
-***REMOVED******REMOVED***observationTask = Task {
+***REMOVED******REMOVED***observationTask = Task.detached { [unowned self] in
 ***REMOVED******REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Observe isRequired changes.
-***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask { [unowned self] in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await isRequired in await element.$isRequired {
+***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await isRequired in await self.element.$isRequired {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !Task.isCancelled else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isRequired = isRequired
@@ -61,8 +61,8 @@ import Combine
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Observe isEditable changes.
-***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask { [unowned self] in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await isEditable in await element.$isEditable {
+***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await isEditable in await self.element.$isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !Task.isCancelled else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isEditable = isEditable
@@ -70,12 +70,12 @@ import Combine
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Observe value changes.
-***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask { [unowned self] in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await value in await element.$value {
+***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await value in await self.element.$value {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !Task.isCancelled else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.value = value
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.formattedValue = element.formattedValue
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.formattedValue = self.element.formattedValue
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
