@@ -47,7 +47,7 @@ import SwiftUI
         isEditable = element.isEditable
         value = element.value
         formattedValue = element.formattedValue
-
+        
         // Kick off tasks to monitor required, editable and value.
         observationTask = Task.detached { [unowned self] in
             await withTaskGroup(of: Void.self) { group in
