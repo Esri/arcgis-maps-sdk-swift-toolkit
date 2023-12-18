@@ -47,13 +47,13 @@ import SwiftUI
         isEditable = element.isEditable
         value = element.value
         formattedValue = element.formattedValue
-        
+
         // Kick off tasks to monitor required, editable and value.
-        observationTask = Task {
+        observationTask = Task.detached { [unowned self] in
             await withTaskGroup(of: Void.self) { group in
                 // Observe isRequired changes.
-                group.addTask { [unowned self] in
-                    for await isRequired in await element.$isRequired {
+                group.addTask {
+                    for await isRequired in await self.element.$isRequired {
                         guard !Task.isCancelled else { return }
                         await MainActor.run {
                             self.isRequired = isRequired
@@ -61,8 +61,8 @@ import SwiftUI
                     }
                 }
                 // Observe isEditable changes.
-                group.addTask { [unowned self] in
-                    for await isEditable in await element.$isEditable {
+                group.addTask {
+                    for await isEditable in await self.element.$isEditable {
                         guard !Task.isCancelled else { return }
                         await MainActor.run {
                             self.isEditable = isEditable
@@ -70,12 +70,12 @@ import SwiftUI
                     }
                 }
                 // Observe value changes.
-                group.addTask { [unowned self] in
-                    for await value in await element.$value {
+                group.addTask {
+                    for await value in await self.element.$value {
                         guard !Task.isCancelled else { return }
                         await MainActor.run {
                             self.value = value
-                            self.formattedValue = element.formattedValue
+                            self.formattedValue = self.element.formattedValue
                         }
                     }
                 }
