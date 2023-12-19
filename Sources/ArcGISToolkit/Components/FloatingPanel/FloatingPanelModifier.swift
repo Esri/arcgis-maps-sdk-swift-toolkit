@@ -41,7 +41,7 @@ public extension View {
 ***REMOVED***func floatingPanel<Content>(
 ***REMOVED******REMOVED***attributionBarHeight: CGFloat = 0,
 ***REMOVED******REMOVED***backgroundColor: Color = Color(uiColor: .systemBackground),
-***REMOVED******REMOVED***selectedDetent: Binding<FloatingPanelDetent> = .constant(.half),
+***REMOVED******REMOVED***selectedDetent: Binding<FloatingPanelDetent>? = nil,
 ***REMOVED******REMOVED***horizontalAlignment: HorizontalAlignment = .trailing,
 ***REMOVED******REMOVED***isPresented: Binding<Bool> = .constant(true),
 ***REMOVED******REMOVED***maxWidth: CGFloat = 400,
@@ -51,7 +51,7 @@ public extension View {
 ***REMOVED******REMOVED******REMOVED***FloatingPanelModifier(
 ***REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: backgroundColor,
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: selectedDetent,
+***REMOVED******REMOVED******REMOVED******REMOVED***boundDetent: selectedDetent,
 ***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: horizontalAlignment,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: maxWidth,
@@ -63,13 +63,7 @@ public extension View {
 
 ***REMOVED***/ Overlays a floating panel on the parent content.
 private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelContent: View {
-***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
-***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the environment is compact.
-***REMOVED***private var isCompact: Bool {
-***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
-***REMOVED***
+***REMOVED***@Environment(\.isPortraitOrientation) var isPortraitOrientation
 ***REMOVED***
 ***REMOVED******REMOVED***/ The height of a geo-view's attribution bar.
 ***REMOVED******REMOVED***/
@@ -81,8 +75,11 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
 ***REMOVED******REMOVED***/ The background color of the floating panel.
 ***REMOVED***let backgroundColor: Color
 ***REMOVED***
-***REMOVED******REMOVED***/ A binding to the currently selected detent.
-***REMOVED***let selectedDetent: Binding<FloatingPanelDetent>
+***REMOVED******REMOVED***/ A user provided detent.
+***REMOVED***let boundDetent: Binding<FloatingPanelDetent>?
+***REMOVED***
+***REMOVED******REMOVED***/ A managed detent when a user bound one isn't provided.
+***REMOVED***@State private var managedDetent: FloatingPanelDetent = .half
 ***REMOVED***
 ***REMOVED******REMOVED***/ The horizontal alignment of the floating panel.
 ***REMOVED***let horizontalAlignment: HorizontalAlignment
@@ -102,11 +99,11 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: backgroundColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: selectedDetent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: boundDetent ?? $managedDetent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content: panelContent
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: isCompact ? .infinity : maxWidth)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: isPortraitOrientation ? .infinity : maxWidth)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

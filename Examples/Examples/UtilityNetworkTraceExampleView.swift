@@ -19,16 +19,8 @@
 ***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with
 ***REMOVED***/ a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-***REMOVED***@Environment(\.horizontalSizeClass)
-***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
-***REMOVED***
-***REMOVED***@Environment(\.verticalSizeClass)
-***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the environment is compact.
-***REMOVED***private var isCompact: Bool {
-***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
-***REMOVED***
+***REMOVED***@Environment(\.isPortraitOrientation)
+***REMOVED***private var isPortraitOrientation
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map with the utility networks.
 ***REMOVED***@State private var map = makeMap()
@@ -84,7 +76,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanelDetent($activeDetent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Manually account for a device's bottom safe area when using a Floating Panel.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** See also #518.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? geometryProxy.safeAreaInsets.bottom : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isPortraitOrientation ? geometryProxy.safeAreaInsets.bottom : nil)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -109,5 +101,13 @@ private extension ArcGISCredential {
 ***REMOVED******REMOVED******REMOVED******REMOVED***password: "I68VGU^nMurF"
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension EnvironmentValues {
+***REMOVED******REMOVED***/ A Boolean value indicating whether this environment has a compact horizontal size class and
+***REMOVED******REMOVED***/ a regular vertical size class.
+***REMOVED***var isPortraitOrientation: Bool {
+***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
 ***REMOVED***
 ***REMOVED***
