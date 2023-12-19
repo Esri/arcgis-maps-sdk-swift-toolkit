@@ -45,6 +45,7 @@ final class BookmarksTests: XCTestCase {
     }
     
     /// Asserts that the list properly handles a selection when provided a modifier and web map.
+    @available(*, deprecated)
     func testSelectBookmarkWithModifierAndMap() async throws {
         let map = Map.portlandTreeSurvey
         do {
