@@ -45,6 +45,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a modifier and web map.
+***REMOVED***@available(*, deprecated)
 ***REMOVED***func testSelectBookmarkWithModifierAndMap() async throws {
 ***REMOVED******REMOVED***let map = Map.portlandTreeSurvey
 ***REMOVED******REMOVED***do {
