@@ -19,16 +19,8 @@ import SwiftUI
 /// A demonstration of the utility network trace tool which runs traces on a web map published with
 /// a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-    @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass: UserInterfaceSizeClass?
-    
-    @Environment(\.verticalSizeClass)
-    private var verticalSizeClass: UserInterfaceSizeClass?
-    
-    /// A Boolean value indicating whether the environment is compact.
-    private var isCompact: Bool {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular
-    }
+    @Environment(\.isPortraitOrientation)
+    private var isPortraitOrientation
     
     /// The map with the utility networks.
     @State private var map = makeMap()
@@ -84,7 +76,7 @@ struct UtilityNetworkTraceExampleView: View {
                     .floatingPanelDetent($activeDetent)
                     // Manually account for a device's bottom safe area when using a Floating Panel.
                     // See also #518.
-                    .padding(.bottom, isCompact ? geometryProxy.safeAreaInsets.bottom : nil)
+                    .padding(.bottom, isPortraitOrientation ? geometryProxy.safeAreaInsets.bottom : nil)
                 }
             }
         }
@@ -109,5 +101,13 @@ private extension ArcGISCredential {
                 password: "I68VGU^nMurF"
             )
         }
+    }
+}
+
+private extension EnvironmentValues {
+    /// A Boolean value indicating whether this environment has a compact horizontal size class and
+    /// a regular vertical size class.
+    var isPortraitOrientation: Bool {
+        horizontalSizeClass == .compact && verticalSizeClass == .regular
     }
 }
