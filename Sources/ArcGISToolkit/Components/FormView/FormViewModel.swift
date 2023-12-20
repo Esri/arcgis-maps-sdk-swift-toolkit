@@ -52,9 +52,9 @@ import SwiftUI
     
     /// Kick off tasks to monitor `isVisible` for each element.
     private func initializeIsVisibleTasks() {
-        isVisibleTask = Task {
-            await withTaskGroup(of: Void.self) { [unowned self] group in
-                for element in featureForm.elements {
+        isVisibleTask = Task.detached { [unowned self] in
+            await withTaskGroup(of: Void.self) { group in
+                for element in await self.featureForm.elements {
                     group.addTask {
                         for await _ in element.$isVisible {
                             guard !Task.isCancelled else { return }

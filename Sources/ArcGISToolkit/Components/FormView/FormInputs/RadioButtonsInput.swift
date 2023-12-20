@@ -24,9 +24,12 @@ struct RadioButtonsInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
-    
+    /// State properties for element events.
+    @State var isRequired: Bool = false
+    @State var isEditable: Bool = false
+    @State var value: Any?
+    @State var formattedValue: String = ""
+
     /// The set of options in the input.
     @State private var codedValues = [CodedValue]()
     
@@ -58,9 +61,10 @@ struct RadioButtonsInput: View {
         self.element = element
         self.input = element.input as! RadioButtonsFormInput
         
-        _inputModel = StateObject(
-            wrappedValue: FormInputModel(fieldFormElement: element)
-        )
+        value = element.value
+        formattedValue = element.formattedValue
+        isRequired = element.isRequired
+        isEditable = element.isEditable
     }
     
     var body: some View {
@@ -72,7 +76,7 @@ struct RadioButtonsInput: View {
             )
         } else {
             Group {
-                InputHeader(label: element.label, isRequired: inputModel.isRequired)
+                InputHeader(label: element.label, isRequired: isRequired)
                     .padding([.top], elementPadding)
                 
                 VStack(alignment: .leading, spacing: .zero) {
@@ -96,7 +100,7 @@ struct RadioButtonsInput: View {
                         }
                     }
                 }
-                .disabled(!inputModel.isEditable)
+                .disabled(!isEditable)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color(uiColor: .tertiarySystemFill))
@@ -115,7 +119,7 @@ struct RadioButtonsInput: View {
                 }
             }
             .onChange(of: selectedValue) { selectedValue in
-                requiredValueMissing = inputModel.isRequired && selectedValue == nil
+                requiredValueMissing = isRequired && selectedValue == nil
                 do {
                     try element.updateValue(selectedValue?.code)
                 } catch {
@@ -123,8 +127,16 @@ struct RadioButtonsInput: View {
                 }
                 model.evaluateExpressions()
             }
-            .onChange(of: inputModel.formattedValue) { formattedValue in
+            .onChangeOfValue(of: element) { newValue, newFormattedValue in
+                value = newValue
+                formattedValue = newFormattedValue
                 selectedValue = codedValues.first { $0.name == formattedValue }
+            }
+            .onChangeOfIsRequired(of: element) { newIsRequired in
+                isRequired = newIsRequired
+            }
+            .onChangeOfIsEditable(of: element) { newIsEditable in
+                isEditable = newIsEditable
             }
         }
     }
