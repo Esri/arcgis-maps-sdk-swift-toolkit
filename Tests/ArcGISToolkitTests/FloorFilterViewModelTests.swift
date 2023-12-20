@@ -19,7 +19,7 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 @MainActor
-final class FloorFilterViewModelTests: XCTestCase {
+final class FloorFilterViewModelTests: DejavuTestCase {
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
 ***REMOVED***func testAutoSelectAlways() async throws {
 ***REMOVED******REMOVED***let floorManager = try await floorManager(

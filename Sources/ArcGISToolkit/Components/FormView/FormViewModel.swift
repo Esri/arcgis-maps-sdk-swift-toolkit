@@ -52,9 +52,9 @@ import Combine
 ***REMOVED***
 ***REMOVED******REMOVED***/ Kick off tasks to monitor `isVisible` for each element.
 ***REMOVED***private func initializeIsVisibleTasks() {
-***REMOVED******REMOVED***isVisibleTask = Task {
-***REMOVED******REMOVED******REMOVED***await withTaskGroup(of: Void.self) { [unowned self] group in
-***REMOVED******REMOVED******REMOVED******REMOVED***for element in featureForm.elements {
+***REMOVED******REMOVED***isVisibleTask = Task.detached { [unowned self] in
+***REMOVED******REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
+***REMOVED******REMOVED******REMOVED******REMOVED***for element in await self.featureForm.elements {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await _ in element.$isVisible {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !Task.isCancelled else { return ***REMOVED***

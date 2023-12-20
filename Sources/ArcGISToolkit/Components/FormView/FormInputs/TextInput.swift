@@ -22,9 +22,12 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the input.
-***REMOVED***@StateObject var inputModel: FormInputModel
-***REMOVED***
+***REMOVED******REMOVED***/ State properties for element events.
+***REMOVED***@State var isRequired: Bool = false
+***REMOVED***@State var isEditable: Bool = false
+***REMOVED***@State var value: Any?
+***REMOVED***@State var formattedValue: String = ""
+
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
@@ -54,15 +57,17 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self) or \(TextBoxFormInput.self)."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***self.element = element
-***REMOVED******REMOVED***_inputModel = StateObject(
-***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
-***REMOVED******REMOVED***)
+
+***REMOVED******REMOVED***value = element.value
+***REMOVED******REMOVED***formattedValue = element.formattedValue
+***REMOVED******REMOVED***isRequired = element.isRequired
+***REMOVED******REMOVED***isEditable = element.isEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
+***REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED***if inputModel.isEditable {
+***REMOVED******REMOVED***if isEditable {
 ***REMOVED******REMOVED******REMOVED***textField
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
@@ -78,14 +83,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***let text = inputModel.formattedValue
-***REMOVED******REMOVED******REMOVED***isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
-***REMOVED******REMOVED******REMOVED***self.text = isPlaceholder ? element.hint : text
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: inputModel.formattedValue) { formattedValue in
-***REMOVED******REMOVED******REMOVED***let text = formattedValue
-***REMOVED******REMOVED******REMOVED***isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
-***REMOVED******REMOVED******REMOVED***self.text = isPlaceholder ? element.hint : text
+***REMOVED******REMOVED******REMOVED***updateText()
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
 ***REMOVED******REMOVED******REMOVED***if isFocused && isPlaceholder {
@@ -117,6 +115,17 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED***if element.isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED***value = newValue
+***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
+***REMOVED******REMOVED******REMOVED***updateText()
+***REMOVED***
+***REMOVED******REMOVED***.onChangeOfIsRequired(of: element) { newIsRequired in
+***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
+***REMOVED***
+***REMOVED******REMOVED***.onChangeOfIsEditable(of: element) { newIsEditable in
+***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -171,7 +180,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.scrollContentBackgroundHidden()
-***REMOVED******REMOVED******REMOVED***if !text.isEmpty && inputModel.isEditable {
+***REMOVED******REMOVED******REMOVED***if !text.isEmpty && isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED***
@@ -202,6 +211,14 @@ private extension TextInput {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "plus.forwardslash.minus")
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Updates ``text`` and ``placeholder`` values in response to
+***REMOVED******REMOVED***/ a change in ``formattedValue``.
+***REMOVED***private func updateText() {
+***REMOVED******REMOVED***let text = formattedValue
+***REMOVED******REMOVED***isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
+***REMOVED******REMOVED***self.text = isPlaceholder ? element.hint : text
 ***REMOVED***
 ***REMOVED***
 

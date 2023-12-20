@@ -24,9 +24,12 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the input.
-***REMOVED***@StateObject var inputModel: FormInputModel
-***REMOVED***
+***REMOVED******REMOVED***/ State properties for element events.
+***REMOVED***@State var isRequired: Bool = false
+***REMOVED***@State var isEditable: Bool = false
+***REMOVED***@State var value: Any?
+***REMOVED***@State var formattedValue: String = ""
+
 ***REMOVED******REMOVED***/ The set of options in the input.
 ***REMOVED***@State private var codedValues = [CodedValue]()
 ***REMOVED***
@@ -58,9 +61,10 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = element.input as! RadioButtonsFormInput
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***_inputModel = StateObject(
-***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***value = element.value
+***REMOVED******REMOVED***formattedValue = element.formattedValue
+***REMOVED******REMOVED***isRequired = element.isRequired
+***REMOVED******REMOVED***isEditable = element.isEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -72,7 +76,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
+***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: .zero) {
@@ -96,7 +100,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!isEditable)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 10)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .tertiarySystemFill))
@@ -115,7 +119,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***requiredValueMissing = inputModel.isRequired && selectedValue == nil
+***REMOVED******REMOVED******REMOVED******REMOVED***requiredValueMissing = isRequired && selectedValue == nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(selectedValue?.code)
 ***REMOVED******REMOVED******REMOVED*** catch {
@@ -123,8 +127,16 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: inputModel.formattedValue) { formattedValue in
+***REMOVED******REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***value = newValue
+***REMOVED******REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == formattedValue ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChangeOfIsRequired(of: element) { newIsRequired in
+***REMOVED******REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChangeOfIsEditable(of: element) { newIsEditable in
+***REMOVED******REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
