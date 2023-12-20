@@ -22,9 +22,12 @@ struct DateTimeInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
-    
+    /// State properties for element events.
+    @State var isRequired: Bool = false
+    @State var isEditable: Bool = false
+    @State var value: Any?
+    @State var formattedValue: String = ""
+
     /// The current date selection.
     @State private var date: Date?
     
@@ -51,10 +54,10 @@ struct DateTimeInput: View {
         
         self.element = element
         self.input = element.input as! DateTimePickerFormInput
-        
-        _inputModel = StateObject(
-            wrappedValue: FormInputModel(fieldFormElement: element)
-        )
+        value = element.value
+        formattedValue = element.formattedValue
+        isRequired = element.isRequired
+        isEditable = element.isEditable
     }
     
     var body: some View {
@@ -71,14 +74,14 @@ struct DateTimeInput: View {
             isEditing = focusedElement == element
         }
         .onAppear {
-            if inputModel.formattedValue.isEmpty {
+            if formattedValue.isEmpty {
                 date = nil
             } else {
-                date = inputModel.value as? Date
+                date = value as? Date
             }
         }
         .onChange(of: date) { date in
-            requiredValueMissing = inputModel.isRequired && date == nil
+            requiredValueMissing = isRequired && date == nil
             do {
                 try element.updateValue(date)
             } catch {
@@ -86,12 +89,18 @@ struct DateTimeInput: View {
             }
             model.evaluateExpressions()
         }
-        .onChange(of: inputModel.formattedValue) { formattedValue in
+        .onChangeOfValue(of: element) { newValue, newFormattedValue in
             if formattedValue.isEmpty {
                 date = nil
             } else {
-                date = inputModel.value as? Date
+                date = newValue as? Date
             }
+        }
+        .onChangeOfIsRequired(of: element) { newIsRequired in
+            isRequired = newIsRequired
+        }
+        .onChangeOfIsEditable(of: element) { newIsEditable in
+            isEditable = newIsEditable
         }
     }
     
@@ -116,7 +125,7 @@ struct DateTimeInput: View {
             
             if isEditing {
                 todayOrNowButton
-            } else if inputModel.isEditable {
+            } else if isEditable {
                 if date == nil {
                     Image(systemName: "calendar")
                         .foregroundColor(.secondary)
@@ -131,7 +140,7 @@ struct DateTimeInput: View {
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {
-                guard inputModel.isEditable else { return }
+                guard isEditable else { return }
                 if date == nil {
                     if dateRange.contains(.now) {
                         date = .now
