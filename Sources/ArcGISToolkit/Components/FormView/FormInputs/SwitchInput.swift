@@ -24,9 +24,12 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the input.
-***REMOVED***@StateObject var inputModel: FormInputModel
-***REMOVED***
+***REMOVED******REMOVED***/ State properties for element events.
+***REMOVED***@State var isRequired: Bool = false
+***REMOVED***@State var isEditable: Bool = false
+***REMOVED***@State var value: Any?
+***REMOVED***@State var formattedValue: String = ""
+
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the current value doesn't exist as an option in the domain.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ In this scenario a ``ComboBoxInput`` should be used instead.
@@ -59,9 +62,10 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = element.input as! SwitchFormInput
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***_inputModel = StateObject(
-***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***value = element.value
+***REMOVED******REMOVED***formattedValue = element.formattedValue
+***REMOVED******REMOVED***isRequired = element.isRequired
+***REMOVED******REMOVED***isEditable = element.isEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -73,7 +77,7 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
+***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(isOn ? input.onValue.name : input.offValue.name)
@@ -86,13 +90,13 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
+***REMOVED******REMOVED******REMOVED***.disabled(!isEditable)
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.formattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isOn = input.onValue.name == inputModel.formattedValue
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isOn = input.onValue.name == formattedValue
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: isOn) { isOn in
@@ -103,8 +107,16 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: inputModel.formattedValue) { formattedValue in
+***REMOVED******REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***value = newValue
+***REMOVED******REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
 ***REMOVED******REMOVED******REMOVED******REMOVED***isOn = formattedValue == input.onValue.name
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChangeOfIsRequired(of: element) { newIsRequired in
+***REMOVED******REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChangeOfIsEditable(of: element) { newIsEditable in
+***REMOVED******REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
