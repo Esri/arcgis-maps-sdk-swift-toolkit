@@ -22,9 +22,12 @@ struct TextInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
-    
+    /// State properties for element events.
+    @State var isRequired: Bool = false
+    @State var isEditable: Bool = false
+    @State var value: Any?
+    @State var formattedValue: String = ""
+
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
@@ -54,15 +57,17 @@ struct TextInput: View {
             "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self) or \(TextBoxFormInput.self)."
         )
         self.element = element
-        _inputModel = StateObject(
-            wrappedValue: FormInputModel(fieldFormElement: element)
-        )
+
+        value = element.value
+        formattedValue = element.formattedValue
+        isRequired = element.isRequired
+        isEditable = element.isEditable
     }
     
     var body: some View {
-        InputHeader(label: element.label, isRequired: inputModel.isRequired)
+        InputHeader(label: element.label, isRequired: isRequired)
             .padding([.top], elementPadding)
-        if inputModel.isEditable {
+        if isEditable {
             textField
         } else {
             Text(text.isEmpty ? "--" : text)
@@ -78,14 +83,7 @@ struct TextInput: View {
         )
         .padding([.bottom], elementPadding)
         .onAppear {
-            let text = inputModel.formattedValue
-            isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
-            self.text = isPlaceholder ? element.hint : text
-        }
-        .onChange(of: inputModel.formattedValue) { formattedValue in
-            let text = formattedValue
-            isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
-            self.text = isPlaceholder ? element.hint : text
+            updateText()
         }
         .onChange(of: isFocused) { isFocused in
             if isFocused && isPlaceholder {
@@ -117,6 +115,17 @@ struct TextInput: View {
             if element.isEditable {
                 model.evaluateExpressions()
             }
+        }
+        .onChangeOfValue(of: element) { newValue, newFormattedValue in
+            value = newValue
+            formattedValue = newFormattedValue
+            updateText()
+        }
+        .onChangeOfIsRequired(of: element) { newIsRequired in
+            isRequired = newIsRequired
+        }
+        .onChangeOfIsEditable(of: element) { newIsEditable in
+            isEditable = newIsEditable
         }
     }
 }
@@ -171,7 +180,7 @@ private extension TextInput {
                 }
             }
             .scrollContentBackgroundHidden()
-            if !text.isEmpty && inputModel.isEditable {
+            if !text.isEmpty && isEditable {
                 ClearButton { text.removeAll() }
                     .accessibilityIdentifier("\(element.label) Clear Button")
             }
@@ -202,6 +211,14 @@ private extension TextInput {
         } label: {
             Image(systemName: "plus.forwardslash.minus")
         }
+    }
+    
+    /// Updates ``text`` and ``placeholder`` values in response to
+    /// a change in ``formattedValue``.
+    private func updateText() {
+        let text = formattedValue
+        isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
+        self.text = isPlaceholder ? element.hint : text
     }
 }
 

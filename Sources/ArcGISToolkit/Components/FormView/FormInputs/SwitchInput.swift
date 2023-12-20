@@ -24,9 +24,12 @@ struct SwitchInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
-    
+    /// State properties for element events.
+    @State var isRequired: Bool = false
+    @State var isEditable: Bool = false
+    @State var value: Any?
+    @State var formattedValue: String = ""
+
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
     /// In this scenario a ``ComboBoxInput`` should be used instead.
@@ -59,9 +62,10 @@ struct SwitchInput: View {
         self.element = element
         self.input = element.input as! SwitchFormInput
         
-        _inputModel = StateObject(
-            wrappedValue: FormInputModel(fieldFormElement: element)
-        )
+        value = element.value
+        formattedValue = element.formattedValue
+        isRequired = element.isRequired
+        isEditable = element.isEditable
     }
     
     var body: some View {
@@ -73,7 +77,7 @@ struct SwitchInput: View {
             )
         } else {
             Group {
-                InputHeader(label: element.label, isRequired: inputModel.isRequired)
+                InputHeader(label: element.label, isRequired: isRequired)
                     .padding([.top], elementPadding)
                 HStack {
                     Text(isOn ? input.onValue.name : input.offValue.name)
@@ -86,13 +90,13 @@ struct SwitchInput: View {
                 .formInputStyle()
                 InputFooter(element: element, requiredValueMissing: requiredValueMissing)
             }
-            .disabled(!inputModel.isEditable)
+            .disabled(!isEditable)
             .padding([.bottom], elementPadding)
             .onAppear {
                 if element.formattedValue.isEmpty {
                     fallbackToComboBox = true
                 } else {
-                    isOn = input.onValue.name == inputModel.formattedValue
+                    isOn = input.onValue.name == formattedValue
                 }
             }
             .onChange(of: isOn) { isOn in
@@ -103,8 +107,16 @@ struct SwitchInput: View {
                 }
                 model.evaluateExpressions()
             }
-            .onChange(of: inputModel.formattedValue) { formattedValue in
+            .onChangeOfValue(of: element) { newValue, newFormattedValue in
+                value = newValue
+                formattedValue = newFormattedValue
                 isOn = formattedValue == input.onValue.name
+            }
+            .onChangeOfIsRequired(of: element) { newIsRequired in
+                isRequired = newIsRequired
+            }
+            .onChangeOfIsEditable(of: element) { newIsEditable in
+                isEditable = newIsEditable
             }
         }
     }
