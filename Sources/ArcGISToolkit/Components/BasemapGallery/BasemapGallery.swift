@@ -101,13 +101,12 @@ public struct BasemapGallery: View {
     /// Set using the `style` modifier.
     private var style: Style = .automatic()
     
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
     /// If `true`, the gallery will display as if the device is in a regular-width orientation.
     /// If `false`, the gallery will display as if the device is in a compact-width orientation.
     private var isRegularWidth: Bool {
-        !(horizontalSizeClass == .compact && verticalSizeClass == .regular)
+        !isPortraitOrientation
     }
     
     /// A Boolean value indicating whether to show an error alert.
