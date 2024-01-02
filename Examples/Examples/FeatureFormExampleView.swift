@@ -17,13 +17,16 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FeatureFormExampleView: View {
+    /// The size of the usable area provided to the `FeatureFormView`.
+    @Environment(\.isPortraitOrientation) private var isPortraitOrientation
+    
     /// The height of the map view's attribution bar.
     @State private var attributionBarHeight: CGFloat = 0
     
     /// A Boolean value indicating whether the alert confirming the user's intent to cancel is presented.
     @State private var cancelConfirmationIsPresented = false
     
-    /// The size of the usable area provided to the `FeatureFormView`.
+    /// The size of the usable area provided to the `FormView`.
     ///
     /// Use this to help avoid covering the feature being edited with the form.
     @State private var contentSize: CGSize?
@@ -59,8 +62,8 @@ struct FeatureFormExampleView: View {
                 .contentInsets(
                     .init(
                         top: .zero,
-                        leading: isFormPresented && /*!isCompact*/true ? contentSize?.width ?? .zero : .zero,
-                        bottom: isFormPresented && /*isCompact*/false && detent != .full ? contentSize?.height ?? .zero : .zero,
+                        leading: isFormPresented && !isPortraitOrientation ? contentSize?.width ?? .zero : .zero,
+                        bottom: isFormPresented && isPortraitOrientation && detent != .full ? contentSize?.height ?? .zero : .zero,
                         trailing: .zero
                     )
                 )
