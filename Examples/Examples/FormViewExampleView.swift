@@ -17,6 +17,9 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FormViewExampleView: View {
+    @Environment(\.isPortraitOrientation)
+    private var isPortraitOrientation
+    
     /// The size of the usable area provided to the `FormView`.
     ///
     /// Use this to help avoid covering the feature being edited with the form.
@@ -66,8 +69,8 @@ struct FormViewExampleView: View {
                 .contentInsets(
                     .init(
                         top: .zero,
-                        leading: isFormPresented && /*!isCompact*/true ? contentSize?.width ?? .zero : .zero,
-                        bottom: isFormPresented && /*isCompact*/false && detent != .full ? contentSize?.height ?? .zero : .zero,
+                        leading: isFormPresented && !isPortraitOrientation ? contentSize?.width ?? .zero : .zero,
+                        bottom: isFormPresented && isPortraitOrientation && detent != .full ? contentSize?.height ?? .zero : .zero,
                         trailing: .zero
                     )
                 )
