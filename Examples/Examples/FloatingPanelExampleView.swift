@@ -16,6 +16,9 @@ import ArcGISToolkit
 import ArcGIS
 
 struct FloatingPanelExampleView: View {
+    /// The height of the map view's attribution bar.
+    @State private var attributionBarHeight: CGFloat = 0
+    
     /// The data model containing the `Map` displayed in the `MapView`.
     @StateObject private var dataModel = MapDataModel(
         map: Map(basemapStyle: .arcGISImagery)
@@ -38,7 +41,15 @@ struct FloatingPanelExampleView: View {
             map: dataModel.map,
             viewpoint: initialViewpoint
         )
-        .floatingPanel(selectedDetent: $selectedDetent, isPresented: isPresented) {
+        .onAttributionBarHeightChanged {
+            attributionBarHeight = $0
+        }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
+        .floatingPanel(
+            attributionBarHeight: attributionBarHeight,
+            selectedDetent: $selectedDetent,
+            isPresented: isPresented
+        ) {
             switch demoContent {
             case .list:
                 FloatingPanelListDemoContent(selectedDetent: $selectedDetent)

@@ -15,7 +15,8 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-struct BookmarksTestView: View {
+/// A view that displays the Bookmarks component initialized with a GeoModel containing bookmarks.
+struct BookmarksTestCase1View: View {
     /// The `Map` with predefined bookmarks.
     @State private var map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
     
