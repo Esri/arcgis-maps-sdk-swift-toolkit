@@ -18,6 +18,17 @@
 ***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with
 ***REMOVED***/ a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
+***REMOVED***@Environment(\.horizontalSizeClass)
+***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
+***REMOVED***
+***REMOVED***@Environment(\.verticalSizeClass)
+***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the environment is compact.
+***REMOVED***private var isCompact: Bool {
+***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The map with the utility networks.
 ***REMOVED***@State private var map = makeMap()
 ***REMOVED***
@@ -37,38 +48,43 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***@State var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapViewReader { mapViewProxy in
-***REMOVED******REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [resultGraphicsOverlay]
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, mapPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED***self.screenPoint = screenPoint
-***REMOVED******REMOVED******REMOVED******REMOVED***self.mapPoint = mapPoint
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***let publicSample = try? await ArcGISCredential.publicSample
-***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.floatingPanel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: Color(uiColor: .systemGroupedBackground),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $activeDetent,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .trailing,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true)
-***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: $resultGraphicsOverlay,
+***REMOVED******REMOVED***GeometryReader { geometryProxy in
+***REMOVED******REMOVED******REMOVED***MapViewReader { mapViewProxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***MapView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: $mapPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***screenPoint: $screenPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewProxy: mapViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [resultGraphicsOverlay]
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanelDetent($activeDetent)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, mapPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.screenPoint = screenPoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.mapPoint = mapPoint
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let publicSample = try? await ArcGISCredential.publicSample
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: Color(uiColor: .systemGroupedBackground),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $activeDetent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .trailing,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true)
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: $resultGraphicsOverlay,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: $mapPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***screenPoint: $screenPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewProxy: mapViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanelDetent($activeDetent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Manually account for a device's bottom safe area when using a Floating Panel.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** See also #518.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? geometryProxy.safeAreaInsets.bottom : nil)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

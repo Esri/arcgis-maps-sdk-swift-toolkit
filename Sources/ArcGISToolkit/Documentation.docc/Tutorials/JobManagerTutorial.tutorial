@@ -1,0 +1,138 @@
+@Tutorial(time: 30) {
+***REMOVED***@Intro(title: "JobManager Tutorial") {
+***REMOVED******REMOVED***The `JobManager` manages saving and loading jobs so that they can continue to run if the app is backgrounded or even terminated.
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Image(source: JobManagerTutorial, alt: "An image of the JobManager component.")
+***REMOVED***
+***REMOVED***
+***REMOVED***@Section(title: "Getting started with the JobManager") {
+***REMOVED******REMOVED***@ContentAndMedia {
+***REMOVED******REMOVED******REMOVED***@Image(source: JobManagerTutorial, alt: "An image of the JobManager component.")
+***REMOVED******REMOVED******REMOVED***In this tutorial you will use a job that generates an offline map. The job will connect to a service, ask the service to generate an offline map, poll the status of the job, and then download the offline map once it is ready.
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@Steps {
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Create the JobManagerTutorialView struct. Add properties and start the UI for adding a job to the job manager. 
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Begin by adding a JobManager property as an observed object. Add state properties for `job`, `error`, and a boolean that you'll use to show progress when adding a job. Start the UI by adding a button to take a map offline and a progress indicator to show that the job is being added. This will be the UI before a job has been added (`job == nil`).
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep1) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: JobManagerTakeMapOfflineButton, alt: "An Image of an iPhone app with a Take Map Offline button.")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add an extension containing the helper function for making the job.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***The function makes a map from a URL, then uses a task to make the generate offline map job.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep2, previousFile: JobManagerViewStep1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Make the UI that will show when a job has been added to the job manager.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***To begin, add a state variable for the job status. Just after the check to see if we have a job, add a progress view that will show the progress of the job. Next, add a button to remove the job from the job manager and start over; give it the title "Start New Job". Last add a task to keep track of the job status in the status state variable.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep3, previousFile: JobManagerViewStep2) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: JobManagerTutorial, alt: "An Image of an iPhone app with a progress bar and Start New Job button.")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Let's look at what we have so far. When the "Take Map Offline" button is tapped, a job is added to the job manager and the job is started.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***The first thing the job does is connect to the specified server to kick off the process that will make a mobile map package. Jobs are intended to be used with longer running service tasks. Once the work on the server is started the job waits and occasionally polls the service for the status of the service work.
+
+***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: JobManagerTutorialJobStart, alt: "An image of the app UI with a progress bar four percent done.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***To know when the work on the server is done, the job polls the service. The job periodically requests the status of the work the service is doing.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***For this tutorial, the service is collecting all the parts of a map and putting them together to create a mobile map package.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: JobManagerTutorialJobPoll, alt: "An image of the app UI with a progress bar twenty-one percent done.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Eventually, the job will poll the service and receive the response that the work is complete and there is a result available to download. At this point the job starts a URL session and downloads the result.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***The mobile map package is downloaded from the server to a local folder.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: JobManagerTutorialJobDownload, alt: "An image of the app UI with a progress bar one hundred percent done.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***To generate the offline map you will need an API key or credential. This step show how to add an API key. To use a credential refer to the AuthenticatorTutorial.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Once an API key has been added the project can be built and run. Tap the "Take Map Offline" button to add the job to the job manager and start the job. The offline map will be generated and downloaded. As long as the tutorial app is running in the foreground the job will finish and we'll get the mobile map package. However, we know that people don't use their devices like that. What we want is for people to be able to start a job, do other things on their device while the job runs and get a notification when the job finishes. In the next steps you will add the code to handle the app being backgrounded or terminated.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "JobManagerTutorialApp.swift", file: JobManagerAppStep1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Adding background tasks begins with some project settings. Enable the kind of background processing needed by the app in the Background Modes. The job manager uses "Background fetch".
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***The job manager registers a background task to allow all of its jobs to check the status of the work happening on the servers. Getting the status is a lightweight operation that requires "Background fetch" mode.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: JobManagerTutorialBackgroundFetch, alt: "An image of the Background Modes settings with the Background fetch mode checked.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Now tell the background task scheduler the identifier of the task that we want to run in the background. This is done in the project info for the app target. Add "com.esri.ArcGISToolkit.jobManager.statusCheck" as the first item in the Permitted Background Task Scheduler Identifiers.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***The job manager will register a background task with this identifier and submit a request to be allotted periodic background processing time. In this tutorial we will ask to be given time every 30 seconds. When the app gets background time is at the operating system's discretion; it may or may not be anywhere close to 30 seconds.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Image(source: JobManagerTutorialPermittedIdentifiers, alt: "An image of the list of Permitted Background Task Scheduler Identifiers.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***The code needed for setting up the background task tells the job manager how often it should ask to be woken up to check status.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Add an init to JobManagerTutorialView. In the init, use `preferredBackgroundStatusCheckSchedule` on the job manager to set the job manager to request to be woken up every 30 seconds. This setting along with the two project settings complete the set up necessary for the job manager to check the status of jobs when the app is backgrounded.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep4, previousFile: JobManagerViewStep3)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***The operating system may determine to terminate your app if the app is suspended. We'll now turn our attention to handling that situation occurring while jobs are running. In the tutorial app, add code to a task that will run if the app gets launched because a download finished.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a backgroundTask that responds to the URLSession that gets set up by the SDK in the ArcGISEnvironment. This is the task that will run if the URL session completes a download after the app has been terminated. In the background task, handle the background URL session events. Also, resume any jobs that have been paused; this will also recreate any URL sessions that finished while the app was in the background. Note: background operation only works on a device not connected to the debugger.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "JobManagerTutorialApp.swift", file: JobManagerAppStep2, previousFile: JobManagerAppStep1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***With the background processing set up, we'll work on the notification for when downloads finish while the app is backgrounded.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***At the end of the `body` property, add an `onAppear` modifier and in the closure request authorization to send the user notifications.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep5, previousFile: JobManagerViewStep4)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***After the `body` property add a method to construct and send a notification.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep6, previousFile: JobManagerViewStep5)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Add the code to send a notification when the job completes.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Find the task in the body property that is awaiting changes to the job status. Add the code to call `notifyJobCompleted` when the job status becomes `failed` or `succeeded`.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep7, previousFile: JobManagerViewStep6)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***In the case that the app was terminated when running a job, the state will be reloaded when the app is launched. In this case we need to populate the current job with the first job from the jobManager's jobs.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Add code in `onAppear` to populate the job property.
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "JobManagerTutorialView.swift", file: JobManagerViewStep8, previousFile: JobManagerViewStep7)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***

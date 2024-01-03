@@ -16,16 +16,18 @@ To use Toolkit in your project:
 * **[Compass](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map points north.
 * **[FloatingPanel](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/floatingpanel)** - Allows display of view-related content in a "bottom sheet". 
 * **[FloorFilter](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/floorfilter)** - Allows filtering of floor plan data in a geo view by a site, a building in the site, or a floor in the building.
+* **[FlyoverSceneView](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/flyoversceneview)** - Allows you to explore a scene using your device as a window into the virtual world.
 * **[JobManager](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/jobmanager)** - Manages saving and loading jobs so that they can continue to run if the app is backgrounded or even terminated by the system.
 * **[OverviewMap](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/overviewmap)** - Displays the visible extent of a geo view in a small "inset" map.
 * **[PopupView](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/popupview)** - Displays details, media, and attachments of features and graphics.
 * **[Scalebar](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/scalebar)** - Displays current scale reference.
 * **[SearchView](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/searchview)** - Displays a search experience for geo views.
+* **[TableTopSceneView](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/tabletopsceneview)** - Allows you to anchor scene content to a physical surface, as if it were a 3D-printed model.
 * **[UtilityNetworkTrace](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/utilitynetworktrace)** - Runs traces on a web map published with a utility network and trace configurations.
 
 ## Requirements
 * ArcGIS Maps SDK for Swift
-* Xcode 14.1 (or newer)
+* Xcode 15.0 (or newer)
 
 The *ArcGIS Maps SDK for Swift Toolkit* has a *Target SDK* version of *15.0*, meaning that it can run on devices with *iOS 15.0* or newer.
 
