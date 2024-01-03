@@ -24,11 +24,11 @@ struct RadioButtonsInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// State properties for element events.
-    @State var isRequired: Bool = false
-    @State var isEditable: Bool = false
-    @State var value: Any?
-    @State var formattedValue: String = ""
+    // State properties for element events.
+    
+    @State private var isRequired: Bool = false
+    @State private var isEditable: Bool = false
+    @State private var value: Any?
 
     /// The set of options in the input.
     @State private var codedValues = [CodedValue]()
@@ -60,11 +60,6 @@ struct RadioButtonsInput: View {
         
         self.element = element
         self.input = element.input as! RadioButtonsFormInput
-        
-        value = element.value
-        formattedValue = element.formattedValue
-        isRequired = element.isRequired
-        isEditable = element.isEditable
     }
     
     var body: some View {
@@ -112,9 +107,7 @@ struct RadioButtonsInput: View {
             .padding([.bottom], elementPadding)
             .onAppear {
                 codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
-                if let selectedValue = codedValues.first(where: { $0.name == element.formattedValue }) {
-                    self.selectedValue = selectedValue
-                } else if !element.formattedValue.isEmpty {
+                if !element.formattedValue.isEmpty {
                     fallbackToComboBox = true
                 }
             }
@@ -129,8 +122,7 @@ struct RadioButtonsInput: View {
             }
             .onChangeOfValue(of: element) { newValue, newFormattedValue in
                 value = newValue
-                formattedValue = newFormattedValue
-                selectedValue = codedValues.first { $0.name == formattedValue }
+                selectedValue = codedValues.first { $0.name == newFormattedValue }
             }
             .onChangeOfIsRequired(of: element) { newIsRequired in
                 isRequired = newIsRequired

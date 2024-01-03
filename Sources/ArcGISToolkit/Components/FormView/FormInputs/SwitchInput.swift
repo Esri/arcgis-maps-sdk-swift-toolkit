@@ -24,11 +24,10 @@ struct SwitchInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// State properties for element events.
-    @State var isRequired: Bool = false
-    @State var isEditable: Bool = false
-    @State var value: Any?
-    @State var formattedValue: String = ""
+    // State properties for element events.
+    
+    @State private var isRequired: Bool = false
+    @State private var isEditable: Bool = false
 
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
@@ -61,11 +60,6 @@ struct SwitchInput: View {
         
         self.element = element
         self.input = element.input as! SwitchFormInput
-        
-        value = element.value
-        formattedValue = element.formattedValue
-        isRequired = element.isRequired
-        isEditable = element.isEditable
     }
     
     var body: some View {
@@ -95,8 +89,6 @@ struct SwitchInput: View {
             .onAppear {
                 if element.formattedValue.isEmpty {
                     fallbackToComboBox = true
-                } else {
-                    isOn = input.onValue.name == formattedValue
                 }
             }
             .onChange(of: isOn) { isOn in
@@ -108,9 +100,7 @@ struct SwitchInput: View {
                 model.evaluateExpressions()
             }
             .onChangeOfValue(of: element) { newValue, newFormattedValue in
-                value = newValue
-                formattedValue = newFormattedValue
-                isOn = formattedValue == input.onValue.name
+                isOn = newFormattedValue == input.onValue.name
             }
             .onChangeOfIsRequired(of: element) { newIsRequired in
                 isRequired = newIsRequired
