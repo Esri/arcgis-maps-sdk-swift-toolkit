@@ -24,11 +24,11 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ State properties for element events.
-***REMOVED***@State var isRequired: Bool = false
-***REMOVED***@State var isEditable: Bool = false
-***REMOVED***@State var value: Any?
-***REMOVED***@State var formattedValue: String = ""
+***REMOVED******REMOVED*** State properties for element events.
+***REMOVED***
+***REMOVED***@State private var isRequired: Bool = false
+***REMOVED***@State private var isEditable: Bool = false
+***REMOVED***@State private var value: Any?
 
 ***REMOVED******REMOVED***/ The set of options in the input.
 ***REMOVED***@State private var codedValues = [CodedValue]()
@@ -60,11 +60,6 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = element.input as! RadioButtonsFormInput
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***value = element.value
-***REMOVED******REMOVED***formattedValue = element.formattedValue
-***REMOVED******REMOVED***isRequired = element.isRequired
-***REMOVED******REMOVED***isEditable = element.isEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -112,9 +107,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
-***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = codedValues.first(where: { $0.name == element.formattedValue ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.selectedValue = selectedValue
-***REMOVED******REMOVED******REMOVED*** else if !element.formattedValue.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !element.formattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -129,8 +122,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***value = newValue
-***REMOVED******REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == formattedValue ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == newFormattedValue ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChangeOfIsRequired(of: element) { newIsRequired in
 ***REMOVED******REMOVED******REMOVED******REMOVED***isRequired = newIsRequired

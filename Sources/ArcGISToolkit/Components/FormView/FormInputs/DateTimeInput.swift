@@ -22,11 +22,11 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ State properties for element events.
-***REMOVED***@State var isRequired: Bool = false
-***REMOVED***@State var isEditable: Bool = false
-***REMOVED***@State var value: Any?
-***REMOVED***@State var formattedValue: String = ""
+***REMOVED******REMOVED*** State properties for element events.
+***REMOVED***
+***REMOVED***@State private var isRequired: Bool = false
+***REMOVED***@State private var isEditable: Bool = false
+***REMOVED***@State private var formattedValue: String = ""
 
 ***REMOVED******REMOVED***/ The current date selection.
 ***REMOVED***@State private var date: Date?
@@ -54,10 +54,6 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = element.input as! DateTimePickerFormInput
-***REMOVED******REMOVED***value = element.value
-***REMOVED******REMOVED***formattedValue = element.formattedValue
-***REMOVED******REMOVED***isRequired = element.isRequired
-***REMOVED******REMOVED***isEditable = element.isEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -73,13 +69,6 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
 ***REMOVED******REMOVED******REMOVED***isEditing = focusedElement == element
 ***REMOVED***
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***if formattedValue.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***date = value as? Date
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { date in
 ***REMOVED******REMOVED******REMOVED***requiredValueMissing = isRequired && date == nil
 ***REMOVED******REMOVED******REMOVED***do {
@@ -90,11 +79,12 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
 ***REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in
-***REMOVED******REMOVED******REMOVED***if formattedValue.isEmpty {
+***REMOVED******REMOVED******REMOVED***if newFormattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***date = newValue as? Date
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
 ***REMOVED***
 ***REMOVED******REMOVED***.onChangeOfIsRequired(of: element) { newIsRequired in
 ***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
@@ -117,7 +107,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***/ - Note: Secondary foreground color is used across input views for consistency.
 ***REMOVED***@ViewBuilder var dateDisplay: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Text(formattedDate ?? .noValue)
+***REMOVED******REMOVED******REMOVED***Text(!formattedValue.isEmpty ? formattedValue : .noValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Value")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(displayColor)
 ***REMOVED******REMOVED******REMOVED***
@@ -187,15 +177,6 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***return .accentColor
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return .primary
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The human-readable date and time selection.
-***REMOVED***var formattedDate: String? {
-***REMOVED******REMOVED***if input.includeTime {
-***REMOVED******REMOVED******REMOVED***return date?.formatted(.dateTime.day().month().year().hour().minute())
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return date?.formatted(.dateTime.day().month().year())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

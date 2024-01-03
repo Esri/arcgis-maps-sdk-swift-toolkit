@@ -24,11 +24,12 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ State properties for element events.
-***REMOVED***@State var isRequired: Bool = false
-***REMOVED***@State var isEditable: Bool = false
-***REMOVED***@State var value: Any?
-***REMOVED***@State var formattedValue: String = ""
+***REMOVED******REMOVED*** State properties for element events.
+***REMOVED***
+***REMOVED***@State private var isRequired: Bool = false
+***REMOVED***@State private var isEditable: Bool = false
+***REMOVED***@State private var value: Any?
+***REMOVED***@State private var formattedValue: String = ""
 
 ***REMOVED******REMOVED***/ The set of options in the combo box.
 ***REMOVED***@State private var codedValues = [CodedValue]()
@@ -77,11 +78,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***let input = element.input as! ComboBoxFormInput
 ***REMOVED******REMOVED***self.noValueLabel = input.noValueLabel
 ***REMOVED******REMOVED***self.noValueOption = input.noValueOption
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***value = element.value
-***REMOVED******REMOVED***formattedValue = element.formattedValue
-***REMOVED******REMOVED***isRequired = element.isRequired
-***REMOVED******REMOVED***isEditable = element.isEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a combo box input.
@@ -135,7 +131,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
-***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == formattedValue ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
 ***REMOVED******REMOVED******REMOVED***requiredValueMissing = isRequired && selectedValue == nil
