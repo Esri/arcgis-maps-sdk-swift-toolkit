@@ -17,10 +17,10 @@ import ArcGIS
 import ArcGISToolkit
 import CoreLocation
 
-/// An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
+/// An example that utilizes the `WorldScaleGeoTrackingSceneView` to show an augmented reality view
 /// of your current location. Because this is an example that can be run from anywhere,
 /// it places a red circle around your initial location which can be explored.
-struct WorldScaleExampleView: View {
+struct WorldScaleGeoTrackingExampleView: View {
     @State private var scene: ArcGIS.Scene = {
         // Creates an elevation source from Terrain3D REST service.
         let elevationServiceURL = URL(string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!
@@ -32,6 +32,7 @@ struct WorldScaleExampleView: View {
         scene.baseSurface.backgroundGrid.isVisible = false
         scene.baseSurface.navigationConstraint = .unconstrained
         scene.basemap = Basemap(style: .arcGISImagery)
+        scene.addOperationalLayer(parcelsLayer)
         return scene
     }()
     
@@ -42,9 +43,19 @@ struct WorldScaleExampleView: View {
     /// The location datasource that is used to access the device location.
     @State private var locationDatasSource = SystemLocationDataSource()
     
+    static var parcelsTable: ServiceFeatureTable {
+        ServiceFeatureTable(url: URL(string: "https://services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
+    }
+    
+    static var parcelsLayer: FeatureLayer {
+        let featureLayer = FeatureLayer(featureTable: parcelsTable)
+        featureLayer.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .cyan, width: 3))
+        return featureLayer
+    }
+    
     var body: some View {
         VStack {
-            WorldScaleSceneView { proxy in
+            WorldScaleGeoTrackingSceneView { proxy in
                 SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
                     .onSingleTapGesture { screen, _ in
                         print("Identifying...")
