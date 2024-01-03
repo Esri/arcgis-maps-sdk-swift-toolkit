@@ -133,7 +133,7 @@ private extension URL {
 }
 
 /// The model class for the form example view
-class Model: ObservableObject {
+@MainActor class Model: ObservableObject {
     /// The feature form.
     @Published var featureForm: FeatureForm? {
         didSet {
