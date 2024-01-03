@@ -24,11 +24,12 @@ struct ComboBoxInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// State properties for element events.
-    @State var isRequired: Bool = false
-    @State var isEditable: Bool = false
-    @State var value: Any?
-    @State var formattedValue: String = ""
+    // State properties for element events.
+    
+    @State private var isRequired: Bool = false
+    @State private var isEditable: Bool = false
+    @State private var value: Any?
+    @State private var formattedValue: String = ""
 
     /// The set of options in the combo box.
     @State private var codedValues = [CodedValue]()
@@ -77,11 +78,6 @@ struct ComboBoxInput: View {
         let input = element.input as! ComboBoxFormInput
         self.noValueLabel = input.noValueLabel
         self.noValueOption = input.noValueOption
-        
-        value = element.value
-        formattedValue = element.formattedValue
-        isRequired = element.isRequired
-        isEditable = element.isEditable
     }
     
     /// Creates a view for a combo box input.
@@ -135,7 +131,6 @@ struct ComboBoxInput: View {
         .padding([.bottom], elementPadding)
         .onAppear {
             codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
-            selectedValue = codedValues.first { $0.name == formattedValue }
         }
         .onChange(of: selectedValue) { selectedValue in
             requiredValueMissing = isRequired && selectedValue == nil
