@@ -123,25 +123,6 @@ extension View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets a closure to perform when a single tap occurs on the view.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - action: The closure to perform upon single tap.
-***REMOVED******REMOVED***/   - screenPoint: The location of the tap in the view's coordinate space.
-***REMOVED***func onSingleTapGesture(perform action: @escaping (_ screenPoint: CGPoint) -> Void) -> some View {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***return self.onTapGesture { screenPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED***action(screenPoint)
-***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return self.gesture(
-***REMOVED******REMOVED******REMOVED******REMOVED***DragGesture()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onEnded { dragAttributes in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(dragAttributes.location)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***
 
 extension View {
 ***REMOVED******REMOVED***/ Adds an action to perform when this view detects data emitted by the
