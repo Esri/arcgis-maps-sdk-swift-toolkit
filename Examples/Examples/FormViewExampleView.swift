@@ -20,10 +20,9 @@ struct FormViewExampleView: View {
     @Environment(\.isPortraitOrientation)
     private var isPortraitOrientation
     
-    /// The size of the usable area provided to the `FormView`.
-    ///
-    /// Use this to help avoid covering the feature being edited with the form.
-    @State private var contentSize: CGSize?
+    /// The distances to inset the map content to avoid covering the feature of interest with the
+    /// form.
+    @State private var contentInsets: EdgeInsets?
     
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
@@ -66,14 +65,7 @@ struct FormViewExampleView: View {
                         identifyScreenPoint = screenPoint
                     }
                 }
-                .contentInsets(
-                    .init(
-                        top: .zero,
-                        leading: isFormPresented && !isPortraitOrientation ? contentSize?.width ?? .zero : .zero,
-                        bottom: isFormPresented && isPortraitOrientation && detent != .full ? contentSize?.height ?? .zero : .zero,
-                        trailing: .zero
-                    )
-                )
+                .contentInsets(contentInsets ?? .init())
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy),
                        let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition,
@@ -97,8 +89,13 @@ struct FormViewExampleView: View {
                     GeometryReader { geometryProxy in
                         FormView(featureForm: featureForm)
                             .padding([.horizontal])
-                            .onChange(of: geometryProxy.size) {
-                                contentSize = $0
+                            .onChange(of: geometryProxy.size) { size in
+                                contentInsets = .init(
+                                    top: .zero,
+                                    leading: isFormPresented && !isPortraitOrientation ? size.width : .zero,
+                                    bottom: isFormPresented && isPortraitOrientation && detent != .full ? size.height : .zero,
+                                    trailing: .zero
+                                )
                             }
                     }
                 }
