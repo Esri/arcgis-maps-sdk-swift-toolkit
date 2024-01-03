@@ -18,6 +18,17 @@ import SwiftUI
 /// A demonstration of the utility network trace tool which runs traces on a web map published with
 /// a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass: UserInterfaceSizeClass?
+    
+    @Environment(\.verticalSizeClass)
+    private var verticalSizeClass: UserInterfaceSizeClass?
+    
+    /// A Boolean value indicating whether the environment is compact.
+    private var isCompact: Bool {
+        horizontalSizeClass == .compact && verticalSizeClass == .regular
+    }
+    
     /// The map with the utility networks.
     @State private var map = makeMap()
     
@@ -37,38 +48,43 @@ struct UtilityNetworkTraceExampleView: View {
     @State var viewpoint: Viewpoint?
     
     var body: some View {
-        MapViewReader { mapViewProxy in
-            MapView(
-                map: map,
-                viewpoint: viewpoint,
-                graphicsOverlays: [resultGraphicsOverlay]
-            )
-            .onSingleTapGesture { screenPoint, mapPoint in
-                self.screenPoint = screenPoint
-                self.mapPoint = mapPoint
-            }
-            .onViewpointChanged(kind: .centerAndScale) {
-                viewpoint = $0
-            }
-            .task {
-                let publicSample = try? await ArcGISCredential.publicSample
-                ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
-            }
-            .floatingPanel(
-                    backgroundColor: Color(uiColor: .systemGroupedBackground),
-                    selectedDetent: $activeDetent,
-                    horizontalAlignment: .trailing,
-                    isPresented: .constant(true)
-            ) {
-                UtilityNetworkTrace(
-                    graphicsOverlay: $resultGraphicsOverlay,
+        GeometryReader { geometryProxy in
+            MapViewReader { mapViewProxy in
+                MapView(
                     map: map,
-                    mapPoint: $mapPoint,
-                    screenPoint: $screenPoint,
-                    mapViewProxy: mapViewProxy,
-                    viewpoint: $viewpoint
+                    viewpoint: viewpoint,
+                    graphicsOverlays: [resultGraphicsOverlay]
                 )
-                .floatingPanelDetent($activeDetent)
+                .onSingleTapGesture { screenPoint, mapPoint in
+                    self.screenPoint = screenPoint
+                    self.mapPoint = mapPoint
+                }
+                .onViewpointChanged(kind: .centerAndScale) {
+                    viewpoint = $0
+                }
+                .task {
+                    let publicSample = try? await ArcGISCredential.publicSample
+                    ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
+                }
+                .floatingPanel(
+                        backgroundColor: Color(uiColor: .systemGroupedBackground),
+                        selectedDetent: $activeDetent,
+                        horizontalAlignment: .trailing,
+                        isPresented: .constant(true)
+                ) {
+                    UtilityNetworkTrace(
+                        graphicsOverlay: $resultGraphicsOverlay,
+                        map: map,
+                        mapPoint: $mapPoint,
+                        screenPoint: $screenPoint,
+                        mapViewProxy: mapViewProxy,
+                        viewpoint: $viewpoint
+                    )
+                    .floatingPanelDetent($activeDetent)
+                    // Manually account for a device's bottom safe area when using a Floating Panel.
+                    // See also #518.
+                    .padding(.bottom, isCompact ? geometryProxy.safeAreaInsets.bottom : nil)
+                }
             }
         }
     }
