@@ -16,28 +16,36 @@ import ARKit
 import SwiftUI
 import ArcGIS
 
-/// A scene view that provides an augmented reality world scale experience.
-public struct WorldScaleSceneView: View {
+/// A scene view that provides an augmented reality world scale experience using geotracking.
+public struct WorldScaleGeoTrackingSceneView: View {
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
-    /// The proxy for the scene view.
-    @State private var sceneViewProxy: SceneViewProxy?
     /// The camera controller that will be set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
-    /// Status text displayed.
-    @State private var statusText: String = ""
     /// The location datasource that is used to access the device location.
-    @State private var locationDatasSource: LocationDataSource
+    @State private var locationDataSource: LocationDataSource
     /// A Boolean value indicating if the camera was initially set.
     @State private var initialCameraIsSet = false
+    /// A Boolean value that indicates whether to hide the coaching overlay view.
+    private var coachingOverlayIsHidden: Bool = false
+    /// A Boolean value that indicates whether the coaching overlay view is active.
+    @State private var coachingOverlayIsActive: Bool = true
     /// The current camera of the scene view.
     @State private var currentCamera: Camera?
+    /// A Boolean value that indicates whether the calibration view is hidden.
+    @State private var calibrationViewIsHidden: Bool = false
+    /// The calibrated camera heading.
+    @State private var calibrationHeading: Double? = nil
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The configuration for the AR session.
     private let configuration: ARConfiguration
+    /// The timestamp of the last recieved location.
+    @State private var lastLocationTimestamp: TimeInterval?
+    /// The current device location.
+    @State private var currentLocation: Location?
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -61,60 +69,53 @@ public struct WorldScaleSceneView: View {
         cameraController.clippingDistance = clippingDistance
         _cameraController = .init(initialValue: cameraController)
         
-        configuration = ARWorldTrackingConfiguration()
-        configuration.worldAlignment = .gravityAndHeading
+        if ARGeoTrackingConfiguration.isSupported {
+            configuration = ARGeoTrackingConfiguration()
+        } else {
+            configuration = ARWorldTrackingConfiguration()
+            configuration.worldAlignment = .gravityAndHeading
+        }
         
-        _locationDatasSource = .init(initialValue: locationDataSource)
+        _locationDataSource = .init(initialValue: locationDataSource)
     }
     
     public var body: some View {
-        ZStack {
-            ARSwiftUIView(proxy: arViewProxy)
-                .onDidUpdateFrame { _, frame in
-                    guard let sceneViewProxy, let interfaceOrientation, initialCameraIsSet else { return }
-                    
-                    sceneViewProxy.updateCamera(
-                        frame: frame,
-                        cameraController: cameraController,
-                        orientation: interfaceOrientation,
-                        initialTransformation: .identity
-                    )
-                    sceneViewProxy.setFieldOfView(
-                        for: frame,
-                        orientation: interfaceOrientation
-                    )
-                    
-                    sceneViewProxy.draw()
-                }
-            
-            if initialCameraIsSet {
-                SceneViewReader { proxy in
-                    sceneViewBuilder(proxy)
+        SceneViewReader { sceneViewProxy in
+            ZStack {
+                ARSwiftUIView(proxy: arViewProxy)
+                    .onDidUpdateFrame { _, frame in
+                        guard let interfaceOrientation, initialCameraIsSet else { return }
+                        
+                        sceneViewProxy.updateCamera(
+                            frame: frame,
+                            cameraController: cameraController,
+                            orientation: interfaceOrientation,
+                            initialTransformation: .identity
+                        )
+                        sceneViewProxy.setFieldOfView(
+                            for: frame,
+                            orientation: interfaceOrientation
+                        )
+                    }
+                
+                if initialCameraIsSet {
+                    sceneViewBuilder(sceneViewProxy)
                         .cameraController(cameraController)
                         .attributionBarHidden(true)
                         .spaceEffect(.transparent)
                         .atmosphereEffect(.off)
-                        .viewDrawingMode(.manual)
                         .interactiveNavigationDisabled(true)
                         .onCameraChanged { camera in
                             self.currentCamera = camera
                         }
-                        .onAppear {
-                            // Capture scene view proxy as a workaround for a bug where
-                            // preferences set for `ARSwiftUIView` are not honored. The
-                            // issue has been logged with a bug report with ID FB13188508.
-                            self.sceneViewProxy = proxy
-                        }
                 }
-            }
-        }
-        .overlay(alignment: .top) {
-            if !statusText.isEmpty {
-                Text(statusText)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(8)
-                    .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+                
+                if !coachingOverlayIsHidden {
+                    ARCoachingOverlay(goal: .geoTracking)
+                        .sessionProvider(arViewProxy)
+                        .active(coachingOverlayIsActive)
+                        .allowsHitTesting(false)
+                }
             }
         }
         .observingInterfaceOrientation($interfaceOrientation)
@@ -123,34 +124,49 @@ public struct WorldScaleSceneView: View {
         }
         .onDisappear {
             arViewProxy.session.pause()
+            Task { await locationDataSource.stop() }
         }
         .task {
             do {
-                withAnimation {
-                    statusText = "Acquiring current location."
-                }
-                try await locationDatasSource.start()
+                try await locationDataSource.start()
                 await withTaskGroup(of: Void.self) { group in
                     group.addTask {
-                        for await location in locationDatasSource.locations {
-                            await updateSceneView(for: location)
+                        for await location in locationDataSource.locations {
+                            self.lastLocationTimestamp = Date().timeIntervalSinceNow
+                            for await heading in locationDataSource.headings {
+                                await updateSceneView(for: location, heading: heading)
+                                self.currentLocation = location
+                            }
                         }
                     }
                 }
-            } catch {
-                withAnimation {
-                    statusText = "Failed to acquire current location."
+            } catch {}
+        }
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                if !calibrationViewIsHidden {
+                    calibrationView
                 }
             }
+        }
+        .overlay(alignment: .top) {
+            accuracyView
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(8)
+                .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
         }
     }
     
     /// If necessary, updates the scene view's camera controller for a new location coming
     /// from the location datasource.
     @MainActor
-    private func updateSceneView(for location: Location) {
+    private func updateSceneView(for location: Location, heading: Double) {
+        // Do not use cached location more than 10 seconds old.
+        guard abs(lastLocationTimestamp ?? 0) < 10 else { return }
+    
         // Make sure there is at least a minimum horizontal and vertical accuracy.
-        guard location.horizontalAccuracy < 10 && location.verticalAccuracy < 10 else { return }
+        guard location.horizontalAccuracy < 45 && location.verticalAccuracy < 45 else { return }
         
         // Make sure either the initial camera is not set, or we need to update the camera.
         guard (!initialCameraIsSet || shouldUpdateCamera(for: location)) else { return }
@@ -163,7 +179,7 @@ public struct WorldScaleSceneView: View {
             latitude: location.position.y,
             longitude: location.position.x,
             altitude: altitude,
-            heading: 0,
+            heading: calibrationHeading ?? heading,
             pitch: 90,
             roll: 0
         )
@@ -175,10 +191,10 @@ public struct WorldScaleSceneView: View {
         // If initial camera is not set, then we set it the flag here to true
         // and set the status text to empty.
         if !initialCameraIsSet {
+            coachingOverlayIsActive = false
             withAnimation {
-                statusText = ""
+                initialCameraIsSet = true
             }
-            initialCameraIsSet = true
         }
     }
     
@@ -187,7 +203,7 @@ public struct WorldScaleSceneView: View {
     func shouldUpdateCamera(for location: Location) -> Bool {
         // Do not update unless the horizontal accuracy is less than a threshold.
         guard let currentCamera,
-              location.horizontalAccuracy < 5,
+              location.horizontalAccuracy < 45,
               let spatialReference = currentCamera.location.spatialReference,
               let currentPosition = GeometryEngine.project(location.position, into: spatialReference)
         else { return false }
@@ -207,5 +223,46 @@ public struct WorldScaleSceneView: View {
         // If the location becomes off by over a certain threshold, then update the camera location.
         let threshold = 2.0
         return result.distance.value > threshold ? true : false
+    }
+    
+    /// Updates the heading of the scene view camera controller.
+    /// - Parameter heading: The camera heading.
+    func updateHeading(_ heading: Double?) {
+        if let heading {
+            cameraController.originCamera = cameraController.originCamera.rotatedTo(
+                heading: heading,
+                pitch: 90,
+                roll: 0
+            )
+        }
+    }
+    
+    var calibrationView: some View {
+        HStack {
+            Button {
+                calibrationHeading = cameraController.originCamera.heading + 1
+                updateHeading(calibrationHeading)
+            } label: {
+                Image(systemName: "plus")
+            }
+            
+            Text("heading: \(calibrationHeading?.rounded() ?? cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
+        
+            Button {
+                calibrationHeading = cameraController.originCamera.heading - 1
+                updateHeading(calibrationHeading)
+            } label: {
+                Image(systemName: "minus")
+            }
+        }
+    }
+    
+    var accuracyView: some View {
+        VStack {
+            if let currentLocation {
+                Text("horizontalAccuracy: \(currentLocation.horizontalAccuracy, format: .number)")
+                Text("verticalAccuracy: \(currentLocation.verticalAccuracy, format: .number)")
+            }
+        }
     }
 }
