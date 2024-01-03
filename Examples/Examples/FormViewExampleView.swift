@@ -70,7 +70,7 @@ struct FormViewExampleView: View {
                 }
                 .alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
                         Button("Discard edits", role: .destructive) {
-                            model.undoEdits()
+                            model.discardEdits()
                         }
                         Button("Continue editing", role: .cancel) { }
                 } message: {
@@ -145,7 +145,7 @@ class Model: ObservableObject {
     @Published var isFormPresented = false
     
     /// Reverts any local edits that haven't yet been saved to service geodatabase.
-    func undoEdits() {
+    func discardEdits() {
         featureForm?.discardEdits()
         featureForm = nil
     }
