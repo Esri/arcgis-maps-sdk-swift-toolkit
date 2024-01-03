@@ -22,7 +22,7 @@ struct FormViewExampleView: View {
     
     /// The distances to inset the map content to avoid covering the feature of interest with the
     /// form.
-    @State private var contentInsets: EdgeInsets?
+    @State private var contentInsets = EdgeInsets()
     
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
@@ -65,7 +65,7 @@ struct FormViewExampleView: View {
                         identifyScreenPoint = screenPoint
                     }
                 }
-                .contentInsets(contentInsets ?? .init())
+                .contentInsets(contentInsets)
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy),
                        let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition,
