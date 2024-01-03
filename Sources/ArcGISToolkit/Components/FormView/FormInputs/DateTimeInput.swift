@@ -73,6 +73,7 @@ struct DateTimeInput: View {
             requiredValueMissing = isRequired && date == nil
             do {
                 try element.updateValue(date)
+                formattedValue = element.formattedValue
             } catch {
                 print(error.localizedDescription)
             }
