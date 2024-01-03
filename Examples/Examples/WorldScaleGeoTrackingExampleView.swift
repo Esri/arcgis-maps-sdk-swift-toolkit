@@ -17,10 +17,10 @@
 ***REMOVED***Toolkit
 import CoreLocation
 
-***REMOVED***/ An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
+***REMOVED***/ An example that utilizes the `WorldScaleGeoTrackingSceneView` to show an augmented reality view
 ***REMOVED***/ of your current location. Because this is an example that can be run from anywhere,
 ***REMOVED***/ it places a red circle around your initial location which can be explored.
-struct WorldScaleExampleView: View {
+struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED***@State private var scene: ArcGIS.Scene = {
 ***REMOVED******REMOVED******REMOVED*** Creates an elevation source from Terrain3D REST service.
 ***REMOVED******REMOVED***let elevationServiceURL = URL(string: "https:***REMOVED***elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!
@@ -32,6 +32,7 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED***scene.baseSurface.backgroundGrid.isVisible = false
 ***REMOVED******REMOVED***scene.baseSurface.navigationConstraint = .unconstrained
 ***REMOVED******REMOVED***scene.basemap = Basemap(style: .arcGISImagery)
+***REMOVED******REMOVED***scene.addOperationalLayer(parcelsLayer)
 ***REMOVED******REMOVED***return scene
 ***REMOVED***()
 ***REMOVED***
@@ -42,9 +43,19 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***@State private var locationDatasSource = SystemLocationDataSource()
 ***REMOVED***
+***REMOVED***static var parcelsTable: ServiceFeatureTable {
+***REMOVED******REMOVED***ServiceFeatureTable(url: URL(string: "https:***REMOVED***services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
+***REMOVED***
+***REMOVED***
+***REMOVED***static var parcelsLayer: FeatureLayer {
+***REMOVED******REMOVED***let featureLayer = FeatureLayer(featureTable: parcelsTable)
+***REMOVED******REMOVED***featureLayer.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .cyan, width: 3))
+***REMOVED******REMOVED***return featureLayer
+***REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***WorldScaleSceneView { proxy in
+***REMOVED******REMOVED******REMOVED***WorldScaleGeoTrackingSceneView { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
