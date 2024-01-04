@@ -46,25 +46,22 @@
 ***REMOVED***/ in the project. To learn more about using the `Bookmarks` component see the [Bookmarks Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/bookmarkstutorial).
 public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ A list of selectable bookmarks.
-***REMOVED***@State private var bookmarks: [Bookmark] = []
+***REMOVED***@State private var bookmarks: [Bookmark]
 ***REMOVED***
-***REMOVED******REMOVED***/ A map or scene containing bookmarks.
-***REMOVED***private var geoModel: GeoModel?
+***REMOVED******REMOVED***/ An error that occurred while loading the geo model.
+***REMOVED***@State private var loadingError: Error?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates if bookmarks have loaded and are ready for display.
 ***REMOVED***@State private var isGeoModelLoaded = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The height of the header content.
-***REMOVED***@State private var headerHeight: CGFloat = .zero
-***REMOVED***
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
 ***REMOVED***@Binding private var isPresented: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ The height of the list content.
-***REMOVED***@State private var listHeight: CGFloat = .zero
-***REMOVED***
-***REMOVED******REMOVED***/ A bookmark that was selected.
+***REMOVED******REMOVED***/ The selected bookmark.
 ***REMOVED***@State private var selectedBookmark: Bookmark? = nil
+***REMOVED***
+***REMOVED******REMOVED***/ A map or scene model containing bookmarks.
+***REMOVED***private var geoModel: GeoModel?
 ***REMOVED***
 ***REMOVED******REMOVED***/ User defined action to be performed when a bookmark is selected.
 ***REMOVED******REMOVED***/
@@ -74,6 +71,70 @@ public struct Bookmarks: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ If non-`nil`, this viewpoint is updated when a bookmark is selected.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>?
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
+***REMOVED******REMOVED***/   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
+***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+***REMOVED******REMOVED***/   Alternately, you can use the `onSelectionChanged(perform:)` modifier to handle
+***REMOVED******REMOVED***/   bookmark selection.
+***REMOVED***public init(
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***bookmarks: [Bookmark],
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***_isPresented = isPresented
+***REMOVED******REMOVED***_bookmarks = State(initialValue: bookmarks)
+***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
+***REMOVED******REMOVED***/   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
+***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+***REMOVED******REMOVED***/   Alternately, you can use the `onSelectionChanged(perform:)` modifier to handle
+***REMOVED******REMOVED***/   bookmark selection.
+***REMOVED***public init(
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***geoModel: GeoModel,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***self.geoModel = geoModel
+***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED******REMOVED***_bookmarks = State(initialValue: [])
+***REMOVED******REMOVED***_isPresented = isPresented
+***REMOVED***
+***REMOVED***
+***REMOVED***public var body: some View {
+***REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
+***REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
+***REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED***if !bookmarks.isEmpty {
+***REMOVED******REMOVED******REMOVED***list
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedBookmark) { selectedBookmark in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedBookmark {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectBookmark(selectedBookmark)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED*** else if let loadingError {
+***REMOVED******REMOVED******REMOVED***makeErrorMessage(with: loadingError)
+***REMOVED*** else if geoModel != nil && !isGeoModelLoaded {
+***REMOVED******REMOVED******REMOVED***loading
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***noBookmarks
+***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Push content to the top edge.
+***REMOVED******REMOVED***Spacer()
+***REMOVED***
+***REMOVED***
+
+extension Bookmarks {
+***REMOVED******REMOVED***/ The list of bookmarks sorted alphabetically.
+***REMOVED***var sortedBookmarks: [Bookmark] {
+***REMOVED******REMOVED***bookmarks.sorted { $0.name <  $1.name ***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets an action to perform when the bookmark selection changes.
 ***REMOVED******REMOVED***/ - Parameter action: The action to perform when the bookmark selection has changed.
@@ -99,68 +160,47 @@ public struct Bookmarks: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
-***REMOVED******REMOVED***/   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
-***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
-***REMOVED******REMOVED***/   Alternately, you can use the `onSelectionChanged(perform:)` modifier to handle
-***REMOVED******REMOVED***/   bookmark selection.
-***REMOVED***public init(
-***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***bookmarks: [Bookmark],
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
-***REMOVED***) {
-***REMOVED******REMOVED***_isPresented = isPresented
-***REMOVED******REMOVED***self.bookmarks = bookmarks
-***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED******REMOVED***/ Makes a view that is shown when the `GeoModel` failed to load.
+***REMOVED***private func makeErrorMessage(with loadingError: Error) -> Text {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Error loading bookmarks: \(loadingError.localizedDescription)",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** An error message shown when a GeoModel failed to load.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The variable provides additional data.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
-***REMOVED******REMOVED***/   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
-***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
-***REMOVED******REMOVED***/   Alternately, you can use the `onSelectionChanged(perform:)` modifier to handle
-***REMOVED******REMOVED***/   bookmark selection.
-***REMOVED***public init(
-***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***geoModel: GeoModel,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
-***REMOVED***) {
-***REMOVED******REMOVED***self.geoModel = geoModel
-***REMOVED******REMOVED***self.viewpoint = viewpoint
-***REMOVED******REMOVED***_isPresented = isPresented
-***REMOVED***
-***REMOVED***
-***REMOVED***public var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
-***REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerHeight = $0.height
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if geoModel == nil || isGeoModelLoaded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BookmarksList(bookmarks: bookmarks)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectBookmark($0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***loadingView
+***REMOVED******REMOVED***/ A view that shows the list of bookmarks.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Note: Once the minimum supported platform is 16.4 or greater, the `ScrollView`, `VStack`
+***REMOVED******REMOVED***/ and `ForEach` can be replaced with a `List` with `scrollContentBackground(.hidden)` applied.
+***REMOVED***private var list: some View {
+***REMOVED******REMOVED***ScrollView {
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sortedBookmarks, id: \.self) { bookmark in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedBookmark = bookmark
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Make the entire row tappable.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***listHeight = $0.height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if bookmark != sortedBookmarks.last {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.frame(idealHeight: headerHeight + listHeight)
+***REMOVED******REMOVED***.padding([.horizontal])
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view that is shown while a `GeoModel` is loading.
-***REMOVED***private var loadingView: some View {
+***REMOVED***private var loading: some View {
 ***REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***.task {
@@ -169,8 +209,23 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks = geoModel?.bookmarks ?? []
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isGeoModelLoaded = true
 ***REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***loadingError = error
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A view that is shown when no bookmarks are present.
+***REMOVED***private var noBookmarks: some View {
+***REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"No bookmarks",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label indicating that no bookmarks are available for selection."
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "bookmark.slash")
+***REMOVED***
+***REMOVED******REMOVED***.foregroundColor(.primary)
+***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***

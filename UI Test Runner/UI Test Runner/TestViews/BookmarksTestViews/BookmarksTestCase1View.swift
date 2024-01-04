@@ -15,7 +15,8 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-struct BookmarksTestView: View {
+***REMOVED***/ A view that displays the Bookmarks component initialized with a GeoModel containing bookmarks.
+struct BookmarksTestCase1View: View {
 ***REMOVED******REMOVED***/ The `Map` with predefined bookmarks.
 ***REMOVED***@State private var map = Map(url: URL(string: "https:***REMOVED***www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 ***REMOVED***
