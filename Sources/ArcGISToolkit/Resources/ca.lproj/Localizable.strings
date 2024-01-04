@@ -225,6 +225,10 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Punts d'inici";
 
+/* An instruction to the user to tap on a horizontal surface to
+place an ArcGIS Scene. */
+"Tap a surface to place the scene" = "Toqueu una superfície per col·locar l'escena";
+
 /* A label indicating that tapping an image will reveal
 additional information. */
 "Tap on the image for more information." = "Toqueu la imatge per obtenir més informació.";

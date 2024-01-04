@@ -215,6 +215,7 @@ public struct UtilityNetworkTrace: View {
                             }
                         } label: {
                             Text(elements.count, format: .number)
+                                .catalystPadding(4)
                         }
                     }
                 }
@@ -227,7 +228,7 @@ public struct UtilityNetworkTrace: View {
         if viewModel.configurations.isEmpty {
             Text(String.noConfigurationsAvailable)
         } else {
-            ForEach(viewModel.configurations, id: \.name) { configuration in
+            ForEach(viewModel.configurations.sorted { $0.name < $1.name }, id: \.name) { configuration in
                 Button {
                     viewModel.setPendingTrace(configuration: configuration)
                     currentActivity = .creatingTrace(nil)
@@ -258,19 +259,21 @@ public struct UtilityNetworkTrace: View {
             if viewModel.networks.count > 1 {
                 Section(String.networkSectionLabel) {
                     DisclosureGroup(
-                        viewModel.network?.name ?? .noneSelected,
-                        isExpanded: Binding(
-                            get: { isFocused(traceCreationActivity: .viewingNetworkOptions) },
-                            set: { currentActivity = .creatingTrace($0 ? .viewingNetworkOptions : nil) }
-                        )
+                        isExpanded: Binding {
+                            isFocused(traceCreationActivity: .viewingNetworkOptions)
+                        } set: {
+                            currentActivity = .creatingTrace($0 ? .viewingNetworkOptions : nil)
+                        }
                     ) {
                         networksList
+                    } label: {
+                        Text(viewModel.network?.name ?? .noneSelected)
+                            .catalystPadding(4)
                     }
                 }
             }
             Section(String.traceConfigurationSectionLabel) {
                 DisclosureGroup(
-                    viewModel.pendingTrace.configuration?.name ?? .noneSelected,
                     isExpanded: Binding {
                         isFocused(traceCreationActivity: .viewingTraceConfigurations)
                     } set: {
@@ -278,6 +281,9 @@ public struct UtilityNetworkTrace: View {
                     }
                 ) {
                     configurationsList
+                } label: {
+                    Text(viewModel.pendingTrace.configuration?.name ?? .noneSelected)
+                        .catalystPadding(4)
                 }
             }
             Section(String.startingPointsTitle) {
@@ -300,31 +306,34 @@ public struct UtilityNetworkTrace: View {
                             bundle: .toolkitModule,
                             comment: "A label declaring the number of starting points selected for a utility network trace."
                         )
+                        .catalystPadding(4)
                     }
                 }
             }
             Section {
                 DisclosureGroup(
-                    String.advancedOptionsHeaderLabel,
                     isExpanded: Binding {
                         isFocused(traceCreationActivity: .viewingAdvancedOptions)
                     } set: {
                         currentActivity = .creatingTrace($0 ? .viewingAdvancedOptions : nil)
-                    }, content: {
-                        HStack {
-                            Text(String.nameLabel)
-                            Spacer()
-                            TextField(String.nameLabel, text: $viewModel.pendingTrace.name)
+                    }
+                ) {
+                    HStack {
+                        Text(String.nameLabel)
+                        Spacer()
+                        TextField(String.nameLabel, text: $viewModel.pendingTrace.name)
                             .onSubmit {
                                 viewModel.pendingTrace.userDidSpecifyName = true
                             }
                             .multilineTextAlignment(.trailing)
                             .foregroundColor(.blue)
-                        }
-                        ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
-                        Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
                     }
-                )
+                    ColorPicker(String.colorLabel, selection: $viewModel.pendingTrace.color)
+                    Toggle(String.zoomToResult, isOn: $shouldZoomOnTraceCompletion)
+                } label: {
+                    Text(String.advancedOptionsHeaderLabel)
+                        .catalystPadding(4)
+                }
             }
         }
         Button(String.traceButtonLabel) {
@@ -390,6 +399,7 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             .font(.title3)
+            .catalystPadding()
         }
         if activeDetent != .summary {
             List {
@@ -417,6 +427,7 @@ public struct UtilityNetworkTrace: View {
                         }
                     } label: {
                         Text(viewModel.selectedTrace?.elementResults.count ?? 0, format: .number)
+                            .catalystPadding(4)
                     }
                 }
                 Section(String.functionResultsSectionTitle) {
@@ -451,11 +462,11 @@ public struct UtilityNetworkTrace: View {
                         }
                     } label: {
                         Text(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0, format: .number)
+                            .catalystPadding(4)
                     }
                 }
                 Section {
                     DisclosureGroup(
-                        String.advancedOptionsHeaderLabel,
                         isExpanded: Binding {
                             isFocused(traceViewingActivity: .viewingAdvancedOptions)
                         } set: {
@@ -473,6 +484,9 @@ public struct UtilityNetworkTrace: View {
                                 }
                             }
                         )
+                    } label: {
+                        Text(String.advancedOptionsHeaderLabel)
+                            .catalystPadding(4)
                     }
                 }
             }
@@ -520,6 +534,7 @@ public struct UtilityNetworkTrace: View {
             }
         }
         .font(.title3)
+        .catalystPadding()
         List {
             if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
                 Section(String.fractionAlongEdgeSectionTitle) {

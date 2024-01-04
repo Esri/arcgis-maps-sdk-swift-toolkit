@@ -26,8 +26,7 @@ struct FlyoverExampleView: View {
     var body: some View {
         FlyoverSceneView(
             initialLocation: Point(x: 4.4777, y: 51.9244, z: 1_000, spatialReference: .wgs84),
-            initialHeading: 0,
-            translationFactor: 2_000
+            translationFactor: 1_000
         ) { proxy in
             SceneView(scene: scene)
                 .onSingleTapGesture { screen, _ in
