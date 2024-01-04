@@ -35,7 +35,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/ The current camera of the scene view.
 ***REMOVED***@State private var currentCamera: Camera?
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
-***REMOVED***@State private var calibrationViewIsHidden: Bool = false
+***REMOVED***private var calibrationViewIsHidden: Bool = false
 ***REMOVED******REMOVED***/ The calibrated camera heading.
 ***REMOVED***@State private var calibrationHeading: Double? = nil
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
@@ -223,6 +223,24 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED*** If the location becomes off by over a certain threshold, then update the camera location.
 ***REMOVED******REMOVED***let threshold = 2.0
 ***REMOVED******REMOVED***return result.distance.value > threshold ? true : false
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the visibility of the coaching overlay view for the AR experince.
+***REMOVED******REMOVED***/ - Parameter hidden: A Boolean value that indicates whether to hide the
+***REMOVED******REMOVED***/  coaching overlay view.
+***REMOVED***public func coachingOverlayHidden(_ hidden: Bool) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.coachingOverlayIsHidden = hidden
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the visibility of the calibration view for the AR experince.
+***REMOVED******REMOVED***/ - Parameter hidden: A Boolean value that indicates whether to hide the
+***REMOVED******REMOVED***/  calibration view.
+***REMOVED***public func calibrationViewHidden(_ hidden: Bool) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.calibrationViewIsHidden = hidden
+***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the heading of the scene view camera controller.
