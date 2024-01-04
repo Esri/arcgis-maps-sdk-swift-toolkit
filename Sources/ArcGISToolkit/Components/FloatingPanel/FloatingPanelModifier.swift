@@ -28,6 +28,7 @@ public extension View {
     /// The floating panel allows for interaction with background contents, unlike native sheets or popovers.
     ///
     /// - Parameters:
+    ///   - attributionBarHeight: The height of a geo-view's attribution bar.
     ///   - backgroundColor: The background color of the floating panel.
     ///   - selectedDetent: A binding to the currently selected detent.
     ///   - horizontalAlignment: The horizontal alignment of the floating panel.
@@ -37,6 +38,7 @@ public extension View {
     /// - Returns: A dynamic view with a presentation style similar to that of a sheet in compact
     /// environments and a popover otherwise.
     func floatingPanel<Content>(
+        attributionBarHeight: CGFloat = 0,
         backgroundColor: Color = Color(uiColor: .systemBackground),
         selectedDetent: Binding<FloatingPanelDetent> = .constant(.half),
         horizontalAlignment: HorizontalAlignment = .trailing,
@@ -46,6 +48,7 @@ public extension View {
     ) -> some View where Content: View {
         modifier(
             FloatingPanelModifier(
+                attributionBarHeight: attributionBarHeight,
                 backgroundColor: backgroundColor,
                 selectedDetent: selectedDetent,
                 horizontalAlignment: horizontalAlignment,
@@ -66,6 +69,13 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
     private var isCompact: Bool {
         horizontalSizeClass == .compact && verticalSizeClass == .regular
     }
+    
+    /// The height of a geo-view's attribution bar.
+    ///
+    /// When the panel is detached from the bottom of the screen this value allows
+    /// the panel to be aligned correctly between the top of a geo-view and the top of the
+    /// its attribution bar.
+    let attributionBarHeight: CGFloat
     
     /// The background color of the floating panel.
     let backgroundColor: Color
@@ -89,12 +99,12 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
         content
             .overlay(alignment: Alignment(horizontal: horizontalAlignment, vertical: .top)) {
                 FloatingPanel(
+                    attributionBarHeight: attributionBarHeight,
                     backgroundColor: backgroundColor,
                     selectedDetent: selectedDetent,
                     isPresented: isPresented,
                     content: panelContent
                 )
-                .ignoresSafeArea(.all, edges: .bottom)
                 .frame(maxWidth: isCompact ? .infinity : maxWidth)
             }
     }

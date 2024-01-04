@@ -20,9 +20,11 @@ public struct FlyoverSceneView: View {
     /// The AR session.
     @StateObject private var session = ObservableARSession()
     /// The initial camera.
-    private let initialCamera: Camera
+    let initialCamera: Camera
     /// The translation factor.
-    private let translationFactor: Double
+    let translationFactor: Double
+    /// A Boolean value indicating whether to orient the scene view's initial heading to compass heading.
+    let shouldOrientToCompass: Bool
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The camera controller that we will set on the scene view.
@@ -35,9 +37,10 @@ public struct FlyoverSceneView: View {
     ///   - initialLatitude: The initial latitude of the scene view's camera.
     ///   - initialLongitude: The initial longitude of the scene view's camera.
     ///   - initialAltitude: The initial altitude of the scene view's camera.
-    ///   - initialHeading: The initial heading of the scene view's camera.
     ///   - translationFactor: The translation factor that defines how much the scene view translates
     ///   as the device moves.
+    ///   - initialHeading: The initial heading of the scene view's camera. A value of `nil` means
+    ///   the scene view's heading will be initially oriented to compass heading.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     /// - Remark: The provided scene view will have certain properties overridden in order to
@@ -46,39 +49,55 @@ public struct FlyoverSceneView: View {
         initialLatitude: Double,
         initialLongitude: Double,
         initialAltitude: Double,
-        initialHeading: Double,
         translationFactor: Double,
+        initialHeading: Double? = nil,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         let camera = Camera(
             latitude: initialLatitude,
             longitude: initialLongitude,
             altitude: initialAltitude,
-            heading: initialHeading,
+            heading: initialHeading ?? 0,
             pitch: 90,
             roll: 0
         )
-        self.init(initialCamera: camera, translationFactor: translationFactor, sceneView: sceneView)
+        self.init(
+            initialCamera: camera,
+            translationFactor: translationFactor,
+            shouldOrientToCompass: initialHeading == nil,
+            sceneView: sceneView
+        )
     }
     
     /// Creates a fly over scene view.
     /// - Parameters:
     ///   - initialLocation: The initial location of the scene view's camera.
-    ///   - initialHeading: The initial heading of the scene view's camera.
     ///   - translationFactor: The translation factor that defines how much the scene view translates
     ///   as the device moves.
+    ///   - initialHeading: The initial heading of the scene view's camera. A value of `nil` means
+    ///   the scene view's heading will be initially oriented to compass heading.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     /// - Remark: The provided scene view will have certain properties overridden in order to
     /// be effectively viewed in augmented reality. One such property is the camera controller.
     public init(
         initialLocation: Point,
-        initialHeading: Double,
         translationFactor: Double,
+        initialHeading: Double? = nil,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
-        let camera = Camera(location: initialLocation, heading: initialHeading, pitch: 90, roll: 0)
-        self.init(initialCamera: camera, translationFactor: translationFactor, sceneView: sceneView)
+        let camera = Camera(
+            location: initialLocation,
+            heading: initialHeading ?? 0,
+            pitch: 90,
+            roll: 0
+        )
+        self.init(
+            initialCamera: camera,
+            translationFactor: translationFactor,
+            shouldOrientToCompass: initialHeading == nil,
+            sceneView: sceneView
+        )
     }
     
     /// Creates a fly over scene view.
@@ -86,6 +105,8 @@ public struct FlyoverSceneView: View {
     ///   - initialCamera: The initial camera.
     ///   - translationFactor: The translation factor that defines how much the scene view translates
     ///   as the device moves.
+    ///   - shouldOrientToCompass: A Boolean value indicating whether to orient the scene view's
+    ///   initial heading to compass heading.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     /// - Remark: The provided scene view will have certain properties overridden in order to
@@ -93,9 +114,11 @@ public struct FlyoverSceneView: View {
     private init(
         initialCamera: Camera,
         translationFactor: Double,
+        shouldOrientToCompass: Bool,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         self.sceneViewBuilder = sceneView
+        self.shouldOrientToCompass = shouldOrientToCompass
         self.translationFactor = translationFactor
         self.initialCamera = initialCamera
         
@@ -108,7 +131,13 @@ public struct FlyoverSceneView: View {
         SceneViewReader { sceneViewProxy in
             sceneViewBuilder(sceneViewProxy)
                 .cameraController(cameraController)
-                .onAppear { session.start() }
+                .onAppear {
+                    let configuration = ARPositionalTrackingConfiguration()
+                    if shouldOrientToCompass {
+                        configuration.worldAlignment = .gravityAndHeading
+                    }
+                    session.start(configuration: configuration)
+                }
                 .onDisappear { session.pause() }
                 .onChange(of: session.currentFrame) { frame in
                     guard let frame, let interfaceOrientation else { return }
@@ -131,20 +160,17 @@ public struct FlyoverSceneView: View {
 
 /// An observable object that wraps an `ARSession` and provides the current frame.
 private class ObservableARSession: NSObject, ObservableObject, ARSessionDelegate {
-    /// The configuration used for the AR session.
-    private let configuration: ARConfiguration
-    
     /// The backing AR session.
     private let session = ARSession()
     
     override init() {
-        configuration = ARPositionalTrackingConfiguration()
         super.init()
         session.delegate = self
     }
     
-    /// Starts the AR session.
-    func start() {
+    /// Starts the AR session by running a given configuration.
+    /// - Parameter configuration: The AR configuration to run.
+    func start(configuration: ARConfiguration) {
         session.run(configuration)
     }
     
