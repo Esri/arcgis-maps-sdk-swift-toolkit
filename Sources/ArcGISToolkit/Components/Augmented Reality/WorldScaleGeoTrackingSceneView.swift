@@ -35,7 +35,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
     /// The current camera of the scene view.
     @State private var currentCamera: Camera?
     /// A Boolean value that indicates whether the calibration view is hidden.
-    @State private var calibrationViewIsHidden: Bool = false
+    private var calibrationViewIsHidden: Bool = false
     /// The calibrated camera heading.
     @State private var calibrationHeading: Double? = nil
     /// The closure that builds the scene view.
@@ -223,6 +223,24 @@ public struct WorldScaleGeoTrackingSceneView: View {
         // If the location becomes off by over a certain threshold, then update the camera location.
         let threshold = 2.0
         return result.distance.value > threshold ? true : false
+    }
+    
+    /// Sets the visibility of the coaching overlay view for the AR experince.
+    /// - Parameter hidden: A Boolean value that indicates whether to hide the
+    ///  coaching overlay view.
+    public func coachingOverlayHidden(_ hidden: Bool) -> Self {
+        var view = self
+        view.coachingOverlayIsHidden = hidden
+        return view
+    }
+    
+    /// Sets the visibility of the calibration view for the AR experince.
+    /// - Parameter hidden: A Boolean value that indicates whether to hide the
+    ///  calibration view.
+    public func calibrationViewHidden(_ hidden: Bool) -> Self {
+        var view = self
+        view.calibrationViewIsHidden = hidden
+        return view
     }
     
     /// Updates the heading of the scene view camera controller.
