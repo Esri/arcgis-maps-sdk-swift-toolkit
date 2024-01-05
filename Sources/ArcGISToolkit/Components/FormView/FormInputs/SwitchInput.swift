@@ -18,7 +18,8 @@ import SwiftUI
 /// A view for boolean style input.
 ///
 /// The switch represents two mutually exclusive values, such as: yes/no, on/off, true/false.
-struct SwitchInput: View {
+/// - Since: 200.4
+public struct SwitchInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// The model for the ancestral form view.
@@ -50,7 +51,7 @@ struct SwitchInput: View {
     /// Creates a view for a switch input.
     /// - Parameters:
     ///   - element: The field's parent element.
-    init(element: FieldFormElement) {
+    public init(element: FieldFormElement) {
         precondition(
             element.input is SwitchFormInput,
             "\(Self.self).\(#function) element's input must be \(SwitchFormInput.self)."
@@ -64,7 +65,7 @@ struct SwitchInput: View {
         )
     }
     
-    var body: some View {
+    public var body: some View {
         if fallbackToComboBox {
             ComboBoxInput(
                 element: element,
@@ -72,7 +73,7 @@ struct SwitchInput: View {
                 noValueOption: .show
             )
         } else {
-            Group {
+            VStack(alignment: .leading) {
                 InputHeader(label: element.label, isRequired: inputModel.isRequired)
                     .padding([.top], elementPadding)
                 HStack {

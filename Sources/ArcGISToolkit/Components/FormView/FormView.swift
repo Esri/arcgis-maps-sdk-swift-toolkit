@@ -39,24 +39,37 @@ public struct FormView: View {
         self.featureForm = featureForm
     }
     
-    public var body: some View {
-        ScrollViewReader { scrollViewProxy in
-            ScrollView {
-                if isEvaluating {
-                    ProgressView()
-                } else {
-                    VStack(alignment: .leading) {
-                        FormHeader(title: featureForm?.title)
-                            .padding([.bottom], elementPadding)
-                        ForEach(model.visibleElements, id: \.self) { element in
-                            makeElement(element)
+    var customBuilder: (([FormElement]) -> any View)?
+    
+    public init(featureForm: FeatureForm?, @ViewBuilder content: @escaping ([FormElement]) -> any View) {
+        self.customBuilder = content
+        self.featureForm = featureForm
+    }
+    
+    @ViewBuilder public var body: some View {
+        Group {
+            if let customBuilder {
+                AnyView(customBuilder(model.visibleElements))
+            } else {
+                ScrollViewReader { scrollViewProxy in
+                    ScrollView {
+                        if isEvaluating {
+                            ProgressView()
+                        } else {
+                            VStack(alignment: .leading) {
+                                FormHeader(title: featureForm?.title)
+                                    .padding([.bottom], elementPadding)
+                                ForEach(model.visibleElements, id: \.self) { element in
+                                    makeElement(element)
+                                }
+                            }
                         }
                     }
-                }
-            }
-            .task(id: model.focusedElement) {
-                if let focusedElement = model.focusedElement {
-                    withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
+                    .task(id: model.focusedElement) {
+                        if let focusedElement = model.focusedElement {
+                            withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
+                        }
+                    }
                 }
             }
         }

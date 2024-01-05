@@ -18,7 +18,8 @@ import SwiftUI
 /// A view for numerical value input.
 ///
 /// This is the preferable input type for long lists of coded value domains.
-struct ComboBoxInput: View {
+/// - Since: 200.4
+public struct ComboBoxInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// The model for the ancestral form view.
@@ -64,7 +65,7 @@ struct ComboBoxInput: View {
     /// Creates a view for a combo box input.
     /// - Parameters:
     ///   - element: The input's parent element.
-    init(element: FieldFormElement) {
+    public init(element: FieldFormElement) {
         precondition(
             element.input is ComboBoxFormInput,
             "\(Self.self).\(#function) element's input must be \(ComboBoxFormInput.self)."
@@ -95,7 +96,7 @@ struct ComboBoxInput: View {
         )
     }
     
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading) {
             InputHeader(label: element.label, isRequired: inputModel.isRequired)
                 .padding([.top], elementPadding)

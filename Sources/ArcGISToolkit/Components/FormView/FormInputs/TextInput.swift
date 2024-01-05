@@ -16,7 +16,8 @@ import SwiftUI
 import ArcGIS
 
 /// A view for text input.
-struct TextInput: View {
+/// - Since: 200.4
+public struct TextInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// The model for the ancestral form view.
@@ -48,7 +49,7 @@ struct TextInput: View {
     /// Creates a view for text input spanning multiple lines.
     /// - Parameters:
     ///   - element: The input's parent element.
-    init(element: FieldFormElement) {
+    public init(element: FieldFormElement) {
         precondition(
             element.input is TextAreaFormInput || element.input is TextBoxFormInput,
             "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self) or \(TextBoxFormInput.self)."
@@ -59,23 +60,25 @@ struct TextInput: View {
         )
     }
     
-    var body: some View {
-        InputHeader(label: element.label, isRequired: inputModel.isRequired)
-            .padding([.top], elementPadding)
-        if inputModel.isEditable {
-            textField
-        } else {
-            Text(text.isEmpty ? "--" : text)
-                .padding([.horizontal], 10)
-                .padding([.vertical], 5)
-                .textSelection(.enabled)
+    public var body: some View {
+        VStack(alignment: .leading) {
+            InputHeader(label: element.label, isRequired: inputModel.isRequired)
+                .padding([.top], elementPadding)
+            if inputModel.isEditable {
+                textField
+            } else {
+                Text(text.isEmpty ? "--" : text)
+                    .padding([.horizontal], 10)
+                    .padding([.vertical], 5)
+                    .textSelection(.enabled)
+            }
+            TextInputFooter(
+                text: isPlaceholder ? "" : text,
+                isFocused: isFocused,
+                element: element,
+                fieldType: fieldType
+            )
         }
-        TextInputFooter(
-            text: isPlaceholder ? "" : text,
-            isFocused: isFocused,
-            element: element,
-            fieldType: fieldType
-        )
         .padding([.bottom], elementPadding)
         .onAppear {
             let text = inputModel.formattedValue
