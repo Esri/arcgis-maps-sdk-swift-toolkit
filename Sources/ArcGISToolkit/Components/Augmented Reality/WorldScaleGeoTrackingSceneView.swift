@@ -164,7 +164,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
     private func updateSceneView(for location: Location, heading: Double) {
         // Do not use cached location more than 10 seconds old.
         guard abs(lastLocationTimestamp ?? 0) < 10 else { return }
-    
+        
         // Make sure there is at least a minimum horizontal and vertical accuracy.
         guard location.horizontalAccuracy < 45 && location.verticalAccuracy < 45 else { return }
         
@@ -265,7 +265,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
             }
             
             Text("heading: \(calibrationHeading?.rounded() ?? cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
-        
+            
             Button {
                 calibrationHeading = cameraController.originCamera.heading - 1
                 updateHeading(calibrationHeading)
