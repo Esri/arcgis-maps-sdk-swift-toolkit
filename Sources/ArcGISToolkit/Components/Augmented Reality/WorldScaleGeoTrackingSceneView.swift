@@ -37,13 +37,13 @@ public struct WorldScaleGeoTrackingSceneView: View {
     /// A Boolean value that indicates whether the calibration view is hidden.
     private var calibrationViewIsHidden: Bool = false
     /// The calibrated camera heading.
-    @State private var calibrationHeading: Double? = nil
+    @State private var calibrationHeading: Double?
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The configuration for the AR session.
     private let configuration: ARConfiguration
-    /// The timestamp of the last recieved location.
-    @State private var lastLocationTimestamp: TimeInterval?
+    /// The timestamp of the last received location.
+    @State private var lastLocationTimestamp: Date?
     /// The current device location.
     @State private var currentLocation: Location?
     
@@ -132,7 +132,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 await withTaskGroup(of: Void.self) { group in
                     group.addTask {
                         for await location in locationDataSource.locations {
-                            self.lastLocationTimestamp = Date().timeIntervalSinceNow
+                            self.lastLocationTimestamp = location.timestamp
                             for await heading in locationDataSource.headings {
                                 await updateSceneView(for: location, heading: heading)
                                 self.currentLocation = location
@@ -163,7 +163,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @MainActor
     private func updateSceneView(for location: Location, heading: Double) {
         // Do not use cached location more than 10 seconds old.
-        guard abs(lastLocationTimestamp ?? 0) < 10 else { return }
+        guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < 10 else { return }
         
         // Make sure there is at least a minimum horizontal and vertical accuracy.
         guard location.horizontalAccuracy < 45 && location.verticalAccuracy < 45 else { return }
@@ -225,7 +225,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
         return result.distance.value > threshold ? true : false
     }
     
-    /// Sets the visibility of the coaching overlay view for the AR experince.
+    /// Sets the visibility of the coaching overlay view for the AR experience.
     /// - Parameter hidden: A Boolean value that indicates whether to hide the
     ///  coaching overlay view.
     public func coachingOverlayHidden(_ hidden: Bool) -> Self {
@@ -234,7 +234,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
         return view
     }
     
-    /// Sets the visibility of the calibration view for the AR experince.
+    /// Sets the visibility of the calibration view for the AR experience.
     /// - Parameter hidden: A Boolean value that indicates whether to hide the
     ///  calibration view.
     public func calibrationViewHidden(_ hidden: Bool) -> Self {
@@ -245,21 +245,20 @@ public struct WorldScaleGeoTrackingSceneView: View {
     
     /// Updates the heading of the scene view camera controller.
     /// - Parameter heading: The camera heading.
-    func updateHeading(_ heading: Double?) {
-        if let heading {
-            cameraController.originCamera = cameraController.originCamera.rotatedTo(
-                heading: heading,
-                pitch: 90,
-                roll: 0
-            )
-        }
+    func updateHeading(_ heading: Double) {
+        cameraController.originCamera = cameraController.originCamera.rotatedTo(
+            heading: heading,
+            pitch: 90,
+            roll: 0
+        )
     }
     
     var calibrationView: some View {
         HStack {
             Button {
-                calibrationHeading = cameraController.originCamera.heading + 1
-                updateHeading(calibrationHeading)
+                let heading = cameraController.originCamera.heading + 1
+                updateHeading(heading)
+                calibrationHeading = heading
             } label: {
                 Image(systemName: "plus")
             }
@@ -267,8 +266,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
             Text("heading: \(calibrationHeading?.rounded() ?? cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
             
             Button {
-                calibrationHeading = cameraController.originCamera.heading - 1
-                updateHeading(calibrationHeading)
+                let heading = cameraController.originCamera.heading - 1
+                updateHeading(heading)
+                calibrationHeading = heading
             } label: {
                 Image(systemName: "minus")
             }
