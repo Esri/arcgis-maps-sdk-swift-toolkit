@@ -387,7 +387,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertEqual(
             footer.label,
-            "Required"
+            "Date Entry is Required"
         )
         
         XCTAssertTrue(
