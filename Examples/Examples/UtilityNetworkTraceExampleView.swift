@@ -103,11 +103,3 @@ private extension ArcGISCredential {
         }
     }
 }
-
-private extension EnvironmentValues {
-    /// A Boolean value indicating whether this environment has a compact horizontal size class and
-    /// a regular vertical size class.
-    var isPortraitOrientation: Bool {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular
-    }
-}

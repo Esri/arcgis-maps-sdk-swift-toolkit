@@ -17,6 +17,13 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FormViewExampleView: View {
+    @Environment(\.isPortraitOrientation)
+    private var isPortraitOrientation
+    
+    /// The distances to inset the map content to avoid covering the feature of interest with the
+    /// form.
+    @State private var contentInsets = EdgeInsets()
+    
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
     
@@ -58,24 +65,39 @@ struct FormViewExampleView: View {
                         identifyScreenPoint = screenPoint
                     }
                 }
+                .contentInsets(contentInsets)
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy),
                        let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition,
                        let featureForm = FeatureForm(feature: feature, definition: formDefinition) {
                         self.featureForm = featureForm
                         formViewModel.startEditing(feature, featureForm: featureForm)
+                        if let geometry = feature.geometry {
+                            await mapViewProxy.setViewpoint(
+                                Viewpoint(boundingGeometry: geometry)
+                            )
+                        }
                     }
                 }
                 .ignoresSafeArea(.keyboard)
-            
                 .floatingPanel(
                     attributionBarHeight: attributionBarHeight,
                     selectedDetent: $detent,
                     horizontalAlignment: .leading,
                     isPresented: $isFormPresented
                 ) {
-                    FormView(featureForm: featureForm)
-                        .padding([.horizontal])
+                    GeometryReader { geometryProxy in
+                        FormView(featureForm: featureForm)
+                            .padding([.horizontal])
+                            .onChange(of: geometryProxy.size) { size in
+                                contentInsets = .init(
+                                    top: .zero,
+                                    leading: isFormPresented && !isPortraitOrientation ? size.width : .zero,
+                                    bottom: isFormPresented && isPortraitOrientation && detent != .full ? size.height : .zero,
+                                    trailing: .zero
+                                )
+                            }
+                    }
                 }
                 .alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
                         Button("Discard edits", role: .destructive) {
