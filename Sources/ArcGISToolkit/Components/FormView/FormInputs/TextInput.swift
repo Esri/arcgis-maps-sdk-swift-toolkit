@@ -22,11 +22,11 @@ struct TextInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// State properties for element events.
-    @State var isRequired: Bool = false
-    @State var isEditable: Bool = false
-    @State var value: Any?
-    @State var formattedValue: String = ""
+    // State properties for element events.
+    
+    @State private var isRequired: Bool = false
+    @State private var isEditable: Bool = false
+    @State private var formattedValue: String = ""
 
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
@@ -57,11 +57,6 @@ struct TextInput: View {
             "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self) or \(TextBoxFormInput.self)."
         )
         self.element = element
-
-        value = element.value
-        formattedValue = element.formattedValue
-        isRequired = element.isRequired
-        isEditable = element.isEditable
     }
     
     var body: some View {
@@ -82,9 +77,6 @@ struct TextInput: View {
             fieldType: fieldType
         )
         .padding([.bottom], elementPadding)
-        .onAppear {
-            updateText()
-        }
         .onChange(of: isFocused) { isFocused in
             if isFocused && isPlaceholder {
                 isPlaceholder = false
@@ -117,7 +109,6 @@ struct TextInput: View {
             }
         }
         .onChangeOfValue(of: element) { newValue, newFormattedValue in
-            value = newValue
             formattedValue = newFormattedValue
             updateText()
         }

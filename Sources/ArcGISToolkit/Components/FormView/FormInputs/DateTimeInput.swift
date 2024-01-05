@@ -22,11 +22,11 @@ struct DateTimeInput: View {
     /// The model for the ancestral form view.
     @EnvironmentObject var model: FormViewModel
     
-    /// State properties for element events.
-    @State var isRequired: Bool = false
-    @State var isEditable: Bool = false
-    @State var value: Any?
-    @State var formattedValue: String = ""
+    // State properties for element events.
+    
+    @State private var isRequired: Bool = false
+    @State private var isEditable: Bool = false
+    @State private var formattedValue: String = ""
 
     /// The current date selection.
     @State private var date: Date?
@@ -54,10 +54,6 @@ struct DateTimeInput: View {
         
         self.element = element
         self.input = element.input as! DateTimePickerFormInput
-        value = element.value
-        formattedValue = element.formattedValue
-        isRequired = element.isRequired
-        isEditable = element.isEditable
     }
     
     var body: some View {
@@ -73,28 +69,23 @@ struct DateTimeInput: View {
         .onChange(of: model.focusedElement) { focusedElement in
             isEditing = focusedElement == element
         }
-        .onAppear {
-            if formattedValue.isEmpty {
-                date = nil
-            } else {
-                date = value as? Date
-            }
-        }
         .onChange(of: date) { date in
             requiredValueMissing = isRequired && date == nil
             do {
                 try element.updateValue(date)
+                formattedValue = element.formattedValue
             } catch {
                 print(error.localizedDescription)
             }
             model.evaluateExpressions()
         }
         .onChangeOfValue(of: element) { newValue, newFormattedValue in
-            if formattedValue.isEmpty {
+            if newFormattedValue.isEmpty {
                 date = nil
             } else {
                 date = newValue as? Date
             }
+            formattedValue = newFormattedValue
         }
         .onChangeOfIsRequired(of: element) { newIsRequired in
             isRequired = newIsRequired
@@ -117,7 +108,7 @@ struct DateTimeInput: View {
     /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
         HStack {
-            Text(formattedDate ?? .noValue)
+            Text(!formattedValue.isEmpty ? formattedValue : .noValue)
                 .accessibilityIdentifier("\(element.label) Value")
                 .foregroundColor(displayColor)
             
@@ -187,15 +178,6 @@ struct DateTimeInput: View {
             return .accentColor
         } else {
             return .primary
-        }
-    }
-    
-    /// The human-readable date and time selection.
-    var formattedDate: String? {
-        if input.includeTime {
-            return date?.formatted(.dateTime.day().month().year().hour().minute())
-        } else {
-            return date?.formatted(.dateTime.day().month().year())
         }
     }
     
