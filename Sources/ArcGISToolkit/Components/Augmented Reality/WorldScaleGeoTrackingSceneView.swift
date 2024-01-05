@@ -46,6 +46,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@State private var lastLocationTimestamp: Date?
 ***REMOVED******REMOVED***/ The current device location.
 ***REMOVED***@State private var currentLocation: Location?
+***REMOVED******REMOVED***/ The current device heading.
+***REMOVED***@State private var currentHeading: Double?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -133,9 +135,17 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await location in locationDataSource.locations {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.lastLocationTimestamp = location.timestamp
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await heading in locationDataSource.headings {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.currentLocation = location
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let heading = currentHeading {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await updateSceneView(for: location, heading: heading)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.currentLocation = location
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await heading in locationDataSource.headings {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.currentHeading = heading
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let location = self.currentLocation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await updateSceneView(for: location, heading: heading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
