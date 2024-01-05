@@ -46,6 +46,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var lastLocationTimestamp: Date?
     /// The current device location.
     @State private var currentLocation: Location?
+    /// The current device heading.
+    @State private var currentHeading: Double?
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -133,9 +135,17 @@ public struct WorldScaleGeoTrackingSceneView: View {
                     group.addTask {
                         for await location in locationDataSource.locations {
                             self.lastLocationTimestamp = location.timestamp
-                            for await heading in locationDataSource.headings {
+                            self.currentLocation = location
+                            if let heading = currentHeading {
                                 await updateSceneView(for: location, heading: heading)
-                                self.currentLocation = location
+                            }
+                        }
+                    }
+                    group.addTask {
+                        for await heading in locationDataSource.headings {
+                            self.currentHeading = heading
+                            if let location = self.currentLocation {
+                                await updateSceneView(for: location, heading: heading)
                             }
                         }
                     }
