@@ -37,13 +37,13 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
 ***REMOVED***private var calibrationViewIsHidden: Bool = false
 ***REMOVED******REMOVED***/ The calibrated camera heading.
-***REMOVED***@State private var calibrationHeading: Double? = nil
+***REMOVED***@State private var calibrationHeading: Double?
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ The configuration for the AR session.
 ***REMOVED***private let configuration: ARConfiguration
-***REMOVED******REMOVED***/ The timestamp of the last recieved location.
-***REMOVED***@State private var lastLocationTimestamp: TimeInterval?
+***REMOVED******REMOVED***/ The timestamp of the last received location.
+***REMOVED***@State private var lastLocationTimestamp: Date?
 ***REMOVED******REMOVED***/ The current device location.
 ***REMOVED***@State private var currentLocation: Location?
 ***REMOVED***
@@ -132,7 +132,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await location in locationDataSource.locations {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.lastLocationTimestamp = Date().timeIntervalSinceNow
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.lastLocationTimestamp = location.timestamp
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await heading in locationDataSource.headings {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await updateSceneView(for: location, heading: heading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.currentLocation = location
@@ -163,7 +163,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@MainActor
 ***REMOVED***private func updateSceneView(for location: Location, heading: Double) {
 ***REMOVED******REMOVED******REMOVED*** Do not use cached location more than 10 seconds old.
-***REMOVED******REMOVED***guard abs(lastLocationTimestamp ?? 0) < 10 else { return ***REMOVED***
+***REMOVED******REMOVED***guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < 10 else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Make sure there is at least a minimum horizontal and vertical accuracy.
 ***REMOVED******REMOVED***guard location.horizontalAccuracy < 45 && location.verticalAccuracy < 45 else { return ***REMOVED***
@@ -225,7 +225,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***return result.distance.value > threshold ? true : false
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the visibility of the coaching overlay view for the AR experince.
+***REMOVED******REMOVED***/ Sets the visibility of the coaching overlay view for the AR experience.
 ***REMOVED******REMOVED***/ - Parameter hidden: A Boolean value that indicates whether to hide the
 ***REMOVED******REMOVED***/  coaching overlay view.
 ***REMOVED***public func coachingOverlayHidden(_ hidden: Bool) -> Self {
@@ -234,7 +234,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the visibility of the calibration view for the AR experince.
+***REMOVED******REMOVED***/ Sets the visibility of the calibration view for the AR experience.
 ***REMOVED******REMOVED***/ - Parameter hidden: A Boolean value that indicates whether to hide the
 ***REMOVED******REMOVED***/  calibration view.
 ***REMOVED***public func calibrationViewHidden(_ hidden: Bool) -> Self {
@@ -245,21 +245,20 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the heading of the scene view camera controller.
 ***REMOVED******REMOVED***/ - Parameter heading: The camera heading.
-***REMOVED***func updateHeading(_ heading: Double?) {
-***REMOVED******REMOVED***if let heading {
-***REMOVED******REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.rotatedTo(
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: heading,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
+***REMOVED***func updateHeading(_ heading: Double) {
+***REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.rotatedTo(
+***REMOVED******REMOVED******REMOVED***heading: heading,
+***REMOVED******REMOVED******REMOVED***pitch: 90,
+***REMOVED******REMOVED******REMOVED***roll: 0
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var calibrationView: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***calibrationHeading = cameraController.originCamera.heading + 1
-***REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(calibrationHeading)
+***REMOVED******REMOVED******REMOVED******REMOVED***let heading = cameraController.originCamera.heading + 1
+***REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(heading)
+***REMOVED******REMOVED******REMOVED******REMOVED***calibrationHeading = heading
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "plus")
 ***REMOVED******REMOVED***
@@ -267,8 +266,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***Text("heading: \(calibrationHeading?.rounded() ?? cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***calibrationHeading = cameraController.originCamera.heading - 1
-***REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(calibrationHeading)
+***REMOVED******REMOVED******REMOVED******REMOVED***let heading = cameraController.originCamera.heading - 1
+***REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(heading)
+***REMOVED******REMOVED******REMOVED******REMOVED***calibrationHeading = heading
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "minus")
 ***REMOVED******REMOVED***

@@ -43,11 +43,8 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***@State private var locationDatasSource = SystemLocationDataSource()
 ***REMOVED***
-***REMOVED***static var parcelsTable: ServiceFeatureTable {
-***REMOVED******REMOVED***ServiceFeatureTable(url: URL(string: "https:***REMOVED***services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
-***REMOVED***
-***REMOVED***
 ***REMOVED***static var parcelsLayer: FeatureLayer {
+***REMOVED******REMOVED***let parcelsTable = ServiceFeatureTable(url: URL(string: "https:***REMOVED***services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
 ***REMOVED******REMOVED***let featureLayer = FeatureLayer(featureTable: parcelsTable)
 ***REMOVED******REMOVED***featureLayer.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .cyan, width: 3))
 ***REMOVED******REMOVED***return featureLayer
