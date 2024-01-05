@@ -260,8 +260,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***func updateHeading(_ heading: Double) {
 ***REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.rotatedTo(
 ***REMOVED******REMOVED******REMOVED***heading: heading,
-***REMOVED******REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED******REMOVED***roll: 0
+***REMOVED******REMOVED******REMOVED***pitch: cameraController.originCamera.pitch,
+***REMOVED******REMOVED******REMOVED***roll: cameraController.originCamera.roll
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
