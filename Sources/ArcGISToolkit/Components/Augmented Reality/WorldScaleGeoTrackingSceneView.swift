@@ -260,8 +260,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
     func updateHeading(_ heading: Double) {
         cameraController.originCamera = cameraController.originCamera.rotatedTo(
             heading: heading,
-            pitch: 90,
-            roll: 0
+            pitch: cameraController.originCamera.pitch,
+            roll: cameraController.originCamera.roll
         )
     }
     
