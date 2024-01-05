@@ -48,6 +48,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var currentLocation: Location?
     /// The current device heading.
     @State private var currentHeading: Double?
+    /// The valid accuracy threshold for a location in meters.
+    private var validAccuracyThreshold: Double = 0
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -175,8 +177,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
         // Do not use cached location more than 10 seconds old.
         guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < 10 else { return }
         
-        // Make sure there is at least a minimum horizontal and vertical accuracy.
-        guard location.horizontalAccuracy < 45 && location.verticalAccuracy < 45 else { return }
+        // Make sure that horizontal and vertical accuracy are valid.
+        guard location.horizontalAccuracy > validAccuracyThreshold,
+              location.verticalAccuracy > validAccuracyThreshold else { return }
         
         // Make sure either the initial camera is not set, or we need to update the camera.
         guard (!initialCameraIsSet || shouldUpdateCamera(for: location)) else { return }
@@ -213,7 +216,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
     func shouldUpdateCamera(for location: Location) -> Bool {
         // Do not update unless the horizontal accuracy is less than a threshold.
         guard let currentCamera,
-              location.horizontalAccuracy < 45,
               let spatialReference = currentCamera.location.spatialReference,
               let currentPosition = GeometryEngine.project(location.position, into: spatialReference)
         else { return false }
