@@ -387,7 +387,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***footer.label,
-***REMOVED******REMOVED******REMOVED***"Required"
+***REMOVED******REMOVED******REMOVED***"Date Entry is Required"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
