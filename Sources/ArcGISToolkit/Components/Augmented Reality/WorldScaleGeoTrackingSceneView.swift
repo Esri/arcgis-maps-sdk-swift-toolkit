@@ -48,6 +48,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@State private var currentLocation: Location?
 ***REMOVED******REMOVED***/ The current device heading.
 ***REMOVED***@State private var currentHeading: Double?
+***REMOVED******REMOVED***/ The valid accuracy threshold for a location in meters.
+***REMOVED***private var validAccuracyThreshold: Double = 0
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -175,8 +177,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED*** Do not use cached location more than 10 seconds old.
 ***REMOVED******REMOVED***guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < 10 else { return ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Make sure there is at least a minimum horizontal and vertical accuracy.
-***REMOVED******REMOVED***guard location.horizontalAccuracy < 45 && location.verticalAccuracy < 45 else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Make sure that horizontal and vertical accuracy are valid.
+***REMOVED******REMOVED***guard location.horizontalAccuracy > validAccuracyThreshold,
+***REMOVED******REMOVED******REMOVED***  location.verticalAccuracy > validAccuracyThreshold else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Make sure either the initial camera is not set, or we need to update the camera.
 ***REMOVED******REMOVED***guard (!initialCameraIsSet || shouldUpdateCamera(for: location)) else { return ***REMOVED***
@@ -213,7 +216,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***func shouldUpdateCamera(for location: Location) -> Bool {
 ***REMOVED******REMOVED******REMOVED*** Do not update unless the horizontal accuracy is less than a threshold.
 ***REMOVED******REMOVED***guard let currentCamera,
-***REMOVED******REMOVED******REMOVED***  location.horizontalAccuracy < 45,
 ***REMOVED******REMOVED******REMOVED***  let spatialReference = currentCamera.location.spatialReference,
 ***REMOVED******REMOVED******REMOVED***  let currentPosition = GeometryEngine.project(location.position, into: spatialReference)
 ***REMOVED******REMOVED***else { return false ***REMOVED***
