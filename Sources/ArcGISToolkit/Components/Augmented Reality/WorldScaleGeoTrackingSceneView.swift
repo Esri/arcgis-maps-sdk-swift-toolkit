@@ -164,7 +164,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***private func updateSceneView(for location: Location, heading: Double) {
 ***REMOVED******REMOVED******REMOVED*** Do not use cached location more than 10 seconds old.
 ***REMOVED******REMOVED***guard abs(lastLocationTimestamp ?? 0) < 10 else { return ***REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Make sure there is at least a minimum horizontal and vertical accuracy.
 ***REMOVED******REMOVED***guard location.horizontalAccuracy < 45 && location.verticalAccuracy < 45 else { return ***REMOVED***
 ***REMOVED******REMOVED***
@@ -265,7 +265,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Text("heading: \(calibrationHeading?.rounded() ?? cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***calibrationHeading = cameraController.originCamera.heading - 1
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(calibrationHeading)
