@@ -22,11 +22,11 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ The model for the ancestral form view.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ State properties for element events.
-***REMOVED***@State var isRequired: Bool = false
-***REMOVED***@State var isEditable: Bool = false
-***REMOVED***@State var value: Any?
-***REMOVED***@State var formattedValue: String = ""
+***REMOVED******REMOVED*** State properties for element events.
+***REMOVED***
+***REMOVED***@State private var isRequired: Bool = false
+***REMOVED***@State private var isEditable: Bool = false
+***REMOVED***@State private var formattedValue: String = ""
 
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
@@ -57,11 +57,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self) or \(TextBoxFormInput.self)."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***self.element = element
-
-***REMOVED******REMOVED***value = element.value
-***REMOVED******REMOVED***formattedValue = element.formattedValue
-***REMOVED******REMOVED***isRequired = element.isRequired
-***REMOVED******REMOVED***isEditable = element.isEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -82,9 +77,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED***fieldType: fieldType
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***updateText()
-***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
 ***REMOVED******REMOVED******REMOVED***if isFocused && isPlaceholder {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
@@ -117,7 +109,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in
-***REMOVED******REMOVED******REMOVED***value = newValue
 ***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
 ***REMOVED******REMOVED******REMOVED***updateText()
 ***REMOVED***

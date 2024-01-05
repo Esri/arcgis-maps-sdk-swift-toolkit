@@ -70,7 +70,7 @@ struct FormViewExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard edits", role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.undoEdits()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.discardEdits()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Continue editing", role: .cancel) { ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** message: {
@@ -133,7 +133,7 @@ private extension URL {
 ***REMOVED***
 
 ***REMOVED***/ The model class for the form example view
-class Model: ObservableObject {
+@MainActor class Model: ObservableObject {
 ***REMOVED******REMOVED***/ The feature form.
 ***REMOVED***@Published var featureForm: FeatureForm? {
 ***REMOVED******REMOVED***didSet {
@@ -145,7 +145,7 @@ class Model: ObservableObject {
 ***REMOVED***@Published var isFormPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ Reverts any local edits that haven't yet been saved to service geodatabase.
-***REMOVED***func undoEdits() {
+***REMOVED***func discardEdits() {
 ***REMOVED******REMOVED***featureForm?.discardEdits()
 ***REMOVED******REMOVED***featureForm = nil
 ***REMOVED***
