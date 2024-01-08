@@ -21,7 +21,7 @@ import SwiftUI
 public struct FormView: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The model for the ancestral form view.
+    /// The view model for the form.
     @StateObject private var model: FormViewModel
     
     /// A Boolean value indicating whether the initial expression evaluation is running.

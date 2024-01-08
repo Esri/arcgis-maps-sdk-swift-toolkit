@@ -19,7 +19,7 @@ import ArcGIS
 struct DateTimeInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The model for the ancestral form view.
+    /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
     // State properties for element events.
@@ -27,15 +27,12 @@ struct DateTimeInput: View {
     @State private var isRequired: Bool = false
     @State private var isEditable: Bool = false
     @State private var formattedValue: String = ""
-
+    
     /// The current date selection.
     @State private var date: Date?
     
     /// A Boolean value indicating whether a new date (or time is being set).
     @State private var isEditing = false
-    
-    /// A Boolean value indicating whether the date selection was cleared when a value is required.
-    @State private var requiredValueMissing = false
     
     /// The input's parent element.
     private let element: FieldFormElement
@@ -63,14 +60,13 @@ struct DateTimeInput: View {
             
             dateEditor
             
-            InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+            InputFooter(element: element)
         }
         .padding([.bottom], elementPadding)
         .onChange(of: model.focusedElement) { focusedElement in
             isEditing = focusedElement == element
         }
         .onChange(of: date) { date in
-            requiredValueMissing = isRequired && date == nil
             do {
                 try element.updateValue(date)
                 formattedValue = element.formattedValue

@@ -29,7 +29,7 @@ import SwiftUI
     
     /// The visibility tasks group.
     private var isVisibleTask: Task<Void, Never>?
-
+    
     /// The list of visible form elements.
     @Published var visibleElements = [FormElement]()
     
@@ -77,7 +77,7 @@ import SwiftUI
         expressionEvaluationErrors = evaluationErrors ?? []
         initializeIsVisibleTasks()
     }
-
+    
     /// Performs an evaluation of all form expressions.
     func evaluateExpressions() {
         evaluateTask?.cancel()
@@ -87,5 +87,9 @@ import SwiftUI
             expressionEvaluationErrors = evaluationErrors ?? []
             isEvaluating = false
         }
+    }
+    
+    var validationErrors: [String : [Error]] {
+        featureForm.validationErrors
     }
 }
