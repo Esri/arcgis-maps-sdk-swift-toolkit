@@ -42,8 +42,8 @@ struct WorldScaleGeoTrackingExampleView: View {
     @State private var graphicsOverlay = GraphicsOverlay()
     /// The location datasource that is used to access the device location.
     @State private var locationDatasSource = SystemLocationDataSource()
-    
-    static var parcelsLayer: FeatureLayer {
+    /// A feature layer with San Bernardino parcels data.
+    private static var parcelsLayer: FeatureLayer {
         let parcelsTable = ServiceFeatureTable(url: URL(string: "https://services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
         let featureLayer = FeatureLayer(featureTable: parcelsTable)
         featureLayer.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .cyan, width: 3))
@@ -56,21 +56,19 @@ struct WorldScaleGeoTrackingExampleView: View {
                 SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
                     .onSingleTapGesture { screen, _ in
                         print("Identifying...")
-                        Task.detached {
+                        Task {
                             let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
                             print("\(results.count) identify result(s).")
                         }
                     }
             }
             // A slider to adjust the basemap opacity.
-            Slider(value: $opacity, in: 0...1.0)
+            Slider(value: $opacity, in: 0...1)
                 .padding(.horizontal)
         }
         .onChange(of: opacity) { opacity in
             guard let basemap = scene.basemap else { return }
-            for layer in basemap.baseLayers {
-                layer.opacity = opacity
-            }
+            basemap.baseLayers.forEach { $0.opacity = opacity }
         }
         .task {
             // Request when-in-use location authorization.
@@ -90,10 +88,10 @@ struct WorldScaleGeoTrackingExampleView: View {
                 print("Failed to start location datasource: \(error.localizedDescription)")
             }
             
-            // Retrieve initial location
+            // Retrieve initial location.
             guard let initialLocation = await locationDatasSource.locations.first(where: { _ in true }) else { return }
             
-            // Put a circle graphic around the initial location
+            // Put a circle graphic around the initial location.
             let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
             graphicsOverlay.addGraphic(Graphic(geometry: circle, symbol: SimpleLineSymbol(color: .red, width: 3)))
         }

@@ -29,13 +29,13 @@ public struct WorldScaleGeoTrackingSceneView: View {
     /// A Boolean value indicating if the camera was initially set.
     @State private var initialCameraIsSet = false
     /// A Boolean value that indicates whether to hide the coaching overlay view.
-    private var coachingOverlayIsHidden: Bool = false
+    private var coachingOverlayIsHidden = false
     /// A Boolean value that indicates whether the coaching overlay view is active.
-    @State private var coachingOverlayIsActive: Bool = true
+    @State private var coachingOverlayIsActive = true
     /// The current camera of the scene view.
     @State private var currentCamera: Camera?
     /// A Boolean value that indicates whether the calibration view is hidden.
-    private var calibrationViewIsHidden: Bool = false
+    private var calibrationViewIsHidden = false
     /// The calibrated camera heading.
     @State private var calibrationHeading: Double?
     /// The closure that builds the scene view.
@@ -146,7 +146,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
                     group.addTask {
                         for await heading in locationDataSource.headings {
                             self.currentHeading = heading
-                            if let location = self.currentLocation {
+                            if let location = currentLocation {
                                 await updateSceneView(for: location, heading: heading)
                             }
                         }
@@ -182,7 +182,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
               location.verticalAccuracy > validAccuracyThreshold else { return }
         
         // Make sure either the initial camera is not set, or we need to update the camera.
-        guard (!initialCameraIsSet || shouldUpdateCamera(for: location)) else { return }
+        guard !initialCameraIsSet || shouldUpdateCamera(for: location) else { return }
         
         // Add some of the vertical accuracy to the z value of the position, that way if the
         // GPS location is not accurate, we won't end up below the earth's surface.
