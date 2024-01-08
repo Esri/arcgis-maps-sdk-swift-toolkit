@@ -21,7 +21,7 @@
 struct ComboBoxInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the ancestral form view.
+***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED*** State properties for element events.
@@ -30,7 +30,7 @@ struct ComboBoxInput: View {
 ***REMOVED***@State private var isEditable: Bool = false
 ***REMOVED***@State private var value: Any?
 ***REMOVED***@State private var formattedValue: String = ""
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The set of options in the combo box.
 ***REMOVED***@State private var codedValues = [CodedValue]()
 ***REMOVED***
@@ -39,9 +39,6 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The phrase to use when filtering by coded value name.
 ***REMOVED***@State private var filterPhrase = ""
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether a value is required but missing.
-***REMOVED***@State private var requiredValueMissing = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
@@ -126,14 +123,13 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
-***REMOVED******REMOVED******REMOVED***requiredValueMissing = isRequired && selectedValue == nil
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(selectedValue?.code)
 ***REMOVED******REMOVED*** catch {

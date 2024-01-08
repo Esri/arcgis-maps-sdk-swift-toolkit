@@ -19,7 +19,7 @@
 struct TextInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the ancestral form view.
+***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED*** State properties for element events.
@@ -27,7 +27,7 @@ struct TextInput: View {
 ***REMOVED***@State private var isRequired: Bool = false
 ***REMOVED***@State private var isEditable: Bool = false
 ***REMOVED***@State private var formattedValue: String = ""
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
@@ -70,12 +70,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 5)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
 ***REMOVED***
-***REMOVED******REMOVED***TextInputFooter(
-***REMOVED******REMOVED******REMOVED***text: isPlaceholder ? "" : text,
-***REMOVED******REMOVED******REMOVED***isFocused: isFocused,
-***REMOVED******REMOVED******REMOVED***element: element,
-***REMOVED******REMOVED******REMOVED***fieldType: fieldType
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
 ***REMOVED******REMOVED******REMOVED***if isFocused && isPlaceholder {
@@ -100,9 +95,22 @@ struct TextInput: View {
 ***REMOVED******REMOVED***.onChange(of: text) { text in
 ***REMOVED******REMOVED******REMOVED***guard !isPlaceholder else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(text)
+***REMOVED******REMOVED******REMOVED******REMOVED***switch element.fieldType {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .int16:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(Int16(text))
+***REMOVED******REMOVED******REMOVED******REMOVED***case .int32:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(Int32(text))
+***REMOVED******REMOVED******REMOVED******REMOVED***case .int64:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(Int64(text))
+***REMOVED******REMOVED******REMOVED******REMOVED***case .float32:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(Float64(text))
+***REMOVED******REMOVED******REMOVED******REMOVED***case .float64:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(Float64(text))
+***REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(text)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
+***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription, String(describing: error))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if element.isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
@@ -129,11 +137,6 @@ private extension TextInput {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The field type of the text input.
-***REMOVED***var fieldType: FieldType {
-***REMOVED******REMOVED***model.featureForm.feature.table!.field(named: element.fieldName)!.type!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
@@ -164,7 +167,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .phone, isFocused, fieldType.isNumeric {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***positiveNegativeButton
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -186,7 +189,8 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.
 ***REMOVED***var keyboardType: UIKeyboardType {
-***REMOVED******REMOVED***fieldType.isNumeric ? (fieldType.isFloatingPoint ? .decimalPad : .numberPad) : .default
+***REMOVED******REMOVED***guard let fieldType = element.fieldType else { return .default ***REMOVED***
+***REMOVED******REMOVED***return fieldType.isNumeric ? (fieldType.isFloatingPoint ? .decimalPad : .numberPad) : .default
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The button that allows a user to switch the numeric value between positive and negative.

@@ -21,7 +21,7 @@
 struct RadioButtonsInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the ancestral form view.
+***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED*** State properties for element events.
@@ -29,12 +29,9 @@ struct RadioButtonsInput: View {
 ***REMOVED***@State private var isRequired: Bool = false
 ***REMOVED***@State private var isEditable: Bool = false
 ***REMOVED***@State private var value: Any?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The set of options in the input.
 ***REMOVED***@State private var codedValues = [CodedValue]()
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the date selection was cleared when a value is required.
-***REMOVED***@State private var requiredValueMissing = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
@@ -102,7 +99,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
@@ -112,7 +109,6 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***requiredValueMissing = isRequired && selectedValue == nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(selectedValue?.code)
 ***REMOVED******REMOVED******REMOVED*** catch {

@@ -29,7 +29,7 @@ import Combine
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visibility tasks group.
 ***REMOVED***private var isVisibleTask: Task<Void, Never>?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The list of visible form elements.
 ***REMOVED***@Published var visibleElements = [FormElement]()
 ***REMOVED***
@@ -77,7 +77,7 @@ import Combine
 ***REMOVED******REMOVED***expressionEvaluationErrors = evaluationErrors ?? []
 ***REMOVED******REMOVED***initializeIsVisibleTasks()
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Performs an evaluation of all form expressions.
 ***REMOVED***func evaluateExpressions() {
 ***REMOVED******REMOVED***evaluateTask?.cancel()
@@ -87,5 +87,9 @@ import Combine
 ***REMOVED******REMOVED******REMOVED***expressionEvaluationErrors = evaluationErrors ?? []
 ***REMOVED******REMOVED******REMOVED***isEvaluating = false
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var validationErrors: [String : [Error]] {
+***REMOVED******REMOVED***featureForm.validationErrors
 ***REMOVED***
 ***REMOVED***
