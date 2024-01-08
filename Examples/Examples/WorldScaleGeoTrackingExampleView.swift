@@ -41,7 +41,7 @@ struct WorldScaleGeoTrackingExampleView: View {
     /// Graphics overlay to show a graphic around your initial location.
     @State private var graphicsOverlay = GraphicsOverlay()
     /// The location datasource that is used to access the device location.
-    @State private var locationDatasSource = SystemLocationDataSource()
+    @State private var locationDataSource = SystemLocationDataSource()
     /// A feature layer with San Bernardino parcels data.
     private static var parcelsLayer: FeatureLayer {
         let parcelsTable = ServiceFeatureTable(url: URL(string: "https://services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
@@ -52,7 +52,7 @@ struct WorldScaleGeoTrackingExampleView: View {
     
     var body: some View {
         VStack {
-            WorldScaleGeoTrackingSceneView { proxy in
+            WorldScaleGeoTrackingSceneView(locationDataSource: locationDataSource) { proxy in
                 SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
                     .onSingleTapGesture { screen, _ in
                         print("Identifying...")
@@ -82,14 +82,8 @@ struct WorldScaleGeoTrackingExampleView: View {
                 locationManager.requestWhenInUseAuthorization()
             }
             
-            do {
-                try await locationDatasSource.start()
-            } catch {
-                print("Failed to start location datasource: \(error.localizedDescription)")
-            }
-            
             // Retrieve initial location.
-            guard let initialLocation = await locationDatasSource.locations.first(where: { _ in true }) else { return }
+            guard let initialLocation = await locationDataSource.locations.first(where: { _ in true }) else { return }
             
             // Put a circle graphic around the initial location.
             let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
