@@ -41,7 +41,7 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED******REMOVED***/ Graphics overlay to show a graphic around your initial location.
 ***REMOVED***@State private var graphicsOverlay = GraphicsOverlay()
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
-***REMOVED***@State private var locationDatasSource = SystemLocationDataSource()
+***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
 ***REMOVED******REMOVED***/ A feature layer with San Bernardino parcels data.
 ***REMOVED***private static var parcelsLayer: FeatureLayer {
 ***REMOVED******REMOVED***let parcelsTable = ServiceFeatureTable(url: URL(string: "https:***REMOVED***services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
@@ -52,7 +52,7 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***WorldScaleGeoTrackingSceneView { proxy in
+***REMOVED******REMOVED******REMOVED***WorldScaleGeoTrackingSceneView(locationDataSource: locationDataSource) { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
@@ -82,14 +82,8 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationManager.requestWhenInUseAuthorization()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await locationDatasSource.start()
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("Failed to start location datasource: \(error.localizedDescription)")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Retrieve initial location.
-***REMOVED******REMOVED******REMOVED***guard let initialLocation = await locationDatasSource.locations.first(where: { _ in true ***REMOVED***) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let initialLocation = await locationDataSource.locations.first(where: { _ in true ***REMOVED***) else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Put a circle graphic around the initial location.
 ***REMOVED******REMOVED******REMOVED***let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
