@@ -21,21 +21,18 @@ import SwiftUI
 struct SwitchInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The model for the ancestral form view.
+    /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
     // State properties for element events.
     
     @State private var isRequired: Bool = false
     @State private var isEditable: Bool = false
-
+    
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
     /// In this scenario a ``ComboBoxInput`` should be used instead.
     @State private var fallbackToComboBox = false
-    
-    /// A Boolean value indicating whether a value is required but missing.
-    @State private var requiredValueMissing = false
     
     /// A Boolean value indicating whether the switch is toggled on or off.
     @State private var isOn: Bool = false
@@ -82,7 +79,7 @@ struct SwitchInput: View {
                         .accessibilityIdentifier("\(element.label) Switch")
                 }
                 .formInputStyle()
-                InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+                InputFooter(element: element)
             }
             .disabled(!isEditable)
             .padding([.bottom], elementPadding)

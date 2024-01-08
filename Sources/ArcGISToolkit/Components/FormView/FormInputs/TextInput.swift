@@ -19,7 +19,7 @@ import ArcGIS
 struct TextInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The model for the ancestral form view.
+    /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
     // State properties for element events.
@@ -27,7 +27,7 @@ struct TextInput: View {
     @State private var isRequired: Bool = false
     @State private var isEditable: Bool = false
     @State private var formattedValue: String = ""
-
+    
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
@@ -70,12 +70,7 @@ struct TextInput: View {
                 .padding([.vertical], 5)
                 .textSelection(.enabled)
         }
-        TextInputFooter(
-            text: isPlaceholder ? "" : text,
-            isFocused: isFocused,
-            element: element,
-            fieldType: fieldType
-        )
+        InputFooter(element: element)
         .padding([.bottom], elementPadding)
         .onChange(of: isFocused) { isFocused in
             if isFocused && isPlaceholder {
@@ -100,9 +95,22 @@ struct TextInput: View {
         .onChange(of: text) { text in
             guard !isPlaceholder else { return }
             do {
-                try element.updateValue(text)
+                switch element.fieldType {
+                case .int16:
+                    try element.updateValue(Int16(text))
+                case .int32:
+                    try element.updateValue(Int32(text))
+                case .int64:
+                    try element.updateValue(Int64(text))
+                case .float32:
+                    try element.updateValue(Float64(text))
+                case .float64:
+                    try element.updateValue(Float64(text))
+                default:
+                    try element.updateValue(text)
+                }
             } catch {
-                print(error.localizedDescription)
+                print(error.localizedDescription, String(describing: error))
             }
             if element.isEditable {
                 model.evaluateExpressions()
@@ -129,11 +137,6 @@ private extension TextInput {
         } else {
             return false
         }
-    }
-    
-    /// The field type of the text input.
-    var fieldType: FieldType {
-        model.featureForm.feature.table!.field(named: element.fieldName)!.type!
     }
     
     /// The body of the text input when the element is editable.
@@ -164,7 +167,7 @@ private extension TextInput {
             .keyboardType(keyboardType)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
-                    if UIDevice.current.userInterfaceIdiom == .phone, isFocused, fieldType.isNumeric {
+                    if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
                         positiveNegativeButton
                         Spacer()
                     }
@@ -186,7 +189,8 @@ private extension TextInput {
     
     /// The keyboard type to use depending on where the input is numeric and decimal.
     var keyboardType: UIKeyboardType {
-        fieldType.isNumeric ? (fieldType.isFloatingPoint ? .decimalPad : .numberPad) : .default
+        guard let fieldType = element.fieldType else { return .default }
+        return fieldType.isNumeric ? (fieldType.isFloatingPoint ? .decimalPad : .numberPad) : .default
     }
     
     /// The button that allows a user to switch the numeric value between positive and negative.

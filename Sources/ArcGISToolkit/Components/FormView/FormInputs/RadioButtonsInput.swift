@@ -21,7 +21,7 @@ import SwiftUI
 struct RadioButtonsInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The model for the ancestral form view.
+    /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
     // State properties for element events.
@@ -29,12 +29,9 @@ struct RadioButtonsInput: View {
     @State private var isRequired: Bool = false
     @State private var isEditable: Bool = false
     @State private var value: Any?
-
+    
     /// The set of options in the input.
     @State private var codedValues = [CodedValue]()
-    
-    /// A Boolean value indicating whether the date selection was cleared when a value is required.
-    @State private var requiredValueMissing = false
     
     /// The selected option.
     @State private var selectedValue: CodedValue?
@@ -102,7 +99,7 @@ struct RadioButtonsInput: View {
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
-                InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+                InputFooter(element: element)
             }
             .padding([.bottom], elementPadding)
             .onAppear {
@@ -112,7 +109,6 @@ struct RadioButtonsInput: View {
                 }
             }
             .onChange(of: selectedValue) { selectedValue in
-                requiredValueMissing = isRequired && selectedValue == nil
                 do {
                     try element.updateValue(selectedValue?.code)
                 } catch {
