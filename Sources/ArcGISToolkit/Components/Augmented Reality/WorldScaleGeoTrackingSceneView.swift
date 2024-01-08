@@ -29,13 +29,13 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating if the camera was initially set.
 ***REMOVED***@State private var initialCameraIsSet = false
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether to hide the coaching overlay view.
-***REMOVED***private var coachingOverlayIsHidden: Bool = false
+***REMOVED***private var coachingOverlayIsHidden = false
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the coaching overlay view is active.
-***REMOVED***@State private var coachingOverlayIsActive: Bool = true
+***REMOVED***@State private var coachingOverlayIsActive = true
 ***REMOVED******REMOVED***/ The current camera of the scene view.
 ***REMOVED***@State private var currentCamera: Camera?
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
-***REMOVED***private var calibrationViewIsHidden: Bool = false
+***REMOVED***private var calibrationViewIsHidden = false
 ***REMOVED******REMOVED***/ The calibrated camera heading.
 ***REMOVED***@State private var calibrationHeading: Double?
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
@@ -146,7 +146,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await heading in locationDataSource.headings {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.currentHeading = heading
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let location = self.currentLocation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let location = currentLocation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await updateSceneView(for: location, heading: heading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -182,7 +182,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***  location.verticalAccuracy > validAccuracyThreshold else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Make sure either the initial camera is not set, or we need to update the camera.
-***REMOVED******REMOVED***guard (!initialCameraIsSet || shouldUpdateCamera(for: location)) else { return ***REMOVED***
+***REMOVED******REMOVED***guard !initialCameraIsSet || shouldUpdateCamera(for: location) else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Add some of the vertical accuracy to the z value of the position, that way if the
 ***REMOVED******REMOVED******REMOVED*** GPS location is not accurate, we won't end up below the earth's surface.

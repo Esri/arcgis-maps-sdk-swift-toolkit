@@ -42,8 +42,8 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED***@State private var graphicsOverlay = GraphicsOverlay()
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***@State private var locationDatasSource = SystemLocationDataSource()
-***REMOVED***
-***REMOVED***static var parcelsLayer: FeatureLayer {
+***REMOVED******REMOVED***/ A feature layer with San Bernardino parcels data.
+***REMOVED***private static var parcelsLayer: FeatureLayer {
 ***REMOVED******REMOVED***let parcelsTable = ServiceFeatureTable(url: URL(string: "https:***REMOVED***services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
 ***REMOVED******REMOVED***let featureLayer = FeatureLayer(featureTable: parcelsTable)
 ***REMOVED******REMOVED***featureLayer.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .cyan, width: 3))
@@ -56,21 +56,19 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task.detached {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("\(results.count) identify result(s).")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** A slider to adjust the basemap opacity.
-***REMOVED******REMOVED******REMOVED***Slider(value: $opacity, in: 0...1.0)
+***REMOVED******REMOVED******REMOVED***Slider(value: $opacity, in: 0...1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: opacity) { opacity in
 ***REMOVED******REMOVED******REMOVED***guard let basemap = scene.basemap else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***for layer in basemap.baseLayers {
-***REMOVED******REMOVED******REMOVED******REMOVED***layer.opacity = opacity
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***basemap.baseLayers.forEach { $0.opacity = opacity ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Request when-in-use location authorization.
@@ -90,10 +88,10 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("Failed to start location datasource: \(error.localizedDescription)")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Retrieve initial location
+***REMOVED******REMOVED******REMOVED******REMOVED*** Retrieve initial location.
 ***REMOVED******REMOVED******REMOVED***guard let initialLocation = await locationDatasSource.locations.first(where: { _ in true ***REMOVED***) else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Put a circle graphic around the initial location
+***REMOVED******REMOVED******REMOVED******REMOVED*** Put a circle graphic around the initial location.
 ***REMOVED******REMOVED******REMOVED***let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(Graphic(geometry: circle, symbol: SimpleLineSymbol(color: .red, width: 3)))
 ***REMOVED***
