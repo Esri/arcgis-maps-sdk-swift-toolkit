@@ -16,6 +16,16 @@ import ARKit
 import SwiftUI
 import ArcGIS
 
+/// The types of tracking states that determine how locations generated from the
+/// location data source are used during AR tracking.
+public enum TrackingState {
+    /// Use only the initial location from the location data source
+    /// and ignore all subsequent locations.
+    case initial
+    /// Use all locations from the location data source.
+    case continious
+}
+
 /// A scene view that provides an augmented reality world scale experience using geotracking.
 public struct WorldScaleGeoTrackingSceneView: View {
     /// The proxy for the ARSwiftUIView.
@@ -50,6 +60,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var currentHeading: Double?
     /// The valid accuracy threshold for a location in meters.
     private var validAccuracyThreshold = 0.0
+    /// The tracking state for the AR experience.
+    private var trackingState: TrackingState = .initial
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -130,24 +142,16 @@ public struct WorldScaleGeoTrackingSceneView: View {
             arViewProxy.session.pause()
             Task { await locationDataSource.stop() }
         }
+        .onChange(of: trackingState) { trackingState in
+            Task {
+                do {
+                    try await setLocation(using: trackingState)
+                } catch {}
+            }
+        }
         .task {
             do {
-                try await locationDataSource.start()
-                await withTaskGroup(of: Void.self) { group in
-                    group.addTask {
-                        for await location in locationDataSource.locations {
-                            lastLocationTimestamp = location.timestamp
-                            currentLocation = location
-                            await updateSceneView(for: location)
-                        }
-                    }
-                    group.addTask {
-                        for await heading in locationDataSource.headings {
-                            currentHeading = heading
-                            updateHeading(heading)
-                        }
-                    }
-                }
+                try await setLocation(using: trackingState)
             } catch {}
         }
         .toolbar {
@@ -163,6 +167,56 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(8)
                 .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+        }
+    }
+    
+    /// Sets camera controller camera values based on location data source location
+    /// and heading values.
+    /// - Parameter trackingState: The tracking state.
+    private func setLocation(using trackingState: TrackingState) async throws {
+        try await manageLocationDataSource(using: trackingState)
+        
+        switch trackingState {
+        case .initial:
+            try await setInitialLocation()
+            await locationDataSource.stop()
+        case .continious:
+            try await observeLocationDataSourceUpdates()
+        }
+    }
+    
+    /// Sets the camera controller camera with initial location data source values.
+    private func setInitialLocation() async throws {
+        if let currentLocation {
+            await updateSceneView(for: currentLocation)
+        } else {
+            guard let location = await locationDataSource.locations.first(where: { _ in true }),
+                  let heading = await locationDataSource.headings.first(where: { _ in true }) else { return }
+            
+            self.currentLocation = location
+            self.currentHeading = heading
+            await updateSceneView(for: location)
+            updateHeading(heading)
+        }
+    }
+    
+    /// Sets the camera controller camera with location data source location
+    /// and heading values as they update.
+    private func observeLocationDataSourceUpdates() async throws {
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask {
+                for await location in locationDataSource.locations {
+                    self.lastLocationTimestamp = location.timestamp
+                    self.currentLocation = location
+                    await updateSceneView(for: location)
+                }
+            }
+            group.addTask {
+                for await heading in locationDataSource.headings {
+                    self.currentHeading = heading
+                    updateHeading(heading)
+                }
+            }
         }
     }
     
@@ -254,6 +308,14 @@ public struct WorldScaleGeoTrackingSceneView: View {
         return view
     }
     
+    /// Sets the tracking state for the AR experience.
+    /// - Parameter trackingState: The tracking state.
+    public func trackingState(_ trackingState: TrackingState) -> Self {
+        var view = self
+        view.trackingState = trackingState
+        return view
+    }
+    
     /// Updates the heading of the scene view camera controller.
     /// - Parameter heading: The camera heading.
     func updateHeading(_ heading: Double) {
@@ -262,6 +324,22 @@ public struct WorldScaleGeoTrackingSceneView: View {
             pitch: cameraController.originCamera.pitch,
             roll: cameraController.originCamera.roll
         )
+    }
+    
+    /// Starts or stops the location data source based on the location data source
+    /// status and the tracking state.
+    /// - Parameter trackingState: The tracking state.
+    func manageLocationDataSource(using trackingState: TrackingState) async throws {
+        switch(locationDataSource.status) {
+        case .stopped, .stopping, .failedToStart:
+            try await locationDataSource.start()
+        case .starting, .started:
+            // Stop location data source once initial camera is set.
+            if trackingState == .initial,
+               initialCameraIsSet {
+                await locationDataSource.stop()
+            }
+        }
     }
     
     /// A view that allows the user to calibrate the heading of the scene view camera controller.
@@ -295,5 +373,11 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 Text("verticalAccuracy: \(currentLocation.verticalAccuracy, format: .number)")
             }
         }
+    }
+}
+
+extension TrackingState: Hashable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.hashValue == rhs.hashValue
     }
 }
