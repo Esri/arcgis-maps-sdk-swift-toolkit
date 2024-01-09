@@ -66,7 +66,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
         clippingDistance: Double? = nil,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
-        self.sceneViewBuilder = sceneView
+        sceneViewBuilder = sceneView
         
         let cameraController = TransformationMatrixCameraController()
         cameraController.translationFactor = 1
@@ -110,7 +110,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
                         .atmosphereEffect(.off)
                         .interactiveNavigationDisabled(true)
                         .onCameraChanged { camera in
-                            self.currentCamera = camera
+                            currentCamera = camera
                         }
                 }
                 
@@ -136,8 +136,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 await withTaskGroup(of: Void.self) { group in
                     group.addTask {
                         for await location in locationDataSource.locations {
-                            self.lastLocationTimestamp = location.timestamp
-                            self.currentLocation = location
+                            lastLocationTimestamp = location.timestamp
+                            currentLocation = location
                             if let heading = currentHeading {
                                 await updateSceneView(for: location, heading: heading)
                             }
@@ -145,7 +145,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
                     }
                     group.addTask {
                         for await heading in locationDataSource.headings {
-                            self.currentHeading = heading
+                            currentHeading = heading
                             if let location = currentLocation {
                                 await updateSceneView(for: location, heading: heading)
                             }
@@ -205,9 +205,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
         // and set the status text to empty.
         if !initialCameraIsSet {
             coachingOverlayIsActive = false
-            withAnimation {
-                initialCameraIsSet = true
-            }
+            initialCameraIsSet = true
         }
     }
     
