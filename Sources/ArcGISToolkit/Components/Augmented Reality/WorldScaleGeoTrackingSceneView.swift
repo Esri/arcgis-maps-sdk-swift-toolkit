@@ -138,17 +138,13 @@ public struct WorldScaleGeoTrackingSceneView: View {
                         for await location in locationDataSource.locations {
                             lastLocationTimestamp = location.timestamp
                             currentLocation = location
-                            if let heading = currentHeading {
-                                await updateSceneView(for: location, heading: heading)
-                            }
+                            await updateSceneView(for: location)
                         }
                     }
                     group.addTask {
                         for await heading in locationDataSource.headings {
                             currentHeading = heading
-                            if let location = currentLocation {
-                                await updateSceneView(for: location, heading: heading)
-                            }
+                            updateHeading(heading)
                         }
                     }
                 }
@@ -172,8 +168,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
     
     /// If necessary, updates the scene view's camera controller for a new location coming
     /// from the location datasource.
+    /// - Parameter location: The location data source location.
     @MainActor
-    private func updateSceneView(for location: Location, heading: Double) {
+    private func updateSceneView(for location: Location) {
         // Do not use cached location more than 10 seconds old.
         guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < 10 else { return }
         
@@ -192,7 +189,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
             latitude: location.position.y,
             longitude: location.position.x,
             altitude: altitude,
-            heading: calibrationHeading ?? heading,
+            heading: calibrationHeading ?? currentHeading ?? 0,
             pitch: 90,
             roll: 0
         )
@@ -257,7 +254,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
     /// - Parameter heading: The camera heading.
     func updateHeading(_ heading: Double) {
         cameraController.originCamera = cameraController.originCamera.rotatedTo(
-            heading: heading,
+            heading: calibrationHeading ?? heading,
             pitch: cameraController.originCamera.pitch,
             roll: cameraController.originCamera.roll
         )
