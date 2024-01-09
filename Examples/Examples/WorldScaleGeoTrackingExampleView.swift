@@ -27,11 +27,10 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED******REMOVED***let elevationSource = ArcGISTiledElevationSource(url: elevationServiceURL)
 ***REMOVED******REMOVED***let surface = Surface()
 ***REMOVED******REMOVED***surface.addElevationSource(elevationSource)
-***REMOVED******REMOVED***let scene = Scene()
+***REMOVED******REMOVED***surface.backgroundGrid.isVisible = false
+***REMOVED******REMOVED***surface.navigationConstraint = .unconstrained
+***REMOVED******REMOVED***let scene = Scene(basemapStyle: .arcGISImagery)
 ***REMOVED******REMOVED***scene.baseSurface = surface
-***REMOVED******REMOVED***scene.baseSurface.backgroundGrid.isVisible = false
-***REMOVED******REMOVED***scene.baseSurface.navigationConstraint = .unconstrained
-***REMOVED******REMOVED***scene.basemap = Basemap(style: .arcGISImagery)
 ***REMOVED******REMOVED***scene.addOperationalLayer(parcelsLayer)
 ***REMOVED******REMOVED***return scene
 ***REMOVED***()

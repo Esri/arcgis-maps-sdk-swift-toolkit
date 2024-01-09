@@ -66,7 +66,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***clippingDistance: Double? = nil,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
-***REMOVED******REMOVED***self.sceneViewBuilder = sceneView
+***REMOVED******REMOVED***sceneViewBuilder = sceneView
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController()
 ***REMOVED******REMOVED***cameraController.translationFactor = 1
@@ -110,7 +110,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.interactiveNavigationDisabled(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCameraChanged { camera in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.currentCamera = camera
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentCamera = camera
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -136,8 +136,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await location in locationDataSource.locations {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.lastLocationTimestamp = location.timestamp
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.currentLocation = location
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lastLocationTimestamp = location.timestamp
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentLocation = location
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let heading = currentHeading {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await updateSceneView(for: location, heading: heading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -145,7 +145,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await heading in locationDataSource.headings {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.currentHeading = heading
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentHeading = heading
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let location = currentLocation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await updateSceneView(for: location, heading: heading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -205,9 +205,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED*** and set the status text to empty.
 ***REMOVED******REMOVED***if !initialCameraIsSet {
 ***REMOVED******REMOVED******REMOVED***coachingOverlayIsActive = false
-***REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
