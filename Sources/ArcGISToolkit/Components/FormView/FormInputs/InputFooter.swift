@@ -174,11 +174,11 @@ private extension RangeDomain {
     /// String representations of the minimum and maximum value of the range domain.
     var displayableMinAndMax: (min: String, max: String)? {
         if let min = minValue as? Double, let max = maxValue as? Double {
-            return (String(min), String(max))
+            return (min.formatted(), max.formatted())
         } else if let min = minValue as? Int, let max = maxValue as? Int {
-            return (String(min), String(max))
+            return (min.formatted(), max.formatted())
         } else if let min = minValue as? Int32, let max = maxValue as? Int32 {
-            return (String(min), String(max))
+            return (min.formatted(), max.formatted())
         } else {
             return nil
         }
