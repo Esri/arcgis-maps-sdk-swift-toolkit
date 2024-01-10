@@ -22,7 +22,13 @@ import SwiftUI
     private(set) var featureForm: FeatureForm
     
     /// The current focused element, if one exists.
-    @Published var focusedElement: FormElement?
+    @Published var focusedElement: FormElement? {
+        didSet {
+            if let focusedElement, !previouslyFocusedFields.contains(focusedElement) {
+                previouslyFocusedFields.append(focusedElement)
+            }
+        }
+    }
     
     /// The expression evaluation task.
     private var evaluateTask: Task<Void, Never>?
@@ -38,6 +44,8 @@ import SwiftUI
     
     /// A Boolean value indicating whether evaluation is running.
     @Published var isEvaluating = true
+    
+    @Published var previouslyFocusedFields = [FormElement]()
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.

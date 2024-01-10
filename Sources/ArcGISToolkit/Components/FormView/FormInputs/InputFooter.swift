@@ -34,7 +34,7 @@ struct InputFooter: View {
             }
             .accessibilityIdentifier("\(element.label) Footer")
             Spacer()
-            if model.focusedElement == element, element.fieldType == .text, element.description.isEmpty || firstError != nil {
+            if model.focusedElement == element, element.fieldType == .text, element.description.isEmpty || primaryError != nil {
                 Text(element.formattedValue.count, format: .number)
                     .accessibilityIdentifier("\(element.label) Character Indicator")
             }
@@ -46,7 +46,7 @@ struct InputFooter: View {
 
 extension InputFooter {
     var errorMessage: Text? {
-        guard let error = firstError else { return nil }
+        guard let error = primaryError else { return nil }
         return switch error {
         case .featureFormNullNotAllowedError:
             Text(
@@ -147,8 +147,13 @@ extension InputFooter {
         )
     }
     
-    var firstError: ArcGIS.FeatureFormError? {
-        model.validationErrors[element.fieldName]?.first as? ArcGIS.FeatureFormError
+    var primaryError: ArcGIS.FeatureFormError? {
+        let elementErrors = model.validationErrors[element.fieldName] as? [ArcGIS.FeatureFormError]
+        if let requiredError = elementErrors?.first(where: { $0 == .featureFormFieldIsRequiredError }), model.focusedElement != element {
+            return requiredError
+        } else {
+            return elementErrors?.first(where: { $0 != .featureFormFieldIsRequiredError })
+        }
     }
     
     var lengthRange: ClosedRange<Int>? {
@@ -161,8 +166,9 @@ extension InputFooter {
         }
     }
     
+    
     var isShowingError: Bool {
-        element.isEditable && firstError != nil
+        element.isEditable && primaryError != nil && model.previouslyFocusedFields.contains(element)
     }
 }
 
