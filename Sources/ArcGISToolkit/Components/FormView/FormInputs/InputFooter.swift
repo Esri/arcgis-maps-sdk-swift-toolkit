@@ -103,7 +103,6 @@ extension InputFooter {
                     comment: "Text indicating a field's value must be within the allowed range."
                 )
             }
-            
         case .featureFormNotInCodedValueDomainError:
             Text(
                 "Value must be within domain",
@@ -119,7 +118,6 @@ extension InputFooter {
                     bundle: .toolkitModule,
                     comment: "Text indicating a field's value must be convertible to a number."
                 )
-                
             } else if element.fieldType?.isNumeric ?? false {
                 Text(
                     "Value must be a whole number",
