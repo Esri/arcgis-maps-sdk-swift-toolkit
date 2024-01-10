@@ -34,7 +34,7 @@ struct InputFooter: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if isFocused, element.fieldType == .text, element.description.isEmpty || firstError != nil {
+***REMOVED******REMOVED******REMOVED***if model.focusedElement == element, element.fieldType == .text, element.description.isEmpty || firstError != nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.formattedValue.count, format: .number)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Character Indicator")
 ***REMOVED******REMOVED***
@@ -55,17 +55,55 @@ extension InputFooter {
 ***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must not be empty."
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .featureFormExceedsMaximumDateTimeError:
-***REMOVED******REMOVED******REMOVED***Text("Unhandled Error")
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Date exceeds maximum",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must not exceed a maximum date."
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .featureFormLessThanMinimumDateTimeError:
-***REMOVED******REMOVED******REMOVED***Text("Unhandled Error")
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Date does not meet minimum",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must meet a minimum date."
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .featureFormExceedsMaximumLengthError:
-***REMOVED******REMOVED******REMOVED***Text("Unhandled Error")
+***REMOVED******REMOVED******REMOVED***if lengthRange?.lowerBound == lengthRange?.upperBound {
+***REMOVED******REMOVED******REMOVED******REMOVED***exactLengthMessage
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Maximum \(lengthRange!.upperBound) characters",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's maximum number of allowed characters."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .featureFormLessThanMinimumLengthError:
-***REMOVED******REMOVED******REMOVED***Text("Unhandled Error")
-***REMOVED******REMOVED***case .featureFormExceedsNumericMaximumError:
-***REMOVED******REMOVED******REMOVED***Text("Unhandled Error")
-***REMOVED******REMOVED***case .featureFormLessThanNumericMinimumError:
-***REMOVED******REMOVED******REMOVED***Text("Unhandled Error")
+***REMOVED******REMOVED******REMOVED***if lengthRange?.lowerBound == lengthRange?.upperBound {
+***REMOVED******REMOVED******REMOVED******REMOVED***exactLengthMessage
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Minimum \(lengthRange!.lowerBound) characters",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's minimum number of allowed characters."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .featureFormExceedsNumericMaximumError, .featureFormLessThanNumericMinimumError:
+***REMOVED******REMOVED******REMOVED***if let numericRange = element.domain as? RangeDomain, let minMax = numericRange.displayableMinAndMax {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Enter value from \(minMax.min) to \(minMax.max)",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text indicating a field's value must be within the allowed range.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The first and second parameter hold the minimum and maximum values respectively.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Value must be within allowed range",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must be within the allowed range."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .featureFormNotInCodedValueDomainError:
 ***REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED***"Value must be within domain",
@@ -98,12 +136,19 @@ extension InputFooter {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Text indicating a field's exact number of allowed characters.
+***REMOVED******REMOVED***/ - Note: This is intended to be used in instances where the character minimum and maximum are
+***REMOVED******REMOVED***/ identical, such as an ID field.
+***REMOVED***var exactLengthMessage: Text {
+***REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange!.lowerBound) characters",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "Text indicating the user should enter a field's exact number of required characters."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED***var firstError: ArcGIS.FeatureFormError? {
 ***REMOVED******REMOVED***model.validationErrors[element.fieldName]?.first as? ArcGIS.FeatureFormError
-***REMOVED***
-***REMOVED***
-***REMOVED***var isFocused: Bool {
-***REMOVED******REMOVED***model.focusedElement == element
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var lengthRange: ClosedRange<Int>? {
@@ -116,23 +161,22 @@ extension InputFooter {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The length validation scheme performed on the text input, determined by the minimum and
-***REMOVED******REMOVED***/ maximum lengths.
-***REMOVED***var lengthValidationScheme: LengthValidationScheme {
-***REMOVED******REMOVED***if lengthRange?.lowerBound == 0 {
-***REMOVED******REMOVED******REMOVED***return .max
-***REMOVED*** else if lengthRange?.lowerBound == lengthRange?.upperBound {
-***REMOVED******REMOVED******REMOVED***return .exact
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return .minAndMax
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***var numericRange: RangeDomain? {
-***REMOVED******REMOVED***element.domain as? RangeDomain
-***REMOVED***
-***REMOVED***
 ***REMOVED***var isShowingError: Bool {
 ***REMOVED******REMOVED***element.isEditable && firstError != nil
+***REMOVED***
+***REMOVED***
+
+private extension RangeDomain {
+***REMOVED******REMOVED***/ String representations of the minimum and maximum value of the range domain.
+***REMOVED***var displayableMinAndMax: (min: String, max: String)? {
+***REMOVED******REMOVED***if let min = minValue as? Double, let max = maxValue as? Double {
+***REMOVED******REMOVED******REMOVED***return (String(min), String(max))
+***REMOVED*** else if let min = minValue as? Int, let max = maxValue as? Int {
+***REMOVED******REMOVED******REMOVED***return (String(min), String(max))
+***REMOVED*** else if let min = minValue as? Int32, let max = maxValue as? Int32 {
+***REMOVED******REMOVED******REMOVED***return (String(min), String(max))
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
