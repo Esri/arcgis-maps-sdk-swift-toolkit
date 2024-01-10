@@ -34,7 +34,7 @@ struct InputFooter: View {
             }
             .accessibilityIdentifier("\(element.label) Footer")
             Spacer()
-            if isFocused, element.fieldType == .text, element.description.isEmpty || firstError != nil {
+            if model.focusedElement == element, element.fieldType == .text, element.description.isEmpty || firstError != nil {
                 Text(element.formattedValue.count, format: .number)
                     .accessibilityIdentifier("\(element.label) Character Indicator")
             }
@@ -55,17 +55,55 @@ extension InputFooter {
                 comment: "Text indicating a field's value must not be empty."
             )
         case .featureFormExceedsMaximumDateTimeError:
-            Text("Unhandled Error")
+            Text(
+                "Date exceeds maximum",
+                bundle: .toolkitModule,
+                comment: "Text indicating a field's value must not exceed a maximum date."
+            )
         case .featureFormLessThanMinimumDateTimeError:
-            Text("Unhandled Error")
+            Text(
+                "Date does not meet minimum",
+                bundle: .toolkitModule,
+                comment: "Text indicating a field's value must meet a minimum date."
+            )
         case .featureFormExceedsMaximumLengthError:
-            Text("Unhandled Error")
+            if lengthRange?.lowerBound == lengthRange?.upperBound {
+                exactLengthMessage
+            } else {
+                Text(
+                    "Maximum \(lengthRange!.upperBound) characters",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's maximum number of allowed characters."
+                )
+            }
         case .featureFormLessThanMinimumLengthError:
-            Text("Unhandled Error")
-        case .featureFormExceedsNumericMaximumError:
-            Text("Unhandled Error")
-        case .featureFormLessThanNumericMinimumError:
-            Text("Unhandled Error")
+            if lengthRange?.lowerBound == lengthRange?.upperBound {
+                exactLengthMessage
+            } else {
+                Text(
+                    "Minimum \(lengthRange!.lowerBound) characters",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's minimum number of allowed characters."
+                )
+            }
+        case .featureFormExceedsNumericMaximumError, .featureFormLessThanNumericMinimumError:
+            if let numericRange = element.domain as? RangeDomain, let minMax = numericRange.displayableMinAndMax {
+                Text(
+                    "Enter value from \(minMax.min) to \(minMax.max)",
+                    bundle: .toolkitModule,
+                    comment: """
+                             Text indicating a field's value must be within the allowed range.
+                             The first and second parameter hold the minimum and maximum values respectively.
+                             """
+                )
+            } else {
+                Text(
+                    "Value must be within allowed range",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value must be within the allowed range."
+                )
+            }
+            
         case .featureFormNotInCodedValueDomainError:
             Text(
                 "Value must be within domain",
@@ -98,12 +136,19 @@ extension InputFooter {
         }
     }
     
-    var firstError: ArcGIS.FeatureFormError? {
-        model.validationErrors[element.fieldName]?.first as? ArcGIS.FeatureFormError
+    /// Text indicating a field's exact number of allowed characters.
+    /// - Note: This is intended to be used in instances where the character minimum and maximum are
+    /// identical, such as an ID field.
+    var exactLengthMessage: Text {
+        Text(
+            "Enter \(lengthRange!.lowerBound) characters",
+            bundle: .toolkitModule,
+            comment: "Text indicating the user should enter a field's exact number of required characters."
+        )
     }
     
-    var isFocused: Bool {
-        model.focusedElement == element
+    var firstError: ArcGIS.FeatureFormError? {
+        model.validationErrors[element.fieldName]?.first as? ArcGIS.FeatureFormError
     }
     
     var lengthRange: ClosedRange<Int>? {
@@ -116,23 +161,22 @@ extension InputFooter {
         }
     }
     
-    /// The length validation scheme performed on the text input, determined by the minimum and
-    /// maximum lengths.
-    var lengthValidationScheme: LengthValidationScheme {
-        if lengthRange?.lowerBound == 0 {
-            return .max
-        } else if lengthRange?.lowerBound == lengthRange?.upperBound {
-            return .exact
-        } else {
-            return .minAndMax
-        }
-    }
-    
-    var numericRange: RangeDomain? {
-        element.domain as? RangeDomain
-    }
-    
     var isShowingError: Bool {
         element.isEditable && firstError != nil
+    }
+}
+
+private extension RangeDomain {
+    /// String representations of the minimum and maximum value of the range domain.
+    var displayableMinAndMax: (min: String, max: String)? {
+        if let min = minValue as? Double, let max = maxValue as? Double {
+            return (String(min), String(max))
+        } else if let min = minValue as? Int, let max = maxValue as? Int {
+            return (String(min), String(max))
+        } else if let min = minValue as? Int32, let max = maxValue as? Int32 {
+            return (String(min), String(max))
+        } else {
+            return nil
+        }
     }
 }
