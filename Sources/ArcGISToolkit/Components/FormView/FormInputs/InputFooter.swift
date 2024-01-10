@@ -145,6 +145,8 @@ extension InputFooter {
         )
     }
     
+    /// The error to display for the input. If the element is not focused and has a required error this will be
+    /// the primary error. Otherwise the primary error is the first error in the element's set of errors.
     var primaryError: ArcGIS.FeatureFormError? {
         let elementErrors = model.validationErrors[element.fieldName] as? [ArcGIS.FeatureFormError]
         if let requiredError = elementErrors?.first(where: { $0 == .featureFormFieldIsRequiredError }), model.focusedElement != element {
@@ -154,6 +156,7 @@ extension InputFooter {
         }
     }
     
+    /// The alloable range of number of characters in the input.
     var lengthRange: ClosedRange<Int>? {
         if let input = element.input as? TextAreaFormInput {
             return input.minLength...input.maxLength
@@ -164,7 +167,7 @@ extension InputFooter {
         }
     }
     
-    
+    /// Determines whether an error is showing in the footer.
     var isShowingError: Bool {
         element.isEditable && primaryError != nil && model.previouslyFocusedFields.contains(element)
     }
