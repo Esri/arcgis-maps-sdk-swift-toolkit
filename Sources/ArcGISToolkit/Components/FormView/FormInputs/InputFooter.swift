@@ -34,7 +34,7 @@ struct InputFooter: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if model.focusedElement == element, element.fieldType == .text, element.description.isEmpty || firstError != nil {
+***REMOVED******REMOVED******REMOVED***if model.focusedElement == element, element.fieldType == .text, element.description.isEmpty || primaryError != nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.formattedValue.count, format: .number)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Character Indicator")
 ***REMOVED******REMOVED***
@@ -46,7 +46,7 @@ struct InputFooter: View {
 
 extension InputFooter {
 ***REMOVED***var errorMessage: Text? {
-***REMOVED******REMOVED***guard let error = firstError else { return nil ***REMOVED***
+***REMOVED******REMOVED***guard let error = primaryError else { return nil ***REMOVED***
 ***REMOVED******REMOVED***return switch error {
 ***REMOVED******REMOVED***case .featureFormNullNotAllowedError:
 ***REMOVED******REMOVED******REMOVED***Text(
@@ -147,8 +147,13 @@ extension InputFooter {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var firstError: ArcGIS.FeatureFormError? {
-***REMOVED******REMOVED***model.validationErrors[element.fieldName]?.first as? ArcGIS.FeatureFormError
+***REMOVED***var primaryError: ArcGIS.FeatureFormError? {
+***REMOVED******REMOVED***let elementErrors = model.validationErrors[element.fieldName] as? [ArcGIS.FeatureFormError]
+***REMOVED******REMOVED***if let requiredError = elementErrors?.first(where: { $0 == .featureFormFieldIsRequiredError ***REMOVED***), model.focusedElement != element {
+***REMOVED******REMOVED******REMOVED***return requiredError
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return elementErrors?.first(where: { $0 != .featureFormFieldIsRequiredError ***REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var lengthRange: ClosedRange<Int>? {
@@ -161,8 +166,9 @@ extension InputFooter {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
 ***REMOVED***var isShowingError: Bool {
-***REMOVED******REMOVED***element.isEditable && firstError != nil
+***REMOVED******REMOVED***element.isEditable && primaryError != nil && model.previouslyFocusedFields.contains(element)
 ***REMOVED***
 ***REMOVED***
 

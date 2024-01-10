@@ -22,7 +22,13 @@ import Combine
 ***REMOVED***private(set) var featureForm: FeatureForm
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current focused element, if one exists.
-***REMOVED***@Published var focusedElement: FormElement?
+***REMOVED***@Published var focusedElement: FormElement? {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***if let focusedElement, !previouslyFocusedFields.contains(focusedElement) {
+***REMOVED******REMOVED******REMOVED******REMOVED***previouslyFocusedFields.append(focusedElement)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The expression evaluation task.
 ***REMOVED***private var evaluateTask: Task<Void, Never>?
@@ -38,6 +44,8 @@ import Combine
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether evaluation is running.
 ***REMOVED***@Published var isEvaluating = true
+***REMOVED***
+***REMOVED***@Published var previouslyFocusedFields = [FormElement]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
 ***REMOVED******REMOVED***/ - Parameter featureForm: The feature form defining the editing experience.
