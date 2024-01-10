@@ -103,7 +103,6 @@ extension InputFooter {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must be within the allowed range."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .featureFormNotInCodedValueDomainError:
 ***REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED***"Value must be within domain",
@@ -119,7 +118,6 @@ extension InputFooter {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must be convertible to a number."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else if element.fieldType?.isNumeric ?? false {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Value must be a whole number",
