@@ -97,6 +97,7 @@ import SwiftUI
         }
     }
     
+    /// A shortcut to all of the validation erros present in the form.
     var validationErrors: [String : [Error]] {
         featureForm.validationErrors
     }
