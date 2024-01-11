@@ -212,7 +212,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED*** Do not update unless the horizontal accuracy is less than a threshold.
 ***REMOVED******REMOVED***guard let currentCamera,
 ***REMOVED******REMOVED******REMOVED***  let spatialReference = currentCamera.location.spatialReference,
-***REMOVED******REMOVED******REMOVED***  let currentPosition = GeometryEngine.project(location.position, into: spatialReference)
+***REMOVED******REMOVED******REMOVED***  ***REMOVED*** Project point from the location datasource spatial reference
+***REMOVED******REMOVED******REMOVED***  ***REMOVED*** to the scene view spatial reference.
+***REMOVED******REMOVED******REMOVED******REMOVED***let currentPosition = GeometryEngine.project(location.position, into: spatialReference)
 ***REMOVED******REMOVED***else { return false ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Measure the distance between the location datasource's reported location
