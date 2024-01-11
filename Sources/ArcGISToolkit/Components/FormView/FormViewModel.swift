@@ -45,6 +45,7 @@ import SwiftUI
     /// A Boolean value indicating whether evaluation is running.
     @Published var isEvaluating = true
     
+    /// The set of all fields which previously held focus.
     @Published var previouslyFocusedFields = [FormElement]()
     
     /// Initializes a form view model.
