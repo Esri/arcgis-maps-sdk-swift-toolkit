@@ -45,6 +45,7 @@ import Combine
 ***REMOVED******REMOVED***/ A Boolean value indicating whether evaluation is running.
 ***REMOVED***@Published var isEvaluating = true
 ***REMOVED***
+***REMOVED******REMOVED***/ The set of all fields which previously held focus.
 ***REMOVED***@Published var previouslyFocusedFields = [FormElement]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
