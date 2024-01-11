@@ -65,7 +65,7 @@ extension InputFooter {
 ***REMOVED******REMOVED***case .featureFormExceedsMaximumDateTimeError:
 ***REMOVED******REMOVED******REMOVED***if let input = element.input as? DateTimePickerFormInput, let max = input.max {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Date must be on or before \(max.formatted(input.includeTime ? .dateTime : .dateTime.month().day().year()))",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Date must be on or before \(max, format: input.includeTime ? .dateTime : .dateTime.month().day().year())",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must be on or before the maximum date specified in the variable."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -79,7 +79,7 @@ extension InputFooter {
 ***REMOVED******REMOVED***case .featureFormLessThanMinimumDateTimeError:
 ***REMOVED******REMOVED******REMOVED***if let input = element.input as? DateTimePickerFormInput, let min = input.min {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Date must be on or after \(min.formatted(input.includeTime ? .dateTime : .dateTime.month().day().year()))",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Date must be on or after \(min, format: input.includeTime ? .dateTime : .dateTime.month().day().year())",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must be on or after the minimum date specified in the variable."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
