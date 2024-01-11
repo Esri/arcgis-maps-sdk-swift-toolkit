@@ -28,8 +28,16 @@ struct InputFooter: View {
             Group {
                 if isShowingError {
                     errorMessage
-                } else {
+                } else if !element.description.isEmpty {
                     Text(element.description)
+                } else if element.fieldType == .text {
+                    if lengthRange?.lowerBound == lengthRange?.upperBound {
+                        exactLengthMessage
+                    } else if lengthRange?.lowerBound ?? 0 > 0 {
+                        lengthRangeMessage
+                    } else {
+                        maximumLengthMessage
+                    }
                 }
             }
             .accessibilityIdentifier("\(element.label) Footer")
@@ -70,21 +78,13 @@ extension InputFooter {
             if lengthRange?.lowerBound == lengthRange?.upperBound {
                 exactLengthMessage
             } else {
-                Text(
-                    "Maximum \(lengthRange!.upperBound) characters",
-                    bundle: .toolkitModule,
-                    comment: "Text indicating a field's maximum number of allowed characters."
-                )
+                maximumLengthMessage
             }
         case .featureFormLessThanMinimumLengthError:
             if lengthRange?.lowerBound == lengthRange?.upperBound {
                 exactLengthMessage
             } else {
-                Text(
-                    "Minimum \(lengthRange!.lowerBound) characters",
-                    bundle: .toolkitModule,
-                    comment: "Text indicating a field's minimum number of allowed characters."
-                )
+                minimumLengthMessage
             }
         case .featureFormExceedsNumericMaximumError, .featureFormLessThanNumericMinimumError:
             if let numericRange = element.domain as? RangeDomain, let minMax = numericRange.displayableMinAndMax {
@@ -145,15 +145,9 @@ extension InputFooter {
         )
     }
     
-    /// The error to display for the input. If the element is not focused and has a required error this will be
-    /// the primary error. Otherwise the primary error is the first error in the element's set of errors.
-    var primaryError: ArcGIS.FeatureFormError? {
-        let elementErrors = model.validationErrors[element.fieldName] as? [ArcGIS.FeatureFormError]
-        if let requiredError = elementErrors?.first(where: { $0 == .featureFormFieldIsRequiredError }), model.focusedElement != element {
-            return requiredError
-        } else {
-            return elementErrors?.first(where: { $0 != .featureFormFieldIsRequiredError })
-        }
+    /// Determines whether an error is showing in the footer.
+    var isShowingError: Bool {
+        element.isEditable && primaryError != nil && model.previouslyFocusedFields.contains(element)
     }
     
     /// The alloable range of number of characters in the input.
@@ -167,9 +161,46 @@ extension InputFooter {
         }
     }
     
-    /// Determines whether an error is showing in the footer.
-    var isShowingError: Bool {
-        element.isEditable && primaryError != nil && model.previouslyFocusedFields.contains(element)
+    /// Text indicating a field's value must be within the allowed length range.
+    var lengthRangeMessage: Text {
+        Text(
+            "Enter \(lengthRange!.lowerBound) to \(lengthRange!.upperBound) characters",
+            bundle: .toolkitModule,
+            comment: """
+                         Text indicating a field's value must be within the 
+                         allowed length range. The first and second parameter
+                         hold the minimum and maximum length respectively.
+                         """
+        )
+    }
+    
+    /// Text indicating a field's maximum number of allowed characters.
+    var maximumLengthMessage: Text {
+        Text(
+            "Maximum \(lengthRange!.upperBound) characters",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field's maximum number of allowed characters."
+        )
+    }
+    
+    /// Text indicating a field's maximum number of allowed characters.
+    var minimumLengthMessage: Text {
+        Text(
+            "Minimum \(lengthRange!.lowerBound) characters",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field's minimum number of allowed characters."
+        )
+    }
+    
+    /// The error to display for the input. If the element is not focused and has a required error this will be
+    /// the primary error. Otherwise the primary error is the first error in the element's set of errors.
+    var primaryError: ArcGIS.FeatureFormError? {
+        let elementErrors = model.validationErrors[element.fieldName] as? [ArcGIS.FeatureFormError]
+        if let requiredError = elementErrors?.first(where: { $0 == .featureFormFieldIsRequiredError }), model.focusedElement != element {
+            return requiredError
+        } else {
+            return elementErrors?.first(where: { $0 != .featureFormFieldIsRequiredError })
+        }
     }
 }
 
