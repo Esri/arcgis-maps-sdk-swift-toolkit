@@ -121,41 +121,34 @@ public struct WorldScaleGeoTrackingSceneView: View {
                         .allowsHitTesting(false)
                 }
             }
-            .observingInterfaceOrientation($interfaceOrientation)
-            .onAppear {
-                arViewProxy.session.run(configuration)
-            }
-            .onDisappear {
-                arViewProxy.session.pause()
-                Task { await locationDataSource.stop() }
-            }
-            .task {
-                do {
-                    try await locationDataSource.start()
-                    await withTaskGroup(of: Void.self) { group in
-                        group.addTask {
-                            for await location in locationDataSource.locations {
-                                lastLocationTimestamp = location.timestamp
-                                currentLocation = location
-                                await updateSceneView(for: location)
-                            }
-                        }
-                        group.addTask {
-                            for await heading in locationDataSource.headings {
-                                currentHeading = heading
-                                
-                                guard let currentCamera else { return }
-                                let camera = cameraController.originCamera.rotatedTo(
-                                    heading: calibrationHeading ?? heading,
-                                    pitch: currentCamera.pitch,
-                                    roll: currentCamera.roll
-                                )
-                                sceneViewProxy.setViewpointCamera(camera)
-                            }
+        }
+        .observingInterfaceOrientation($interfaceOrientation)
+        .onAppear {
+            arViewProxy.session.run(configuration)
+        }
+        .onDisappear {
+            arViewProxy.session.pause()
+            Task { await locationDataSource.stop() }
+        }
+        .task {
+            do {
+                try await locationDataSource.start()
+                await withTaskGroup(of: Void.self) { group in
+                    group.addTask {
+                        for await location in locationDataSource.locations {
+                            lastLocationTimestamp = location.timestamp
+                            currentLocation = location
+                            await updateSceneView(for: location)
                         }
                     }
-                } catch {}
-            }
+                    group.addTask {
+                        for await heading in locationDataSource.headings {
+                            currentHeading = heading
+                            updateHeading(heading)
+                        }
+                    }
+                }
+            } catch {}
         }
         .toolbar {
             ToolbarItem(placement: .bottomBar) {
