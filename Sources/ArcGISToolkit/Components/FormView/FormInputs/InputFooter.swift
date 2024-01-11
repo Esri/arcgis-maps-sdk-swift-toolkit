@@ -63,17 +63,33 @@ extension InputFooter {
                 comment: "Text indicating a field's value must not be empty."
             )
         case .featureFormExceedsMaximumDateTimeError:
-            Text(
-                "Date exceeds maximum",
-                bundle: .toolkitModule,
-                comment: "Text indicating a field's value must not exceed a maximum date."
-            )
+            if let input = element.input as? DateTimePickerFormInput, let max = input.max {
+                Text(
+                    "Date must be on or before \(max.formatted(input.includeTime ? .dateTime : .dateTime.month().day().year()))",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value must be on or before the maximum date specified in the variable."
+                )
+            } else {
+                Text(
+                    "Date exceeds maximum",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value must not exceed a maximum date."
+                )
+            }
         case .featureFormLessThanMinimumDateTimeError:
-            Text(
-                "Date does not meet minimum",
-                bundle: .toolkitModule,
-                comment: "Text indicating a field's value must meet a minimum date."
-            )
+            if let input = element.input as? DateTimePickerFormInput, let min = input.min {
+                Text(
+                    "Date must be on or after \(min.formatted(input.includeTime ? .dateTime : .dateTime.month().day().year()))",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value must be on or after the minimum date specified in the variable."
+                )
+            } else {
+                Text(
+                    "Date does not meet minimum",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value must meet a minimum date."
+                )
+            }
         case .featureFormExceedsMaximumLengthError:
             if lengthRange?.lowerBound == lengthRange?.upperBound {
                 exactLengthMessage
