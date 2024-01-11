@@ -97,6 +97,7 @@ import Combine
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A shortcut to all of the validation erros present in the form.
 ***REMOVED***var validationErrors: [String : [Error]] {
 ***REMOVED******REMOVED***featureForm.validationErrors
 ***REMOVED***
