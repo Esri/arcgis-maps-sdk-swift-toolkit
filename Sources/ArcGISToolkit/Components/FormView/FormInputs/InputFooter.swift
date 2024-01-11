@@ -30,7 +30,7 @@ struct InputFooter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***errorMessage
 ***REMOVED******REMOVED******REMOVED*** else if !element.description.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
-***REMOVED******REMOVED******REMOVED*** else if element.fieldType == .text {
+***REMOVED******REMOVED******REMOVED*** else if element.fieldType == .text && model.focusedElement == element {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if lengthRange?.lowerBound == lengthRange?.upperBound {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***exactLengthMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else if lengthRange?.lowerBound ?? 0 > 0 {
@@ -208,7 +208,7 @@ private extension RangeDomain {
 ***REMOVED******REMOVED***/ String representations of the minimum and maximum value of the range domain.
 ***REMOVED***var displayableMinAndMax: (min: String, max: String)? {
 ***REMOVED******REMOVED***if let min = minValue as? Double, let max = maxValue as? Double {
-***REMOVED******REMOVED******REMOVED***return (min.formatted(), max.formatted())
+***REMOVED******REMOVED******REMOVED***return (min.formatted(.number.precision(.fractionLength(1...3))), max.formatted(.number.precision(.fractionLength(1...3))))
 ***REMOVED*** else if let min = minValue as? Int, let max = maxValue as? Int {
 ***REMOVED******REMOVED******REMOVED***return (min.formatted(), max.formatted())
 ***REMOVED*** else if let min = minValue as? Int32, let max = maxValue as? Int32 {
