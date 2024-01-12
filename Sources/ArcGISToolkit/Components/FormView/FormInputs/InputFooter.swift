@@ -56,13 +56,13 @@ extension InputFooter {
     var errorMessage: Text? {
         guard let error = primaryError else { return nil }
         return switch error {
-        case .featureFormNullNotAllowedError:
+        case .nullNotAllowed:
             Text(
                 "Value must not be empty",
                 bundle: .toolkitModule,
                 comment: "Text indicating a field's value must not be empty."
             )
-        case .featureFormExceedsMaximumDateTimeError:
+        case .exceedsMaximumDateTime:
             if let input = element.input as? DateTimePickerFormInput, let max = input.max {
                 Text(
                     "Date must be on or before \(max, format: input.includeTime ? .dateTime : .dateTime.month().day().year())",
@@ -76,7 +76,7 @@ extension InputFooter {
                     comment: "Text indicating a field's value must not exceed a maximum date."
                 )
             }
-        case .featureFormLessThanMinimumDateTimeError:
+        case .lessThanMinimumDateTime:
             if let input = element.input as? DateTimePickerFormInput, let min = input.min {
                 Text(
                     "Date must be on or after \(min, format: input.includeTime ? .dateTime : .dateTime.month().day().year())",
@@ -90,19 +90,19 @@ extension InputFooter {
                     comment: "Text indicating a field's value must meet a minimum date."
                 )
             }
-        case .featureFormExceedsMaximumLengthError:
+        case .exceedsMaximumLength:
             if lengthRange?.lowerBound == lengthRange?.upperBound {
                 exactLengthMessage
             } else {
                 maximumLengthMessage
             }
-        case .featureFormLessThanMinimumLengthError:
+        case .lessThanMinimumLength:
             if lengthRange?.lowerBound == lengthRange?.upperBound {
                 exactLengthMessage
             } else {
                 minimumLengthMessage
             }
-        case .featureFormExceedsNumericMaximumError, .featureFormLessThanNumericMinimumError:
+        case .exceedsNumericMaximum, .lessThanNumericMinimum:
             if let numericRange = element.domain as? RangeDomain, let minMax = numericRange.displayableMinAndMax {
                 Text(
                     "Enter value from \(minMax.min) to \(minMax.max)",
@@ -119,15 +119,15 @@ extension InputFooter {
                     comment: "Text indicating a field's value must be within the allowed range."
                 )
             }
-        case .featureFormNotInCodedValueDomainError:
+        case .notInCodedValueDomain:
             Text(
                 "Value must be within domain",
                 bundle: .toolkitModule,
                 comment: "Text indicating a field's value must exist in the domain."
             )
-        case .featureFormFieldIsRequiredError:
+        case .fieldIsRequired:
             Text.required
-        case .featureFormIncorrectValueTypeError:
+        case .incorrectValueType:
             if element.fieldType?.isFloatingPoint ?? false {
                 Text(
                     "Value must be a number",
@@ -212,10 +212,24 @@ extension InputFooter {
     /// the primary error. Otherwise the primary error is the first error in the element's set of errors.
     var primaryError: ArcGIS.FeatureFormError? {
         let elementErrors = model.validationErrors[element.fieldName] as? [ArcGIS.FeatureFormError]
-        if let requiredError = elementErrors?.first(where: { $0 == .featureFormFieldIsRequiredError }), model.focusedElement != element {
+        if let requiredError = elementErrors?.first(where: {
+            switch $0 {
+            case .fieldIsRequired(_):
+                return true
+            default:
+                return false
+            }
+        }), model.focusedElement != element {
             return requiredError
         } else {
-            return elementErrors?.first(where: { $0 != .featureFormFieldIsRequiredError })
+            return elementErrors?.first(where: {
+                switch $0 {
+                case .fieldIsRequired(_):
+                    return false
+                default:
+                    return true
+                }
+            })
         }
     }
 }
