@@ -30,13 +30,17 @@ struct InputFooter: View {
                     errorMessage
                 } else if !element.description.isEmpty {
                     Text(element.description)
-                } else if element.fieldType == .text && model.focusedElement == element {
-                    if lengthRange?.lowerBound == lengthRange?.upperBound {
-                        exactLengthMessage
-                    } else if lengthRange?.lowerBound ?? 0 > 0 {
-                        lengthRangeMessage
-                    } else {
-                        maximumLengthMessage
+                } else if model.focusedElement == element {
+                    if element.fieldType == .text, let lengthRange {
+                        if lengthRange.lowerBound == lengthRange.upperBound {
+                            makeExactLengthMessage(lengthRange)
+                        } else if lengthRange.lowerBound > .zero {
+                            makeLengthRangeMessage(lengthRange)
+                        } else {
+                            makeMaximumLengthMessage(lengthRange)
+                        }
+                    } else if element.fieldType?.isNumeric ?? false, let numericRange {
+                        makeNumericRangeMessage(numericRange)
                     }
                 }
             }
@@ -53,6 +57,7 @@ struct InputFooter: View {
 }
 
 extension InputFooter {
+    /// Localzed error text to be shown to a user depending on the type of error information available.
     var errorMessage: Text? {
         guard let error = primaryError else { return nil }
         return switch error {
@@ -91,27 +96,46 @@ extension InputFooter {
                 )
             }
         case .exceedsMaximumLength:
-            if lengthRange?.lowerBound == lengthRange?.upperBound {
-                exactLengthMessage
+            if let lengthRange {
+                if lengthRange.lowerBound == lengthRange.upperBound {
+                    makeExactLengthMessage(lengthRange)
+                } else {
+                    makeMaximumLengthMessage(lengthRange)
+                }
             } else {
-                maximumLengthMessage
+                Text(
+                    "Maximum character length exceeded",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's maximum number of allowed characters is exceeded."
+                )
             }
         case .lessThanMinimumLength:
-            if lengthRange?.lowerBound == lengthRange?.upperBound {
-                exactLengthMessage
+            if let lengthRange {
+                if lengthRange.lowerBound == lengthRange.upperBound {
+                    makeExactLengthMessage(lengthRange)
+                } else {
+                    makeLengthRangeMessage(lengthRange)
+                }
             } else {
-                minimumLengthMessage
-            }
-        case .exceedsNumericMaximum, .lessThanNumericMinimum:
-            if let numericRange = element.domain as? RangeDomain, let minMax = numericRange.displayableMinAndMax {
                 Text(
-                    "Enter value from \(minMax.min) to \(minMax.max)",
+                    "Minimum character length not met",
                     bundle: .toolkitModule,
-                    comment: """
-                             Text indicating a field's value must be within the allowed range.
-                             The first and second parameter hold the minimum and maximum values respectively.
-                             """
+                    comment: "Text indicating a field's minimum number of allowed characters is not met."
                 )
+            }
+        case .exceedsNumericMaximum:
+            if let numericRange {
+                makeNumericRangeMessage(numericRange)
+            } else {
+                Text(
+                    "Exceeds maximum value",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value exceeds the maximum allowed value."
+                )
+            }
+        case .lessThanNumericMinimum:
+            if let numericRange {
+                makeNumericRangeMessage(numericRange)
             } else {
                 Text(
                     "Value must be within allowed range",
@@ -150,23 +174,12 @@ extension InputFooter {
         }
     }
     
-    /// Text indicating a field's exact number of allowed characters.
-    /// - Note: This is intended to be used in instances where the character minimum and maximum are
-    /// identical, such as an ID field.
-    var exactLengthMessage: Text {
-        Text(
-            "Enter \(lengthRange!.lowerBound) characters",
-            bundle: .toolkitModule,
-            comment: "Text indicating the user should enter a field's exact number of required characters."
-        )
-    }
-    
     /// Determines whether an error is showing in the footer.
     var isShowingError: Bool {
         element.isEditable && primaryError != nil && model.previouslyFocusedFields.contains(element)
     }
     
-    /// The alloable range of number of characters in the input.
+    /// The allowable number of characters in the input.
     var lengthRange: ClosedRange<Int>? {
         if let input = element.input as? TextAreaFormInput {
             return input.minLength...input.maxLength
@@ -177,35 +190,13 @@ extension InputFooter {
         }
     }
     
-    /// Text indicating a field's value must be within the allowed length range.
-    var lengthRangeMessage: Text {
-        Text(
-            "Enter \(lengthRange!.lowerBound) to \(lengthRange!.upperBound) characters",
-            bundle: .toolkitModule,
-            comment: """
-                         Text indicating a field's value must be within the 
-                         allowed length range. The first and second parameter
-                         hold the minimum and maximum length respectively.
-                         """
-        )
-    }
-    
-    /// Text indicating a field's maximum number of allowed characters.
-    var maximumLengthMessage: Text {
-        Text(
-            "Maximum \(lengthRange!.upperBound) characters",
-            bundle: .toolkitModule,
-            comment: "Text indicating a field's maximum number of allowed characters."
-        )
-    }
-    
-    /// Text indicating a field's maximum number of allowed characters.
-    var minimumLengthMessage: Text {
-        Text(
-            "Minimum \(lengthRange!.lowerBound) characters",
-            bundle: .toolkitModule,
-            comment: "Text indicating a field's minimum number of allowed characters."
-        )
+    /// The allowable numeric range the input.
+    var numericRange: (min: String, max: String)? {
+        if let rangeDomain = element.domain as? RangeDomain, let minMax = rangeDomain.displayableMinAndMax {
+            return minMax
+        } else {
+            return nil
+        }
     }
     
     /// The error to display for the input. If the element is not focused and has a required error this will be
@@ -231,6 +222,51 @@ extension InputFooter {
                 }
             })
         }
+    }
+    
+    /// Text indicating a field's exact number of allowed characters.
+    /// - Note: This is intended to be used in instances where the character minimum and maximum are
+    /// identical, such as an ID field.
+    func makeExactLengthMessage(_ lengthRange: ClosedRange<Int>) -> Text {
+        Text(
+            "Enter \(lengthRange.lowerBound) characters",
+            bundle: .toolkitModule,
+            comment: "Text indicating the user should enter a field's exact number of required characters."
+        )
+    }
+    
+    /// Text indicating a field's value must be within the allowed length range.
+    func makeLengthRangeMessage(_ lengthRange: ClosedRange<Int>) -> Text {
+        Text(
+            "Enter \(lengthRange.lowerBound) to \(lengthRange.upperBound) characters",
+            bundle: .toolkitModule,
+            comment: """
+                     Text indicating a field's value must be within the
+                     allowed length range. The first and second parameter
+                     hold the minimum and maximum length respectively.
+                     """
+        )
+    }
+    
+    /// Text indicating a field's maximum number of allowed characters.
+    func makeMaximumLengthMessage(_ lengthRange: ClosedRange<Int>) -> Text {
+        Text(
+            "Maximum \(lengthRange.upperBound) characters",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field's maximum number of allowed characters."
+        )
+    }
+    
+    /// Text indicating a field's value must be within the allowed numeric range.
+    func makeNumericRangeMessage(_ numericRange: (min: String, max: String)) -> Text {
+        Text(
+            "Enter value from \(numericRange.min) to \(numericRange.max)",
+            bundle: .toolkitModule,
+            comment: """
+                     Text indicating a field's value must be within the allowed range.
+                     The first and second parameter hold the minimum and maximum values respectively.
+                     """
+        )
     }
 }
 
