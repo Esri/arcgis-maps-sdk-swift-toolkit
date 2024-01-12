@@ -104,7 +104,9 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
-***REMOVED******REMOVED******REMOVED******REMOVED***if !element.formattedValue.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = codedValues.first(where: { $0.name == element.formattedValue ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.selectedValue = selectedValue
+***REMOVED******REMOVED******REMOVED*** else if !element.formattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
