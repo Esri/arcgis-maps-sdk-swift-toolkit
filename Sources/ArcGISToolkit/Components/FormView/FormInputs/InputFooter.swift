@@ -56,13 +56,13 @@ extension InputFooter {
 ***REMOVED***var errorMessage: Text? {
 ***REMOVED******REMOVED***guard let error = primaryError else { return nil ***REMOVED***
 ***REMOVED******REMOVED***return switch error {
-***REMOVED******REMOVED***case .featureFormNullNotAllowedError:
+***REMOVED******REMOVED***case .nullNotAllowed:
 ***REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED***"Value must not be empty",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must not be empty."
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***case .featureFormExceedsMaximumDateTimeError:
+***REMOVED******REMOVED***case .exceedsMaximumDateTime:
 ***REMOVED******REMOVED******REMOVED***if let input = element.input as? DateTimePickerFormInput, let max = input.max {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Date must be on or before \(max, format: input.includeTime ? .dateTime : .dateTime.month().day().year())",
@@ -76,7 +76,7 @@ extension InputFooter {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must not exceed a maximum date."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .featureFormLessThanMinimumDateTimeError:
+***REMOVED******REMOVED***case .lessThanMinimumDateTime:
 ***REMOVED******REMOVED******REMOVED***if let input = element.input as? DateTimePickerFormInput, let min = input.min {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Date must be on or after \(min, format: input.includeTime ? .dateTime : .dateTime.month().day().year())",
@@ -90,19 +90,19 @@ extension InputFooter {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must meet a minimum date."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .featureFormExceedsMaximumLengthError:
+***REMOVED******REMOVED***case .exceedsMaximumLength:
 ***REMOVED******REMOVED******REMOVED***if lengthRange?.lowerBound == lengthRange?.upperBound {
 ***REMOVED******REMOVED******REMOVED******REMOVED***exactLengthMessage
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumLengthMessage
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .featureFormLessThanMinimumLengthError:
+***REMOVED******REMOVED***case .lessThanMinimumLength:
 ***REMOVED******REMOVED******REMOVED***if lengthRange?.lowerBound == lengthRange?.upperBound {
 ***REMOVED******REMOVED******REMOVED******REMOVED***exactLengthMessage
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***minimumLengthMessage
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .featureFormExceedsNumericMaximumError, .featureFormLessThanNumericMinimumError:
+***REMOVED******REMOVED***case .exceedsNumericMaximum, .lessThanNumericMinimum:
 ***REMOVED******REMOVED******REMOVED***if let numericRange = element.domain as? RangeDomain, let minMax = numericRange.displayableMinAndMax {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Enter value from \(minMax.min) to \(minMax.max)",
@@ -119,15 +119,15 @@ extension InputFooter {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must be within the allowed range."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .featureFormNotInCodedValueDomainError:
+***REMOVED******REMOVED***case .notInCodedValueDomain:
 ***REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED***"Value must be within domain",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must exist in the domain."
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***case .featureFormFieldIsRequiredError:
+***REMOVED******REMOVED***case .fieldIsRequired:
 ***REMOVED******REMOVED******REMOVED***Text.required
-***REMOVED******REMOVED***case .featureFormIncorrectValueTypeError:
+***REMOVED******REMOVED***case .incorrectValueType:
 ***REMOVED******REMOVED******REMOVED***if element.fieldType?.isFloatingPoint ?? false {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Value must be a number",
@@ -212,10 +212,24 @@ extension InputFooter {
 ***REMOVED******REMOVED***/ the primary error. Otherwise the primary error is the first error in the element's set of errors.
 ***REMOVED***var primaryError: ArcGIS.FeatureFormError? {
 ***REMOVED******REMOVED***let elementErrors = model.validationErrors[element.fieldName] as? [ArcGIS.FeatureFormError]
-***REMOVED******REMOVED***if let requiredError = elementErrors?.first(where: { $0 == .featureFormFieldIsRequiredError ***REMOVED***), model.focusedElement != element {
+***REMOVED******REMOVED***if let requiredError = elementErrors?.first(where: {
+***REMOVED******REMOVED******REMOVED***switch $0 {
+***REMOVED******REMOVED******REMOVED***case .fieldIsRequired(_):
+***REMOVED******REMOVED******REMOVED******REMOVED***return true
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED***
+***REMOVED***), model.focusedElement != element {
 ***REMOVED******REMOVED******REMOVED***return requiredError
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return elementErrors?.first(where: { $0 != .featureFormFieldIsRequiredError ***REMOVED***)
+***REMOVED******REMOVED******REMOVED***return elementErrors?.first(where: {
+***REMOVED******REMOVED******REMOVED******REMOVED***switch $0 {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .fieldIsRequired(_):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
