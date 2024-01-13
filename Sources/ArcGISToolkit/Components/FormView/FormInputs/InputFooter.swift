@@ -90,7 +90,7 @@ extension InputFooter {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Date does not meet minimum",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Date less than minimum",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must meet a minimum date."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
