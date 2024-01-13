@@ -90,7 +90,7 @@ extension InputFooter {
                 )
             } else {
                 Text(
-                    "Date does not meet minimum",
+                    "Date less than minimum",
                     bundle: .toolkitModule,
                     comment: "Text indicating a field's value must meet a minimum date."
                 )
