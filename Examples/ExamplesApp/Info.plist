@@ -60,7 +60,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>This app uses augmented reality to overlay imagery over your real-world environment. Camera access is required for this functionality.</string>
+	<string>This app uses your camera for augmented reality that overlays imagery over your real-world environment.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
