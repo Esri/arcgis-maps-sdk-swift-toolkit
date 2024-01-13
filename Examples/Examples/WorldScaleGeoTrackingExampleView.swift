@@ -31,23 +31,16 @@ struct WorldScaleGeoTrackingExampleView: View {
         surface.navigationConstraint = .unconstrained
         let scene = Scene(basemapStyle: .arcGISImagery)
         scene.baseSurface = surface
-        scene.addOperationalLayer(parcelsLayer)
+        scene.addOperationalLayer(.parcelsLayer)
         return scene
     }()
     
-    /// Basemap opacity.
+    /// The basemap opacity.
     @State private var opacity: Float = 1
-    /// Graphics overlay to show a graphic around your initial location.
+    /// The graphics overlay which shows a graphic around your initial location.
     @State private var graphicsOverlay = GraphicsOverlay()
     /// The location datasource that is used to access the device location.
     @State private var locationDataSource = SystemLocationDataSource()
-    /// A feature layer with San Bernardino parcels data.
-    private static var parcelsLayer: FeatureLayer {
-        let parcelsTable = ServiceFeatureTable(url: URL(string: "https://services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
-        let featureLayer = FeatureLayer(featureTable: parcelsTable)
-        featureLayer.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .cyan, width: 3))
-        return featureLayer
-    }
     
     var body: some View {
         VStack {
@@ -88,5 +81,15 @@ struct WorldScaleGeoTrackingExampleView: View {
             let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
             graphicsOverlay.addGraphic(Graphic(geometry: circle, symbol: SimpleLineSymbol(color: .red, width: 3)))
         }
+    }
+}
+
+private extension Layer {
+    // A feature layer with San Bernardino parcels data.
+    static var parcelsLayer: FeatureLayer {
+        let parcelsTable = ServiceFeatureTable(url: URL(string: "https://services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
+        let featureLayer = FeatureLayer(featureTable: parcelsTable)
+        featureLayer.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .cyan, width: 3))
+        return featureLayer
     }
 }
