@@ -49,7 +49,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
     /// The current device heading.
     @State private var currentHeading: Double?
     /// The valid accuracy threshold for a location in meters.
-    private var validAccuracyThreshold: Double = 0
+    private var validAccuracyThreshold = 0.0
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -208,6 +208,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
     
     /// Returns a Boolean value indicating if the camera should be updated for a location
     /// coming in from the location datasource.
+    /// - Parameter location: The location datasource location.
+    /// - Returns: A Boolean value indicating if the camera should be updated.
     func shouldUpdateCamera(for location: Location) -> Bool {
         // Do not update unless the horizontal accuracy is less than a threshold.
         guard let currentCamera,
@@ -262,6 +264,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
         )
     }
     
+    /// A view that allows the user to calibrate the heading of the scene view camera controller.
     var calibrationView: some View {
         HStack {
             Button {
@@ -284,6 +287,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
         }
     }
     
+    /// A view that displays the horizontal and vertical accuracy of the current location datasource location.
     var accuracyView: some View {
         VStack {
             if let currentLocation {
