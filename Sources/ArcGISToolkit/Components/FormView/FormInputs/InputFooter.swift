@@ -57,7 +57,7 @@ struct InputFooter: View {
 }
 
 extension InputFooter {
-    /// Localzed error text to be shown to a user depending on the type of error information available.
+    /// Localized error text to be shown to a user depending on the type of error information available.
     var errorMessage: Text? {
         guard let error = primaryError else { return nil }
         return switch error {
