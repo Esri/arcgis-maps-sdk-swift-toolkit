@@ -31,23 +31,16 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED******REMOVED***surface.navigationConstraint = .unconstrained
 ***REMOVED******REMOVED***let scene = Scene(basemapStyle: .arcGISImagery)
 ***REMOVED******REMOVED***scene.baseSurface = surface
-***REMOVED******REMOVED***scene.addOperationalLayer(parcelsLayer)
+***REMOVED******REMOVED***scene.addOperationalLayer(.parcelsLayer)
 ***REMOVED******REMOVED***return scene
 ***REMOVED***()
 ***REMOVED***
-***REMOVED******REMOVED***/ Basemap opacity.
+***REMOVED******REMOVED***/ The basemap opacity.
 ***REMOVED***@State private var opacity: Float = 1
-***REMOVED******REMOVED***/ Graphics overlay to show a graphic around your initial location.
+***REMOVED******REMOVED***/ The graphics overlay which shows a graphic around your initial location.
 ***REMOVED***@State private var graphicsOverlay = GraphicsOverlay()
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
-***REMOVED******REMOVED***/ A feature layer with San Bernardino parcels data.
-***REMOVED***private static var parcelsLayer: FeatureLayer {
-***REMOVED******REMOVED***let parcelsTable = ServiceFeatureTable(url: URL(string: "https:***REMOVED***services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
-***REMOVED******REMOVED***let featureLayer = FeatureLayer(featureTable: parcelsTable)
-***REMOVED******REMOVED***featureLayer.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .cyan, width: 3))
-***REMOVED******REMOVED***return featureLayer
-***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -88,5 +81,15 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED******REMOVED******REMOVED***let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(Graphic(geometry: circle, symbol: SimpleLineSymbol(color: .red, width: 3)))
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension Layer {
+***REMOVED******REMOVED*** A feature layer with San Bernardino parcels data.
+***REMOVED***static var parcelsLayer: FeatureLayer {
+***REMOVED******REMOVED***let parcelsTable = ServiceFeatureTable(url: URL(string: "https:***REMOVED***services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
+***REMOVED******REMOVED***let featureLayer = FeatureLayer(featureTable: parcelsTable)
+***REMOVED******REMOVED***featureLayer.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .cyan, width: 3))
+***REMOVED******REMOVED***return featureLayer
 ***REMOVED***
 ***REMOVED***
