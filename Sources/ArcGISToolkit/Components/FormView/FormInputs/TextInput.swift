@@ -95,20 +95,7 @@ struct TextInput: View {
         .onChange(of: text) { text in
             guard !isPlaceholder else { return }
             do {
-                switch element.fieldType {
-                case .int16:
-                    try element.updateValue(Int16(text))
-                case .int32:
-                    try element.updateValue(Int32(text))
-                case .int64:
-                    try element.updateValue(Int64(text))
-                case .float32:
-                    try element.updateValue(Float64(text))
-                case .float64:
-                    try element.updateValue(Float64(text))
-                default:
-                    try element.updateValue(text)
-                }
+                try element.convertAndUpdateValue(text)
             } catch {
                 print(error.localizedDescription, String(describing: error))
             }
@@ -214,6 +201,32 @@ private extension TextInput {
         let text = formattedValue
         isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
         self.text = isPlaceholder ? element.hint : text
+    }
+}
+
+private extension FieldFormElement {
+    /// Attempts to convert the value to a type suitable for the element's field type and then update
+    /// the element with the converted value.
+    func convertAndUpdateValue(_ value: String?) throws {
+        if let value {
+            if fieldType == .text {
+                try updateValue(value)
+            } else if fieldType == .int16, let value = Int16(value) {
+                try updateValue(value)
+            } else if fieldType == .int32, let value = Int32(value) {
+                try updateValue(value)
+            } else if fieldType == .int64, let value = Int64(value) {
+                try updateValue(value)
+            } else if fieldType == .float32, let value = Float32(value) {
+                try updateValue(value)
+            } else if fieldType == .float64, let value = Float64(value) {
+                try updateValue(value)
+            } else {
+                throw FeatureFormError.incorrectValueType(details: "")
+            }
+        } else {
+            try updateValue(nil)
+        }
     }
 }
 
