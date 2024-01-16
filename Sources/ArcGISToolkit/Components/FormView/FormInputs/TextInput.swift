@@ -95,20 +95,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED***.onChange(of: text) { text in
 ***REMOVED******REMOVED******REMOVED***guard !isPlaceholder else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***switch element.fieldType {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .int16:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(Int16(text))
-***REMOVED******REMOVED******REMOVED******REMOVED***case .int32:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(Int32(text))
-***REMOVED******REMOVED******REMOVED******REMOVED***case .int64:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(Int64(text))
-***REMOVED******REMOVED******REMOVED******REMOVED***case .float32:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(Float64(text))
-***REMOVED******REMOVED******REMOVED******REMOVED***case .float64:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(Float64(text))
-***REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(text)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***try element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription, String(describing: error))
 ***REMOVED******REMOVED***
@@ -214,6 +201,32 @@ private extension TextInput {
 ***REMOVED******REMOVED***let text = formattedValue
 ***REMOVED******REMOVED***isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
 ***REMOVED******REMOVED***self.text = isPlaceholder ? element.hint : text
+***REMOVED***
+***REMOVED***
+
+private extension FieldFormElement {
+***REMOVED******REMOVED***/ Attempts to convert the value to a type suitable for the element's field type and then update
+***REMOVED******REMOVED***/ the element with the converted value.
+***REMOVED***func convertAndUpdateValue(_ value: String?) throws {
+***REMOVED******REMOVED***if let value {
+***REMOVED******REMOVED******REMOVED***if fieldType == .text {
+***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED*** else if fieldType == .int16, let value = Int16(value) {
+***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED*** else if fieldType == .int32, let value = Int32(value) {
+***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED*** else if fieldType == .int64, let value = Int64(value) {
+***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED*** else if fieldType == .float32, let value = Float32(value) {
+***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED*** else if fieldType == .float64, let value = Float64(value) {
+***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***throw FeatureFormError.incorrectValueType(details: "")
+***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***try updateValue(nil)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
