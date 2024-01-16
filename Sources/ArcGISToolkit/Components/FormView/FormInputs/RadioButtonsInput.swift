@@ -157,6 +157,7 @@ extension RadioButtonsInput {
         _ action: @escaping () -> Void
     ) -> some View {
         Button {
+            model.focusedElement = element
             action()
         } label: {
             HStack {

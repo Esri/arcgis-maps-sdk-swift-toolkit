@@ -120,6 +120,7 @@ struct ComboBoxInput: View {
                 makePicker(for: matchingValues)
             }
             .onTapGesture {
+                model.focusedElement = element
                 isPresented = true
             }
             
