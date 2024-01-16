@@ -157,6 +157,7 @@ extension RadioButtonsInput {
 ***REMOVED******REMOVED***_ action: @escaping () -> Void
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***action()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***HStack {
