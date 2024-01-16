@@ -89,6 +89,7 @@ struct SwitchInput: View {
                 }
             }
             .onChange(of: isOn) { isOn in
+                model.focusedElement = element
                 do {
                     try element.updateValue(isOn ? input.onValue.code : input.offValue.code)
                 } catch {
