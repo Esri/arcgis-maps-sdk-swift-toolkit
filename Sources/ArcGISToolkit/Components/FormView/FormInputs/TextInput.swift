@@ -221,8 +221,6 @@ private extension FieldFormElement {
                 try updateValue(value)
             } else if fieldType == .float64, let value = Float64(value) {
                 try updateValue(value)
-            } else {
-                throw FeatureFormError.incorrectValueType(details: "")
             }
         } else {
             try updateValue(nil)
