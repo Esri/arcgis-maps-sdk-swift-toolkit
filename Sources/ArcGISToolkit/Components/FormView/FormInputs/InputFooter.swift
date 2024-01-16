@@ -202,7 +202,7 @@ extension InputFooter {
     /// The error to display for the input. If the element is not focused and has a required error this will be
     /// the primary error. Otherwise the primary error is the first error in the element's set of errors.
     var primaryError: ArcGIS.FeatureFormError? {
-        let elementErrors = model.validationErrors[element.fieldName] as? [ArcGIS.FeatureFormError]
+        let elementErrors = element.validationErrors as? [ArcGIS.FeatureFormError]
         if let requiredError = elementErrors?.first(where: {
             switch $0 {
             case .fieldIsRequired(_):
