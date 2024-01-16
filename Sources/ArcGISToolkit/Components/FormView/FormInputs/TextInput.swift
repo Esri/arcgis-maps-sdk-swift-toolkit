@@ -221,8 +221,6 @@ private extension FieldFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
 ***REMOVED******REMOVED*** else if fieldType == .float64, let value = Float64(value) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***throw FeatureFormError.incorrectValueType(details: "")
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***try updateValue(nil)
