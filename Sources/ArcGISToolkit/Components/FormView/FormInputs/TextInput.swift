@@ -162,8 +162,16 @@ private extension TextInput {
             }
             .scrollContentBackgroundHidden()
             if !text.isEmpty && isEditable {
-                ClearButton { text.removeAll() }
-                    .accessibilityIdentifier("\(element.label) Clear Button")
+                ClearButton {
+                    if !isFocused {
+                        // If the user wasn't already editing the field provide
+                        // instantaneous focus to enable validation.
+                        model.focusedElement = element
+                        model.focusedElement = nil
+                    }
+                    text.removeAll()
+                }
+                .accessibilityIdentifier("\(element.label) Clear Button")
             }
         }
         .formInputStyle()
