@@ -30,9 +30,6 @@ struct RadioButtonsInput: View {
     @State private var isEditable: Bool = false
     @State private var value: Any?
     
-    /// The set of options in the input.
-    @State private var codedValues = [CodedValue]()
-    
     /// The selected option.
     @State private var selectedValue: CodedValue?
     
@@ -76,17 +73,17 @@ struct RadioButtonsInput: View {
                         makeRadioButtonRow(
                             placeholderValue,
                             selectedValue == nil,
-                            !codedValues.isEmpty,
+                            !element.codedValues.isEmpty,
                             useNoValueStyle: true
                         ) {
                             selectedValue = nil
                         }
                     }
-                    ForEach(codedValues, id: \.self) { codedValue in
+                    ForEach(element.codedValues, id: \.self) { codedValue in
                         makeRadioButtonRow(
                             codedValue.name,
                             codedValue == selectedValue,
-                            codedValue != codedValues.last
+                            codedValue != element.codedValues.last
                         ) {
                             selectedValue = codedValue
                         }
@@ -103,8 +100,7 @@ struct RadioButtonsInput: View {
             }
             .padding([.bottom], elementPadding)
             .onAppear {
-                codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
-                if let selectedValue = codedValues.first(where: { $0.name == element.formattedValue }) {
+                if let selectedValue = element.codedValues.first(where: { $0.name == element.formattedValue }) {
                     self.selectedValue = selectedValue
                 } else if !element.formattedValue.isEmpty {
                     fallbackToComboBox = true
@@ -120,7 +116,7 @@ struct RadioButtonsInput: View {
             }
             .onChangeOfValue(of: element) { newValue, newFormattedValue in
                 value = newValue
-                selectedValue = codedValues.first { $0.name == newFormattedValue }
+                selectedValue = element.codedValues.first { $0.name == newFormattedValue }
             }
             .onChangeOfIsRequired(of: element) { newIsRequired in
                 isRequired = newIsRequired
