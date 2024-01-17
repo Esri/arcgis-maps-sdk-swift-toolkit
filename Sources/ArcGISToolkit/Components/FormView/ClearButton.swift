@@ -14,7 +14,7 @@
 
 import SwiftUI
 
-/// A circular button with a cross in the center, intended to be used to clear text fields.
+/// A circular button with a cross in the center, intended to be used to clear form inputs.
 struct ClearButton: View {
     /// The action to be performed when the button is pressed.
     let action: () -> Void

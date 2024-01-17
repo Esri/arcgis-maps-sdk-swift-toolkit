@@ -109,8 +109,12 @@ struct ComboBoxInput: View {
                             .foregroundColor(.secondary)
                             .accessibilityIdentifier("\(element.label) Options Button")
                     } else {
-                        ClearButton { selectedValue = nil }
-                            .accessibilityIdentifier("\(element.label) Clear Button")
+                        ClearButton {
+                            model.focusedElement = element
+                            defer { model.focusedElement = nil }
+                            selectedValue = nil
+                        }
+                        .accessibilityIdentifier("\(element.label) Clear Button")
                     }
                 }
             }
