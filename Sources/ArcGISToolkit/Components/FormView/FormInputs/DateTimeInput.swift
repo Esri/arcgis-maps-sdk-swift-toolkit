@@ -118,8 +118,12 @@ struct DateTimeInput: View {
                         .foregroundColor(.secondary)
                         .accessibilityIdentifier("\(element.label) Calendar Image")
                 } else {
-                    ClearButton { date = nil }
-                        .accessibilityIdentifier("\(element.label) Clear Button")
+                    ClearButton {
+                        model.focusedElement = element
+                        defer { model.focusedElement = nil }
+                        date = nil
+                    }
+                    .accessibilityIdentifier("\(element.label) Clear Button")
                 }
             }
         }
