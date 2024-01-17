@@ -61,7 +61,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
     /// The valid accuracy threshold for a location in meters.
     private var validAccuracyThreshold = 0.0
     /// The tracking state for the AR experience.
-    private var trackingState: TrackingState = .initial
+    private var trackingState: TrackingState = .continious
     
     /// Creates a world scale scene view.
     /// - Parameters:
