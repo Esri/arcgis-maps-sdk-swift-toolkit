@@ -29,6 +29,9 @@ struct FormViewExampleView: View {
     /// A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
     @State private var isCancelConfirmationPresented = false
     
+    /// The validation error visibility configuration of the form.
+    @State var validationErrorVisibility = FormView.ValidationErrorVisibility.automatic
+    
     /// The form view model provides a channel of communication between the form view and its host.
     @StateObject private var model = Model()
     
@@ -65,7 +68,7 @@ struct FormViewExampleView: View {
                 ) {
                     if let featureForm = model.featureForm {
                         FormView(featureForm: featureForm)
-                            .validation(force: model.validationIsForced)
+                            .validationErrors(validationErrorVisibility)
                             .padding([.horizontal])
                     }
                 }
@@ -93,6 +96,7 @@ struct FormViewExampleView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         if model.isFormPresented {
                             Button("Submit") {
+                                validationErrorVisibility = .visible
                                 Task {
                                     await model.submitChanges()
                                 }
@@ -136,10 +140,6 @@ private extension URL {
 /// The model class for the form example view
 @MainActor
 class Model: ObservableObject {
-    /// A Boolean value indicating whether or not to display all validation errors in the form, irrespective of
-    /// whether a given field has received user-focus.
-    @Published var validationIsForced = false
-    
     /// The feature form.
     @Published var featureForm: FeatureForm? {
         didSet {
@@ -158,19 +158,17 @@ class Model: ObservableObject {
     
     /// Submit the changes made to the form.
     func submitChanges() async {
-        guard let feature = featureForm?.feature,
-              let table = feature.table as? ServiceFeatureTable,
+        guard let featureForm = featureForm,
+              let table = featureForm.feature.table as? ServiceFeatureTable,
               table.isEditable,
               let database = table.serviceGeodatabase else {
             print("A precondition to submit the changes wasn't met.")
             return
         }
         
-        validationIsForced = true
+        guard featureForm.validationErrors.isEmpty else { return }
         
-        guard featureForm?.validationErrors.isEmpty ?? true else { return }
-        
-        try? await table.update(feature)
+        try? await table.update(featureForm.feature)
         
         guard database.hasLocalEdits else {
             print("No submittable changes found.")
@@ -183,6 +181,6 @@ class Model: ObservableObject {
             print("An error occurred while submitting the changes.")
         }
         
-        featureForm = nil
+        self.featureForm = nil
     }
 }
