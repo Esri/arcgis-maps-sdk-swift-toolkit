@@ -19,20 +19,20 @@ import ArcGIS
 struct DateTimeInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The model for the ancestral form view.
+    /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
+    // State properties for element events.
+    
+    @State private var isRequired: Bool = false
+    @State private var isEditable: Bool = false
+    @State private var formattedValue: String = ""
     
     /// The current date selection.
     @State private var date: Date?
     
     /// A Boolean value indicating whether a new date (or time is being set).
     @State private var isEditing = false
-    
-    /// A Boolean value indicating whether the date selection was cleared when a value is required.
-    @State private var requiredValueMissing = false
     
     /// The input's parent element.
     private let element: FieldFormElement
@@ -51,10 +51,6 @@ struct DateTimeInput: View {
         
         self.element = element
         self.input = element.input as! DateTimePickerFormInput
-        
-        _inputModel = StateObject(
-            wrappedValue: FormInputModel(fieldFormElement: element)
-        )
     }
     
     var body: some View {
@@ -64,34 +60,34 @@ struct DateTimeInput: View {
             
             dateEditor
             
-            InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+            InputFooter(element: element)
         }
         .padding([.bottom], elementPadding)
         .onChange(of: model.focusedElement) { focusedElement in
             isEditing = focusedElement == element
         }
-        .onAppear {
-            if inputModel.formattedValue.isEmpty {
-                date = nil
-            } else {
-                date = inputModel.value as? Date
-            }
-        }
         .onChange(of: date) { date in
-            requiredValueMissing = inputModel.isRequired && date == nil
             do {
                 try element.updateValue(date)
+                formattedValue = element.formattedValue
             } catch {
                 print(error.localizedDescription)
             }
             model.evaluateExpressions()
         }
-        .onChange(of: inputModel.formattedValue) { formattedValue in
-            if formattedValue.isEmpty {
+        .onChangeOfValue(of: element) { newValue, newFormattedValue in
+            if newFormattedValue.isEmpty {
                 date = nil
             } else {
-                date = inputModel.value as? Date
+                date = newValue as? Date
             }
+            formattedValue = newFormattedValue
+        }
+        .onChangeOfIsRequired(of: element) { newIsRequired in
+            isRequired = newIsRequired
+        }
+        .onChangeOfIsEditable(of: element) { newIsEditable in
+            isEditable = newIsEditable
         }
     }
     
@@ -108,7 +104,7 @@ struct DateTimeInput: View {
     /// - Note: Secondary foreground color is used across input views for consistency.
     @ViewBuilder var dateDisplay: some View {
         HStack {
-            Text(formattedDate ?? .noValue)
+            Text(!formattedValue.isEmpty ? formattedValue : .noValue)
                 .accessibilityIdentifier("\(element.label) Value")
                 .foregroundColor(displayColor)
             
@@ -116,14 +112,18 @@ struct DateTimeInput: View {
             
             if isEditing {
                 todayOrNowButton
-            } else if inputModel.isEditable {
+            } else if isEditable {
                 if date == nil {
                     Image(systemName: "calendar")
                         .foregroundColor(.secondary)
                         .accessibilityIdentifier("\(element.label) Calendar Image")
                 } else {
-                    ClearButton { date = nil }
-                        .accessibilityIdentifier("\(element.label) Clear Button")
+                    ClearButton {
+                        model.focusedElement = element
+                        defer { model.focusedElement = nil }
+                        date = nil
+                    }
+                    .accessibilityIdentifier("\(element.label) Clear Button")
                 }
             }
         }
@@ -131,7 +131,7 @@ struct DateTimeInput: View {
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {
-                guard inputModel.isEditable else { return }
+                guard isEditable else { return }
                 if date == nil {
                     if dateRange.contains(.now) {
                         date = .now
@@ -178,15 +178,6 @@ struct DateTimeInput: View {
             return .accentColor
         } else {
             return .primary
-        }
-    }
-    
-    /// The human-readable date and time selection.
-    var formattedDate: String? {
-        if input.includeTime {
-            return date?.formatted(.dateTime.day().month().year().hour().minute())
-        } else {
-            return date?.formatted(.dateTime.day().month().year())
         }
     }
     

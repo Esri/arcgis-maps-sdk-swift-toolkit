@@ -21,19 +21,18 @@ import SwiftUI
 struct SwitchInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The model for the ancestral form view.
+    /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
+    // State properties for element events.
+    
+    @State private var isRequired: Bool = false
+    @State private var isEditable: Bool = false
     
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
     /// In this scenario a ``ComboBoxInput`` should be used instead.
     @State private var fallbackToComboBox = false
-    
-    /// A Boolean value indicating whether a value is required but missing.
-    @State private var requiredValueMissing = false
     
     /// A Boolean value indicating whether the switch is toggled on or off.
     @State private var isOn: Bool = false
@@ -58,10 +57,6 @@ struct SwitchInput: View {
         
         self.element = element
         self.input = element.input as! SwitchFormInput
-        
-        _inputModel = StateObject(
-            wrappedValue: FormInputModel(fieldFormElement: element)
-        )
     }
     
     var body: some View {
@@ -73,7 +68,7 @@ struct SwitchInput: View {
             )
         } else {
             Group {
-                InputHeader(label: element.label, isRequired: inputModel.isRequired)
+                InputHeader(label: element.label, isRequired: isRequired)
                     .padding([.top], elementPadding)
                 HStack {
                     Text(isOn ? input.onValue.name : input.offValue.name)
@@ -84,18 +79,17 @@ struct SwitchInput: View {
                         .accessibilityIdentifier("\(element.label) Switch")
                 }
                 .formInputStyle()
-                InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+                InputFooter(element: element)
             }
-            .disabled(!inputModel.isEditable)
+            .disabled(!isEditable)
             .padding([.bottom], elementPadding)
             .onAppear {
                 if element.formattedValue.isEmpty {
                     fallbackToComboBox = true
-                } else {
-                    isOn = input.onValue.name == inputModel.formattedValue
                 }
             }
             .onChange(of: isOn) { isOn in
+                model.focusedElement = element
                 do {
                     try element.updateValue(isOn ? input.onValue.code : input.offValue.code)
                 } catch {
@@ -103,8 +97,14 @@ struct SwitchInput: View {
                 }
                 model.evaluateExpressions()
             }
-            .onChange(of: inputModel.formattedValue) { formattedValue in
-                isOn = formattedValue == input.onValue.name
+            .onChangeOfValue(of: element) { newValue, newFormattedValue in
+                isOn = newFormattedValue == input.onValue.name
+            }
+            .onChangeOfIsRequired(of: element) { newIsRequired in
+                isRequired = newIsRequired
+            }
+            .onChangeOfIsEditable(of: element) { newIsEditable in
+                isEditable = newIsEditable
             }
         }
     }

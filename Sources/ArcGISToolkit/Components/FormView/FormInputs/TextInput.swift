@@ -12,18 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view for text input.
 struct TextInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The model for the ancestral form view.
+    /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
+    // State properties for element events.
+    
+    @State private var isRequired: Bool = false
+    @State private var isEditable: Bool = false
+    @State private var formattedValue: String = ""
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
@@ -54,15 +57,12 @@ struct TextInput: View {
             "\(Self.self).\(#function) element's input must be \(TextAreaFormInput.self) or \(TextBoxFormInput.self)."
         )
         self.element = element
-        _inputModel = StateObject(
-            wrappedValue: FormInputModel(fieldFormElement: element)
-        )
     }
     
     var body: some View {
-        InputHeader(label: element.label, isRequired: inputModel.isRequired)
+        InputHeader(label: element.label, isRequired: isRequired)
             .padding([.top], elementPadding)
-        if inputModel.isEditable {
+        if isEditable {
             textField
         } else {
             Text(text.isEmpty ? "--" : text)
@@ -70,23 +70,8 @@ struct TextInput: View {
                 .padding([.vertical], 5)
                 .textSelection(.enabled)
         }
-        TextInputFooter(
-            text: isPlaceholder ? "" : text,
-            isFocused: isFocused,
-            element: element,
-            fieldType: fieldType
-        )
+        InputFooter(element: element)
         .padding([.bottom], elementPadding)
-        .onAppear {
-            let text = inputModel.formattedValue
-            isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
-            self.text = isPlaceholder ? element.hint : text
-        }
-        .onChange(of: inputModel.formattedValue) { formattedValue in
-            let text = formattedValue
-            isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
-            self.text = isPlaceholder ? element.hint : text
-        }
         .onChange(of: isFocused) { isFocused in
             if isFocused && isPlaceholder {
                 isPlaceholder = false
@@ -110,11 +95,23 @@ struct TextInput: View {
         .onChange(of: text) { text in
             guard !isPlaceholder else { return }
             do {
-                try element.updateValue(text)
+                try element.convertAndUpdateValue(text)
             } catch {
-                print(error.localizedDescription)
+                print(error.localizedDescription, String(describing: error))
             }
-            model.evaluateExpressions()
+            if element.isEditable {
+                model.evaluateExpressions()
+            }
+        }
+        .onChangeOfValue(of: element) { newValue, newFormattedValue in
+            formattedValue = newFormattedValue
+            updateText()
+        }
+        .onChangeOfIsRequired(of: element) { newIsRequired in
+            isRequired = newIsRequired
+        }
+        .onChangeOfIsEditable(of: element) { newIsEditable in
+            isEditable = newIsEditable
         }
     }
 }
@@ -127,11 +124,6 @@ private extension TextInput {
         } else {
             return false
         }
-    }
-    
-    /// The field type of the text input.
-    var fieldType: FieldType {
-        model.featureForm!.feature.table!.field(named: element.fieldName)!.type!
     }
     
     /// The body of the text input when the element is editable.
@@ -162,16 +154,24 @@ private extension TextInput {
             .keyboardType(keyboardType)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
-                    if UIDevice.current.userInterfaceIdiom == .phone, isFocused, fieldType.isNumeric {
+                    if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
                         positiveNegativeButton
                         Spacer()
                     }
                 }
             }
             .scrollContentBackgroundHidden()
-            if !text.isEmpty && inputModel.isEditable {
-                ClearButton { text.removeAll() }
-                    .accessibilityIdentifier("\(element.label) Clear Button")
+            if !text.isEmpty && isEditable {
+                ClearButton {
+                    if !isFocused {
+                        // If the user wasn't already editing the field provide
+                        // instantaneous focus to enable validation.
+                        model.focusedElement = element
+                        model.focusedElement = nil
+                    }
+                    text.removeAll()
+                }
+                .accessibilityIdentifier("\(element.label) Clear Button")
             }
         }
         .formInputStyle()
@@ -184,7 +184,8 @@ private extension TextInput {
     
     /// The keyboard type to use depending on where the input is numeric and decimal.
     var keyboardType: UIKeyboardType {
-        fieldType.isNumeric ? (fieldType.isFloatingPoint ? .decimalPad : .numberPad) : .default
+        guard let fieldType = element.fieldType else { return .default }
+        return fieldType.isNumeric ? (fieldType.isFloatingPoint ? .decimalPad : .numberPad) : .default
     }
     
     /// The button that allows a user to switch the numeric value between positive and negative.
@@ -199,6 +200,38 @@ private extension TextInput {
             }
         } label: {
             Image(systemName: "plus.forwardslash.minus")
+        }
+    }
+    
+    /// Updates ``text`` and ``placeholder`` values in response to
+    /// a change in ``formattedValue``.
+    private func updateText() {
+        let text = formattedValue
+        isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
+        self.text = isPlaceholder ? element.hint : text
+    }
+}
+
+private extension FieldFormElement {
+    /// Attempts to convert the value to a type suitable for the element's field type and then update
+    /// the element with the converted value.
+    func convertAndUpdateValue(_ value: String?) throws {
+        if let value {
+            if fieldType == .text {
+                try updateValue(value)
+            } else if fieldType == .int16, let value = Int16(value) {
+                try updateValue(value)
+            } else if fieldType == .int32, let value = Int32(value) {
+                try updateValue(value)
+            } else if fieldType == .int64, let value = Int64(value) {
+                try updateValue(value)
+            } else if fieldType == .float32, let value = Float32(value) {
+                try updateValue(value)
+            } else if fieldType == .float64, let value = Float64(value) {
+                try updateValue(value)
+            }
+        } else {
+            try updateValue(nil)
         }
     }
 }

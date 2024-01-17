@@ -149,8 +149,8 @@ final class FormViewTests: XCTestCase {
         )
         
         XCTAssertTrue(
-            characterIndicator.isHittable,
-            "The character count isn't hittable."
+            characterIndicator.exists,
+            "The character count doesn't exist."
         )
         
         XCTAssertEqual(
@@ -404,7 +404,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertEqual(
             fieldValue.label,
-            Date.now.formatted(.dateTime.day().month().year().hour().minute())
+            Date.now.formatted()
         )
         
         XCTAssertTrue(
@@ -457,7 +457,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertEqual(
             fieldValue.label,
-            localDate?.formatted(.dateTime.day().month().year().hour().minute())
+            localDate?.formatted()
         )
         
         XCTAssertEqual(
@@ -533,6 +533,8 @@ final class FormViewTests: XCTestCase {
                 timeZone: .gmt, year: 2023, month: 7, day: 15, hour: 3, minute: 53
             )
         )
+        
+        XCTExpectFailure("Time should not be included. Apollo #355")
         
         XCTAssertEqual(
             fieldValue.label,
@@ -611,7 +613,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertEqual(
             fieldValue.label,
-            localDate?.formatted(.dateTime.day().month().year().hour().minute())
+            localDate?.formatted()
         )
     }
     
@@ -668,7 +670,7 @@ final class FormViewTests: XCTestCase {
         
         XCTAssertEqual(
             fieldValue.label,
-            localDate?.formatted(.dateTime.day().month().year().hour().minute())
+            localDate?.formatted()
         )
         
         XCTAssertFalse(

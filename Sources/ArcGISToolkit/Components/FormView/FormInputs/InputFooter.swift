@@ -17,23 +17,270 @@ import SwiftUI
 
 /// A view shown at the bottom of a field element in a form.
 struct InputFooter: View {
+    /// The view model for the form.
+    @EnvironmentObject var model: FormViewModel
+    
     /// The form element the footer belongs to.
     let element: FieldFormElement
     
-    /// A Boolean value indicating if the form element the footer belongs to is required but a value
-    /// is missing.
-    let requiredValueMissing: Bool
-    
     var body: some View {
-        Group {
-            if requiredValueMissing {
-                Text.required
-            } else {
-                Text(element.description)
+        HStack(alignment: .top) {
+            Group {
+                if isShowingError {
+                    errorMessage
+                } else if !element.description.isEmpty {
+                    Text(element.description)
+                } else if model.focusedElement == element {
+                    if element.fieldType == .text, let lengthRange {
+                        if lengthRange.lowerBound == lengthRange.upperBound {
+                            makeExactLengthMessage(lengthRange)
+                        } else if lengthRange.lowerBound > .zero {
+                            makeLengthRangeMessage(lengthRange)
+                        } else {
+                            makeMaximumLengthMessage(lengthRange)
+                        }
+                    } else if element.fieldType?.isNumeric ?? false, let numericRange {
+                        makeNumericRangeMessage(numericRange)
+                    }
+                }
+            }
+            .accessibilityIdentifier("\(element.label) Footer")
+            Spacer()
+            if model.focusedElement == element, element.fieldType == .text, element.description.isEmpty || primaryError != nil {
+                Text(element.formattedValue.count, format: .number)
+                    .accessibilityIdentifier("\(element.label) Character Indicator")
             }
         }
         .font(.footnote)
-        .foregroundColor(requiredValueMissing ? .red : .secondary)
-        .accessibilityIdentifier("\(element.label) Footer")
+        .foregroundColor(isShowingError ? .red : .secondary)
+    }
+}
+
+extension InputFooter {
+    /// Localized error text to be shown to a user depending on the type of error information available.
+    var errorMessage: Text? {
+        guard let error = primaryError else { return nil }
+        return switch error {
+        case .nullNotAllowed:
+            Text(
+                "Value must not be empty",
+                bundle: .toolkitModule,
+                comment: "Text indicating a field's value must not be empty."
+            )
+        case .exceedsMaximumDateTime:
+            if let input = element.input as? DateTimePickerFormInput, let max = input.max {
+                Text(
+                    "Date must be on or before \(max, format: input.includeTime ? .dateTime : .dateTime.month().day().year())",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value must be on or before the maximum date specified in the variable."
+                )
+            } else {
+                Text(
+                    "Date exceeds maximum",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value must not exceed a maximum date."
+                )
+            }
+        case .lessThanMinimumDateTime:
+            if let input = element.input as? DateTimePickerFormInput, let min = input.min {
+                Text(
+                    "Date must be on or after \(min, format: input.includeTime ? .dateTime : .dateTime.month().day().year())",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value must be on or after the minimum date specified in the variable."
+                )
+            } else {
+                Text(
+                    "Date less than minimum",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value must meet a minimum date."
+                )
+            }
+        case .exceedsMaximumLength:
+            if let lengthRange {
+                if lengthRange.lowerBound == lengthRange.upperBound {
+                    makeExactLengthMessage(lengthRange)
+                } else {
+                    makeMaximumLengthMessage(lengthRange)
+                }
+            } else {
+                Text(
+                    "Maximum character length exceeded",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's maximum number of allowed characters is exceeded."
+                )
+            }
+        case .lessThanMinimumLength:
+            if let lengthRange {
+                if lengthRange.lowerBound == lengthRange.upperBound {
+                    makeExactLengthMessage(lengthRange)
+                } else {
+                    makeLengthRangeMessage(lengthRange)
+                }
+            } else {
+                Text(
+                    "Minimum character length not met",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's minimum number of allowed characters is not met."
+                )
+            }
+        case .exceedsNumericMaximum:
+            if let numericRange {
+                makeNumericRangeMessage(numericRange)
+            } else {
+                Text(
+                    "Exceeds maximum value",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value exceeds the maximum allowed value."
+                )
+            }
+        case .lessThanNumericMinimum:
+            if let numericRange {
+                makeNumericRangeMessage(numericRange)
+            } else {
+                Text(
+                    "Less than minimum value",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value must be within the allowed range."
+                )
+            }
+        case .notInCodedValueDomain:
+            Text(
+                "Value must be within domain",
+                bundle: .toolkitModule,
+                comment: "Text indicating a field's value must exist in the domain."
+            )
+        case .fieldIsRequired:
+            Text.required
+        case .incorrectValueType:
+            if element.fieldType?.isFloatingPoint ?? false {
+                Text(
+                    "Value must be a number",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value must be convertible to a number."
+                )
+            } else if element.fieldType?.isNumeric ?? false {
+                Text(
+                    "Value must be a whole number",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value must be convertible to a whole number."
+                )
+            } else {
+                Text(
+                    "Value must be of correct type",
+                    bundle: .toolkitModule,
+                    comment: "Text indicating a field's value must be of the correct type."
+                )
+            }
+        }
+    }
+    
+    /// Determines whether an error is showing in the footer.
+    var isShowingError: Bool {
+        element.isEditable && primaryError != nil && model.previouslyFocusedFields.contains(element)
+    }
+    
+    /// The allowable number of characters in the input.
+    var lengthRange: ClosedRange<Int>? {
+        if let input = element.input as? TextAreaFormInput {
+            return input.minLength...input.maxLength
+        } else if let input = element.input as? TextBoxFormInput, element.fieldType == .text {
+            return input.minLength...input.maxLength
+        } else {
+            return nil
+        }
+    }
+    
+    /// The allowable numeric range the input.
+    var numericRange: (min: String, max: String)? {
+        if let rangeDomain = element.domain as? RangeDomain, let minMax = rangeDomain.displayableMinAndMax {
+            return minMax
+        } else {
+            return nil
+        }
+    }
+    
+    /// The error to display for the input. If the element is not focused and has a required error this will be
+    /// the primary error. Otherwise the primary error is the first error in the element's set of errors.
+    var primaryError: ArcGIS.FeatureFormError? {
+        let elementErrors = element.validationErrors as? [ArcGIS.FeatureFormError]
+        if let requiredError = elementErrors?.first(where: {
+            switch $0 {
+            case .fieldIsRequired(_):
+                return true
+            default:
+                return false
+            }
+        }), model.focusedElement != element {
+            return requiredError
+        } else {
+            return elementErrors?.first(where: {
+                switch $0 {
+                case .fieldIsRequired(_):
+                    return false
+                default:
+                    return true
+                }
+            })
+        }
+    }
+    
+    /// Text indicating a field's exact number of allowed characters.
+    /// - Note: This is intended to be used in instances where the character minimum and maximum are
+    /// identical, such as an ID field.
+    func makeExactLengthMessage(_ lengthRange: ClosedRange<Int>) -> Text {
+        Text(
+            "Enter \(lengthRange.lowerBound) characters",
+            bundle: .toolkitModule,
+            comment: "Text indicating the user should enter a field's exact number of required characters."
+        )
+    }
+    
+    /// Text indicating a field's value must be within the allowed length range.
+    func makeLengthRangeMessage(_ lengthRange: ClosedRange<Int>) -> Text {
+        Text(
+            "Enter \(lengthRange.lowerBound) to \(lengthRange.upperBound) characters",
+            bundle: .toolkitModule,
+            comment: """
+                     Text indicating a field's value must be within the
+                     allowed length range. The first and second parameter
+                     hold the minimum and maximum length respectively.
+                     """
+        )
+    }
+    
+    /// Text indicating a field's maximum number of allowed characters.
+    func makeMaximumLengthMessage(_ lengthRange: ClosedRange<Int>) -> Text {
+        Text(
+            "Maximum \(lengthRange.upperBound) characters",
+            bundle: .toolkitModule,
+            comment: "Text indicating a field's maximum number of allowed characters."
+        )
+    }
+    
+    /// Text indicating a field's value must be within the allowed numeric range.
+    func makeNumericRangeMessage(_ numericRange: (min: String, max: String)) -> Text {
+        Text(
+            "Enter value from \(numericRange.min) to \(numericRange.max)",
+            bundle: .toolkitModule,
+            comment: """
+                     Text indicating a field's value must be within the allowed range.
+                     The first and second parameter hold the minimum and maximum values respectively.
+                     """
+        )
+    }
+}
+
+private extension RangeDomain {
+    /// String representations of the minimum and maximum value of the range domain.
+    var displayableMinAndMax: (min: String, max: String)? {
+        if let min = minValue as? Double, let max = maxValue as? Double {
+            return (min.formatted(.number.precision(.fractionLength(1...))), max.formatted(.number.precision(.fractionLength(1...))))
+        } else if let min = minValue as? Int, let max = maxValue as? Int {
+            return (min.formatted(), max.formatted())
+        } else if let min = minValue as? Int32, let max = maxValue as? Int32 {
+            return (min.formatted(), max.formatted())
+        } else {
+            return nil
+        }
     }
 }
