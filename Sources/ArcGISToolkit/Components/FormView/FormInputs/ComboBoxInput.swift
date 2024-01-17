@@ -21,7 +21,7 @@ import SwiftUI
 struct ComboBoxInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The model for the ancestral form view.
+    /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
     // State properties for element events.
@@ -30,7 +30,7 @@ struct ComboBoxInput: View {
     @State private var isEditable: Bool = false
     @State private var value: Any?
     @State private var formattedValue: String = ""
-
+    
     /// The set of options in the combo box.
     @State private var codedValues = [CodedValue]()
     
@@ -39,9 +39,6 @@ struct ComboBoxInput: View {
     
     /// The phrase to use when filtering by coded value name.
     @State private var filterPhrase = ""
-    
-    /// A Boolean value indicating whether a value is required but missing.
-    @State private var requiredValueMissing = false
     
     /// The selected option.
     @State private var selectedValue: CodedValue?
@@ -123,17 +120,17 @@ struct ComboBoxInput: View {
                 makePicker(for: matchingValues)
             }
             .onTapGesture {
+                model.focusedElement = element
                 isPresented = true
             }
             
-            InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+            InputFooter(element: element)
         }
         .padding([.bottom], elementPadding)
         .onAppear {
             codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
         }
         .onChange(of: selectedValue) { selectedValue in
-            requiredValueMissing = isRequired && selectedValue == nil
             do {
                 try element.updateValue(selectedValue?.code)
             } catch {

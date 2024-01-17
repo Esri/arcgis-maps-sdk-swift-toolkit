@@ -22,14 +22,20 @@ import SwiftUI
     private(set) var featureForm: FeatureForm
     
     /// The current focused element, if one exists.
-    @Published var focusedElement: FormElement?
+    @Published var focusedElement: FormElement? {
+        didSet {
+            if let focusedElement, !previouslyFocusedFields.contains(focusedElement) {
+                previouslyFocusedFields.append(focusedElement)
+            }
+        }
+    }
     
     /// The expression evaluation task.
     private var evaluateTask: Task<Void, Never>?
     
     /// The visibility tasks group.
     private var isVisibleTask: Task<Void, Never>?
-
+    
     /// The list of visible form elements.
     @Published var visibleElements = [FormElement]()
     
@@ -38,6 +44,9 @@ import SwiftUI
     
     /// A Boolean value indicating whether evaluation is running.
     @Published var isEvaluating = true
+    
+    /// The set of all fields which previously held focus.
+    @Published var previouslyFocusedFields = [FormElement]()
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
@@ -77,7 +86,7 @@ import SwiftUI
         expressionEvaluationErrors = evaluationErrors ?? []
         initializeIsVisibleTasks()
     }
-
+    
     /// Performs an evaluation of all form expressions.
     func evaluateExpressions() {
         evaluateTask?.cancel()
