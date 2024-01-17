@@ -106,6 +106,14 @@ extension FormView {
     }
 }
 
+public extension FormView {
+    /// Enables validation for all form fields irrespective of whether a given field has received user-focus.
+    /// - Parameter force: A Boolean value that indicates whether to display all form validation errors.
+    func validation(force: Bool) -> some View {
+        environment(\.forceValidation, force)
+    }
+}
+
 private extension View {
     /// Configures the behavior in which scrollable content interacts with the software keyboard.
     /// - Returns: A view that dismisses the keyboard when the  scroll.
