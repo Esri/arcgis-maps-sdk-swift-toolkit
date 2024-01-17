@@ -138,7 +138,7 @@ extension InputFooter {
                 makeNumericRangeMessage(numericRange)
             } else {
                 Text(
-                    "Value must be within allowed range",
+                    "Less than minimum value",
                     bundle: .toolkitModule,
                     comment: "Text indicating a field's value must be within the allowed range."
                 )
