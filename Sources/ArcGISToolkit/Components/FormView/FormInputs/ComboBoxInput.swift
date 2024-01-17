@@ -21,11 +21,15 @@
 struct ComboBoxInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the ancestral form view.
+***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the input.
-***REMOVED***@StateObject var inputModel: FormInputModel
+***REMOVED******REMOVED*** State properties for element events.
+***REMOVED***
+***REMOVED***@State private var isRequired: Bool = false
+***REMOVED***@State private var isEditable: Bool = false
+***REMOVED***@State private var value: Any?
+***REMOVED***@State private var formattedValue: String = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The set of options in the combo box.
 ***REMOVED***@State private var codedValues = [CodedValue]()
@@ -35,9 +39,6 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The phrase to use when filtering by coded value name.
 ***REMOVED***@State private var filterPhrase = ""
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether a value is required but missing.
-***REMOVED***@State private var requiredValueMissing = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
@@ -74,10 +75,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***let input = element.input as! ComboBoxFormInput
 ***REMOVED******REMOVED***self.noValueLabel = input.noValueLabel
 ***REMOVED******REMOVED***self.noValueOption = input.noValueOption
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***_inputModel = StateObject(
-***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for a combo box input.
@@ -90,14 +87,15 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***self.noValueLabel = noValueLabel
 ***REMOVED******REMOVED***self.noValueOption = noValueOption
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***_inputModel = StateObject(
-***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***value = element.value
+***REMOVED******REMOVED***formattedValue = element.formattedValue
+***REMOVED******REMOVED***isRequired = element.isRequired
+***REMOVED******REMOVED***isEditable = element.isEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
+***REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***HStack {
@@ -105,14 +103,18 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(selectedValue != nil ? .primary : .secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Value")
-***REMOVED******REMOVED******REMOVED******REMOVED***if inputModel.isEditable {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if selectedValue == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "list.bullet")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Options Button")
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { selectedValue = nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { model.focusedElement = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -122,18 +124,17 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***makePicker(for: matchingValues)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
-***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == inputModel.formattedValue ***REMOVED***
+***REMOVED******REMOVED******REMOVED***codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
-***REMOVED******REMOVED******REMOVED***requiredValueMissing = inputModel.isRequired && selectedValue == nil
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(selectedValue?.code)
 ***REMOVED******REMOVED*** catch {
@@ -141,9 +142,17 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: inputModel.formattedValue) { _ in
-***REMOVED******REMOVED******REMOVED***let codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
-***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == inputModel.formattedValue ***REMOVED***
+***REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED***value = newValue
+***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
+***REMOVED******REMOVED******REMOVED***let codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
+***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == formattedValue ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChangeOfIsRequired(of: element) { newIsRequired in
+***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
+***REMOVED***
+***REMOVED******REMOVED***.onChangeOfIsEditable(of: element) { newIsEditable in
+***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

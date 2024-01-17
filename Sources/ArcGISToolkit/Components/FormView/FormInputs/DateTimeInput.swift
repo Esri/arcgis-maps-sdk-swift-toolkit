@@ -19,20 +19,20 @@
 struct DateTimeInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the ancestral form view.
+***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the input.
-***REMOVED***@StateObject var inputModel: FormInputModel
+***REMOVED******REMOVED*** State properties for element events.
+***REMOVED***
+***REMOVED***@State private var isRequired: Bool = false
+***REMOVED***@State private var isEditable: Bool = false
+***REMOVED***@State private var formattedValue: String = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current date selection.
 ***REMOVED***@State private var date: Date?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether a new date (or time is being set).
 ***REMOVED***@State private var isEditing = false
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the date selection was cleared when a value is required.
-***REMOVED***@State private var requiredValueMissing = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***private let element: FieldFormElement
@@ -51,10 +51,6 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = element.input as! DateTimePickerFormInput
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***_inputModel = StateObject(
-***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -64,34 +60,34 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***dateEditor
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
 ***REMOVED******REMOVED******REMOVED***isEditing = focusedElement == element
 ***REMOVED***
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***if inputModel.formattedValue.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***date = inputModel.value as? Date
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { date in
-***REMOVED******REMOVED******REMOVED***requiredValueMissing = inputModel.isRequired && date == nil
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(date)
+***REMOVED******REMOVED******REMOVED******REMOVED***formattedValue = element.formattedValue
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: inputModel.formattedValue) { formattedValue in
-***REMOVED******REMOVED******REMOVED***if formattedValue.isEmpty {
+***REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED***if newFormattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***date = inputModel.value as? Date
+***REMOVED******REMOVED******REMOVED******REMOVED***date = newValue as? Date
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
+***REMOVED***
+***REMOVED******REMOVED***.onChangeOfIsRequired(of: element) { newIsRequired in
+***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
+***REMOVED***
+***REMOVED******REMOVED***.onChangeOfIsEditable(of: element) { newIsEditable in
+***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -108,7 +104,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***/ - Note: Secondary foreground color is used across input views for consistency.
 ***REMOVED***@ViewBuilder var dateDisplay: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Text(formattedDate ?? .noValue)
+***REMOVED******REMOVED******REMOVED***Text(!formattedValue.isEmpty ? formattedValue : .noValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Value")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(displayColor)
 ***REMOVED******REMOVED******REMOVED***
@@ -116,14 +112,18 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isEditing {
 ***REMOVED******REMOVED******REMOVED******REMOVED***todayOrNowButton
-***REMOVED******REMOVED*** else if inputModel.isEditable {
+***REMOVED******REMOVED*** else if isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Calendar Image")
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { date = nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { model.focusedElement = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -131,7 +131,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED***guard inputModel.isEditable else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***guard isEditable else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if dateRange.contains(.now) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = .now
@@ -178,15 +178,6 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***return .accentColor
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return .primary
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The human-readable date and time selection.
-***REMOVED***var formattedDate: String? {
-***REMOVED******REMOVED***if input.includeTime {
-***REMOVED******REMOVED******REMOVED***return date?.formatted(.dateTime.day().month().year().hour().minute())
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return date?.formatted(.dateTime.day().month().year())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

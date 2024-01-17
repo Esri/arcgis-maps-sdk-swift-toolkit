@@ -17,36 +17,31 @@
 
 ***REMOVED***/ Forms allow users to edit information about GIS features.
 ***REMOVED***/
-***REMOVED***/ - Since: 200.3
+***REMOVED***/ - Since: 200.4
 public struct FormView: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the ancestral form view.
-***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED******REMOVED***/ The view model for the form.
+***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ The form's configuration.
-***REMOVED***private let featureForm: FeatureForm?
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether an evaluation is running.
-***REMOVED***@State var isEvaluating = true
-***REMOVED***
-***REMOVED******REMOVED***/ A list of the visible elements in the form.
-***REMOVED***@State var visibleElements = [FormElement]()
+***REMOVED******REMOVED***/ A Boolean value indicating whether the initial expression evaluation is running.
+***REMOVED***@State var isEvaluatingInitialExpressions = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
-***REMOVED******REMOVED***/ - Parameter featureForm: The form's configuration.
-***REMOVED***public init(featureForm: FeatureForm?) {
-***REMOVED******REMOVED***self.featureForm = featureForm
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
+***REMOVED***public init(featureForm: FeatureForm) {
+***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isEvaluating {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isEvaluatingInitialExpressions {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: featureForm?.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: model.featureForm.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
@@ -64,18 +59,11 @@ public struct FormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Allow tall multiline text fields to be scrolled
 ***REMOVED******REMOVED******REMOVED***immediately: (model.focusedElement as? FieldFormElement)?.input is TextAreaFormInput ? false : true
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.onChange(of: model.visibleElements) { _ in
-***REMOVED******REMOVED******REMOVED***visibleElements = model.visibleElements
-***REMOVED***
+***REMOVED******REMOVED***.environmentObject(model)
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***isEvaluating = true
-***REMOVED******REMOVED******REMOVED******REMOVED***try await featureForm?.evaluateExpressions()
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("error evaluating expressions: \(error.localizedDescription)")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***model.initializeIsVisibleTasks()
-***REMOVED******REMOVED******REMOVED***isEvaluating = false
+***REMOVED******REMOVED******REMOVED******REMOVED*** Perform the initial expression evaluation.
+***REMOVED******REMOVED******REMOVED***await model.initialEvaluation()
+***REMOVED******REMOVED******REMOVED***isEvaluatingInitialExpressions = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

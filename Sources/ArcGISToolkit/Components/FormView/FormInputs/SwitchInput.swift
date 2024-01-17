@@ -21,19 +21,18 @@
 struct SwitchInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the ancestral form view.
+***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the input.
-***REMOVED***@StateObject var inputModel: FormInputModel
+***REMOVED******REMOVED*** State properties for element events.
+***REMOVED***
+***REMOVED***@State private var isRequired: Bool = false
+***REMOVED***@State private var isEditable: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the current value doesn't exist as an option in the domain.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ In this scenario a ``ComboBoxInput`` should be used instead.
 ***REMOVED***@State private var fallbackToComboBox = false
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether a value is required but missing.
-***REMOVED***@State private var requiredValueMissing = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the switch is toggled on or off.
 ***REMOVED***@State private var isOn: Bool = false
@@ -58,10 +57,6 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = element.input as! SwitchFormInput
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***_inputModel = StateObject(
-***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -73,7 +68,7 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
+***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(isOn ? input.onValue.name : input.offValue.name)
@@ -84,18 +79,17 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.formInputStyle()
-***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
+***REMOVED******REMOVED******REMOVED***.disabled(!isEditable)
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.formattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isOn = input.onValue.name == inputModel.formattedValue
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: isOn) { isOn in
+***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(isOn ? input.onValue.code : input.offValue.code)
 ***REMOVED******REMOVED******REMOVED*** catch {
@@ -103,8 +97,14 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: inputModel.formattedValue) { formattedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***isOn = formattedValue == input.onValue.name
+***REMOVED******REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***isOn = newFormattedValue == input.onValue.name
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChangeOfIsRequired(of: element) { newIsRequired in
+***REMOVED******REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChangeOfIsEditable(of: element) { newIsEditable in
+***REMOVED******REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

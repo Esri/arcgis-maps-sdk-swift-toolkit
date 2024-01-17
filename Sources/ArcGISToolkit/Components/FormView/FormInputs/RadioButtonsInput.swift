@@ -21,17 +21,17 @@
 struct RadioButtonsInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the ancestral form view.
+***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ The model for the input.
-***REMOVED***@StateObject var inputModel: FormInputModel
+***REMOVED******REMOVED*** State properties for element events.
+***REMOVED***
+***REMOVED***@State private var isRequired: Bool = false
+***REMOVED***@State private var isEditable: Bool = false
+***REMOVED***@State private var value: Any?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The set of options in the input.
 ***REMOVED***@State private var codedValues = [CodedValue]()
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the date selection was cleared when a value is required.
-***REMOVED***@State private var requiredValueMissing = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
@@ -57,10 +57,6 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = element.input as! RadioButtonsFormInput
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***_inputModel = StateObject(
-***REMOVED******REMOVED******REMOVED***wrappedValue: FormInputModel(fieldFormElement: element)
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -72,7 +68,7 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: inputModel.isRequired)
+***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: .zero) {
@@ -96,18 +92,18 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!inputModel.isEditable)
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!isEditable)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 10)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .tertiarySystemFill))
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
+***REMOVED******REMOVED******REMOVED******REMOVED***codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = codedValues.first(where: { $0.name == element.formattedValue ***REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.selectedValue = selectedValue
 ***REMOVED******REMOVED******REMOVED*** else if !element.formattedValue.isEmpty {
@@ -115,7 +111,6 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***requiredValueMissing = inputModel.isRequired && selectedValue == nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(selectedValue?.code)
 ***REMOVED******REMOVED******REMOVED*** catch {
@@ -123,8 +118,15 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: inputModel.formattedValue) { formattedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == formattedValue ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***value = newValue
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == newFormattedValue ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChangeOfIsRequired(of: element) { newIsRequired in
+***REMOVED******REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChangeOfIsEditable(of: element) { newIsEditable in
+***REMOVED******REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -155,6 +157,7 @@ extension RadioButtonsInput {
 ***REMOVED******REMOVED***_ action: @escaping () -> Void
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***action()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***HStack {
