@@ -17,36 +17,31 @@ import SwiftUI
 
 /// Forms allow users to edit information about GIS features.
 ///
-/// - Since: 200.3
+/// - Since: 200.4
 public struct FormView: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The model for the ancestral form view.
-    @EnvironmentObject var model: FormViewModel
+    /// The view model for the form.
+    @StateObject private var model: FormViewModel
     
-    /// The form's configuration.
-    private let featureForm: FeatureForm?
-    
-    /// A Boolean value indicating whether an evaluation is running.
-    @State var isEvaluating = true
-    
-    /// A list of the visible elements in the form.
-    @State var visibleElements = [FormElement]()
+    /// A Boolean value indicating whether the initial expression evaluation is running.
+    @State var isEvaluatingInitialExpressions = true
     
     /// Initializes a form view.
-    /// - Parameter featureForm: The form's configuration.
-    public init(featureForm: FeatureForm?) {
-        self.featureForm = featureForm
+    /// - Parameters:
+    ///   - featureForm: The feature form defining the editing experience.
+    public init(featureForm: FeatureForm) {
+        _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
     }
     
     public var body: some View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
-                if isEvaluating {
+                if isEvaluatingInitialExpressions {
                     ProgressView()
                 } else {
                     VStack(alignment: .leading) {
-                        FormHeader(title: featureForm?.title)
+                        FormHeader(title: model.featureForm.title)
                             .padding([.bottom], elementPadding)
                         ForEach(model.visibleElements, id: \.self) { element in
                             makeElement(element)
@@ -64,18 +59,11 @@ public struct FormView: View {
             // Allow tall multiline text fields to be scrolled
             immediately: (model.focusedElement as? FieldFormElement)?.input is TextAreaFormInput ? false : true
         )
-        .onChange(of: model.visibleElements) { _ in
-            visibleElements = model.visibleElements
-        }
+        .environmentObject(model)
         .task {
-            do {
-                isEvaluating = true
-                try await featureForm?.evaluateExpressions()
-            } catch {
-                print("error evaluating expressions: \(error.localizedDescription)")
-            }
-            model.initializeIsVisibleTasks()
-            isEvaluating = false
+            // Perform the initial expression evaluation.
+            await model.initialEvaluation()
+            isEvaluatingInitialExpressions = false
         }
     }
 }

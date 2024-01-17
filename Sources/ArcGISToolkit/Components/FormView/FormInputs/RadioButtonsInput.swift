@@ -21,17 +21,17 @@ import SwiftUI
 struct RadioButtonsInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The model for the ancestral form view.
+    /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
+    // State properties for element events.
+    
+    @State private var isRequired: Bool = false
+    @State private var isEditable: Bool = false
+    @State private var value: Any?
     
     /// The set of options in the input.
     @State private var codedValues = [CodedValue]()
-    
-    /// A Boolean value indicating whether the date selection was cleared when a value is required.
-    @State private var requiredValueMissing = false
     
     /// The selected option.
     @State private var selectedValue: CodedValue?
@@ -57,10 +57,6 @@ struct RadioButtonsInput: View {
         
         self.element = element
         self.input = element.input as! RadioButtonsFormInput
-        
-        _inputModel = StateObject(
-            wrappedValue: FormInputModel(fieldFormElement: element)
-        )
     }
     
     var body: some View {
@@ -72,7 +68,7 @@ struct RadioButtonsInput: View {
             )
         } else {
             Group {
-                InputHeader(label: element.label, isRequired: inputModel.isRequired)
+                InputHeader(label: element.label, isRequired: isRequired)
                     .padding([.top], elementPadding)
                 
                 VStack(alignment: .leading, spacing: .zero) {
@@ -96,18 +92,18 @@ struct RadioButtonsInput: View {
                         }
                     }
                 }
-                .disabled(!inputModel.isEditable)
+                .disabled(!isEditable)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color(uiColor: .tertiarySystemFill))
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
-                InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+                InputFooter(element: element)
             }
             .padding([.bottom], elementPadding)
             .onAppear {
-                codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
+                codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
                 if let selectedValue = codedValues.first(where: { $0.name == element.formattedValue }) {
                     self.selectedValue = selectedValue
                 } else if !element.formattedValue.isEmpty {
@@ -115,7 +111,6 @@ struct RadioButtonsInput: View {
                 }
             }
             .onChange(of: selectedValue) { selectedValue in
-                requiredValueMissing = inputModel.isRequired && selectedValue == nil
                 do {
                     try element.updateValue(selectedValue?.code)
                 } catch {
@@ -123,8 +118,15 @@ struct RadioButtonsInput: View {
                 }
                 model.evaluateExpressions()
             }
-            .onChange(of: inputModel.formattedValue) { formattedValue in
-                selectedValue = codedValues.first { $0.name == formattedValue }
+            .onChangeOfValue(of: element) { newValue, newFormattedValue in
+                value = newValue
+                selectedValue = codedValues.first { $0.name == newFormattedValue }
+            }
+            .onChangeOfIsRequired(of: element) { newIsRequired in
+                isRequired = newIsRequired
+            }
+            .onChangeOfIsEditable(of: element) { newIsEditable in
+                isEditable = newIsEditable
             }
         }
     }
@@ -155,6 +157,7 @@ extension RadioButtonsInput {
         _ action: @escaping () -> Void
     ) -> some View {
         Button {
+            model.focusedElement = element
             action()
         } label: {
             HStack {

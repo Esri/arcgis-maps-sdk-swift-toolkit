@@ -21,11 +21,15 @@ import SwiftUI
 struct ComboBoxInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The model for the ancestral form view.
+    /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    /// The model for the input.
-    @StateObject var inputModel: FormInputModel
+    // State properties for element events.
+    
+    @State private var isRequired: Bool = false
+    @State private var isEditable: Bool = false
+    @State private var value: Any?
+    @State private var formattedValue: String = ""
     
     /// The set of options in the combo box.
     @State private var codedValues = [CodedValue]()
@@ -35,9 +39,6 @@ struct ComboBoxInput: View {
     
     /// The phrase to use when filtering by coded value name.
     @State private var filterPhrase = ""
-    
-    /// A Boolean value indicating whether a value is required but missing.
-    @State private var requiredValueMissing = false
     
     /// The selected option.
     @State private var selectedValue: CodedValue?
@@ -74,10 +75,6 @@ struct ComboBoxInput: View {
         let input = element.input as! ComboBoxFormInput
         self.noValueLabel = input.noValueLabel
         self.noValueOption = input.noValueOption
-        
-        _inputModel = StateObject(
-            wrappedValue: FormInputModel(fieldFormElement: element)
-        )
     }
     
     /// Creates a view for a combo box input.
@@ -90,14 +87,15 @@ struct ComboBoxInput: View {
         self.noValueLabel = noValueLabel
         self.noValueOption = noValueOption
         
-        _inputModel = StateObject(
-            wrappedValue: FormInputModel(fieldFormElement: element)
-        )
+        value = element.value
+        formattedValue = element.formattedValue
+        isRequired = element.isRequired
+        isEditable = element.isEditable
     }
     
     var body: some View {
         VStack(alignment: .leading) {
-            InputHeader(label: element.label, isRequired: inputModel.isRequired)
+            InputHeader(label: element.label, isRequired: isRequired)
                 .padding([.top], elementPadding)
             
             HStack {
@@ -105,14 +103,18 @@ struct ComboBoxInput: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
                     .accessibilityIdentifier("\(element.label) Value")
-                if inputModel.isEditable {
+                if isEditable {
                     if selectedValue == nil {
                         Image(systemName: "list.bullet")
                             .foregroundColor(.secondary)
                             .accessibilityIdentifier("\(element.label) Options Button")
                     } else {
-                        ClearButton { selectedValue = nil }
-                            .accessibilityIdentifier("\(element.label) Clear Button")
+                        ClearButton {
+                            model.focusedElement = element
+                            defer { model.focusedElement = nil }
+                            selectedValue = nil
+                        }
+                        .accessibilityIdentifier("\(element.label) Clear Button")
                     }
                 }
             }
@@ -122,18 +124,17 @@ struct ComboBoxInput: View {
                 makePicker(for: matchingValues)
             }
             .onTapGesture {
+                model.focusedElement = element
                 isPresented = true
             }
             
-            InputFooter(element: element, requiredValueMissing: requiredValueMissing)
+            InputFooter(element: element)
         }
         .padding([.bottom], elementPadding)
         .onAppear {
-            codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
-            selectedValue = codedValues.first { $0.name == inputModel.formattedValue }
+            codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
         }
         .onChange(of: selectedValue) { selectedValue in
-            requiredValueMissing = inputModel.isRequired && selectedValue == nil
             do {
                 try element.updateValue(selectedValue?.code)
             } catch {
@@ -141,9 +142,17 @@ struct ComboBoxInput: View {
             }
             model.evaluateExpressions()
         }
-        .onChange(of: inputModel.formattedValue) { _ in
-            let codedValues = model.featureForm!.codedValues(fieldName: element.fieldName)
-            selectedValue = codedValues.first { $0.name == inputModel.formattedValue }
+        .onChangeOfValue(of: element) { newValue, newFormattedValue in
+            value = newValue
+            formattedValue = newFormattedValue
+            let codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
+            selectedValue = codedValues.first { $0.name == formattedValue }
+        }
+        .onChangeOfIsRequired(of: element) { newIsRequired in
+            isRequired = newIsRequired
+        }
+        .onChangeOfIsEditable(of: element) { newIsEditable in
+            isEditable = newIsEditable
         }
     }
     

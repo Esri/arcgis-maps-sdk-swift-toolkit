@@ -15,19 +15,6 @@
 import SwiftUI
 import ArcGIS
 
-extension FormElement: Equatable {
-    public static func == (lhs: ArcGIS.FormElement, rhs: ArcGIS.FormElement) -> Bool {
-        lhs === rhs
-    }
-}
-
-extension FormElement: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(description)
-        hasher.combine(label)
-    }
-}
-
 extension FormElement {
     /// The id of the element.
     public var id: ObjectIdentifier {
