@@ -85,7 +85,7 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED***
 
 private extension Layer {
-***REMOVED******REMOVED*** A feature layer with San Bernardino parcels data.
+***REMOVED******REMOVED***/ A feature layer with San Bernardino parcels data.
 ***REMOVED***static var parcelsLayer: FeatureLayer {
 ***REMOVED******REMOVED***let parcelsTable = ServiceFeatureTable(url: URL(string: "https:***REMOVED***services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
 ***REMOVED******REMOVED***let featureLayer = FeatureLayer(featureTable: parcelsTable)
