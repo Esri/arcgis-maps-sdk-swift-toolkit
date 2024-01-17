@@ -20,8 +20,8 @@ struct InputFooter: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value that indicates whether to display all form validation errors.
-***REMOVED***@Environment(\.forceValidation) var forceValidation: Bool
+***REMOVED******REMOVED***/ The validation error visibility configuration of a form.
+***REMOVED***@Environment(\.validationErrorVisibility) private var validationErrorVisibility
 ***REMOVED***
 ***REMOVED******REMOVED***/ The form element the footer belongs to.
 ***REMOVED***let element: FieldFormElement
@@ -179,9 +179,9 @@ extension InputFooter {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether an error is showing in the footer.
 ***REMOVED***var isShowingError: Bool {
-***REMOVED******REMOVED***element.isEditable && 
-***REMOVED******REMOVED***primaryError != nil &&
-***REMOVED******REMOVED***(model.previouslyFocusedFields.contains(element) || forceValidation)
+***REMOVED******REMOVED***element.isEditable 
+***REMOVED******REMOVED***&& primaryError != nil
+***REMOVED******REMOVED***&& (model.previouslyFocusedFields.contains(element) || validationErrorVisibility == .visible)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The allowable number of characters in the input.
