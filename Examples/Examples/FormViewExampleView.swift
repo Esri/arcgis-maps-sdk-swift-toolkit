@@ -59,7 +59,6 @@ struct FormViewExampleView: View {
                     }
                 }
                 .ignoresSafeArea(.keyboard)
-            
                 .floatingPanel(
                     attributionBarHeight: attributionBarHeight,
                     selectedDetent: $detent,
@@ -71,6 +70,9 @@ struct FormViewExampleView: View {
                             .validationErrors(validationErrorVisibility)
                             .padding([.horizontal])
                     }
+                }
+                .onChange(of: model.isFormPresented) { isFormPresented in
+                    if !isFormPresented { validationErrorVisibility = .automatic }
                 }
                 .alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
                         Button("Discard edits", role: .destructive) {
