@@ -20,6 +20,9 @@ struct InputFooter: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
+    /// A Boolean value that indicates whether to display all form validation errors.
+    @Environment(\.forceValidation) var forceValidation: Bool
+    
     /// The form element the footer belongs to.
     let element: FieldFormElement
     
@@ -176,7 +179,9 @@ extension InputFooter {
     
     /// Determines whether an error is showing in the footer.
     var isShowingError: Bool {
-        element.isEditable && primaryError != nil && model.previouslyFocusedFields.contains(element)
+        element.isEditable && 
+        primaryError != nil &&
+        (model.previouslyFocusedFields.contains(element) || forceValidation)
     }
     
     /// The allowable number of characters in the input.

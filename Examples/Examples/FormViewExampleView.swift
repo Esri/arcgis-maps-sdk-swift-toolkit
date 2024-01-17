@@ -65,6 +65,7 @@ struct FormViewExampleView: View {
                 ) {
                     if let featureForm = model.featureForm {
                         FormView(featureForm: featureForm)
+                            .validation(force: model.validationIsForced)
                             .padding([.horizontal])
                     }
                 }
@@ -133,7 +134,12 @@ private extension URL {
 }
 
 /// The model class for the form example view
-@MainActor class Model: ObservableObject {
+@MainActor
+class Model: ObservableObject {
+    /// A Boolean value indicating whether or not to display all validation errors in the form, irrespective of
+    /// whether a given field has received user-focus.
+    @Published var validationIsForced = false
+    
     /// The feature form.
     @Published var featureForm: FeatureForm? {
         didSet {
@@ -159,6 +165,10 @@ private extension URL {
             print("A precondition to submit the changes wasn't met.")
             return
         }
+        
+        validationIsForced = true
+        
+        guard featureForm?.validationErrors.isEmpty ?? true else { return }
         
         try? await table.update(feature)
         
