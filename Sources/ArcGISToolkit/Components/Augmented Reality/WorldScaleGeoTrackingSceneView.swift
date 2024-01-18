@@ -46,8 +46,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@State private var lastLocationTimestamp: Date?
 ***REMOVED******REMOVED***/ The current device location.
 ***REMOVED***@State private var currentLocation: Location?
-***REMOVED******REMOVED***/ The current device heading.
-***REMOVED***@State private var currentHeading: Double?
 ***REMOVED******REMOVED***/ The valid accuracy threshold for a location in meters.
 ***REMOVED***private var validAccuracyThreshold = 0.0
 ***REMOVED***
@@ -141,12 +139,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await updateSceneView(for: location)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await heading in locationDataSource.headings {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentHeading = heading
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(heading)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {***REMOVED***
 ***REMOVED***
@@ -189,7 +181,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***latitude: location.position.y,
 ***REMOVED******REMOVED******REMOVED***longitude: location.position.x,
 ***REMOVED******REMOVED******REMOVED***altitude: altitude,
-***REMOVED******REMOVED******REMOVED***heading: calibrationHeading ?? currentHeading ?? 0,
+***REMOVED******REMOVED******REMOVED***heading: calibrationHeading ?? 0,
 ***REMOVED******REMOVED******REMOVED***pitch: 90,
 ***REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED***)
