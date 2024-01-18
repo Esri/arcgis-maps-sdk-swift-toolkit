@@ -215,10 +215,10 @@ private extension TextInput {
 private extension FieldFormElement {
 ***REMOVED******REMOVED***/ Attempts to convert the value to a type suitable for the element's field type and then update
 ***REMOVED******REMOVED***/ the element with the converted value.
-***REMOVED***func convertAndUpdateValue(_ value: String?) throws {
+***REMOVED***func convertAndUpdateValue(_ value: String) throws {
 ***REMOVED******REMOVED***if fieldType == .text {
 ***REMOVED******REMOVED******REMOVED***try updateValue(value)
-***REMOVED*** else if let fieldType, let value {
+***REMOVED*** else if let fieldType {
 ***REMOVED******REMOVED******REMOVED***if fieldType.isNumeric && value.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(nil)
 ***REMOVED******REMOVED*** else if fieldType == .int16, let value = Int16(value) {
