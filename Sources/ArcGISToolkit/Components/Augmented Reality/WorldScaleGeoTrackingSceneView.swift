@@ -46,8 +46,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var lastLocationTimestamp: Date?
     /// The current device location.
     @State private var currentLocation: Location?
-    /// The current device heading.
-    @State private var currentHeading: Double?
     /// The valid accuracy threshold for a location in meters.
     private var validAccuracyThreshold = 0.0
     
@@ -141,12 +139,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
                             await updateSceneView(for: location)
                         }
                     }
-                    group.addTask {
-                        for await heading in locationDataSource.headings {
-                            currentHeading = heading
-                            updateHeading(heading)
-                        }
-                    }
                 }
             } catch {}
         }
@@ -189,7 +181,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
             latitude: location.position.y,
             longitude: location.position.x,
             altitude: altitude,
-            heading: calibrationHeading ?? currentHeading ?? 0,
+            heading: calibrationHeading ?? 0,
             pitch: 90,
             roll: 0
         )
