@@ -56,8 +56,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var lastLocationTimestamp: Date?
     /// The current device location.
     @State private var currentLocation: Location?
-    /// The current device heading.
-    @State private var currentHeading: Double?
     /// The valid accuracy threshold for a location in meters.
     private var validAccuracyThreshold = 0.0
     /// The tracking state for the AR experience.
@@ -190,13 +188,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
         if let currentLocation {
             await updateSceneView(for: currentLocation)
         } else {
-            guard let location = await locationDataSource.locations.first(where: { _ in true }),
-                  let heading = await locationDataSource.headings.first(where: { _ in true }) else { return }
-            
+            guard let location = await locationDataSource.locations.first(where: { _ in true }) else { return }
             self.currentLocation = location
-            self.currentHeading = heading
             await updateSceneView(for: location)
-            updateHeading(heading)
         }
     }
     
@@ -209,12 +203,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
                     self.lastLocationTimestamp = location.timestamp
                     self.currentLocation = location
                     await updateSceneView(for: location)
-                }
-            }
-            group.addTask {
-                for await heading in locationDataSource.headings {
-                    self.currentHeading = heading
-                    updateHeading(heading)
                 }
             }
         }
@@ -243,7 +231,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
             latitude: location.position.y,
             longitude: location.position.x,
             altitude: altitude,
-            heading: calibrationHeading ?? currentHeading ?? 0,
+            heading: calibrationHeading ?? 0,
             pitch: 90,
             roll: 0
         )
