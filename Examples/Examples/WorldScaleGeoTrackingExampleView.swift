@@ -41,6 +41,8 @@ struct WorldScaleGeoTrackingExampleView: View {
     @State private var graphicsOverlay = GraphicsOverlay()
     /// The location datasource that is used to access the device location.
     @State private var locationDataSource = SystemLocationDataSource()
+    /// The tracking state.
+    @State private var trackingState: TrackingState = .continious
     
     var body: some View {
         VStack {
@@ -54,9 +56,25 @@ struct WorldScaleGeoTrackingExampleView: View {
                         }
                     }
             }
+            .trackingState(trackingState)
             // A slider to adjust the basemap opacity.
             Slider(value: $opacity, in: 0...1)
                 .padding(.horizontal)
+            
+            Button {
+                if trackingState == .initial {
+                    trackingState = .continious
+                } else {
+                    trackingState = .initial
+                }
+            } label: {
+                if trackingState == .initial {
+                    Text("Tracking state: initial")
+                } else {
+                    Text("Tracking state: continious")
+                }
+            }
+            .buttonStyle(.bordered)
         }
         .onChange(of: opacity) { opacity in
             guard let basemap = scene.basemap else { return }
