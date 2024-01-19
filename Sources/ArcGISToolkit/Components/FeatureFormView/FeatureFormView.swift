@@ -18,7 +18,7 @@ import SwiftUI
 /// Forms allow users to edit information about GIS features.
 ///
 /// - Since: 200.4
-public struct FormView: View {
+public struct FeatureFormView: View {
     @Environment(\.formElementPadding) var elementPadding
     
     /// The view model for the form.
@@ -68,7 +68,7 @@ public struct FormView: View {
     }
 }
 
-extension FormView {
+extension FeatureFormView {
     /// Makes UI for a form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {
