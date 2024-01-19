@@ -23,6 +23,19 @@ struct InputFooter: View {
 ***REMOVED******REMOVED***/ The form element the footer belongs to.
 ***REMOVED***let element: FieldFormElement
 ***REMOVED***
+***REMOVED******REMOVED***/ An error provided directly to the footer.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ In the majority of cases we can grab validation errors directly off the element. One scenario where we
+***REMOVED******REMOVED***/ cannot rely on this mechanism is a text input receiving a non-numeric string in a numeric field via the
+***REMOVED******REMOVED***/ system clipboard. This value cannot be used but it is in the field and a validation error needs to be
+***REMOVED******REMOVED***/ shown.
+***REMOVED***let manualError: FeatureFormError?
+***REMOVED***
+***REMOVED***init(element: FieldFormElement, error: FeatureFormError? = nil) {
+***REMOVED******REMOVED***self.element = element
+***REMOVED******REMOVED***self.manualError = error
+***REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED***Group {
@@ -202,6 +215,7 @@ extension InputFooter {
 ***REMOVED******REMOVED***/ The error to display for the input. If the element is not focused and has a required error this will be
 ***REMOVED******REMOVED***/ the primary error. Otherwise the primary error is the first error in the element's set of errors.
 ***REMOVED***var primaryError: ArcGIS.FeatureFormError? {
+***REMOVED******REMOVED***if let manualError { return manualError ***REMOVED***
 ***REMOVED******REMOVED***let elementErrors = element.validationErrors as? [ArcGIS.FeatureFormError]
 ***REMOVED******REMOVED***if let requiredError = elementErrors?.first(where: {
 ***REMOVED******REMOVED******REMOVED***switch $0 {
