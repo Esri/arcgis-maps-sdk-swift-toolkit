@@ -21,7 +21,7 @@ struct Tests: View {
                 NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
                 NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
                 NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-                NavigationLink("FormView Tests", destination: FormViewTestView())
+                NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
             }
         }
         .navigationViewStyle(.stack)

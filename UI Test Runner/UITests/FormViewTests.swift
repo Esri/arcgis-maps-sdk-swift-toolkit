@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class FormViewTests: XCTestCase {
+final class FeatureFormViewTests: XCTestCase {
     override func setUp() async throws {
         continueAfterFailure = false
     }
@@ -118,7 +118,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -204,7 +204,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -295,7 +295,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -360,7 +360,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -431,7 +431,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -500,7 +500,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -631,7 +631,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -690,7 +690,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -733,7 +733,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -793,7 +793,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -837,7 +837,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -897,7 +897,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -955,7 +955,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -1039,7 +1039,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -1107,7 +1107,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -1164,7 +1164,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -1204,7 +1204,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -1248,7 +1248,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -1283,7 +1283,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
@@ -1339,7 +1339,7 @@ final class FormViewTests: XCTestCase {
         
         app.launch()
         
-        // Open the FormView component test view.
+        // Open the FeatureFormView component test view.
         formViewTestsButton.tap()
         
         selectTestCase(app)
