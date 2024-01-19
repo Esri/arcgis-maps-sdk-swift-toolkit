@@ -18,7 +18,7 @@
 ***REMOVED***/ Forms allow users to edit information about GIS features.
 ***REMOVED***/
 ***REMOVED***/ - Since: 200.4
-public struct FormView: View {
+public struct FeatureFormView: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
@@ -68,7 +68,7 @@ public struct FormView: View {
 ***REMOVED***
 ***REMOVED***
 
-extension FormView {
+extension FeatureFormView {
 ***REMOVED******REMOVED***/ Makes UI for a form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeElement(_ element: FormElement) -> some View {
