@@ -16,7 +16,7 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-struct FormViewTestView: View {
+struct FeatureFormTestView: View {
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
 ***REMOVED******REMOVED***/ The height of the map view's attribution bar.
@@ -45,7 +45,7 @@ struct FormViewTestView: View {
 ***REMOVED***
 ***REMOVED***
 
-private extension FormViewTestView {
+private extension FeatureFormTestView {
 ***REMOVED******REMOVED***/ Make the main test UI.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - map: The map under test.
@@ -75,7 +75,7 @@ private extension FormViewTestView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
 ***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FormView(featureForm: featureForm!)
+***REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(featureForm: featureForm!)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(isPresented)
@@ -111,7 +111,7 @@ private extension FormViewTestView {
 ***REMOVED******REMOVED******REMOVED***/ The test data location.
 ***REMOVED******REMOVED***let url: URL
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Creates a FormView test case.
+***REMOVED******REMOVED******REMOVED***/ Creates a FeatureFormView test case.
 ***REMOVED******REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED******REMOVED***/   - name: The name of the test case.
 ***REMOVED******REMOVED******REMOVED***/   - objectID: The object ID of the feature being tested.
