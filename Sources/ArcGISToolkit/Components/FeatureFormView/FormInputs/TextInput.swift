@@ -28,6 +28,9 @@ struct TextInput: View {
 ***REMOVED***@State private var isEditable: Bool = false
 ***REMOVED***@State private var formattedValue: String = ""
 ***REMOVED***
+***REMOVED******REMOVED***/ An error encountered while casting and updating input values.
+***REMOVED***@State private var inputError: FeatureFormError?
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
@@ -70,7 +73,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 5)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
 ***REMOVED***
-***REMOVED******REMOVED***InputFooter(element: element)
+***REMOVED******REMOVED***InputFooter(element: element, error: inputError)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
 ***REMOVED******REMOVED******REMOVED***if isFocused && isPlaceholder {
@@ -94,8 +97,11 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { text in
 ***REMOVED******REMOVED******REMOVED***guard !isPlaceholder else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***inputError = nil
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try element.convertAndUpdateValue(text)
+***REMOVED******REMOVED*** catch let error as FeatureFormError {
+***REMOVED******REMOVED******REMOVED******REMOVED***inputError = error
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription, String(describing: error))
 ***REMOVED******REMOVED***
@@ -230,6 +236,8 @@ private extension FieldFormElement {
 ***REMOVED******REMOVED*** else if fieldType == .float32, let value = Float32(value) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
 ***REMOVED******REMOVED*** else if fieldType == .float64, let value = Float64(value) {
+***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
 ***REMOVED******REMOVED***
 ***REMOVED***
