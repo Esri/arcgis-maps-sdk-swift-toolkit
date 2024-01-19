@@ -28,6 +28,9 @@ struct TextInput: View {
     @State private var isEditable: Bool = false
     @State private var formattedValue: String = ""
     
+    /// An error encountered while casting and updating input values.
+    @State private var inputError: FeatureFormError?
+    
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
@@ -70,7 +73,7 @@ struct TextInput: View {
                 .padding([.vertical], 5)
                 .textSelection(.enabled)
         }
-        InputFooter(element: element)
+        InputFooter(element: element, error: inputError)
         .padding([.bottom], elementPadding)
         .onChange(of: isFocused) { isFocused in
             if isFocused && isPlaceholder {
@@ -94,8 +97,11 @@ struct TextInput: View {
         }
         .onChange(of: text) { text in
             guard !isPlaceholder else { return }
+            inputError = nil
             do {
                 try element.convertAndUpdateValue(text)
+            } catch let error as FeatureFormError {
+                inputError = error
             } catch {
                 print(error.localizedDescription, String(describing: error))
             }
@@ -230,6 +236,8 @@ private extension FieldFormElement {
             } else if fieldType == .float32, let value = Float32(value) {
                 try updateValue(value)
             } else if fieldType == .float64, let value = Float64(value) {
+                try updateValue(value)
+            } else {
                 try updateValue(value)
             }
         }
