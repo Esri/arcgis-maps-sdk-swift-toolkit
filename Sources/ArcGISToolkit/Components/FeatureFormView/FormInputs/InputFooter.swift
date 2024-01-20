@@ -59,7 +59,7 @@ struct InputFooter: View {
             }
             .accessibilityIdentifier("\(element.label) Footer")
             Spacer()
-            if model.focusedElement == element, element.fieldType == .text, element.description.isEmpty || primaryError != nil {
+            if isShowingCharacterIndicator {
                 Text(element.formattedValue.count, format: .number)
                     .accessibilityIdentifier("\(element.label) Character Indicator")
             }
@@ -187,7 +187,14 @@ extension InputFooter {
         }
     }
     
-    /// Determines whether an error is showing in the footer.
+    /// A Boolean value which indicates whether or not the character indicator is showing in the footer.
+    var isShowingCharacterIndicator: Bool {
+        model.focusedElement == element
+        && (element.input is TextAreaFormInput || element.input is TextBoxFormInput)
+        && (element.description.isEmpty || primaryError != nil)
+    }
+    
+    /// A Boolean value which indicates whether or not an error is showing in the footer.
     var isShowingError: Bool {
         element.isEditable && primaryError != nil && model.previouslyFocusedFields.contains(element)
     }
