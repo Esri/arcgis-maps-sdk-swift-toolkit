@@ -15,8 +15,47 @@
 import ArcGIS
 import SwiftUI
 
-/// Forms allow users to edit information about GIS features.
+/// The `FeatureFormView` component enables users to edit field values of features
+/// in a layer using forms that have been configured externally, either in
+/// the Web Map Viewer or the Fields Maps Designer.
 ///
+/// Forms are currently only supported in maps. The form definition is stored
+/// in the web map itself and contains a title, description, and a list of "form elements".
+///
+/// `FeatureFormView` will support the display of form elements created by
+/// the Map Viewer or Field Maps Designer, including:
+///
+/// - Field Element - used to edit a single field of a feature with a specific "input type".
+/// - Group Element - used to group field elements together. Group Elements
+/// can be expanded, to show all enclosed field elements, or collapsed, hiding
+/// the field elements it contains.
+///
+/// A Field Element has a single input type object. The following are the supported input types:
+///
+/// - Combo Box - long lists of coded value domains
+/// - Date/Time - date/time picker
+/// - Radio Buttons - short lists of coded value domains
+/// - Switch - two mutually exclusive values
+/// - Text Area - multi-line text area
+/// - Text Box - single-line text box
+///
+/// **Features**
+///
+/// - Display a form editing view for a feature based on the feature form definition defined in a web map.
+/// - Uses native SwiftUI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker` for consistent platform styling.
+/// - Supports elements containing Arcade expression and automatically evaluates expressions for element visibility, editability, values, and "required" state.
+/// - Fully supports dark mode, as do all Toolkit components.
+///
+/// **Behavior**
+///
+/// The feature form view can be embedded in any type of container view including, as demonstrated in the
+/// example, the Toolkit's `FloatingPanel`.
+///
+/// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/Forms/Examples/Examples)
+/// and refer to
+/// [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
+/// in the project. To learn more about using the `FeatureFormView` see the [FeatureFormView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/featureformviewtutorial) [Coming Soon].
+/// 
 /// - Since: 200.4
 public struct FeatureFormView: View {
     @Environment(\.formElementPadding) var elementPadding
