@@ -99,6 +99,17 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidChangeStatus { _, geoTrackingStatus in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch geoTrackingStatus.state {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .localized:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Inactivate the overlay when geo-tracking is localized.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***coachingOverlayIsActive = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .notAvailable, .initializing, .localizing:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError("Unknown geo-tracking status.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if initialCameraIsSet {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
@@ -193,7 +204,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED*** If initial camera is not set, then we set it the flag here to true
 ***REMOVED******REMOVED******REMOVED*** and set the status text to empty.
 ***REMOVED******REMOVED***if !initialCameraIsSet {
-***REMOVED******REMOVED******REMOVED***coachingOverlayIsActive = false
 ***REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
 ***REMOVED***
 ***REMOVED***
