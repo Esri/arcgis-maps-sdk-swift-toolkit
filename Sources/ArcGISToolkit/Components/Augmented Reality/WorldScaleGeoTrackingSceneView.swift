@@ -193,8 +193,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED*** If initial camera is not set, then we set it the flag here to true
 ***REMOVED******REMOVED******REMOVED*** and set the status text to empty.
 ***REMOVED******REMOVED***if !initialCameraIsSet {
-***REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
 ***REMOVED******REMOVED******REMOVED***coachingOverlayIsActive = false
+***REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
