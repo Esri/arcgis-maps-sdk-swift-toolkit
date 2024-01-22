@@ -184,6 +184,8 @@ extension InputFooter {
                     comment: "Text indicating a field's value must be of the correct type."
                 )
             }
+        @unknown default:
+            nil
         }
     }
     
