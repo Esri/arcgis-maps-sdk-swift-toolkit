@@ -66,12 +66,15 @@ struct TextInput: View {
 ***REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED***if isEditable {
-***REMOVED******REMOVED******REMOVED***textField
+***REMOVED******REMOVED******REMOVED***textWriter
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal], 10)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 5)
-***REMOVED******REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
+***REMOVED******REMOVED******REMOVED***if isMultiline {
+***REMOVED******REMOVED******REMOVED******REMOVED***textReader
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textReader
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***InputFooter(element: element, error: inputError)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
@@ -132,8 +135,17 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The body of the text input when the element is non-editable.
+***REMOVED***var textReader: some View {
+***REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
+***REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
+***REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
+***REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
+***REMOVED******REMOVED******REMOVED***.lineLimit(isMultiline ? nil : 1)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
-***REMOVED***var textField: some View {
+***REMOVED***var textWriter: some View {
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {

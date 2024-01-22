@@ -59,7 +59,7 @@ struct InputFooter: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if model.focusedElement == element, element.fieldType == .text, element.description.isEmpty || primaryError != nil {
+***REMOVED******REMOVED******REMOVED***if isShowingCharacterIndicator {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.formattedValue.count, format: .number)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Character Indicator")
 ***REMOVED******REMOVED***
@@ -187,7 +187,14 @@ extension InputFooter {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Determines whether an error is showing in the footer.
+***REMOVED******REMOVED***/ A Boolean value which indicates whether or not the character indicator is showing in the footer.
+***REMOVED***var isShowingCharacterIndicator: Bool {
+***REMOVED******REMOVED***model.focusedElement == element
+***REMOVED******REMOVED***&& (element.input is TextAreaFormInput || element.input is TextBoxFormInput)
+***REMOVED******REMOVED***&& (element.description.isEmpty || primaryError != nil)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value which indicates whether or not an error is showing in the footer.
 ***REMOVED***var isShowingError: Bool {
 ***REMOVED******REMOVED***element.isEditable && primaryError != nil && model.previouslyFocusedFields.contains(element)
 ***REMOVED***
