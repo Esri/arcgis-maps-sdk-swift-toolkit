@@ -19,6 +19,8 @@ typealias ARViewType = ARSCNView
 
 /// A SwiftUI version of an AR view.
 struct ARSwiftUIView {
+    /// The closure to call when the session's geo-tracking state changes.
+    private(set) var onDidChangeStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
     /// The closure to call when the session's frame updates.
     private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
     /// The closure to call when a node corresponding to a new anchor has been added to the view.
@@ -34,6 +36,17 @@ struct ARSwiftUIView {
     /// when available by the underlying view.
     init(proxy: ARSwiftUIViewProxy? = nil) {
         self.proxy = proxy
+    }
+    
+    /// Sets the closure to call when the session's geo-tracking state changes.
+    /// 
+    /// ARKit invokes this callback only for `ARGeoTrackingConfiguration` sessions.
+    func onDidChangeStatus(
+        perform action: @escaping (ARSession, ARGeoTrackingStatus) -> Void
+    ) -> Self {
+        var view = self
+        view.onDidChangeStatusAction = action
+        return view
     }
     
     /// Sets the closure to call when underlying scene renders.
@@ -75,6 +88,7 @@ extension ARSwiftUIView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: ARViewType, context: Context) {
+        context.coordinator.onDidChangeStatusAction = onDidChangeStatusAction
         context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
         context.coordinator.onAddNodeAction = onAddNodeAction
         context.coordinator.onUpdateNodeAction = onUpdateNodeAction
@@ -87,9 +101,14 @@ extension ARSwiftUIView: UIViewRepresentable {
 
 extension ARSwiftUIView {
     class Coordinator: NSObject, ARSCNViewDelegate, ARSessionDelegate {
+        var onDidChangeStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
         var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
         var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
         var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+        
+        func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
+            onDidChangeStatusAction?(session, geoTrackingStatus)
+        }
         
         func session(_ session: ARSession, didUpdate frame: ARFrame) {
             onDidUpdateFrameAction?(session, frame)
