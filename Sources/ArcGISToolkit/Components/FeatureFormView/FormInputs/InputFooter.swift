@@ -185,7 +185,11 @@ extension InputFooter {
                 )
             }
         @unknown default:
-            nil
+            Text(
+                "Unknown validation error",
+                bundle: .toolkitModule,
+                comment: "Text indicating a field has an unknown validation error."
+            )
         }
     }
     
