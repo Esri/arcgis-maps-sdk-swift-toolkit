@@ -66,12 +66,15 @@ struct TextInput: View {
         InputHeader(label: element.label, isRequired: isRequired)
             .padding([.top], elementPadding)
         if isEditable {
-            textField
+            textWriter
         } else {
-            Text(text.isEmpty ? "--" : text)
-                .padding([.horizontal], 10)
-                .padding([.vertical], 5)
-                .textSelection(.enabled)
+            if isMultiline {
+                textReader
+            } else {
+                ScrollView(.horizontal) {
+                    textReader
+                }
+            }
         }
         InputFooter(element: element, error: inputError)
         .padding([.bottom], elementPadding)
@@ -132,8 +135,17 @@ private extension TextInput {
         }
     }
     
+    /// The body of the text input when the element is non-editable.
+    var textReader: some View {
+        Text(text.isEmpty ? "--" : text)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .textSelection(.enabled)
+            .lineLimit(isMultiline ? nil : 1)
+    }
+    
     /// The body of the text input when the element is editable.
-    var textField: some View {
+    var textWriter: some View {
         HStack(alignment: .bottom) {
             Group {
                 if #available(iOS 16.0, *) {
