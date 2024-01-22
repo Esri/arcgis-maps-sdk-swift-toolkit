@@ -40,7 +40,7 @@ struct ARSwiftUIView {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the closure to call when the session's geo-tracking state changes.
 ***REMOVED******REMOVED***/ 
-***REMOVED******REMOVED***/ ARKit invokes this callback only for `ARGeoTrackingConfiguration` sessions.
+***REMOVED******REMOVED***/ ARKit invokes the callback only for `ARGeoTrackingConfiguration` sessions.
 ***REMOVED***func onDidChangeStatus(
 ***REMOVED******REMOVED***perform action: @escaping (ARSession, ARGeoTrackingStatus) -> Void
 ***REMOVED***) -> Self {
@@ -88,7 +88,7 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func updateUIView(_ uiView: ARViewType, context: Context) {
-***REMOVED******REMOVED***context.coordinator.onDidChangeStatusAction = onDidChangeStatusAction
+***REMOVED******REMOVED***context.coordinator.onDidChangeGeoTrackingStatusAction = onDidChangeStatusAction
 ***REMOVED******REMOVED***context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
 ***REMOVED******REMOVED***context.coordinator.onAddNodeAction = onAddNodeAction
 ***REMOVED******REMOVED***context.coordinator.onUpdateNodeAction = onUpdateNodeAction
@@ -101,13 +101,13 @@ extension ARSwiftUIView: UIViewRepresentable {
 
 extension ARSwiftUIView {
 ***REMOVED***class Coordinator: NSObject, ARSCNViewDelegate, ARSessionDelegate {
-***REMOVED******REMOVED***var onDidChangeStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
+***REMOVED******REMOVED***var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
 ***REMOVED******REMOVED***var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
 ***REMOVED******REMOVED***var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED******REMOVED***var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
-***REMOVED******REMOVED******REMOVED***onDidChangeStatusAction?(session, geoTrackingStatus)
+***REMOVED******REMOVED******REMOVED***onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
