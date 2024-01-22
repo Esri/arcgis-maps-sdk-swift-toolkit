@@ -30,8 +30,7 @@ import SwiftUI
 /// can be expanded, to show all enclosed field elements, or collapsed, hiding
 /// the field elements it contains.
 ///
-/// A Field Element has a single input type object. The following are the supported
-/// input types and their associated toolkit view:
+/// A Field Element has a single input type object. The following are the supported input types:
 ///
 /// - Combo Box - long lists of coded value domains
 /// - Date/Time - date/time picker
