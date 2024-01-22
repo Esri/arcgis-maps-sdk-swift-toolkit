@@ -33,17 +33,17 @@
 ***REMOVED***/ A Field Element has a single input type object. The following are the supported
 ***REMOVED***/ input types and their associated toolkit view:
 ***REMOVED***/
-***REMOVED***/ - Combo Box - long lists of coded value domains (ComboBoxInput)
-***REMOVED***/ - Date/Time - date/time picker (DateTimeInput)
-***REMOVED***/ - Radio Buttons - short lists of coded value domains (RadioButtonsInput)
-***REMOVED***/ - Switch - two mutually exclusive values (SwitchInput)
-***REMOVED***/ - Text Area - multi-line text area (TextInput)
-***REMOVED***/ - Text Box - single-line text box (TextInput)
+***REMOVED***/ - Combo Box - long lists of coded value domains
+***REMOVED***/ - Date/Time - date/time picker
+***REMOVED***/ - Radio Buttons - short lists of coded value domains
+***REMOVED***/ - Switch - two mutually exclusive values
+***REMOVED***/ - Text Area - multi-line text area
+***REMOVED***/ - Text Box - single-line text box
 ***REMOVED***/
 ***REMOVED***/ **Features**
 ***REMOVED***/
 ***REMOVED***/ - Display a form editing view for a feature based on the feature form definition defined in a web map.
-***REMOVED***/ - Supports native SwiftUI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker`.
+***REMOVED***/ - Uses native SwiftUI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker` for consistent platform styling.
 ***REMOVED***/ - Supports elements containing Arcade expression and automatically evaluates expressions for element visibility, editability, values, and "required" state.
 ***REMOVED***/ - Fully supports dark mode, as do all Toolkit components.
 ***REMOVED***/
