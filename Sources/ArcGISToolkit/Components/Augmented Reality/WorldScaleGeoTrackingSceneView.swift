@@ -193,8 +193,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
         // If initial camera is not set, then we set it the flag here to true
         // and set the status text to empty.
         if !initialCameraIsSet {
-            initialCameraIsSet = true
             coachingOverlayIsActive = false
+            initialCameraIsSet = true
         }
     }
     
