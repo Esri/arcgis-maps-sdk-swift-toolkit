@@ -30,8 +30,7 @@
 ***REMOVED***/ can be expanded, to show all enclosed field elements, or collapsed, hiding
 ***REMOVED***/ the field elements it contains.
 ***REMOVED***/
-***REMOVED***/ A Field Element has a single input type object. The following are the supported
-***REMOVED***/ input types and their associated toolkit view:
+***REMOVED***/ A Field Element has a single input type object. The following are the supported input types:
 ***REMOVED***/
 ***REMOVED***/ - Combo Box - long lists of coded value domains
 ***REMOVED***/ - Date/Time - date/time picker
