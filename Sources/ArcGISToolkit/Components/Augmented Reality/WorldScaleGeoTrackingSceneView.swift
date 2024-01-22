@@ -99,17 +99,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
                             orientation: interfaceOrientation
                         )
                     }
-                    .onDidChangeStatus { _, geoTrackingStatus in
-                        switch geoTrackingStatus.state {
-                        case .localized:
-                            // Inactivate the overlay when geo-tracking is localized.
-                            coachingOverlayIsActive = false
-                        case .notAvailable, .initializing, .localizing:
-                            return
-                        @unknown default:
-                            fatalError("Unknown geo-tracking status.")
-                        }
-                    }
                 
                 if initialCameraIsSet {
                     sceneViewBuilder(sceneViewProxy)
@@ -205,6 +194,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
         // and set the status text to empty.
         if !initialCameraIsSet {
             initialCameraIsSet = true
+            coachingOverlayIsActive = false
         }
     }
     
