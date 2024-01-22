@@ -42,7 +42,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
         app.launch()
@@ -112,7 +112,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
         let formTitle = app.staticTexts["InputValidation"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let returnButton = app.buttons["Return"]
         let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
         
@@ -196,7 +196,7 @@ final class FeatureFormViewTests: XCTestCase {
         let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
         let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
         let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let formTitle = app.staticTexts["InputValidation"]
         let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
         let returnButton = app.buttons["Return"]
@@ -290,7 +290,7 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let footer = app.staticTexts["numbers Footer"]
         let formTitle = app.staticTexts["Domain"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let textField = app.textFields["numbers Text Input"]
         
         app.launch()
@@ -355,7 +355,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Required Date Value"]
         let footer = app.staticTexts["Required Date Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let nowButton = app.buttons["Required Date Now Button"]
         
         app.launch()
@@ -426,7 +426,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
         let footer = app.staticTexts["Launch Date and Time for Apollo 11 Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let nowButton = app.buttons["Launch Date and Time for Apollo 11 Now Button"]
         
         app.launch()
@@ -495,7 +495,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Launch Date for Apollo 11 Value"]
         let footer = app.staticTexts["Launch Date for Apollo 11 Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let todayButton = app.buttons["Launch Date for Apollo 11 Today Button"]
         
         app.launch()
@@ -559,7 +559,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Launch Date Time End Value"]
         let footer = app.staticTexts["Launch Date Time End Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let nowButton = app.buttons["Launch Date Time End Now Button"]
         
         app.launch()
@@ -624,7 +624,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["start and end date time Value"]
         let footer = app.staticTexts["start and end date time Footer"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let nowButton = app.buttons["start and end date time Now Button"]
         let previousMonthButton = datePicker.buttons["Previous Month"]
         let julyFirstButton = datePicker.collectionViews.staticTexts["1"]
@@ -686,7 +686,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
         let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
         let formTitle = app.staticTexts["DateTimePoint"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         
         app.launch()
         
@@ -728,7 +728,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Combo String"]
         let fieldValue = app.staticTexts["Combo String Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let footer = app.staticTexts["Combo String Footer"]
         
         app.launch()
@@ -788,7 +788,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Combo Integer"]
         let fieldValue = app.staticTexts["Combo Integer Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let optionsButton = app.images["Combo Integer Options Button"]
         
         app.launch()
@@ -833,7 +833,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Combo String Value"]
         let firstOptionButton = app.buttons["String 1"]
         let formTitle = app.staticTexts["comboBox"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         
         app.launch()
         
@@ -892,7 +892,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["Combo String"]
         let fieldValue = app.staticTexts["Combo String Value"]
         let formTitle = app.staticTexts["comboBox"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let noValueButton = app.buttons["No value"]
         
         app.launch()
@@ -949,7 +949,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Required Combo Box Value"]
         let footer = app.staticTexts["Required Combo Box Footer"]
         let formTitle = app.staticTexts["comboBox"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let noValueButton = app.buttons["No value"]
         let oakButton = app.buttons["Oak"]
         
@@ -1033,7 +1033,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldValue = app.staticTexts["Combo No Value False Value"]
         let firstOption = app.buttons["First"]
         let formTitle = app.staticTexts["comboBox"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let noValueButton = app.buttons["No Value"]
         let optionsButton = app.images["Combo No Value False Options Button"]
         
@@ -1100,7 +1100,7 @@ final class FeatureFormViewTests: XCTestCase {
         let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
         let fieldTitle = app.staticTexts["Radio Button Text"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let dogOption = app.buttons["Radio Button Text dog"]
         let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
         let noValueOption = app.buttons["Radio Button Text No Value"]
@@ -1158,7 +1158,7 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let fieldTitle = app.staticTexts["switch integer"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let switchLabel = app.staticTexts["switch integer Switch Label"]
         let switchView = app.switches["switch integer Switch"]
         
@@ -1198,7 +1198,7 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let fieldTitle = app.staticTexts["switch string"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let switchLabel = app.staticTexts["switch string Switch Label"]
         let switchView = app.switches["switch string Switch"]
         
@@ -1244,7 +1244,7 @@ final class FeatureFormViewTests: XCTestCase {
         let fieldTitle = app.staticTexts["switch double"]
         let fieldValue = app.staticTexts["switch double Value"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         
         app.launch()
         
@@ -1279,7 +1279,7 @@ final class FeatureFormViewTests: XCTestCase {
         let expandedGroup = app.disclosureTriangles["Group with Multiple Form Elements"]
         let expandedGroupDescription = app.staticTexts["Group with Multiple Form Elements Description"]
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         
         app.launch()
         
@@ -1331,7 +1331,7 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_6_2() {
         let app = XCUIApplication()
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
-        let formViewTestsButton = app.buttons["FormView Tests"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
         let showElementsButton = app.buttons["show invisible form element"]
         let hiddenElementsGroup = app.disclosureTriangles["Group with children that are visible dependent"]
         let hiddenElementsGroupDescription = app.staticTexts["Group with children that are visible dependent Description"]

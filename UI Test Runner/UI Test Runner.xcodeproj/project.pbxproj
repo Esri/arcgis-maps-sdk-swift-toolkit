@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		75022F942A7AC289000ED7B7 /* FormViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75022F932A7AC289000ED7B7 /* FormViewTestView.swift */; };
 		75022F962A7AC9A0000ED7B7 /* FormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */; };
 		7552A7542A573CBB0023DA5A /* UITestRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7532A573CBB0023DA5A /* UITestRunner.swift */; };
 		7552A7562A573CBB0023DA5A /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7552A573CBB0023DA5A /* Tests.swift */; };
@@ -24,6 +23,7 @@
 		75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */; };
 		75B2366D2A5CC78C00AEFACE /* FloorFilterTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */; };
 		75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */; };
+		8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +37,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		75022F932A7AC289000ED7B7 /* FormViewTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewTestView.swift; sourceTree = "<group>"; };
 		75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewTests.swift; sourceTree = "<group>"; };
 		7552A7502A573CBB0023DA5A /* UI Test Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "UI Test Runner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7552A7532A573CBB0023DA5A /* UITestRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestRunner.swift; sourceTree = "<group>"; };
@@ -57,6 +56,7 @@
 		75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterTestView.swift; sourceTree = "<group>"; };
 		75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterTests.swift; sourceTree = "<group>"; };
 		75CCCD612A5F691E0098B059 /* UI Test Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "UI Test Runner.entitlements"; sourceTree = "<group>"; };
+		8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormTestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,10 +152,10 @@
 		75B236672A5CB32700AEFACE /* TestViews */ = {
 			isa = PBXGroup;
 			children = (
+				8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */,
 				75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */,
 				7584B7532B1A798B00772AB7 /* BookmarksTestViews */,
 				75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */,
-				75022F932A7AC289000ED7B7 /* FormViewTestView.swift */,
 			);
 			path = TestViews;
 			sourceTree = "<group>";
@@ -264,13 +264,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				7552A7562A573CBB0023DA5A /* Tests.swift in Sources */,
-				75022F942A7AC289000ED7B7 /* FormViewTestView.swift in Sources */,
 				7552A7542A573CBB0023DA5A /* UITestRunner.swift in Sources */,
 				7584B7552B1A79DD00772AB7 /* BookmarksTestViews.swift in Sources */,
 				75B2366D2A5CC78C00AEFACE /* FloorFilterTestView.swift in Sources */,
 				7552A7622A573D810023DA5A /* BookmarksTestCase1View.swift in Sources */,
 				7584B7592B1A817A00772AB7 /* BookmarksTestCase3View.swift in Sources */,
 				7584B7572B1A7AF100772AB7 /* BookmarksTestCase2View.swift in Sources */,
+				8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */,
 				7584B75B2B1A824300772AB7 /* BookmarksTestCase4View.swift in Sources */,
 				75B236692A5CB49B00AEFACE /* BasemapGalleryTestView.swift in Sources */,
 			);
