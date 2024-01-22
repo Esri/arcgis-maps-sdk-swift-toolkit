@@ -15,9 +15,47 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ Forms allow users to edit information about GIS features.
+***REMOVED***/ The `FeatureFormView` component enables users to edit field values of features
+***REMOVED***/ in a layer using forms that have been configured externally, either in
+***REMOVED***/ the Web Map Viewer or the Fields Maps Designer.
 ***REMOVED***/
-***REMOVED***/ - Since: 200.4
+***REMOVED***/ Forms are currently only supported in maps. The form definition is stored
+***REMOVED***/ in the web map itself and contains a title, description, and a list of "form elements".
+***REMOVED***/
+***REMOVED***/ `FeatureFormView` will support the display of form elements created by
+***REMOVED***/ the Map Viewer or Field Maps Designer, including:
+***REMOVED***/
+***REMOVED***/ - Field Element - used to edit a single field of a feature with a specific "input type".
+***REMOVED***/ - Group Element - used to group field elements together. Group Elements
+***REMOVED***/ can be expanded, to show all enclosed field elements, or collapsed, hiding
+***REMOVED***/ the field elements it contains.
+***REMOVED***/
+***REMOVED***/ A Field Element has a single input type object. The following are the supported
+***REMOVED***/ input types and their associated toolkit view:
+***REMOVED***/
+***REMOVED***/ - Text Area - multi-line text area (TextInput)
+***REMOVED***/ - Text Box - single-line text box (TextInput)
+***REMOVED***/ - Combo Box - long lists of coded value domains (ComboBoxInput)
+***REMOVED***/ - Radio Buttons - short lists of coded value domains (RadioButtonsInput)
+***REMOVED***/ - Switch - two mutually exclusive values (SwitchInput)
+***REMOVED***/ - Date/Time - date/time picker (DateTimeInput)
+***REMOVED***/
+***REMOVED***/ **Features**
+***REMOVED***/
+***REMOVED***/ - Display a form editing view for a feature based on the feature form definition defined in a web map.
+***REMOVED***/ - Supports native Swift UI controls for editing, such as `TextEditor`, `TextField`, and `DatePicker`.
+***REMOVED***/ - Supports elements containing Arcade expression and automatically evaluates expressions for element visibility, editability, values, and "required" state.
+***REMOVED***/ - Fully supports dark mode, as do all Toolkit components.
+***REMOVED***/
+***REMOVED***/ **Behavior**
+***REMOVED***/
+***REMOVED***/ The feature form view can be embedded in any type of container view including, as demonstrated in the
+***REMOVED***/ example, the Toolkit's `FloatingPanel`.
+***REMOVED***/
+***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/Forms/Examples/Examples)
+***REMOVED***/ and refer to
+***REMOVED***/ [FeatureFormExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
+***REMOVED***/ in the project. To learn more about using the `FeatureFormView` see the [FeatureFormView Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/featureformviewtutorial) [Coming Soon].
 public struct FeatureFormView: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
