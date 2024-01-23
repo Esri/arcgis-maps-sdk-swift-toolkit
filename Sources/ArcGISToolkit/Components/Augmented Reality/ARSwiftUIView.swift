@@ -19,6 +19,8 @@ typealias ARViewType = ARSCNView
 
 ***REMOVED***/ A SwiftUI version of an AR view.
 struct ARSwiftUIView {
+***REMOVED******REMOVED***/ The closure to call when the session's geo-tracking state changes.
+***REMOVED***private(set) var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
 ***REMOVED******REMOVED***/ The closure to call when the session's frame updates.
 ***REMOVED***private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
 ***REMOVED******REMOVED***/ The closure to call when a node corresponding to a new anchor has been added to the view.
@@ -34,6 +36,17 @@ struct ARSwiftUIView {
 ***REMOVED******REMOVED***/ when available by the underlying view.
 ***REMOVED***init(proxy: ARSwiftUIViewProxy? = nil) {
 ***REMOVED******REMOVED***self.proxy = proxy
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the closure to call when the session's geo-tracking state changes.
+***REMOVED******REMOVED***/ 
+***REMOVED******REMOVED***/ ARKit invokes the callback only for `ARGeoTrackingConfiguration` sessions.
+***REMOVED***func onDidChangeGeoTrackingStatus(
+***REMOVED******REMOVED***perform action: @escaping (ARSession, ARGeoTrackingStatus) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onDidChangeGeoTrackingStatusAction = action
+***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the closure to call when underlying scene renders.
@@ -75,6 +88,7 @@ extension ARSwiftUIView: UIViewRepresentable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func updateUIView(_ uiView: ARViewType, context: Context) {
+***REMOVED******REMOVED***context.coordinator.onDidChangeGeoTrackingStatusAction = onDidChangeGeoTrackingStatusAction
 ***REMOVED******REMOVED***context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
 ***REMOVED******REMOVED***context.coordinator.onAddNodeAction = onAddNodeAction
 ***REMOVED******REMOVED***context.coordinator.onUpdateNodeAction = onUpdateNodeAction
@@ -87,9 +101,14 @@ extension ARSwiftUIView: UIViewRepresentable {
 
 extension ARSwiftUIView {
 ***REMOVED***class Coordinator: NSObject, ARSCNViewDelegate, ARSessionDelegate {
+***REMOVED******REMOVED***var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
 ***REMOVED******REMOVED***var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
 ***REMOVED******REMOVED***var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
 ***REMOVED******REMOVED***var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
+***REMOVED******REMOVED******REMOVED***onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func session(_ session: ARSession, didUpdate frame: ARFrame) {
 ***REMOVED******REMOVED******REMOVED***onDidUpdateFrameAction?(session, frame)
