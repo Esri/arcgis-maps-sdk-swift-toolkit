@@ -26,6 +26,19 @@ struct InputFooter: View {
 ***REMOVED******REMOVED***/ The form element the footer belongs to.
 ***REMOVED***let element: FieldFormElement
 ***REMOVED***
+***REMOVED******REMOVED***/ An error provided directly to the footer.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ In the majority of cases we can grab validation errors directly off the element. One scenario where we
+***REMOVED******REMOVED***/ cannot rely on this mechanism is a text input receiving a non-numeric string in a numeric field via the
+***REMOVED******REMOVED***/ system clipboard. This value cannot be used but it is in the field and a validation error needs to be
+***REMOVED******REMOVED***/ shown.
+***REMOVED***let manualError: FeatureFormError?
+***REMOVED***
+***REMOVED***init(element: FieldFormElement, error: FeatureFormError? = nil) {
+***REMOVED******REMOVED***self.element = element
+***REMOVED******REMOVED***self.manualError = error
+***REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED***Group {
@@ -49,7 +62,7 @@ struct InputFooter: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Footer")
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if model.focusedElement == element, element.fieldType == .text, element.description.isEmpty || primaryError != nil {
+***REMOVED******REMOVED******REMOVED***if isShowingCharacterIndicator {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.formattedValue.count, format: .number)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Character Indicator")
 ***REMOVED******REMOVED***
@@ -141,7 +154,7 @@ extension InputFooter {
 ***REMOVED******REMOVED******REMOVED******REMOVED***makeNumericRangeMessage(numericRange)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Value must be within allowed range",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Less than minimum value",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must be within the allowed range."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -174,10 +187,23 @@ extension InputFooter {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's value must be of the correct type."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Unknown validation error",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field has an unknown validation error."
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Determines whether an error is showing in the footer.
+***REMOVED******REMOVED***/ A Boolean value which indicates whether or not the character indicator is showing in the footer.
+***REMOVED***var isShowingCharacterIndicator: Bool {
+***REMOVED******REMOVED***model.focusedElement == element
+***REMOVED******REMOVED***&& (element.input is TextAreaFormInput || element.input is TextBoxFormInput)
+***REMOVED******REMOVED***&& (element.description.isEmpty || primaryError != nil)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value which indicates whether or not an error is showing in the footer.
 ***REMOVED***var isShowingError: Bool {
 ***REMOVED******REMOVED***element.isEditable 
 ***REMOVED******REMOVED***&& primaryError != nil
@@ -207,6 +233,7 @@ extension InputFooter {
 ***REMOVED******REMOVED***/ The error to display for the input. If the element is not focused and has a required error this will be
 ***REMOVED******REMOVED***/ the primary error. Otherwise the primary error is the first error in the element's set of errors.
 ***REMOVED***var primaryError: ArcGIS.FeatureFormError? {
+***REMOVED******REMOVED***if let manualError { return manualError ***REMOVED***
 ***REMOVED******REMOVED***let elementErrors = element.validationErrors as? [ArcGIS.FeatureFormError]
 ***REMOVED******REMOVED***if let requiredError = elementErrors?.first(where: {
 ***REMOVED******REMOVED******REMOVED***switch $0 {

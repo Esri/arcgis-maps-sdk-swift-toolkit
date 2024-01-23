@@ -28,6 +28,9 @@ struct TextInput: View {
 ***REMOVED***@State private var isEditable: Bool = false
 ***REMOVED***@State private var formattedValue: String = ""
 ***REMOVED***
+***REMOVED******REMOVED***/ An error encountered while casting and updating input values.
+***REMOVED***@State private var inputError: FeatureFormError?
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
@@ -63,14 +66,17 @@ struct TextInput: View {
 ***REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED***if isEditable {
-***REMOVED******REMOVED******REMOVED***textField
+***REMOVED******REMOVED******REMOVED***textWriter
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal], 10)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 5)
-***REMOVED******REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
+***REMOVED******REMOVED******REMOVED***if isMultiline {
+***REMOVED******REMOVED******REMOVED******REMOVED***textReader
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textReader
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***InputFooter(element: element)
+***REMOVED******REMOVED***InputFooter(element: element, error: inputError)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
 ***REMOVED******REMOVED******REMOVED***if isFocused && isPlaceholder {
@@ -94,8 +100,11 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { text in
 ***REMOVED******REMOVED******REMOVED***guard !isPlaceholder else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***inputError = nil
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try element.convertAndUpdateValue(text)
+***REMOVED******REMOVED*** catch let error as FeatureFormError {
+***REMOVED******REMOVED******REMOVED******REMOVED***inputError = error
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription, String(describing: error))
 ***REMOVED******REMOVED***
@@ -126,8 +135,17 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The body of the text input when the element is non-editable.
+***REMOVED***var textReader: some View {
+***REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
+***REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
+***REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
+***REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
+***REMOVED******REMOVED******REMOVED***.lineLimit(isMultiline ? nil : 1)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
-***REMOVED***var textField: some View {
+***REMOVED***var textWriter: some View {
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
@@ -162,8 +180,16 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.scrollContentBackgroundHidden()
 ***REMOVED******REMOVED******REMOVED***if !text.isEmpty && isEditable {
-***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { text.removeAll() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
+***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isFocused {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the user wasn't already editing the field provide
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** instantaneous focus to enable validation.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text.removeAll()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formInputStyle()
@@ -207,10 +233,12 @@ private extension TextInput {
 private extension FieldFormElement {
 ***REMOVED******REMOVED***/ Attempts to convert the value to a type suitable for the element's field type and then update
 ***REMOVED******REMOVED***/ the element with the converted value.
-***REMOVED***func convertAndUpdateValue(_ value: String?) throws {
-***REMOVED******REMOVED***if let value {
-***REMOVED******REMOVED******REMOVED***if fieldType == .text {
-***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED***func convertAndUpdateValue(_ value: String) throws {
+***REMOVED******REMOVED***if fieldType == .text {
+***REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED*** else if let fieldType {
+***REMOVED******REMOVED******REMOVED***if fieldType.isNumeric && value.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(nil)
 ***REMOVED******REMOVED*** else if fieldType == .int16, let value = Int16(value) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
 ***REMOVED******REMOVED*** else if fieldType == .int32, let value = Int32(value) {
@@ -221,9 +249,9 @@ private extension FieldFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
 ***REMOVED******REMOVED*** else if fieldType == .float64, let value = Float64(value) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
 ***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***try updateValue(nil)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

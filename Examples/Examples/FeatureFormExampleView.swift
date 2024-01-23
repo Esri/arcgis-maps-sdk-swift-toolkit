@@ -16,7 +16,7 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-struct FormViewExampleView: View {
+struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***/ The height to present the form at.
 ***REMOVED***@State private var detent: FloatingPanelDetent = .full
 ***REMOVED***
@@ -110,7 +110,7 @@ struct FormViewExampleView: View {
 ***REMOVED***
 ***REMOVED***
 
-extension FormViewExampleView {
+extension FeatureFormExampleView {
 ***REMOVED******REMOVED***/ Identifies features, if any, at the current screen point.
 ***REMOVED******REMOVED***/ - Parameter proxy: The proxy to use for identification.
 ***REMOVED******REMOVED***/ - Returns: The first identified feature in a layer with

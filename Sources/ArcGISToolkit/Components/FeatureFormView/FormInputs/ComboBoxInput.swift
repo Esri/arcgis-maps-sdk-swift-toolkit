@@ -31,9 +31,6 @@ struct ComboBoxInput: View {
 ***REMOVED***@State private var value: Any?
 ***REMOVED***@State private var formattedValue: String = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ The set of options in the combo box.
-***REMOVED***@State private var codedValues = [CodedValue]()
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the combo box picker is presented.
 ***REMOVED***@State private var isPresented = false
 ***REMOVED***
@@ -56,9 +53,9 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ if `filterPhrase` is empty.
 ***REMOVED***var matchingValues: [CodedValue] {
 ***REMOVED******REMOVED***guard !filterPhrase.isEmpty else {
-***REMOVED******REMOVED******REMOVED***return codedValues
+***REMOVED******REMOVED******REMOVED***return element.codedValues
 ***REMOVED***
-***REMOVED******REMOVED***return codedValues
+***REMOVED******REMOVED***return element.codedValues
 ***REMOVED******REMOVED******REMOVED***.filter { $0.name.localizedStandardContains(filterPhrase) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -109,8 +106,12 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Options Button")
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton { selectedValue = nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { model.focusedElement = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -127,9 +128,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
-***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(selectedValue?.code)
@@ -141,8 +139,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED***value = newValue
 ***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
-***REMOVED******REMOVED******REMOVED***let codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
-***REMOVED******REMOVED******REMOVED***selectedValue = codedValues.first { $0.name == formattedValue ***REMOVED***
+***REMOVED******REMOVED******REMOVED***selectedValue = element.codedValues.first { $0.name == formattedValue ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChangeOfIsRequired(of: element) { newIsRequired in
 ***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
@@ -238,7 +235,7 @@ extension ComboBoxInput {
 ***REMOVED******REMOVED******REMOVED***return .noValue
 ***REMOVED******REMOVED***case (.show, false):
 ***REMOVED******REMOVED******REMOVED***return noValueLabel
-***REMOVED******REMOVED***case (.hide, _):
+***REMOVED******REMOVED***case (_, _):
 ***REMOVED******REMOVED******REMOVED***return ""
 ***REMOVED***
 ***REMOVED***
@@ -277,17 +274,5 @@ extension CodedValue: Hashable {
 ***REMOVED******REMOVED***/ - Note: Hashable conformance added temporarily in lieu of finalized API.
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(name)
-***REMOVED***
-***REMOVED***
-
-extension FeatureForm {
-***REMOVED******REMOVED***/ - Note: This property added temporarily in lieu of finalized API.
-***REMOVED***func codedValues(fieldName: String) -> [CodedValue] {
-***REMOVED******REMOVED***if let field = feature.table?.field(named: fieldName),
-***REMOVED******REMOVED***   let domain = field.domain as? CodedValueDomain {
-***REMOVED******REMOVED******REMOVED***return domain.codedValues
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return []
-***REMOVED***
 ***REMOVED***
 ***REMOVED***

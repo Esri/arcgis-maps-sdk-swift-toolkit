@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class FormViewTests: XCTestCase {
+final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***override func setUp() async throws {
 ***REMOVED******REMOVED***continueAfterFailure = false
 ***REMOVED***
@@ -42,7 +42,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -112,13 +112,13 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let returnButton = app.buttons["Return"]
 ***REMOVED******REMOVED***let textField = app.textFields["Single Line No Value, Placeholder or Description Text Input"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -196,7 +196,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let characterIndicator = app.staticTexts["Single Line No Value, Placeholder or Description Character Indicator"]
 ***REMOVED******REMOVED***let clearButton = app.buttons["Single Line No Value, Placeholder or Description Clear Button"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Single Line No Value, Placeholder or Description Footer"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["InputValidation"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Single Line No Value, Placeholder or Description"]
 ***REMOVED******REMOVED***let returnButton = app.buttons["Return"]
@@ -204,7 +204,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -290,12 +290,12 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let footer = app.staticTexts["numbers Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Domain"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let textField = app.textFields["numbers Text Input"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -355,12 +355,12 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Date Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Required Date Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let nowButton = app.buttons["Required Date Now Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -426,12 +426,12 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date and Time for Apollo 11 Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let nowButton = app.buttons["Launch Date and Time for Apollo 11 Now Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -495,12 +495,12 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date for Apollo 11 Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date for Apollo 11 Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let todayButton = app.buttons["Launch Date for Apollo 11 Today Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -559,7 +559,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date Time End Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Launch Date Time End Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let nowButton = app.buttons["Launch Date Time End Now Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
@@ -624,14 +624,14 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["start and end date time Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["start and end date time Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let nowButton = app.buttons["start and end date time Now Button"]
 ***REMOVED******REMOVED***let previousMonthButton = datePicker.buttons["Previous Month"]
 ***REMOVED******REMOVED***let julyFirstButton = datePicker.collectionViews.staticTexts["1"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -686,11 +686,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Launch Date and Time for Apollo 11"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Launch Date and Time for Apollo 11 Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["DateTimePoint"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -728,12 +728,12 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo String"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Combo String Footer"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -788,12 +788,12 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo Integer"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo Integer Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let optionsButton = app.images["Combo Integer Options Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -833,11 +833,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Value"]
 ***REMOVED******REMOVED***let firstOptionButton = app.buttons["String 1"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -892,12 +892,12 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo String"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -949,13 +949,13 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Combo Box Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Required Combo Box Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
 ***REMOVED******REMOVED***let oakButton = app.buttons["Oak"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -1033,13 +1033,13 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo No Value False Value"]
 ***REMOVED******REMOVED***let firstOption = app.buttons["First"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let noValueButton = app.buttons["No Value"]
 ***REMOVED******REMOVED***let optionsButton = app.images["Combo No Value False Options Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -1100,14 +1100,14 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Radio Button Text"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let dogOption = app.buttons["Radio Button Text dog"]
 ***REMOVED******REMOVED***let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
 ***REMOVED******REMOVED***let noValueOption = app.buttons["Radio Button Text No Value"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -1158,13 +1158,13 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch integer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let switchLabel = app.staticTexts["switch integer Switch Label"]
 ***REMOVED******REMOVED***let switchView = app.switches["switch integer Switch"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -1198,13 +1198,13 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch string"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let switchLabel = app.staticTexts["switch string Switch Label"]
 ***REMOVED******REMOVED***let switchView = app.switches["switch string Switch"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -1244,11 +1244,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch double"]
 ***REMOVED******REMOVED***let fieldValue = app.staticTexts["switch double Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -1279,11 +1279,11 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let expandedGroup = app.disclosureTriangles["Group with Multiple Form Elements"]
 ***REMOVED******REMOVED***let expandedGroupDescription = app.staticTexts["Group with Multiple Form Elements Description"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
@@ -1331,7 +1331,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED***func testCase_6_2() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
-***REMOVED******REMOVED***let formViewTestsButton = app.buttons["FormView Tests"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let showElementsButton = app.buttons["show invisible form element"]
 ***REMOVED******REMOVED***let hiddenElementsGroup = app.disclosureTriangles["Group with children that are visible dependent"]
 ***REMOVED******REMOVED***let hiddenElementsGroupDescription = app.staticTexts["Group with children that are visible dependent Description"]
@@ -1339,7 +1339,7 @@ final class FormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Open the FormView component test view.
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
 ***REMOVED******REMOVED***formViewTestsButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectTestCase(app)
