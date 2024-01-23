@@ -26,6 +26,19 @@ struct InputFooter: View {
     /// The form element the footer belongs to.
     let element: FieldFormElement
     
+    /// An error provided directly to the footer.
+    ///
+    /// In the majority of cases we can grab validation errors directly off the element. One scenario where we
+    /// cannot rely on this mechanism is a text input receiving a non-numeric string in a numeric field via the
+    /// system clipboard. This value cannot be used but it is in the field and a validation error needs to be
+    /// shown.
+    let manualError: FeatureFormError?
+    
+    init(element: FieldFormElement, error: FeatureFormError? = nil) {
+        self.element = element
+        self.manualError = error
+    }
+    
     var body: some View {
         HStack(alignment: .top) {
             Group {
@@ -49,7 +62,7 @@ struct InputFooter: View {
             }
             .accessibilityIdentifier("\(element.label) Footer")
             Spacer()
-            if model.focusedElement == element, element.fieldType == .text, element.description.isEmpty || primaryError != nil {
+            if isShowingCharacterIndicator {
                 Text(element.formattedValue.count, format: .number)
                     .accessibilityIdentifier("\(element.label) Character Indicator")
             }
@@ -141,7 +154,7 @@ extension InputFooter {
                 makeNumericRangeMessage(numericRange)
             } else {
                 Text(
-                    "Value must be within allowed range",
+                    "Less than minimum value",
                     bundle: .toolkitModule,
                     comment: "Text indicating a field's value must be within the allowed range."
                 )
@@ -174,10 +187,23 @@ extension InputFooter {
                     comment: "Text indicating a field's value must be of the correct type."
                 )
             }
+        @unknown default:
+            Text(
+                "Unknown validation error",
+                bundle: .toolkitModule,
+                comment: "Text indicating a field has an unknown validation error."
+            )
         }
     }
     
-    /// Determines whether an error is showing in the footer.
+    /// A Boolean value which indicates whether or not the character indicator is showing in the footer.
+    var isShowingCharacterIndicator: Bool {
+        model.focusedElement == element
+        && (element.input is TextAreaFormInput || element.input is TextBoxFormInput)
+        && (element.description.isEmpty || primaryError != nil)
+    }
+    
+    /// A Boolean value which indicates whether or not an error is showing in the footer.
     var isShowingError: Bool {
         element.isEditable 
         && primaryError != nil
@@ -207,6 +233,7 @@ extension InputFooter {
     /// The error to display for the input. If the element is not focused and has a required error this will be
     /// the primary error. Otherwise the primary error is the first error in the element's set of errors.
     var primaryError: ArcGIS.FeatureFormError? {
+        if let manualError { return manualError }
         let elementErrors = element.validationErrors as? [ArcGIS.FeatureFormError]
         if let requiredError = elementErrors?.first(where: {
             switch $0 {

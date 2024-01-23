@@ -1,4 +1,4 @@
-// Copyright 2023 Esri
+// Copyright 2024 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,21 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+import ArcGIS
 
-/// A circular button with a cross in the center, intended to be used to clear text fields.
-struct ClearButton: View {
-    /// The action to be performed when the button is pressed.
-    let action: () -> Void
-    
-    var body: some View {
-        Button {
-            action()
-        } label: {
-            Image(systemName: "xmark.circle.fill")
-                .foregroundColor(.secondary)
-        }
-        .buttonStyle(.plain)
-        .padding(2)
+extension FieldFormElement {
+    /// The coded values of the element's domain.
+    var codedValues: [CodedValue] {
+        return (domain as? CodedValueDomain)?.codedValues ?? []
     }
 }

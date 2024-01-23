@@ -16,7 +16,7 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-struct FormViewTestView: View {
+struct FeatureFormTestView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
     /// The height of the map view's attribution bar.
@@ -45,7 +45,7 @@ struct FormViewTestView: View {
     }
 }
 
-private extension FormViewTestView {
+private extension FeatureFormTestView {
     /// Make the main test UI.
     /// - Parameters:
     ///   - map: The map under test.
@@ -75,7 +75,7 @@ private extension FormViewTestView {
                 horizontalAlignment: .leading,
                 isPresented: $isPresented
             ) {
-                FormView(featureForm: featureForm!)
+                FeatureFormView(featureForm: featureForm!)
                     .padding()
             }
             .navigationBarBackButtonHidden(isPresented)
@@ -111,7 +111,7 @@ private extension FormViewTestView {
         /// The test data location.
         let url: URL
         
-        /// Creates a FormView test case.
+        /// Creates a FeatureFormView test case.
         /// - Parameters:
         ///   - name: The name of the test case.
         ///   - objectID: The object ID of the feature being tested.

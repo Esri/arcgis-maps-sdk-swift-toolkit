@@ -28,6 +28,9 @@ struct TextInput: View {
     @State private var isEditable: Bool = false
     @State private var formattedValue: String = ""
     
+    /// An error encountered while casting and updating input values.
+    @State private var inputError: FeatureFormError?
+    
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
@@ -63,14 +66,17 @@ struct TextInput: View {
         InputHeader(label: element.label, isRequired: isRequired)
             .padding([.top], elementPadding)
         if isEditable {
-            textField
+            textWriter
         } else {
-            Text(text.isEmpty ? "--" : text)
-                .padding([.horizontal], 10)
-                .padding([.vertical], 5)
-                .textSelection(.enabled)
+            if isMultiline {
+                textReader
+            } else {
+                ScrollView(.horizontal) {
+                    textReader
+                }
+            }
         }
-        InputFooter(element: element)
+        InputFooter(element: element, error: inputError)
         .padding([.bottom], elementPadding)
         .onChange(of: isFocused) { isFocused in
             if isFocused && isPlaceholder {
@@ -94,8 +100,11 @@ struct TextInput: View {
         }
         .onChange(of: text) { text in
             guard !isPlaceholder else { return }
+            inputError = nil
             do {
                 try element.convertAndUpdateValue(text)
+            } catch let error as FeatureFormError {
+                inputError = error
             } catch {
                 print(error.localizedDescription, String(describing: error))
             }
@@ -126,8 +135,17 @@ private extension TextInput {
         }
     }
     
+    /// The body of the text input when the element is non-editable.
+    var textReader: some View {
+        Text(text.isEmpty ? "--" : text)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .textSelection(.enabled)
+            .lineLimit(isMultiline ? nil : 1)
+    }
+    
     /// The body of the text input when the element is editable.
-    var textField: some View {
+    var textWriter: some View {
         HStack(alignment: .bottom) {
             Group {
                 if #available(iOS 16.0, *) {
@@ -162,8 +180,16 @@ private extension TextInput {
             }
             .scrollContentBackgroundHidden()
             if !text.isEmpty && isEditable {
-                ClearButton { text.removeAll() }
-                    .accessibilityIdentifier("\(element.label) Clear Button")
+                ClearButton {
+                    if !isFocused {
+                        // If the user wasn't already editing the field provide
+                        // instantaneous focus to enable validation.
+                        model.focusedElement = element
+                        model.focusedElement = nil
+                    }
+                    text.removeAll()
+                }
+                .accessibilityIdentifier("\(element.label) Clear Button")
             }
         }
         .formInputStyle()
@@ -207,10 +233,12 @@ private extension TextInput {
 private extension FieldFormElement {
     /// Attempts to convert the value to a type suitable for the element's field type and then update
     /// the element with the converted value.
-    func convertAndUpdateValue(_ value: String?) throws {
-        if let value {
-            if fieldType == .text {
-                try updateValue(value)
+    func convertAndUpdateValue(_ value: String) throws {
+        if fieldType == .text {
+            try updateValue(value)
+        } else if let fieldType {
+            if fieldType.isNumeric && value.isEmpty {
+                try updateValue(nil)
             } else if fieldType == .int16, let value = Int16(value) {
                 try updateValue(value)
             } else if fieldType == .int32, let value = Int32(value) {
@@ -221,9 +249,9 @@ private extension FieldFormElement {
                 try updateValue(value)
             } else if fieldType == .float64, let value = Float64(value) {
                 try updateValue(value)
+            } else {
+                try updateValue(value)
             }
-        } else {
-            try updateValue(nil)
         }
     }
 }
