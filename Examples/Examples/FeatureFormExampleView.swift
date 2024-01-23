@@ -29,6 +29,9 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
 ***REMOVED***@State private var isCancelConfirmationPresented = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
+***REMOVED***@State var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
+***REMOVED***
 ***REMOVED******REMOVED***/ The form view model provides a channel of communication between the form view and its host.
 ***REMOVED***@StateObject private var model = Model()
 ***REMOVED***
@@ -56,7 +59,6 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attributionBarHeight: attributionBarHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $detent,
@@ -65,8 +67,12 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let featureForm = model.featureForm {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(featureForm: featureForm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.validationErrors(validationErrorVisibility)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal])
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: model.isFormPresented) { isFormPresented in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isFormPresented { validationErrorVisibility = .automatic ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard edits", role: .destructive) {
@@ -92,6 +98,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.isFormPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Submit") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility = .visible
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.submitChanges()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -153,15 +160,17 @@ class Model: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Submit the changes made to the form.
 ***REMOVED***func submitChanges() async {
-***REMOVED******REMOVED***guard let feature = featureForm?.feature,
-***REMOVED******REMOVED******REMOVED***  let table = feature.table as? ServiceFeatureTable,
+***REMOVED******REMOVED***guard let featureForm = featureForm,
+***REMOVED******REMOVED******REMOVED***  let table = featureForm.feature.table as? ServiceFeatureTable,
 ***REMOVED******REMOVED******REMOVED***  table.isEditable,
 ***REMOVED******REMOVED******REMOVED***  let database = table.serviceGeodatabase else {
 ***REMOVED******REMOVED******REMOVED***print("A precondition to submit the changes wasn't met.")
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***try? await table.update(feature)
+***REMOVED******REMOVED***guard featureForm.validationErrors.isEmpty else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***try? await table.update(featureForm.feature)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard database.hasLocalEdits else {
 ***REMOVED******REMOVED******REMOVED***print("No submittable changes found.")
@@ -174,6 +183,6 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***print("An error occurred while submitting the changes.")
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***featureForm = nil
+***REMOVED******REMOVED***self.featureForm = nil
 ***REMOVED***
 ***REMOVED***
