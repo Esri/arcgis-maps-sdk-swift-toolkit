@@ -133,7 +133,8 @@ private extension URL {
 ***REMOVED***
 
 ***REMOVED***/ The model class for the form example view
-@MainActor class Model: ObservableObject {
+@MainActor
+class Model: ObservableObject {
 ***REMOVED******REMOVED***/ The feature form.
 ***REMOVED***@Published var featureForm: FeatureForm? {
 ***REMOVED******REMOVED***didSet {

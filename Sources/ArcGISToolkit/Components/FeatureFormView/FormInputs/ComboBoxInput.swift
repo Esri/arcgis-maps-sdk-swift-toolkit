@@ -235,7 +235,7 @@ extension ComboBoxInput {
 ***REMOVED******REMOVED******REMOVED***return .noValue
 ***REMOVED******REMOVED***case (.show, false):
 ***REMOVED******REMOVED******REMOVED***return noValueLabel
-***REMOVED******REMOVED***case (.hide, _):
+***REMOVED******REMOVED***case (_, _):
 ***REMOVED******REMOVED******REMOVED***return ""
 ***REMOVED***
 ***REMOVED***
