@@ -14,16 +14,19 @@
 
 import SwiftUI
 
-struct Tests: View {
+/// A circular button with a cross in the center, intended to be used to clear form inputs.
+struct ClearButton: View {
+    /// The action to be performed when the button is pressed.
+    let action: () -> Void
+    
     var body: some View {
-        NavigationView {
-            List {
-                NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-                NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
-                NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-                NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
-            }
+        Button {
+            action()
+        } label: {
+            Image(systemName: "xmark.circle.fill")
+                .foregroundColor(.secondary)
         }
-        .navigationViewStyle(.stack)
+        .buttonStyle(.plain)
+        .padding(2)
     }
 }

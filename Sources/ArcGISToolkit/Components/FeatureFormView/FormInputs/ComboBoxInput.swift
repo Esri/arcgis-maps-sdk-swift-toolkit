@@ -31,9 +31,6 @@ struct ComboBoxInput: View {
     @State private var value: Any?
     @State private var formattedValue: String = ""
     
-    /// The set of options in the combo box.
-    @State private var codedValues = [CodedValue]()
-    
     /// A Boolean value indicating if the combo box picker is presented.
     @State private var isPresented = false
     
@@ -56,9 +53,9 @@ struct ComboBoxInput: View {
     /// if `filterPhrase` is empty.
     var matchingValues: [CodedValue] {
         guard !filterPhrase.isEmpty else {
-            return codedValues
+            return element.codedValues
         }
-        return codedValues
+        return element.codedValues
             .filter { $0.name.localizedStandardContains(filterPhrase) }
     }
     
@@ -109,8 +106,12 @@ struct ComboBoxInput: View {
                             .foregroundColor(.secondary)
                             .accessibilityIdentifier("\(element.label) Options Button")
                     } else {
-                        ClearButton { selectedValue = nil }
-                            .accessibilityIdentifier("\(element.label) Clear Button")
+                        ClearButton {
+                            model.focusedElement = element
+                            defer { model.focusedElement = nil }
+                            selectedValue = nil
+                        }
+                        .accessibilityIdentifier("\(element.label) Clear Button")
                     }
                 }
             }
@@ -127,9 +128,6 @@ struct ComboBoxInput: View {
             InputFooter(element: element)
         }
         .padding([.bottom], elementPadding)
-        .onAppear {
-            codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
-        }
         .onChange(of: selectedValue) { selectedValue in
             do {
                 try element.updateValue(selectedValue?.code)
@@ -141,8 +139,7 @@ struct ComboBoxInput: View {
         .onChangeOfValue(of: element) { newValue, newFormattedValue in
             value = newValue
             formattedValue = newFormattedValue
-            let codedValues = model.featureForm.codedValues(fieldName: element.fieldName)
-            selectedValue = codedValues.first { $0.name == formattedValue }
+            selectedValue = element.codedValues.first { $0.name == formattedValue }
         }
         .onChangeOfIsRequired(of: element) { newIsRequired in
             isRequired = newIsRequired
@@ -238,7 +235,7 @@ extension ComboBoxInput {
             return .noValue
         case (.show, false):
             return noValueLabel
-        case (.hide, _):
+        case (_, _):
             return ""
         }
     }
@@ -277,17 +274,5 @@ extension CodedValue: Hashable {
     /// - Note: Hashable conformance added temporarily in lieu of finalized API.
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
-    }
-}
-
-extension FeatureForm {
-    /// - Note: This property added temporarily in lieu of finalized API.
-    func codedValues(fieldName: String) -> [CodedValue] {
-        if let field = feature.table?.field(named: fieldName),
-           let domain = field.domain as? CodedValueDomain {
-            return domain.codedValues
-        } else {
-            return []
-        }
     }
 }

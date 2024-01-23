@@ -16,7 +16,7 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-struct FormViewExampleView: View {
+struct FeatureFormExampleView: View {
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
     
@@ -110,7 +110,7 @@ struct FormViewExampleView: View {
     }
 }
 
-extension FormViewExampleView {
+extension FeatureFormExampleView {
     /// Identifies features, if any, at the current screen point.
     /// - Parameter proxy: The proxy to use for identification.
     /// - Returns: The first identified feature in a layer with
