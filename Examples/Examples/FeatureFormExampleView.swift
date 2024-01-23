@@ -30,7 +30,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***@State private var isCancelConfirmationPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
-***REMOVED***@State var validationErrorVisibility = FormView.ValidationErrorVisibility.automatic
+***REMOVED***@State var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
 ***REMOVED***
 ***REMOVED******REMOVED***/ The form view model provides a channel of communication between the form view and its host.
 ***REMOVED***@StateObject private var model = Model()
@@ -66,7 +66,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $model.isFormPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let featureForm = model.featureForm {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormView(featureForm: featureForm)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(featureForm: featureForm)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.validationErrors(validationErrorVisibility)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal])
 ***REMOVED******REMOVED******REMOVED******REMOVED***
