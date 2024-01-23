@@ -30,7 +30,7 @@ struct FeatureFormExampleView: View {
     @State private var isCancelConfirmationPresented = false
     
     /// The validation error visibility configuration of the form.
-    @State var validationErrorVisibility = FormView.ValidationErrorVisibility.automatic
+    @State var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
     
     /// The form view model provides a channel of communication between the form view and its host.
     @StateObject private var model = Model()
@@ -66,7 +66,7 @@ struct FeatureFormExampleView: View {
                     isPresented: $model.isFormPresented
                 ) {
                     if let featureForm = model.featureForm {
-                        FormView(featureForm: featureForm)
+                        FeatureFormView(featureForm: featureForm)
                             .validationErrors(validationErrorVisibility)
                             .padding([.horizontal])
                     }
