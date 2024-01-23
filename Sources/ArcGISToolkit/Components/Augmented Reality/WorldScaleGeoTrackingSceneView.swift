@@ -36,6 +36,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
     private var calibrationViewIsHidden = false
     /// The calibrated camera heading.
     @State private var calibrationHeading: Double?
+    /// The calibrated camera elevation.
+    @State private var calibrationElevation: Double?
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The configuration for the AR session.
@@ -46,6 +48,26 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var currentLocation: Location?
     /// The valid accuracy threshold for a location in meters.
     private var validAccuracyThreshold = 0.0
+    /// The basemap opacity.
+    @State private var basemapOpacity = 0.0
+    /// A Boolean value that indicates if the AR experince is being calibrated.
+    @State private var isCalibrating = false
+    /// The slider value for the camera heading.
+    @State private var headingSliderValue = 0.0
+    /// The slider value for the camera elevation.
+    @State private var elevationSliderValue = 0.0
+    /// The elevation timer for the "joystick" behavior.
+    @State private var headingTimer: Timer?
+    /// The heading timer for the "joystick" behavior.
+    @State private var elevationTimer: Timer?
+    /// The heading delta amount based on the heading slider value.
+    private var joystickHeadingDelta: Double {
+        Double(signOf: headingSliderValue, magnitudeOf: headingSliderValue * headingSliderValue / 25)
+    }
+    /// The elevation delta amount based on the elevation slider value.
+    private var joystickElevationDelta: Double {
+        Double(signOf: elevationSliderValue, magnitudeOf: elevationSliderValue * elevationSliderValue / 100)
+    }
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -186,14 +208,29 @@ public struct WorldScaleGeoTrackingSceneView: View {
         // GPS location is not accurate, we won't end up below the earth's surface.
         let altitude = (location.position.z ?? 0) + location.verticalAccuracy
         
-        cameraController.originCamera = Camera(
-            latitude: location.position.y,
-            longitude: location.position.x,
-            altitude: altitude,
-            heading: calibrationHeading ?? 0,
-            pitch: 90,
-            roll: 0
-        )
+        if !initialCameraIsSet {
+            let heading = 0.0
+            cameraController.originCamera = Camera(
+                latitude: location.position.y,
+                longitude: location.position.x,
+                altitude: altitude,
+                heading: heading,
+                pitch: 90,
+                roll: 0
+            )
+            calibrationElevation = altitude
+        } else {
+            // Ignore location updates when calibrating heading and elevation.
+            guard !isCalibrating else { return }
+            cameraController.originCamera = Camera(
+                latitude: location.position.y,
+                longitude: location.position.x,
+                altitude: calibrationElevation ?? altitude,
+                heading: calibrationHeading ?? 0,
+                pitch: 90,
+                roll: 0
+            )
+        }
         
         // We have to do this or the error gets bigger and bigger.
         cameraController.transformationMatrix = .identity
@@ -249,32 +286,118 @@ public struct WorldScaleGeoTrackingSceneView: View {
     /// - Parameter heading: The camera heading.
     func updateHeading(_ heading: Double) {
         cameraController.originCamera = cameraController.originCamera.rotatedTo(
-            heading: calibrationHeading ?? heading,
+            heading: heading,
             pitch: cameraController.originCamera.pitch,
             roll: cameraController.originCamera.roll
         )
+        calibrationHeading = heading
+    }
+    
+    /// Rotates the heading of the scene view camera controller by the heading delta in degrees.
+    /// - Parameter headingDelta: The heading delta in degrees.
+    func rotateHeading(_ headingDelta: Double) {
+        let newHeading = cameraController.originCamera.heading + headingDelta
+        cameraController.originCamera = cameraController.originCamera.rotatedTo(
+            heading: newHeading,
+            pitch: cameraController.originCamera.pitch,
+            roll: cameraController.originCamera.roll
+        )
+        calibrationHeading = newHeading
+    }
+    
+    /// Elevates the scene view camera controller by the elevation delta.
+    /// - Parameter elevationDelta: The elevation delta.
+    func updateElevation(_ elevationDelta: Double) {
+        cameraController.originCamera = cameraController.originCamera.elevated(by: elevationDelta)
+        if let elevation = cameraController.originCamera.location.z {
+            calibrationElevation = elevation
+        }
     }
     
     /// A view that allows the user to calibrate the heading of the scene view camera controller.
     var calibrationView: some View {
-        HStack {
-            Button {
-                let heading = cameraController.originCamera.heading + 1
-                updateHeading(heading)
-                calibrationHeading = heading
-            } label: {
-                Image(systemName: "plus")
+        Button {
+            isCalibrating = true
+            basemapOpacity = 0.5
+        } label: {
+            Text("Calibrate")
+        }
+        .popover(isPresented: $isCalibrating) {
+            VStack {
+                Text("Heading: \(calibrationHeading?.rounded(.towardZero) ?? cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
+                
+                HStack {
+                    Button {
+                        let heading = cameraController.originCamera.heading - 1
+                        updateHeading(heading)
+                    } label: {
+                        Image(systemName: "minus")
+                    }
+                    Slider(value: $headingSliderValue, in: -10...10) { editingChanged in
+                        if !editingChanged {
+                            headingTimer?.invalidate()
+                            headingTimer = nil
+                            headingSliderValue = 0.0
+                        }
+                    }
+                    .onChange(of: headingSliderValue) { heading in
+                        
+                        guard headingTimer == nil else { return }
+                        // Create a timer which rotates the camera when fired.
+                        let timer = Timer(timeInterval: 0.1, repeats: true) { [self] (_) in
+                            rotateHeading(joystickHeadingDelta)
+                        }
+                        headingTimer = timer
+                        // Add the timer to the main run loop.
+                        RunLoop.main.add(timer, forMode: .default)
+                    }
+                    
+                    Button {
+                        let heading = cameraController.originCamera.heading + 1
+                        updateHeading(heading)
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+                VStack {
+                    Text("Elevation: \(calibrationElevation?.rounded(.towardZero) ?? cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number)")
+                    HStack {
+                        Button {
+                            updateElevation(-1)
+                        } label: {
+                            Image(systemName: "minus")
+                        }
+                        Slider(value: $elevationSliderValue, in: -20...20) { editingChanged in
+                            if !editingChanged {
+                                elevationTimer?.invalidate()
+                                elevationTimer = nil
+                                elevationSliderValue = 0.0
+                            }
+                        }
+                        .onChange(of: elevationSliderValue) { elevation in
+                            
+                            guard elevationTimer == nil else { return }
+                            // Create a timer which rotates the camera when fired.
+                            let timer = Timer(timeInterval: 0.1, repeats: true) { [self] (_) in
+                                updateElevation(joystickElevationDelta)
+                            }
+                            elevationTimer = timer
+                            // Add the timer to the main run loop.
+                            RunLoop.main.add(timer, forMode: .default)
+                        }
+                        Button {
+                            updateElevation(1)
+                        } label: {
+                            Image(systemName: "plus")
+                        }
+                    }
+                }
             }
-            
-            Text("heading: \(calibrationHeading?.rounded() ?? cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
-            
-            Button {
-                let heading = cameraController.originCamera.heading - 1
-                updateHeading(heading)
-                calibrationHeading = heading
-            } label: {
-                Image(systemName: "minus")
-            }
+            .frame(minWidth: 200, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+            .padding()
+        }
+        .onDisappear {
+            basemapOpacity = 0.0
         }
     }
     
