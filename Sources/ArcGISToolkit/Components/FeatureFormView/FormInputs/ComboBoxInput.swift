@@ -235,7 +235,7 @@ extension ComboBoxInput {
             return .noValue
         case (.show, false):
             return noValueLabel
-        case (.hide, _):
+        case (_, _):
             return ""
         }
     }

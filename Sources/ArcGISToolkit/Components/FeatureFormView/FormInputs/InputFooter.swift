@@ -184,6 +184,12 @@ extension InputFooter {
                     comment: "Text indicating a field's value must be of the correct type."
                 )
             }
+        @unknown default:
+            Text(
+                "Unknown validation error",
+                bundle: .toolkitModule,
+                comment: "Text indicating a field has an unknown validation error."
+            )
         }
     }
     
