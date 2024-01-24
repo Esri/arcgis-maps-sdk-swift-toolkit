@@ -45,7 +45,7 @@ struct ARCoachingOverlay: UIViewRepresentable {
     func makeUIView(context: Context) -> ARCoachingOverlayView {
         let view = ARCoachingOverlayView()
         view.delegate = context.coordinator
-        view.activatesAutomatically = false
+        view.activatesAutomatically = true
         return view
     }
     
