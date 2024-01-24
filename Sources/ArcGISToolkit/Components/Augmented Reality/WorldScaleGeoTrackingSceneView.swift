@@ -30,8 +30,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@State private var initialCameraIsSet = false
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether to hide the coaching overlay view.
 ***REMOVED***private var coachingOverlayIsHidden = false
-***REMOVED******REMOVED***/ A Boolean value that indicates whether the coaching overlay view is active.
-***REMOVED***@State private var coachingOverlayIsActive = true
 ***REMOVED******REMOVED***/ The current camera of the scene view.
 ***REMOVED***@State private var currentCamera: Camera?
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
@@ -48,6 +46,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@State private var currentLocation: Location?
 ***REMOVED******REMOVED***/ The valid accuracy threshold for a location in meters.
 ***REMOVED***private var validAccuracyThreshold = 0.0
+***REMOVED******REMOVED***/ The app's tracking requirements for the coaching overlay to show/dismiss.
+***REMOVED***@State private var goal: ARCoachingOverlayView.Goal
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -73,10 +73,12 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if ARGeoTrackingConfiguration.isSupported {
 ***REMOVED******REMOVED******REMOVED***configuration = ARGeoTrackingConfiguration()
+***REMOVED******REMOVED******REMOVED***_goal = .init(initialValue: .geoTracking)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
-***REMOVED******REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
+***REMOVED******REMOVED******REMOVED***_goal = .init(initialValue: .tracking)
 ***REMOVED***
+***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_locationDataSource = .init(initialValue: locationDataSource)
 ***REMOVED***
@@ -115,7 +117,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !coachingOverlayIsHidden {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ARCoachingOverlay(goal: .geoTracking)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sessionProvider(arViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.active(coachingOverlayIsActive)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -193,7 +194,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED*** If initial camera is not set, then we set it the flag here to true
 ***REMOVED******REMOVED******REMOVED*** and set the status text to empty.
 ***REMOVED******REMOVED***if !initialCameraIsSet {
-***REMOVED******REMOVED******REMOVED***coachingOverlayIsActive = false
 ***REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
 ***REMOVED***
 ***REMOVED***

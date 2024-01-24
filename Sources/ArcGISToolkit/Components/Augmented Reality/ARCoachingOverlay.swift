@@ -45,7 +45,7 @@ struct ARCoachingOverlay: UIViewRepresentable {
 ***REMOVED***func makeUIView(context: Context) -> ARCoachingOverlayView {
 ***REMOVED******REMOVED***let view = ARCoachingOverlayView()
 ***REMOVED******REMOVED***view.delegate = context.coordinator
-***REMOVED******REMOVED***view.activatesAutomatically = false
+***REMOVED******REMOVED***view.activatesAutomatically = true
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
