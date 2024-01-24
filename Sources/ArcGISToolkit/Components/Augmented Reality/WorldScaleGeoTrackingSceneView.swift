@@ -30,8 +30,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var initialCameraIsSet = false
     /// A Boolean value that indicates whether to hide the coaching overlay view.
     private var coachingOverlayIsHidden = false
-    /// A Boolean value that indicates whether the coaching overlay view is active.
-    @State private var coachingOverlayIsActive = true
     /// The current camera of the scene view.
     @State private var currentCamera: Camera?
     /// A Boolean value that indicates whether the calibration view is hidden.
@@ -48,6 +46,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var currentLocation: Location?
     /// The valid accuracy threshold for a location in meters.
     private var validAccuracyThreshold = 0.0
+    /// The app's tracking requirements for the coaching overlay to show/dismiss.
+    @State private var goal: ARCoachingOverlayView.Goal
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -73,10 +73,12 @@ public struct WorldScaleGeoTrackingSceneView: View {
         
         if ARGeoTrackingConfiguration.isSupported {
             configuration = ARGeoTrackingConfiguration()
+            _goal = .init(initialValue: .geoTracking)
         } else {
             configuration = ARWorldTrackingConfiguration()
-            configuration.worldAlignment = .gravityAndHeading
+            _goal = .init(initialValue: .tracking)
         }
+        configuration.worldAlignment = .gravityAndHeading
         
         _locationDataSource = .init(initialValue: locationDataSource)
     }
@@ -115,7 +117,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 if !coachingOverlayIsHidden {
                     ARCoachingOverlay(goal: .geoTracking)
                         .sessionProvider(arViewProxy)
-                        .active(coachingOverlayIsActive)
                         .allowsHitTesting(false)
                 }
             }
@@ -193,7 +194,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
         // If initial camera is not set, then we set it the flag here to true
         // and set the status text to empty.
         if !initialCameraIsSet {
-            coachingOverlayIsActive = false
             initialCameraIsSet = true
         }
     }
