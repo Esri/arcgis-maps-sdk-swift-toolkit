@@ -20,6 +20,8 @@ import ARKit
 public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
+***REMOVED******REMOVED***/ The scene view.
+***REMOVED***@State private var scene: ArcGIS.Scene
 ***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The current interface orientation.
@@ -48,32 +50,15 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@State private var currentLocation: Location?
 ***REMOVED******REMOVED***/ The valid accuracy threshold for a location in meters.
 ***REMOVED***private var validAccuracyThreshold = 0.0
-***REMOVED******REMOVED***/ The basemap opacity.
-***REMOVED***@State private var basemapOpacity = 0.0
 ***REMOVED******REMOVED***/ A Boolean value that indicates if the AR experince is being calibrated.
 ***REMOVED***@State private var isCalibrating = false
-***REMOVED******REMOVED***/ The slider value for the camera heading.
-***REMOVED***@State private var headingSliderValue = 0.0
-***REMOVED******REMOVED***/ The slider value for the camera elevation.
-***REMOVED***@State private var elevationSliderValue = 0.0
-***REMOVED******REMOVED***/ The elevation timer for the "joystick" behavior.
-***REMOVED***@State private var headingTimer: Timer?
-***REMOVED******REMOVED***/ The heading timer for the "joystick" behavior.
-***REMOVED***@State private var elevationTimer: Timer?
-***REMOVED******REMOVED***/ The heading delta amount based on the heading slider value.
-***REMOVED***private var joystickHeadingDelta: Double {
-***REMOVED******REMOVED***Double(signOf: headingSliderValue, magnitudeOf: headingSliderValue * headingSliderValue / 25)
-***REMOVED***
-***REMOVED******REMOVED***/ The elevation delta amount based on the elevation slider value.
-***REMOVED***private var joystickElevationDelta: Double {
-***REMOVED******REMOVED***Double(signOf: elevationSliderValue, magnitudeOf: elevationSliderValue * elevationSliderValue / 100)
-***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - locationDataSource: The location datasource used to acquire the device's location.
 ***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera. A value
 ***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
+***REMOVED******REMOVED***/   - scene: The scene used in the scene view.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
 ***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
@@ -82,8 +67,12 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***public init(
 ***REMOVED******REMOVED***locationDataSource: LocationDataSource = SystemLocationDataSource(),
 ***REMOVED******REMOVED***clippingDistance: Double? = nil,
+***REMOVED******REMOVED***scene: ArcGIS.Scene,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
+***REMOVED******REMOVED***scene.basemap?.baseLayers.forEach({ $0.opacity = 0.5***REMOVED***)
+***REMOVED******REMOVED***_scene = .init(initialValue: scene)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***sceneViewBuilder = sceneView
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController()
@@ -170,10 +159,20 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: scene.basemap?.loadStatus) { loadStatus in
+***REMOVED******REMOVED******REMOVED***guard loadStatus == .loaded else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***setBasemapOpacity(0)
+***REMOVED***
 ***REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .bottomBar) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !calibrationViewIsHidden {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scene: scene,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationHeading: calibrationHeading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationElevation: calibrationElevation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -282,123 +281,11 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Updates the heading of the scene view camera controller.
-***REMOVED******REMOVED***/ - Parameter heading: The camera heading.
-***REMOVED***func updateHeading(_ heading: Double) {
-***REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.rotatedTo(
-***REMOVED******REMOVED******REMOVED***heading: heading,
-***REMOVED******REMOVED******REMOVED***pitch: cameraController.originCamera.pitch,
-***REMOVED******REMOVED******REMOVED***roll: cameraController.originCamera.roll
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***calibrationHeading = heading
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Rotates the heading of the scene view camera controller by the heading delta in degrees.
-***REMOVED******REMOVED***/ - Parameter headingDelta: The heading delta in degrees.
-***REMOVED***func rotateHeading(_ headingDelta: Double) {
-***REMOVED******REMOVED***let newHeading = cameraController.originCamera.heading + headingDelta
-***REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.rotatedTo(
-***REMOVED******REMOVED******REMOVED***heading: newHeading,
-***REMOVED******REMOVED******REMOVED***pitch: cameraController.originCamera.pitch,
-***REMOVED******REMOVED******REMOVED***roll: cameraController.originCamera.roll
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***calibrationHeading = newHeading
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Elevates the scene view camera controller by the elevation delta.
-***REMOVED******REMOVED***/ - Parameter elevationDelta: The elevation delta.
-***REMOVED***func updateElevation(_ elevationDelta: Double) {
-***REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.elevated(by: elevationDelta)
-***REMOVED******REMOVED***if let elevation = cameraController.originCamera.location.z {
-***REMOVED******REMOVED******REMOVED***calibrationElevation = elevation
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A view that allows the user to calibrate the heading of the scene view camera controller.
-***REMOVED***var calibrationView: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***isCalibrating = true
-***REMOVED******REMOVED******REMOVED***basemapOpacity = 0.5
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text("Calibrate")
-***REMOVED***
-***REMOVED******REMOVED***.popover(isPresented: $isCalibrating) {
-***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Heading: \(calibrationHeading?.rounded(.towardZero) ?? cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let heading = cameraController.originCamera.heading - 1
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(heading)
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "minus")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Slider(value: $headingSliderValue, in: -10...10) { editingChanged in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !editingChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headingTimer?.invalidate()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headingTimer = nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headingSliderValue = 0.0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: headingSliderValue) { heading in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard headingTimer == nil else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create a timer which rotates the camera when fired.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let timer = Timer(timeInterval: 0.1, repeats: true) { [self] (_) in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***rotateHeading(joystickHeadingDelta)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headingTimer = timer
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Add the timer to the main run loop.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RunLoop.main.add(timer, forMode: .default)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let heading = cameraController.originCamera.heading + 1
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(heading)
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "plus")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Elevation: \(calibrationElevation?.rounded(.towardZero) ?? cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateElevation(-1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "minus")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Slider(value: $elevationSliderValue, in: -20...20) { editingChanged in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !editingChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevationTimer?.invalidate()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevationTimer = nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevationSliderValue = 0.0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: elevationSliderValue) { elevation in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard elevationTimer == nil else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create a timer which rotates the camera when fired.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let timer = Timer(timeInterval: 0.1, repeats: true) { [self] (_) in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateElevation(joystickElevationDelta)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevationTimer = timer
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Add the timer to the main run loop.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RunLoop.main.add(timer, forMode: .default)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateElevation(1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "plus")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(minWidth: 200, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-***REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED***
-***REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED***basemapOpacity = 0.0
-***REMOVED***
+***REMOVED******REMOVED***/ Sets the basemap base layers with the given opacity.
+***REMOVED******REMOVED***/ - Parameter opacity: The opacity of the layer.
+***REMOVED***private func setBasemapOpacity(_ opacity: Float) {
+***REMOVED******REMOVED***guard let basemap = scene.basemap else { return ***REMOVED***
+***REMOVED******REMOVED***basemap.baseLayers.forEach { $0.opacity = opacity ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view that displays the horizontal and vertical accuracy of the current location datasource location.
