@@ -72,6 +72,8 @@ extension NetworkChallengeContinuation.Kind {
 ***REMOVED******REMOVED******REMOVED***self = .login
 ***REMOVED******REMOVED***case .clientCertificate:
 ***REMOVED******REMOVED******REMOVED***self = .certificate
+***REMOVED******REMOVED***case .negotiate:
+***REMOVED******REMOVED******REMOVED***fatalError("Negotiate challenge continuation is not implemented.")
 ***REMOVED******REMOVED***@unknown default:
 ***REMOVED******REMOVED******REMOVED***fatalError("Unknown NetworkAuthenticationChallenge.Kind")
 ***REMOVED***
