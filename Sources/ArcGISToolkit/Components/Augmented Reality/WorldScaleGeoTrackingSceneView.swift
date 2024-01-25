@@ -28,8 +28,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var locationDataSource: LocationDataSource
     /// A Boolean value indicating if the camera was initially set.
     @State private var initialCameraIsSet = false
-    /// A Boolean value that indicates whether the coaching overlay is hidden.
-    @State private var coachingOverlayIsHidden = false
+    /// A Boolean value that indicates whether the coaching overlay view is active.
+    @State private var coachingOverlayIsActive = false
     /// The current camera of the scene view.
     @State private var currentCamera: Camera?
     /// A Boolean value that indicates whether the calibration view is hidden.
@@ -113,10 +113,10 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 ARCoachingOverlay(goal: .geoTracking)
                     .sessionProvider(arViewProxy)
                     .onCoachingOverlayActivate { _ in
-                        coachingOverlayIsHidden = false
+                        coachingOverlayIsActive = true
                     }
                     .onCoachingOverlayDeactivate { _ in
-                        coachingOverlayIsHidden = true
+                        coachingOverlayIsActive = false
                     }
                     .onCoachingOverlayRequestSessionReset { _ in
                         if let currentLocation {
@@ -170,7 +170,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @MainActor
     private func updateSceneView(for location: Location) {
         // Do not update the scene view when the coaching overlay is in place.
-        guard coachingOverlayIsHidden else { return }
+        guard !coachingOverlayIsActive else { return }
         
         // Do not use cached location more than 10 seconds old.
         guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < 10 else { return }
