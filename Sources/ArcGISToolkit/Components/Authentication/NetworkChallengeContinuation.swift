@@ -72,6 +72,8 @@ extension NetworkChallengeContinuation.Kind {
             self = .login
         case .clientCertificate:
             self = .certificate
+        case .negotiate:
+            fatalError("Negotiate challenge continuation is not implemented.")
         @unknown default:
             fatalError("Unknown NetworkAuthenticationChallenge.Kind")
         }
