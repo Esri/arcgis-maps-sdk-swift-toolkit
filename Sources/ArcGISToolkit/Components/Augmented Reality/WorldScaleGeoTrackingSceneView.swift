@@ -118,6 +118,11 @@ public struct WorldScaleGeoTrackingSceneView: View {
                     .onCoachingOverlayDeactivate { _ in
                         coachingOverlayIsHidden = true
                     }
+                    .onCoachingOverlayRequestSessionReset { _ in
+                        if let currentLocation {
+                            updateSceneView(for: currentLocation)
+                        }
+                    }
                     .allowsHitTesting(false)
             }
         }
