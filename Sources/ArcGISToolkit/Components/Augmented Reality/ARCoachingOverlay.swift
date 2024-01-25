@@ -16,7 +16,14 @@ import ARKit
 import SwiftUI
 
 /// A SwiftUI version of an ARCoachingOverlayView view.
-struct ARCoachingOverlay: UIViewRepresentable {
+struct ARCoachingOverlay {
+    /// The closure to call when the coaching overlay view activates.
+    private(set) var onCoachingOverlayActivateAction: ((ARCoachingOverlayView) -> Void)?
+    /// The closure to call when the coaching overlay view deactivates.
+    private(set) var onCoachingOverlayDeactivateAction: ((ARCoachingOverlayView) -> Void)?
+    /// The closure to call when the user taps the coaching overlay view's Start Over button.
+    private(set) var onCoachingOverlayRequestSessionResetAction: ((ARCoachingOverlayView) -> Void)?
+    
     /// The data source for an AR session.
     var sessionProvider: ARSessionProviding?
     /// The goal for the coaching overlay.
@@ -33,6 +40,34 @@ struct ARCoachingOverlay: UIViewRepresentable {
         return view
     }
     
+    /// Sets the closure to call when the coaching overlay view activates.
+    func onCoachingOverlayActivate(
+        perform action: @escaping (ARCoachingOverlayView) -> Void
+    ) -> Self {
+        var view = self
+        view.onCoachingOverlayActivateAction = action
+        return view
+    }
+    
+    /// Sets the closure to call when the coaching experience is completely deactivated.
+    func onCoachingOverlayDeactivate(
+        perform action: @escaping (ARCoachingOverlayView) -> Void
+    ) -> Self {
+        var view = self
+        view.onCoachingOverlayDeactivateAction = action
+        return view
+    }
+    
+    /// Sets the closure to call when the user taps the coaching overlay view's Start Over button
+    /// while the session is relocalizing.
+    func onCoachingOverlayRequestSessionReset(
+        perform action: @escaping (ARCoachingOverlayView) -> Void
+    ) -> Self {
+        var view = self
+        view.onCoachingOverlayRequestSessionResetAction = action
+        return view
+    }
+    
     /// Sets the AR session data source for the coaching overlay.
     /// - Parameter sessionProvider: The AR session data source.
     /// - Returns: The `ARCoachingOverlay`.
@@ -41,7 +76,9 @@ struct ARCoachingOverlay: UIViewRepresentable {
         view.sessionProvider = sessionProvider
         return view
     }
-    
+}
+
+extension ARCoachingOverlay: UIViewRepresentable {
     func makeUIView(context: Context) -> ARCoachingOverlayView {
         let view = ARCoachingOverlayView()
         view.delegate = context.coordinator
@@ -53,11 +90,32 @@ struct ARCoachingOverlay: UIViewRepresentable {
         uiView.sessionProvider = sessionProvider
         uiView.goal = goal
         uiView.setActive(active, animated: true)
+        context.coordinator.onCoachingOverlayActivateAction = onCoachingOverlayActivateAction
+        context.coordinator.onCoachingOverlayDeactivateAction = onCoachingOverlayDeactivateAction
+        context.coordinator.onCoachingOverlayRequestSessionResetAction = onCoachingOverlayRequestSessionResetAction
     }
     
     func makeCoordinator() -> Coordinator {
         Coordinator()
     }
-    
-    class Coordinator: NSObject, ARCoachingOverlayViewDelegate {}
+}
+
+extension ARCoachingOverlay {
+    class Coordinator: NSObject, ARCoachingOverlayViewDelegate {
+        var onCoachingOverlayActivateAction: ((ARCoachingOverlayView) -> Void)?
+        var onCoachingOverlayDeactivateAction: ((ARCoachingOverlayView) -> Void)?
+        var onCoachingOverlayRequestSessionResetAction: ((ARCoachingOverlayView) -> Void)?
+        
+        func coachingOverlayViewWillActivate(_ coachingOverlayView: ARCoachingOverlayView) {
+            onCoachingOverlayActivateAction?(coachingOverlayView)
+        }
+        
+        func coachingOverlayViewDidDeactivate(_ coachingOverlayView: ARCoachingOverlayView) {
+            onCoachingOverlayDeactivateAction?(coachingOverlayView)
+        }
+        
+        func coachingOverlayViewDidRequestSessionReset(_ coachingOverlayView: ARCoachingOverlayView) {
+            onCoachingOverlayRequestSessionResetAction?(coachingOverlayView)
+        }
+    }
 }
