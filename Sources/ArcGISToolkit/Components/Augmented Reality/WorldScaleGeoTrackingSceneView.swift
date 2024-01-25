@@ -28,8 +28,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@State private var locationDataSource: LocationDataSource
 ***REMOVED******REMOVED***/ A Boolean value indicating if the camera was initially set.
 ***REMOVED***@State private var initialCameraIsSet = false
-***REMOVED******REMOVED***/ A Boolean value that indicates whether the coaching overlay is hidden.
-***REMOVED***@State private var coachingOverlayIsHidden = false
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the coaching overlay view is active.
+***REMOVED***@State private var coachingOverlayIsActive = false
 ***REMOVED******REMOVED***/ The current camera of the scene view.
 ***REMOVED***@State private var currentCamera: Camera?
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
@@ -113,10 +113,10 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARCoachingOverlay(goal: .geoTracking)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sessionProvider(arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCoachingOverlayActivate { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***coachingOverlayIsHidden = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***coachingOverlayIsActive = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCoachingOverlayDeactivate { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***coachingOverlayIsHidden = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***coachingOverlayIsActive = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCoachingOverlayRequestSessionReset { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let currentLocation {
@@ -170,7 +170,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@MainActor
 ***REMOVED***private func updateSceneView(for location: Location) {
 ***REMOVED******REMOVED******REMOVED*** Do not update the scene view when the coaching overlay is in place.
-***REMOVED******REMOVED***guard coachingOverlayIsHidden else { return ***REMOVED***
+***REMOVED******REMOVED***guard !coachingOverlayIsActive else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Do not use cached location more than 10 seconds old.
 ***REMOVED******REMOVED***guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < 10 else { return ***REMOVED***
