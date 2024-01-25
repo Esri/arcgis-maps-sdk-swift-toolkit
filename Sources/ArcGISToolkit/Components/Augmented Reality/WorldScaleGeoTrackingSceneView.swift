@@ -28,8 +28,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var locationDataSource: LocationDataSource
     /// A Boolean value indicating if the camera was initially set.
     @State private var initialCameraIsSet = false
-    /// A Boolean value that indicates whether to hide the coaching overlay view.
-    private var coachingOverlayIsHidden = false
+    /// A Boolean value that indicates whether the coaching overlay is hidden.
+    @State private var coachingOverlayIsHidden = false
     /// The current camera of the scene view.
     @State private var currentCamera: Camera?
     /// A Boolean value that indicates whether the calibration view is hidden.
@@ -46,8 +46,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var currentLocation: Location?
     /// The valid accuracy threshold for a location in meters.
     private var validAccuracyThreshold = 0.0
-    /// The app's tracking requirements for the coaching overlay to show/dismiss.
-    @State private var goal: ARCoachingOverlayView.Goal
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -73,12 +71,10 @@ public struct WorldScaleGeoTrackingSceneView: View {
         
         if ARGeoTrackingConfiguration.isSupported {
             configuration = ARGeoTrackingConfiguration()
-            _goal = .init(initialValue: .geoTracking)
         } else {
             configuration = ARWorldTrackingConfiguration()
-            _goal = .init(initialValue: .tracking)
+            configuration.worldAlignment = .gravityAndHeading
         }
-        configuration.worldAlignment = .gravityAndHeading
         
         _locationDataSource = .init(initialValue: locationDataSource)
     }
@@ -114,11 +110,15 @@ public struct WorldScaleGeoTrackingSceneView: View {
                         }
                 }
                 
-                if !coachingOverlayIsHidden {
-                    ARCoachingOverlay(goal: .geoTracking)
-                        .sessionProvider(arViewProxy)
-                        .allowsHitTesting(false)
-                }
+                ARCoachingOverlay(goal: .geoTracking)
+                    .sessionProvider(arViewProxy)
+                    .onCoachingOverlayActivate { _ in
+                        coachingOverlayIsHidden = false
+                    }
+                    .onCoachingOverlayDeactivate { _ in
+                        coachingOverlayIsHidden = true
+                    }
+                    .allowsHitTesting(false)
             }
         }
         .observingInterfaceOrientation($interfaceOrientation)
@@ -164,6 +164,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
     /// - Parameter location: The location data source location.
     @MainActor
     private func updateSceneView(for location: Location) {
+        // Do not update the scene view when the coaching overlay is in place.
+        guard coachingOverlayIsHidden else { return }
+        
         // Do not use cached location more than 10 seconds old.
         guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < 10 else { return }
         
@@ -226,15 +229,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
         // If the location becomes off by over a certain threshold, then update the camera location.
         let threshold = 2.0
         return result.distance.value > threshold ? true : false
-    }
-    
-    /// Sets the visibility of the coaching overlay view for the AR experience.
-    /// - Parameter hidden: A Boolean value that indicates whether to hide the
-    ///  coaching overlay view.
-    public func coachingOverlayHidden(_ hidden: Bool) -> Self {
-        var view = self
-        view.coachingOverlayIsHidden = hidden
-        return view
     }
     
     /// Sets the visibility of the calibration view for the AR experience.
