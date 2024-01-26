@@ -19,15 +19,7 @@ import ArcGIS
 extension WorldScaleGeoTrackingSceneView {
     /// A view that allows the user to calibrate the heading of the scene view camera controller.
     struct CalibrationView: View {
-        let scene: ArcGIS.Scene
-        /// The camera controller that will be set on the scene view.
-        @State private var cameraController: TransformationMatrixCameraController
-        /// A Boolean value that indicates if the AR experince is being calibrated.
-        @State private var isCalibrating = false
-        /// The calibrated camera heading.
-        @State private var calibrationHeading: Double?
-        /// The calibrated camera elevation.
-        @State private var calibrationElevation: Double?
+        @ObservedObject var viewModel: ViewModel
         /// The slider value for the camera heading.
         @State private var headingSliderValue = 0.0
         /// The slider value for the camera elevation.
@@ -45,34 +37,20 @@ extension WorldScaleGeoTrackingSceneView {
             Double(signOf: elevationSliderValue, magnitudeOf: elevationSliderValue * elevationSliderValue / 100)
         }
         
-        init(
-            scene: ArcGIS.Scene,
-            cameraController: TransformationMatrixCameraController,
-            isCalibrating: Bool,
-            calibrationHeading: Double?,
-            calibrationElevation: Double?
-        ) {
-            self.scene = scene
-            self.cameraController = cameraController
-            self.isCalibrating = isCalibrating
-            self.calibrationHeading = calibrationHeading
-            self.calibrationElevation = calibrationElevation
-        }
-        
         var body: some View {
             Button {
-                isCalibrating = true
+                viewModel.isCalibrating = true
                 setBasemapOpacity(0.5)
             } label: {
                 Text("Calibrate")
             }
-            .popover(isPresented: $isCalibrating) {
+            .popover(isPresented: $viewModel.isCalibrating) {
                 VStack {
-                    Text("Heading: \(calibrationHeading?.rounded(.towardZero) ?? cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
+                    Text("Heading: \(viewModel.calibrationHeading?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
                     
                     HStack {
                         Button {
-                            let heading = cameraController.originCamera.heading - 1
+                            let heading = viewModel.cameraController.originCamera.heading - 1
                             updateHeading(heading)
                         } label: {
                             Image(systemName: "minus")
@@ -97,14 +75,14 @@ extension WorldScaleGeoTrackingSceneView {
                         }
                         
                         Button {
-                            let heading = cameraController.originCamera.heading + 1
+                            let heading = viewModel.cameraController.originCamera.heading + 1
                             updateHeading(heading)
                         } label: {
                             Image(systemName: "plus")
                         }
                     }
                     VStack {
-                        Text("Elevation: \(calibrationElevation?.rounded(.towardZero) ?? cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number)")
+                        Text("Elevation: \(viewModel.calibrationElevation?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number)")
                         HStack {
                             Button {
                                 updateElevation(-1)
@@ -138,7 +116,7 @@ extension WorldScaleGeoTrackingSceneView {
                     }
                 }
                 .onDisappear {
-                    guard !isCalibrating else { return }
+                    guard !viewModel.isCalibrating else { return }
                     withAnimation(.easeInOut) {
                         setBasemapOpacity(0)
                     }
@@ -151,39 +129,39 @@ extension WorldScaleGeoTrackingSceneView {
         /// Sets the basemap base layers with the given opacity.
         /// - Parameter opacity: The opacity of the layer.
         private func setBasemapOpacity(_ opacity: Float) {
-            guard let basemap = scene.basemap else { return }
+            guard let basemap = viewModel.scene.basemap else { return }
             basemap.baseLayers.forEach { $0.opacity = opacity }
         }
         
         /// Updates the heading of the scene view camera controller.
         /// - Parameter heading: The camera heading.
         private func updateHeading(_ heading: Double) {
-            cameraController.originCamera = cameraController.originCamera.rotatedTo(
+            viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.rotatedTo(
                 heading: heading,
-                pitch: cameraController.originCamera.pitch,
-                roll: cameraController.originCamera.roll
+                pitch: viewModel.cameraController.originCamera.pitch,
+                roll: viewModel.cameraController.originCamera.roll
             )
-            calibrationHeading = heading
+            viewModel.calibrationHeading = heading
         }
         
         /// Rotates the heading of the scene view camera controller by the heading delta in degrees.
         /// - Parameter headingDelta: The heading delta in degrees.
         private func rotateHeading(_ headingDelta: Double) {
-            let newHeading = cameraController.originCamera.heading + headingDelta
-            cameraController.originCamera = cameraController.originCamera.rotatedTo(
+            let newHeading = viewModel.cameraController.originCamera.heading + headingDelta
+            viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.rotatedTo(
                 heading: newHeading,
-                pitch: cameraController.originCamera.pitch,
-                roll: cameraController.originCamera.roll
+                pitch: viewModel.cameraController.originCamera.pitch,
+                roll: viewModel.cameraController.originCamera.roll
             )
-            calibrationHeading = newHeading
+            viewModel.calibrationHeading = newHeading
         }
         
         /// Elevates the scene view camera controller by the elevation delta.
         /// - Parameter elevationDelta: The elevation delta.
         private func updateElevation(_ elevationDelta: Double) {
-            cameraController.originCamera = cameraController.originCamera.elevated(by: elevationDelta)
-            if let elevation = cameraController.originCamera.location.z {
-                calibrationElevation = elevation
+            viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.elevated(by: elevationDelta)
+            if let elevation = viewModel.cameraController.originCamera.location.z {
+                viewModel.calibrationElevation = elevation
             }
         }
     }
