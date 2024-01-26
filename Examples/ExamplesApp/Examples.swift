@@ -38,7 +38,8 @@ extension ExampleList {
 ***REMOVED******REMOVED***name: "Augmented Reality",
 ***REMOVED******REMOVED***examples: [
 ***REMOVED******REMOVED******REMOVED***AnyExample("Flyover", content: FlyoverExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Tabletop", content: TableTopExampleView())
+***REMOVED******REMOVED******REMOVED***AnyExample("Tabletop", content: TableTopExampleView()),
+***REMOVED******REMOVED******REMOVED***AnyExample("World Scale", content: WorldScaleGeoTrackingExampleView())
 ***REMOVED******REMOVED***]
 ***REMOVED***)
 ***REMOVED***
