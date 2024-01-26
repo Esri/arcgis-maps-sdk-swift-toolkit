@@ -20,10 +20,8 @@ import ArcGIS
 public struct WorldScaleGeoTrackingSceneView: View {
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
-    /// The scene view.
-    @State private var scene: ArcGIS.Scene
-    /// The camera controller that will be set on the scene view.
-    @State private var cameraController: TransformationMatrixCameraController
+    /// The view model for the calibration view.
+    @StateObject private var viewModel: ViewModel
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
     /// The location datasource that is used to access the device location.
@@ -36,10 +34,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var currentCamera: Camera?
     /// A Boolean value that indicates whether the calibration view is hidden.
     private var calibrationViewIsHidden = false
-    /// The calibrated camera heading.
-    @State private var calibrationHeading: Double?
-    /// The calibrated camera elevation.
-    @State private var calibrationElevation: Double?
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The configuration for the AR session.
@@ -50,8 +44,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var currentLocation: Location?
     /// The valid accuracy threshold for a location in meters.
     private var validAccuracyThreshold = 0.0
-    /// A Boolean value that indicates if the AR experince is being calibrated.
-    @State private var isCalibrating = false
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -70,15 +62,11 @@ public struct WorldScaleGeoTrackingSceneView: View {
         scene: ArcGIS.Scene,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
-        scene.basemap?.baseLayers.forEach({ $0.opacity = 0.5})
-        _scene = .init(initialValue: scene)
-        
         sceneViewBuilder = sceneView
         
         let cameraController = TransformationMatrixCameraController()
         cameraController.translationFactor = 1
         cameraController.clippingDistance = clippingDistance
-        _cameraController = .init(initialValue: cameraController)
         
         if ARGeoTrackingConfiguration.isSupported {
             configuration = ARGeoTrackingConfiguration()
@@ -88,6 +76,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
         }
         
         _locationDataSource = .init(initialValue: locationDataSource)
+        
+        _viewModel = StateObject(wrappedValue: ViewModel(scene: scene, cameraController: cameraController))
     }
     
     public var body: some View {
@@ -99,7 +89,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
                         
                         sceneViewProxy.updateCamera(
                             frame: frame,
-                            cameraController: cameraController,
+                            cameraController: viewModel.cameraController,
                             orientation: interfaceOrientation,
                             initialTransformation: .identity
                         )
@@ -111,7 +101,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 
                 if initialCameraIsSet {
                     sceneViewBuilder(sceneViewProxy)
-                        .cameraController(cameraController)
+                        .cameraController(viewModel.cameraController)
                         .attributionBarHidden(true)
                         .spaceEffect(.transparent)
                         .atmosphereEffect(.off)
@@ -159,20 +149,10 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 }
             } catch {}
         }
-        .onChange(of: scene.basemap?.loadStatus) { loadStatus in
-            guard loadStatus == .loaded else { return }
-            setBasemapOpacity(0)
-        }
         .toolbar {
             ToolbarItem(placement: .bottomBar) {
                 if !calibrationViewIsHidden {
-                    CalibrationView(
-                        scene: scene,
-                        cameraController: cameraController,
-                        isCalibrating: isCalibrating,
-                        calibrationHeading: calibrationHeading,
-                        calibrationElevation: calibrationElevation
-                    )
+                    CalibrationView(viewModel: viewModel)
                 }
             }
         }
@@ -209,7 +189,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
         
         if !initialCameraIsSet {
             let heading = 0.0
-            cameraController.originCamera = Camera(
+            viewModel.cameraController.originCamera = Camera(
                 latitude: location.position.y,
                 longitude: location.position.x,
                 altitude: altitude,
@@ -217,22 +197,22 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 pitch: 90,
                 roll: 0
             )
-            calibrationElevation = altitude
+            viewModel.calibrationElevation = altitude
         } else {
             // Ignore location updates when calibrating heading and elevation.
-            guard !isCalibrating else { return }
-            cameraController.originCamera = Camera(
+            guard !viewModel.isCalibrating else { return }
+            viewModel.cameraController.originCamera = Camera(
                 latitude: location.position.y,
                 longitude: location.position.x,
-                altitude: calibrationElevation ?? altitude,
-                heading: calibrationHeading ?? 0,
+                altitude: viewModel.calibrationElevation ?? altitude,
+                heading: viewModel.calibrationHeading ?? 0,
                 pitch: 90,
                 roll: 0
             )
         }
         
         // We have to do this or the error gets bigger and bigger.
-        cameraController.transformationMatrix = .identity
+        viewModel.cameraController.transformationMatrix = .identity
         arViewProxy.session.run(configuration, options: .resetTracking)
         
         // If initial camera is not set, then we set it the flag here to true
@@ -281,13 +261,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
         return view
     }
     
-    /// Sets the basemap base layers with the given opacity.
-    /// - Parameter opacity: The opacity of the layer.
-    private func setBasemapOpacity(_ opacity: Float) {
-        guard let basemap = scene.basemap else { return }
-        basemap.baseLayers.forEach { $0.opacity = opacity }
-    }
-    
     /// A view that displays the horizontal and vertical accuracy of the current location datasource location.
     var accuracyView: some View {
         VStack {
@@ -295,6 +268,27 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 Text("horizontalAccuracy: \(currentLocation.horizontalAccuracy, format: .number)")
                 Text("verticalAccuracy: \(currentLocation.verticalAccuracy, format: .number)")
             }
+        }
+    }
+}
+
+extension WorldScaleGeoTrackingSceneView {
+    @MainActor
+    class ViewModel: ObservableObject {
+        /// The scene.
+        @Published var scene: ArcGIS.Scene
+        /// The camera controller that will be set on the scene view.
+        @Published var cameraController: TransformationMatrixCameraController
+        /// A Boolean value that indicates if the AR experince is being calibrated.
+        @Published var isCalibrating = false
+        /// The calibrated camera heading.
+        @Published var calibrationHeading: Double?
+        /// The calibrated camera elevation.
+        @Published var calibrationElevation: Double?
+        
+        init(scene: ArcGIS.Scene, cameraController: TransformationMatrixCameraController) {
+            self.scene = scene
+            self.cameraController = cameraController
         }
     }
 }

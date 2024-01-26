@@ -44,7 +44,7 @@ struct WorldScaleGeoTrackingExampleView: View {
     
     var body: some View {
         VStack {
-            WorldScaleGeoTrackingSceneView(locationDataSource: locationDataSource) { proxy in
+            WorldScaleGeoTrackingSceneView(locationDataSource: locationDataSource, scene: scene) { proxy in
                 SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
                     .onSingleTapGesture { screen, _ in
                         print("Identifying...")
