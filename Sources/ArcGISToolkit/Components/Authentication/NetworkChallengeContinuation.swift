@@ -72,6 +72,8 @@ extension NetworkChallengeContinuation.Kind {
             self = .login
         case .clientCertificate:
             self = .certificate
+        case .negotiate:
+            fatalError("We should not end up here as negotiate challenges are rejected when they come in.")
         @unknown default:
             fatalError("Unknown NetworkAuthenticationChallenge.Kind")
         }
