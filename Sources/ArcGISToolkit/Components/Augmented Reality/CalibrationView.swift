@@ -37,6 +37,10 @@ extension WorldScaleGeoTrackingSceneView {
             Double(signOf: elevationSliderValue, magnitudeOf: elevationSliderValue * elevationSliderValue / 100)
         }
         
+        init(viewModel: ViewModel) {
+            self.viewModel = viewModel
+        }
+        
         var body: some View {
             Button {
                 viewModel.isCalibrating = true
@@ -63,7 +67,6 @@ extension WorldScaleGeoTrackingSceneView {
                             }
                         }
                         .onChange(of: headingSliderValue) { heading in
-                            
                             guard headingTimer == nil else { return }
                             // Create a timer which rotates the camera when fired.
                             let timer = Timer(timeInterval: 0.1, repeats: true) { [self] (_) in
@@ -97,7 +100,6 @@ extension WorldScaleGeoTrackingSceneView {
                                 }
                             }
                             .onChange(of: elevationSliderValue) { elevation in
-                                
                                 guard elevationTimer == nil else { return }
                                 // Create a timer which rotates the camera when fired.
                                 let timer = Timer(timeInterval: 0.1, repeats: true) { [self] (_) in
@@ -123,6 +125,9 @@ extension WorldScaleGeoTrackingSceneView {
                 }
                 .frame(minWidth: 200, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                 .padding()
+            }
+            .onChange(of: viewModel.scene.basemap?.loadStatus) { loadStatus in
+                viewModel.scene.basemap?.baseLayers.forEach( { $0.opacity = 0 })
             }
         }
         
