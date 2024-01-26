@@ -19,15 +19,7 @@ import ARKit
 extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***/ A view that allows the user to calibrate the heading of the scene view camera controller.
 ***REMOVED***struct CalibrationView: View {
-***REMOVED******REMOVED***let scene: ArcGIS.Scene
-***REMOVED******REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
-***REMOVED******REMOVED***@State private var cameraController: TransformationMatrixCameraController
-***REMOVED******REMOVED******REMOVED***/ A Boolean value that indicates if the AR experince is being calibrated.
-***REMOVED******REMOVED***@State private var isCalibrating = false
-***REMOVED******REMOVED******REMOVED***/ The calibrated camera heading.
-***REMOVED******REMOVED***@State private var calibrationHeading: Double?
-***REMOVED******REMOVED******REMOVED***/ The calibrated camera elevation.
-***REMOVED******REMOVED***@State private var calibrationElevation: Double?
+***REMOVED******REMOVED***@ObservedObject var viewModel: ViewModel
 ***REMOVED******REMOVED******REMOVED***/ The slider value for the camera heading.
 ***REMOVED******REMOVED***@State private var headingSliderValue = 0.0
 ***REMOVED******REMOVED******REMOVED***/ The slider value for the camera elevation.
@@ -45,34 +37,20 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***Double(signOf: elevationSliderValue, magnitudeOf: elevationSliderValue * elevationSliderValue / 100)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(
-***REMOVED******REMOVED******REMOVED***scene: ArcGIS.Scene,
-***REMOVED******REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
-***REMOVED******REMOVED******REMOVED***isCalibrating: Bool,
-***REMOVED******REMOVED******REMOVED***calibrationHeading: Double?,
-***REMOVED******REMOVED******REMOVED***calibrationElevation: Double?
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***self.scene = scene
-***REMOVED******REMOVED******REMOVED***self.cameraController = cameraController
-***REMOVED******REMOVED******REMOVED***self.isCalibrating = isCalibrating
-***REMOVED******REMOVED******REMOVED***self.calibrationHeading = calibrationHeading
-***REMOVED******REMOVED******REMOVED***self.calibrationElevation = calibrationElevation
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating = true
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.isCalibrating = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***setBasemapOpacity(0.5)
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Calibrate")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.popover(isPresented: $isCalibrating) {
+***REMOVED******REMOVED******REMOVED***.popover(isPresented: $viewModel.isCalibrating) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Heading: \(calibrationHeading?.rounded(.towardZero) ?? cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Heading: \(viewModel.calibrationHeading?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let heading = cameraController.originCamera.heading - 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let heading = viewModel.cameraController.originCamera.heading - 1
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(heading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "minus")
@@ -97,14 +75,14 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let heading = cameraController.originCamera.heading + 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let heading = viewModel.cameraController.originCamera.heading + 1
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(heading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "plus")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Elevation: \(calibrationElevation?.rounded(.towardZero) ?? cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Elevation: \(viewModel.calibrationElevation?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number)")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateElevation(-1)
@@ -138,7 +116,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !isCalibrating else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !viewModel.isCalibrating else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.easeInOut) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setBasemapOpacity(0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -151,39 +129,39 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***/ Sets the basemap base layers with the given opacity.
 ***REMOVED******REMOVED******REMOVED***/ - Parameter opacity: The opacity of the layer.
 ***REMOVED******REMOVED***private func setBasemapOpacity(_ opacity: Float) {
-***REMOVED******REMOVED******REMOVED***guard let basemap = scene.basemap else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let basemap = viewModel.scene.basemap else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***basemap.baseLayers.forEach { $0.opacity = opacity ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Updates the heading of the scene view camera controller.
 ***REMOVED******REMOVED******REMOVED***/ - Parameter heading: The camera heading.
 ***REMOVED******REMOVED***private func updateHeading(_ heading: Double) {
-***REMOVED******REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.rotatedTo(
+***REMOVED******REMOVED******REMOVED***viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.rotatedTo(
 ***REMOVED******REMOVED******REMOVED******REMOVED***heading: heading,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: cameraController.originCamera.pitch,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: cameraController.originCamera.roll
+***REMOVED******REMOVED******REMOVED******REMOVED***pitch: viewModel.cameraController.originCamera.pitch,
+***REMOVED******REMOVED******REMOVED******REMOVED***roll: viewModel.cameraController.originCamera.roll
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***calibrationHeading = heading
+***REMOVED******REMOVED******REMOVED***viewModel.calibrationHeading = heading
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Rotates the heading of the scene view camera controller by the heading delta in degrees.
 ***REMOVED******REMOVED******REMOVED***/ - Parameter headingDelta: The heading delta in degrees.
 ***REMOVED******REMOVED***private func rotateHeading(_ headingDelta: Double) {
-***REMOVED******REMOVED******REMOVED***let newHeading = cameraController.originCamera.heading + headingDelta
-***REMOVED******REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.rotatedTo(
+***REMOVED******REMOVED******REMOVED***let newHeading = viewModel.cameraController.originCamera.heading + headingDelta
+***REMOVED******REMOVED******REMOVED***viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.rotatedTo(
 ***REMOVED******REMOVED******REMOVED******REMOVED***heading: newHeading,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: cameraController.originCamera.pitch,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: cameraController.originCamera.roll
+***REMOVED******REMOVED******REMOVED******REMOVED***pitch: viewModel.cameraController.originCamera.pitch,
+***REMOVED******REMOVED******REMOVED******REMOVED***roll: viewModel.cameraController.originCamera.roll
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***calibrationHeading = newHeading
+***REMOVED******REMOVED******REMOVED***viewModel.calibrationHeading = newHeading
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Elevates the scene view camera controller by the elevation delta.
 ***REMOVED******REMOVED******REMOVED***/ - Parameter elevationDelta: The elevation delta.
 ***REMOVED******REMOVED***private func updateElevation(_ elevationDelta: Double) {
-***REMOVED******REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.elevated(by: elevationDelta)
-***REMOVED******REMOVED******REMOVED***if let elevation = cameraController.originCamera.location.z {
-***REMOVED******REMOVED******REMOVED******REMOVED***calibrationElevation = elevation
+***REMOVED******REMOVED******REMOVED***viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.elevated(by: elevationDelta)
+***REMOVED******REMOVED******REMOVED***if let elevation = viewModel.cameraController.originCamera.location.z {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.calibrationElevation = elevation
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

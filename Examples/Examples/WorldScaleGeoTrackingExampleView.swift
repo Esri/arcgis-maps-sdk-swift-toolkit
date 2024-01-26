@@ -44,7 +44,7 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***WorldScaleGeoTrackingSceneView(locationDataSource: locationDataSource) { proxy in
+***REMOVED******REMOVED******REMOVED***WorldScaleGeoTrackingSceneView(locationDataSource: locationDataSource, scene: scene) { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
