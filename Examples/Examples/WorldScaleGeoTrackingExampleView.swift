@@ -35,9 +35,6 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED******REMOVED***return scene
 ***REMOVED***()
 ***REMOVED***
-***REMOVED******REMOVED***/ The basemap opacity.
-***REMOVED***@State private var opacity: Float = 1
-***REMOVED******REMOVED***/ The graphics overlay which shows a graphic around your initial location.
 ***REMOVED***@State private var graphicsOverlay = GraphicsOverlay()
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
@@ -54,13 +51,6 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** A slider to adjust the basemap opacity.
-***REMOVED******REMOVED******REMOVED***Slider(value: $opacity, in: 0...1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: opacity) { opacity in
-***REMOVED******REMOVED******REMOVED***guard let basemap = scene.basemap else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***basemap.baseLayers.forEach { $0.opacity = opacity ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Request when-in-use location authorization.
