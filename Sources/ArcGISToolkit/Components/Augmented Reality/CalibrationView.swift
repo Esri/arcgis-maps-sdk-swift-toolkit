@@ -119,7 +119,8 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setBasemapOpacity(0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(minWidth: 250, maxWidth: UIScreen.main.bounds.width/3)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(idealWidth: UIScreen.main.bounds.width/3)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fractionPresentationDetents(0.25)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.esriBorder()
