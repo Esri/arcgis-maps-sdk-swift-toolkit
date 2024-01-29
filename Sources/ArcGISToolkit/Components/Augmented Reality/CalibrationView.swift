@@ -123,12 +123,12 @@ extension WorldScaleGeoTrackingSceneView {
                         setBasemapOpacity(0)
                     }
                 }
-                .frame(minWidth: 250, maxWidth: UIScreen.main.bounds.width/3, alignment: .bottomLeading)
+                .frame(minWidth: 250, maxWidth: UIScreen.main.bounds.width/3)
                 .padding()
             }
+            .esriBorder()
             .padding([.horizontal], 10)
             .padding([.vertical], 10)
-            .esriBorder()
         }
         
         /// Sets the basemap base layers with the given opacity.
