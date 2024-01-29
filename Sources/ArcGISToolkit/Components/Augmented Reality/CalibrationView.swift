@@ -119,7 +119,8 @@ extension WorldScaleGeoTrackingSceneView {
                         setBasemapOpacity(0)
                     }
                 }
-                .frame(minWidth: 250, maxWidth: UIScreen.main.bounds.width/3)
+                .frame(idealWidth: UIScreen.main.bounds.width/3)
+                .fractionPresentationDetents(0.25)
                 .padding()
             }
             .esriBorder()
