@@ -145,11 +145,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 }
             } catch {}
         }
-        .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                if !calibrationViewIsHidden {
-                    CalibrationView(viewModel: viewModel)
-                }
+        .overlay(alignment: .bottomLeading) {
+            if !calibrationViewIsHidden {
+                CalibrationView(viewModel: viewModel)
             }
         }
         .overlay(alignment: .top) {
@@ -158,6 +156,11 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(8)
                 .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+        }
+        .onChange(of: viewModel.scene.basemap?.loadStatus) { loadStatus in
+            withAnimation {
+                viewModel.scene.basemap?.baseLayers.forEach( { $0.opacity = 0 })
+            }
         }
     }
     
