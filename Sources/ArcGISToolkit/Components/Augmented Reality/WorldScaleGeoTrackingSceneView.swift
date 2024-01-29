@@ -152,6 +152,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.isCalibrating {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.isCalibrating = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setBasemapOpacity(0.5)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Calibrate")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -171,9 +172,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: viewModel.scene.basemap?.loadStatus) { loadStatus in
-***REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.scene.basemap?.baseLayers.forEach( { $0.opacity = 0 ***REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***guard loadStatus == .loaded else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***viewModel.setBasemapOpacity(0)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -309,6 +309,13 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***init(scene: ArcGIS.Scene, cameraController: TransformationMatrixCameraController) {
 ***REMOVED******REMOVED******REMOVED***self.scene = scene
 ***REMOVED******REMOVED******REMOVED***self.cameraController = cameraController
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Sets the basemap base layers with the given opacity.
+***REMOVED******REMOVED******REMOVED***/ - Parameter opacity: The opacity of the layer.
+***REMOVED******REMOVED***func setBasemapOpacity(_ opacity: Float) {
+***REMOVED******REMOVED******REMOVED***guard let basemap = scene.basemap else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***basemap.baseLayers.forEach { $0.opacity = opacity ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

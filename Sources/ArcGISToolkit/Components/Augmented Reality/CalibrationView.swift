@@ -108,9 +108,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard !viewModel.isCalibrating else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.easeInOut) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setBasemapOpacity(0)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setBasemapOpacity(0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
@@ -127,13 +125,6 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Sets the basemap base layers with the given opacity.
-***REMOVED******REMOVED******REMOVED***/ - Parameter opacity: The opacity of the layer.
-***REMOVED******REMOVED***private func setBasemapOpacity(_ opacity: Float) {
-***REMOVED******REMOVED******REMOVED***guard let basemap = viewModel.scene.basemap else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***basemap.baseLayers.forEach { $0.opacity = opacity ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Updates the heading of the scene view camera controller.
