@@ -145,11 +145,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .bottomBar) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !calibrationViewIsHidden {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(viewModel: viewModel)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
+***REMOVED******REMOVED******REMOVED***if !calibrationViewIsHidden {
+***REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(viewModel: viewModel)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(alignment: .top) {
@@ -158,6 +156,11 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewModel.scene.basemap?.loadStatus) { loadStatus in
+***REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.scene.basemap?.baseLayers.forEach( { $0.opacity = 0 ***REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
