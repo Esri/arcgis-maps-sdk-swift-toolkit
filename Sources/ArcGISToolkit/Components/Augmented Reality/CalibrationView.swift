@@ -38,94 +38,95 @@ extension WorldScaleGeoTrackingSceneView {
         }
         
         var body: some View {
-            Button {
-                viewModel.isCalibrating = true
-                setBasemapOpacity(0.5)
-            } label: {
-                Text("Calibrate")
-            }
-            .popover(isPresented: $viewModel.isCalibrating) {
-                VStack {
-                    Text("Heading: \(viewModel.calibrationHeading?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
+            VStack {
+                Text("Heading: \(viewModel.calibrationHeading?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
+                
+                HStack {
+                    Button {
+                        let heading = viewModel.cameraController.originCamera.heading - 1
+                        updateHeading(heading)
+                    } label: {
+                        Image(systemName: "minus")
+                    }
+                    Slider(value: $headingSliderValue, in: -10...10) { editingChanged in
+                        if !editingChanged {
+                            headingTimer?.invalidate()
+                            headingTimer = nil
+                            headingSliderValue = 0.0
+                        }
+                    }
+                    .onChange(of: headingSliderValue) { heading in
+                        guard headingTimer == nil else { return }
+                        // Create a timer which rotates the camera when fired.
+                        let timer = Timer(timeInterval: 0.1, repeats: true) { [self] (_) in
+                            rotateHeading(joystickHeadingDelta)
+                        }
+                        headingTimer = timer
+                        // Add the timer to the main run loop.
+                        RunLoop.main.add(timer, forMode: .default)
+                    }
                     
+                    Button {
+                        let heading = viewModel.cameraController.originCamera.heading + 1
+                        updateHeading(heading)
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+                VStack {
+                    Text("Elevation: \(viewModel.calibrationElevation?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number)")
                     HStack {
                         Button {
-                            let heading = viewModel.cameraController.originCamera.heading - 1
-                            updateHeading(heading)
+                            updateElevation(-1)
                         } label: {
                             Image(systemName: "minus")
                         }
-                        Slider(value: $headingSliderValue, in: -10...10) { editingChanged in
+                        Slider(value: $elevationSliderValue, in: -20...20) { editingChanged in
                             if !editingChanged {
-                                headingTimer?.invalidate()
-                                headingTimer = nil
-                                headingSliderValue = 0.0
+                                elevationTimer?.invalidate()
+                                elevationTimer = nil
+                                elevationSliderValue = 0.0
                             }
                         }
-                        .onChange(of: headingSliderValue) { heading in
-                            guard headingTimer == nil else { return }
+                        .onChange(of: elevationSliderValue) { elevation in
+                            guard elevationTimer == nil else { return }
                             // Create a timer which rotates the camera when fired.
                             let timer = Timer(timeInterval: 0.1, repeats: true) { [self] (_) in
-                                rotateHeading(joystickHeadingDelta)
+                                updateElevation(joystickElevationDelta)
                             }
-                            headingTimer = timer
+                            elevationTimer = timer
                             // Add the timer to the main run loop.
                             RunLoop.main.add(timer, forMode: .default)
                         }
-                        
                         Button {
-                            let heading = viewModel.cameraController.originCamera.heading + 1
-                            updateHeading(heading)
+                            updateElevation(1)
                         } label: {
                             Image(systemName: "plus")
                         }
                     }
-                    VStack {
-                        Text("Elevation: \(viewModel.calibrationElevation?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number)")
-                        HStack {
-                            Button {
-                                updateElevation(-1)
-                            } label: {
-                                Image(systemName: "minus")
-                            }
-                            Slider(value: $elevationSliderValue, in: -20...20) { editingChanged in
-                                if !editingChanged {
-                                    elevationTimer?.invalidate()
-                                    elevationTimer = nil
-                                    elevationSliderValue = 0.0
-                                }
-                            }
-                            .onChange(of: elevationSliderValue) { elevation in
-                                guard elevationTimer == nil else { return }
-                                // Create a timer which rotates the camera when fired.
-                                let timer = Timer(timeInterval: 0.1, repeats: true) { [self] (_) in
-                                    updateElevation(joystickElevationDelta)
-                                }
-                                elevationTimer = timer
-                                // Add the timer to the main run loop.
-                                RunLoop.main.add(timer, forMode: .default)
-                            }
-                            Button {
-                                updateElevation(1)
-                            } label: {
-                                Image(systemName: "plus")
-                            }
-                        }
-                    }
                 }
-                .onDisappear {
-                    guard !viewModel.isCalibrating else { return }
-                    withAnimation(.easeInOut) {
-                        setBasemapOpacity(0)
-                    }
-                }
-                .frame(idealWidth: UIScreen.main.bounds.width/3)
-                .fractionPresentationDetents(0.25)
-                .padding()
             }
-            .esriBorder()
-            .padding([.horizontal], 10)
-            .padding([.vertical], 10)
+            .onDisappear {
+                guard !viewModel.isCalibrating else { return }
+                withAnimation(.easeInOut) {
+                    setBasemapOpacity(0)
+                }
+            }
+            .overlay(alignment: .topTrailing) {
+                HStack {
+                    Spacer()
+                    Button {
+                        viewModel.isCalibrating = false
+                    } label: {
+                        Text("Done")
+                    }
+                    .frame(alignment: .topTrailing)
+                    
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(.regularMaterial)
         }
         
         /// Sets the basemap base layers with the given opacity.

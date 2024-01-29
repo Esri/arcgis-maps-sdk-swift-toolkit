@@ -45,7 +45,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
     /// The valid accuracy threshold for a location in meters.
     private var validAccuracyThreshold = 0.0
     /// Determines the alignment of the calibration view.
-    private var calibrationViewAlignment: Alignment = .bottomLeading
+    private var calibrationViewAlignment: Alignment = .bottom
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -149,7 +149,18 @@ public struct WorldScaleGeoTrackingSceneView: View {
         }
         .overlay(alignment: calibrationViewAlignment) {
             if !calibrationViewIsHidden {
-                CalibrationView(viewModel: viewModel)
+                if !viewModel.isCalibrating {
+                    Button {
+                        viewModel.isCalibrating = true
+                    } label: {
+                        Text("Calibrate")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(.regularMaterial)
+                } else {
+                    CalibrationView(viewModel: viewModel)
+                }
             }
         }
         .overlay(alignment: .top) {
@@ -264,7 +275,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
     
     /// Sets the alignment of the calibration view.
     /// - Parameter alignment: The alignment for the calibration view.
-    public func calibrationViewAlignemnt(_ alignment: Alignment) -> Self {
+    public func calibrationViewAlignment(_ alignment: Alignment) -> Self {
         var view = self
         view.calibrationViewAlignment = alignment
         return view
