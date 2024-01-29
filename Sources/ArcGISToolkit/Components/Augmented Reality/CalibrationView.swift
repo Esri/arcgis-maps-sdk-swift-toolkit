@@ -123,12 +123,12 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setBasemapOpacity(0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(minWidth: 200, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(minWidth: 250, maxWidth: UIScreen.main.bounds.width/3, alignment: .bottomLeading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.scene.basemap?.loadStatus) { loadStatus in
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.scene.basemap?.baseLayers.forEach( { $0.opacity = 0 ***REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding([.horizontal], 10)
+***REMOVED******REMOVED******REMOVED***.padding([.vertical], 10)
+***REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Sets the basemap base layers with the given opacity.
