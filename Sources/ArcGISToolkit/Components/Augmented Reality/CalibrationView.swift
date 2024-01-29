@@ -37,10 +37,6 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***Double(signOf: elevationSliderValue, magnitudeOf: elevationSliderValue * elevationSliderValue / 100)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(viewModel: ViewModel) {
-***REMOVED******REMOVED******REMOVED***self.viewModel = viewModel
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.isCalibrating = true
