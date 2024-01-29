@@ -44,6 +44,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@State private var currentLocation: Location?
 ***REMOVED******REMOVED***/ The valid accuracy threshold for a location in meters.
 ***REMOVED***private var validAccuracyThreshold = 0.0
+***REMOVED******REMOVED***/ Determines the alignment of the calibration view.
+***REMOVED***private var calibrationViewAlignment: Alignment = .bottomLeading
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -145,7 +147,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
+***REMOVED******REMOVED***.overlay(alignment: calibrationViewAlignment) {
 ***REMOVED******REMOVED******REMOVED***if !calibrationViewIsHidden {
 ***REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(viewModel: viewModel)
 ***REMOVED******REMOVED***
@@ -257,6 +259,14 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***public func calibrationViewHidden(_ hidden: Bool) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.calibrationViewIsHidden = hidden
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the alignment of the calibration view.
+***REMOVED******REMOVED***/ - Parameter alignment: The alignment for the calibration view.
+***REMOVED***public func calibrationViewAlignemnt(_ alignment: Alignment) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.calibrationViewAlignment = alignment
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
