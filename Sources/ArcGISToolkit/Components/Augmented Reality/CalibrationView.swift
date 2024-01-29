@@ -37,10 +37,6 @@ extension WorldScaleGeoTrackingSceneView {
             Double(signOf: elevationSliderValue, magnitudeOf: elevationSliderValue * elevationSliderValue / 100)
         }
         
-        init(viewModel: ViewModel) {
-            self.viewModel = viewModel
-        }
-        
         var body: some View {
             Button {
                 viewModel.isCalibrating = true
