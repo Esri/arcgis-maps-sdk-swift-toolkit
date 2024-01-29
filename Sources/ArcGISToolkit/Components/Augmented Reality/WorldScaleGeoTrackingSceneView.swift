@@ -45,7 +45,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/ The valid accuracy threshold for a location in meters.
 ***REMOVED***private var validAccuracyThreshold = 0.0
 ***REMOVED******REMOVED***/ Determines the alignment of the calibration view.
-***REMOVED***private var calibrationViewAlignment: Alignment = .bottomLeading
+***REMOVED***private var calibrationViewAlignment: Alignment = .bottom
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -149,7 +149,18 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(alignment: calibrationViewAlignment) {
 ***REMOVED******REMOVED******REMOVED***if !calibrationViewIsHidden {
-***REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(viewModel: viewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.isCalibrating {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.isCalibrating = true
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Calibrate")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(viewModel: viewModel)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(alignment: .top) {
@@ -264,7 +275,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the alignment of the calibration view.
 ***REMOVED******REMOVED***/ - Parameter alignment: The alignment for the calibration view.
-***REMOVED***public func calibrationViewAlignemnt(_ alignment: Alignment) -> Self {
+***REMOVED***public func calibrationViewAlignment(_ alignment: Alignment) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.calibrationViewAlignment = alignment
 ***REMOVED******REMOVED***return view
