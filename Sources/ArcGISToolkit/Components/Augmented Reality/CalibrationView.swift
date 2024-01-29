@@ -108,9 +108,7 @@ extension WorldScaleGeoTrackingSceneView {
             }
             .onDisappear {
                 guard !viewModel.isCalibrating else { return }
-                withAnimation(.easeInOut) {
-                    setBasemapOpacity(0)
-                }
+                viewModel.setBasemapOpacity(0)
             }
             .overlay(alignment: .topTrailing) {
                 HStack {
@@ -127,13 +125,6 @@ extension WorldScaleGeoTrackingSceneView {
             .frame(maxWidth: .infinity)
             .padding()
             .background(.regularMaterial)
-        }
-        
-        /// Sets the basemap base layers with the given opacity.
-        /// - Parameter opacity: The opacity of the layer.
-        private func setBasemapOpacity(_ opacity: Float) {
-            guard let basemap = viewModel.scene.basemap else { return }
-            basemap.baseLayers.forEach { $0.opacity = opacity }
         }
         
         /// Updates the heading of the scene view camera controller.

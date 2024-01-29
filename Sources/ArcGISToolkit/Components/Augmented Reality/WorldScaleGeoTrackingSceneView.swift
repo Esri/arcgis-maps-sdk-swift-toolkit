@@ -152,6 +152,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 if !viewModel.isCalibrating {
                     Button {
                         viewModel.isCalibrating = true
+                        viewModel.setBasemapOpacity(0.5)
                     } label: {
                         Text("Calibrate")
                     }
@@ -171,9 +172,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
         }
         .onChange(of: viewModel.scene.basemap?.loadStatus) { loadStatus in
-            withAnimation {
-                viewModel.scene.basemap?.baseLayers.forEach( { $0.opacity = 0 })
-            }
+            guard loadStatus == .loaded else { return }
+            viewModel.setBasemapOpacity(0)
         }
     }
     
@@ -309,6 +309,13 @@ extension WorldScaleGeoTrackingSceneView {
         init(scene: ArcGIS.Scene, cameraController: TransformationMatrixCameraController) {
             self.scene = scene
             self.cameraController = cameraController
+        }
+        
+        /// Sets the basemap base layers with the given opacity.
+        /// - Parameter opacity: The opacity of the layer.
+        func setBasemapOpacity(_ opacity: Float) {
+            guard let basemap = scene.basemap else { return }
+            basemap.baseLayers.forEach { $0.opacity = opacity }
         }
     }
 }
