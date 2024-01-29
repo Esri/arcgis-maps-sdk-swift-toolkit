@@ -35,9 +35,6 @@ struct WorldScaleGeoTrackingExampleView: View {
         return scene
     }()
     
-    /// The basemap opacity.
-    @State private var opacity: Float = 1
-    /// The graphics overlay which shows a graphic around your initial location.
     @State private var graphicsOverlay = GraphicsOverlay()
     /// The location datasource that is used to access the device location.
     @State private var locationDataSource = SystemLocationDataSource()
@@ -54,13 +51,6 @@ struct WorldScaleGeoTrackingExampleView: View {
                         }
                     }
             }
-            // A slider to adjust the basemap opacity.
-            Slider(value: $opacity, in: 0...1)
-                .padding(.horizontal)
-        }
-        .onChange(of: opacity) { opacity in
-            guard let basemap = scene.basemap else { return }
-            basemap.baseLayers.forEach { $0.opacity = opacity }
         }
         .task {
             // Request when-in-use location authorization.
