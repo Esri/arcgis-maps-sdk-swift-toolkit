@@ -126,22 +126,25 @@ extension WorldScaleGeoTrackingSceneView {
                     .frame(alignment: .topTrailing)
                     .padding()
                 }
-                .padding([.trailing], -20)
-                .padding([.top,], -30)
+                .padding(.trailing, -20)
+                .padding(.top, -30)
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .padding([.top], 10)
+            .padding(.top, 10)
             .background(.regularMaterial)
+            .cornerRadius(10)
+            .shadow(radius: 50)
         }
         
         /// Updates the heading of the scene view camera controller.
         /// - Parameter heading: The camera heading.
         private func updateHeading(to heading: Double) {
-            viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.rotatedTo(
+            let originCamera = viewModel.cameraController.originCamera
+            viewModel.cameraController.originCamera = originCamera.rotatedTo(
                 heading: heading,
-                pitch: viewModel.cameraController.originCamera.pitch,
-                roll: viewModel.cameraController.originCamera.roll
+                pitch: originCamera.pitch,
+                roll: originCamera.roll
             )
             viewModel.calibrationHeading = heading
         }
@@ -149,11 +152,12 @@ extension WorldScaleGeoTrackingSceneView {
         /// Rotates the heading of the scene view camera controller by the heading delta in degrees.
         /// - Parameter headingDelta: The heading delta in degrees.
         private func rotateHeading(by headingDelta: Double) {
-            let newHeading = viewModel.cameraController.originCamera.heading + headingDelta
-            viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.rotatedTo(
+            let originCamera = viewModel.cameraController.originCamera
+            let newHeading = originCamera.heading + headingDelta
+            viewModel.cameraController.originCamera = originCamera.rotatedTo(
                 heading: newHeading,
-                pitch: viewModel.cameraController.originCamera.pitch,
-                roll: viewModel.cameraController.originCamera.roll
+                pitch: originCamera.pitch,
+                roll: originCamera.roll
             )
             viewModel.calibrationHeading = newHeading
         }

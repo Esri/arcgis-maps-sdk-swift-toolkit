@@ -159,6 +159,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(.regularMaterial)
+                    .disabled(!initialCameraIsSet)
                 } else {
                     CalibrationView(viewModel: viewModel)
                 }
