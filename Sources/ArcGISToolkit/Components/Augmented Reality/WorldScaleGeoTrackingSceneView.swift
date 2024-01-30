@@ -296,10 +296,10 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED***@MainActor
 ***REMOVED***class ViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***/ The scene.
-***REMOVED******REMOVED***@Published var scene: ArcGIS.Scene
+***REMOVED******REMOVED***let scene: ArcGIS.Scene
 ***REMOVED******REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
-***REMOVED******REMOVED***@Published var cameraController: TransformationMatrixCameraController
-***REMOVED******REMOVED******REMOVED***/ A Boolean value that indicates if the AR experince is being calibrated.
+***REMOVED******REMOVED***let cameraController: TransformationMatrixCameraController
+***REMOVED******REMOVED******REMOVED***/ A Boolean value that indicates if the AR experience is being calibrated.
 ***REMOVED******REMOVED***@Published var isCalibrating = false
 ***REMOVED******REMOVED******REMOVED***/ The calibrated camera heading.
 ***REMOVED******REMOVED***@Published var calibrationHeading: Double?
