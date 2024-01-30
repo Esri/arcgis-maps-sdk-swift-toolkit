@@ -58,6 +58,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/ be effectively viewed in augmented reality. Properties such as the camera controller,
 ***REMOVED******REMOVED***/ and view drawing mode.
 ***REMOVED***public init(
+***REMOVED******REMOVED***trackingType: TrackingType = .geoTracking,
 ***REMOVED******REMOVED***locationDataSource: LocationDataSource = SystemLocationDataSource(),
 ***REMOVED******REMOVED***clippingDistance: Double? = nil,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
@@ -69,12 +70,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if ARGeoTrackingConfiguration.isSupported {
-***REMOVED******REMOVED******REMOVED***configuration = ARGeoTrackingConfiguration()
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
-***REMOVED******REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
-***REMOVED***
+***REMOVED******REMOVED***configuration = trackingType.trackingConfiguration
+***REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_locationDataSource = .init(initialValue: locationDataSource)
 ***REMOVED***
@@ -284,6 +281,20 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***if let currentLocation {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("horizontalAccuracy: \(currentLocation.horizontalAccuracy, format: .number)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("verticalAccuracy: \(currentLocation.verticalAccuracy, format: .number)")
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***public enum TrackingType {
+***REMOVED******REMOVED***case geoTracking
+***REMOVED******REMOVED***case worldTracking
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var trackingConfiguration: ARConfiguration {
+***REMOVED******REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED******REMOVED***case .geoTracking:
+***REMOVED******REMOVED******REMOVED******REMOVED***return ARGeoTrackingConfiguration()
+***REMOVED******REMOVED******REMOVED***case .worldTracking:
+***REMOVED******REMOVED******REMOVED******REMOVED***return ARWorldTrackingConfiguration()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
