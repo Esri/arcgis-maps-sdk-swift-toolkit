@@ -76,7 +76,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Elevation: \(viewModel.calibrationElevation?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Elevation: \(viewModel.calibrationElevation?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number) m")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateElevation(by: -1)
