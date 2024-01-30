@@ -133,14 +133,11 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await locationDataSource.start()
-***REMOVED******REMOVED******REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await location in locationDataSource.locations {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lastLocationTimestamp = location.timestamp
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentLocation = location
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await updateSceneView(for: location)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***for await location in locationDataSource.locations {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lastLocationTimestamp = location.timestamp
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentLocation = location
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateSceneView(for: location)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {***REMOVED***
 ***REMOVED***
