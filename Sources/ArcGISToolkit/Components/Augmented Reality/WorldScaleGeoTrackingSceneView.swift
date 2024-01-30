@@ -148,7 +148,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED*** catch {***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(alignment: calibrationViewAlignment) {
-***REMOVED******REMOVED******REMOVED***if !calibrationViewIsHidden {
+***REMOVED******REMOVED******REMOVED***if configuration is ARWorldTrackingConfiguration,
+***REMOVED******REMOVED******REMOVED***   !calibrationViewIsHidden {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.isCalibrating {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.isCalibrating = true
