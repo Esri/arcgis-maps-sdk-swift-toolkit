@@ -133,7 +133,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***.padding(.top, 10)
 ***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
-***REMOVED******REMOVED******REMOVED***.cornerRadius(10)
+***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 15))
 ***REMOVED******REMOVED******REMOVED***.shadow(radius: 50)
 ***REMOVED***
 ***REMOVED******REMOVED***
