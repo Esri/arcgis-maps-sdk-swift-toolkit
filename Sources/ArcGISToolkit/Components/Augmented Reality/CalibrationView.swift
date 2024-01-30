@@ -129,12 +129,12 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.trailing, -20)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top, -30)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: 300)
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***.padding(.top, 10)
 ***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
 ***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 15))
-***REMOVED******REMOVED******REMOVED***.shadow(radius: 50)
+***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Updates the heading of the scene view camera controller.
