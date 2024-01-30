@@ -133,14 +133,11 @@ public struct WorldScaleGeoTrackingSceneView: View {
         .task {
             do {
                 try await locationDataSource.start()
-                await withTaskGroup(of: Void.self) { group in
-                    group.addTask {
-                        for await location in locationDataSource.locations {
-                            lastLocationTimestamp = location.timestamp
-                            currentLocation = location
-                            await updateSceneView(for: location)
-                        }
-                    }
+                
+                for await location in locationDataSource.locations {
+                    lastLocationTimestamp = location.timestamp
+                    currentLocation = location
+                    updateSceneView(for: location)
                 }
             } catch {}
         }
