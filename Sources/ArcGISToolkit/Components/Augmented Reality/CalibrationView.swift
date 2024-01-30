@@ -129,7 +129,7 @@ extension WorldScaleGeoTrackingSceneView {
                 .padding(.trailing, -20)
                 .padding(.top, -30)
             }
-            .frame(maxWidth: 300)
+            .frame(maxWidth: 350)
             .padding()
             .padding(.top, 10)
             .background(.regularMaterial)
