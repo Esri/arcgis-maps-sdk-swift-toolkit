@@ -101,17 +101,6 @@ extension View {
         modifier(SelectedModifier(isSelected: isSelected))
     }
     
-    /// Returns a new view with fraction presentation detents, if presentation
-    /// detents are supported (iOS 16 and up).
-    func fractionPresentationDetents(_ fraction: CGFloat) -> some View {
-        if #available(iOS 16.0, *) {
-            return self
-                .presentationDetents([.fraction(fraction)])
-        } else {
-            return self
-        }
-    }
-    
     /// Returns a new view with medium presentation detents, if presentation
     /// detents are supported (iOS 16 and up).
     func mediumPresentationDetents() -> some View {
