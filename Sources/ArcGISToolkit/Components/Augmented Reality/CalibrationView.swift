@@ -129,12 +129,12 @@ extension WorldScaleGeoTrackingSceneView {
                 .padding(.trailing, -20)
                 .padding(.top, -30)
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: 300)
             .padding()
             .padding(.top, 10)
             .background(.regularMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 15))
-            .shadow(radius: 50)
+            .padding()
         }
         
         /// Updates the heading of the scene view camera controller.
