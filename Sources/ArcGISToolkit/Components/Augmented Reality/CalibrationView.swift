@@ -129,7 +129,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.trailing, -20)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top, -30)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: 300)
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: 350)
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***.padding(.top, 10)
 ***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
