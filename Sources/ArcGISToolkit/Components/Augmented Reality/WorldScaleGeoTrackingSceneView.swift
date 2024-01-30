@@ -58,6 +58,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
     /// be effectively viewed in augmented reality. Properties such as the camera controller,
     /// and view drawing mode.
     public init(
+        trackingType: TrackingType = .geoTracking,
         locationDataSource: LocationDataSource = SystemLocationDataSource(),
         clippingDistance: Double? = nil,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
@@ -69,12 +70,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
         cameraController.clippingDistance = clippingDistance
         _cameraController = .init(initialValue: cameraController)
         
-        if ARGeoTrackingConfiguration.isSupported {
-            configuration = ARGeoTrackingConfiguration()
-        } else {
-            configuration = ARWorldTrackingConfiguration()
-            configuration.worldAlignment = .gravityAndHeading
-        }
+        configuration = trackingType.trackingConfiguration
+        configuration.worldAlignment = .gravityAndHeading
         
         _locationDataSource = .init(initialValue: locationDataSource)
     }
@@ -284,6 +281,20 @@ public struct WorldScaleGeoTrackingSceneView: View {
             if let currentLocation {
                 Text("horizontalAccuracy: \(currentLocation.horizontalAccuracy, format: .number)")
                 Text("verticalAccuracy: \(currentLocation.verticalAccuracy, format: .number)")
+            }
+        }
+    }
+    
+    public enum TrackingType {
+        case geoTracking
+        case worldTracking
+        
+        var trackingConfiguration: ARConfiguration {
+            switch self {
+            case .geoTracking:
+                return ARGeoTrackingConfiguration()
+            case .worldTracking:
+                return ARWorldTrackingConfiguration()
             }
         }
     }
