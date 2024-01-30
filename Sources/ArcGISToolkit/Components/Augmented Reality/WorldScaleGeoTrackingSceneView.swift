@@ -45,7 +45,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
     /// The current device location.
     @State private var currentLocation: Location?
     /// The valid accuracy threshold for a location in meters.
-    private var validAccuracyThreshold = 0.0
+    private let validAccuracyThreshold = 0.0
     
     /// Creates a world scale scene view.
     /// - Parameters:
