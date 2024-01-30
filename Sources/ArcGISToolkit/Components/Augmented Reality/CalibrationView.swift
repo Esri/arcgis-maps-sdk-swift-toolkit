@@ -126,22 +126,25 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(alignment: .topTrailing)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.trailing], -20)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top,], -30)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.trailing, -20)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top, -30)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED***.padding([.top], 10)
+***REMOVED******REMOVED******REMOVED***.padding(.top, 10)
 ***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
+***REMOVED******REMOVED******REMOVED***.cornerRadius(10)
+***REMOVED******REMOVED******REMOVED***.shadow(radius: 50)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Updates the heading of the scene view camera controller.
 ***REMOVED******REMOVED******REMOVED***/ - Parameter heading: The camera heading.
 ***REMOVED******REMOVED***private func updateHeading(to heading: Double) {
-***REMOVED******REMOVED******REMOVED***viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.rotatedTo(
+***REMOVED******REMOVED******REMOVED***let originCamera = viewModel.cameraController.originCamera
+***REMOVED******REMOVED******REMOVED***viewModel.cameraController.originCamera = originCamera.rotatedTo(
 ***REMOVED******REMOVED******REMOVED******REMOVED***heading: heading,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: viewModel.cameraController.originCamera.pitch,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: viewModel.cameraController.originCamera.roll
+***REMOVED******REMOVED******REMOVED******REMOVED***pitch: originCamera.pitch,
+***REMOVED******REMOVED******REMOVED******REMOVED***roll: originCamera.roll
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***viewModel.calibrationHeading = heading
 ***REMOVED***
@@ -149,11 +152,12 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***/ Rotates the heading of the scene view camera controller by the heading delta in degrees.
 ***REMOVED******REMOVED******REMOVED***/ - Parameter headingDelta: The heading delta in degrees.
 ***REMOVED******REMOVED***private func rotateHeading(by headingDelta: Double) {
-***REMOVED******REMOVED******REMOVED***let newHeading = viewModel.cameraController.originCamera.heading + headingDelta
-***REMOVED******REMOVED******REMOVED***viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.rotatedTo(
+***REMOVED******REMOVED******REMOVED***let originCamera = viewModel.cameraController.originCamera
+***REMOVED******REMOVED******REMOVED***let newHeading = originCamera.heading + headingDelta
+***REMOVED******REMOVED******REMOVED***viewModel.cameraController.originCamera = originCamera.rotatedTo(
 ***REMOVED******REMOVED******REMOVED******REMOVED***heading: newHeading,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: viewModel.cameraController.originCamera.pitch,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: viewModel.cameraController.originCamera.roll
+***REMOVED******REMOVED******REMOVED******REMOVED***pitch: originCamera.pitch,
+***REMOVED******REMOVED******REMOVED******REMOVED***roll: originCamera.roll
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***viewModel.calibrationHeading = newHeading
 ***REMOVED***
