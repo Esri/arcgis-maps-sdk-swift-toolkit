@@ -148,7 +148,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
             } catch {}
         }
         .overlay(alignment: calibrationViewAlignment) {
-            if !calibrationViewIsHidden {
+            if configuration is ARWorldTrackingConfiguration,
+               !calibrationViewIsHidden {
                 if !viewModel.isCalibrating {
                     Button {
                         viewModel.isCalibrating = true
