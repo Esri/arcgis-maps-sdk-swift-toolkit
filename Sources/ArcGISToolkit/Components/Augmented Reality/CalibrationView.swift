@@ -133,7 +133,7 @@ extension WorldScaleGeoTrackingSceneView {
             .padding()
             .padding(.top, 10)
             .background(.regularMaterial)
-            .cornerRadius(10)
+            .clipShape(RoundedRectangle(cornerRadius: 15))
             .shadow(radius: 50)
         }
         
