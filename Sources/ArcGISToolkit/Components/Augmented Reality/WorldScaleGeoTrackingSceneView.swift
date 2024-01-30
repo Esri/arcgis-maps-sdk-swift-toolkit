@@ -21,7 +21,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
     /// The camera controller that will be set on the scene view.
-    @State private var cameraController: TransformationMatrixCameraController
+    private let cameraController: TransformationMatrixCameraController
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
     /// The location datasource that is used to access the device location.
@@ -65,10 +65,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
     ) {
         sceneViewBuilder = sceneView
         
-        let cameraController = TransformationMatrixCameraController()
+        cameraController = TransformationMatrixCameraController()
         cameraController.translationFactor = 1
         cameraController.clippingDistance = clippingDistance
-        _cameraController = .init(initialValue: cameraController)
         
         configuration = trackingType.trackingConfiguration
         configuration.worldAlignment = .gravityAndHeading
