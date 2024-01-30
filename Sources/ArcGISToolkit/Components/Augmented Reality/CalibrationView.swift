@@ -76,7 +76,7 @@ extension WorldScaleGeoTrackingSceneView {
                     }
                 }
                 VStack {
-                    Text("Elevation: \(viewModel.calibrationElevation?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number)")
+                    Text("Elevation: \(viewModel.calibrationElevation?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number) m")
                     HStack {
                         Button {
                             updateElevation(by: -1)
