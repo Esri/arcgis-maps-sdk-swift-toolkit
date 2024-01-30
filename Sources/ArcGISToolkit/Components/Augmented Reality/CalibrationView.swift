@@ -120,14 +120,18 @@ extension WorldScaleGeoTrackingSceneView {
                     Button {
                         viewModel.isCalibrating = false
                     } label: {
-                        Text("Done")
+                        Image(systemName: "xmark.circle")
+                            .imageScale(.large)
                     }
                     .frame(alignment: .topTrailing)
-                    
+                    .padding()
                 }
+                .padding([.trailing], -20)
+                .padding([.top,], -30)
             }
             .frame(maxWidth: .infinity)
             .padding()
+            .padding([.top], 10)
             .background(.regularMaterial)
         }
         
