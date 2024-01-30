@@ -121,7 +121,7 @@ extension WorldScaleGeoTrackingSceneView {
                         viewModel.isCalibrating = false
                     } label: {
                         Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 20))
+                            .font(.title3)
                             .symbolRenderingMode(.hierarchical)
                             .foregroundStyle(.secondary)
                             .imageScale(.large)
