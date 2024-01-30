@@ -101,17 +101,6 @@ extension View {
 ***REMOVED******REMOVED***modifier(SelectedModifier(isSelected: isSelected))
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Returns a new view with fraction presentation detents, if presentation
-***REMOVED******REMOVED***/ detents are supported (iOS 16 and up).
-***REMOVED***func fractionPresentationDetents(_ fraction: CGFloat) -> some View {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***return self
-***REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.fraction(fraction)])
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return self
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Returns a new view with medium presentation detents, if presentation
 ***REMOVED******REMOVED***/ detents are supported (iOS 16 and up).
 ***REMOVED***func mediumPresentationDetents() -> some View {
