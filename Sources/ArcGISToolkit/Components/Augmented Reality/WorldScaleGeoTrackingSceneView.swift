@@ -203,7 +203,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns a Boolean value indicating if the camera should be updated for a location
-***REMOVED******REMOVED***/ coming in from the location datasource.
+***REMOVED******REMOVED***/ coming in from the location datasource based on current camera deviation.
 ***REMOVED******REMOVED***/ - Parameter location: The location datasource location.
 ***REMOVED******REMOVED***/ - Returns: A Boolean value indicating if the camera should be updated.
 ***REMOVED***func shouldUpdateCamera(for location: Location) -> Bool {
@@ -212,7 +212,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***  let spatialReference = currentCamera.location.spatialReference,
 ***REMOVED******REMOVED******REMOVED***  ***REMOVED*** Project point from the location datasource spatial reference
 ***REMOVED******REMOVED******REMOVED***  ***REMOVED*** to the scene view spatial reference.
-***REMOVED******REMOVED******REMOVED******REMOVED***let currentPosition = GeometryEngine.project(location.position, into: spatialReference)
+***REMOVED******REMOVED******REMOVED***  let currentPosition = GeometryEngine.project(location.position, into: spatialReference)
 ***REMOVED******REMOVED***else { return false ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Measure the distance between the location datasource's reported location
