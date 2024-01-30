@@ -44,9 +44,10 @@ extension WorldScaleGeoTrackingSceneView {
                 HStack {
                     Button {
                         let heading = viewModel.cameraController.originCamera.heading - 1
-                        updateHeading(heading)
+                        updateHeading(to: heading)
                     } label: {
                         Image(systemName: "minus")
+                            .imageScale(.large)
                     }
                     Slider(value: $headingSliderValue, in: -10...10) { editingChanged in
                         if !editingChanged {
@@ -58,8 +59,8 @@ extension WorldScaleGeoTrackingSceneView {
                     .onChange(of: headingSliderValue) { heading in
                         guard headingTimer == nil else { return }
                         // Create a timer which rotates the camera when fired.
-                        let timer = Timer(timeInterval: 0.1, repeats: true) { [self] (_) in
-                            rotateHeading(joystickHeadingDelta)
+                        let timer = Timer(timeInterval: 0.1, repeats: true) { _ in
+                            rotateHeading(by: joystickHeadingDelta)
                         }
                         headingTimer = timer
                         // Add the timer to the main run loop.
@@ -68,18 +69,20 @@ extension WorldScaleGeoTrackingSceneView {
                     
                     Button {
                         let heading = viewModel.cameraController.originCamera.heading + 1
-                        updateHeading(heading)
+                        updateHeading(to: heading)
                     } label: {
                         Image(systemName: "plus")
+                            .imageScale(.large)
                     }
                 }
                 VStack {
                     Text("Elevation: \(viewModel.calibrationElevation?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number)")
                     HStack {
                         Button {
-                            updateElevation(-1)
+                            updateElevation(by: -1)
                         } label: {
                             Image(systemName: "minus")
+                                .imageScale(.large)
                         }
                         Slider(value: $elevationSliderValue, in: -20...20) { editingChanged in
                             if !editingChanged {
@@ -91,17 +94,18 @@ extension WorldScaleGeoTrackingSceneView {
                         .onChange(of: elevationSliderValue) { elevation in
                             guard elevationTimer == nil else { return }
                             // Create a timer which rotates the camera when fired.
-                            let timer = Timer(timeInterval: 0.1, repeats: true) { [self] (_) in
-                                updateElevation(joystickElevationDelta)
+                            let timer = Timer(timeInterval: 0.1, repeats: true) { _ in
+                                updateElevation(by: joystickElevationDelta)
                             }
                             elevationTimer = timer
                             // Add the timer to the main run loop.
                             RunLoop.main.add(timer, forMode: .default)
                         }
                         Button {
-                            updateElevation(1)
+                            updateElevation(by: 1)
                         } label: {
                             Image(systemName: "plus")
+                                .imageScale(.large)
                         }
                     }
                 }
@@ -129,7 +133,7 @@ extension WorldScaleGeoTrackingSceneView {
         
         /// Updates the heading of the scene view camera controller.
         /// - Parameter heading: The camera heading.
-        private func updateHeading(_ heading: Double) {
+        private func updateHeading(to heading: Double) {
             viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.rotatedTo(
                 heading: heading,
                 pitch: viewModel.cameraController.originCamera.pitch,
@@ -140,7 +144,7 @@ extension WorldScaleGeoTrackingSceneView {
         
         /// Rotates the heading of the scene view camera controller by the heading delta in degrees.
         /// - Parameter headingDelta: The heading delta in degrees.
-        private func rotateHeading(_ headingDelta: Double) {
+        private func rotateHeading(by headingDelta: Double) {
             let newHeading = viewModel.cameraController.originCamera.heading + headingDelta
             viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.rotatedTo(
                 heading: newHeading,
@@ -152,7 +156,7 @@ extension WorldScaleGeoTrackingSceneView {
         
         /// Elevates the scene view camera controller by the elevation delta.
         /// - Parameter elevationDelta: The elevation delta.
-        private func updateElevation(_ elevationDelta: Double) {
+        private func updateElevation(by elevationDelta: Double) {
             viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.elevated(by: elevationDelta)
             if let elevation = viewModel.cameraController.originCamera.location.z {
                 viewModel.calibrationElevation = elevation
