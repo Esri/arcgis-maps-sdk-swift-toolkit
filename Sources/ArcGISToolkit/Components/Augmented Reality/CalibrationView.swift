@@ -108,15 +108,12 @@ extension WorldScaleGeoTrackingSceneView {
                     }
                 }
             }
-            .onDisappear {
-                guard !viewModel.isCalibrating else { return }
-                viewModel.setBasemapOpacity(0)
-            }
             .overlay(alignment: .topTrailing) {
                 HStack {
                     Spacer()
                     Button {
                         viewModel.isCalibrating = false
+                        viewModel.setBasemapOpacity(0)
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.title3)
