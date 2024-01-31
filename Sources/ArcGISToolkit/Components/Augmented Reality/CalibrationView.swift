@@ -43,8 +43,7 @@ extension WorldScaleGeoTrackingSceneView {
                 
                 HStack {
                     Button {
-                        let heading = viewModel.cameraController.originCamera.heading - 1
-                        updateHeading(to: heading)
+                        rotateHeading(by: -1)
                     } label: {
                         Image(systemName: "minus")
                             .imageScale(.large)
@@ -68,8 +67,7 @@ extension WorldScaleGeoTrackingSceneView {
                     }
                     
                     Button {
-                        let heading = viewModel.cameraController.originCamera.heading + 1
-                        updateHeading(to: heading)
+                        rotateHeading(by: 1)
                     } label: {
                         Image(systemName: "plus")
                             .imageScale(.large)
@@ -139,18 +137,6 @@ extension WorldScaleGeoTrackingSceneView {
             .background(.regularMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 15))
             .padding()
-        }
-        
-        /// Updates the heading of the scene view camera controller.
-        /// - Parameter heading: The camera heading.
-        private func updateHeading(to heading: Double) {
-            let originCamera = viewModel.cameraController.originCamera
-            viewModel.cameraController.originCamera = originCamera.rotatedTo(
-                heading: heading,
-                pitch: originCamera.pitch,
-                roll: originCamera.roll
-            )
-            viewModel.calibrationHeading = heading
         }
         
         /// Rotates the heading of the scene view camera controller by the heading delta in degrees.
