@@ -39,38 +39,40 @@ extension WorldScaleGeoTrackingSceneView {
         
         var body: some View {
             VStack {
-                Text("Heading: \(viewModel.calibrationHeading?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
-                
-                HStack {
-                    Button {
-                        rotateHeading(by: -1)
-                    } label: {
-                        Image(systemName: "minus")
-                            .imageScale(.large)
-                    }
-                    Slider(value: $headingSliderValue, in: -10...10) { editingChanged in
-                        if !editingChanged {
-                            headingTimer?.invalidate()
-                            headingTimer = nil
-                            headingSliderValue = 0.0
-                        }
-                    }
-                    .onChange(of: headingSliderValue) { heading in
-                        guard headingTimer == nil else { return }
-                        // Create a timer which rotates the camera when fired.
-                        let timer = Timer(timeInterval: 0.1, repeats: true) { _ in
-                            rotateHeading(by: joystickHeadingDelta)
-                        }
-                        headingTimer = timer
-                        // Add the timer to the main run loop.
-                        RunLoop.main.add(timer, forMode: .default)
-                    }
+                VStack {
+                    Text("Heading: \(viewModel.calibrationHeading?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
                     
-                    Button {
-                        rotateHeading(by: 1)
-                    } label: {
-                        Image(systemName: "plus")
-                            .imageScale(.large)
+                    HStack {
+                        Button {
+                            rotateHeading(by: -1)
+                        } label: {
+                            Image(systemName: "minus")
+                                .imageScale(.large)
+                        }
+                        Slider(value: $headingSliderValue, in: -10...10) { editingChanged in
+                            if !editingChanged {
+                                headingTimer?.invalidate()
+                                headingTimer = nil
+                                headingSliderValue = 0.0
+                            }
+                        }
+                        .onChange(of: headingSliderValue) { heading in
+                            guard headingTimer == nil else { return }
+                            // Create a timer which rotates the camera when fired.
+                            let timer = Timer(timeInterval: 0.1, repeats: true) { _ in
+                                rotateHeading(by: joystickHeadingDelta)
+                            }
+                            headingTimer = timer
+                            // Add the timer to the main run loop.
+                            RunLoop.main.add(timer, forMode: .default)
+                        }
+                        
+                        Button {
+                            rotateHeading(by: 1)
+                        } label: {
+                            Image(systemName: "plus")
+                                .imageScale(.large)
+                        }
                     }
                 }
                 VStack {
@@ -109,28 +111,23 @@ extension WorldScaleGeoTrackingSceneView {
                 }
             }
             .overlay(alignment: .topTrailing) {
-                HStack {
-                    Spacer()
-                    Button {
+                Button {
+                    viewModel.setBasemapOpacity(0)
+                    withAnimation {
                         viewModel.isCalibrating = false
-                        viewModel.setBasemapOpacity(0)
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title3)
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(.secondary)
-                            .imageScale(.large)
                     }
-                    .buttonStyle(.plain)
-                    .frame(alignment: .topTrailing)
-                    .padding()
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.title3)
+                        .symbolRenderingMode(.hierarchical)
+                        .foregroundStyle(.secondary)
+                        .imageScale(.large)
                 }
-                .padding(.trailing, -20)
-                .padding(.top, -30)
+                .buttonStyle(.plain)
+                .padding([.top, .trailing], -5)
             }
             .frame(maxWidth: 350)
             .padding()
-            .padding(.top, 10)
             .background(.regularMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 15))
             .padding()
