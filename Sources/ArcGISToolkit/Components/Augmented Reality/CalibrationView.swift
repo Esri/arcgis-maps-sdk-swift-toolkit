@@ -43,8 +43,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let heading = viewModel.cameraController.originCamera.heading - 1
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(to: heading)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***rotateHeading(by: -1)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "minus")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
@@ -68,8 +67,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let heading = viewModel.cameraController.originCamera.heading + 1
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(to: heading)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***rotateHeading(by: 1)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "plus")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
@@ -139,18 +137,6 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
 ***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 15))
 ***REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Updates the heading of the scene view camera controller.
-***REMOVED******REMOVED******REMOVED***/ - Parameter heading: The camera heading.
-***REMOVED******REMOVED***private func updateHeading(to heading: Double) {
-***REMOVED******REMOVED******REMOVED***let originCamera = viewModel.cameraController.originCamera
-***REMOVED******REMOVED******REMOVED***viewModel.cameraController.originCamera = originCamera.rotatedTo(
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: heading,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: originCamera.pitch,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: originCamera.roll
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***viewModel.calibrationHeading = heading
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Rotates the heading of the scene view camera controller by the heading delta in degrees.
