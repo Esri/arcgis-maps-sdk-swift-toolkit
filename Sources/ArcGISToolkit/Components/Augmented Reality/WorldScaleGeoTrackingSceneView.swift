@@ -152,8 +152,10 @@ public struct WorldScaleGeoTrackingSceneView: View {
                !calibrationViewIsHidden {
                 if !viewModel.isCalibrating {
                     Button {
-                        viewModel.isCalibrating = true
                         viewModel.setBasemapOpacity(0.5)
+                        withAnimation {
+                            viewModel.isCalibrating = true
+                        }
                     } label: {
                         Text("Calibrate")
                     }
