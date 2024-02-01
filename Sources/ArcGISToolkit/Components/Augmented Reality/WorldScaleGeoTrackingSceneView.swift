@@ -325,7 +325,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***case .geoTracking:
 ***REMOVED******REMOVED******REMOVED******REMOVED***return geoTrackingConfiguration
 ***REMOVED******REMOVED******REMOVED***case .worldTracking:
-***REMOVED******REMOVED******REMOVED******REMOVED***return ARWorldTrackingConfiguration()
+***REMOVED******REMOVED******REMOVED******REMOVED***return worldTrackingConfiguration
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
