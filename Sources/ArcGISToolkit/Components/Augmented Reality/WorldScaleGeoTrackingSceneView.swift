@@ -325,7 +325,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
             case .geoTracking:
                 return geoTrackingConfiguration
             case .worldTracking:
-                return ARWorldTrackingConfiguration()
+                return worldTrackingConfiguration
             }
         }
     }
