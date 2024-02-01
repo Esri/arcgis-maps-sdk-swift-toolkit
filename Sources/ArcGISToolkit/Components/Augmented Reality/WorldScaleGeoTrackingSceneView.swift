@@ -239,6 +239,12 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Reset the AR session to provide the best tracking performance.
 ***REMOVED******REMOVED***arViewProxy.session.run(configuration, options: .resetTracking)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** If initial camera is not set, then we set it the flag here to true
+***REMOVED******REMOVED******REMOVED*** and set the status text to empty.
+***REMOVED******REMOVED***if !initialCameraIsSet {
+***REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns a Boolean value indicating if the camera should be updated for a location
