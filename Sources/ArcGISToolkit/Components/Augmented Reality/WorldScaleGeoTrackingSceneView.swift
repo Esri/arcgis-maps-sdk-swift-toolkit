@@ -239,6 +239,12 @@ public struct WorldScaleGeoTrackingSceneView: View {
         
         // Reset the AR session to provide the best tracking performance.
         arViewProxy.session.run(configuration, options: .resetTracking)
+        
+        // If initial camera is not set, then we set it the flag here to true
+        // and set the status text to empty.
+        if !initialCameraIsSet {
+            initialCameraIsSet = true
+        }
     }
     
     /// Returns a Boolean value indicating if the camera should be updated for a location
