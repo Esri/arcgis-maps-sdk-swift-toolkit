@@ -173,7 +173,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***for await location in locationDataSource.locations {
 ***REMOVED******REMOVED******REMOVED******REMOVED***lastLocationTimestamp = location.timestamp
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentLocation = location
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateSceneView(for: location)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Call the method to check if world tracking session needs to be updated.
+***REMOVED******REMOVED******REMOVED******REMOVED***updateWorldTrackingSceneView(for: location)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
