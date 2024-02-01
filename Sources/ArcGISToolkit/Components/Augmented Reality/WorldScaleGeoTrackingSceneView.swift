@@ -173,7 +173,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
             for await location in locationDataSource.locations {
                 lastLocationTimestamp = location.timestamp
                 currentLocation = location
-//                    updateSceneView(for: location)
+                // Call the method to check if world tracking session needs to be updated.
+                updateWorldTrackingSceneView(for: location)
             }
         }
         .task {
