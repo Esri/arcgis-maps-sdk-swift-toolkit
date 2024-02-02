@@ -107,7 +107,6 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***@ViewBuilder
 ***REMOVED******REMOVED***var dismissButton: some View {
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setBasemapOpacity(0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.isCalibrating = false
 ***REMOVED******REMOVED******REMOVED***
