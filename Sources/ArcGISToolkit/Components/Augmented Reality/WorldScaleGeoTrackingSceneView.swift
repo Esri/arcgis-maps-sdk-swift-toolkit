@@ -52,7 +52,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
     ///   - locationDataSource: The location datasource used to acquire the device's location.
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
     ///   of `nil` means that no data will be clipped.
-    ///   - scene: The scene used in the scene view.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     /// - Remark: The provided scene view will have certain properties overridden in order to
@@ -61,7 +60,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
     public init(
         locationDataSource: LocationDataSource = SystemLocationDataSource(),
         clippingDistance: Double? = nil,
-        scene: ArcGIS.Scene,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         sceneViewBuilder = sceneView
@@ -79,7 +77,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
         
         _locationDataSource = .init(initialValue: locationDataSource)
         
-        _viewModel = StateObject(wrappedValue: ViewModel(scene: scene, cameraController: cameraController))
+        _viewModel = StateObject(wrappedValue: ViewModel(cameraController: cameraController))
     }
     
     public var body: some View {
@@ -153,7 +151,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 if !viewModel.isCalibrating {
                     VStack {
                         Button {
-                            viewModel.setBasemapOpacity(0.5)
                             withAnimation {
                                 viewModel.isCalibrating = true
                             }
@@ -177,12 +174,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(8)
                 .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
-        }
-        .onChange(of: viewModel.scene.basemap?.loadStatus) { loadStatus in
-            guard loadStatus == .loaded else { return }
-            // Hide basemap baselayers once basemap is loaded
-            // so camera feed is visible.
-            viewModel.setBasemapOpacity(0)
         }
     }
     
@@ -304,8 +295,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 extension WorldScaleGeoTrackingSceneView {
     @MainActor
     class ViewModel: ObservableObject {
-        /// The scene.
-        let scene: ArcGIS.Scene
         /// The camera controller that will be set on the scene view.
         let cameraController: TransformationMatrixCameraController
         /// A Boolean value that indicates if the AR experience is being calibrated.
@@ -315,16 +304,8 @@ extension WorldScaleGeoTrackingSceneView {
         /// The calibrated camera elevation.
         @Published var calibrationElevation: Double?
         
-        init(scene: ArcGIS.Scene, cameraController: TransformationMatrixCameraController) {
-            self.scene = scene
+        init(cameraController: TransformationMatrixCameraController) {
             self.cameraController = cameraController
-        }
-        
-        /// Sets the basemap base layers with the given opacity.
-        /// - Parameter opacity: The opacity of the layer.
-        func setBasemapOpacity(_ opacity: Float) {
-            guard let basemap = scene.basemap else { return }
-            basemap.baseLayers.forEach { $0.opacity = opacity }
         }
     }
 }
