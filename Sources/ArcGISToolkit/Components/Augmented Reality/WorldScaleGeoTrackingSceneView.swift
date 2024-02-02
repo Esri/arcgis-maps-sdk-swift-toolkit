@@ -178,6 +178,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: viewModel.scene.basemap?.loadStatus) { loadStatus in
 ***REMOVED******REMOVED******REMOVED***guard loadStatus == .loaded else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Hide basemap baselayers once basemap is loaded
+***REMOVED******REMOVED******REMOVED******REMOVED*** so camera feed is visible.
 ***REMOVED******REMOVED******REMOVED***viewModel.setBasemapOpacity(0)
 ***REMOVED***
 ***REMOVED***
