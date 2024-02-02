@@ -73,7 +73,7 @@ extension WorldScaleGeoTrackingSceneView {
                     }
                 }
                 JoystickSliderView()
-                    .onSliderValueChanged { delta in
+                    .onSliderDeltaValueChanged { delta in
                         rotateHeading(by: delta)
                     }
             }
@@ -100,7 +100,7 @@ extension WorldScaleGeoTrackingSceneView {
                     }
                 }
                 JoystickSliderView()
-                    .onSliderValueChanged { delta in
+                    .onSliderDeltaValueChanged { delta in
                         updateElevation(by: delta)
                     }
             }
@@ -156,8 +156,8 @@ struct JoystickSliderView: View {
     private var joystickDelta: Double {
         Double(signOf: value, magnitudeOf: value * value / 25)
     }
-    /// User defined action to be performed when the slider value changes.
-    var sliderValueChangedAction: ((Double) -> Void)? = nil
+    /// User defined action to be performed when the slider delta value changes.
+    var sliderDeltaValueChangedAction: ((Double) -> Void)? = nil
     
     var body: some View {
         Slider(value: $value, in: -10...10) { editingChanged in
@@ -169,12 +169,11 @@ struct JoystickSliderView: View {
         }
         .onChange(of: value) { value in
             guard timer == nil else { return }
-            // Create a timer which rotates the camera when fired.
+            // Start a timer when slider is active.
             let timer = Timer(timeInterval: 0.1, repeats: true) { _ in
-                if let onSliderValueChanged = sliderValueChangedAction {
-                    // Returns the joystick slider delta value
-                    // when the slider value changes.
-                    onSliderValueChanged(joystickDelta)
+                if let onSliderDeltaValueChanged = sliderDeltaValueChangedAction {
+                    // Returns the joystick slider delta value.
+                    onSliderDeltaValueChanged(joystickDelta)
                 }
             }
             self.timer = timer
@@ -183,13 +182,13 @@ struct JoystickSliderView: View {
         }
     }
     
-    /// Sets an action to perform when the slider value changes.
-    /// - Parameter action: The action to perform when the slider value has changed.
-    public func onSliderValueChanged(
+    /// Sets an action to perform when the slider delta value changes.
+    /// - Parameter action: The action to perform when the slider delta value has changed.
+    public func onSliderDeltaValueChanged(
         perform action: @escaping (Double) -> Void
     ) -> JoystickSliderView {
         var copy = self
-        copy.sliderValueChangedAction = action
+        copy.sliderDeltaValueChangedAction = action
         return copy
     }
 }
