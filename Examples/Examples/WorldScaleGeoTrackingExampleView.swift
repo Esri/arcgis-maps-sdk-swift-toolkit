@@ -54,6 +54,7 @@ struct WorldScaleGeoTrackingExampleView: View {
                         }
                     }
             }
+            .calibrationViewAlignment(.bottomLeading)
             // A slider to adjust the basemap opacity.
             Slider(value: $opacity, in: 0...1)
                 .padding(.horizontal)
