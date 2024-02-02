@@ -178,6 +178,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
         }
         .onChange(of: viewModel.scene.basemap?.loadStatus) { loadStatus in
             guard loadStatus == .loaded else { return }
+            // Hide basemap baselayers once basemap is loaded
+            // so camera feed is visible.
             viewModel.setBasemapOpacity(0)
         }
     }
