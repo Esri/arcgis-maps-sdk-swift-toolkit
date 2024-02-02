@@ -73,7 +73,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***JoystickSliderView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSliderValueChanged { delta in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSliderDeltaValueChanged { delta in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***rotateHeading(by: delta)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -100,7 +100,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***JoystickSliderView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSliderValueChanged { delta in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSliderDeltaValueChanged { delta in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateElevation(by: delta)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -156,8 +156,8 @@ struct JoystickSliderView: View {
 ***REMOVED***private var joystickDelta: Double {
 ***REMOVED******REMOVED***Double(signOf: value, magnitudeOf: value * value / 25)
 ***REMOVED***
-***REMOVED******REMOVED***/ User defined action to be performed when the slider value changes.
-***REMOVED***var sliderValueChangedAction: ((Double) -> Void)? = nil
+***REMOVED******REMOVED***/ User defined action to be performed when the slider delta value changes.
+***REMOVED***var sliderDeltaValueChangedAction: ((Double) -> Void)? = nil
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Slider(value: $value, in: -10...10) { editingChanged in
@@ -169,12 +169,11 @@ struct JoystickSliderView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: value) { value in
 ***REMOVED******REMOVED******REMOVED***guard timer == nil else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Create a timer which rotates the camera when fired.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Start a timer when slider is active.
 ***REMOVED******REMOVED******REMOVED***let timer = Timer(timeInterval: 0.1, repeats: true) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let onSliderValueChanged = sliderValueChangedAction {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Returns the joystick slider delta value
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** when the slider value changes.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onSliderValueChanged(joystickDelta)
+***REMOVED******REMOVED******REMOVED******REMOVED***if let onSliderDeltaValueChanged = sliderDeltaValueChangedAction {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Returns the joystick slider delta value.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onSliderDeltaValueChanged(joystickDelta)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.timer = timer
@@ -183,13 +182,13 @@ struct JoystickSliderView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets an action to perform when the slider value changes.
-***REMOVED******REMOVED***/ - Parameter action: The action to perform when the slider value has changed.
-***REMOVED***public func onSliderValueChanged(
+***REMOVED******REMOVED***/ Sets an action to perform when the slider delta value changes.
+***REMOVED******REMOVED***/ - Parameter action: The action to perform when the slider delta value has changed.
+***REMOVED***public func onSliderDeltaValueChanged(
 ***REMOVED******REMOVED***perform action: @escaping (Double) -> Void
 ***REMOVED***) -> JoystickSliderView {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.sliderValueChangedAction = action
+***REMOVED******REMOVED***copy.sliderDeltaValueChangedAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
