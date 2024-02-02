@@ -62,7 +62,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((viewModel.calibrationHeading ?? viewModel.cameraController.originCamera.heading).formatted(.number.noFractionalDigits))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((viewModel.calibrationHeading ?? viewModel.cameraController.originCamera.heading), format: .number.precision(.fractionLength(0)))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
@@ -88,7 +88,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((viewModel.calibrationElevation ?? viewModel.cameraController.originCamera.location.z ?? 0).formatted(.number.noFractionalDigits))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((viewModel.calibrationElevation ?? viewModel.cameraController.originCamera.location.z ?? 0), format: .number.precision(.fractionLength(0)))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
@@ -107,7 +107,6 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***@ViewBuilder
 ***REMOVED******REMOVED***var dismissButton: some View {
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setBasemapOpacity(0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.isCalibrating = false
 ***REMOVED******REMOVED******REMOVED***
@@ -190,11 +189,5 @@ struct JoystickSliderView: View {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.sliderValueChangedAction = action
 ***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
-
-private extension FloatingPointFormatStyle {
-***REMOVED***var noFractionalDigits: FloatingPointFormatStyle<Value> {
-***REMOVED******REMOVED***precision(.fractionLength(0...0))
 ***REMOVED***
 ***REMOVED***

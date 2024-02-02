@@ -52,7 +52,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/   - locationDataSource: The location datasource used to acquire the device's location.
 ***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera. A value
 ***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
-***REMOVED******REMOVED***/   - scene: The scene used in the scene view.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
 ***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
@@ -61,7 +60,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***public init(
 ***REMOVED******REMOVED***locationDataSource: LocationDataSource = SystemLocationDataSource(),
 ***REMOVED******REMOVED***clippingDistance: Double? = nil,
-***REMOVED******REMOVED***scene: ArcGIS.Scene,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***sceneViewBuilder = sceneView
@@ -79,7 +77,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_locationDataSource = .init(initialValue: locationDataSource)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: ViewModel(scene: scene, cameraController: cameraController))
+***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: ViewModel(cameraController: cameraController))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -153,7 +151,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.isCalibrating {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setBasemapOpacity(0.5)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.isCalibrating = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -177,12 +174,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewModel.scene.basemap?.loadStatus) { loadStatus in
-***REMOVED******REMOVED******REMOVED***guard loadStatus == .loaded else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Hide basemap baselayers once basemap is loaded
-***REMOVED******REMOVED******REMOVED******REMOVED*** so camera feed is visible.
-***REMOVED******REMOVED******REMOVED***viewModel.setBasemapOpacity(0)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -304,8 +295,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 extension WorldScaleGeoTrackingSceneView {
 ***REMOVED***@MainActor
 ***REMOVED***class ViewModel: ObservableObject {
-***REMOVED******REMOVED******REMOVED***/ The scene.
-***REMOVED******REMOVED***let scene: ArcGIS.Scene
 ***REMOVED******REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
 ***REMOVED******REMOVED***let cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value that indicates if the AR experience is being calibrated.
@@ -315,16 +304,8 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***/ The calibrated camera elevation.
 ***REMOVED******REMOVED***@Published var calibrationElevation: Double?
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(scene: ArcGIS.Scene, cameraController: TransformationMatrixCameraController) {
-***REMOVED******REMOVED******REMOVED***self.scene = scene
+***REMOVED******REMOVED***init(cameraController: TransformationMatrixCameraController) {
 ***REMOVED******REMOVED******REMOVED***self.cameraController = cameraController
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Sets the basemap base layers with the given opacity.
-***REMOVED******REMOVED******REMOVED***/ - Parameter opacity: The opacity of the layer.
-***REMOVED******REMOVED***func setBasemapOpacity(_ opacity: Float) {
-***REMOVED******REMOVED******REMOVED***guard let basemap = scene.basemap else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***basemap.baseLayers.forEach { $0.opacity = opacity ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
