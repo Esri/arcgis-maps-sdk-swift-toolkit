@@ -51,6 +51,8 @@ struct WorldScaleGeoTrackingExampleView: View {
                         }
                     }
             }
+            .calibrationViewHidden(false)
+            .calibrationViewAlignment(.bottomLeading)
         }
         .task {
             // Request when-in-use location authorization.
