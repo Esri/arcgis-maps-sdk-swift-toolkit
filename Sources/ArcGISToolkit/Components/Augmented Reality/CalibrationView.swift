@@ -62,7 +62,7 @@ extension WorldScaleGeoTrackingSceneView {
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text((viewModel.calibrationHeading ?? viewModel.cameraController.originCamera.heading).formatted(.number.noFractionalDigits))
+                            Text((viewModel.calibrationHeading ?? viewModel.cameraController.originCamera.heading), format: .number.precision(.fractionLength(0)))
                             Spacer()
                         }
                     } onIncrement: {
@@ -88,7 +88,7 @@ extension WorldScaleGeoTrackingSceneView {
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text((viewModel.calibrationElevation ?? viewModel.cameraController.originCamera.location.z ?? 0).formatted(.number.noFractionalDigits))
+                            Text((viewModel.calibrationElevation ?? viewModel.cameraController.originCamera.location.z ?? 0), format: .number.precision(.fractionLength(0)))
                             Spacer()
                         }
                     } onIncrement: {
@@ -107,7 +107,6 @@ extension WorldScaleGeoTrackingSceneView {
         @ViewBuilder
         var dismissButton: some View {
             Button {
-                viewModel.setBasemapOpacity(0)
                 withAnimation {
                     viewModel.isCalibrating = false
                 }
@@ -190,11 +189,5 @@ struct JoystickSliderView: View {
         var copy = self
         copy.sliderValueChangedAction = action
         return copy
-    }
-}
-
-private extension FloatingPointFormatStyle {
-    var noFractionalDigits: FloatingPointFormatStyle<Value> {
-        precision(.fractionLength(0...0))
     }
 }
