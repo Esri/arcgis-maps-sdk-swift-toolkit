@@ -19,118 +19,106 @@ import ArcGIS
 extension WorldScaleGeoTrackingSceneView {
     /// A view that allows the user to calibrate the heading of the scene view camera controller.
     struct CalibrationView: View {
+        /// The view model for the calibration view.
         @ObservedObject var viewModel: ViewModel
-        /// The slider value for the camera heading.
-        @State private var headingSliderValue = 0.0
-        /// The slider value for the camera elevation.
-        @State private var elevationSliderValue = 0.0
-        /// The elevation timer for the "joystick" behavior.
-        @State private var headingTimer: Timer?
-        /// The heading timer for the "joystick" behavior.
-        @State private var elevationTimer: Timer?
-        /// The heading delta amount based on the heading slider value.
-        private var joystickHeadingDelta: Double {
-            Double(signOf: headingSliderValue, magnitudeOf: headingSliderValue * headingSliderValue / 25)
-        }
-        /// The elevation delta amount based on the elevation slider value.
-        private var joystickElevationDelta: Double {
-            Double(signOf: elevationSliderValue, magnitudeOf: elevationSliderValue * elevationSliderValue / 100)
-        }
+        /// The scene camera controller heading.
+        @State private var heading: Double = 0
+        /// The scene camera controller elevation.
+        @State private var elevation: Double = 0
         
         var body: some View {
             VStack {
-                VStack {
-                    Text("Heading: \(viewModel.calibrationHeading?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
-                    
-                    HStack {
-                        Button {
-                            rotateHeading(by: -1)
-                        } label: {
-                            Image(systemName: "minus")
-                                .imageScale(.large)
-                        }
-                        Slider(value: $headingSliderValue, in: -10...10) { editingChanged in
-                            if !editingChanged {
-                                headingTimer?.invalidate()
-                                headingTimer = nil
-                                headingSliderValue = 0.0
-                            }
-                        }
-                        .onChange(of: headingSliderValue) { heading in
-                            guard headingTimer == nil else { return }
-                            // Create a timer which rotates the camera when fired.
-                            let timer = Timer(timeInterval: 0.1, repeats: true) { _ in
-                                rotateHeading(by: joystickHeadingDelta)
-                            }
-                            headingTimer = timer
-                            // Add the timer to the main run loop.
-                            RunLoop.main.add(timer, forMode: .default)
-                        }
-                        
-                        Button {
-                            rotateHeading(by: 1)
-                        } label: {
-                            Image(systemName: "plus")
-                                .imageScale(.large)
-                        }
-                    }
+                HStack(alignment: .firstTextBaseline) {
+                    Text("Calibration")
+                        .font(.title)
+                        .lineLimit(1)
+                    Spacer()
+                    dismissButton
+                        .layoutPriority(1)
                 }
-                VStack {
-                    Text("Elevation: \(viewModel.calibrationElevation?.rounded(.towardZero) ?? viewModel.cameraController.originCamera.location.z?.rounded(.towardZero) ?? 0, format: .number) m")
-                    HStack {
-                        Button {
-                            updateElevation(by: -1)
-                        } label: {
-                            Image(systemName: "minus")
-                                .imageScale(.large)
-                        }
-                        Slider(value: $elevationSliderValue, in: -20...20) { editingChanged in
-                            if !editingChanged {
-                                elevationTimer?.invalidate()
-                                elevationTimer = nil
-                                elevationSliderValue = 0.0
-                            }
-                        }
-                        .onChange(of: elevationSliderValue) { elevation in
-                            guard elevationTimer == nil else { return }
-                            // Create a timer which rotates the camera when fired.
-                            let timer = Timer(timeInterval: 0.1, repeats: true) { _ in
-                                updateElevation(by: joystickElevationDelta)
-                            }
-                            elevationTimer = timer
-                            // Add the timer to the main run loop.
-                            RunLoop.main.add(timer, forMode: .default)
-                        }
-                        Button {
-                            updateElevation(by: 1)
-                        } label: {
-                            Image(systemName: "plus")
-                                .imageScale(.large)
-                        }
-                    }
-                }
+                .padding(.bottom)
+                headingSlider
+                Divider()
+                elevationSlider
             }
-            .overlay(alignment: .topTrailing) {
-                Button {
-                    viewModel.setBasemapOpacity(0)
-                    withAnimation {
-                        viewModel.isCalibrating = false
-                    }
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.title3)
-                        .symbolRenderingMode(.hierarchical)
-                        .foregroundStyle(.secondary)
-                        .imageScale(.large)
-                }
-                .buttonStyle(.plain)
-                .padding([.top, .trailing], -5)
-            }
-            .frame(maxWidth: 350)
             .padding()
             .background(.regularMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 15))
+            .frame(maxWidth: 350)
             .padding()
+            .task {
+                heading = viewModel.cameraController.originCamera.heading
+                elevation = viewModel.cameraController.originCamera.location.z ?? 0
+            }
+        }
+        
+        @ViewBuilder
+        var headingSlider: some View {
+            VStack {
+                HStack {
+                    Stepper() {
+                        HStack {
+                            Text("Heading")
+                                .font(.body.smallCaps())
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                            Text((viewModel.calibrationHeading ?? viewModel.cameraController.originCamera.heading).formatted(.number.noFractionalDigits))
+                            Spacer()
+                        }
+                    } onIncrement: {
+                        rotateHeading(by: 1)
+                    } onDecrement: {
+                        rotateHeading(by: -1)
+                    }
+                }
+                JoystickSliderView()
+                    .onSliderValueChanged { delta in
+                        rotateHeading(by: delta)
+                    }
+            }
+        }
+        
+        @ViewBuilder
+        var elevationSlider: some View {
+            VStack {
+                HStack {
+                    Stepper() {
+                        HStack {
+                            Text("Elevation (m)")
+                                .font(.body.smallCaps())
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                            Text((viewModel.calibrationElevation ?? viewModel.cameraController.originCamera.location.z ?? 0).formatted(.number.noFractionalDigits))
+                            Spacer()
+                        }
+                    } onIncrement: {
+                        updateElevation(by: 1)
+                    } onDecrement: {
+                        updateElevation(by: -1)
+                    }
+                }
+                JoystickSliderView()
+                    .onSliderValueChanged { delta in
+                        updateElevation(by: delta)
+                    }
+            }
+        }
+        
+        @ViewBuilder
+        var dismissButton: some View {
+            Button {
+                viewModel.setBasemapOpacity(0)
+                withAnimation {
+                    viewModel.isCalibrating = false
+                }
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .resizable()
+                    .symbolRenderingMode(.hierarchical)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 28, height: 28)
+            }
+            .buttonStyle(.plain)
         }
         
         /// Rotates the heading of the scene view camera controller by the heading delta in degrees.
@@ -154,5 +142,59 @@ extension WorldScaleGeoTrackingSceneView {
                 viewModel.calibrationElevation = elevation
             }
         }
+    }
+}
+
+/// A view for a joystick style slider.
+struct JoystickSliderView: View {
+    /// The slider value.
+    @State private var value = 0.0
+    /// The timer for the "joystick" behavior.
+    @State private var timer: Timer?
+    /// The delta amount based on the slider value.
+    private var joystickDelta: Double {
+        Double(signOf: value, magnitudeOf: value * value / 25)
+    }
+    /// User defined action to be performed when the slider value changes.
+    var sliderValueChangedAction: ((Double) -> Void)? = nil
+    
+    var body: some View {
+        Slider(value: $value, in: -10...10) { editingChanged in
+            if !editingChanged {
+                timer?.invalidate()
+                timer = nil
+                value = 0.0
+            }
+        }
+        .onChange(of: value) { value in
+            guard timer == nil else { return }
+            // Create a timer which rotates the camera when fired.
+            let timer = Timer(timeInterval: 0.1, repeats: true) { _ in
+                if let onSliderValueChanged = sliderValueChangedAction {
+                    // Returns the joystick slider delta value
+                    // when the slider value changes.
+                    onSliderValueChanged(joystickDelta)
+                }
+            }
+            self.timer = timer
+            // Add the timer to the main run loop.
+            RunLoop.main.add(timer, forMode: .default)
+        }
+    }
+    
+    /// Sets an action to perform when the slider value changes.
+    /// - Parameter action: The action to perform when the slider value has changed.
+    public func onSliderValueChanged(
+        perform action: @escaping (Double) -> Void
+    ) -> JoystickSliderView {
+        var copy = self
+        copy.sliderValueChangedAction = action
+        return copy
+    }
+}
+
+private extension FloatingPointFormatStyle {
+    var noFractionalDigits: FloatingPointFormatStyle<Value> {
+        precision(.fractionLength(0...0))
     }
 }
