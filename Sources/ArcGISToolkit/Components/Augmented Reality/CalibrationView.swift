@@ -107,7 +107,6 @@ extension WorldScaleGeoTrackingSceneView {
         @ViewBuilder
         var dismissButton: some View {
             Button {
-                viewModel.setBasemapOpacity(0)
                 withAnimation {
                     viewModel.isCalibrating = false
                 }
