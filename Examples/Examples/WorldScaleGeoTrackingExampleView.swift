@@ -51,6 +51,8 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.calibrationViewHidden(false)
+***REMOVED******REMOVED******REMOVED***.calibrationViewAlignment(.bottomLeading)
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Request when-in-use location authorization.

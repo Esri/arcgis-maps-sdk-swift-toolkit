@@ -70,12 +70,12 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***cameraController.translationFactor = 1
 ***REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if ARGeoTrackingConfiguration.isSupported {
-***REMOVED******REMOVED******REMOVED***configuration = ARGeoTrackingConfiguration()
-***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***if ARGeoTrackingConfiguration.isSupported {
+***REMOVED******REMOVED******REMOVED******REMOVED***configuration = ARGeoTrackingConfiguration()
+***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***configuration = ARWorldTrackingConfiguration()
 ***REMOVED******REMOVED******REMOVED***configuration.worldAlignment = .gravityAndHeading
-***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_locationDataSource = .init(initialValue: locationDataSource)
 ***REMOVED******REMOVED***
