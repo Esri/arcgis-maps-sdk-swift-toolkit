@@ -23,8 +23,6 @@ extension WorldScaleGeoTrackingSceneView {
         @Binding var heading: Double
         /// The camera controller elevation.
         @Binding var elevation: Double
-        /// The calibrated elevation delta.
-        @Binding var elevationDelta: Double
         /// A Boolean value that indicates if the user is calibrating.
         @Binding var isCalibrating: Bool
         
@@ -92,14 +90,14 @@ extension WorldScaleGeoTrackingSceneView {
                             Spacer()
                         }
                     } onIncrement: {
-                        elevationDelta += 1
+                        elevation += 1
                     } onDecrement: {
-                        elevationDelta -= 1
+                        elevation -= 1
                     }
                 }
                 JoystickSliderView()
                     .onSliderDeltaValueChanged { delta in
-                        elevationDelta = delta
+                        elevation += delta
                     }
             }
         }

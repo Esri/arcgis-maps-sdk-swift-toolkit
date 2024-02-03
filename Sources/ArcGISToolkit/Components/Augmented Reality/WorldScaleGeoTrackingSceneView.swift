@@ -26,8 +26,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State var heading: Double = 0
     /// The camera controller elevation.
     @State var elevation: Double = 0
-    /// The calibrated elevation delta.
-    @State private var elevationDelta: Double = 0
     /// A Boolean value that indicates if the user is calibrating.
     @State var isCalibrating = false
     /// The current interface orientation.
@@ -144,7 +142,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
                     CalibrationView(
                         heading: $heading,
                         elevation: $elevation,
-                        elevationDelta: $elevationDelta,
                         isCalibrating: $isCalibrating
                     )
                     .padding(.bottom)
@@ -196,11 +193,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 roll: originCamera.roll
             )
         }
-        .onChange(of: elevationDelta) { elevationDelta in
+        .onChange(of: elevation) { elevation in
+            let elevationDelta = elevation - (cameraController.originCamera.location.z ?? 0)
             cameraController.originCamera = cameraController.originCamera.elevated(by: elevationDelta)
-            if let elevation = cameraController.originCamera.location.z {
-                self.elevation = elevation
-            }
         }
     }
     
