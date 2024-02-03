@@ -117,7 +117,43 @@ public struct WorldScaleGeoTrackingSceneView: View {
                             currentCamera = camera
                         }
                 }
-                
+            }
+            .ignoresSafeArea(.all)
+            .overlay(alignment: calibrationViewAlignment) {
+                if configuration is ARWorldTrackingConfiguration,
+                   !calibrationViewIsHidden {
+                    if !isCalibrating {
+                        Button {
+                            withAnimation {
+                                isCalibrating = true
+                            }
+                        } label: {
+                            Text("Calibrate")
+                                .padding()
+                        }
+                        .background(.regularMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .disabled(!initialCameraIsSet)
+                        .padding()
+                        .padding(.vertical)
+                    }
+                }
+            }
+            .overlay(alignment: .bottom) {
+                if isCalibrating {
+                    CalibrationView(
+                        heading: $heading,
+                        elevation: $elevation,
+                        elevationDelta: $elevationDelta,
+                        isCalibrating: $isCalibrating
+                    )
+                    .padding(.bottom)
+                }
+            }
+            .overlay(alignment: .top) {
+                accuracyView
+            }
+            .overlay {
                 ARCoachingOverlay(goal: .geoTracking)
                     .sessionProvider(arViewProxy)
                     .onCoachingOverlayActivate { _ in
@@ -152,35 +188,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 }
             } catch {}
         }
-        .overlay(alignment: calibrationViewAlignment) {
-            if configuration is ARWorldTrackingConfiguration,
-               !calibrationViewIsHidden {
-                if !isCalibrating {
-                    Button {
-                        withAnimation {
-                            isCalibrating = true
-                        }
-                    } label: {
-                        Text("Calibrate")
-                    }
-                    .padding()
-                    .background(.regularMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .disabled(!initialCameraIsSet)
-                    .padding()
-                }
-            }
-        }
-        .overlay(alignment: .bottom) {
-            if isCalibrating {
-                CalibrationView(
-                    heading: $heading,
-                    elevation: $elevation,
-                    elevationDelta: $elevationDelta,
-                    isCalibrating: $isCalibrating
-                )
-            }
-        }
         .onChange(of: heading) { heading in
             let originCamera = cameraController.originCamera
             cameraController.originCamera = originCamera.rotatedTo(
@@ -194,13 +201,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
             if let elevation = cameraController.originCamera.location.z {
                 self.elevation = elevation
             }
-        }
-        .overlay(alignment: .top) {
-            accuracyView
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(8)
-                .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
         }
     }
     
@@ -310,12 +310,20 @@ public struct WorldScaleGeoTrackingSceneView: View {
     }
     
     /// A view that displays the horizontal and vertical accuracy of the current location datasource location.
+    @ViewBuilder
     var accuracyView: some View {
-        VStack {
-            if let currentLocation {
-                Text("horizontalAccuracy: \(currentLocation.horizontalAccuracy, format: .number)")
-                Text("verticalAccuracy: \(currentLocation.verticalAccuracy, format: .number)")
+        if let currentLocation {
+            VStack {
+                Text("H. Accuracy: \(currentLocation.horizontalAccuracy.formatted(.number.precision(.fractionLength(2))))")
+                Text("V. Accuracy: \(currentLocation.verticalAccuracy.formatted(.number.precision(.fractionLength(2))))")
             }
+            .multilineTextAlignment(.center)
+            .padding(8)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .background(.regularMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .padding(.horizontal)
+            .padding(.top)
         }
     }
 }
