@@ -23,8 +23,6 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***@Binding var heading: Double
 ***REMOVED******REMOVED******REMOVED***/ The camera controller elevation.
 ***REMOVED******REMOVED***@Binding var elevation: Double
-***REMOVED******REMOVED******REMOVED***/ The calibrated elevation delta.
-***REMOVED******REMOVED***@Binding var elevationDelta: Double
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
 ***REMOVED******REMOVED***@Binding var isCalibrating: Bool
 ***REMOVED******REMOVED***
@@ -92,14 +90,14 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevationDelta += 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation += 1
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onDecrement: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevationDelta -= 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation -= 1
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***JoystickSliderView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSliderDeltaValueChanged { delta in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevationDelta = delta
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation += delta
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

@@ -26,8 +26,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@State var heading: Double = 0
 ***REMOVED******REMOVED***/ The camera controller elevation.
 ***REMOVED***@State var elevation: Double = 0
-***REMOVED******REMOVED***/ The calibrated elevation delta.
-***REMOVED***@State private var elevationDelta: Double = 0
 ***REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
 ***REMOVED***@State var isCalibrating = false
 ***REMOVED******REMOVED***/ The current interface orientation.
@@ -144,7 +142,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: $heading,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation: $elevation,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevationDelta: $elevationDelta,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: $isCalibrating
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
@@ -196,11 +193,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***roll: originCamera.roll
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: elevationDelta) { elevationDelta in
+***REMOVED******REMOVED***.onChange(of: elevation) { elevation in
+***REMOVED******REMOVED******REMOVED***let elevationDelta = elevation - (cameraController.originCamera.location.z ?? 0)
 ***REMOVED******REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.elevated(by: elevationDelta)
-***REMOVED******REMOVED******REMOVED***if let elevation = cameraController.originCamera.location.z {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.elevation = elevation
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
