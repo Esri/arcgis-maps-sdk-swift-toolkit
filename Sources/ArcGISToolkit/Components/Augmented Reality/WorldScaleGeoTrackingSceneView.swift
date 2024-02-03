@@ -156,19 +156,17 @@ public struct WorldScaleGeoTrackingSceneView: View {
             if configuration is ARWorldTrackingConfiguration,
                !calibrationViewIsHidden {
                 if !isCalibrating {
-                    VStack {
-                        Button {
-                            withAnimation {
-                                isCalibrating = true
-                            }
-                        } label: {
-                            Text("Calibrate")
+                    Button {
+                        withAnimation {
+                            isCalibrating = true
                         }
-                        .padding()
-                        .background(.regularMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .disabled(!initialCameraIsSet)
+                    } label: {
+                        Text("Calibrate")
                     }
+                    .padding()
+                    .background(.regularMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .disabled(!initialCameraIsSet)
                     .padding()
                 } else {
                     CalibrationView(
