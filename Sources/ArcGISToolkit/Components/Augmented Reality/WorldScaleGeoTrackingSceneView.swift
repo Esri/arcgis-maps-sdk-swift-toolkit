@@ -168,14 +168,17 @@ public struct WorldScaleGeoTrackingSceneView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .disabled(!initialCameraIsSet)
                     .padding()
-                } else {
-                    CalibrationView(
-                        heading: $heading,
-                        elevation: $elevation,
-                        elevationDelta: $elevationDelta,
-                        isCalibrating: $isCalibrating
-                    )
                 }
+            }
+        }
+        .overlay(alignment: .bottom) {
+            if isCalibrating {
+                CalibrationView(
+                    heading: $heading,
+                    elevation: $elevation,
+                    elevationDelta: $elevationDelta,
+                    isCalibrating: $isCalibrating
+                )
             }
         }
         .onChange(of: heading) { heading in
