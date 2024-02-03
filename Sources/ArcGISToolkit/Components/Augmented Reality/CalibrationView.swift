@@ -19,12 +19,14 @@ import ArcGIS
 extension WorldScaleGeoTrackingSceneView {
     /// A view that allows the user to calibrate the heading of the scene view camera controller.
     struct CalibrationView: View {
-        /// The view model for the calibration view.
-        @ObservedObject var viewModel: ViewModel
-        /// The scene camera controller heading.
-        @State private var heading: Double = 0
-        /// The scene camera controller elevation.
-        @State private var elevation: Double = 0
+        /// The camera controller heading.
+        @Binding var heading: Double
+        /// The camera controller elevation.
+        @Binding var elevation: Double
+        /// The calibrated elevation delta.
+        @Binding var elevationDelta: Double
+        /// A Boolean value that indicates if the user is calibrating.
+        @Binding var isCalibrating: Bool
         
         var body: some View {
             VStack {
@@ -46,10 +48,6 @@ extension WorldScaleGeoTrackingSceneView {
             .clipShape(RoundedRectangle(cornerRadius: 15))
             .frame(maxWidth: 350)
             .padding()
-            .task {
-                heading = viewModel.cameraController.originCamera.heading
-                elevation = viewModel.cameraController.originCamera.location.z ?? 0
-            }
         }
         
         @ViewBuilder
@@ -62,19 +60,19 @@ extension WorldScaleGeoTrackingSceneView {
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text((viewModel.calibrationHeading ?? viewModel.cameraController.originCamera.heading), format: .number.precision(.fractionLength(0)))
+                            Text(heading, format: .number.precision(.fractionLength(0)))
                             + Text("°")
                             Spacer()
                         }
                     } onIncrement: {
-                        rotateHeading(by: 1)
+                        heading += 1
                     } onDecrement: {
-                        rotateHeading(by: -1)
+                        heading -= 1
                     }
                 }
                 JoystickSliderView()
                     .onSliderDeltaValueChanged { delta in
-                        rotateHeading(by: delta)
+                        heading += delta
                     }
             }
         }
@@ -89,19 +87,19 @@ extension WorldScaleGeoTrackingSceneView {
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text((viewModel.calibrationElevation ?? viewModel.cameraController.originCamera.location.z ?? 0), format: .number.precision(.fractionLength(0)))
+                            Text(elevation, format: .number.precision(.fractionLength(0)))
                             + Text(" m")
                             Spacer()
                         }
                     } onIncrement: {
-                        updateElevation(by: 1)
+                        elevationDelta += 1
                     } onDecrement: {
-                        updateElevation(by: -1)
+                        elevationDelta -= 1
                     }
                 }
                 JoystickSliderView()
                     .onSliderDeltaValueChanged { delta in
-                        updateElevation(by: delta)
+                        elevationDelta = delta
                     }
             }
         }
@@ -110,7 +108,7 @@ extension WorldScaleGeoTrackingSceneView {
         var dismissButton: some View {
             Button {
                 withAnimation {
-                    viewModel.isCalibrating = false
+                    isCalibrating = false
                 }
             } label: {
                 Image(systemName: "xmark.circle.fill")
@@ -120,28 +118,6 @@ extension WorldScaleGeoTrackingSceneView {
                     .frame(width: 28, height: 28)
             }
             .buttonStyle(.plain)
-        }
-        
-        /// Rotates the heading of the scene view camera controller by the heading delta in degrees.
-        /// - Parameter headingDelta: The heading delta in degrees.
-        private func rotateHeading(by headingDelta: Double) {
-            let originCamera = viewModel.cameraController.originCamera
-            let newHeading = originCamera.heading + headingDelta
-            viewModel.cameraController.originCamera = originCamera.rotatedTo(
-                heading: newHeading,
-                pitch: originCamera.pitch,
-                roll: originCamera.roll
-            )
-            viewModel.calibrationHeading = newHeading
-        }
-        
-        /// Elevates the scene view camera controller by the elevation delta.
-        /// - Parameter elevationDelta: The elevation delta.
-        private func updateElevation(by elevationDelta: Double) {
-            viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.elevated(by: elevationDelta)
-            if let elevation = viewModel.cameraController.originCamera.location.z {
-                viewModel.calibrationElevation = elevation
-            }
         }
     }
 }
