@@ -63,6 +63,7 @@ extension WorldScaleGeoTrackingSceneView {
                                 .foregroundStyle(.secondary)
                             Spacer()
                             Text((viewModel.calibrationHeading ?? viewModel.cameraController.originCamera.heading), format: .number.precision(.fractionLength(0)))
+                            + Text("°")
                             Spacer()
                         }
                     } onIncrement: {
@@ -84,11 +85,12 @@ extension WorldScaleGeoTrackingSceneView {
                 HStack {
                     Stepper() {
                         HStack {
-                            Text("Elevation (m)")
+                            Text("Elevation")
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
                             Text((viewModel.calibrationElevation ?? viewModel.cameraController.originCamera.location.z ?? 0), format: .number.precision(.fractionLength(0)))
+                            + Text("m")
                             Spacer()
                         }
                     } onIncrement: {
