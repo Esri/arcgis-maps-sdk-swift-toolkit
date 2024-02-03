@@ -122,7 +122,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: calibrationViewAlignment) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if configuration is ARWorldTrackingConfiguration,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   !calibrationViewIsHidden {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.isCalibrating {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isCalibrating {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating = true
@@ -140,7 +140,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.isCalibrating {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isCalibrating {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: $heading,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation: $elevation,
