@@ -19,12 +19,14 @@ import ARKit
 extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***/ A view that allows the user to calibrate the heading of the scene view camera controller.
 ***REMOVED***struct CalibrationView: View {
-***REMOVED******REMOVED******REMOVED***/ The view model for the calibration view.
-***REMOVED******REMOVED***@ObservedObject var viewModel: ViewModel
-***REMOVED******REMOVED******REMOVED***/ The scene camera controller heading.
-***REMOVED******REMOVED***@State private var heading: Double = 0
-***REMOVED******REMOVED******REMOVED***/ The scene camera controller elevation.
-***REMOVED******REMOVED***@State private var elevation: Double = 0
+***REMOVED******REMOVED******REMOVED***/ The camera controller heading.
+***REMOVED******REMOVED***@Binding var heading: Double
+***REMOVED******REMOVED******REMOVED***/ The camera controller elevation.
+***REMOVED******REMOVED***@Binding var elevation: Double
+***REMOVED******REMOVED******REMOVED***/ The calibrated elevation delta.
+***REMOVED******REMOVED***@Binding var elevationDelta: Double
+***REMOVED******REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
+***REMOVED******REMOVED***@Binding var isCalibrating: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
@@ -46,10 +48,6 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 15))
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: 350)
 ***REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***heading = viewModel.cameraController.originCamera.heading
-***REMOVED******REMOVED******REMOVED******REMOVED***elevation = viewModel.cameraController.originCamera.location.z ?? 0
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@ViewBuilder
@@ -62,19 +60,19 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((viewModel.calibrationHeading ?? viewModel.cameraController.originCamera.heading), format: .number.precision(.fractionLength(0)))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(heading, format: .number.precision(.fractionLength(0)))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***+ Text("°")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***rotateHeading(by: 1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading += 1
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onDecrement: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***rotateHeading(by: -1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading -= 1
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***JoystickSliderView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSliderDeltaValueChanged { delta in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***rotateHeading(by: delta)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading += delta
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -89,19 +87,19 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((viewModel.calibrationElevation ?? viewModel.cameraController.originCamera.location.z ?? 0), format: .number.precision(.fractionLength(0)))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(elevation, format: .number.precision(.fractionLength(0)))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***+ Text(" m")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateElevation(by: 1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevationDelta += 1
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onDecrement: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateElevation(by: -1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevationDelta -= 1
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***JoystickSliderView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSliderDeltaValueChanged { delta in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateElevation(by: delta)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevationDelta = delta
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -110,7 +108,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***var dismissButton: some View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.isCalibrating = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating = false
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle.fill")
@@ -120,28 +118,6 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 28, height: 28)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Rotates the heading of the scene view camera controller by the heading delta in degrees.
-***REMOVED******REMOVED******REMOVED***/ - Parameter headingDelta: The heading delta in degrees.
-***REMOVED******REMOVED***private func rotateHeading(by headingDelta: Double) {
-***REMOVED******REMOVED******REMOVED***let originCamera = viewModel.cameraController.originCamera
-***REMOVED******REMOVED******REMOVED***let newHeading = originCamera.heading + headingDelta
-***REMOVED******REMOVED******REMOVED***viewModel.cameraController.originCamera = originCamera.rotatedTo(
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: newHeading,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: originCamera.pitch,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: originCamera.roll
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***viewModel.calibrationHeading = newHeading
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Elevates the scene view camera controller by the elevation delta.
-***REMOVED******REMOVED******REMOVED***/ - Parameter elevationDelta: The elevation delta.
-***REMOVED******REMOVED***private func updateElevation(by elevationDelta: Double) {
-***REMOVED******REMOVED******REMOVED***viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.elevated(by: elevationDelta)
-***REMOVED******REMOVED******REMOVED***if let elevation = viewModel.cameraController.originCamera.location.z {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.calibrationElevation = elevation
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
