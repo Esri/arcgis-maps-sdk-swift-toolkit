@@ -168,14 +168,17 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!initialCameraIsSet)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: $heading,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation: $elevation,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevationDelta: $elevationDelta,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: $isCalibrating
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.overlay(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED***if isCalibrating {
+***REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: $heading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation: $elevation,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevationDelta: $elevationDelta,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: $isCalibrating
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: heading) { heading in
