@@ -19,12 +19,14 @@ import ArcGIS
 extension WorldScaleGeoTrackingSceneView {
     /// A view that allows the user to calibrate the heading of the scene view camera controller.
     struct CalibrationView: View {
-        /// The view model for the calibration view.
-        @ObservedObject var viewModel: ViewModel
-        /// The scene camera controller heading.
-        @State private var heading: Double = 0
-        /// The scene camera controller elevation.
-        @State private var elevation: Double = 0
+        /// The camera controller heading.
+        @Binding var heading: Double
+        /// The camera controller elevation.
+        @Binding var elevation: Double
+        /// The calibrated elevation delta.
+        @Binding var elevationDelta: Double
+        /// A Boolean value that indicates if the user is calibrating.
+        @Binding var isCalibrating: Bool
         
         var body: some View {
             VStack {
@@ -46,10 +48,6 @@ extension WorldScaleGeoTrackingSceneView {
             .clipShape(RoundedRectangle(cornerRadius: 15))
             .frame(maxWidth: 350)
             .padding()
-            .task {
-                heading = viewModel.cameraController.originCamera.heading
-                elevation = viewModel.cameraController.originCamera.location.z ?? 0
-            }
         }
         
         @ViewBuilder
@@ -62,19 +60,19 @@ extension WorldScaleGeoTrackingSceneView {
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text((viewModel.calibrationHeading ?? viewModel.cameraController.originCamera.heading), format: .number.precision(.fractionLength(0)))
+                            Text(heading, format: .number.precision(.fractionLength(0)))
                             + Text("°")
                             Spacer()
                         }
                     } onIncrement: {
-                        rotateHeading(by: 1)
+                        heading += 1
                     } onDecrement: {
-                        rotateHeading(by: -1)
+                        heading -= 1
                     }
                 }
                 JoystickSliderView()
-                    .onSliderValueChanged { delta in
-                        rotateHeading(by: delta)
+                    .onSliderDeltaValueChanged { delta in
+                        heading += delta
                     }
             }
         }
@@ -89,19 +87,19 @@ extension WorldScaleGeoTrackingSceneView {
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text((viewModel.calibrationElevation ?? viewModel.cameraController.originCamera.location.z ?? 0), format: .number.precision(.fractionLength(0)))
-                            + Text("m")
+                            Text(elevation, format: .number.precision(.fractionLength(0)))
+                            + Text(" m")
                             Spacer()
                         }
                     } onIncrement: {
-                        updateElevation(by: 1)
+                        elevationDelta += 1
                     } onDecrement: {
-                        updateElevation(by: -1)
+                        elevationDelta -= 1
                     }
                 }
                 JoystickSliderView()
-                    .onSliderValueChanged { delta in
-                        updateElevation(by: delta)
+                    .onSliderDeltaValueChanged { delta in
+                        elevationDelta = delta
                     }
             }
         }
@@ -110,7 +108,7 @@ extension WorldScaleGeoTrackingSceneView {
         var dismissButton: some View {
             Button {
                 withAnimation {
-                    viewModel.isCalibrating = false
+                    isCalibrating = false
                 }
             } label: {
                 Image(systemName: "xmark.circle.fill")
@@ -120,28 +118,6 @@ extension WorldScaleGeoTrackingSceneView {
                     .frame(width: 28, height: 28)
             }
             .buttonStyle(.plain)
-        }
-        
-        /// Rotates the heading of the scene view camera controller by the heading delta in degrees.
-        /// - Parameter headingDelta: The heading delta in degrees.
-        private func rotateHeading(by headingDelta: Double) {
-            let originCamera = viewModel.cameraController.originCamera
-            let newHeading = originCamera.heading + headingDelta
-            viewModel.cameraController.originCamera = originCamera.rotatedTo(
-                heading: newHeading,
-                pitch: originCamera.pitch,
-                roll: originCamera.roll
-            )
-            viewModel.calibrationHeading = newHeading
-        }
-        
-        /// Elevates the scene view camera controller by the elevation delta.
-        /// - Parameter elevationDelta: The elevation delta.
-        private func updateElevation(by elevationDelta: Double) {
-            viewModel.cameraController.originCamera = viewModel.cameraController.originCamera.elevated(by: elevationDelta)
-            if let elevation = viewModel.cameraController.originCamera.location.z {
-                viewModel.calibrationElevation = elevation
-            }
         }
     }
 }
@@ -156,8 +132,8 @@ struct JoystickSliderView: View {
     private var joystickDelta: Double {
         Double(signOf: value, magnitudeOf: value * value / 25)
     }
-    /// User defined action to be performed when the slider value changes.
-    var sliderValueChangedAction: ((Double) -> Void)? = nil
+    /// User defined action to be performed when the slider delta value changes.
+    var sliderDeltaValueChangedAction: ((Double) -> Void)? = nil
     
     var body: some View {
         Slider(value: $value, in: -10...10) { editingChanged in
@@ -169,12 +145,11 @@ struct JoystickSliderView: View {
         }
         .onChange(of: value) { value in
             guard timer == nil else { return }
-            // Create a timer which rotates the camera when fired.
+            // Start a timer when slider is active.
             let timer = Timer(timeInterval: 0.1, repeats: true) { _ in
-                if let onSliderValueChanged = sliderValueChangedAction {
-                    // Returns the joystick slider delta value
-                    // when the slider value changes.
-                    onSliderValueChanged(joystickDelta)
+                if let onSliderDeltaValueChanged = sliderDeltaValueChangedAction {
+                    // Returns the joystick slider delta value.
+                    onSliderDeltaValueChanged(joystickDelta)
                 }
             }
             self.timer = timer
@@ -183,13 +158,13 @@ struct JoystickSliderView: View {
         }
     }
     
-    /// Sets an action to perform when the slider value changes.
-    /// - Parameter action: The action to perform when the slider value has changed.
-    public func onSliderValueChanged(
+    /// Sets an action to perform when the slider delta value changes.
+    /// - Parameter action: The action to perform when the slider delta value has changed.
+    public func onSliderDeltaValueChanged(
         perform action: @escaping (Double) -> Void
     ) -> JoystickSliderView {
         var copy = self
-        copy.sliderValueChangedAction = action
+        copy.sliderDeltaValueChangedAction = action
         return copy
     }
 }
