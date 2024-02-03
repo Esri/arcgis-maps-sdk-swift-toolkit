@@ -122,7 +122,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
             .overlay(alignment: calibrationViewAlignment) {
                 if configuration is ARWorldTrackingConfiguration,
                    !calibrationViewIsHidden {
-                    if !viewModel.isCalibrating {
+                    if !isCalibrating {
                         Button {
                             withAnimation {
                                 isCalibrating = true
@@ -140,7 +140,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 }
             }
             .overlay(alignment: .bottom) {
-                if viewModel.isCalibrating {
+                if isCalibrating {
                     CalibrationView(
                         heading: $heading,
                         elevation: $elevation,
