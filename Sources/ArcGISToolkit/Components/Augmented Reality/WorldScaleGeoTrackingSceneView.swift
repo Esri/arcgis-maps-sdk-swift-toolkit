@@ -52,6 +52,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
     private var validAccuracyThreshold = 0.0
     /// Determines the alignment of the calibration view.
     private var calibrationViewAlignment: Alignment = .bottom
+    /// The initial camera controller elevation.
+    @State private var initialElevation = 0.0
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -142,7 +144,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
                     CalibrationView(
                         heading: $heading,
                         elevation: $elevation,
-                        isCalibrating: $isCalibrating
+                        isCalibrating: $isCalibrating,
+                        initialElevation: $initialElevation
                     )
                     .padding(.bottom)
                 }
@@ -233,6 +236,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
             )
             self.heading = heading
             elevation = altitude
+            initialElevation = altitude
         } else {
             // Ignore location updates when calibrating heading and elevation.
             guard !isCalibrating else { return }
