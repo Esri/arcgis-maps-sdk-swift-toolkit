@@ -73,8 +73,8 @@ extension WorldScaleGeoTrackingSceneView {
                         heading -= 1
                     }
                 }
-                JoystickSliderView()
-                    .onSliderDeltaValueChanged { delta in
+                Joyslider()
+                    .onValueChanged { delta in
                         heading += delta
                     }
             }
@@ -101,8 +101,8 @@ extension WorldScaleGeoTrackingSceneView {
                         elevation -= 1
                     }
                 }
-                JoystickSliderView()
-                    .onSliderDeltaValueChanged { delta in
+                Joyslider()
+                    .onValueChanged { delta in
                         elevation += delta
                     }
             }
