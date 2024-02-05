@@ -52,6 +52,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***private var validAccuracyThreshold = 0.0
 ***REMOVED******REMOVED***/ Determines the alignment of the calibration view.
 ***REMOVED***private var calibrationViewAlignment: Alignment = .bottom
+***REMOVED******REMOVED***/ The initial camera controller elevation.
+***REMOVED***@State private var initialElevation = 0.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -142,7 +144,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: $heading,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation: $elevation,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: $isCalibrating
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: $isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialElevation: $initialElevation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED******REMOVED******REMOVED***
@@ -233,6 +236,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***self.heading = heading
 ***REMOVED******REMOVED******REMOVED***elevation = altitude
+***REMOVED******REMOVED******REMOVED***initialElevation = altitude
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Ignore location updates when calibrating heading and elevation.
 ***REMOVED******REMOVED******REMOVED***guard !isCalibrating else { return ***REMOVED***
