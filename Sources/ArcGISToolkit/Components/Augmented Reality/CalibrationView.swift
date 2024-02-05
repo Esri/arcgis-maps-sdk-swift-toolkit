@@ -121,7 +121,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED***
 
 ***REMOVED***/ A view for a joystick style slider.
-struct JoystickSliderView: View {
+private struct JoystickSliderView: View {
 ***REMOVED******REMOVED***/ The slider value.
 ***REMOVED***@State private var value = 0.0
 ***REMOVED******REMOVED***/ The timer for the "joystick" behavior.
@@ -158,7 +158,7 @@ struct JoystickSliderView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets an action to perform when the slider delta value changes.
 ***REMOVED******REMOVED***/ - Parameter action: The action to perform when the slider delta value has changed.
-***REMOVED***public func onSliderDeltaValueChanged(
+***REMOVED***func onSliderDeltaValueChanged(
 ***REMOVED******REMOVED***perform action: @escaping (Double) -> Void
 ***REMOVED***) -> JoystickSliderView {
 ***REMOVED******REMOVED***var copy = self
