@@ -44,7 +44,7 @@ extension WorldScaleGeoTrackingSceneView {
             .padding()
             .background(.regularMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 15))
-            .frame(maxWidth: 414)
+            .frame(maxWidth: 430)
             .padding()
         }
         
