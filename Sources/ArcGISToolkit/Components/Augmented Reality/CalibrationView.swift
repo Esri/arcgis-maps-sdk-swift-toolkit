@@ -25,6 +25,10 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***@Binding var elevation: Double
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
 ***REMOVED******REMOVED***@Binding var isCalibrating: Bool
+***REMOVED******REMOVED******REMOVED***/ The initial camera controller elevation.
+***REMOVED******REMOVED***@Binding var initialElevation: Double
+***REMOVED******REMOVED******REMOVED***/ The elevation delta value after calibrating.
+***REMOVED******REMOVED***@State private var elevationDelta = 0.0
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
@@ -58,6 +62,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(heading.isLess(than: 0) || heading.isZero ? "" : "+") +
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(heading, format: .number.precision(.fractionLength(0)))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***+ Text("°")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
@@ -85,7 +90,8 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(elevation, format: .number.precision(.fractionLength(0)))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(elevationDelta.isLess(than: 0) || elevationDelta.isZero ? "" : "+") +
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(elevationDelta, format: .number.precision(.fractionLength(0)))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***+ Text(" m")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -99,6 +105,12 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSliderDeltaValueChanged { delta in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation += delta
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: elevation) { elevation in
+***REMOVED******REMOVED******REMOVED******REMOVED***elevationDelta =  elevation - initialElevation
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***elevationDelta =  elevation - initialElevation
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
