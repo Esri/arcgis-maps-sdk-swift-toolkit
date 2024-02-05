@@ -317,8 +317,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
 ***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
 ***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10))
-***REMOVED******REMOVED******REMOVED***.padding(.horizontal)
-***REMOVED******REMOVED******REMOVED***.padding(.top)
+***REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
