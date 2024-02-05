@@ -63,7 +63,7 @@ extension WorldScaleGeoTrackingSceneView {
                                 .foregroundStyle(.secondary)
                             Spacer()
                             Text(heading.isLess(than: 0) || heading.rounded().isZero ? "" : "+") +
-                            Text(heading, format: .number.precision(.fractionLength(0)))
+                            Text((heading.truncatingRemainder(dividingBy: 180)), format: .number.precision(.fractionLength(0)))
                             + Text("°")
                             Spacer()
                         }
