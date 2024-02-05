@@ -73,8 +73,8 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading -= 1
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***JoystickSliderView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSliderDeltaValueChanged { delta in
+***REMOVED******REMOVED******REMOVED******REMOVED***Joyslider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onValueChanged { delta in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading += delta
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -101,8 +101,8 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation -= 1
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***JoystickSliderView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSliderDeltaValueChanged { delta in
+***REMOVED******REMOVED******REMOVED******REMOVED***Joyslider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onValueChanged { delta in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation += delta
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
