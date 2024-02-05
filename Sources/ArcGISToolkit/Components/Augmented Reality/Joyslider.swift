@@ -45,7 +45,7 @@ struct Joyslider: View {
                     )
             }
         }
-        .frame(height: Thumb.size)
+        .frame(height: Thumb.size + 4)
         .task(id: isChanging) {
             guard isChanging else { return }
             while !Task.isCancelled {
@@ -72,13 +72,14 @@ private struct Thumb: View {
     static let size: Double = 26
     var body: some View {
         Circle()
+            .stroke(Color.accentColor, lineWidth: 2)
             .foregroundStyle(.background)
             .frame(width: Self.size, height: Self.size)
             .background {
                 Circle()
                     .frame(width: Self.size, height: Self.size)
                     .foregroundStyle(.background)
-                    .shadow(color: .secondary.opacity(0.5), radius: 3, x: 0, y: 1)
+                    .shadow(color: .secondary.opacity(0.5), radius: 5, x: 0, y: 2)
             }
     }
 }
@@ -102,17 +103,15 @@ private struct Track: View {
     }
     
     var fill: some ShapeStyle {
-        let accent = Color.accentColor.opacity(abs(factor))
-        
         if offset >= 0 {
             return LinearGradient(
-                gradient: Gradient(colors: [.systemFill, accent]),
+                gradient: Gradient(colors: [.clear, .accentColor]),
                 startPoint: .leading,
                 endPoint: .trailing
             )
         } else {
             return LinearGradient(
-                gradient: Gradient(colors: [.systemFill, accent]),
+                gradient: Gradient(colors: [.clear, .accentColor]),
                 startPoint: .trailing,
                 endPoint: .leading
             )
