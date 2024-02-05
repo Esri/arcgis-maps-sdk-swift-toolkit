@@ -45,7 +45,7 @@ struct Joyslider: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.frame(height: Thumb.size)
+***REMOVED******REMOVED***.frame(height: Thumb.size + 4)
 ***REMOVED******REMOVED***.task(id: isChanging) {
 ***REMOVED******REMOVED******REMOVED***guard isChanging else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***while !Task.isCancelled {
@@ -72,13 +72,14 @@ private struct Thumb: View {
 ***REMOVED***static let size: Double = 26
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Circle()
+***REMOVED******REMOVED******REMOVED***.stroke(Color.accentColor, lineWidth: 2)
 ***REMOVED******REMOVED******REMOVED***.foregroundStyle(.background)
 ***REMOVED******REMOVED******REMOVED***.frame(width: Self.size, height: Self.size)
 ***REMOVED******REMOVED******REMOVED***.background {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Circle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: Self.size, height: Self.size)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.background)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.shadow(color: .secondary.opacity(0.5), radius: 3, x: 0, y: 1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.shadow(color: .secondary.opacity(0.5), radius: 5, x: 0, y: 2)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -102,17 +103,15 @@ private struct Track: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var fill: some ShapeStyle {
-***REMOVED******REMOVED***let accent = Color.accentColor.opacity(abs(factor))
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if offset >= 0 {
 ***REMOVED******REMOVED******REMOVED***return LinearGradient(
-***REMOVED******REMOVED******REMOVED******REMOVED***gradient: Gradient(colors: [.systemFill, accent]),
+***REMOVED******REMOVED******REMOVED******REMOVED***gradient: Gradient(colors: [.clear, .accentColor]),
 ***REMOVED******REMOVED******REMOVED******REMOVED***startPoint: .leading,
 ***REMOVED******REMOVED******REMOVED******REMOVED***endPoint: .trailing
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return LinearGradient(
-***REMOVED******REMOVED******REMOVED******REMOVED***gradient: Gradient(colors: [.systemFill, accent]),
+***REMOVED******REMOVED******REMOVED******REMOVED***gradient: Gradient(colors: [.clear, .accentColor]),
 ***REMOVED******REMOVED******REMOVED******REMOVED***startPoint: .trailing,
 ***REMOVED******REMOVED******REMOVED******REMOVED***endPoint: .leading
 ***REMOVED******REMOVED******REMOVED***)
