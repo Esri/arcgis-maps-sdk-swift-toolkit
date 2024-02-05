@@ -62,7 +62,7 @@ extension WorldScaleGeoTrackingSceneView {
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text(heading.isLess(than: 0) || heading.isZero ? "" : "+") +
+                            Text(heading.isLess(than: 0) || heading.rounded().isZero ? "" : "+") +
                             Text(heading, format: .number.precision(.fractionLength(0)))
                             + Text("°")
                             Spacer()
@@ -90,7 +90,7 @@ extension WorldScaleGeoTrackingSceneView {
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text(elevationDelta.isLess(than: 0) || elevationDelta.isZero ? "" : "+") +
+                            Text(elevationDelta.isLess(than: 0) || elevationDelta.rounded().isZero ? "" : "+") +
                             Text(elevationDelta, format: .number.precision(.fractionLength(0)))
                             + Text(" m")
                             Spacer()
