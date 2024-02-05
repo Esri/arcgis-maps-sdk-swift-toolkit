@@ -317,8 +317,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
             .frame(maxWidth: .infinity, alignment: .center)
             .background(.regularMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .padding(.horizontal)
-            .padding(.top)
+            .padding([.horizontal, .top])
         }
     }
 }
