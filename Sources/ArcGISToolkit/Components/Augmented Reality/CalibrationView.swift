@@ -25,6 +25,10 @@ extension WorldScaleGeoTrackingSceneView {
         @Binding var elevation: Double
         /// A Boolean value that indicates if the user is calibrating.
         @Binding var isCalibrating: Bool
+        /// The initial camera controller elevation.
+        @Binding var initialElevation: Double
+        /// The elevation delta value after calibrating.
+        @State private var elevationDelta = 0.0
         
         var body: some View {
             VStack {
@@ -58,6 +62,7 @@ extension WorldScaleGeoTrackingSceneView {
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
+                            Text(heading.isLess(than: 0) || heading.isZero ? "" : "+") +
                             Text(heading, format: .number.precision(.fractionLength(0)))
                             + Text("°")
                             Spacer()
@@ -85,7 +90,8 @@ extension WorldScaleGeoTrackingSceneView {
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text(elevation, format: .number.precision(.fractionLength(0)))
+                            Text(elevationDelta.isLess(than: 0) || elevationDelta.isZero ? "" : "+") +
+                            Text(elevationDelta, format: .number.precision(.fractionLength(0)))
                             + Text(" m")
                             Spacer()
                         }
@@ -99,6 +105,12 @@ extension WorldScaleGeoTrackingSceneView {
                     .onSliderDeltaValueChanged { delta in
                         elevation += delta
                     }
+            }
+            .onChange(of: elevation) { elevation in
+                elevationDelta =  elevation - initialElevation
+            }
+            .onAppear {
+                elevationDelta =  elevation - initialElevation
             }
         }
         
