@@ -150,7 +150,9 @@ private struct JoystickSliderView: View {
 ***REMOVED******REMOVED******REMOVED***if !editingChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED***timer?.invalidate()
 ***REMOVED******REMOVED******REMOVED******REMOVED***timer = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***value = 0.0
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value = 0.0
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: value) { value in
