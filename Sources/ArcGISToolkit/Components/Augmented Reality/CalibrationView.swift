@@ -30,6 +30,10 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***/ The elevation delta value after calibrating.
 ***REMOVED******REMOVED***@State private var elevationDelta = 0.0
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***private let numberFormat = FloatingPointFormatStyle<Double>.number
+***REMOVED******REMOVED******REMOVED***.precision(.fractionLength(0))
+***REMOVED******REMOVED******REMOVED***.sign(strategy: .always(includingZero: false))
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .firstTextBaseline) {
@@ -62,9 +66,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(heading.isLess(than: 0) || heading.rounded().isZero ? "" : "+")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***+ Text(heading, format: .number.precision(.fractionLength(0)))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***+ Text("°")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(heading, format: numberFormat) + Text("°")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
@@ -74,8 +76,12 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Joyslider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onValueChanged { delta in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChanged { delta in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = (heading + delta).clamped(to: -180...180)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onEnded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Round the value now that it stopped changing.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = heading.rounded()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -90,9 +96,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(elevationDelta.isLess(than: 0) || elevationDelta.rounded().isZero ? "" : "+") +
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(elevationDelta, format: .number.precision(.fractionLength(0)))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***+ Text(" m")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(elevationDelta, format: numberFormat) + Text(" m")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
@@ -102,8 +106,12 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Joyslider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onValueChanged { delta in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChanged { delta in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation += delta
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onEnded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Round the value now that it stopped changing.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation = elevation.rounded()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: elevation) { elevation in
@@ -129,54 +137,5 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A view for a joystick style slider.
-private struct JoystickSliderView: View {
-***REMOVED******REMOVED***/ The slider value.
-***REMOVED***@State private var value = 0.0
-***REMOVED******REMOVED***/ The timer for the "joystick" behavior.
-***REMOVED***@State private var timer: Timer?
-***REMOVED******REMOVED***/ The delta amount based on the slider value.
-***REMOVED***private var joystickDelta: Double {
-***REMOVED******REMOVED***Double(signOf: value, magnitudeOf: value * value / 25)
-***REMOVED***
-***REMOVED******REMOVED***/ User defined action to be performed when the slider delta value changes.
-***REMOVED***var sliderDeltaValueChangedAction: ((Double) -> Void)? = nil
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***Slider(value: $value, in: -10...10) { editingChanged in
-***REMOVED******REMOVED******REMOVED***if !editingChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED***timer?.invalidate()
-***REMOVED******REMOVED******REMOVED******REMOVED***timer = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value = 0.0
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: value) { value in
-***REMOVED******REMOVED******REMOVED***guard timer == nil else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Start a timer when slider is active.
-***REMOVED******REMOVED******REMOVED***let timer = Timer(timeInterval: 0.1, repeats: true) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let onSliderDeltaValueChanged = sliderDeltaValueChangedAction {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Returns the joystick slider delta value.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onSliderDeltaValueChanged(joystickDelta)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***self.timer = timer
-***REMOVED******REMOVED******REMOVED******REMOVED*** Add the timer to the main run loop.
-***REMOVED******REMOVED******REMOVED***RunLoop.main.add(timer, forMode: .default)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Sets an action to perform when the slider delta value changes.
-***REMOVED******REMOVED***/ - Parameter action: The action to perform when the slider delta value has changed.
-***REMOVED***func onSliderDeltaValueChanged(
-***REMOVED******REMOVED***perform action: @escaping (Double) -> Void
-***REMOVED***) -> JoystickSliderView {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.sliderDeltaValueChangedAction = action
-***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***

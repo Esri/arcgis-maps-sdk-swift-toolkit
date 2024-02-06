@@ -17,7 +17,8 @@
 ***REMOVED***/ A slider that acts similar to a joystick controller.
 ***REMOVED***/ The slider provides delta values as they change between -1...1.
 struct Joyslider: View {
-***REMOVED***private var onValueChangedAction: ((Double) -> Void)?
+***REMOVED***private var onChangedAction: ((Double) -> Void)?
+***REMOVED***private var onEndedAction: (() -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The x offset of the thumb in points.
 ***REMOVED***@State private var offset: Double = 0
@@ -46,6 +47,7 @@ struct Joyslider: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.bouncy) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offset = 0
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onEndedAction?()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -66,15 +68,22 @@ struct Joyslider: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If task is cancelled after sleeping, return.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if Task.isCancelled { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise change the value.
-***REMOVED******REMOVED******REMOVED******REMOVED***onValueChangedAction?(factor)
+***REMOVED******REMOVED******REMOVED******REMOVED***onChangedAction?(factor)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Specifies an on value changed action.
-***REMOVED***func onValueChanged(perform action: @escaping (Double) -> Void) -> Joyslider {
+***REMOVED******REMOVED***/ Specifies an action to perform when the value changes.
+***REMOVED***func onChanged(perform action: @escaping (Double) -> Void) -> Joyslider {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onValueChangedAction = action
+***REMOVED******REMOVED***copy.onChangedAction = action
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Specifies an action to perform when the value stops changing.
+***REMOVED***func onEnded(perform action: @escaping () -> Void) -> Joyslider {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onEndedAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
