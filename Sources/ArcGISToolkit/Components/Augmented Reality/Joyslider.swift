@@ -14,11 +14,16 @@
 
 ***REMOVED***
 
+***REMOVED***/ A slider that acts similar to a joystick controller.
+***REMOVED***/ The slider provides delta values as they change between -1...1.
 struct Joyslider: View {
-***REMOVED***var onValueChangedAction: ((Double) -> Void)?
+***REMOVED***private var onValueChangedAction: ((Double) -> Void)?
 ***REMOVED***
+***REMOVED******REMOVED***/ The x offset of the thumb in points.
 ***REMOVED***@State private var offset: Double = 0
+***REMOVED******REMOVED***/ A factor between -1 and 1 that specifies the current percentage of the thumb's position.
 ***REMOVED***@State private var factor: Double = 0
+***REMOVED******REMOVED***/ A Boolean value indicating if the user is dragging the thumb.
 ***REMOVED***@State private var isChanging = false
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -61,6 +66,7 @@ struct Joyslider: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Specifies an on value changed action.
 ***REMOVED***func onValueChanged(perform action: @escaping (Double) -> Void) -> Joyslider {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.onValueChangedAction = action
@@ -68,8 +74,11 @@ struct Joyslider: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ Thumb view for the joyslider.
 private struct Thumb: View {
+***REMOVED******REMOVED***/ The size of the thumb.
 ***REMOVED***static let size: Double = 26
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Circle()
 ***REMOVED******REMOVED******REMOVED***.stroke(Color.accentColor, lineWidth: 2)
@@ -83,8 +92,11 @@ private struct Thumb: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ Track view for the joyslider.
 private struct Track: View {
+***REMOVED******REMOVED***/ A Boolean value indicating if the user is dragging the thumb.
 ***REMOVED***let offset: Double
+***REMOVED******REMOVED***/ A factor between -1 and 1 that specifies the current percentage of the thumb's position.
 ***REMOVED***let factor: Double
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -119,6 +131,7 @@ private struct Track: View {
 ***REMOVED***
 
 private extension Color {
+***REMOVED******REMOVED***/ The system fill color.
 ***REMOVED***static var systemFill: Color { Color(UIColor.systemFill) ***REMOVED***
 ***REMOVED***
 
