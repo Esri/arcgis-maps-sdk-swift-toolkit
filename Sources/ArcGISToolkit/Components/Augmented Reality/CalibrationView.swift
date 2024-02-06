@@ -62,20 +62,20 @@ extension WorldScaleGeoTrackingSceneView {
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text(heading.isLess(than: 0) || heading.rounded().isZero ? "" : "+") +
-                            Text((heading.truncatingRemainder(dividingBy: 180)), format: .number.precision(.fractionLength(0)))
+                            Text(heading.isLess(than: 0) || heading.rounded().isZero ? "" : "+")
+                            + Text(heading, format: .number.precision(.fractionLength(0)))
                             + Text("°")
                             Spacer()
                         }
                     } onIncrement: {
-                        heading += 1
+                        heading = (heading + 1).clamped(to: -180...180)
                     } onDecrement: {
-                        heading -= 1
+                        heading = (heading - 1).clamped(to: -180...180)
                     }
                 }
                 Joyslider()
                     .onValueChanged { delta in
-                        heading += delta
+                        heading = (heading + delta).clamped(to: -180...180)
                     }
             }
         }
