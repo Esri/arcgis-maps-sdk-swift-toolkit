@@ -34,7 +34,7 @@ struct GroupView<Content>: View where Content: View {
     
     /// Filters the group's elements by visibility.
     private func updateVisibleElements() {
-        visibleElements = element.formElements.filter { $0.isVisible }
+        visibleElements = element.elements.filter { $0.isVisible }
     }
     
     /// - Creates a view for a group form element and manages the visibility of the elements within
@@ -65,7 +65,7 @@ struct GroupView<Content>: View where Content: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .onAppear {
-            element.formElements.forEach { element in
+            element.elements.forEach { element in
                 let newTask = Task.detached { [self] in
                     for await _ in element.$isVisible {
                         await MainActor.run {
