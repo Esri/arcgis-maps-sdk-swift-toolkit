@@ -44,7 +44,7 @@ struct Joyslider: View {
                             }
                             .onEnded { _ in
                                 isChanging = false
-                                withAnimation(.bouncy) {
+                                withAnimation(.bouncy.speed(1.5)) {
                                     offset = 0
                                 }
                                 onEndedAction?()
