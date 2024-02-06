@@ -31,7 +31,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***@State private var elevationDelta = 0.0
 ***REMOVED******REMOVED******REMOVED***/ A number format style for signed values with their fractional component removed.
 ***REMOVED******REMOVED***private let numberFormat = FloatingPointFormatStyle<Double>.number
-***REMOVED******REMOVED******REMOVED***.precision(.fractionLength(0))
+***REMOVED******REMOVED******REMOVED***.precision(.fractionLength(1))
 ***REMOVED******REMOVED******REMOVED***.sign(strategy: .always(includingZero: false))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
@@ -79,10 +79,6 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChanged { delta in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = (heading + delta).clamped(to: -180...180)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onEnded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Round the value now that it stopped changing.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = heading.rounded()
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -108,10 +104,6 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Joyslider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChanged { delta in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation += delta
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onEnded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Round the value now that it stopped changing.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation = elevation.rounded()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: elevation) { elevation in
