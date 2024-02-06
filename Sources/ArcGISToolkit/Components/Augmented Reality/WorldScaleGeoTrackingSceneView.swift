@@ -22,6 +22,12 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var arViewProxy = ARSwiftUIViewProxy()
     /// The camera controller that will be set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
+    /// The camera controller heading.
+    @State var heading: Double = 0
+    /// The camera controller elevation.
+    @State var elevation: Double = 0
+    /// A Boolean value that indicates if the user is calibrating.
+    @State var isCalibrating = false
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
     /// The location datasource that is used to access the device location.
@@ -34,8 +40,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var currentCamera: Camera?
     /// A Boolean value that indicates whether the calibration view is hidden.
     private var calibrationViewIsHidden = false
-    /// The calibrated camera heading.
-    @State private var calibrationHeading: Double?
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The configuration for the AR session.
@@ -46,6 +50,10 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var currentLocation: Location?
     /// The valid accuracy threshold for a location in meters.
     private var validAccuracyThreshold = 0.0
+    /// Determines the alignment of the calibration view.
+    private var calibrationViewAlignment: Alignment = .bottom
+    /// The initial camera controller elevation.
+    @State private var initialElevation = 0.0
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -109,7 +117,43 @@ public struct WorldScaleGeoTrackingSceneView: View {
                             currentCamera = camera
                         }
                 }
-                
+            }
+            .ignoresSafeArea(.all)
+            .overlay(alignment: calibrationViewAlignment) {
+                if configuration is ARWorldTrackingConfiguration,
+                   !calibrationViewIsHidden {
+                    if !isCalibrating {
+                        Button {
+                            withAnimation {
+                                isCalibrating = true
+                            }
+                        } label: {
+                            Text("Calibrate")
+                                .padding()
+                        }
+                        .background(.regularMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .disabled(!initialCameraIsSet)
+                        .padding()
+                        .padding(.vertical)
+                    }
+                }
+            }
+            .overlay(alignment: .bottom) {
+                if isCalibrating {
+                    CalibrationView(
+                        heading: $heading,
+                        elevation: $elevation,
+                        isCalibrating: $isCalibrating,
+                        initialElevation: $initialElevation
+                    )
+                    .padding(.bottom)
+                }
+            }
+            .overlay(alignment: .top) {
+                accuracyView
+            }
+            .overlay {
                 ARCoachingOverlay(goal: .geoTracking)
                     .sessionProvider(arViewProxy)
                     .onCoachingOverlayActivate { _ in
@@ -137,30 +181,24 @@ public struct WorldScaleGeoTrackingSceneView: View {
         .task {
             do {
                 try await locationDataSource.start()
-                await withTaskGroup(of: Void.self) { group in
-                    group.addTask {
-                        for await location in locationDataSource.locations {
-                            lastLocationTimestamp = location.timestamp
-                            currentLocation = location
-                            await updateSceneView(for: location)
-                        }
-                    }
+                for await location in locationDataSource.locations {
+                    lastLocationTimestamp = location.timestamp
+                    currentLocation = location
+                    updateSceneView(for: location)
                 }
             } catch {}
         }
-        .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                if !calibrationViewIsHidden {
-                    calibrationView
-                }
-            }
+        .onChange(of: heading) { heading in
+            let originCamera = cameraController.originCamera
+            cameraController.originCamera = originCamera.rotatedTo(
+                heading: heading,
+                pitch: originCamera.pitch,
+                roll: originCamera.roll
+            )
         }
-        .overlay(alignment: .top) {
-            accuracyView
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(8)
-                .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+        .onChange(of: elevation) { elevation in
+            let elevationDelta = elevation - (cameraController.originCamera.location.z ?? 0)
+            cameraController.originCamera = cameraController.originCamera.elevated(by: elevationDelta)
         }
     }
     
@@ -186,14 +224,31 @@ public struct WorldScaleGeoTrackingSceneView: View {
         // GPS location is not accurate, we won't end up below the earth's surface.
         let altitude = (location.position.z ?? 0) + location.verticalAccuracy
         
-        cameraController.originCamera = Camera(
-            latitude: location.position.y,
-            longitude: location.position.x,
-            altitude: altitude,
-            heading: calibrationHeading ?? 0,
-            pitch: 90,
-            roll: 0
-        )
+        if !initialCameraIsSet {
+            let heading = 0.0
+            cameraController.originCamera = Camera(
+                latitude: location.position.y,
+                longitude: location.position.x,
+                altitude: altitude,
+                heading: heading,
+                pitch: 90,
+                roll: 0
+            )
+            self.heading = heading
+            elevation = altitude
+            initialElevation = altitude
+        } else {
+            // Ignore location updates when calibrating heading and elevation.
+            guard !isCalibrating else { return }
+            cameraController.originCamera = Camera(
+                latitude: location.position.y,
+                longitude: location.position.x,
+                altitude: elevation,
+                heading: heading,
+                pitch: 90,
+                roll: 0
+            )
+        }
         
         // We have to do this or the error gets bigger and bigger.
         cameraController.transformationMatrix = .identity
@@ -245,46 +300,28 @@ public struct WorldScaleGeoTrackingSceneView: View {
         return view
     }
     
-    /// Updates the heading of the scene view camera controller.
-    /// - Parameter heading: The camera heading.
-    func updateHeading(_ heading: Double) {
-        cameraController.originCamera = cameraController.originCamera.rotatedTo(
-            heading: calibrationHeading ?? heading,
-            pitch: cameraController.originCamera.pitch,
-            roll: cameraController.originCamera.roll
-        )
-    }
-    
-    /// A view that allows the user to calibrate the heading of the scene view camera controller.
-    var calibrationView: some View {
-        HStack {
-            Button {
-                let heading = cameraController.originCamera.heading + 1
-                updateHeading(heading)
-                calibrationHeading = heading
-            } label: {
-                Image(systemName: "plus")
-            }
-            
-            Text("heading: \(calibrationHeading?.rounded() ?? cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
-            
-            Button {
-                let heading = cameraController.originCamera.heading - 1
-                updateHeading(heading)
-                calibrationHeading = heading
-            } label: {
-                Image(systemName: "minus")
-            }
-        }
+    /// Sets the alignment of the calibration view.
+    /// - Parameter alignment: The alignment for the calibration view.
+    public func calibrationViewAlignment(_ alignment: Alignment) -> Self {
+        var view = self
+        view.calibrationViewAlignment = alignment
+        return view
     }
     
     /// A view that displays the horizontal and vertical accuracy of the current location datasource location.
+    @ViewBuilder
     var accuracyView: some View {
-        VStack {
-            if let currentLocation {
-                Text("horizontalAccuracy: \(currentLocation.horizontalAccuracy, format: .number)")
-                Text("verticalAccuracy: \(currentLocation.verticalAccuracy, format: .number)")
+        if let currentLocation {
+            VStack {
+                Text("H. Accuracy: \(currentLocation.horizontalAccuracy.formatted(.number.precision(.fractionLength(2))))")
+                Text("V. Accuracy: \(currentLocation.verticalAccuracy.formatted(.number.precision(.fractionLength(2))))")
             }
+            .multilineTextAlignment(.center)
+            .padding(8)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .background(.regularMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .padding([.horizontal, .top])
         }
     }
 }
