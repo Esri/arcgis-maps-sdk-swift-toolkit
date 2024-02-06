@@ -34,7 +34,7 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Filters the group's elements by visibility.
 ***REMOVED***private func updateVisibleElements() {
-***REMOVED******REMOVED***visibleElements = element.formElements.filter { $0.isVisible ***REMOVED***
+***REMOVED******REMOVED***visibleElements = element.elements.filter { $0.isVisible ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ - Creates a view for a group form element and manages the visibility of the elements within
@@ -65,7 +65,7 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***element.formElements.forEach { element in
+***REMOVED******REMOVED******REMOVED***element.elements.forEach { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED***let newTask = Task.detached { [self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await _ in element.$isVisible {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await MainActor.run {
