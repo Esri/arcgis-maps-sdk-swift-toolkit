@@ -73,7 +73,6 @@ private struct Thumb: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Circle()
 ***REMOVED******REMOVED******REMOVED***.stroke(Color.accentColor, lineWidth: 2)
-***REMOVED******REMOVED******REMOVED***.foregroundStyle(.background)
 ***REMOVED******REMOVED******REMOVED***.frame(width: Self.size, height: Self.size)
 ***REMOVED******REMOVED******REMOVED***.background {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Circle()
