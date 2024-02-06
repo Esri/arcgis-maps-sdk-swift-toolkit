@@ -150,7 +150,9 @@ private struct JoystickSliderView: View {
             if !editingChanged {
                 timer?.invalidate()
                 timer = nil
-                value = 0.0
+                withAnimation {
+                    value = 0.0
+                }
             }
         }
         .onChange(of: value) { value in
