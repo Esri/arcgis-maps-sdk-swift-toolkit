@@ -39,7 +39,7 @@ struct Joyslider: View {
                                 isChanging = true
                                 
                                 let halfWidth = (geometry.size.width / 2)
-                                offset = max(min(value.translation.width, halfWidth), -halfWidth)
+                                offset = value.translation.width.clamped(to: -halfWidth...halfWidth)
                                 factor = offset / halfWidth
                             }
                             .onEnded { _ in
