@@ -31,7 +31,7 @@ extension WorldScaleGeoTrackingSceneView {
         @State private var elevationDelta = 0.0
         /// A number format style for signed values with their fractional component removed.
         private let numberFormat = FloatingPointFormatStyle<Double>.number
-            .precision(.fractionLength(0))
+            .precision(.fractionLength(1))
             .sign(strategy: .always(includingZero: false))
         
         var body: some View {
@@ -79,10 +79,6 @@ extension WorldScaleGeoTrackingSceneView {
                     .onChanged { delta in
                         heading = (heading + delta).clamped(to: -180...180)
                     }
-                    .onEnded {
-                        // Round the value now that it stopped changing.
-                        heading = heading.rounded()
-                    }
             }
         }
         
@@ -108,10 +104,6 @@ extension WorldScaleGeoTrackingSceneView {
                 Joyslider()
                     .onChanged { delta in
                         elevation += delta
-                    }
-                    .onEnded {
-                        // Round the value now that it stopped changing.
-                        elevation = elevation.rounded()
                     }
             }
             .onChange(of: elevation) { elevation in
