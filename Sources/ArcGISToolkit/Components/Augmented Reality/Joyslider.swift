@@ -17,7 +17,8 @@ import SwiftUI
 /// A slider that acts similar to a joystick controller.
 /// The slider provides delta values as they change between -1...1.
 struct Joyslider: View {
-    private var onValueChangedAction: ((Double) -> Void)?
+    private var onChangedAction: ((Double) -> Void)?
+    private var onEndedAction: (() -> Void)?
     
     /// The x offset of the thumb in points.
     @State private var offset: Double = 0
@@ -46,6 +47,7 @@ struct Joyslider: View {
                                 withAnimation(.bouncy) {
                                     offset = 0
                                 }
+                                onEndedAction?()
                             }
                     )
             }
@@ -66,15 +68,22 @@ struct Joyslider: View {
                 // If task is cancelled after sleeping, return.
                 if Task.isCancelled { return }
                 // Otherwise change the value.
-                onValueChangedAction?(factor)
+                onChangedAction?(factor)
             }
         }
     }
     
-    /// Specifies an on value changed action.
-    func onValueChanged(perform action: @escaping (Double) -> Void) -> Joyslider {
+    /// Specifies an action to perform when the value changes.
+    func onChanged(perform action: @escaping (Double) -> Void) -> Joyslider {
         var copy = self
-        copy.onValueChangedAction = action
+        copy.onChangedAction = action
+        return copy
+    }
+    
+    /// Specifies an action to perform when the value stops changing.
+    func onEnded(perform action: @escaping () -> Void) -> Joyslider {
+        var copy = self
+        copy.onEndedAction = action
         return copy
     }
 }
