@@ -29,7 +29,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***@Binding var initialElevation: Double
 ***REMOVED******REMOVED******REMOVED***/ The elevation delta value after calibrating.
 ***REMOVED******REMOVED***@State private var elevationDelta = 0.0
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A number format style for signed values with their fractional component removed.
 ***REMOVED******REMOVED***private let numberFormat = FloatingPointFormatStyle<Double>.number
 ***REMOVED******REMOVED******REMOVED***.precision(.fractionLength(0))
 ***REMOVED******REMOVED******REMOVED***.sign(strategy: .always(includingZero: false))
