@@ -62,20 +62,20 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(heading.isLess(than: 0) || heading.rounded().isZero ? "" : "+") +
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((heading.truncatingRemainder(dividingBy: 180)), format: .number.precision(.fractionLength(0)))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(heading.isLess(than: 0) || heading.rounded().isZero ? "" : "+")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***+ Text(heading, format: .number.precision(.fractionLength(0)))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***+ Text("°")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading += 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = (heading + 1).clamped(to: -180...180)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onDecrement: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading -= 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = (heading - 1).clamped(to: -180...180)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***JoystickSliderView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSliderDeltaValueChanged { delta in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading += delta
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = (heading + delta).clamped(to: -180...180)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
