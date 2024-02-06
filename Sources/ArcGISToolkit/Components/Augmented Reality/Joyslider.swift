@@ -14,11 +14,16 @@
 
 import SwiftUI
 
+/// A slider that acts similar to a joystick controller.
+/// The slider provides delta values as they change between -1...1.
 struct Joyslider: View {
-    var onValueChangedAction: ((Double) -> Void)?
+    private var onValueChangedAction: ((Double) -> Void)?
     
+    /// The x offset of the thumb in points.
     @State private var offset: Double = 0
+    /// A factor between -1 and 1 that specifies the current percentage of the thumb's position.
     @State private var factor: Double = 0
+    /// A Boolean value indicating if the user is dragging the thumb.
     @State private var isChanging = false
     
     var body: some View {
@@ -61,6 +66,7 @@ struct Joyslider: View {
         }
     }
     
+    /// Specifies an on value changed action.
     func onValueChanged(perform action: @escaping (Double) -> Void) -> Joyslider {
         var copy = self
         copy.onValueChangedAction = action
@@ -68,8 +74,11 @@ struct Joyslider: View {
     }
 }
 
+/// Thumb view for the joyslider.
 private struct Thumb: View {
+    /// The size of the thumb.
     static let size: Double = 26
+    
     var body: some View {
         Circle()
             .stroke(Color.accentColor, lineWidth: 2)
@@ -83,8 +92,11 @@ private struct Thumb: View {
     }
 }
 
+/// Track view for the joyslider.
 private struct Track: View {
+    /// A Boolean value indicating if the user is dragging the thumb.
     let offset: Double
+    /// A factor between -1 and 1 that specifies the current percentage of the thumb's position.
     let factor: Double
     
     var body: some View {
@@ -119,6 +131,7 @@ private struct Track: View {
 }
 
 private extension Color {
+    /// The system fill color.
     static var systemFill: Color { Color(UIColor.systemFill) }
 }
 
