@@ -73,7 +73,6 @@ private struct Thumb: View {
     var body: some View {
         Circle()
             .stroke(Color.accentColor, lineWidth: 2)
-            .foregroundStyle(.background)
             .frame(width: Self.size, height: Self.size)
             .background {
                 Circle()
