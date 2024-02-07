@@ -122,6 +122,10 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
            let pivToken = TKTokenWatcher().tokenIDs.filter({ $0.localizedCaseInsensitiveContains("pivtoken") }).first,
            let credential = try? NetworkCredential.smartCard(pivToken: pivToken) {
             return .continueWithCredential(credential)
+        } else if challenge.kind == .negotiate {
+            // Reject the negotiate challenge so next authentication protection
+            // space is tried.
+            return .rejectProtectionSpace
         }
         
         let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)
