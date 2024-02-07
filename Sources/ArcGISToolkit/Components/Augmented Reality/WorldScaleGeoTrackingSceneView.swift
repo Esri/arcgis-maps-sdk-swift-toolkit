@@ -48,7 +48,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***private var validAccuracyThreshold = 0.0
 ***REMOVED******REMOVED***/ Determines the alignment of the calibration view.
 ***REMOVED***private var calibrationViewAlignment: Alignment = .bottom
-***REMOVED***
+***REMOVED******REMOVED***/ The view model for the calibration view.
 ***REMOVED***@ObservedObject private var calibrationViewModel = CalibrationViewModel()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
