@@ -22,6 +22,12 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
+***REMOVED******REMOVED***/ The camera controller heading.
+***REMOVED***@State var heading: Double = 0
+***REMOVED******REMOVED***/ The camera controller elevation.
+***REMOVED***@State var elevation: Double = 0
+***REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
+***REMOVED***@State var isCalibrating = false
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
@@ -44,8 +50,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@State private var currentLocation: Location?
 ***REMOVED******REMOVED***/ The current device heading.
 ***REMOVED***@State private var currentHeading: Double?
-***REMOVED******REMOVED***/ The calibrated camera heading.
-***REMOVED***@State private var calibrationHeading: Double?
 ***REMOVED******REMOVED***/ The valid accuracy threshold for a location in meters.
 ***REMOVED***private let validAccuracyThreshold = 0.0
 ***REMOVED******REMOVED***/ The distance threshold in meters between camera and device location to reset
@@ -60,6 +64,10 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***else { return nil ***REMOVED***
 ***REMOVED******REMOVED***return position
 ***REMOVED***
+***REMOVED******REMOVED***/ Determines the alignment of the calibration view.
+***REMOVED***private var calibrationViewAlignment: Alignment = .bottom
+***REMOVED******REMOVED***/ The initial camera controller elevation.
+***REMOVED***@State private var initialElevation = 0.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -72,7 +80,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/ be effectively viewed in augmented reality. Properties such as the camera controller,
 ***REMOVED******REMOVED***/ and view drawing mode.
 ***REMOVED***public init(
-***REMOVED******REMOVED***trackingType: TrackingType = .geoTracking,
+***REMOVED******REMOVED***trackingType: TrackingType = .worldTracking,
 ***REMOVED******REMOVED***locationDataSource: LocationDataSource = SystemLocationDataSource(),
 ***REMOVED******REMOVED***clippingDistance: Double? = nil,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
@@ -138,7 +146,43 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentCamera = camera
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.all)
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: calibrationViewAlignment) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if configuration is ARWorldTrackingConfiguration,
+***REMOVED******REMOVED******REMOVED******REMOVED***   !calibrationViewIsHidden {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isCalibrating {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Calibrate")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!initialCameraIsSet)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isCalibrating {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: $heading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation: $elevation,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: $isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialElevation: $initialElevation
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .top) {
+***REMOVED******REMOVED******REMOVED******REMOVED***accuracyView
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARCoachingOverlay(goal: .geoTracking)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sessionProvider(arViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCoachingOverlayActivate { _ in
@@ -182,17 +226,15 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentHeading = heading
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.overlay(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED***if !calibrationViewIsHidden {
-***REMOVED******REMOVED******REMOVED******REMOVED***calibrationView
+***REMOVED******REMOVED***.onChange(of: heading) { heading in
+***REMOVED******REMOVED******REMOVED***if let currentLocation {
+***REMOVED******REMOVED******REMOVED******REMOVED***updateCameraController(location: currentLocation, heading: heading, altitude: elevation)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.overlay(alignment: .top) {
-***REMOVED******REMOVED******REMOVED***accuracyView
-***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+***REMOVED******REMOVED***.onChange(of: elevation) { elevation in
+***REMOVED******REMOVED******REMOVED***if let currentLocation {
+***REMOVED******REMOVED******REMOVED******REMOVED***updateCameraController(location: currentLocation, heading: heading, altitude: elevation)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -201,6 +243,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/   - location: The location for the camera.
 ***REMOVED******REMOVED***/   - heading: The heading for the camera.
 ***REMOVED***private func updateCameraController(location: Location, heading: Double, altitude: Double) {
+***REMOVED******REMOVED******REMOVED*** Ignore location updates when calibrating heading and elevation.
+***REMOVED******REMOVED***guard !isCalibrating else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Add some of the vertical accuracy to the z value of the position, that way if the
 ***REMOVED******REMOVED******REMOVED*** GPS location is not accurate, it won't end up below the earth's surface.
 ***REMOVED******REMOVED***let adjustedAltitude = altitude + location.verticalAccuracy
@@ -233,9 +277,9 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***  location.verticalAccuracy > validAccuracyThreshold else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Make sure we need to update the camera based on distance deviation.
-***REMOVED******REMOVED***guard shouldUpdateCamera(for: location) else { return ***REMOVED***
+***REMOVED******REMOVED***guard !initialCameraIsSet || shouldUpdateCamera(for: location) else { return ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***updateCameraController(location: location, heading: calibrationHeading ?? 0, altitude: currentPosition?.z ?? 0)
+***REMOVED******REMOVED***updateCameraController(location: location, heading: heading, altitude: elevation)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Reset the AR session to provide the best tracking performance.
 ***REMOVED******REMOVED***arViewProxy.session.run(configuration, options: .resetTracking)
@@ -279,36 +323,28 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A view that allows the user to calibrate the heading of the scene view camera controller.
-***REMOVED***var calibrationView: some View {
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***let heading = cameraController.originCamera.heading + 1
-***REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(heading)
-***REMOVED******REMOVED******REMOVED******REMOVED***calibrationHeading = heading
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "plus")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Text("heading: \(calibrationHeading?.rounded() ?? cameraController.originCamera.heading.rounded(.towardZero), format: .number)")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***let heading = cameraController.originCamera.heading - 1
-***REMOVED******REMOVED******REMOVED******REMOVED***updateHeading(heading)
-***REMOVED******REMOVED******REMOVED******REMOVED***calibrationHeading = heading
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "minus")
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***/ Sets the alignment of the calibration view.
+***REMOVED******REMOVED***/ - Parameter alignment: The alignment for the calibration view.
+***REMOVED***public func calibrationViewAlignment(_ alignment: Alignment) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.calibrationViewAlignment = alignment
+***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view that displays the horizontal and vertical accuracy of the current location datasource location.
+***REMOVED***@ViewBuilder
 ***REMOVED***var accuracyView: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if let currentLocation {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("horizontalAccuracy: \(currentLocation.horizontalAccuracy, format: .number)")
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("verticalAccuracy: \(currentLocation.verticalAccuracy, format: .number)")
+***REMOVED******REMOVED***if let currentLocation {
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("H. Accuracy: \(currentLocation.horizontalAccuracy.formatted(.number.precision(.fractionLength(2))))")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("V. Accuracy: \(currentLocation.verticalAccuracy.formatted(.number.precision(.fractionLength(2))))")
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
+***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
+***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10))
+***REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
