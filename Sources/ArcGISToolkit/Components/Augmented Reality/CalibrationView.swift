@@ -15,20 +15,63 @@
 import ARKit
 import SwiftUI
 import ArcGIS
+import Combine
 
+extension WorldScaleGeoTrackingSceneView {
+    /// A view model that stores state information for the calibration.
+    @MainActor
+    class CalibrationViewModel: ObservableObject {
+        /// The total heading correction.
+        @Published
+        private(set) var totalHeadingCorrection: Double = 0
+        
+        /// The total elevation correction.
+        @Published
+        private(set) var totalElevationCorrection: Double = 0
+
+        // A subject for the heading corrections to publish as they come in.
+        private var headingSubject = PassthroughSubject<Double, Never>()
+        
+        // A subject for the elevation corrections to publish as they come in.
+        private var elevationSubject = PassthroughSubject<Double, Never>()
+        
+        /// The heading corrections.
+        var headingCorrections: AnyPublisher<Double, Never> {
+            headingSubject.eraseToAnyPublisher()
+        }
+        
+        /// The elevation corrections.
+        var elevationCorrections: AnyPublisher<Double, Never> {
+            elevationSubject.eraseToAnyPublisher()
+        }
+        
+        /// Proposes a heading correction.
+        /// This will limit the total heading correction to -180...180.
+        fileprivate func propose(headingCorrection: Double) {
+            let newTotalHeadingCorrection = (totalHeadingCorrection + headingCorrection)
+                .clamped(to: -180...180)
+            let allowedHeadingCorrection = newTotalHeadingCorrection - totalHeadingCorrection
+            totalHeadingCorrection = newTotalHeadingCorrection
+            headingSubject.send(allowedHeadingCorrection)
+        }
+        
+        /// Proposes an elevation correction.
+        fileprivate func propose(elevationCorrection: Double) {
+            totalElevationCorrection += elevationCorrection
+            elevationSubject.send(elevationCorrection)
+        }
+    }
+}
+    
 extension WorldScaleGeoTrackingSceneView {
     /// A view that allows the user to calibrate the heading of the scene view camera controller.
     struct CalibrationView: View {
-        /// The camera controller heading.
-        @Binding var heading: Double
-        /// The camera controller elevation.
-        @Binding var elevation: Double
-        /// A Boolean value that indicates if the user is calibrating.
-        @Binding var isCalibrating: Bool
-        /// The initial camera controller elevation.
-        @Binding var initialElevation: Double
-        /// The elevation delta value after calibrating.
-        @State private var elevationDelta = 0.0
+        @ObservedObject
+        var viewModel: CalibrationViewModel
+        
+        /// A Boolean value that indicates if the user is presenting the calibration view.
+        @Binding
+        var isPresented: Bool
         /// A number format style for signed values with their fractional component removed.
         private let numberFormat = FloatingPointFormatStyle<Double>.number
             .precision(.fractionLength(1))
@@ -66,18 +109,18 @@ extension WorldScaleGeoTrackingSceneView {
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text(heading, format: numberFormat) + Text("°")
+                            Text(viewModel.totalHeadingCorrection, format: numberFormat) + Text("°")
                             Spacer()
                         }
                     } onIncrement: {
-                        heading = (heading + 1).clamped(to: -180...180)
+                        viewModel.propose(headingCorrection: 1)
                     } onDecrement: {
-                        heading = (heading - 1).clamped(to: -180...180)
+                        viewModel.propose(headingCorrection: -1)
                     }
                 }
                 Joyslider()
                     .onChanged { delta in
-                        heading = (heading + delta).clamped(to: -180...180)
+                        viewModel.propose(headingCorrection: delta)
                     }
             }
         }
@@ -92,25 +135,19 @@ extension WorldScaleGeoTrackingSceneView {
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text(elevationDelta, format: numberFormat) + Text(" m")
+                            Text(viewModel.totalElevationCorrection, format: numberFormat) + Text(" m")
                             Spacer()
                         }
                     } onIncrement: {
-                        elevation += 1
+                        viewModel.propose(elevationCorrection: 1)
                     } onDecrement: {
-                        elevation -= 1
+                        viewModel.propose(elevationCorrection: -1)
                     }
                 }
                 Joyslider()
                     .onChanged { delta in
-                        elevation += delta
+                        viewModel.propose(elevationCorrection: delta)
                     }
-            }
-            .onChange(of: elevation) { elevation in
-                elevationDelta =  elevation - initialElevation
-            }
-            .onAppear {
-                elevationDelta =  elevation - initialElevation
             }
         }
         
@@ -118,7 +155,7 @@ extension WorldScaleGeoTrackingSceneView {
         var dismissButton: some View {
             Button {
                 withAnimation {
-                    isCalibrating = false
+                    isPresented = false
                 }
             } label: {
                 Image(systemName: "xmark.circle.fill")
