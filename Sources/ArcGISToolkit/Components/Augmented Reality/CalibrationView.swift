@@ -91,7 +91,7 @@ extension WorldScaleGeoTrackingSceneView {
         var body: some View {
             VStack {
                 HStack(alignment: .firstTextBaseline) {
-                    Text("Calibration")
+                    Text(calibrationLabel)
                         .font(.title)
                         .lineLimit(1)
                     Spacer()
@@ -116,7 +116,7 @@ extension WorldScaleGeoTrackingSceneView {
                 HStack {
                     Stepper() {
                         HStack {
-                            Text("Heading")
+                            Text(headingLabel)
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
@@ -142,7 +142,7 @@ extension WorldScaleGeoTrackingSceneView {
                 HStack {
                     Stepper() {
                         HStack {
-                            Text("Elevation")
+                            Text(elevationLabel)
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
@@ -177,5 +177,38 @@ extension WorldScaleGeoTrackingSceneView {
             }
             .buttonStyle(.plain)
         }
+    }
+}
+
+private extension WorldScaleGeoTrackingSceneView.CalibrationView {
+    var calibrationLabel: String {
+        String(
+            localized: "Calibration",
+            bundle: .toolkitModule,
+            comment: """
+                 A label for the calibration view used to calibrate the camera
+                 for the AR experience.
+                 """
+        )
+    }
+    var headingLabel: String {
+        String(
+            localized: "heading",
+            bundle: .toolkitModule,
+            comment: """
+                 A label for the slider that adjusts the camera heading for the
+                 AR experience.
+                 """
+        )
+    }
+    var elevationLabel: String {
+        String(
+            localized: "elevation",
+            bundle: .toolkitModule,
+            comment: """
+                 A label for the slider that adjusts the camera elevation for the
+                 AR experience.
+                 """
+        )
     }
 }
