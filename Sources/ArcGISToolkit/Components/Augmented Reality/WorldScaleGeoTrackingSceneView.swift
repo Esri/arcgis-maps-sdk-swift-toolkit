@@ -22,10 +22,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
-***REMOVED******REMOVED***/ The camera controller heading.
-***REMOVED***@State var heading: Double = 0
-***REMOVED******REMOVED***/ The camera controller elevation.
-***REMOVED***@State var elevation: Double = 0
 ***REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
 ***REMOVED***@State var isCalibrating = false
 ***REMOVED******REMOVED***/ The current interface orientation.
@@ -52,8 +48,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED***private var validAccuracyThreshold = 0.0
 ***REMOVED******REMOVED***/ Determines the alignment of the calibration view.
 ***REMOVED***private var calibrationViewAlignment: Alignment = .bottom
-***REMOVED******REMOVED***/ The initial camera controller elevation.
-***REMOVED***@State private var initialElevation = 0.0
+***REMOVED******REMOVED***/ The view model for the calibration view.
+***REMOVED***@StateObject private var calibrationViewModel = CalibrationViewModel()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -141,13 +137,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottom) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isCalibrating {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: $heading,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation: $elevation,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: $isCalibrating,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialElevation: $initialElevation
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(viewModel: calibrationViewModel, isPresented: $isCalibrating)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .top) {
@@ -188,17 +179,16 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: heading) { heading in
+***REMOVED******REMOVED***.onReceive(calibrationViewModel.headingCorrections) { correction in
 ***REMOVED******REMOVED******REMOVED***let originCamera = cameraController.originCamera
 ***REMOVED******REMOVED******REMOVED***cameraController.originCamera = originCamera.rotatedTo(
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: heading,
+***REMOVED******REMOVED******REMOVED******REMOVED***heading: originCamera.heading + correction,
 ***REMOVED******REMOVED******REMOVED******REMOVED***pitch: originCamera.pitch,
 ***REMOVED******REMOVED******REMOVED******REMOVED***roll: originCamera.roll
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: elevation) { elevation in
-***REMOVED******REMOVED******REMOVED***let elevationDelta = elevation - (cameraController.originCamera.location.z ?? 0)
-***REMOVED******REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.elevated(by: elevationDelta)
+***REMOVED******REMOVED***.onReceive(calibrationViewModel.elevationCorrections) { correction in
+***REMOVED******REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.elevated(by: correction)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -225,26 +215,22 @@ public struct WorldScaleGeoTrackingSceneView: View {
 ***REMOVED******REMOVED***let altitude = (location.position.z ?? 0) + location.verticalAccuracy
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if !initialCameraIsSet {
-***REMOVED******REMOVED******REMOVED***let heading = 0.0
 ***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
 ***REMOVED******REMOVED******REMOVED******REMOVED***latitude: location.position.y,
 ***REMOVED******REMOVED******REMOVED******REMOVED***longitude: location.position.x,
 ***REMOVED******REMOVED******REMOVED******REMOVED***altitude: altitude,
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: heading,
+***REMOVED******REMOVED******REMOVED******REMOVED***heading: 0,
 ***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
 ***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***self.heading = heading
-***REMOVED******REMOVED******REMOVED***elevation = altitude
-***REMOVED******REMOVED******REMOVED***initialElevation = altitude
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Ignore location updates when calibrating heading and elevation.
 ***REMOVED******REMOVED******REMOVED***guard !isCalibrating else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
 ***REMOVED******REMOVED******REMOVED******REMOVED***latitude: location.position.y,
 ***REMOVED******REMOVED******REMOVED******REMOVED***longitude: location.position.x,
-***REMOVED******REMOVED******REMOVED******REMOVED***altitude: elevation,
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: heading,
+***REMOVED******REMOVED******REMOVED******REMOVED***altitude: altitude + calibrationViewModel.totalElevationCorrection,
+***REMOVED******REMOVED******REMOVED******REMOVED***heading: calibrationViewModel.totalHeadingCorrection,
 ***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
 ***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
 ***REMOVED******REMOVED******REMOVED***)

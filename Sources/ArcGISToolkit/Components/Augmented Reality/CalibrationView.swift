@@ -15,20 +15,63 @@
 import ARKit
 ***REMOVED***
 ***REMOVED***
+import Combine
 
+extension WorldScaleGeoTrackingSceneView {
+***REMOVED******REMOVED***/ A view model that stores state information for the calibration.
+***REMOVED***@MainActor
+***REMOVED***class CalibrationViewModel: ObservableObject {
+***REMOVED******REMOVED******REMOVED***/ The total heading correction.
+***REMOVED******REMOVED***@Published
+***REMOVED******REMOVED***private(set) var totalHeadingCorrection: Double = 0
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The total elevation correction.
+***REMOVED******REMOVED***@Published
+***REMOVED******REMOVED***private(set) var totalElevationCorrection: Double = 0
+
+***REMOVED******REMOVED******REMOVED*** A subject for the heading corrections to publish as they come in.
+***REMOVED******REMOVED***private var headingSubject = PassthroughSubject<Double, Never>()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** A subject for the elevation corrections to publish as they come in.
+***REMOVED******REMOVED***private var elevationSubject = PassthroughSubject<Double, Never>()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The heading corrections.
+***REMOVED******REMOVED***var headingCorrections: AnyPublisher<Double, Never> {
+***REMOVED******REMOVED******REMOVED***headingSubject.eraseToAnyPublisher()
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The elevation corrections.
+***REMOVED******REMOVED***var elevationCorrections: AnyPublisher<Double, Never> {
+***REMOVED******REMOVED******REMOVED***elevationSubject.eraseToAnyPublisher()
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Proposes a heading correction.
+***REMOVED******REMOVED******REMOVED***/ This will limit the total heading correction to -180...180.
+***REMOVED******REMOVED***fileprivate func propose(headingCorrection: Double) {
+***REMOVED******REMOVED******REMOVED***let newTotalHeadingCorrection = (totalHeadingCorrection + headingCorrection)
+***REMOVED******REMOVED******REMOVED******REMOVED***.clamped(to: -180...180)
+***REMOVED******REMOVED******REMOVED***let allowedHeadingCorrection = newTotalHeadingCorrection - totalHeadingCorrection
+***REMOVED******REMOVED******REMOVED***totalHeadingCorrection = newTotalHeadingCorrection
+***REMOVED******REMOVED******REMOVED***headingSubject.send(allowedHeadingCorrection)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Proposes an elevation correction.
+***REMOVED******REMOVED***fileprivate func propose(elevationCorrection: Double) {
+***REMOVED******REMOVED******REMOVED***totalElevationCorrection += elevationCorrection
+***REMOVED******REMOVED******REMOVED***elevationSubject.send(elevationCorrection)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***/ A view that allows the user to calibrate the heading of the scene view camera controller.
 ***REMOVED***struct CalibrationView: View {
-***REMOVED******REMOVED******REMOVED***/ The camera controller heading.
-***REMOVED******REMOVED***@Binding var heading: Double
-***REMOVED******REMOVED******REMOVED***/ The camera controller elevation.
-***REMOVED******REMOVED***@Binding var elevation: Double
-***REMOVED******REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
-***REMOVED******REMOVED***@Binding var isCalibrating: Bool
-***REMOVED******REMOVED******REMOVED***/ The initial camera controller elevation.
-***REMOVED******REMOVED***@Binding var initialElevation: Double
-***REMOVED******REMOVED******REMOVED***/ The elevation delta value after calibrating.
-***REMOVED******REMOVED***@State private var elevationDelta = 0.0
+***REMOVED******REMOVED***@ObservedObject
+***REMOVED******REMOVED***var viewModel: CalibrationViewModel
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value that indicates if the user is presenting the calibration view.
+***REMOVED******REMOVED***@Binding
+***REMOVED******REMOVED***var isPresented: Bool
 ***REMOVED******REMOVED******REMOVED***/ A number format style for signed values with their fractional component removed.
 ***REMOVED******REMOVED***private let numberFormat = FloatingPointFormatStyle<Double>.number
 ***REMOVED******REMOVED******REMOVED***.precision(.fractionLength(1))
@@ -66,18 +109,18 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(heading, format: numberFormat) + Text("°")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.totalHeadingCorrection, format: numberFormat) + Text("°")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = (heading + 1).clamped(to: -180...180)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.propose(headingCorrection: 1)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onDecrement: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = (heading - 1).clamped(to: -180...180)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.propose(headingCorrection: -1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Joyslider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChanged { delta in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = (heading + delta).clamped(to: -180...180)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.propose(headingCorrection: delta)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -92,25 +135,19 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(elevationDelta, format: numberFormat) + Text(" m")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.totalElevationCorrection, format: numberFormat) + Text(" m")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation += 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.propose(elevationCorrection: 1)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onDecrement: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation -= 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.propose(elevationCorrection: -1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Joyslider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChanged { delta in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***elevation += delta
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.propose(elevationCorrection: delta)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: elevation) { elevation in
-***REMOVED******REMOVED******REMOVED******REMOVED***elevationDelta =  elevation - initialElevation
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***elevationDelta =  elevation - initialElevation
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -118,7 +155,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***var dismissButton: some View {
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle.fill")
