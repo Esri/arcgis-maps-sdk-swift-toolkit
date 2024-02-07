@@ -108,7 +108,7 @@ private struct Thumb: View {
 
 ***REMOVED***/ Track view for the joyslider.
 private struct Track: View {
-***REMOVED******REMOVED***/ A Boolean value indicating if the user is dragging the thumb.
+***REMOVED******REMOVED***/ The x offset of the thumb in points.
 ***REMOVED***let offset: Double
 ***REMOVED******REMOVED***/ A factor between -1 and 1 that specifies the current percentage of the thumb's position.
 ***REMOVED***let factor: Double
