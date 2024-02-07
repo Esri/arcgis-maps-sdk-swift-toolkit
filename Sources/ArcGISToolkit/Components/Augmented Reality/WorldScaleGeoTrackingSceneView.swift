@@ -49,7 +49,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
     /// Determines the alignment of the calibration view.
     private var calibrationViewAlignment: Alignment = .bottom
     /// The view model for the calibration view.
-    @ObservedObject private var calibrationViewModel = CalibrationViewModel()
+    @StateObject private var calibrationViewModel = CalibrationViewModel()
     
     /// Creates a world scale scene view.
     /// - Parameters:
