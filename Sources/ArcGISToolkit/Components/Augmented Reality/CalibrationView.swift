@@ -72,10 +72,21 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value that indicates if the user is presenting the calibration view.
 ***REMOVED******REMOVED***@Binding
 ***REMOVED******REMOVED***var isPresented: Bool
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A number format style for signed values with their fractional component removed.
 ***REMOVED******REMOVED***private let numberFormat = FloatingPointFormatStyle<Double>.number
 ***REMOVED******REMOVED******REMOVED***.precision(.fractionLength(1))
 ***REMOVED******REMOVED******REMOVED***.sign(strategy: .always(includingZero: false))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The total heading correction measurement in degrees.
+***REMOVED******REMOVED***private var totalHeadingCorrectionMeasurement: Measurement<UnitAngle> {
+***REMOVED******REMOVED******REMOVED***Measurement<UnitAngle>(value: viewModel.totalHeadingCorrection, unit: .degrees)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The total elevation correction measurement in meters.
+***REMOVED******REMOVED***private var totalElevationCorrectionMeasurement: Measurement<UnitLength> {
+***REMOVED******REMOVED******REMOVED***Measurement<UnitLength>(value: viewModel.totalElevationCorrection, unit: .meters)
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
@@ -109,7 +120,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.totalHeadingCorrection, format: numberFormat) + Text("°")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(totalHeadingCorrectionMeasurement, format: .measurement(width: .narrow, numberFormatStyle: numberFormat))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
@@ -135,7 +146,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.totalElevationCorrection, format: numberFormat) + Text(" m")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(totalElevationCorrectionMeasurement, format: .measurement(width: .abbreviated, usage: .asProvided, numberFormatStyle: numberFormat))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
