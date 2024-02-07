@@ -45,8 +45,8 @@ extension WorldScaleGeoTrackingSceneView {
             elevationSubject.eraseToAnyPublisher()
         }
         
-        /// Propose a heading correction.
-        /// This will limit the total heading correction to -180...180
+        /// Proposes a heading correction.
+        /// This will limit the total heading correction to -180...180.
         fileprivate func propose(headingCorrection: Double) {
             let newTotalHeadingCorrection = (totalHeadingCorrection + headingCorrection)
                 .clamped(to: -180...180)
@@ -55,7 +55,7 @@ extension WorldScaleGeoTrackingSceneView {
             headingSubject.send(allowedHeadingCorrection)
         }
         
-        /// Propose an elevation correction.
+        /// Proposes an elevation correction.
         fileprivate func propose(elevationCorrection: Double) {
             totalElevationCorrection += elevationCorrection
             elevationSubject.send(elevationCorrection)
