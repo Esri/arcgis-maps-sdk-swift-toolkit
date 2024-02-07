@@ -121,7 +121,7 @@ private struct Track: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Capsule(style: .continuous)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(fill)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: abs(offset))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.offset(x: offset/2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.offset(x: offset / 2)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(height: 4)
