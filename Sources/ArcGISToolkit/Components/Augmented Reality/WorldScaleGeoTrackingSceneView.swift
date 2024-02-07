@@ -22,10 +22,6 @@ public struct WorldScaleGeoTrackingSceneView: View {
     @State private var arViewProxy = ARSwiftUIViewProxy()
     /// The camera controller that will be set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
-    /// The camera controller heading.
-    @State var heading: Double = 0
-    /// The camera controller elevation.
-    @State var elevation: Double = 0
     /// A Boolean value that indicates if the user is calibrating.
     @State var isCalibrating = false
     /// The current interface orientation.
@@ -52,8 +48,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
     private var validAccuracyThreshold = 0.0
     /// Determines the alignment of the calibration view.
     private var calibrationViewAlignment: Alignment = .bottom
-    /// The initial camera controller elevation.
-    @State private var initialElevation = 0.0
+    /// The view model for the calibration view.
+    @StateObject private var calibrationViewModel = CalibrationViewModel()
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -141,13 +137,8 @@ public struct WorldScaleGeoTrackingSceneView: View {
             }
             .overlay(alignment: .bottom) {
                 if isCalibrating {
-                    CalibrationView(
-                        heading: $heading,
-                        elevation: $elevation,
-                        isCalibrating: $isCalibrating,
-                        initialElevation: $initialElevation
-                    )
-                    .padding(.bottom)
+                    CalibrationView(viewModel: calibrationViewModel, isPresented: $isCalibrating)
+                        .padding(.bottom)
                 }
             }
             .overlay(alignment: .top) {
@@ -188,17 +179,16 @@ public struct WorldScaleGeoTrackingSceneView: View {
                 }
             } catch {}
         }
-        .onChange(of: heading) { heading in
+        .onReceive(calibrationViewModel.headingCorrections) { correction in
             let originCamera = cameraController.originCamera
             cameraController.originCamera = originCamera.rotatedTo(
-                heading: heading,
+                heading: originCamera.heading + correction,
                 pitch: originCamera.pitch,
                 roll: originCamera.roll
             )
         }
-        .onChange(of: elevation) { elevation in
-            let elevationDelta = elevation - (cameraController.originCamera.location.z ?? 0)
-            cameraController.originCamera = cameraController.originCamera.elevated(by: elevationDelta)
+        .onReceive(calibrationViewModel.elevationCorrections) { correction in
+            cameraController.originCamera = cameraController.originCamera.elevated(by: correction)
         }
     }
     
@@ -225,26 +215,22 @@ public struct WorldScaleGeoTrackingSceneView: View {
         let altitude = (location.position.z ?? 0) + location.verticalAccuracy
         
         if !initialCameraIsSet {
-            let heading = 0.0
             cameraController.originCamera = Camera(
                 latitude: location.position.y,
                 longitude: location.position.x,
                 altitude: altitude,
-                heading: heading,
+                heading: 0,
                 pitch: 90,
                 roll: 0
             )
-            self.heading = heading
-            elevation = altitude
-            initialElevation = altitude
         } else {
             // Ignore location updates when calibrating heading and elevation.
             guard !isCalibrating else { return }
             cameraController.originCamera = Camera(
                 latitude: location.position.y,
                 longitude: location.position.x,
-                altitude: elevation,
-                heading: heading,
+                altitude: altitude + calibrationViewModel.totalElevationCorrection,
+                heading: calibrationViewModel.totalHeadingCorrection,
                 pitch: 90,
                 roll: 0
             )
