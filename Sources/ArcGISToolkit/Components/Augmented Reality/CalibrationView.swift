@@ -45,8 +45,8 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***elevationSubject.eraseToAnyPublisher()
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Propose a heading correction.
-***REMOVED******REMOVED******REMOVED***/ This will limit the total heading correction to -180...180
+***REMOVED******REMOVED******REMOVED***/ Proposes a heading correction.
+***REMOVED******REMOVED******REMOVED***/ This will limit the total heading correction to -180...180.
 ***REMOVED******REMOVED***fileprivate func propose(headingCorrection: Double) {
 ***REMOVED******REMOVED******REMOVED***let newTotalHeadingCorrection = (totalHeadingCorrection + headingCorrection)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.clamped(to: -180...180)
@@ -55,7 +55,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***headingSubject.send(allowedHeadingCorrection)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Propose an elevation correction.
+***REMOVED******REMOVED******REMOVED***/ Proposes an elevation correction.
 ***REMOVED******REMOVED***fileprivate func propose(elevationCorrection: Double) {
 ***REMOVED******REMOVED******REMOVED***totalElevationCorrection += elevationCorrection
 ***REMOVED******REMOVED******REMOVED***elevationSubject.send(elevationCorrection)
