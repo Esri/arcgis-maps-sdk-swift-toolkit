@@ -121,7 +121,7 @@ private struct Track: View {
                 Capsule(style: .continuous)
                     .fill(fill)
                     .frame(width: abs(offset))
-                    .offset(x: offset/2)
+                    .offset(x: offset / 2)
             }
         }
         .frame(height: 4)
