@@ -63,10 +63,10 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***locationDataSource: LocationDataSource,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
-***REMOVED******REMOVED***self._initialCameraIsSet = initialCameraIsSet
+***REMOVED******REMOVED***self.calibrationViewModel = calibrationViewModel
+***REMOVED******REMOVED***_initialCameraIsSet = initialCameraIsSet
 ***REMOVED******REMOVED***self.isCalibrating = isCalibrating
 ***REMOVED******REMOVED***self.locationDataSource = locationDataSource
-***REMOVED******REMOVED***self.calibrationViewModel = calibrationViewModel
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***sceneViewBuilder = sceneView
 ***REMOVED******REMOVED***
@@ -95,7 +95,6 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidChangeGeoTrackingStatus { session, status in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This modifier will only be called when using geo-tracking.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch status.state {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .notAvailable, .initializing, .localizing:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet = false
