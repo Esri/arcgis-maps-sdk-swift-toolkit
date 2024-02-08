@@ -18,32 +18,29 @@ import ArcGIS
 
 /// A scene view that provides an augmented reality world scale experience.
 public struct WorldScaleSceneView: View {
-    /// Determines the alignment of the calibration view.
-    var calibrationViewAlignment: Alignment = .bottom
-    /// A Boolean value that indicates whether the calibration view is hidden.
-    var calibrationViewIsHidden = false
-    
+    /// The clipping distance of the scene view.
+    private let clippingDistance: Double?
+    /// The tracking mode for world scale AR.
+    private let trackingMode: TrackingMode
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-    
-    private let trackingMode: TrackingMode
-    
-    private let clippingDistance: Double?
-    
+    /// Determines the alignment of the calibration view.
+    private var calibrationViewAlignment: Alignment = .bottom
+    /// A Boolean value that indicates whether the calibration view is hidden.
+    private var calibrationViewIsHidden = false
     /// The view model for the calibration view.
     @StateObject private var calibrationViewModel = CalibrationViewModel()
+    /// The current device location.
+    @State private var currentLocation: Location?
+    /// A Boolean value that indicates whether the geo-tracking configuration is available.
+    @State private var geoTrackingIsAvailable = true
+    /// A Boolean value that indicates whether the initial camera is set for the scene view.
+    @State private var initialCameraIsSet = false
     /// A Boolean value that indicates if the user is calibrating.
     @State private var isCalibrating = false
     /// The location datasource that is used to access the device location.
     @State private var locationDataSource = SystemLocationDataSource()
-    
-    /// The current device location.
-    @State private var currentLocation: Location?
-    
-    @State private var geoTrackingIsAvailable = true
-    
-    @State private var initialCameraIsSet = false
-    
+    /// The error from the view.
     @State private var error: Error?
     
     public init(
@@ -60,6 +57,8 @@ public struct WorldScaleSceneView: View {
         Group {
             switch trackingMode {
             case .automatic:
+                // By default we try the geo-tracking configuration. If it is not available at
+                // the current location, fall back to world-tracking.
                 if geoTrackingIsAvailable {
                     GeoTrackingSceneView(
                         initialCameraIsSet: $initialCameraIsSet,
@@ -99,8 +98,6 @@ public struct WorldScaleSceneView: View {
                 )
             }
         }
-        .onAppear {
-        }
         .onDisappear {
             Task { await locationDataSource.stop() }
         }
@@ -113,7 +110,7 @@ public struct WorldScaleSceneView: View {
             if locationManager.authorizationStatus == .notDetermined {
                 locationManager.requestWhenInUseAuthorization()
             }
-            if !checkDeviceCapabilities(locationManager) {
+            if !checkTrackingCapabilities(locationManager) {
                 print("Device doesn't support full accuracy location.")
             }
             
@@ -128,8 +125,7 @@ public struct WorldScaleSceneView: View {
         }
         .task {
             do {
-                let isAvailable = try await checkGeoTrackingAvailability()
-                geoTrackingIsAvailable = isAvailable
+                geoTrackingIsAvailable = try await checkGeoTrackingAvailability()
             } catch {
                 self.error = error
             }
@@ -198,7 +194,10 @@ public struct WorldScaleSceneView: View {
         return view
     }
     
-    private func checkDeviceCapabilities(_ locationManager: CLLocationManager) -> Bool {
+    /// Checks if GPS is providing the most accurate location and heading.
+    /// - Parameter locationManager: The location manager to determine the accuracy authorization.
+    /// - Returns: A Boolean value that indicates whether tracking is accurate.
+    private func checkTrackingCapabilities(_ locationManager: CLLocationManager) -> Bool {
         let headingAvailable = CLLocationManager.headingAvailable()
         let fullAccuracy: Bool
         switch locationManager.accuracyAuthorization {
@@ -211,8 +210,11 @@ public struct WorldScaleSceneView: View {
         return headingAvailable && fullAccuracy
     }
     
+    /// Checks if the hardware and the current location supports geo-tracking.
+    /// - Returns: A Boolean value that indicates whether geo-tracking is available.
     private func checkGeoTrackingAvailability() async throws -> Bool {
         if !ARGeoTrackingConfiguration.isSupported {
+            // Return false if the device doesn't satisfy the hardware requirements.
             return false
         }
         return try await ARGeoTrackingConfiguration.checkAvailability()
