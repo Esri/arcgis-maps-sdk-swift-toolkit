@@ -71,11 +71,11 @@ public struct WorldScaleSceneView: View {
                 // the current location, fall back to world-tracking.
                 if geoTrackingIsAvailable {
                     GeoTrackingSceneView(
+                        calibrationViewModel: calibrationViewModel,
+                        clippingDistance: clippingDistance,
                         initialCameraIsSet: $initialCameraIsSet,
                         isCalibrating: isCalibrating,
                         locationDataSource: locationDataSource,
-                        calibrationViewModel: calibrationViewModel,
-                        clippingDistance: clippingDistance,
                         sceneView: sceneViewBuilder
                     )
                 } else {
@@ -90,11 +90,11 @@ public struct WorldScaleSceneView: View {
                 }
             case .geoTracking:
                 GeoTrackingSceneView(
+                    calibrationViewModel: calibrationViewModel,
+                    clippingDistance: clippingDistance,
                     initialCameraIsSet: $initialCameraIsSet,
                     isCalibrating: isCalibrating,
                     locationDataSource: locationDataSource,
-                    calibrationViewModel: calibrationViewModel,
-                    clippingDistance: clippingDistance,
                     sceneView: sceneViewBuilder
                 )
             case .worldTracking:
