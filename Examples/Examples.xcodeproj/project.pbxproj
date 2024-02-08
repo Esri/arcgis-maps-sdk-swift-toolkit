@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C40E1132B76DDA90098DFA1 /* NavigateInARExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C40E1122B76DDA90098DFA1 /* NavigateInARExampleView.swift */; };
 		1C40F3322B46118800C00ED5 /* WorldScaleExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C40F3312B46118800C00ED5 /* WorldScaleExampleView.swift */; };
 		1CC376D42ABA0B3700A83300 /* TableTopExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC376D32ABA0B3700A83300 /* TableTopExampleView.swift */; };
 		4D19FCB52881C8F3002601E8 /* PopupExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */; };
@@ -47,6 +48,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1C40E1122B76DDA90098DFA1 /* NavigateInARExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NavigateInARExampleView.swift; path = Examples/NavigateInARExampleView.swift; sourceTree = "<group>"; };
 		1C40F3312B46118800C00ED5 /* WorldScaleExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldScaleExampleView.swift; sourceTree = "<group>"; };
 		1CC376D32ABA0B3700A83300 /* TableTopExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableTopExampleView.swift; sourceTree = "<group>"; };
 		4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupExampleView.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 		E47ABE372652FE0900FD2FE3 = {
 			isa = PBXGroup;
 			children = (
+				1C40E1122B76DDA90098DFA1 /* NavigateInARExampleView.swift */,
 				E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolkit */,
 				E47ABE562652FE7F00FD2FE3 /* Examples */,
 				752A4FC7294D26DC00A49479 /* Utility */,
@@ -274,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1C40F3322B46118800C00ED5 /* WorldScaleExampleView.swift in Sources */,
+				1C40E1132B76DDA90098DFA1 /* NavigateInARExampleView.swift in Sources */,
 				1CC376D42ABA0B3700A83300 /* TableTopExampleView.swift in Sources */,
 				752A4FC4294D268000A49479 /* MapDataModel.swift in Sources */,
 				752A4FC5294D268000A49479 /* SceneDataModel.swift in Sources */,

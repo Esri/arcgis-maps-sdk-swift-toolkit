@@ -39,7 +39,8 @@ extension ExampleList {
         examples: [
             AnyExample("Flyover", content: FlyoverExampleView()),
             AnyExample("Tabletop", content: TableTopExampleView()),
-            AnyExample("World Scale", content: WorldScaleExampleView())
+            AnyExample("World Scale", content: WorldScaleExampleView()),
+            AnyExample("Navigate in AR", content: NavigateInARExampleView())
         ]
     )
     

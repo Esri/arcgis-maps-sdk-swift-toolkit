@@ -1,0 +1,382 @@
+// Copyright 2024 Esri
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import SwiftUI
+import ArcGIS
+import ArcGISToolkit
+import CoreLocation
+
+struct NavigateInARExampleView: View {
+    /// A binding to a Boolean value indicating whether the route planner is showing.
+    @State private var isShowingRoutePlanner = true
+    
+    /// The location datasource that is used to access the device location.
+    @State private var locationDataSource = SystemLocationDataSource()
+    
+    /// A scene with an imagery basemap.
+    @State private var scene: ArcGIS.Scene = {
+        let surface = Surface()
+        surface.backgroundGrid.isVisible = false
+        surface.navigationConstraint = .unconstrained
+        let scene = Scene(basemapStyle: .arcGISImagery)
+        scene.baseSurface = surface
+        scene.baseSurface.opacity = 0.5
+        return scene
+    }()
+    
+    /// The graphics overlay containing a graphic.
+    @State private var graphicsOverlay = GraphicsOverlay()
+    
+    var body: some View {
+        if isShowingRoutePlanner {
+            RoutePlannerView(isShowing: $isShowingRoutePlanner)
+                .onDidSelectRoute { routeGraphic, routeResult  in
+                    graphicsOverlay = makeRouteOverlay(
+                        for: routeResult,
+                        using: routeGraphic
+                    )
+                }
+        } else {
+            VStack {
+                WorldScaleSceneView(trackingMode: .worldTracking) { proxy in
+                    SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
+                        .onSingleTapGesture { screen, _ in
+                            print("Identifying...")
+                            Task {
+                                let results = try await proxy.identifyLayers(screenPoint: screen, tolerance: 20)
+                                print("\(results.count) identify result(s).")
+                            }
+                        }
+                }
+            }
+        }
+    }
+    
+    /// Create a graphic overlay and adds a graphic (with solid yellow 3D tube symbol)
+    /// to represent the route.
+    @MainActor
+    func makeRouteOverlay(for routeResult: RouteResult, using routeGraphic: Graphic) -> GraphicsOverlay {
+        let graphicsOverlay = GraphicsOverlay()
+        graphicsOverlay.sceneProperties.surfacePlacement = .absolute
+        let strokeSymbolLayer = SolidStrokeSymbolLayer(
+            width: 1.0,
+            color: .yellow,
+            geometricEffects: [],
+            lineStyle3D: .tube
+        )
+        let polylineSymbol = MultilayerPolylineSymbol(symbolLayers: [strokeSymbolLayer])
+        let polylineRenderer = SimpleRenderer(symbol: polylineSymbol)
+        graphicsOverlay.renderer = polylineRenderer
+        
+        Task {
+            if let originalPolyline = routeResult.routes.first?.geometry {
+                addElevationToPolyline(polyline: originalPolyline) { polyline in
+                    routeGraphic.geometry = polyline
+                    graphicsOverlay.addGraphic(routeGraphic)
+                }
+            }
+        }
+        
+        return graphicsOverlay
+    }
+    
+    /// Densify the polyline geometry so the elevation can be adjusted every 0.3 meters,
+    /// and add an elevation to the geometry.
+    ///
+    /// - Parameters:
+    ///   - polyline: The polyline geometry of the route.
+    ///   - z: A `Double` value representing z elevation.
+    ///   - completion: A completion closure to execute after the polyline is generated with success or not.
+    @MainActor
+    func addElevationToPolyline(polyline: Polyline, elevation z: Double = 3, completion: @escaping (Polyline?) -> Void) {
+        if let densifiedPolyline = GeometryEngine.densify(polyline, maxSegmentLength: 0.3) as? Polyline {
+            let polylinebuilder = PolylineBuilder(polyline: densifiedPolyline)
+            
+            let allPoints = densifiedPolyline.parts.flatMap { $0.points }
+            
+            let buildGroup = DispatchGroup()
+            allPoints.forEach { point in
+                Task {
+                    buildGroup.enter()
+                    
+                    do {
+                        let elevationSurface = Surface()
+                        let elevation = try await elevationSurface.elevation(at: point)
+                        
+                        let newPoint = GeometryEngine.makeGeometry(from: point, z: elevation + z)
+                        
+                        // Put the new point 3 meters above the ground elevation.
+                        polylinebuilder.add(newPoint)
+                        
+                        buildGroup.leave()
+                    } catch {
+                        print("error: \(error)")
+                    }
+                }
+            }
+            
+            buildGroup.notify(queue: .main) {
+                completion(polylinebuilder.toGeometry())
+            }
+        } else {
+            completion(nil)
+        }
+    }
+}
+
+private extension NavigateInARExampleView {
+    @MainActor
+    struct RoutePlannerView: View {
+        /// The view model for this sample.
+        @StateObject private var model = Model()
+        
+        /// A Boolean value indicating whether the view is showing.
+        @Binding var isShowing: Bool
+        
+        /// The status text displayed to the user.
+        @State private var statusText = ""
+        
+        /// User defined action to be performed when the slider delta value changes.
+        var selectRouteAction: ((Graphic, RouteResult) -> Void)?
+        
+        /// A Boolean value indicating whether a route stop is selected.
+        var didSelectRouteStop: Bool {
+            model.startPoint != nil || model.endPoint != nil
+        }
+        
+        var body: some View {
+            MapView(
+                map: model.map,
+                graphicsOverlays: model.graphicsOverlays
+            )
+            .onSingleTapGesture { _, mapPoint in
+                if model.startPoint == nil {
+                    model.startPoint = mapPoint
+                    statusText = "Tap to place destination."
+                } else if model.endPoint == nil {
+                    model.endPoint = mapPoint
+                    model.routeParameters.setStops(model.makeStops())
+                    Task {
+                        let routeResult = try await model.routeTask.solveRoute(using: model.routeParameters)
+                        if let firstRoute = routeResult.routes.first {
+                            let routeGraphic = Graphic(geometry: firstRoute.geometry)
+                            model.routeGraphicsOverlay.addGraphic(routeGraphic)
+                            model.routeResult = routeResult
+                            model.didSelectRoute = true
+                            statusText = "Tap camera to start navigation."
+                        } else {}
+                    }
+                }
+            }
+            .locationDisplay(model.locationDisplay)
+            .overlay(alignment: .top) {
+                Text(statusText)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(8)
+                    .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+            }
+            .task {
+                statusText = "Tap to place a start point."
+            }
+            .onChange(of: model.didSelectRoute) { didSelectRoute in
+                guard didSelectRoute else { return }
+                if let onDidSelectRoute = selectRouteAction,
+                   let routeResult = model.routeResult {
+                    onDidSelectRoute(model.routeGraphic, routeResult)
+                }
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Spacer()
+                    Button {
+                        isShowing = false
+                    } label: {
+                        Image(systemName: "camera")
+                            .imageScale(.large)
+                    }
+                    .disabled(!model.didSelectRoute)
+                    Spacer()
+                    Button {
+                        model.reset()
+                        statusText = "Tap to place a start point."
+                        model.didSelectRoute = false
+                    } label: {
+                        Image(systemName: "trash")
+                            .imageScale(.large)
+                    }
+                    .disabled(!didSelectRouteStop)
+                }
+            }
+        }
+        
+        /// Sets an action to perform when the route is selected
+        /// - Parameter action: The action to perform when the route is selected.
+        func onDidSelectRoute(
+            perform action: @escaping (Graphic, RouteResult) -> Void
+        ) -> RoutePlannerView {
+            var copy = self
+            copy.selectRouteAction = action
+            return copy
+        }
+    }
+}
+
+private extension NavigateInARExampleView.RoutePlannerView {
+    /// A view model for this sample.
+    @MainActor
+    class Model: ObservableObject {
+        /// A map with an imagery basemap style.
+        @Published var map: Map = {
+            let map = Map(basemapStyle: .arcGISImagery)
+            return map
+        }()
+        
+        /// A binding to a Boolean value indicating whether a route is selected.
+        @Published var didSelectRoute = false
+        
+        /// The graphics overlay for the route.
+        @Published var routeOverlay: GraphicsOverlay = {
+            let graphicsOverlay = GraphicsOverlay()
+            graphicsOverlay.sceneProperties.surfacePlacement = .absolute
+            let strokeSymbolLayer = SolidStrokeSymbolLayer(
+                width: 1,
+                color: .yellow,
+                lineStyle3D: .tube
+            )
+            let polylineSymbol = MultilayerPolylineSymbol(symbolLayers: [strokeSymbolLayer])
+            let polylineRenderer = SimpleRenderer(symbol: polylineSymbol)
+            graphicsOverlay.renderer = polylineRenderer
+            
+            return graphicsOverlay
+        }()
+        
+        /// The parameters for route task to solve a route, received from route planner.
+        @Published var routeParameters: RouteParameters!
+        
+        /// The current route for navigation.
+        @Published var currentRoute: Route!
+        
+        /// The data source to track device location and provide updates to route tracker.
+        let trackingLocationDataSource = SystemLocationDataSource()
+        
+        /// The graphic (with solid yellow 3D tube symbol) to represent the route.
+        @Published var routeGraphic = Graphic()
+        
+        /// The route result.
+        @Published var routeResult: RouteResult?
+        
+        /// The elevation source with elevation service URL.
+        let elevationSource = ArcGISTiledElevationSource(url: URL(string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!)
+        
+        /// The elevation surface set to the base surface of the scene.
+        @Published var elevationSurface: Surface = {
+            let elevationSurface = Surface()
+            elevationSurface.navigationConstraint = .unconstrained
+            elevationSurface.opacity = 0
+            return elevationSurface
+        }()
+        
+        /// The error shown in the error alert.
+        @Published var error: Error?
+        
+        /// The map's location display.
+        @Published var locationDisplay: LocationDisplay = {
+            let locationDisplay = LocationDisplay()
+            locationDisplay.autoPanMode = .recenter
+            return locationDisplay
+        }()
+        
+        /// The route task that solves the route using the online routing service, using API key authentication.
+        let routeTask = RouteTask(url: URL(string: "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World")!)
+        
+        /// The graphics overlay for the stops.
+        let stopGraphicsOverlay = GraphicsOverlay()
+        
+        /// A graphic overlay for route graphics.
+        let routeGraphicsOverlay: GraphicsOverlay = {
+            let overlay = GraphicsOverlay()
+            overlay.renderer = SimpleRenderer(
+                symbol: SimpleLineSymbol(style: .solid, color: .yellow, width: 5)
+            )
+            return overlay
+        }()
+        
+        /// The map's graphics overlays.
+        var graphicsOverlays: [GraphicsOverlay] {
+            return [stopGraphicsOverlay, routeGraphicsOverlay]
+        }
+        
+        /// A point representing the start of navigation.
+        var startPoint: Point? {
+            didSet {
+                let stopSymbol = PictureMarkerSymbol(image: UIImage(named: "StopA")!)
+                let startStopGraphic = Graphic(geometry: self.startPoint, symbol: stopSymbol)
+                stopGraphicsOverlay.addGraphic(startStopGraphic)
+            }
+        }
+        
+        /// A point representing the destination of navigation.
+        var endPoint: Point? {
+            didSet {
+                let stopSymbol = PictureMarkerSymbol(image: UIImage(named: "StopB")!)
+                let endStopGraphic = Graphic(geometry: self.endPoint, symbol: stopSymbol)
+                stopGraphicsOverlay.addGraphic(endStopGraphic)
+            }
+        }
+        
+        init() {
+            // Request when-in-use location authorization.
+            let locationManager = CLLocationManager()
+            if locationManager.authorizationStatus == .notDetermined {
+                locationManager.requestWhenInUseAuthorization()
+            }
+            
+            elevationSurface.addElevationSource(elevationSource)
+            locationDisplay.dataSource = trackingLocationDataSource
+            
+            Task {
+                try await trackingLocationDataSource.start()
+                
+                let parameters = try await routeTask.makeDefaultParameters()
+                
+                if let walkMode = routeTask.info.travelModes.first(where: { $0.name.contains("Walking") }) {
+                    parameters.travelMode = walkMode
+                    parameters.returnsStops = true
+                    parameters.returnsDirections = true
+                    parameters.returnsRoutes = true
+                    routeParameters = parameters
+                }
+            }
+        }
+        
+        /// Creates the start and destination stops for the navigation.
+        func makeStops() -> [Stop] {
+            let stop1 = Stop(point: self.startPoint!)
+            stop1.name = "Start"
+            let stop2 = Stop(point: self.endPoint!)
+            stop2.name = "Destination"
+            return [stop1, stop2]
+        }
+        
+        /// Resets the start and destination stops for the navigation.
+        func reset() {
+            routeGraphicsOverlay.removeAllGraphics()
+            stopGraphicsOverlay.removeAllGraphics()
+            routeParameters.clearStops()
+            startPoint = nil
+            endPoint = nil
+        }
+    }
+}
