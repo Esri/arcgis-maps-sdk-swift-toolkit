@@ -1,14 +1,250 @@
+***REMOVED*** Copyright 2023 Esri
 ***REMOVED***
-***REMOVED***  SwiftUIView.swift
-***REMOVED***  
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
 ***REMOVED***
-***REMOVED***  Created by Ting Chen on 2/7/24.
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+import ARKit
+***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A scene view that provides an augmented reality world scale experience.
+public struct WorldScaleSceneView: View {
+***REMOVED******REMOVED***/ Determines the alignment of the calibration view.
+***REMOVED***var calibrationViewAlignment: Alignment = .bottom
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
+***REMOVED***var calibrationViewIsHidden = false
+***REMOVED***
+***REMOVED******REMOVED***/ The closure that builds the scene view.
+***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
+***REMOVED***
+***REMOVED***private let trackingMode: TrackingMode
+***REMOVED***
+***REMOVED***private let clippingDistance: Double?
+***REMOVED***
+***REMOVED******REMOVED***/ The view model for the calibration view.
+***REMOVED***@StateObject private var calibrationViewModel = CalibrationViewModel()
+***REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
+***REMOVED***@State private var isCalibrating = false
+***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
+***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
+***REMOVED***
+***REMOVED******REMOVED***/ The current device location.
+***REMOVED***@State private var currentLocation: Location?
+***REMOVED***
+***REMOVED***@State private var geoTrackingIsAvailable = true
+***REMOVED***
+***REMOVED***@State private var initialCameraIsSet = false
+***REMOVED***
+***REMOVED***@State private var error: Error?
+***REMOVED***
+***REMOVED***public init(
+***REMOVED******REMOVED***clippingDistance: Double? = nil,
+***REMOVED******REMOVED***trackingMode: TrackingMode,
+***REMOVED******REMOVED***sceneViewBuilder: @escaping (SceneViewProxy) -> SceneView
+***REMOVED***) {
+***REMOVED******REMOVED***self.clippingDistance = clippingDistance
+***REMOVED******REMOVED***self.trackingMode = trackingMode
+***REMOVED******REMOVED***self.sceneViewBuilder = sceneViewBuilder
+***REMOVED***
+***REMOVED***
+***REMOVED***public var body: some View {
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***switch trackingMode {
+***REMOVED******REMOVED******REMOVED***case .automatic:
+***REMOVED******REMOVED******REMOVED******REMOVED***if geoTrackingIsAvailable {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeoTrackingSceneView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***WorldTrackingSceneView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .geoTracking:
+***REMOVED******REMOVED******REMOVED******REMOVED***GeoTrackingSceneView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***case .worldTracking:
+***REMOVED******REMOVED******REMOVED******REMOVED***WorldTrackingSceneView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onAppear {
+***REMOVED***
+***REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED***Task { await locationDataSource.stop() ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Start the location data source when the view appears.
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Request when-in-use location authorization.
+***REMOVED******REMOVED******REMOVED******REMOVED*** The view utilizes a location datasource and it will not start until authorized.
+***REMOVED******REMOVED******REMOVED***let locationManager = CLLocationManager()
+***REMOVED******REMOVED******REMOVED***if locationManager.authorizationStatus == .notDetermined {
+***REMOVED******REMOVED******REMOVED******REMOVED***locationManager.requestWhenInUseAuthorization()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if !checkDeviceCapabilities(locationManager) {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("Device doesn't support full accuracy location.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await locationDataSource.start()
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***for await location in locationDataSource.locations {
+***REMOVED******REMOVED******REMOVED******REMOVED***currentLocation = location
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***let isAvailable = try await checkGeoTrackingAvailability()
+***REMOVED******REMOVED******REMOVED******REMOVED***geoTrackingIsAvailable = isAvailable
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.overlay(alignment: calibrationViewAlignment) {
+***REMOVED******REMOVED******REMOVED***if !calibrationViewIsHidden {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !isCalibrating {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Calibrate")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!initialCameraIsSet)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.overlay(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED***if isCalibrating {
+***REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(viewModel: calibrationViewModel, isPresented: $isCalibrating)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.overlay(alignment: .top) {
+***REMOVED******REMOVED******REMOVED***accuracyView
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A view that displays the horizontal and vertical accuracy of the current location datasource location.
+***REMOVED***@ViewBuilder
+***REMOVED***var accuracyView: some View {
+***REMOVED******REMOVED***if let currentLocation {
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("H. Accuracy: \(currentLocation.horizontalAccuracy.formatted(.number.precision(.fractionLength(2))))")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("V. Accuracy: \(currentLocation.verticalAccuracy.formatted(.number.precision(.fractionLength(2))))")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
+***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
+***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10))
+***REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the visibility of the calibration view for the AR experience.
+***REMOVED******REMOVED***/ - Parameter hidden: A Boolean value that indicates whether to hide the
+***REMOVED******REMOVED***/  calibration view.
+***REMOVED***public func calibrationViewHidden(_ hidden: Bool) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.calibrationViewIsHidden = hidden
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the alignment of the calibration view.
+***REMOVED******REMOVED***/ - Parameter alignment: The alignment for the calibration view.
+***REMOVED***public func calibrationViewAlignment(_ alignment: Alignment) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.calibrationViewAlignment = alignment
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED***private func checkDeviceCapabilities(_ locationManager: CLLocationManager) -> Bool {
+***REMOVED******REMOVED***let headingAvailable = CLLocationManager.headingAvailable()
+***REMOVED******REMOVED***let fullAccuracy: Bool
+***REMOVED******REMOVED***switch locationManager.accuracyAuthorization {
+***REMOVED******REMOVED***case .fullAccuracy:
+***REMOVED******REMOVED******REMOVED******REMOVED*** World scale AR experience must use full accuracy of device location.
+***REMOVED******REMOVED******REMOVED***fullAccuracy = true
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***fullAccuracy = false
+***REMOVED***
+***REMOVED******REMOVED***return headingAvailable && fullAccuracy
+***REMOVED***
+***REMOVED***
+***REMOVED***private func checkGeoTrackingAvailability() async throws -> Bool {
+***REMOVED******REMOVED***if !ARGeoTrackingConfiguration.isSupported {
+***REMOVED******REMOVED******REMOVED***return false
+***REMOVED***
+***REMOVED******REMOVED***return try await ARGeoTrackingConfiguration.checkAvailability()
+***REMOVED***
 ***REMOVED***
 
-struct WorldScaleSceneView: View {
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+public extension WorldScaleSceneView {
+***REMOVED******REMOVED***/ The type of tracking configuration used by the view.
+***REMOVED***enum TrackingMode {
+***REMOVED******REMOVED******REMOVED***/ If geo-tracking is unavailable, fall back to world-tracking.
+***REMOVED******REMOVED***case automatic
+***REMOVED******REMOVED******REMOVED***/ Geo-tracking.
+***REMOVED******REMOVED***case geoTracking
+***REMOVED******REMOVED******REMOVED***/ World-tracking.
+***REMOVED******REMOVED***case worldTracking
+***REMOVED***
+***REMOVED***
+
+private extension ARGeoTrackingConfiguration {
+***REMOVED******REMOVED***/ Determines the availability of geo tracking at the current location.
+***REMOVED******REMOVED***/ - Returns: A Boolean that indicates whether geo-tracking is available at the current
+***REMOVED******REMOVED***/ location or not. If not, an error will be thrown that indicates why geo tracking is
+***REMOVED******REMOVED***/ not available at the current location.
+***REMOVED***static func checkAvailability() async throws -> Bool {
+***REMOVED******REMOVED***return try await withUnsafeThrowingContinuation { (continuation: UnsafeContinuation<Bool, Error>) in
+***REMOVED******REMOVED******REMOVED***self.checkAvailability { isAvailable, error in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let error = error {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continuation.resume(throwing: error)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continuation.resume(returning: isAvailable)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

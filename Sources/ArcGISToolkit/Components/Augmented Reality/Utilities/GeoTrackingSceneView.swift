@@ -16,18 +16,16 @@ import ARKit
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A scene view that provides an augmented reality world scale experience using world-tracking.
-struct WorldTrackingSceneView: View {
+***REMOVED***/ A scene view that provides an augmented reality world scale experience using geo-tracking.
+public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
-***REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
-***REMOVED***private let isCalibrating: Bool
-***REMOVED******REMOVED***/ The current interface orientation.
-***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***private let locationDataSource: LocationDataSource
+***REMOVED******REMOVED***/ The current interface orientation.
+***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
 ***REMOVED******REMOVED***/ A Boolean value indicating if the camera was initially set.
 ***REMOVED***@Binding var initialCameraIsSet: Bool
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the coaching overlay view is active.
@@ -36,33 +34,30 @@ struct WorldTrackingSceneView: View {
 ***REMOVED***@State private var currentCamera: Camera?
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-***REMOVED******REMOVED***/ The configuration for the AR session.
-***REMOVED***private let configuration: ARConfiguration
-***REMOVED******REMOVED***/ The timestamp of the last received location.
-***REMOVED***@State private var lastLocationTimestamp: Date?
+***REMOVED******REMOVED***/ The geo-tracking configuration for the AR session.
+***REMOVED***private let configuration = ARGeoTrackingConfiguration()
 ***REMOVED******REMOVED***/ The current device location.
 ***REMOVED***@State private var currentLocation: Location?
 ***REMOVED******REMOVED***/ The current device heading.
 ***REMOVED***@State private var currentHeading: Double?
-***REMOVED******REMOVED***/ The valid accuracy threshold for a location in meters.
-***REMOVED***private let validAccuracyThreshold = 0.0
-***REMOVED******REMOVED***/ The distance threshold in meters between camera and device location to reset
-***REMOVED******REMOVED***/ world-tracking session.
-***REMOVED***private let distanceThreshold = 2.0
-***REMOVED******REMOVED***/ Projected point from the spatial reference of the location data source's to the scene view's.
-***REMOVED***private var currentPosition: Point? {
-***REMOVED******REMOVED***guard let currentLocation,
-***REMOVED******REMOVED******REMOVED***  let currentCamera,
-***REMOVED******REMOVED******REMOVED***  let spatialReference = currentCamera.location.spatialReference,
-***REMOVED******REMOVED******REMOVED***  let position = GeometryEngine.project(currentLocation.position, into: spatialReference)
-***REMOVED******REMOVED***else { return nil ***REMOVED***
-***REMOVED******REMOVED***return position
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
+***REMOVED***private let isCalibrating: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the calibration view.
 ***REMOVED***@ObservedObject private var calibrationViewModel: WorldScaleSceneView.CalibrationViewModel
 ***REMOVED***
-***REMOVED***init(
+***REMOVED******REMOVED***/ Creates a world scale geo-tracking scene view.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - locationDataSource: The location datasource used to acquire the device's location.
+***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera. A value
+***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
+***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
+***REMOVED******REMOVED***/   augmented reality video feed.
+***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
+***REMOVED******REMOVED***/ be effectively viewed in augmented reality. Properties such as the camera controller,
+***REMOVED******REMOVED***/ and view drawing mode.
+***REMOVED***public init(
 ***REMOVED******REMOVED***initialCameraIsSet: Binding<Bool>,
 ***REMOVED******REMOVED***isCalibrating: Bool,
 ***REMOVED******REMOVED***locationDataSource: LocationDataSource,
@@ -81,15 +76,9 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***cameraController.translationFactor = 1
 ***REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let worldTrackingConfiguration = ARWorldTrackingConfiguration()
-***REMOVED******REMOVED******REMOVED*** Set world alignment to `gravityAndHeading` so the world-tracking configuration uses
-***REMOVED******REMOVED******REMOVED*** geographic location from the device. Geo-tracking uses it by default.
-***REMOVED******REMOVED***worldTrackingConfiguration.worldAlignment = .gravityAndHeading
-***REMOVED******REMOVED***configuration = worldTrackingConfiguration
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var body: some View {
+***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
 ***REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARSwiftUIView(proxy: arViewProxy)
@@ -106,6 +95,28 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: frame,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidChangeGeoTrackingStatus { session, status in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This modifier will only be called when using geo-tracking.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch status.state {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .notAvailable, .initializing, .localizing:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .localized:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Update the camera controller every time ge-tracking is localized,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to ensure the best experience.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !initialCameraIsSet, let currentLocation, let currentHeading {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the initial heading of scene view camera based on location
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and heading. Geo-tracking requires 90 degrees rotation.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateCameraController(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***location: currentLocation,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: currentHeading + 90,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***altitude: currentLocation.position.z ?? 0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError("Unknown ARGeoTrackingStatus.State")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if initialCameraIsSet {
@@ -131,9 +142,8 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***coachingOverlayIsActive = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCoachingOverlayRequestSessionReset { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let currentLocation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateWorldTrackingSceneView(for: currentLocation)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset the AR session to provide the best tracking performance.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy.session.run(configuration, options: .resetTracking)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.allowsHitTesting(false)
 ***REMOVED******REMOVED***
@@ -147,10 +157,7 @@ struct WorldTrackingSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***for await location in locationDataSource.locations {
-***REMOVED******REMOVED******REMOVED******REMOVED***lastLocationTimestamp = location.timestamp
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentLocation = location
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Call the method to check if world tracking session needs to be updated.
-***REMOVED******REMOVED******REMOVED******REMOVED***updateWorldTrackingSceneView(for: location)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
@@ -171,79 +178,26 @@ struct WorldTrackingSceneView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Updates the scene view's camera controller with a new location coming from the
-***REMOVED******REMOVED***/ location data source and resets the AR session when using world-tracking configuration.
-***REMOVED******REMOVED***/ - Parameter location: The location data source location.
-***REMOVED***private func updateWorldTrackingSceneView(for location: Location) {
-***REMOVED******REMOVED******REMOVED*** Do not update the scene view when the coaching overlay is in place.
-***REMOVED******REMOVED***guard !coachingOverlayIsActive else { return ***REMOVED***
+***REMOVED******REMOVED***/ Updates the scene view's camera controller with location and heading.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - location: The location for the camera.
+***REMOVED******REMOVED***/   - heading: The heading for the camera.
+***REMOVED******REMOVED***/   - altitude: The altitude for the camera.
+***REMOVED***private func updateCameraController(location: Location, heading: Double, altitude: Double) {
+***REMOVED******REMOVED******REMOVED*** Add some of the vertical accuracy to the z value of the position, that way if the
+***REMOVED******REMOVED******REMOVED*** GPS location is not accurate, it won't end up below the earth's surface.
+***REMOVED******REMOVED***let adjustedAltitude = altitude + location.verticalAccuracy
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Update if the location is more than 10 seconds old.
-***REMOVED******REMOVED***guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < 10 else { return ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Make sure that horizontal and vertical accuracy are valid.
-***REMOVED******REMOVED***guard location.horizontalAccuracy > validAccuracyThreshold,
-***REMOVED******REMOVED******REMOVED***  location.verticalAccuracy > validAccuracyThreshold else { return ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Make sure we need to update the camera based on distance deviation.
-***REMOVED******REMOVED***guard !initialCameraIsSet || shouldUpdateCamera(for: location) else { return ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let altitude = (location.position.z ?? 0) + location.verticalAccuracy
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if !initialCameraIsSet {
-***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
-***REMOVED******REMOVED******REMOVED******REMOVED***latitude: location.position.y,
-***REMOVED******REMOVED******REMOVED******REMOVED***longitude: location.position.x,
-***REMOVED******REMOVED******REMOVED******REMOVED***altitude: altitude,
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: 0,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Ignore location updates when calibrating heading and elevation.
-***REMOVED******REMOVED******REMOVED***guard !isCalibrating else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
-***REMOVED******REMOVED******REMOVED******REMOVED***latitude: location.position.y,
-***REMOVED******REMOVED******REMOVED******REMOVED***longitude: location.position.x,
-***REMOVED******REMOVED******REMOVED******REMOVED***altitude: altitude + calibrationViewModel.totalElevationCorrection,
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: calibrationViewModel.totalHeadingCorrection,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: 90,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: 0
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
+***REMOVED******REMOVED***cameraController.originCamera = Camera(
+***REMOVED******REMOVED******REMOVED***latitude: location.position.y,
+***REMOVED******REMOVED******REMOVED***longitude: location.position.x,
+***REMOVED******REMOVED******REMOVED***altitude: adjustedAltitude,
+***REMOVED******REMOVED******REMOVED***heading: heading,
+***REMOVED******REMOVED******REMOVED***pitch: 90,
+***REMOVED******REMOVED******REMOVED***roll: 0
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** We have to do this or the error gets bigger and bigger.
 ***REMOVED******REMOVED***cameraController.transformationMatrix = .identity
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***arViewProxy.session.run(configuration, options: .resetTracking)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** If initial camera is not set, then we set it the flag here to true
-***REMOVED******REMOVED******REMOVED*** and set the status text to empty.
-***REMOVED******REMOVED***if !initialCameraIsSet {
-***REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Returns a Boolean value indicating if the camera should be updated for a location
-***REMOVED******REMOVED***/ coming in from the location data source based on current camera deviation.
-***REMOVED******REMOVED***/ - Parameter location: The location data source location.
-***REMOVED******REMOVED***/ - Returns: A Boolean value indicating if the camera should be updated.
-***REMOVED***func shouldUpdateCamera(for location: Location) -> Bool {
-***REMOVED******REMOVED***guard let currentCamera, let currentPosition else { return false ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Measure the distance between the location datasource's reported location
-***REMOVED******REMOVED******REMOVED*** and the camera's current location.
-***REMOVED******REMOVED***guard let result = GeometryEngine.geodeticDistance(
-***REMOVED******REMOVED******REMOVED***from: currentCamera.location,
-***REMOVED******REMOVED******REMOVED***to: currentPosition,
-***REMOVED******REMOVED******REMOVED***distanceUnit: .meters,
-***REMOVED******REMOVED******REMOVED***azimuthUnit: nil,
-***REMOVED******REMOVED******REMOVED***curveType: .geodesic
-***REMOVED******REMOVED***) else {
-***REMOVED******REMOVED******REMOVED***return false
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** If the location becomes off by over a certain threshold, then update the camera location.
-***REMOVED******REMOVED***return result.distance.value > distanceThreshold ? true : false
 ***REMOVED***
 ***REMOVED***
