@@ -124,7 +124,7 @@ public struct WorldScaleGeoTrackingSceneView: View {
                                 isCalibrating = true
                             }
                         } label: {
-                            Text("Calibrate")
+                            Text(calibrateLabel)
                                 .padding()
                         }
                         .background(.regularMaterial)
@@ -309,5 +309,17 @@ public struct WorldScaleGeoTrackingSceneView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .padding([.horizontal, .top])
         }
+    }
+}
+
+private extension WorldScaleGeoTrackingSceneView {
+    var calibrateLabel: String {
+        String(
+            localized: "Calibrate",
+            bundle: .toolkitModule,
+            comment: """
+                 A label for a button to show the calibration view.
+                 """
+        )
     }
 }

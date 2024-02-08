@@ -72,15 +72,26 @@ extension WorldScaleGeoTrackingSceneView {
         /// A Boolean value that indicates if the user is presenting the calibration view.
         @Binding
         var isPresented: Bool
+        
         /// A number format style for signed values with their fractional component removed.
         private let numberFormat = FloatingPointFormatStyle<Double>.number
             .precision(.fractionLength(1))
             .sign(strategy: .always(includingZero: false))
         
+        /// The total heading correction measurement in degrees.
+        private var totalHeadingCorrectionMeasurement: Measurement<UnitAngle> {
+            Measurement<UnitAngle>(value: viewModel.totalHeadingCorrection, unit: .degrees)
+        }
+        
+        /// The total elevation correction measurement in meters.
+        private var totalElevationCorrectionMeasurement: Measurement<UnitLength> {
+            Measurement<UnitLength>(value: viewModel.totalElevationCorrection, unit: .meters)
+        }
+        
         var body: some View {
             VStack {
                 HStack(alignment: .firstTextBaseline) {
-                    Text("Calibration")
+                    Text(calibrationLabel)
                         .font(.title)
                         .lineLimit(1)
                     Spacer()
@@ -105,11 +116,11 @@ extension WorldScaleGeoTrackingSceneView {
                 HStack {
                     Stepper() {
                         HStack {
-                            Text("Heading")
+                            Text(headingLabel)
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text(viewModel.totalHeadingCorrection, format: numberFormat) + Text("°")
+                            Text(totalHeadingCorrectionMeasurement, format: .measurement(width: .narrow, numberFormatStyle: numberFormat))
                             Spacer()
                         }
                     } onIncrement: {
@@ -131,11 +142,11 @@ extension WorldScaleGeoTrackingSceneView {
                 HStack {
                     Stepper() {
                         HStack {
-                            Text("Elevation")
+                            Text(elevationLabel)
                                 .font(.body.smallCaps())
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text(viewModel.totalElevationCorrection, format: numberFormat) + Text(" m")
+                            Text(totalElevationCorrectionMeasurement, format: .measurement(width: .abbreviated, usage: .asProvided, numberFormatStyle: numberFormat))
                             Spacer()
                         }
                     } onIncrement: {
@@ -166,5 +177,38 @@ extension WorldScaleGeoTrackingSceneView {
             }
             .buttonStyle(.plain)
         }
+    }
+}
+
+private extension WorldScaleGeoTrackingSceneView.CalibrationView {
+    var calibrationLabel: String {
+        String(
+            localized: "Calibration",
+            bundle: .toolkitModule,
+            comment: """
+                 A label for the calibration view used to calibrate the camera
+                 for the AR experience.
+                 """
+        )
+    }
+    var headingLabel: String {
+        String(
+            localized: "heading",
+            bundle: .toolkitModule,
+            comment: """
+                 A label for the slider that adjusts the camera heading for the
+                 AR experience.
+                 """
+        )
+    }
+    var elevationLabel: String {
+        String(
+            localized: "elevation",
+            bundle: .toolkitModule,
+            comment: """
+                 A label for the slider that adjusts the camera elevation for the
+                 AR experience.
+                 """
+        )
     }
 }
