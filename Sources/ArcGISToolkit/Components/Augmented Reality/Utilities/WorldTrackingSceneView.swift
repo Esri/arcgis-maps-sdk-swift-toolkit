@@ -18,37 +18,38 @@ import ArcGIS
 
 /// A scene view that provides an augmented reality world scale experience using world-tracking.
 struct WorldTrackingSceneView: View {
+    /// A Boolean value indicating if the camera was initially set.
+    @Binding var initialCameraIsSet: Bool
+    /// The view model for the calibration view.
+    @ObservedObject private var calibrationViewModel: WorldScaleSceneView.CalibrationViewModel
+    /// The configuration for the AR session.
+    private let configuration: ARConfiguration
+    /// The distance threshold in meters between camera and device location to reset the
+    /// world-tracking session.
+    private let distanceThreshold: Double
+    /// A Boolean value that indicates if the user is calibrating.
+    private let isCalibrating: Bool
+    /// The location datasource that is used to access the device location.
+    private let locationDataSource: LocationDataSource
+    /// The closure that builds the scene view.
+    private let sceneViewBuilder: (SceneViewProxy) -> SceneView
+    /// The time threshold in seconds between location updates to reset the world-tracking session.
+    private let timeThreshold: Double
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
     /// The camera controller that will be set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
-    /// A Boolean value that indicates if the user is calibrating.
-    private let isCalibrating: Bool
-    /// The current interface orientation.
-    @State private var interfaceOrientation: InterfaceOrientation?
-    /// The location datasource that is used to access the device location.
-    private let locationDataSource: LocationDataSource
-    /// A Boolean value indicating if the camera was initially set.
-    @Binding var initialCameraIsSet: Bool
     /// A Boolean value that indicates whether the coaching overlay view is active.
     @State private var coachingOverlayIsActive = false
     /// The current camera of the scene view.
     @State private var currentCamera: Camera?
-    /// The closure that builds the scene view.
-    private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-    /// The configuration for the AR session.
-    private let configuration: ARConfiguration
-    /// The timestamp of the last received location.
-    @State private var lastLocationTimestamp: Date?
     /// The current device location.
     @State private var currentLocation: Location?
-    /// The current device heading.
-    @State private var currentHeading: Double?
-    /// The valid accuracy threshold for a location in meters.
-    private let validAccuracyThreshold = 0.0
-    /// The distance threshold in meters between camera and device location to reset
-    /// world-tracking session.
-    private let distanceThreshold = 2.0
+    /// The current interface orientation.
+    @State private var interfaceOrientation: InterfaceOrientation?
+    /// The timestamp of the last received location.
+    @State private var lastLocationTimestamp: Date?
+    
     /// Projected point from the spatial reference of the location data source's to the scene view's.
     private var currentPosition: Point? {
         guard let currentLocation,
@@ -59,21 +60,34 @@ struct WorldTrackingSceneView: View {
         return position
     }
     
-    /// The view model for the calibration view.
-    @ObservedObject private var calibrationViewModel: WorldScaleSceneView.CalibrationViewModel
-    
+    /// Creates a world scale world-tracking scene view.
+    /// - Parameters:
+    ///   - calibrationViewModel: The view model for accessing the calibration values.
+    ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
+    ///   of `nil` means that no data will be clipped.
+    ///   - distanceThreshold: The distance threshold for the camera to be re-aligned with the GPS.
+    ///   - initialCameraIsSet: A Boolean value that indicates whether the initial camera is set for the scene view.
+    ///   - isCalibrating: A Boolean value that indicates whether the calibration view is present.
+    ///   - locationDataSource: The location datasource used to acquire the device's location.
+    ///   - timeThreshold: The time threshold for the camera to be re-aligned with the GPS.
+    ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
+    ///   augmented reality video feed.
     init(
+        calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
+        clippingDistance: Double?,
+        distanceThreshold: Double = 2.0,
         initialCameraIsSet: Binding<Bool>,
         isCalibrating: Bool,
         locationDataSource: LocationDataSource,
-        calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
-        clippingDistance: Double?,
+        timeThreshold: Double = 10.0,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
-        self._initialCameraIsSet = initialCameraIsSet
+        self.calibrationViewModel = calibrationViewModel
+        self.distanceThreshold = distanceThreshold
+        _initialCameraIsSet = initialCameraIsSet
         self.isCalibrating = isCalibrating
         self.locationDataSource = locationDataSource
-        self.calibrationViewModel = calibrationViewModel
+        self.timeThreshold = timeThreshold
         
         sceneViewBuilder = sceneView
         
@@ -153,11 +167,6 @@ struct WorldTrackingSceneView: View {
                 updateWorldTrackingSceneView(for: location)
             }
         }
-        .task {
-            for await heading in locationDataSource.headings {
-                currentHeading = heading
-            }
-        }
         .onReceive(calibrationViewModel.headingCorrections) { correction in
             let originCamera = cameraController.originCamera
             cameraController.originCamera = originCamera.rotatedTo(
@@ -179,11 +188,11 @@ struct WorldTrackingSceneView: View {
         guard !coachingOverlayIsActive else { return }
         
         // Update if the location is more than 10 seconds old.
-        guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < 10 else { return }
+        guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < timeThreshold else { return }
         
         // Make sure that horizontal and vertical accuracy are valid.
-        guard location.horizontalAccuracy > validAccuracyThreshold,
-              location.verticalAccuracy > validAccuracyThreshold else { return }
+        guard location.horizontalAccuracy > .zero,
+              location.verticalAccuracy > .zero else { return }
         
         // Make sure we need to update the camera based on distance deviation.
         guard !initialCameraIsSet || shouldUpdateCamera(for: location) else { return }

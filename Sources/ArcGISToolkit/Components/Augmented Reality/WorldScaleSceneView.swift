@@ -80,11 +80,11 @@ public struct WorldScaleSceneView: View {
                     )
                 } else {
                     WorldTrackingSceneView(
+                        calibrationViewModel: calibrationViewModel,
+                        clippingDistance: clippingDistance,
                         initialCameraIsSet: $initialCameraIsSet,
                         isCalibrating: isCalibrating,
                         locationDataSource: locationDataSource,
-                        calibrationViewModel: calibrationViewModel,
-                        clippingDistance: clippingDistance,
                         sceneView: sceneViewBuilder
                     )
                 }
@@ -99,11 +99,11 @@ public struct WorldScaleSceneView: View {
                 )
             case .worldTracking:
                 WorldTrackingSceneView(
+                    calibrationViewModel: calibrationViewModel,
+                    clippingDistance: clippingDistance,
                     initialCameraIsSet: $initialCameraIsSet,
                     isCalibrating: isCalibrating,
                     locationDataSource: locationDataSource,
-                    calibrationViewModel: calibrationViewModel,
-                    clippingDistance: clippingDistance,
                     sceneView: sceneViewBuilder
                 )
             }
