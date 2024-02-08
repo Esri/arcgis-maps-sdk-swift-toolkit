@@ -17,7 +17,7 @@ import ARKit
 ***REMOVED***
 import Combine
 
-extension WorldScaleGeoTrackingSceneView {
+public extension WorldScaleSceneView {
 ***REMOVED******REMOVED***/ A view model that stores state information for the calibration.
 ***REMOVED***@MainActor
 ***REMOVED***class CalibrationViewModel: ObservableObject {
@@ -63,7 +63,7 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-extension WorldScaleGeoTrackingSceneView {
+extension WorldScaleSceneView {
 ***REMOVED******REMOVED***/ A view that allows the user to calibrate the heading of the scene view camera controller.
 ***REMOVED***struct CalibrationView: View {
 ***REMOVED******REMOVED***@ObservedObject

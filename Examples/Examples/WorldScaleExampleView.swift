@@ -41,7 +41,7 @@ struct WorldScaleExampleView: View {
 ***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***GeoTrackingSceneView(locationDataSource: locationDataSource) { proxy in
+***REMOVED******REMOVED***WorldScaleSceneView(trackingMode: .worldTracking) { proxy in
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
