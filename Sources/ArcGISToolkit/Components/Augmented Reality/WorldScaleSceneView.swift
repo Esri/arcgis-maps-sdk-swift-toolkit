@@ -71,11 +71,11 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the current location, fall back to world-tracking.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if geoTrackingIsAvailable {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeoTrackingSceneView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: isCalibrating,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** else {
@@ -90,11 +90,11 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .geoTracking:
 ***REMOVED******REMOVED******REMOVED******REMOVED***GeoTrackingSceneView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: isCalibrating,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***case .worldTracking:

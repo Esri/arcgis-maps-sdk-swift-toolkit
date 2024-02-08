@@ -18,51 +18,49 @@ import ARKit
 
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience using geo-tracking.
 public struct GeoTrackingSceneView: View {
+***REMOVED******REMOVED***/ A Boolean value indicating if the camera was initially set.
+***REMOVED***@Binding var initialCameraIsSet: Bool
+***REMOVED******REMOVED***/ The view model for the calibration view.
+***REMOVED***@ObservedObject private var calibrationViewModel: WorldScaleSceneView.CalibrationViewModel
+***REMOVED******REMOVED***/ The geo-tracking configuration for the AR session.
+***REMOVED***private let configuration = ARGeoTrackingConfiguration()
+***REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
+***REMOVED***private let isCalibrating: Bool
+***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
+***REMOVED***private let locationDataSource: LocationDataSource
+***REMOVED******REMOVED***/ The closure that builds the scene view.
+***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
-***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
-***REMOVED***private let locationDataSource: LocationDataSource
-***REMOVED******REMOVED***/ The current interface orientation.
-***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
-***REMOVED******REMOVED***/ A Boolean value indicating if the camera was initially set.
-***REMOVED***@Binding var initialCameraIsSet: Bool
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the coaching overlay view is active.
 ***REMOVED***@State private var coachingOverlayIsActive = false
 ***REMOVED******REMOVED***/ The current camera of the scene view.
 ***REMOVED***@State private var currentCamera: Camera?
-***REMOVED******REMOVED***/ The closure that builds the scene view.
-***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-***REMOVED******REMOVED***/ The geo-tracking configuration for the AR session.
-***REMOVED***private let configuration = ARGeoTrackingConfiguration()
-***REMOVED******REMOVED***/ The current device location.
-***REMOVED***@State private var currentLocation: Location?
 ***REMOVED******REMOVED***/ The current device heading.
 ***REMOVED***@State private var currentHeading: Double?
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
-***REMOVED***private let isCalibrating: Bool
-***REMOVED***
-***REMOVED******REMOVED***/ The view model for the calibration view.
-***REMOVED***@ObservedObject private var calibrationViewModel: WorldScaleSceneView.CalibrationViewModel
+***REMOVED******REMOVED***/ The current device location.
+***REMOVED***@State private var currentLocation: Location?
+***REMOVED******REMOVED***/ The current interface orientation.
+***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale geo-tracking scene view.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - locationDataSource: The location datasource used to acquire the device's location.
+***REMOVED******REMOVED***/   - calibrationViewModel: The view model for accessing the calibration values.
 ***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera. A value
 ***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
+***REMOVED******REMOVED***/   - initialCameraIsSet: A Boolean value that indicates whether the initial camera is set for the scene view.
+***REMOVED******REMOVED***/   - isCalibrating: A Boolean value that indicates whether the calibration view is present.
+***REMOVED******REMOVED***/   - locationDataSource: The location datasource used to acquire the device's location.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
-***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
-***REMOVED******REMOVED***/ be effectively viewed in augmented reality. Properties such as the camera controller,
-***REMOVED******REMOVED***/ and view drawing mode.
 ***REMOVED***public init(
+***REMOVED******REMOVED***calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
+***REMOVED******REMOVED***clippingDistance: Double?,
 ***REMOVED******REMOVED***initialCameraIsSet: Binding<Bool>,
 ***REMOVED******REMOVED***isCalibrating: Bool,
 ***REMOVED******REMOVED***locationDataSource: LocationDataSource,
-***REMOVED******REMOVED***calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
-***REMOVED******REMOVED***clippingDistance: Double?,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***self._initialCameraIsSet = initialCameraIsSet
@@ -102,7 +100,7 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .notAvailable, .initializing, .localizing:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .localized:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Update the camera controller every time ge-tracking is localized,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Update the camera controller every time geo-tracking is localized,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to ensure the best experience.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !initialCameraIsSet, let currentLocation, let currentHeading {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the initial heading of scene view camera based on location
