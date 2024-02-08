@@ -18,51 +18,49 @@ import ArcGIS
 
 /// A scene view that provides an augmented reality world scale experience using geo-tracking.
 public struct GeoTrackingSceneView: View {
+    /// A Boolean value indicating if the camera was initially set.
+    @Binding var initialCameraIsSet: Bool
+    /// The view model for the calibration view.
+    @ObservedObject private var calibrationViewModel: WorldScaleSceneView.CalibrationViewModel
+    /// The geo-tracking configuration for the AR session.
+    private let configuration = ARGeoTrackingConfiguration()
+    /// A Boolean value that indicates if the user is calibrating.
+    private let isCalibrating: Bool
+    /// The location datasource that is used to access the device location.
+    private let locationDataSource: LocationDataSource
+    /// The closure that builds the scene view.
+    private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
     /// The camera controller that will be set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
-    /// The location datasource that is used to access the device location.
-    private let locationDataSource: LocationDataSource
-    /// The current interface orientation.
-    @State private var interfaceOrientation: InterfaceOrientation?
-    /// A Boolean value indicating if the camera was initially set.
-    @Binding var initialCameraIsSet: Bool
     /// A Boolean value that indicates whether the coaching overlay view is active.
     @State private var coachingOverlayIsActive = false
     /// The current camera of the scene view.
     @State private var currentCamera: Camera?
-    /// The closure that builds the scene view.
-    private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-    /// The geo-tracking configuration for the AR session.
-    private let configuration = ARGeoTrackingConfiguration()
-    /// The current device location.
-    @State private var currentLocation: Location?
     /// The current device heading.
     @State private var currentHeading: Double?
-    
-    /// A Boolean value that indicates if the user is calibrating.
-    private let isCalibrating: Bool
-    
-    /// The view model for the calibration view.
-    @ObservedObject private var calibrationViewModel: WorldScaleSceneView.CalibrationViewModel
+    /// The current device location.
+    @State private var currentLocation: Location?
+    /// The current interface orientation.
+    @State private var interfaceOrientation: InterfaceOrientation?
     
     /// Creates a world scale geo-tracking scene view.
     /// - Parameters:
-    ///   - locationDataSource: The location datasource used to acquire the device's location.
+    ///   - calibrationViewModel: The view model for accessing the calibration values.
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
     ///   of `nil` means that no data will be clipped.
+    ///   - initialCameraIsSet: A Boolean value that indicates whether the initial camera is set for the scene view.
+    ///   - isCalibrating: A Boolean value that indicates whether the calibration view is present.
+    ///   - locationDataSource: The location datasource used to acquire the device's location.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
-    /// - Remark: The provided scene view will have certain properties overridden in order to
-    /// be effectively viewed in augmented reality. Properties such as the camera controller,
-    /// and view drawing mode.
     public init(
+        calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
+        clippingDistance: Double?,
         initialCameraIsSet: Binding<Bool>,
         isCalibrating: Bool,
         locationDataSource: LocationDataSource,
-        calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
-        clippingDistance: Double?,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         self._initialCameraIsSet = initialCameraIsSet
@@ -102,7 +100,7 @@ public struct GeoTrackingSceneView: View {
                         case .notAvailable, .initializing, .localizing:
                             initialCameraIsSet = false
                         case .localized:
-                            // Update the camera controller every time ge-tracking is localized,
+                            // Update the camera controller every time geo-tracking is localized,
                             // to ensure the best experience.
                             if !initialCameraIsSet, let currentLocation, let currentHeading {
                                 // Set the initial heading of scene view camera based on location
