@@ -63,10 +63,10 @@ public struct GeoTrackingSceneView: View {
         locationDataSource: LocationDataSource,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
-        self._initialCameraIsSet = initialCameraIsSet
+        self.calibrationViewModel = calibrationViewModel
+        _initialCameraIsSet = initialCameraIsSet
         self.isCalibrating = isCalibrating
         self.locationDataSource = locationDataSource
-        self.calibrationViewModel = calibrationViewModel
         
         sceneViewBuilder = sceneView
         
@@ -95,7 +95,6 @@ public struct GeoTrackingSceneView: View {
                         )
                     }
                     .onDidChangeGeoTrackingStatus { session, status in
-                        // This modifier will only be called when using geo-tracking.
                         switch status.state {
                         case .notAvailable, .initializing, .localizing:
                             initialCameraIsSet = false
