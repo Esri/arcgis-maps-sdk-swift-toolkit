@@ -43,6 +43,16 @@ public struct WorldScaleSceneView: View {
     /// The error from the view.
     @State private var error: Error?
     
+    /// Creates a world scale scene view.
+    /// - Parameters:
+    ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
+    ///   of `nil` means that no data will be clipped.
+    ///   - trackingMode: The type of tracking configuration used by the AR view.
+    ///   - sceneViewBuilder: A closure that builds the scene view to be overlayed on top of the
+    ///   augmented reality video feed.
+    /// - Remark: The provided scene view will have certain properties overridden in order to
+    /// be effectively viewed in augmented reality. Properties such as the camera controller,
+    /// and view drawing mode.
     public init(
         clippingDistance: Double? = nil,
         trackingMode: TrackingMode,
