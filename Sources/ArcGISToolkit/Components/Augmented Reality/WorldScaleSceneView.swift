@@ -18,32 +18,29 @@ import ARKit
 
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience.
 public struct WorldScaleSceneView: View {
-***REMOVED******REMOVED***/ Determines the alignment of the calibration view.
-***REMOVED***var calibrationViewAlignment: Alignment = .bottom
-***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
-***REMOVED***var calibrationViewIsHidden = false
-***REMOVED***
+***REMOVED******REMOVED***/ The clipping distance of the scene view.
+***REMOVED***private let clippingDistance: Double?
+***REMOVED******REMOVED***/ The tracking mode for world scale AR.
+***REMOVED***private let trackingMode: TrackingMode
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-***REMOVED***
-***REMOVED***private let trackingMode: TrackingMode
-***REMOVED***
-***REMOVED***private let clippingDistance: Double?
-***REMOVED***
+***REMOVED******REMOVED***/ Determines the alignment of the calibration view.
+***REMOVED***private var calibrationViewAlignment: Alignment = .bottom
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
+***REMOVED***private var calibrationViewIsHidden = false
 ***REMOVED******REMOVED***/ The view model for the calibration view.
 ***REMOVED***@StateObject private var calibrationViewModel = CalibrationViewModel()
+***REMOVED******REMOVED***/ The current device location.
+***REMOVED***@State private var currentLocation: Location?
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the geo-tracking configuration is available.
+***REMOVED***@State private var geoTrackingIsAvailable = true
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the initial camera is set for the scene view.
+***REMOVED***@State private var initialCameraIsSet = false
 ***REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
 ***REMOVED***@State private var isCalibrating = false
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
-***REMOVED***
-***REMOVED******REMOVED***/ The current device location.
-***REMOVED***@State private var currentLocation: Location?
-***REMOVED***
-***REMOVED***@State private var geoTrackingIsAvailable = true
-***REMOVED***
-***REMOVED***@State private var initialCameraIsSet = false
-***REMOVED***
+***REMOVED******REMOVED***/ The error from the view.
 ***REMOVED***@State private var error: Error?
 ***REMOVED***
 ***REMOVED***public init(
@@ -60,6 +57,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***switch trackingMode {
 ***REMOVED******REMOVED******REMOVED***case .automatic:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** By default we try the geo-tracking configuration. If it is not available at
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the current location, fall back to world-tracking.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if geoTrackingIsAvailable {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeoTrackingSceneView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
@@ -99,8 +98,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onAppear {
-***REMOVED***
 ***REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED***Task { await locationDataSource.stop() ***REMOVED***
 ***REMOVED***
@@ -113,7 +110,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***if locationManager.authorizationStatus == .notDetermined {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationManager.requestWhenInUseAuthorization()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if !checkDeviceCapabilities(locationManager) {
+***REMOVED******REMOVED******REMOVED***if !checkTrackingCapabilities(locationManager) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("Device doesn't support full accuracy location.")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -128,8 +125,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let isAvailable = try await checkGeoTrackingAvailability()
-***REMOVED******REMOVED******REMOVED******REMOVED***geoTrackingIsAvailable = isAvailable
+***REMOVED******REMOVED******REMOVED******REMOVED***geoTrackingIsAvailable = try await checkGeoTrackingAvailability()
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
 ***REMOVED******REMOVED***
@@ -198,7 +194,10 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func checkDeviceCapabilities(_ locationManager: CLLocationManager) -> Bool {
+***REMOVED******REMOVED***/ Checks if GPS is providing the most accurate location and heading.
+***REMOVED******REMOVED***/ - Parameter locationManager: The location manager to determine the accuracy authorization.
+***REMOVED******REMOVED***/ - Returns: A Boolean value that indicates whether tracking is accurate.
+***REMOVED***private func checkTrackingCapabilities(_ locationManager: CLLocationManager) -> Bool {
 ***REMOVED******REMOVED***let headingAvailable = CLLocationManager.headingAvailable()
 ***REMOVED******REMOVED***let fullAccuracy: Bool
 ***REMOVED******REMOVED***switch locationManager.accuracyAuthorization {
@@ -211,8 +210,11 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***return headingAvailable && fullAccuracy
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Checks if the hardware and the current location supports geo-tracking.
+***REMOVED******REMOVED***/ - Returns: A Boolean value that indicates whether geo-tracking is available.
 ***REMOVED***private func checkGeoTrackingAvailability() async throws -> Bool {
 ***REMOVED******REMOVED***if !ARGeoTrackingConfiguration.isSupported {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Return false if the device doesn't satisfy the hardware requirements.
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***return try await ARGeoTrackingConfiguration.checkAvailability()
