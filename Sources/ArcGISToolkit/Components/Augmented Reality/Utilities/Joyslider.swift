@@ -108,7 +108,7 @@ private struct Thumb: View {
 
 /// Track view for the joyslider.
 private struct Track: View {
-    /// A Boolean value indicating if the user is dragging the thumb.
+    /// The x offset of the thumb in points.
     let offset: Double
     /// A factor between -1 and 1 that specifies the current percentage of the thumb's position.
     let factor: Double
@@ -121,7 +121,7 @@ private struct Track: View {
                 Capsule(style: .continuous)
                     .fill(fill)
                     .frame(width: abs(offset))
-                    .offset(x: offset/2)
+                    .offset(x: offset / 2)
             }
         }
         .frame(height: 4)
