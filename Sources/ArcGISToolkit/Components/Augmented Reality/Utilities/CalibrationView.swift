@@ -17,7 +17,7 @@ import SwiftUI
 import ArcGIS
 import Combine
 
-extension WorldScaleGeoTrackingSceneView {
+public extension WorldScaleSceneView {
     /// A view model that stores state information for the calibration.
     @MainActor
     class CalibrationViewModel: ObservableObject {
@@ -63,7 +63,7 @@ extension WorldScaleGeoTrackingSceneView {
     }
 }
     
-extension WorldScaleGeoTrackingSceneView {
+extension WorldScaleSceneView {
     /// A view that allows the user to calibrate the heading of the scene view camera controller.
     struct CalibrationView: View {
         @ObservedObject
