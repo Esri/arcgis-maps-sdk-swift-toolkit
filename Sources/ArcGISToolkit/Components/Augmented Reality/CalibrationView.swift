@@ -72,15 +72,26 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value that indicates if the user is presenting the calibration view.
 ***REMOVED******REMOVED***@Binding
 ***REMOVED******REMOVED***var isPresented: Bool
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A number format style for signed values with their fractional component removed.
 ***REMOVED******REMOVED***private let numberFormat = FloatingPointFormatStyle<Double>.number
 ***REMOVED******REMOVED******REMOVED***.precision(.fractionLength(1))
 ***REMOVED******REMOVED******REMOVED***.sign(strategy: .always(includingZero: false))
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The total heading correction measurement in degrees.
+***REMOVED******REMOVED***private var totalHeadingCorrectionMeasurement: Measurement<UnitAngle> {
+***REMOVED******REMOVED******REMOVED***Measurement<UnitAngle>(value: viewModel.totalHeadingCorrection, unit: .degrees)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The total elevation correction measurement in meters.
+***REMOVED******REMOVED***private var totalElevationCorrectionMeasurement: Measurement<UnitLength> {
+***REMOVED******REMOVED******REMOVED***Measurement<UnitLength>(value: viewModel.totalElevationCorrection, unit: .meters)
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .firstTextBaseline) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Calibration")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(calibrationLabel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
@@ -105,11 +116,11 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Stepper() {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Heading")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(headingLabel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.totalHeadingCorrection, format: numberFormat) + Text("°")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(totalHeadingCorrectionMeasurement, format: .measurement(width: .narrow, numberFormatStyle: numberFormat))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
@@ -131,11 +142,11 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Stepper() {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Elevation")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(elevationLabel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body.smallCaps())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.totalElevationCorrection, format: numberFormat) + Text(" m")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(totalElevationCorrectionMeasurement, format: .measurement(width: .abbreviated, usage: .asProvided, numberFormatStyle: numberFormat))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** onIncrement: {
@@ -166,5 +177,38 @@ extension WorldScaleGeoTrackingSceneView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension WorldScaleGeoTrackingSceneView.CalibrationView {
+***REMOVED***var calibrationLabel: String {
+***REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED***localized: "Calibration",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** A label for the calibration view used to calibrate the camera
+***REMOVED******REMOVED******REMOVED******REMOVED*** for the AR experience.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***var headingLabel: String {
+***REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED***localized: "heading",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** A label for the slider that adjusts the camera heading for the
+***REMOVED******REMOVED******REMOVED******REMOVED*** AR experience.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***var elevationLabel: String {
+***REMOVED******REMOVED***String(
+***REMOVED******REMOVED******REMOVED***localized: "elevation",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED*** A label for the slider that adjusts the camera elevation for the
+***REMOVED******REMOVED******REMOVED******REMOVED*** AR experience.
+***REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
