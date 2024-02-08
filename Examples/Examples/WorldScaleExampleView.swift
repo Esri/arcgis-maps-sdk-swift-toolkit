@@ -20,7 +20,7 @@ import CoreLocation
 ***REMOVED***/ An example that utilizes the `WorldScaleGeoTrackingSceneView` to show an augmented reality view
 ***REMOVED***/ of your current location. Because this is an example that can be run from anywhere,
 ***REMOVED***/ it places a red circle around your initial location which can be explored.
-struct WorldScaleGeoTrackingExampleView: View {
+struct WorldScaleExampleView: View {
 ***REMOVED***@State private var scene: ArcGIS.Scene = {
 ***REMOVED******REMOVED******REMOVED*** Creates an elevation source from Terrain3D REST service.
 ***REMOVED******REMOVED***let elevationServiceURL = URL(string: "https:***REMOVED***elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!
@@ -41,7 +41,7 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***WorldScaleGeoTrackingSceneView(locationDataSource: locationDataSource) { proxy in
+***REMOVED******REMOVED***GeoTrackingSceneView(locationDataSource: locationDataSource) { proxy in
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
