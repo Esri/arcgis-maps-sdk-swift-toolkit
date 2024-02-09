@@ -51,6 +51,7 @@ struct WorldScaleExampleView: View {
                     }
                 }
         }
+        .calibrationViewAlignment(.bottomLeading)
         .task {
             // Request when-in-use location authorization.
             // This is necessary for 2 reasons:
