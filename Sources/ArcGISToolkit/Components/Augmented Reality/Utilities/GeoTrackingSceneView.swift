@@ -36,8 +36,6 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the coaching overlay view is active.
 ***REMOVED***@State private var coachingOverlayIsActive = false
-***REMOVED******REMOVED***/ The current camera of the scene view.
-***REMOVED***@State private var currentCamera: Camera?
 ***REMOVED******REMOVED***/ The current device heading.
 ***REMOVED***@State private var currentHeading: Double?
 ***REMOVED******REMOVED***/ The current device location.
@@ -127,9 +125,6 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.interactiveNavigationDisabled(true)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCameraChanged { camera in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentCamera = camera
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.all)
