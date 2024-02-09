@@ -1,4 +1,4 @@
-***REMOVED*** Copyright 2023 Esri
+***REMOVED*** Copyright 2024 Esri
 ***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrationViewEnabled: isCalibrating,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -83,7 +83,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrationViewEnabled: isCalibrating,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -93,7 +93,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrationViewEnabled: isCalibrating,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -102,7 +102,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating: isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrationViewEnabled: isCalibrating,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED***)

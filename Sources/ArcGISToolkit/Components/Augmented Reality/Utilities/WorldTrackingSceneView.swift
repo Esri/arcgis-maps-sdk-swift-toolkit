@@ -28,7 +28,7 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***/ world-tracking session.
 ***REMOVED***private let distanceThreshold: Double
 ***REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
-***REMOVED***private let isCalibrating: Bool
+***REMOVED***private let isCalibrationViewEnabled: Bool
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***private let locationDataSource: LocationDataSource
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
@@ -67,7 +67,7 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
 ***REMOVED******REMOVED***/   - distanceThreshold: The distance threshold for the camera to be re-aligned with the GPS.
 ***REMOVED******REMOVED***/   - initialCameraIsSet: A Boolean value that indicates whether the initial camera is set for the scene view.
-***REMOVED******REMOVED***/   - isCalibrating: A Boolean value that indicates whether the calibration view is present.
+***REMOVED******REMOVED***/   - isCalibrationViewEnabled: A Boolean value that indicates whether the calibration view is present.
 ***REMOVED******REMOVED***/   - locationDataSource: The location datasource used to acquire the device's location.
 ***REMOVED******REMOVED***/   - timeThreshold: The time threshold for the camera to be re-aligned with the GPS.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
@@ -77,7 +77,7 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***clippingDistance: Double?,
 ***REMOVED******REMOVED***distanceThreshold: Double = 2.0,
 ***REMOVED******REMOVED***initialCameraIsSet: Binding<Bool>,
-***REMOVED******REMOVED***isCalibrating: Bool,
+***REMOVED******REMOVED***isCalibrationViewEnabled: Bool,
 ***REMOVED******REMOVED***locationDataSource: LocationDataSource,
 ***REMOVED******REMOVED***timeThreshold: Double = 10.0,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
@@ -85,7 +85,7 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***self.calibrationViewModel = calibrationViewModel
 ***REMOVED******REMOVED***self.distanceThreshold = distanceThreshold
 ***REMOVED******REMOVED***_initialCameraIsSet = initialCameraIsSet
-***REMOVED******REMOVED***self.isCalibrating = isCalibrating
+***REMOVED******REMOVED***self.isCalibrationViewEnabled = isCalibrationViewEnabled
 ***REMOVED******REMOVED***self.locationDataSource = locationDataSource
 ***REMOVED******REMOVED***self.timeThreshold = timeThreshold
 ***REMOVED******REMOVED***
@@ -210,7 +210,7 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Ignore location updates when calibrating heading and elevation.
-***REMOVED******REMOVED******REMOVED***guard !isCalibrating else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard !isCalibrationViewEnabled else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
 ***REMOVED******REMOVED******REMOVED******REMOVED***latitude: location.position.y,
 ***REMOVED******REMOVED******REMOVED******REMOVED***longitude: location.position.x,

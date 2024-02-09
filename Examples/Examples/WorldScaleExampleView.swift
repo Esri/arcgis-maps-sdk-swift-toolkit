@@ -17,7 +17,7 @@
 ***REMOVED***Toolkit
 import CoreLocation
 
-***REMOVED***/ An example that utilizes the `WorldScaleGeoTrackingSceneView` to show an augmented reality view
+***REMOVED***/ An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
 ***REMOVED***/ of your current location. Because this is an example that can be run from anywhere,
 ***REMOVED***/ it places a red circle around your initial location which can be explored.
 struct WorldScaleExampleView: View {
@@ -51,8 +51,6 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.calibrationViewHidden(false)
-***REMOVED******REMOVED***.calibrationViewAlignment(.bottom)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Request when-in-use location authorization.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** This is necessary for 2 reasons:

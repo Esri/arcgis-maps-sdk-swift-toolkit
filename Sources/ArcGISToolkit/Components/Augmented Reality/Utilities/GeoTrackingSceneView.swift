@@ -1,4 +1,4 @@
-***REMOVED*** Copyright 2023 Esri
+***REMOVED*** Copyright 2024 Esri
 ***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/ The geo-tracking configuration for the AR session.
 ***REMOVED***private let configuration = ARGeoTrackingConfiguration()
 ***REMOVED******REMOVED***/ A Boolean value that indicates if the user is calibrating.
-***REMOVED***private let isCalibrating: Bool
+***REMOVED***private let isCalibrationViewEnabled: Bool
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***private let locationDataSource: LocationDataSource
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
@@ -51,7 +51,7 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera. A value
 ***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
 ***REMOVED******REMOVED***/   - initialCameraIsSet: A Boolean value that indicates whether the initial camera is set for the scene view.
-***REMOVED******REMOVED***/   - isCalibrating: A Boolean value that indicates whether the calibration view is present.
+***REMOVED******REMOVED***/   - isCalibrationViewEnabled: A Boolean value that indicates whether the calibration view is present.
 ***REMOVED******REMOVED***/   - locationDataSource: The location datasource used to acquire the device's location.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
@@ -59,13 +59,13 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
 ***REMOVED******REMOVED***clippingDistance: Double?,
 ***REMOVED******REMOVED***initialCameraIsSet: Binding<Bool>,
-***REMOVED******REMOVED***isCalibrating: Bool,
+***REMOVED******REMOVED***isCalibrationViewEnabled: Bool,
 ***REMOVED******REMOVED***locationDataSource: LocationDataSource,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.calibrationViewModel = calibrationViewModel
 ***REMOVED******REMOVED***_initialCameraIsSet = initialCameraIsSet
-***REMOVED******REMOVED***self.isCalibrating = isCalibrating
+***REMOVED******REMOVED***self.isCalibrationViewEnabled = isCalibrationViewEnabled
 ***REMOVED******REMOVED***self.locationDataSource = locationDataSource
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***sceneViewBuilder = sceneView
