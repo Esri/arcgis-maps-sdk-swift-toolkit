@@ -180,7 +180,7 @@ extension WorldScaleSceneView {
     }
 }
 
-private extension WorldScaleGeoTrackingSceneView.CalibrationView {
+private extension WorldScaleSceneView.CalibrationView {
     var calibrationLabel: String {
         String(
             localized: "Calibration",
