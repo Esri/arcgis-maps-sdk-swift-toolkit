@@ -36,8 +36,6 @@ public struct GeoTrackingSceneView: View {
     @State private var cameraController: TransformationMatrixCameraController
     /// A Boolean value that indicates whether the coaching overlay view is active.
     @State private var coachingOverlayIsActive = false
-    /// The current camera of the scene view.
-    @State private var currentCamera: Camera?
     /// The current device heading.
     @State private var currentHeading: Double?
     /// The current device location.
@@ -127,9 +125,6 @@ public struct GeoTrackingSceneView: View {
                         .spaceEffect(.transparent)
                         .atmosphereEffect(.off)
                         .interactiveNavigationDisabled(true)
-                        .onCameraChanged { camera in
-                            currentCamera = camera
-                        }
                 }
             }
             .ignoresSafeArea(.all)
