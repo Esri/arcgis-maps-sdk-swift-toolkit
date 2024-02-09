@@ -74,7 +74,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrationViewEnabled: isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewIsPresented: isCalibrating,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -83,7 +83,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrationViewEnabled: isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewIsPresented: isCalibrating,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -93,7 +93,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrationViewEnabled: isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewIsPresented: isCalibrating,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -102,7 +102,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrationViewEnabled: isCalibrating,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewIsPresented: isCalibrating,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
