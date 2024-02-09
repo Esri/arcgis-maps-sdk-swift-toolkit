@@ -180,7 +180,7 @@ extension WorldScaleSceneView {
 ***REMOVED***
 ***REMOVED***
 
-private extension WorldScaleGeoTrackingSceneView.CalibrationView {
+private extension WorldScaleSceneView.CalibrationView {
 ***REMOVED***var calibrationLabel: String {
 ***REMOVED******REMOVED***String(
 ***REMOVED******REMOVED******REMOVED***localized: "Calibration",
