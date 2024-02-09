@@ -28,7 +28,7 @@ struct WorldTrackingSceneView: View {
     /// world-tracking session.
     private let distanceThreshold: Double
     /// A Boolean value that indicates if the user is calibrating.
-    private let isCalibrationViewEnabled: Bool
+    private let calibrationViewIsPresented: Bool
     /// The location datasource that is used to access the device location.
     private let locationDataSource: LocationDataSource
     /// The closure that builds the scene view.
@@ -67,7 +67,7 @@ struct WorldTrackingSceneView: View {
     ///   of `nil` means that no data will be clipped.
     ///   - distanceThreshold: The distance threshold for the camera to be re-aligned with the GPS.
     ///   - initialCameraIsSet: A Boolean value that indicates whether the initial camera is set for the scene view.
-    ///   - isCalibrationViewEnabled: A Boolean value that indicates whether the calibration view is present.
+    ///   - calibrationViewIsPresented: A Boolean value that indicates whether the calibration view is present.
     ///   - locationDataSource: The location datasource used to acquire the device's location.
     ///   - timeThreshold: The time threshold for the camera to be re-aligned with the GPS.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
@@ -77,7 +77,7 @@ struct WorldTrackingSceneView: View {
         clippingDistance: Double?,
         distanceThreshold: Double = 2.0,
         initialCameraIsSet: Binding<Bool>,
-        isCalibrationViewEnabled: Bool,
+        calibrationViewIsPresented: Bool,
         locationDataSource: LocationDataSource,
         timeThreshold: Double = 10.0,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
@@ -85,7 +85,7 @@ struct WorldTrackingSceneView: View {
         self.calibrationViewModel = calibrationViewModel
         self.distanceThreshold = distanceThreshold
         _initialCameraIsSet = initialCameraIsSet
-        self.isCalibrationViewEnabled = isCalibrationViewEnabled
+        self.calibrationViewIsPresented = calibrationViewIsPresented
         self.locationDataSource = locationDataSource
         self.timeThreshold = timeThreshold
         
@@ -210,7 +210,7 @@ struct WorldTrackingSceneView: View {
             )
         } else {
             // Ignore location updates when calibrating heading and elevation.
-            guard !isCalibrationViewEnabled else { return }
+            guard !calibrationViewIsPresented else { return }
             cameraController.originCamera = Camera(
                 latitude: location.position.y,
                 longitude: location.position.x,

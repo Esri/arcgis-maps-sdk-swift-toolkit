@@ -25,7 +25,7 @@ public struct GeoTrackingSceneView: View {
     /// The geo-tracking configuration for the AR session.
     private let configuration = ARGeoTrackingConfiguration()
     /// A Boolean value that indicates if the user is calibrating.
-    private let isCalibrationViewEnabled: Bool
+    private let calibrationViewIsPresented: Bool
     /// The location datasource that is used to access the device location.
     private let locationDataSource: LocationDataSource
     /// The closure that builds the scene view.
@@ -51,7 +51,7 @@ public struct GeoTrackingSceneView: View {
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
     ///   of `nil` means that no data will be clipped.
     ///   - initialCameraIsSet: A Boolean value that indicates whether the initial camera is set for the scene view.
-    ///   - isCalibrationViewEnabled: A Boolean value that indicates whether the calibration view is present.
+    ///   - calibrationViewIsPresented: A Boolean value that indicates whether the calibration view is present.
     ///   - locationDataSource: The location datasource used to acquire the device's location.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
@@ -59,13 +59,13 @@ public struct GeoTrackingSceneView: View {
         calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
         clippingDistance: Double?,
         initialCameraIsSet: Binding<Bool>,
-        isCalibrationViewEnabled: Bool,
+        calibrationViewIsPresented: Bool,
         locationDataSource: LocationDataSource,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         self.calibrationViewModel = calibrationViewModel
         _initialCameraIsSet = initialCameraIsSet
-        self.isCalibrationViewEnabled = isCalibrationViewEnabled
+        self.calibrationViewIsPresented = calibrationViewIsPresented
         self.locationDataSource = locationDataSource
         
         sceneViewBuilder = sceneView
