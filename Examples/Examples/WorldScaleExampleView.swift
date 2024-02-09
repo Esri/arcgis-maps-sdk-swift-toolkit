@@ -52,6 +52,9 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.calibrationViewAlignment(.bottomLeading)
+***REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED***Task { await locationDataSource.stop() ***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Request when-in-use location authorization.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** This is necessary for 2 reasons:
@@ -63,6 +66,8 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED***if locationManager.authorizationStatus == .notDetermined {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationManager.requestWhenInUseAuthorization()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***try? await locationDataSource.start()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Retrieve initial location.
 ***REMOVED******REMOVED******REMOVED***guard let initialLocation = await locationDataSource.locations.first(where: { _ in true ***REMOVED***) else { return ***REMOVED***
