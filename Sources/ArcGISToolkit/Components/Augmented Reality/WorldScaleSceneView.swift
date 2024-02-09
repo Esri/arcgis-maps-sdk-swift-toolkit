@@ -148,7 +148,7 @@ public struct WorldScaleSceneView: View {
                             isCalibrating = true
                         }
                     } label: {
-                        Text("Calibrate")
+                        Text(calibrateLabel)
                             .padding()
                     }
                     .background(.regularMaterial)
@@ -258,5 +258,17 @@ private extension ARGeoTrackingConfiguration {
                 }
             }
         }
+    }
+}
+
+private extension WorldScaleSceneView {
+    var calibrateLabel: String {
+        String(
+            localized: "Calibrate",
+            bundle: .toolkitModule,
+            comment: """
+                 A label for a button to show the calibration view.
+                 """
+        )
     }
 }
