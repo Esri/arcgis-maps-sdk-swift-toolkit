@@ -74,7 +74,7 @@ public struct WorldScaleSceneView: View {
                         calibrationViewModel: calibrationViewModel,
                         clippingDistance: clippingDistance,
                         initialCameraIsSet: $initialCameraIsSet,
-                        isCalibrationViewEnabled: isCalibrating,
+                        calibrationViewIsPresented: isCalibrating,
                         locationDataSource: locationDataSource,
                         sceneView: sceneViewBuilder
                     )
@@ -83,7 +83,7 @@ public struct WorldScaleSceneView: View {
                         calibrationViewModel: calibrationViewModel,
                         clippingDistance: clippingDistance,
                         initialCameraIsSet: $initialCameraIsSet,
-                        isCalibrationViewEnabled: isCalibrating,
+                        calibrationViewIsPresented: isCalibrating,
                         locationDataSource: locationDataSource,
                         sceneView: sceneViewBuilder
                     )
@@ -93,7 +93,7 @@ public struct WorldScaleSceneView: View {
                     calibrationViewModel: calibrationViewModel,
                     clippingDistance: clippingDistance,
                     initialCameraIsSet: $initialCameraIsSet,
-                    isCalibrationViewEnabled: isCalibrating,
+                    calibrationViewIsPresented: isCalibrating,
                     locationDataSource: locationDataSource,
                     sceneView: sceneViewBuilder
                 )
@@ -102,7 +102,7 @@ public struct WorldScaleSceneView: View {
                     calibrationViewModel: calibrationViewModel,
                     clippingDistance: clippingDistance,
                     initialCameraIsSet: $initialCameraIsSet,
-                    isCalibrationViewEnabled: isCalibrating,
+                    calibrationViewIsPresented: isCalibrating,
                     locationDataSource: locationDataSource,
                     sceneView: sceneViewBuilder
                 )
