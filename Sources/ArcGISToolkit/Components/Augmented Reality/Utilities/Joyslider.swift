@@ -148,12 +148,3 @@ private extension Color {
     /// The system fill color.
     static var systemFill: Color { Color(UIColor.systemFill) }
 }
-
-#Preview {
-    VStack {
-        Slider(value: .constant(0.5))
-        Joyslider()
-        Slider(value: .constant(0.5))
-    }
-    .padding()
-}
