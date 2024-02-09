@@ -1,4 +1,4 @@
-// Copyright 2023 Esri
+// Copyright 2024 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ public struct WorldScaleSceneView: View {
                         calibrationViewModel: calibrationViewModel,
                         clippingDistance: clippingDistance,
                         initialCameraIsSet: $initialCameraIsSet,
-                        isCalibrating: isCalibrating,
+                        isCalibrationViewEnabled: isCalibrating,
                         locationDataSource: locationDataSource,
                         sceneView: sceneViewBuilder
                     )
@@ -83,7 +83,7 @@ public struct WorldScaleSceneView: View {
                         calibrationViewModel: calibrationViewModel,
                         clippingDistance: clippingDistance,
                         initialCameraIsSet: $initialCameraIsSet,
-                        isCalibrating: isCalibrating,
+                        isCalibrationViewEnabled: isCalibrating,
                         locationDataSource: locationDataSource,
                         sceneView: sceneViewBuilder
                     )
@@ -93,7 +93,7 @@ public struct WorldScaleSceneView: View {
                     calibrationViewModel: calibrationViewModel,
                     clippingDistance: clippingDistance,
                     initialCameraIsSet: $initialCameraIsSet,
-                    isCalibrating: isCalibrating,
+                    isCalibrationViewEnabled: isCalibrating,
                     locationDataSource: locationDataSource,
                     sceneView: sceneViewBuilder
                 )
@@ -102,7 +102,7 @@ public struct WorldScaleSceneView: View {
                     calibrationViewModel: calibrationViewModel,
                     clippingDistance: clippingDistance,
                     initialCameraIsSet: $initialCameraIsSet,
-                    isCalibrating: isCalibrating,
+                    isCalibrationViewEnabled: isCalibrating,
                     locationDataSource: locationDataSource,
                     sceneView: sceneViewBuilder
                 )

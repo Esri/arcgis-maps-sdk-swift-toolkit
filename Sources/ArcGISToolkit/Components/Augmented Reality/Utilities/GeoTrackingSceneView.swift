@@ -1,4 +1,4 @@
-// Copyright 2023 Esri
+// Copyright 2024 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ public struct GeoTrackingSceneView: View {
     /// The geo-tracking configuration for the AR session.
     private let configuration = ARGeoTrackingConfiguration()
     /// A Boolean value that indicates if the user is calibrating.
-    private let isCalibrating: Bool
+    private let isCalibrationViewEnabled: Bool
     /// The location datasource that is used to access the device location.
     private let locationDataSource: LocationDataSource
     /// The closure that builds the scene view.
@@ -51,7 +51,7 @@ public struct GeoTrackingSceneView: View {
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
     ///   of `nil` means that no data will be clipped.
     ///   - initialCameraIsSet: A Boolean value that indicates whether the initial camera is set for the scene view.
-    ///   - isCalibrating: A Boolean value that indicates whether the calibration view is present.
+    ///   - isCalibrationViewEnabled: A Boolean value that indicates whether the calibration view is present.
     ///   - locationDataSource: The location datasource used to acquire the device's location.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
@@ -59,13 +59,13 @@ public struct GeoTrackingSceneView: View {
         calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
         clippingDistance: Double?,
         initialCameraIsSet: Binding<Bool>,
-        isCalibrating: Bool,
+        isCalibrationViewEnabled: Bool,
         locationDataSource: LocationDataSource,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
         self.calibrationViewModel = calibrationViewModel
         _initialCameraIsSet = initialCameraIsSet
-        self.isCalibrating = isCalibrating
+        self.isCalibrationViewEnabled = isCalibrationViewEnabled
         self.locationDataSource = locationDataSource
         
         sceneViewBuilder = sceneView
