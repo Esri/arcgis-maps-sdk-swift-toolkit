@@ -51,6 +51,7 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.calibrationViewAlignment(.bottomLeading)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Request when-in-use location authorization.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** This is necessary for 2 reasons:
