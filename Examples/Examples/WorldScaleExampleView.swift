@@ -17,7 +17,7 @@ import ArcGIS
 import ArcGISToolkit
 import CoreLocation
 
-/// An example that utilizes the `WorldScaleGeoTrackingSceneView` to show an augmented reality view
+/// An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
 /// of your current location. Because this is an example that can be run from anywhere,
 /// it places a red circle around your initial location which can be explored.
 struct WorldScaleExampleView: View {
@@ -51,8 +51,6 @@ struct WorldScaleExampleView: View {
                     }
                 }
         }
-        .calibrationViewHidden(false)
-        .calibrationViewAlignment(.bottom)
         .task {
             // Request when-in-use location authorization.
             // This is necessary for 2 reasons:
