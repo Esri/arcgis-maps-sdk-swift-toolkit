@@ -148,12 +148,3 @@ private extension Color {
 ***REMOVED******REMOVED***/ The system fill color.
 ***REMOVED***static var systemFill: Color { Color(UIColor.systemFill) ***REMOVED***
 ***REMOVED***
-
-#Preview {
-***REMOVED***VStack {
-***REMOVED******REMOVED***Slider(value: .constant(0.5))
-***REMOVED******REMOVED***Joyslider()
-***REMOVED******REMOVED***Slider(value: .constant(0.5))
-***REMOVED***
-***REMOVED***.padding()
-***REMOVED***
