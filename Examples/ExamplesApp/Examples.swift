@@ -38,7 +38,8 @@ extension ExampleList {
         name: "Augmented Reality",
         examples: [
             AnyExample("Flyover", content: FlyoverExampleView()),
-            AnyExample("Tabletop", content: TableTopExampleView())
+            AnyExample("Tabletop", content: TableTopExampleView()),
+            AnyExample("World Scale", content: WorldScaleGeoTrackingExampleView())
         ]
     )
     
