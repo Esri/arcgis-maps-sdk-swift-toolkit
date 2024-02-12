@@ -16,7 +16,7 @@ import XCTest
 ***REMOVED***
 ***REMOVED***Toolkit
 
-final class SmartLocatorSearchSourceTests: XCTestCase {
+final class SmartLocatorSearchSourceTests: DejavuTestCase {
 ***REMOVED***func testRepeatSearchResultThreshold() async throws {
 ***REMOVED******REMOVED***let locator = SmartLocatorSearchSource()
 ***REMOVED******REMOVED***
