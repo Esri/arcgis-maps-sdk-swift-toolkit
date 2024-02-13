@@ -38,6 +38,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "찾아보기";
 
+/* A label for a button to show the calibration view. */
+"Calibrate" = "한_Calibrate___________________빠";
+
+/* A label for the calibration view used to calibrate the camera
+for the AR experience. */
+"Calibration" = "한_Calibration____________빠";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "취소";
 
@@ -84,6 +91,10 @@ network element for more than one trace starting point. */
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
 "Element could not be identified." = "요소를 식별할 수 없습니다.";
+
+/* A label for the slider that adjusts the camera elevation for the
+AR experience. */
+"elevation" = "한_elevation___________________빠";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "오류";
@@ -133,6 +144,10 @@ contains one or more facilities in a floor-aware map or scene. */
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "함수 결과";
+
+/* A label for the slider that adjusts the camera heading for the
+AR experience. */
+"heading" = "한_heading_______________빠";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "미디어";

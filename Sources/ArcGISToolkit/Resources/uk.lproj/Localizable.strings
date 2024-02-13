@@ -38,6 +38,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "Перегляд";
 
+/* A label for a button to show the calibration view. */
+"Calibrate" = "ґ_Calibrate___________________Ї";
+
+/* A label for the calibration view used to calibrate the camera
+for the AR experience. */
+"Calibration" = "ґ_Calibration____________Ї";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Скасувати";
 
@@ -84,6 +91,10 @@ network element for more than one trace starting point. */
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
 "Element could not be identified." = "Не вдалося ідентифікувати елемент.";
+
+/* A label for the slider that adjusts the camera elevation for the
+AR experience. */
+"elevation" = "ґ_elevation___________________Ї";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Помилка";
@@ -133,6 +144,10 @@ contains one or more facilities in a floor-aware map or scene. */
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Результати функції";
+
+/* A label for the slider that adjusts the camera heading for the
+AR experience. */
+"heading" = "ґ_heading_______________Ї";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Середовище";
