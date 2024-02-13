@@ -323,3 +323,31 @@ private extension WorldScaleGeoTrackingSceneView {
         )
     }
 }
+
+public extension WorldScaleGeoTrackingSceneView {
+    /// Determines the scene point for the given screen point.
+    /// - Parameter screenPoint: The point in screen's coordinate space.
+    /// - Returns: The scene point corresponding to screen point.
+    func arScreenToLocation(screenPoint: CGPoint) -> Point? {
+        // Use the `raycast` method to get the matrix of `screenPoint`.
+        guard let localOffsetMatrix = arViewProxy.raycast(from: screenPoint) else { return nil }
+        
+        let translationFactor = cameraController.translationFactor
+        let originTransformationMatrix = cameraController.originCamera.transformationMatrix
+        
+        // Scale translation by translationFactor.
+        let translatedMatrix = TransformationMatrix.normalized(
+            quaternionX: localOffsetMatrix.quaternionX,
+            quaternionY: localOffsetMatrix.quaternionY,
+            quaternionZ: localOffsetMatrix.quaternionZ,
+            quaternionW: localOffsetMatrix.quaternionW,
+            translationX: localOffsetMatrix.translationX * translationFactor,
+            translationY: localOffsetMatrix.translationY * translationFactor,
+            translationZ: localOffsetMatrix.translationZ * translationFactor
+        )
+        let scenePointMatrix = originTransformationMatrix.adding(translatedMatrix)
+        
+        // Create a camera from transformationMatrix and return its location.
+        return Camera(transformationMatrix: scenePointMatrix).location
+    }
+}
