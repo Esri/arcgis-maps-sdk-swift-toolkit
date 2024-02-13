@@ -158,22 +158,20 @@ public struct WorldScaleSceneView: View {
             }
         }
         .overlay(alignment: calibrationButtonAlignment) {
-            if !calibrationViewIsHidden {
-                if !isCalibrating {
-                    Button {
-                        withAnimation {
-                            isCalibrating = true
-                        }
-                    } label: {
-                        Text(calibrateLabel)
-                            .padding()
+            if !calibrationViewIsHidden && !isCalibrating {
+                Button {
+                    withAnimation {
+                        isCalibrating = true
                     }
-                    .background(.regularMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .disabled(!initialCameraIsSet)
-                    .padding()
-                    .padding(.vertical)
+                } label: {
+                    Text(calibrateLabel)
+                        .padding()
                 }
+                .background(.regularMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .disabled(!initialCameraIsSet)
+                .padding()
+                .padding(.vertical)
             }
         }
         .overlay(alignment: .bottom) {
