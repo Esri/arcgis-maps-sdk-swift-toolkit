@@ -35,8 +35,22 @@ struct NavigateInARExampleView: View {
         return scene
     }()
     
+    /// The elevation surface set to the base surface of the scene.
+    @State var elevationSurface: Surface = {
+        let elevationSurface = Surface()
+        elevationSurface.navigationConstraint = .unconstrained
+        elevationSurface.opacity = 0.5
+        elevationSurface.backgroundGrid.isVisible = false
+        return elevationSurface
+    }()
+    
     /// The graphics overlay containing a graphic.
     @State private var graphicsOverlay = GraphicsOverlay()
+    
+    init() {
+        elevationSurface.addElevationSource(Surface.elevationSource)
+        Task { try await Surface.elevationSource.load() }
+    }
     
     var body: some View {
         if isShowingRoutePlanner {
@@ -111,7 +125,6 @@ struct NavigateInARExampleView: View {
                     buildGroup.enter()
                     
                     do {
-                        let elevationSurface = Surface()
                         let elevation = try await elevationSurface.elevation(at: point)
                         
                         let newPoint = GeometryEngine.makeGeometry(from: point, z: elevation + z)
@@ -130,7 +143,7 @@ struct NavigateInARExampleView: View {
                 completion(polylinebuilder.toGeometry())
             }
         } else {
-            completion(nil)
+            completion(polyline)
         }
     }
 }
@@ -277,17 +290,6 @@ private extension NavigateInARExampleView.RoutePlannerView {
         /// The route result.
         @Published var routeResult: RouteResult?
         
-        /// The elevation source with elevation service URL.
-        let elevationSource = ArcGISTiledElevationSource(url: URL(string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!)
-        
-        /// The elevation surface set to the base surface of the scene.
-        @Published var elevationSurface: Surface = {
-            let elevationSurface = Surface()
-            elevationSurface.navigationConstraint = .unconstrained
-            elevationSurface.opacity = 0
-            return elevationSurface
-        }()
-        
         /// The error shown in the error alert.
         @Published var error: Error?
         
@@ -343,7 +345,6 @@ private extension NavigateInARExampleView.RoutePlannerView {
                 locationManager.requestWhenInUseAuthorization()
             }
             
-            elevationSurface.addElevationSource(elevationSource)
             locationDisplay.dataSource = trackingLocationDataSource
             
             Task {
@@ -379,4 +380,9 @@ private extension NavigateInARExampleView.RoutePlannerView {
             endPoint = nil
         }
     }
+}
+
+private extension Surface {
+    /// The elevation source with elevation service URL.
+    static let elevationSource = ArcGISTiledElevationSource(url: URL(string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!)
 }
