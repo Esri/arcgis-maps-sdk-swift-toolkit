@@ -51,7 +51,7 @@ struct WorldScaleExampleView: View {
                     }
                 }
         }
-        .calibrationViewAlignment(.bottomLeading)
+        .calibrationButtonAlignment(.bottomLeading)
         .onDisappear {
             Task { await locationDataSource.stop() }
         }
