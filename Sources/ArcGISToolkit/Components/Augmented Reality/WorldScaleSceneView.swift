@@ -28,6 +28,10 @@ public struct WorldScaleSceneView: View {
     private var calibrationViewAlignment: Alignment = .bottom
     /// A Boolean value that indicates whether the calibration view is hidden.
     private var calibrationViewIsHidden = false
+    /// The proxy for the ARSwiftUIView.
+    @State private var arViewProxy = ARSwiftUIViewProxy()
+    /// The camera controller that will be set on the scene view.
+    @State private var cameraController: TransformationMatrixCameraController
     /// The view model for the calibration view.
     @StateObject private var calibrationViewModel = CalibrationViewModel()
     /// The current device location.
@@ -61,6 +65,11 @@ public struct WorldScaleSceneView: View {
         self.clippingDistance = clippingDistance
         self.trackingMode = trackingMode
         self.sceneViewBuilder = sceneViewBuilder
+        
+        let cameraController = TransformationMatrixCameraController()
+        cameraController.translationFactor = 1
+        cameraController.clippingDistance = clippingDistance
+        _cameraController = .init(initialValue: cameraController)
     }
     
     public var body: some View {
@@ -71,6 +80,8 @@ public struct WorldScaleSceneView: View {
                 // the current location, fall back to world-tracking.
                 if geoTrackingIsAvailable {
                     GeoTrackingSceneView(
+                        arViewProxy: arViewProxy,
+                        cameraController: cameraController,
                         calibrationViewModel: calibrationViewModel,
                         clippingDistance: clippingDistance,
                         initialCameraIsSet: $initialCameraIsSet,
@@ -80,6 +91,8 @@ public struct WorldScaleSceneView: View {
                     )
                 } else {
                     WorldTrackingSceneView(
+                        arViewProxy: arViewProxy,
+                        cameraController: cameraController,
                         calibrationViewModel: calibrationViewModel,
                         clippingDistance: clippingDistance,
                         initialCameraIsSet: $initialCameraIsSet,
@@ -90,6 +103,8 @@ public struct WorldScaleSceneView: View {
                 }
             case .geoTracking:
                 GeoTrackingSceneView(
+                    arViewProxy: arViewProxy,
+                    cameraController: cameraController,
                     calibrationViewModel: calibrationViewModel,
                     clippingDistance: clippingDistance,
                     initialCameraIsSet: $initialCameraIsSet,
@@ -99,6 +114,8 @@ public struct WorldScaleSceneView: View {
                 )
             case .worldTracking:
                 WorldTrackingSceneView(
+                    arViewProxy: arViewProxy,
+                    cameraController: cameraController,
                     calibrationViewModel: calibrationViewModel,
                     clippingDistance: clippingDistance,
                     initialCameraIsSet: $initialCameraIsSet,

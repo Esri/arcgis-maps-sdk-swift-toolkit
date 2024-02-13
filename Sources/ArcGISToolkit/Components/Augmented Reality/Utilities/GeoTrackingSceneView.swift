@@ -31,9 +31,9 @@ public struct GeoTrackingSceneView: View {
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// The proxy for the ARSwiftUIView.
-    @State private var arViewProxy = ARSwiftUIViewProxy()
+    private let arViewProxy: ARSwiftUIViewProxy
     /// The camera controller that will be set on the scene view.
-    @State private var cameraController: TransformationMatrixCameraController
+    private let cameraController: TransformationMatrixCameraController
     /// A Boolean value that indicates whether the coaching overlay view is active.
     @State private var coachingOverlayIsActive = false
     /// The current device heading.
@@ -45,6 +45,8 @@ public struct GeoTrackingSceneView: View {
     
     /// Creates a world scale geo-tracking scene view.
     /// - Parameters:
+    ///   - arViewProxy: The proxy for the ARSwiftUIView.
+    ///   - cameraController: The camera controller that will be set on the scene view.
     ///   - calibrationViewModel: The view model for accessing the calibration values.
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
     ///   of `nil` means that no data will be clipped.
@@ -53,7 +55,9 @@ public struct GeoTrackingSceneView: View {
     ///   - locationDataSource: The location datasource used to acquire the device's location.
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
-    public init(
+    init(
+        arViewProxy: ARSwiftUIViewProxy,
+        cameraController: TransformationMatrixCameraController,
         calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
         clippingDistance: Double?,
         initialCameraIsSet: Binding<Bool>,
@@ -61,17 +65,14 @@ public struct GeoTrackingSceneView: View {
         locationDataSource: LocationDataSource,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
+        self.arViewProxy = arViewProxy
+        self.cameraController = cameraController
         self.calibrationViewModel = calibrationViewModel
         _initialCameraIsSet = initialCameraIsSet
         self.calibrationViewIsPresented = calibrationViewIsPresented
         self.locationDataSource = locationDataSource
         
         sceneViewBuilder = sceneView
-        
-        let cameraController = TransformationMatrixCameraController()
-        cameraController.translationFactor = 1
-        cameraController.clippingDistance = clippingDistance
-        _cameraController = .init(initialValue: cameraController)
     }
     
     public var body: some View {

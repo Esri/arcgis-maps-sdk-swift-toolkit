@@ -36,9 +36,9 @@ struct WorldTrackingSceneView: View {
     /// The time threshold in seconds between location updates to reset the world-tracking session.
     private let timeThreshold: Double
     /// The proxy for the ARSwiftUIView.
-    @State private var arViewProxy = ARSwiftUIViewProxy()
+    private let arViewProxy: ARSwiftUIViewProxy
     /// The camera controller that will be set on the scene view.
-    @State private var cameraController: TransformationMatrixCameraController
+    private let cameraController: TransformationMatrixCameraController
     /// A Boolean value that indicates whether the coaching overlay view is active.
     @State private var coachingOverlayIsActive = false
     /// The current camera of the scene view.
@@ -62,6 +62,8 @@ struct WorldTrackingSceneView: View {
     
     /// Creates a world scale world-tracking scene view.
     /// - Parameters:
+    ///   - arViewProxy: The proxy for the ARSwiftUIView.
+    ///   - cameraController: The camera controller that will be set on the scene view.
     ///   - calibrationViewModel: The view model for accessing the calibration values.
     ///   - clippingDistance: Determines the clipping distance in meters around the camera. A value
     ///   of `nil` means that no data will be clipped.
@@ -73,6 +75,8 @@ struct WorldTrackingSceneView: View {
     ///   - sceneView: A closure that builds the scene view to be overlayed on top of the
     ///   augmented reality video feed.
     init(
+        arViewProxy: ARSwiftUIViewProxy,
+        cameraController: TransformationMatrixCameraController,
         calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
         clippingDistance: Double?,
         distanceThreshold: Double = 2.0,
@@ -82,6 +86,8 @@ struct WorldTrackingSceneView: View {
         timeThreshold: Double = 10.0,
         @ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
     ) {
+        self.arViewProxy = arViewProxy
+        self.cameraController = cameraController
         self.calibrationViewModel = calibrationViewModel
         self.distanceThreshold = distanceThreshold
         _initialCameraIsSet = initialCameraIsSet
@@ -90,11 +96,6 @@ struct WorldTrackingSceneView: View {
         self.timeThreshold = timeThreshold
         
         sceneViewBuilder = sceneView
-        
-        let cameraController = TransformationMatrixCameraController()
-        cameraController.translationFactor = 1
-        cameraController.clippingDistance = clippingDistance
-        _cameraController = .init(initialValue: cameraController)
         
         let worldTrackingConfiguration = ARWorldTrackingConfiguration()
         // Set world alignment to `gravityAndHeading` so the world-tracking configuration uses
