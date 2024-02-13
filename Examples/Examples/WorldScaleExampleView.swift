@@ -51,7 +51,7 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.calibrationViewAlignment(.bottomLeading)
+***REMOVED******REMOVED***.calibrationButtonAlignment(.bottomLeading)
 ***REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED***Task { await locationDataSource.stop() ***REMOVED***
 ***REMOVED***

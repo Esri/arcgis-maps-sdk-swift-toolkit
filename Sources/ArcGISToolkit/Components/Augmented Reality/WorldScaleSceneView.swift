@@ -24,8 +24,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***private let trackingMode: TrackingMode
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-***REMOVED******REMOVED***/ Determines the alignment of the calibration view.
-***REMOVED***private var calibrationViewAlignment: Alignment = .bottom
+***REMOVED******REMOVED***/ Determines the alignment of the calibration button.
+***REMOVED***private var calibrationButtonAlignment: Alignment = .bottom
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
 ***REMOVED***private var calibrationViewIsHidden = false
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
@@ -157,7 +157,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.overlay(alignment: calibrationViewAlignment) {
+***REMOVED******REMOVED***.overlay(alignment: calibrationButtonAlignment) {
 ***REMOVED******REMOVED******REMOVED***if !calibrationViewIsHidden {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !isCalibrating {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -213,11 +213,11 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the alignment of the calibration view.
-***REMOVED******REMOVED***/ - Parameter alignment: The alignment for the calibration view.
-***REMOVED***public func calibrationViewAlignment(_ alignment: Alignment) -> Self {
+***REMOVED******REMOVED***/ Sets the alignment of the calibration button.
+***REMOVED******REMOVED***/ - Parameter alignment: The alignment for the calibration button.
+***REMOVED***public func calibrationButtonAlignment(_ alignment: Alignment) -> Self {
 ***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.calibrationViewAlignment = alignment
+***REMOVED******REMOVED***view.calibrationButtonAlignment = alignment
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
