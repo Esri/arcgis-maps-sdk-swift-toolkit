@@ -250,42 +250,6 @@ private extension View {
     }
 }
 
-private extension ARSwiftUIViewProxy {
-    /// Performs a hit test operation to get the transformation matrix representing the corresponding real-world point for `screenPoint`.
-    /// - Parameter screenPoint: The screen point to determine the real world transformation matrix from.
-    /// - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
-    func hitTest(at screenPoint: CGPoint) -> TransformationMatrix? {
-        // Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
-        guard let query = raycastQuery(
-            from: screenPoint,
-            allowing: .existingPlaneGeometry,
-            alignment: .any
-        ) else { return nil }
-        
-        let results = session.raycast(query)
-        
-        // Get the worldTransform from the first result; if there's no worldTransform, return nil.
-        guard let worldTransform = results.first?.worldTransform else { return nil }
-        
-        // Create our hit test matrix based on the worldTransform location.
-        // Right now we ignore the orientation of the plane that was hit to find the point
-        // since we only use horizontal planes.
-        // If we start supporting vertical planes we will have to stop suppressing the
-        // quaternion rotation to a null rotation (0,0,0,1).
-        let hitTestMatrix = TransformationMatrix.normalized(
-            quaternionX: 0,
-            quaternionY: 0,
-            quaternionZ: 0,
-            quaternionW: 1,
-            translationX: Double(worldTransform.columns.3.x),
-            translationY: Double(worldTransform.columns.3.y),
-            translationZ: Double(worldTransform.columns.3.z)
-        )
-        
-        return hitTestMatrix
-    }
-}
-
 private extension SceneViewProxy {
     /// Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined
     /// via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.
@@ -297,10 +261,10 @@ private extension SceneViewProxy {
         for arViewProxy: ARSwiftUIViewProxy,
         using screenPoint: CGPoint
     ) -> TransformationMatrix? {
-        // Use the `hitTest` method to get the matrix of `screenPoint`.
-        guard let matrix = arViewProxy.hitTest(at: screenPoint) else { return nil }
+        // Use the `raycast` method to get the matrix of `screenPoint`.
+        guard let matrix = arViewProxy.raycast(from: screenPoint) else { return nil }
         
-        // Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
+        // Set the `initialTransformation` as the TransformationMatrix.identity - raycast matrix.
         let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
         
         return initialTransformation
