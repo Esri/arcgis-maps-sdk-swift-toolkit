@@ -24,8 +24,8 @@ public struct WorldScaleSceneView: View {
     private let trackingMode: TrackingMode
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
-    /// Determines the alignment of the calibration view.
-    private var calibrationViewAlignment: Alignment = .bottom
+    /// Determines the alignment of the calibration button.
+    private var calibrationButtonAlignment: Alignment = .bottom
     /// A Boolean value that indicates whether the calibration view is hidden.
     private var calibrationViewIsHidden = false
     /// The proxy for the ARSwiftUIView.
@@ -157,7 +157,7 @@ public struct WorldScaleSceneView: View {
                 self.error = error
             }
         }
-        .overlay(alignment: calibrationViewAlignment) {
+        .overlay(alignment: calibrationButtonAlignment) {
             if !calibrationViewIsHidden {
                 if !isCalibrating {
                     Button {
@@ -213,11 +213,11 @@ public struct WorldScaleSceneView: View {
         return view
     }
     
-    /// Sets the alignment of the calibration view.
-    /// - Parameter alignment: The alignment for the calibration view.
-    public func calibrationViewAlignment(_ alignment: Alignment) -> Self {
+    /// Sets the alignment of the calibration button.
+    /// - Parameter alignment: The alignment for the calibration button.
+    public func calibrationButtonAlignment(_ alignment: Alignment) -> Self {
         var view = self
-        view.calibrationViewAlignment = alignment
+        view.calibrationButtonAlignment = alignment
         return view
     }
     
