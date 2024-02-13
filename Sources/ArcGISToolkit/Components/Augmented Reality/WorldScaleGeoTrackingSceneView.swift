@@ -331,22 +331,8 @@ public extension WorldScaleGeoTrackingSceneView {
     func arScreenToLocation(screenPoint: CGPoint) -> Point? {
         // Use the `raycast` method to get the matrix of `screenPoint`.
         guard let localOffsetMatrix = arViewProxy.raycast(from: screenPoint) else { return nil }
-        
-        let translationFactor = cameraController.translationFactor
         let originTransformationMatrix = cameraController.originCamera.transformationMatrix
-        
-        // Scale translation by translationFactor.
-        let translatedMatrix = TransformationMatrix.normalized(
-            quaternionX: localOffsetMatrix.quaternionX,
-            quaternionY: localOffsetMatrix.quaternionY,
-            quaternionZ: localOffsetMatrix.quaternionZ,
-            quaternionW: localOffsetMatrix.quaternionW,
-            translationX: localOffsetMatrix.translationX * translationFactor,
-            translationY: localOffsetMatrix.translationY * translationFactor,
-            translationZ: localOffsetMatrix.translationZ * translationFactor
-        )
-        let scenePointMatrix = originTransformationMatrix.adding(translatedMatrix)
-        
+        let scenePointMatrix = originTransformationMatrix.adding(localOffsetMatrix)
         // Create a camera from transformationMatrix and return its location.
         return Camera(transformationMatrix: scenePointMatrix).location
     }
