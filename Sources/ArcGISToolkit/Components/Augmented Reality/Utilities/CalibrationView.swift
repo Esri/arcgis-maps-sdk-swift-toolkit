@@ -17,57 +17,55 @@ import ARKit
 ***REMOVED***
 import Combine
 
-public extension WorldScaleSceneView {
-***REMOVED******REMOVED***/ A view model that stores state information for the calibration.
-***REMOVED***@MainActor
-***REMOVED***class CalibrationViewModel: ObservableObject {
-***REMOVED******REMOVED******REMOVED***/ The total heading correction.
-***REMOVED******REMOVED***@Published
-***REMOVED******REMOVED***private(set) var totalHeadingCorrection: Double = 0
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The total elevation correction.
-***REMOVED******REMOVED***@Published
-***REMOVED******REMOVED***private(set) var totalElevationCorrection: Double = 0
+***REMOVED***/ A view model that stores state information for the calibration.
+@MainActor
+class WorldScaleCalibrationViewModel: ObservableObject {
+***REMOVED******REMOVED***/ The total heading correction.
+***REMOVED***@Published
+***REMOVED***private(set) var totalHeadingCorrection: Double = 0
+***REMOVED***
+***REMOVED******REMOVED***/ The total elevation correction.
+***REMOVED***@Published
+***REMOVED***private(set) var totalElevationCorrection: Double = 0
+***REMOVED***
+***REMOVED******REMOVED*** A subject for the heading corrections to publish as they come in.
+***REMOVED***private var headingSubject = PassthroughSubject<Double, Never>()
+***REMOVED***
+***REMOVED******REMOVED*** A subject for the elevation corrections to publish as they come in.
+***REMOVED***private var elevationSubject = PassthroughSubject<Double, Never>()
+***REMOVED***
+***REMOVED******REMOVED***/ The heading corrections.
+***REMOVED***var headingCorrections: AnyPublisher<Double, Never> {
+***REMOVED******REMOVED***headingSubject.eraseToAnyPublisher()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The elevation corrections.
+***REMOVED***var elevationCorrections: AnyPublisher<Double, Never> {
+***REMOVED******REMOVED***elevationSubject.eraseToAnyPublisher()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Proposes a heading correction.
+***REMOVED******REMOVED***/ This will limit the total heading correction to -180...180.
+***REMOVED***fileprivate func propose(headingCorrection: Double) {
+***REMOVED******REMOVED***let newTotalHeadingCorrection = (totalHeadingCorrection + headingCorrection)
+***REMOVED******REMOVED******REMOVED***.clamped(to: -180...180)
+***REMOVED******REMOVED***let allowedHeadingCorrection = newTotalHeadingCorrection - totalHeadingCorrection
+***REMOVED******REMOVED***totalHeadingCorrection = newTotalHeadingCorrection
+***REMOVED******REMOVED***headingSubject.send(allowedHeadingCorrection)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Proposes an elevation correction.
+***REMOVED***fileprivate func propose(elevationCorrection: Double) {
+***REMOVED******REMOVED***totalElevationCorrection += elevationCorrection
+***REMOVED******REMOVED***elevationSubject.send(elevationCorrection)
+***REMOVED***
+***REMOVED***
 
-***REMOVED******REMOVED******REMOVED*** A subject for the heading corrections to publish as they come in.
-***REMOVED******REMOVED***private var headingSubject = PassthroughSubject<Double, Never>()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** A subject for the elevation corrections to publish as they come in.
-***REMOVED******REMOVED***private var elevationSubject = PassthroughSubject<Double, Never>()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The heading corrections.
-***REMOVED******REMOVED***var headingCorrections: AnyPublisher<Double, Never> {
-***REMOVED******REMOVED******REMOVED***headingSubject.eraseToAnyPublisher()
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The elevation corrections.
-***REMOVED******REMOVED***var elevationCorrections: AnyPublisher<Double, Never> {
-***REMOVED******REMOVED******REMOVED***elevationSubject.eraseToAnyPublisher()
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Proposes a heading correction.
-***REMOVED******REMOVED******REMOVED***/ This will limit the total heading correction to -180...180.
-***REMOVED******REMOVED***fileprivate func propose(headingCorrection: Double) {
-***REMOVED******REMOVED******REMOVED***let newTotalHeadingCorrection = (totalHeadingCorrection + headingCorrection)
-***REMOVED******REMOVED******REMOVED******REMOVED***.clamped(to: -180...180)
-***REMOVED******REMOVED******REMOVED***let allowedHeadingCorrection = newTotalHeadingCorrection - totalHeadingCorrection
-***REMOVED******REMOVED******REMOVED***totalHeadingCorrection = newTotalHeadingCorrection
-***REMOVED******REMOVED******REMOVED***headingSubject.send(allowedHeadingCorrection)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Proposes an elevation correction.
-***REMOVED******REMOVED***fileprivate func propose(elevationCorrection: Double) {
-***REMOVED******REMOVED******REMOVED***totalElevationCorrection += elevationCorrection
-***REMOVED******REMOVED******REMOVED***elevationSubject.send(elevationCorrection)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
 extension WorldScaleSceneView {
 ***REMOVED******REMOVED***/ A view that allows the user to calibrate the heading of the scene view camera controller.
 ***REMOVED***struct CalibrationView: View {
 ***REMOVED******REMOVED***@ObservedObject
-***REMOVED******REMOVED***var viewModel: CalibrationViewModel
+***REMOVED******REMOVED***var viewModel: WorldScaleCalibrationViewModel
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value that indicates if the user is presenting the calibration view.
 ***REMOVED******REMOVED***@Binding
