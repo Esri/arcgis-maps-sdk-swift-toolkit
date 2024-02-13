@@ -17,57 +17,55 @@ import SwiftUI
 import ArcGIS
 import Combine
 
-public extension WorldScaleSceneView {
-    /// A view model that stores state information for the calibration.
-    @MainActor
-    class CalibrationViewModel: ObservableObject {
-        /// The total heading correction.
-        @Published
-        private(set) var totalHeadingCorrection: Double = 0
-        
-        /// The total elevation correction.
-        @Published
-        private(set) var totalElevationCorrection: Double = 0
-
-        // A subject for the heading corrections to publish as they come in.
-        private var headingSubject = PassthroughSubject<Double, Never>()
-        
-        // A subject for the elevation corrections to publish as they come in.
-        private var elevationSubject = PassthroughSubject<Double, Never>()
-        
-        /// The heading corrections.
-        var headingCorrections: AnyPublisher<Double, Never> {
-            headingSubject.eraseToAnyPublisher()
-        }
-        
-        /// The elevation corrections.
-        var elevationCorrections: AnyPublisher<Double, Never> {
-            elevationSubject.eraseToAnyPublisher()
-        }
-        
-        /// Proposes a heading correction.
-        /// This will limit the total heading correction to -180...180.
-        fileprivate func propose(headingCorrection: Double) {
-            let newTotalHeadingCorrection = (totalHeadingCorrection + headingCorrection)
-                .clamped(to: -180...180)
-            let allowedHeadingCorrection = newTotalHeadingCorrection - totalHeadingCorrection
-            totalHeadingCorrection = newTotalHeadingCorrection
-            headingSubject.send(allowedHeadingCorrection)
-        }
-        
-        /// Proposes an elevation correction.
-        fileprivate func propose(elevationCorrection: Double) {
-            totalElevationCorrection += elevationCorrection
-            elevationSubject.send(elevationCorrection)
-        }
+/// A view model that stores state information for the calibration.
+@MainActor
+class WorldScaleCalibrationViewModel: ObservableObject {
+    /// The total heading correction.
+    @Published
+    private(set) var totalHeadingCorrection: Double = 0
+    
+    /// The total elevation correction.
+    @Published
+    private(set) var totalElevationCorrection: Double = 0
+    
+    // A subject for the heading corrections to publish as they come in.
+    private var headingSubject = PassthroughSubject<Double, Never>()
+    
+    // A subject for the elevation corrections to publish as they come in.
+    private var elevationSubject = PassthroughSubject<Double, Never>()
+    
+    /// The heading corrections.
+    var headingCorrections: AnyPublisher<Double, Never> {
+        headingSubject.eraseToAnyPublisher()
+    }
+    
+    /// The elevation corrections.
+    var elevationCorrections: AnyPublisher<Double, Never> {
+        elevationSubject.eraseToAnyPublisher()
+    }
+    
+    /// Proposes a heading correction.
+    /// This will limit the total heading correction to -180...180.
+    fileprivate func propose(headingCorrection: Double) {
+        let newTotalHeadingCorrection = (totalHeadingCorrection + headingCorrection)
+            .clamped(to: -180...180)
+        let allowedHeadingCorrection = newTotalHeadingCorrection - totalHeadingCorrection
+        totalHeadingCorrection = newTotalHeadingCorrection
+        headingSubject.send(allowedHeadingCorrection)
+    }
+    
+    /// Proposes an elevation correction.
+    fileprivate func propose(elevationCorrection: Double) {
+        totalElevationCorrection += elevationCorrection
+        elevationSubject.send(elevationCorrection)
     }
 }
-    
+
 extension WorldScaleSceneView {
     /// A view that allows the user to calibrate the heading of the scene view camera controller.
     struct CalibrationView: View {
         @ObservedObject
-        var viewModel: CalibrationViewModel
+        var viewModel: WorldScaleCalibrationViewModel
         
         /// A Boolean value that indicates if the user is presenting the calibration view.
         @Binding

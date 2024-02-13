@@ -33,7 +33,7 @@ public struct WorldScaleSceneView: View {
     /// The camera controller that will be set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
     /// The view model for the calibration view.
-    @StateObject private var calibrationViewModel = CalibrationViewModel()
+    @StateObject private var calibrationViewModel = WorldScaleCalibrationViewModel()
     /// The current device location.
     @State private var currentLocation: Location?
     /// A Boolean value that indicates whether the geo-tracking configuration is available.

@@ -21,7 +21,7 @@ public struct GeoTrackingSceneView: View {
     /// A Boolean value indicating if the camera was initially set.
     @Binding var initialCameraIsSet: Bool
     /// The view model for the calibration view.
-    @ObservedObject private var calibrationViewModel: WorldScaleSceneView.CalibrationViewModel
+    @ObservedObject private var calibrationViewModel: WorldScaleCalibrationViewModel
     /// The geo-tracking configuration for the AR session.
     private let configuration = ARGeoTrackingConfiguration()
     /// A Boolean value that indicates if the user is calibrating.
@@ -58,7 +58,7 @@ public struct GeoTrackingSceneView: View {
     init(
         arViewProxy: ARSwiftUIViewProxy,
         cameraController: TransformationMatrixCameraController,
-        calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
+        calibrationViewModel: WorldScaleCalibrationViewModel,
         clippingDistance: Double?,
         initialCameraIsSet: Binding<Bool>,
         calibrationViewIsPresented: Bool,

@@ -21,7 +21,7 @@ struct WorldTrackingSceneView: View {
     /// A Boolean value indicating if the camera was initially set.
     @Binding var initialCameraIsSet: Bool
     /// The view model for the calibration view.
-    @ObservedObject private var calibrationViewModel: WorldScaleSceneView.CalibrationViewModel
+    @ObservedObject private var calibrationViewModel: WorldScaleCalibrationViewModel
     /// The configuration for the AR session.
     private let configuration: ARConfiguration
     /// The distance threshold in meters between camera and device location to reset the
@@ -77,7 +77,7 @@ struct WorldTrackingSceneView: View {
     init(
         arViewProxy: ARSwiftUIViewProxy,
         cameraController: TransformationMatrixCameraController,
-        calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
+        calibrationViewModel: WorldScaleCalibrationViewModel,
         clippingDistance: Double?,
         distanceThreshold: Double = 2.0,
         initialCameraIsSet: Binding<Bool>,
