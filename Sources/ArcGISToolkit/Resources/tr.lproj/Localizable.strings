@@ -38,6 +38,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "Gözat";
 
+/* A label for a button to show the calibration view. */
+"Calibrate" = "ı_Calibrate___________________İ";
+
+/* A label for the calibration view used to calibrate the camera
+for the AR experience. */
+"Calibration" = "ı_Calibration____________İ";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "İptal";
 
@@ -84,6 +91,10 @@ network element for more than one trace starting point. */
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
 "Element could not be identified." = "Öge tanımlanamadı.";
+
+/* A label for the slider that adjusts the camera elevation for the
+AR experience. */
+"elevation" = "ı_elevation___________________İ";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Hata";
@@ -133,6 +144,10 @@ contains one or more facilities in a floor-aware map or scene. */
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "İşlev Sonuçları";
+
+/* A label for the slider that adjusts the camera heading for the
+AR experience. */
+"heading" = "ı_heading_______________İ";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Ortam";
