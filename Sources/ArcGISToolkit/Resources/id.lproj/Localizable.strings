@@ -38,6 +38,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "Jelajahi";
 
+/* A label for a button to show the calibration view. */
+"Calibrate" = "ng_Calibrate___________________ny";
+
+/* A label for the calibration view used to calibrate the camera
+for the AR experience. */
+"Calibration" = "ng_Calibration____________ny";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Batalkan";
 
@@ -84,6 +91,10 @@ network element for more than one trace starting point. */
 /* A label indicating an element could not be identified as a starting point
 for a utility network trace. */
 "Element could not be identified." = "Elemen tidak dapat diidentifikasi.";
+
+/* A label for the slider that adjusts the camera elevation for the
+AR experience. */
+"elevation" = "ng_elevation___________________ny";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Kesalahan";
@@ -133,6 +144,10 @@ contains one or more facilities in a floor-aware map or scene. */
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Hasil Fungsi";
+
+/* A label for the slider that adjusts the camera heading for the
+AR experience. */
+"heading" = "ng_heading_______________ny";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
