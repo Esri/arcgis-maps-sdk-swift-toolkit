@@ -28,6 +28,10 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***private var calibrationViewAlignment: Alignment = .bottom
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
 ***REMOVED***private var calibrationViewIsHidden = false
+***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
+***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
+***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
+***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The view model for the calibration view.
 ***REMOVED***@StateObject private var calibrationViewModel = CalibrationViewModel()
 ***REMOVED******REMOVED***/ The current device location.
@@ -61,6 +65,11 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***self.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***self.trackingMode = trackingMode
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneViewBuilder
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController()
+***REMOVED******REMOVED***cameraController.translationFactor = 1
+***REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
+***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -71,6 +80,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the current location, fall back to world-tracking.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if geoTrackingIsAvailable {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeoTrackingSceneView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy: arViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
@@ -80,6 +91,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***WorldTrackingSceneView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy: arViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
@@ -90,6 +103,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .geoTracking:
 ***REMOVED******REMOVED******REMOVED******REMOVED***GeoTrackingSceneView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy: arViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
@@ -99,6 +114,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***case .worldTracking:
 ***REMOVED******REMOVED******REMOVED******REMOVED***WorldTrackingSceneView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy: arViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,

@@ -36,9 +36,9 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***/ The time threshold in seconds between location updates to reset the world-tracking session.
 ***REMOVED***private let timeThreshold: Double
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
-***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
+***REMOVED***private let arViewProxy: ARSwiftUIViewProxy
 ***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
-***REMOVED***@State private var cameraController: TransformationMatrixCameraController
+***REMOVED***private let cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the coaching overlay view is active.
 ***REMOVED***@State private var coachingOverlayIsActive = false
 ***REMOVED******REMOVED***/ The current camera of the scene view.
@@ -62,6 +62,8 @@ struct WorldTrackingSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale world-tracking scene view.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - arViewProxy: The proxy for the ARSwiftUIView.
+***REMOVED******REMOVED***/   - cameraController: The camera controller that will be set on the scene view.
 ***REMOVED******REMOVED***/   - calibrationViewModel: The view model for accessing the calibration values.
 ***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera. A value
 ***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
@@ -73,6 +75,8 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
 ***REMOVED***init(
+***REMOVED******REMOVED***arViewProxy: ARSwiftUIViewProxy,
+***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
 ***REMOVED******REMOVED***calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
 ***REMOVED******REMOVED***clippingDistance: Double?,
 ***REMOVED******REMOVED***distanceThreshold: Double = 2.0,
@@ -82,6 +86,8 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***timeThreshold: Double = 10.0,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
+***REMOVED******REMOVED***self.arViewProxy = arViewProxy
+***REMOVED******REMOVED***self.cameraController = cameraController
 ***REMOVED******REMOVED***self.calibrationViewModel = calibrationViewModel
 ***REMOVED******REMOVED***self.distanceThreshold = distanceThreshold
 ***REMOVED******REMOVED***_initialCameraIsSet = initialCameraIsSet
@@ -90,11 +96,6 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***self.timeThreshold = timeThreshold
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***sceneViewBuilder = sceneView
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController()
-***REMOVED******REMOVED***cameraController.translationFactor = 1
-***REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
-***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let worldTrackingConfiguration = ARWorldTrackingConfiguration()
 ***REMOVED******REMOVED******REMOVED*** Set world alignment to `gravityAndHeading` so the world-tracking configuration uses

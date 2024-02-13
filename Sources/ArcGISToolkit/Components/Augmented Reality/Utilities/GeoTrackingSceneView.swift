@@ -31,9 +31,9 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
-***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
+***REMOVED***private let arViewProxy: ARSwiftUIViewProxy
 ***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
-***REMOVED***@State private var cameraController: TransformationMatrixCameraController
+***REMOVED***private let cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the coaching overlay view is active.
 ***REMOVED***@State private var coachingOverlayIsActive = false
 ***REMOVED******REMOVED***/ The current device heading.
@@ -45,6 +45,8 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale geo-tracking scene view.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - arViewProxy: The proxy for the ARSwiftUIView.
+***REMOVED******REMOVED***/   - cameraController: The camera controller that will be set on the scene view.
 ***REMOVED******REMOVED***/   - calibrationViewModel: The view model for accessing the calibration values.
 ***REMOVED******REMOVED***/   - clippingDistance: Determines the clipping distance in meters around the camera. A value
 ***REMOVED******REMOVED***/   of `nil` means that no data will be clipped.
@@ -53,7 +55,9 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/   - locationDataSource: The location datasource used to acquire the device's location.
 ***REMOVED******REMOVED***/   - sceneView: A closure that builds the scene view to be overlayed on top of the
 ***REMOVED******REMOVED***/   augmented reality video feed.
-***REMOVED***public init(
+***REMOVED***init(
+***REMOVED******REMOVED***arViewProxy: ARSwiftUIViewProxy,
+***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController,
 ***REMOVED******REMOVED***calibrationViewModel: WorldScaleSceneView.CalibrationViewModel,
 ***REMOVED******REMOVED***clippingDistance: Double?,
 ***REMOVED******REMOVED***initialCameraIsSet: Binding<Bool>,
@@ -61,17 +65,14 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***locationDataSource: LocationDataSource,
 ***REMOVED******REMOVED***@ViewBuilder sceneView: @escaping (SceneViewProxy) -> SceneView
 ***REMOVED***) {
+***REMOVED******REMOVED***self.arViewProxy = arViewProxy
+***REMOVED******REMOVED***self.cameraController = cameraController
 ***REMOVED******REMOVED***self.calibrationViewModel = calibrationViewModel
 ***REMOVED******REMOVED***_initialCameraIsSet = initialCameraIsSet
 ***REMOVED******REMOVED***self.calibrationViewIsPresented = calibrationViewIsPresented
 ***REMOVED******REMOVED***self.locationDataSource = locationDataSource
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***sceneViewBuilder = sceneView
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController()
-***REMOVED******REMOVED***cameraController.translationFactor = 1
-***REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
-***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
