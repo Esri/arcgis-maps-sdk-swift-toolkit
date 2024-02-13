@@ -158,22 +158,20 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(alignment: calibrationButtonAlignment) {
-***REMOVED******REMOVED******REMOVED***if !calibrationViewIsHidden {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !isCalibrating {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(calibrateLabel)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***if !calibrationViewIsHidden && !isCalibrating {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCalibrating = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!initialCameraIsSet)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical)
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(calibrateLabel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10))
+***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!initialCameraIsSet)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(alignment: .bottom) {
