@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ArcGIS
 import ARKit
 import SwiftUI
 
@@ -151,5 +152,42 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
             allowing: target,
             alignment: alignment
         )
+    }
+}
+
+extension ARSwiftUIViewProxy {
+    /// Performs a raycast to get the transformation matrix representing the corresponding 
+    /// real-world point for `screenPoint`.
+    /// - Parameter screenPoint: The screen point to determine the real world transformation matrix from.
+    /// - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
+    func raycast(from screenPoint: CGPoint) -> TransformationMatrix? {
+        // Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
+        guard let query = raycastQuery(
+            from: screenPoint,
+            allowing: .existingPlaneGeometry,
+            alignment: .any
+        ) else { return nil }
+        
+        let results = session.raycast(query)
+        
+        // Get the worldTransform from the first result; if there's no worldTransform, return nil.
+        guard let worldTransform = results.first?.worldTransform else { return nil }
+        
+        // Create our raycast matrix based on the worldTransform location.
+        // Right now we ignore the orientation of the plane that was hit to find the point
+        // since we only use horizontal planes.
+        // If we start supporting vertical planes we will have to stop suppressing the
+        // quaternion rotation to a null rotation (0,0,0,1).
+        let raycastMatrix = TransformationMatrix.normalized(
+            quaternionX: 0,
+            quaternionY: 0,
+            quaternionZ: 0,
+            quaternionW: 1,
+            translationX: Double(worldTransform.columns.3.x),
+            translationY: Double(worldTransform.columns.3.y),
+            translationZ: Double(worldTransform.columns.3.z)
+        )
+        
+        return raycastMatrix
     }
 }
