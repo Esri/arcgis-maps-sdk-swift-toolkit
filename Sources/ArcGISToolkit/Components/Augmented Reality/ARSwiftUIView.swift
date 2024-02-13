@@ -12,6 +12,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+***REMOVED***
 import ARKit
 ***REMOVED***
 
@@ -151,5 +152,42 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
 ***REMOVED******REMOVED******REMOVED***allowing: target,
 ***REMOVED******REMOVED******REMOVED***alignment: alignment
 ***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+extension ARSwiftUIViewProxy {
+***REMOVED******REMOVED***/ Performs a raycast to get the transformation matrix representing the corresponding 
+***REMOVED******REMOVED***/ real-world point for `screenPoint`.
+***REMOVED******REMOVED***/ - Parameter screenPoint: The screen point to determine the real world transformation matrix from.
+***REMOVED******REMOVED***/ - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
+***REMOVED***func raycast(from screenPoint: CGPoint) -> TransformationMatrix? {
+***REMOVED******REMOVED******REMOVED*** Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
+***REMOVED******REMOVED***guard let query = raycastQuery(
+***REMOVED******REMOVED******REMOVED***from: screenPoint,
+***REMOVED******REMOVED******REMOVED***allowing: .existingPlaneGeometry,
+***REMOVED******REMOVED******REMOVED***alignment: .any
+***REMOVED******REMOVED***) else { return nil ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let results = session.raycast(query)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Get the worldTransform from the first result; if there's no worldTransform, return nil.
+***REMOVED******REMOVED***guard let worldTransform = results.first?.worldTransform else { return nil ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create our raycast matrix based on the worldTransform location.
+***REMOVED******REMOVED******REMOVED*** Right now we ignore the orientation of the plane that was hit to find the point
+***REMOVED******REMOVED******REMOVED*** since we only use horizontal planes.
+***REMOVED******REMOVED******REMOVED*** If we start supporting vertical planes we will have to stop suppressing the
+***REMOVED******REMOVED******REMOVED*** quaternion rotation to a null rotation (0,0,0,1).
+***REMOVED******REMOVED***let raycastMatrix = TransformationMatrix.normalized(
+***REMOVED******REMOVED******REMOVED***quaternionX: 0,
+***REMOVED******REMOVED******REMOVED***quaternionY: 0,
+***REMOVED******REMOVED******REMOVED***quaternionZ: 0,
+***REMOVED******REMOVED******REMOVED***quaternionW: 1,
+***REMOVED******REMOVED******REMOVED***translationX: Double(worldTransform.columns.3.x),
+***REMOVED******REMOVED******REMOVED***translationY: Double(worldTransform.columns.3.y),
+***REMOVED******REMOVED******REMOVED***translationZ: Double(worldTransform.columns.3.z)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return raycastMatrix
 ***REMOVED***
 ***REMOVED***

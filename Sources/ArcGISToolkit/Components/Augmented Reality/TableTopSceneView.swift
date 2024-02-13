@@ -250,42 +250,6 @@ private extension View {
 ***REMOVED***
 ***REMOVED***
 
-private extension ARSwiftUIViewProxy {
-***REMOVED******REMOVED***/ Performs a hit test operation to get the transformation matrix representing the corresponding real-world point for `screenPoint`.
-***REMOVED******REMOVED***/ - Parameter screenPoint: The screen point to determine the real world transformation matrix from.
-***REMOVED******REMOVED***/ - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
-***REMOVED***func hitTest(at screenPoint: CGPoint) -> TransformationMatrix? {
-***REMOVED******REMOVED******REMOVED*** Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
-***REMOVED******REMOVED***guard let query = raycastQuery(
-***REMOVED******REMOVED******REMOVED***from: screenPoint,
-***REMOVED******REMOVED******REMOVED***allowing: .existingPlaneGeometry,
-***REMOVED******REMOVED******REMOVED***alignment: .any
-***REMOVED******REMOVED***) else { return nil ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let results = session.raycast(query)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Get the worldTransform from the first result; if there's no worldTransform, return nil.
-***REMOVED******REMOVED***guard let worldTransform = results.first?.worldTransform else { return nil ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Create our hit test matrix based on the worldTransform location.
-***REMOVED******REMOVED******REMOVED*** Right now we ignore the orientation of the plane that was hit to find the point
-***REMOVED******REMOVED******REMOVED*** since we only use horizontal planes.
-***REMOVED******REMOVED******REMOVED*** If we start supporting vertical planes we will have to stop suppressing the
-***REMOVED******REMOVED******REMOVED*** quaternion rotation to a null rotation (0,0,0,1).
-***REMOVED******REMOVED***let hitTestMatrix = TransformationMatrix.normalized(
-***REMOVED******REMOVED******REMOVED***quaternionX: 0,
-***REMOVED******REMOVED******REMOVED***quaternionY: 0,
-***REMOVED******REMOVED******REMOVED***quaternionZ: 0,
-***REMOVED******REMOVED******REMOVED***quaternionW: 1,
-***REMOVED******REMOVED******REMOVED***translationX: Double(worldTransform.columns.3.x),
-***REMOVED******REMOVED******REMOVED***translationY: Double(worldTransform.columns.3.y),
-***REMOVED******REMOVED******REMOVED***translationZ: Double(worldTransform.columns.3.z)
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return hitTestMatrix
-***REMOVED***
-***REMOVED***
-
 private extension SceneViewProxy {
 ***REMOVED******REMOVED***/ Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined
 ***REMOVED******REMOVED***/ via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.
@@ -297,10 +261,10 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED***for arViewProxy: ARSwiftUIViewProxy,
 ***REMOVED******REMOVED***using screenPoint: CGPoint
 ***REMOVED***) -> TransformationMatrix? {
-***REMOVED******REMOVED******REMOVED*** Use the `hitTest` method to get the matrix of `screenPoint`.
-***REMOVED******REMOVED***guard let matrix = arViewProxy.hitTest(at: screenPoint) else { return nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Use the `raycast` method to get the matrix of `screenPoint`.
+***REMOVED******REMOVED***guard let matrix = arViewProxy.raycast(from: screenPoint) else { return nil ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
+***REMOVED******REMOVED******REMOVED*** Set the `initialTransformation` as the TransformationMatrix.identity - raycast matrix.
 ***REMOVED******REMOVED***let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return initialTransformation
