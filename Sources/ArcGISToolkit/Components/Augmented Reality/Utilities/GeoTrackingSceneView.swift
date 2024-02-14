@@ -159,14 +159,10 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***/   - heading: The heading for the camera.
 ***REMOVED******REMOVED***/   - altitude: The altitude for the camera.
 ***REMOVED***private func updateCameraController(location: Location, heading: Double, altitude: Double) {
-***REMOVED******REMOVED******REMOVED*** Add some of the vertical accuracy to the z value of the position, that way if the
-***REMOVED******REMOVED******REMOVED*** GPS location is not accurate, it won't end up below the earth's surface.
-***REMOVED******REMOVED***let adjustedAltitude = altitude + location.verticalAccuracy
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***cameraController.originCamera = Camera(
 ***REMOVED******REMOVED******REMOVED***latitude: location.position.y,
 ***REMOVED******REMOVED******REMOVED***longitude: location.position.x,
-***REMOVED******REMOVED******REMOVED***altitude: adjustedAltitude,
+***REMOVED******REMOVED******REMOVED***altitude: altitude,
 ***REMOVED******REMOVED******REMOVED***heading: heading,
 ***REMOVED******REMOVED******REMOVED***pitch: 90,
 ***REMOVED******REMOVED******REMOVED***roll: 0
