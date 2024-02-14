@@ -93,30 +93,8 @@ public struct GeoTrackingSceneView: View {
                             orientation: interfaceOrientation
                         )
                     }
-                    .onDidChangeGeoTrackingStatus { session, status in
-                        switch status.state {
-                        case .notAvailable, .initializing, .localizing:
-                            Task.detached { @MainActor in
-                                initialCameraIsSet = false
-                            }
-                        case .localized:
-                            // Update the camera controller every time geo-tracking is localized,
-                            // to ensure the best experience.
-                            if !initialCameraIsSet, let currentLocation, let currentHeading {
-                                // Set the initial heading of scene view camera based on location
-                                // and heading. Geo-tracking requires 90 degrees rotation.
-                                updateCameraController(
-                                    location: currentLocation,
-                                    heading: currentHeading + 90,
-                                    altitude: currentLocation.position.z ?? 0
-                                )
-                                Task.detached { @MainActor in
-                                    initialCameraIsSet = true
-                                }
-                            }
-                        @unknown default:
-                            fatalError("Unknown ARGeoTrackingStatus.State")
-                        }
+                    .onDidChangeGeoTrackingStatus { _, status in
+                        handleGeoTrackingStatusChange(status)
                     }
                 
                 if initialCameraIsSet {
@@ -196,5 +174,28 @@ public struct GeoTrackingSceneView: View {
         
         // We have to do this or the error gets bigger and bigger.
         cameraController.transformationMatrix = .identity
+    }
+    
+    @MainActor
+    private func handleGeoTrackingStatusChange(_ status: ARGeoTrackingStatus) {
+        switch status.state {
+        case .notAvailable, .initializing, .localizing:
+            initialCameraIsSet = false
+        case .localized:
+            // Update the camera controller every time geo-tracking is localized,
+            // to ensure the best experience.
+            if !initialCameraIsSet, let currentLocation, let currentHeading {
+                // Set the initial heading of scene view camera based on location
+                // and heading. Geo-tracking requires 90 degrees rotation.
+                updateCameraController(
+                    location: currentLocation,
+                    heading: currentHeading + 90,
+                    altitude: currentLocation.position.z ?? 0
+                )
+                initialCameraIsSet = true
+            }
+        @unknown default:
+            fatalError("Unknown ARGeoTrackingStatus.State")
+        }
     }
 }
