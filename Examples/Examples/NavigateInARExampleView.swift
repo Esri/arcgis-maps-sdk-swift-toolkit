@@ -45,6 +45,8 @@ struct NavigateInARExampleView: View {
         elevationSurface.backgroundGrid.isVisible = false
         return elevationSurface
     }()
+    /// The elevation source with elevation service URL.
+    @State private var elevationSource: ElevationSource?
     /// The graphics overlay containing a graphic.
     @State private var graphicsOverlay = GraphicsOverlay()
     /// The status text displayed to the user.
@@ -55,8 +57,9 @@ struct NavigateInARExampleView: View {
     @State private var routeResult: RouteResult?
     
     init() {
-        elevationSurface.addElevationSource(Surface.elevationSource)
-        Task { try await Surface.elevationSource.load() }
+        let elevationSource = ArcGISTiledElevationSource(url: URL(string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!)
+        elevationSurface.addElevationSource(elevationSource)
+        Task { try await elevationSource.load() }
     }
     
     var body: some View {
@@ -117,6 +120,9 @@ struct NavigateInARExampleView: View {
                 .padding()
                 .padding([.bottom, .trailing], 10)
                 .disabled(isNavigating)
+            }
+            .onDisappear {
+                Task { await locationDataSource.stop() }
             }
         }
     }
@@ -353,6 +359,9 @@ private extension NavigateInARExampleView {
                     .disabled(!didSelectRouteStop)
                 }
             }
+            .onDisappear {
+                Task { await model.locationDataSource.stop() }
+            }
         }
         
         /// Sets an action to perform when the route is selected
@@ -478,11 +487,6 @@ private extension NavigateInARExampleView.RoutePlannerView {
             endPoint = nil
         }
     }
-}
-
-private extension Surface {
-    /// The elevation source with elevation service URL.
-    static let elevationSource = ArcGISTiledElevationSource(url: URL(string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!)
 }
 
 @MainActor
