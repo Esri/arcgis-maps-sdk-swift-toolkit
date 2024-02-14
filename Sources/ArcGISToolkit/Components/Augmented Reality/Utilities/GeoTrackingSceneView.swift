@@ -93,30 +93,8 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidChangeGeoTrackingStatus { session, status in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch status.state {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .notAvailable, .initializing, .localizing:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task.detached { @MainActor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .localized:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Update the camera controller every time geo-tracking is localized,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to ensure the best experience.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !initialCameraIsSet, let currentLocation, let currentHeading {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the initial heading of scene view camera based on location
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and heading. Geo-tracking requires 90 degrees rotation.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateCameraController(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***location: currentLocation,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: currentHeading + 90,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***altitude: currentLocation.position.z ?? 0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task.detached { @MainActor in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError("Unknown ARGeoTrackingStatus.State")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidChangeGeoTrackingStatus { _, status in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handleGeoTrackingStatusChange(status)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if initialCameraIsSet {
@@ -196,5 +174,28 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** We have to do this or the error gets bigger and bigger.
 ***REMOVED******REMOVED***cameraController.transformationMatrix = .identity
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***private func handleGeoTrackingStatusChange(_ status: ARGeoTrackingStatus) {
+***REMOVED******REMOVED***switch status.state {
+***REMOVED******REMOVED***case .notAvailable, .initializing, .localizing:
+***REMOVED******REMOVED******REMOVED***initialCameraIsSet = false
+***REMOVED******REMOVED***case .localized:
+***REMOVED******REMOVED******REMOVED******REMOVED*** Update the camera controller every time geo-tracking is localized,
+***REMOVED******REMOVED******REMOVED******REMOVED*** to ensure the best experience.
+***REMOVED******REMOVED******REMOVED***if !initialCameraIsSet, let currentLocation, let currentHeading {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the initial heading of scene view camera based on location
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and heading. Geo-tracking requires 90 degrees rotation.
+***REMOVED******REMOVED******REMOVED******REMOVED***updateCameraController(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***location: currentLocation,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: currentHeading + 90,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***altitude: currentLocation.position.z ?? 0
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***fatalError("Unknown ARGeoTrackingStatus.State")
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
