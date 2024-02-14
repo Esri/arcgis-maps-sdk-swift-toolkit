@@ -192,8 +192,8 @@ struct WorldTrackingSceneView: View {
         guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < timeThreshold else { return }
         
         // Make sure that horizontal and vertical accuracy are valid.
-        guard location.horizontalAccuracy > .zero,
-              location.verticalAccuracy > .zero else { return }
+        guard location.horizontalAccuracy >= .zero,
+              location.verticalAccuracy >= .zero else { return }
         
         // Make sure we need to update the camera based on distance deviation.
         guard !initialCameraIsSet || shouldUpdateCamera(for: location) else { return }
