@@ -16,14 +16,17 @@ import SwiftUI
 import ArcGIS
 import ArcGISToolkit
 import CoreLocation
+import AVFoundation
 
 struct NavigateInARExampleView: View {
-    /// A binding to a Boolean value indicating whether the route planner is showing.
+    /// The data model for the selected route.
+    @StateObject private var routeDataModel = RouteDataModel()
+    /// An AVSpeechSynthesizer for text to speech.
+    private let speechSynthesizer = AVSpeechSynthesizer()
+    /// A Boolean value indicating whether the route planner is showing.
     @State private var isShowingRoutePlanner = true
-    
     /// The location datasource that is used to access the device location.
     @State private var locationDataSource = SystemLocationDataSource()
-    
     /// A scene with an imagery basemap.
     @State private var scene: ArcGIS.Scene = {
         let surface = Surface()
@@ -34,7 +37,6 @@ struct NavigateInARExampleView: View {
         scene.baseSurface.opacity = 0.5
         return scene
     }()
-    
     /// The elevation surface set to the base surface of the scene.
     @State var elevationSurface: Surface = {
         let elevationSurface = Surface()
@@ -43,9 +45,14 @@ struct NavigateInARExampleView: View {
         elevationSurface.backgroundGrid.isVisible = false
         return elevationSurface
     }()
-    
     /// The graphics overlay containing a graphic.
     @State private var graphicsOverlay = GraphicsOverlay()
+    /// The status text displayed to the user.
+    @State private var statusText = ""
+    /// A Boolean value indicating whether the use is navigatig the route.
+    @State private var isNavigating = false
+    /// The result of the route selected in the route planner view.
+    @State private var routeResult: RouteResult?
     
     init() {
         elevationSurface.addElevationSource(Surface.elevationSource)
@@ -56,6 +63,7 @@ struct NavigateInARExampleView: View {
         if isShowingRoutePlanner {
             RoutePlannerView(isShowing: $isShowingRoutePlanner)
                 .onDidSelectRoute { routeGraphic, routeResult  in
+                    self.routeResult = routeResult
                     graphicsOverlay = makeRouteOverlay(
                         for: routeResult,
                         using: routeGraphic
@@ -73,6 +81,42 @@ struct NavigateInARExampleView: View {
                             }
                         }
                 }
+                .calibrationViewAlignment(.bottomLeading)
+                .task {
+                    statusText = "Adjust calibration before starting."
+                    Task {
+                        try await locationDataSource.start()
+                        
+                        for await location in locationDataSource.locations {
+                            try await routeDataModel.routeTracker?.track(location)
+                        }
+                    }
+                }
+            }
+            .overlay(alignment: .top) {
+                Text(statusText)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(8)
+                    .background(.regularMaterial, ignoresSafeAreaEdges: .horizontal)
+            }
+            .overlay(alignment: .bottomTrailing) {
+                Button("Start") {
+                    isNavigating = true
+                    Task {
+                        do {
+                            try await startNavigation()
+                        } catch {
+                            print("Failed to start navigation.")
+                        }
+                    }
+                }
+                .padding()
+                .background(.regularMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 15))
+                .padding()
+                .padding([.bottom, .trailing], 10)
+                .disabled(isNavigating)
             }
         }
     }
@@ -146,6 +190,81 @@ struct NavigateInARExampleView: View {
             completion(polyline)
         }
     }
+    
+    /// Starts navigating the route.
+    @MainActor
+    private func startNavigation() async throws {
+        guard let routeResult else { return }
+        let routeTracker = RouteTracker(
+            routeResult: routeResult,
+            routeIndex: 0,
+            skipsCoincidentStops: true
+        )
+        guard let routeTracker else { return }
+        
+        routeTracker.voiceGuidanceUnitSystem = Locale.current.usesMetricSystem ? .metric : .imperial
+        
+        routeDataModel.routeTracker = routeTracker
+        
+        do {
+            try await routeDataModel.routeTask.load()
+        } catch {
+            throw error
+        }
+        
+        if routeDataModel.routeTask.info.supportsRerouting,
+           let reroutingParameters = ReroutingParameters(
+            routeTask: routeDataModel.routeTask,
+            routeParameters: routeDataModel.routeParameters
+           ) {
+            do {
+                try await routeTracker.enableRerouting(using: reroutingParameters)
+            } catch {
+                throw error
+            }
+        }
+        
+        statusText = "Navigation will start."
+        await startTracking()
+    }
+    
+    /// Starts monitoring multiple asynchronous streams of information.
+    private func startTracking() async {
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { await self.trackStatus() }
+            group.addTask { await self.trackVoiceGuidance() }
+        }
+    }
+    
+    /// Monitors the asynchronous stream of tracking statuses.
+    ///
+    /// When new statuses are delivered, update the route's traversed and remaining graphics.
+    private func trackStatus() async {
+        guard let routeTracker = routeDataModel.routeTracker else { return }
+        for await status in routeTracker.$trackingStatus {
+            if let status {
+                switch status.destinationStatus {
+                case .notReached, .approaching:
+                    guard let route = routeResult?.routes.first else { return }
+                    let currentManeuver = route.directionManeuvers[status.currentManeuverIndex]
+                    statusText = currentManeuver.text
+                case .reached:
+                    statusText = "You have arrived!"
+                @unknown default:
+                    break
+                }
+            }
+        }
+    }
+    
+    /// Monitors the asynchronous stream of voice guidances.
+    private func trackVoiceGuidance() async {
+        guard let routeTracker = routeDataModel.routeTracker else { return }
+        for try await voiceGuidance in routeTracker.voiceGuidances {
+            speechSynthesizer.stopSpeaking(at: .word)
+            speechSynthesizer.speak(AVSpeechUtterance(string: voiceGuidance.text))
+        }
+    }
 }
 
 private extension NavigateInARExampleView {
@@ -153,20 +272,18 @@ private extension NavigateInARExampleView {
     struct RoutePlannerView: View {
         /// The view model for this sample.
         @StateObject private var model = Model()
-        
         /// A Boolean value indicating whether the view is showing.
         @Binding var isShowing: Bool
-        
         /// The status text displayed to the user.
         @State private var statusText = ""
-        
         /// User defined action to be performed when the slider delta value changes.
         var selectRouteAction: ((Graphic, RouteResult) -> Void)?
-        
         /// A Boolean value indicating whether a route stop is selected.
         var didSelectRouteStop: Bool {
             model.startPoint != nil || model.endPoint != nil
         }
+        /// The error shown in the error alert.
+        @State var error: Error?
         
         var body: some View {
             MapView(
@@ -179,16 +296,20 @@ private extension NavigateInARExampleView {
                     statusText = "Tap to place destination."
                 } else if model.endPoint == nil {
                     model.endPoint = mapPoint
-                    model.routeParameters.setStops(model.makeStops())
+                    model.routeDataModel.routeParameters.setStops(model.makeStops())
                     Task {
-                        let routeResult = try await model.routeTask.solveRoute(using: model.routeParameters)
+                        let routeResult = try await model.routeDataModel.routeTask.solveRoute(
+                            using: model.routeDataModel.routeParameters
+                        )
                         if let firstRoute = routeResult.routes.first {
                             let routeGraphic = Graphic(geometry: firstRoute.geometry)
                             model.routeGraphicsOverlay.addGraphic(routeGraphic)
-                            model.routeResult = routeResult
+                            model.routeDataModel.routeResult = routeResult
                             model.didSelectRoute = true
                             statusText = "Tap camera to start navigation."
-                        } else {}
+                        } else {
+                            self.error = error
+                        }
                     }
                 }
             }
@@ -206,7 +327,7 @@ private extension NavigateInARExampleView {
             .onChange(of: model.didSelectRoute) { didSelectRoute in
                 guard didSelectRoute else { return }
                 if let onDidSelectRoute = selectRouteAction,
-                   let routeResult = model.routeResult {
+                   let routeResult = model.routeDataModel.routeResult {
                     onDidSelectRoute(model.routeGraphic, routeResult)
                 }
             }
@@ -247,18 +368,18 @@ private extension NavigateInARExampleView {
 }
 
 private extension NavigateInARExampleView.RoutePlannerView {
-    /// A view model for this sample.
+    /// A view model for this example.
     @MainActor
     class Model: ObservableObject {
+        /// The data model for the selected route.
+        @ObservedObject var routeDataModel = RouteDataModel()
         /// A map with an imagery basemap style.
         @Published var map: Map = {
             let map = Map(basemapStyle: .arcGISImagery)
             return map
         }()
-        
         /// A binding to a Boolean value indicating whether a route is selected.
         @Published var didSelectRoute = false
-        
         /// The graphics overlay for the route.
         @Published var routeOverlay: GraphicsOverlay = {
             let graphicsOverlay = GraphicsOverlay()
@@ -274,38 +395,18 @@ private extension NavigateInARExampleView.RoutePlannerView {
             
             return graphicsOverlay
         }()
-        
-        /// The parameters for route task to solve a route, received from route planner.
-        @Published var routeParameters: RouteParameters!
-        
-        /// The current route for navigation.
-        @Published var currentRoute: Route!
-        
         /// The data source to track device location and provide updates to route tracker.
-        let trackingLocationDataSource = SystemLocationDataSource()
-        
+        let locationDataSource = SystemLocationDataSource()
         /// The graphic (with solid yellow 3D tube symbol) to represent the route.
         @Published var routeGraphic = Graphic()
-        
-        /// The route result.
-        @Published var routeResult: RouteResult?
-        
-        /// The error shown in the error alert.
-        @Published var error: Error?
-        
         /// The map's location display.
         @Published var locationDisplay: LocationDisplay = {
             let locationDisplay = LocationDisplay()
             locationDisplay.autoPanMode = .recenter
             return locationDisplay
         }()
-        
-        /// The route task that solves the route using the online routing service, using API key authentication.
-        let routeTask = RouteTask(url: URL(string: "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World")!)
-        
         /// The graphics overlay for the stops.
         let stopGraphicsOverlay = GraphicsOverlay()
-        
         /// A graphic overlay for route graphics.
         let routeGraphicsOverlay: GraphicsOverlay = {
             let overlay = GraphicsOverlay()
@@ -314,12 +415,10 @@ private extension NavigateInARExampleView.RoutePlannerView {
             )
             return overlay
         }()
-        
         /// The map's graphics overlays.
         var graphicsOverlays: [GraphicsOverlay] {
             return [stopGraphicsOverlay, routeGraphicsOverlay]
         }
-        
         /// A point representing the start of navigation.
         var startPoint: Point? {
             didSet {
@@ -328,7 +427,6 @@ private extension NavigateInARExampleView.RoutePlannerView {
                 stopGraphicsOverlay.addGraphic(startStopGraphic)
             }
         }
-        
         /// A point representing the destination of navigation.
         var endPoint: Point? {
             didSet {
@@ -345,19 +443,19 @@ private extension NavigateInARExampleView.RoutePlannerView {
                 locationManager.requestWhenInUseAuthorization()
             }
             
-            locationDisplay.dataSource = trackingLocationDataSource
+            locationDisplay.dataSource = locationDataSource
             
             Task {
-                try await trackingLocationDataSource.start()
+                try await locationDataSource.start()
                 
-                let parameters = try await routeTask.makeDefaultParameters()
+                let parameters = try await routeDataModel.routeTask.makeDefaultParameters()
                 
-                if let walkMode = routeTask.info.travelModes.first(where: { $0.name.contains("Walking") }) {
+                if let walkMode = routeDataModel.routeTask.info.travelModes.first(where: { $0.name.contains("Walking") }) {
                     parameters.travelMode = walkMode
                     parameters.returnsStops = true
                     parameters.returnsDirections = true
                     parameters.returnsRoutes = true
-                    routeParameters = parameters
+                    routeDataModel.routeParameters = parameters
                 }
             }
         }
@@ -375,7 +473,7 @@ private extension NavigateInARExampleView.RoutePlannerView {
         func reset() {
             routeGraphicsOverlay.removeAllGraphics()
             stopGraphicsOverlay.removeAllGraphics()
-            routeParameters.clearStops()
+            routeDataModel.routeParameters.clearStops()
             startPoint = nil
             endPoint = nil
         }
@@ -385,4 +483,16 @@ private extension NavigateInARExampleView.RoutePlannerView {
 private extension Surface {
     /// The elevation source with elevation service URL.
     static let elevationSource = ArcGISTiledElevationSource(url: URL(string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!)
+}
+
+@MainActor
+private class RouteDataModel: ObservableObject {
+    /// The route task that solves the route using the online routing service, using API key authentication.
+    @Published var routeTask = RouteTask(url: URL(string: "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World")!)
+    /// The parameters for route task to solve a route.
+    @Published var routeParameters = RouteParameters()
+    /// The route tracker.
+    @Published var routeTracker: RouteTracker?
+    /// The route result.
+    @Published var routeResult: RouteResult?
 }
