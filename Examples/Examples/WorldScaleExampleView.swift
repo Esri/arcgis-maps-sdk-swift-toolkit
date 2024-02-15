@@ -89,8 +89,7 @@ struct WorldScaleExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view that displays the horizontal and vertical accuracy of the current location datasource location.
-***REMOVED***@ViewBuilder
-***REMOVED***var accuracyView: some View {
+***REMOVED***@ViewBuilder var accuracyView: some View {
 ***REMOVED******REMOVED***if let currentLocation {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("H. Accuracy: \(currentLocation.horizontalAccuracy.formatted(.number.precision(.fractionLength(2))))")

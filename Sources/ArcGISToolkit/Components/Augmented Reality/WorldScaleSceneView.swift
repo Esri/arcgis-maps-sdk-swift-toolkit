@@ -138,6 +138,11 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***if !checkTrackingCapabilities(locationManager) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("Device doesn't support full accuracy location.")
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await locationDataSource.start()
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***do {
