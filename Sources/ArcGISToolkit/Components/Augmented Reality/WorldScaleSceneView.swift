@@ -34,8 +34,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The view model for the calibration view.
 ***REMOVED***@StateObject private var calibrationViewModel = WorldScaleCalibrationViewModel()
-***REMOVED******REMOVED***/ The current device location.
-***REMOVED***@State private var currentLocation: Location?
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the geo-tracking configuration is available.
 ***REMOVED***@State private var geoTrackingIsAvailable = true
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the initial camera is set for the scene view.
@@ -140,15 +138,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***if !checkTrackingCapabilities(locationManager) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("Device doesn't support full accuracy location.")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await locationDataSource.start()
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***for await location in locationDataSource.locations {
-***REMOVED******REMOVED******REMOVED******REMOVED***currentLocation = location
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***do {
@@ -179,26 +168,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***CalibrationView(viewModel: calibrationViewModel, isPresented: $isCalibrating)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.overlay(alignment: .top) {
-***REMOVED******REMOVED******REMOVED***accuracyView
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A view that displays the horizontal and vertical accuracy of the current location datasource location.
-***REMOVED***@ViewBuilder
-***REMOVED***var accuracyView: some View {
-***REMOVED******REMOVED***if let currentLocation {
-***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("H. Accuracy: \(currentLocation.horizontalAccuracy.formatted(.number.precision(.fractionLength(2))))")
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("V. Accuracy: \(currentLocation.verticalAccuracy.formatted(.number.precision(.fractionLength(2))))")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED******REMOVED***.padding(8)
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
-***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10))
-***REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

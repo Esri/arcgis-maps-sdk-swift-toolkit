@@ -39,6 +39,8 @@ struct WorldScaleExampleView: View {
 ***REMOVED***@State private var graphicsOverlay = GraphicsOverlay()
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
+***REMOVED******REMOVED***/ The current device location.
+***REMOVED***@State private var currentLocation: Location?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***WorldScaleSceneView(trackingMode: .worldTracking) { proxy in
@@ -52,6 +54,9 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.calibrationButtonAlignment(.bottomLeading)
+***REMOVED******REMOVED***.overlay(alignment: .top) {
+***REMOVED******REMOVED******REMOVED***accuracyView
+***REMOVED***
 ***REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED***Task { await locationDataSource.stop() ***REMOVED***
 ***REMOVED***
@@ -75,6 +80,28 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Put a circle graphic around the initial location.
 ***REMOVED******REMOVED******REMOVED***let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(Graphic(geometry: circle, symbol: SimpleLineSymbol(color: .red, width: 3)))
+***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***for await location in locationDataSource.locations {
+***REMOVED******REMOVED******REMOVED******REMOVED***currentLocation = location
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A view that displays the horizontal and vertical accuracy of the current location datasource location.
+***REMOVED***@ViewBuilder
+***REMOVED***var accuracyView: some View {
+***REMOVED******REMOVED***if let currentLocation {
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("H. Accuracy: \(currentLocation.horizontalAccuracy.formatted(.number.precision(.fractionLength(2))))")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("V. Accuracy: \(currentLocation.verticalAccuracy.formatted(.number.precision(.fractionLength(2))))")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
+***REMOVED******REMOVED******REMOVED***.background(.regularMaterial)
+***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 10))
+***REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
