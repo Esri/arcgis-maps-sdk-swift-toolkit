@@ -34,8 +34,6 @@ public struct WorldScaleSceneView: View {
     @State private var cameraController: TransformationMatrixCameraController
     /// The view model for the calibration view.
     @StateObject private var calibrationViewModel = WorldScaleCalibrationViewModel()
-    /// The current device location.
-    @State private var currentLocation: Location?
     /// A Boolean value that indicates whether the geo-tracking configuration is available.
     @State private var geoTrackingIsAvailable = true
     /// A Boolean value that indicates whether the initial camera is set for the scene view.
@@ -140,15 +138,6 @@ public struct WorldScaleSceneView: View {
             if !checkTrackingCapabilities(locationManager) {
                 print("Device doesn't support full accuracy location.")
             }
-            
-            do {
-                try await locationDataSource.start()
-            } catch {
-                self.error = error
-            }
-            for await location in locationDataSource.locations {
-                currentLocation = location
-            }
         }
         .task {
             do {
@@ -179,26 +168,6 @@ public struct WorldScaleSceneView: View {
                 CalibrationView(viewModel: calibrationViewModel, isPresented: $isCalibrating)
                     .padding(.bottom)
             }
-        }
-        .overlay(alignment: .top) {
-            accuracyView
-        }
-    }
-    
-    /// A view that displays the horizontal and vertical accuracy of the current location datasource location.
-    @ViewBuilder
-    var accuracyView: some View {
-        if let currentLocation {
-            VStack {
-                Text("H. Accuracy: \(currentLocation.horizontalAccuracy.formatted(.number.precision(.fractionLength(2))))")
-                Text("V. Accuracy: \(currentLocation.verticalAccuracy.formatted(.number.precision(.fractionLength(2))))")
-            }
-            .multilineTextAlignment(.center)
-            .padding(8)
-            .frame(maxWidth: .infinity, alignment: .center)
-            .background(.regularMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .padding([.horizontal, .top])
         }
     }
     
