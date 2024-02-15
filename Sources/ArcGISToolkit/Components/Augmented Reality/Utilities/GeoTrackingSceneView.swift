@@ -99,10 +99,7 @@ public struct GeoTrackingSceneView: View {
                 
                 if initialCameraIsSet {
                     sceneViewBuilder(sceneViewProxy)
-                        .cameraController(cameraController)
-                        .attributionBarHidden(true)
-                        .spaceEffect(.transparent)
-                        .atmosphereEffect(.off)
+                        .combinedSceneViewModifier(cameraController: cameraController)
                         .interactiveNavigationDisabled(true)
                 }
             }
