@@ -89,8 +89,7 @@ struct WorldScaleExampleView: View {
     }
     
     /// A view that displays the horizontal and vertical accuracy of the current location datasource location.
-    @ViewBuilder
-    var accuracyView: some View {
+    @ViewBuilder var accuracyView: some View {
         if let currentLocation {
             VStack {
                 Text("H. Accuracy: \(currentLocation.horizontalAccuracy.formatted(.number.precision(.fractionLength(2))))")
