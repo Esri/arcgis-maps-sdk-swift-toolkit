@@ -138,6 +138,11 @@ public struct WorldScaleSceneView: View {
             if !checkTrackingCapabilities(locationManager) {
                 print("Device doesn't support full accuracy location.")
             }
+            do {
+                try await locationDataSource.start()
+            } catch {
+                self.error = error
+            }
         }
         .task {
             do {
