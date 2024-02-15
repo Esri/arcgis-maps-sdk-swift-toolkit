@@ -115,11 +115,7 @@ struct WorldTrackingSceneView: View {
                 
                 if initialCameraIsSet {
                     sceneViewBuilder(sceneViewProxy)
-                        .cameraController(cameraController)
-                        .attributionBarHidden(true)
-                        .spaceEffect(.transparent)
-                        .atmosphereEffect(.off)
-                        .interactiveNavigationDisabled(true)
+                        .combinedSceneViewModifier(cameraController: cameraController)
                         .onCameraChanged { camera in
                             currentCamera = camera
                         }

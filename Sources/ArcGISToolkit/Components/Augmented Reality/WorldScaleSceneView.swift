@@ -261,3 +261,14 @@ private extension WorldScaleSceneView {
         )
     }
 }
+
+extension SceneView {
+    func combinedSceneViewModifier(cameraController: TransformationMatrixCameraController) -> SceneView {
+        self
+            .cameraController(cameraController)
+            .attributionBarHidden(true)
+            .spaceEffect(.transparent)
+            .atmosphereEffect(.off)
+            .interactiveNavigationDisabled(true)
+    }
+}
