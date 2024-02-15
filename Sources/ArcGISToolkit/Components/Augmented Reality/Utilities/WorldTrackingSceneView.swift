@@ -50,16 +50,6 @@ struct WorldTrackingSceneView: View {
     /// The timestamp of the last received location.
     @State private var lastLocationTimestamp: Date?
     
-    /// Projected point from the spatial reference of the location data source's to the scene view's.
-    private var currentPosition: Point? {
-        guard let currentLocation,
-              let currentCamera,
-              let spatialReference = currentCamera.location.spatialReference,
-              let position = GeometryEngine.project(currentLocation.position, into: spatialReference)
-        else { return nil }
-        return position
-    }
-    
     /// Creates a world scale world-tracking scene view.
     /// - Parameters:
     ///   - arViewProxy: The proxy for the ARSwiftUIView.
@@ -198,7 +188,7 @@ struct WorldTrackingSceneView: View {
         // Make sure we need to update the camera based on distance deviation.
         guard !initialCameraIsSet || shouldUpdateCamera(for: location) else { return }
         
-        let altitude = (location.position.z ?? 0) + location.verticalAccuracy
+        let altitude = location.position.z ?? 0
         
         if !initialCameraIsSet {
             cameraController.originCamera = Camera(
@@ -239,13 +229,13 @@ struct WorldTrackingSceneView: View {
     /// - Parameter location: The location data source location.
     /// - Returns: A Boolean value indicating if the camera should be updated.
     func shouldUpdateCamera(for location: Location) -> Bool {
-        guard let currentCamera, let currentPosition else { return false }
+        guard let currentCamera, let currentLocation else { return false }
         
         // Measure the distance between the location datasource's reported location
         // and the camera's current location.
         guard let result = GeometryEngine.geodeticDistance(
             from: currentCamera.location,
-            to: currentPosition,
+            to: currentLocation.position,
             distanceUnit: .meters,
             azimuthUnit: nil,
             curveType: .geodesic
