@@ -50,16 +50,6 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***/ The timestamp of the last received location.
 ***REMOVED***@State private var lastLocationTimestamp: Date?
 ***REMOVED***
-***REMOVED******REMOVED***/ Projected point from the spatial reference of the location data source's to the scene view's.
-***REMOVED***private var currentPosition: Point? {
-***REMOVED******REMOVED***guard let currentLocation,
-***REMOVED******REMOVED******REMOVED***  let currentCamera,
-***REMOVED******REMOVED******REMOVED***  let spatialReference = currentCamera.location.spatialReference,
-***REMOVED******REMOVED******REMOVED***  let position = GeometryEngine.project(currentLocation.position, into: spatialReference)
-***REMOVED******REMOVED***else { return nil ***REMOVED***
-***REMOVED******REMOVED***return position
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale world-tracking scene view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - arViewProxy: The proxy for the ARSwiftUIView.
@@ -198,7 +188,7 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED*** Make sure we need to update the camera based on distance deviation.
 ***REMOVED******REMOVED***guard !initialCameraIsSet || shouldUpdateCamera(for: location) else { return ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let altitude = (location.position.z ?? 0) + location.verticalAccuracy
+***REMOVED******REMOVED***let altitude = location.position.z ?? 0
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if !initialCameraIsSet {
 ***REMOVED******REMOVED******REMOVED***cameraController.originCamera = Camera(
@@ -239,13 +229,13 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***/ - Parameter location: The location data source location.
 ***REMOVED******REMOVED***/ - Returns: A Boolean value indicating if the camera should be updated.
 ***REMOVED***func shouldUpdateCamera(for location: Location) -> Bool {
-***REMOVED******REMOVED***guard let currentCamera, let currentPosition else { return false ***REMOVED***
+***REMOVED******REMOVED***guard let currentCamera, let currentLocation else { return false ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Measure the distance between the location datasource's reported location
 ***REMOVED******REMOVED******REMOVED*** and the camera's current location.
 ***REMOVED******REMOVED***guard let result = GeometryEngine.geodeticDistance(
 ***REMOVED******REMOVED******REMOVED***from: currentCamera.location,
-***REMOVED******REMOVED******REMOVED***to: currentPosition,
+***REMOVED******REMOVED******REMOVED***to: currentLocation.position,
 ***REMOVED******REMOVED******REMOVED***distanceUnit: .meters,
 ***REMOVED******REMOVED******REMOVED***azimuthUnit: nil,
 ***REMOVED******REMOVED******REMOVED***curveType: .geodesic
