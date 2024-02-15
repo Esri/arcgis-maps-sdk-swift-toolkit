@@ -261,3 +261,14 @@ private extension WorldScaleSceneView {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+
+extension SceneView {
+***REMOVED***func combinedSceneViewModifier(cameraController: TransformationMatrixCameraController) -> SceneView {
+***REMOVED******REMOVED***self
+***REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
+***REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
+***REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
+***REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
+***REMOVED******REMOVED******REMOVED***.interactiveNavigationDisabled(true)
+***REMOVED***
+***REMOVED***
