@@ -263,7 +263,8 @@ private extension WorldScaleSceneView {
 }
 
 extension SceneView {
-    func combinedSceneViewModifier(cameraController: TransformationMatrixCameraController) -> SceneView {
+    /// A modifier to combine various modifiers that apply to both world and geo tracking scene view.
+    func worldScaleViewModifier(cameraController: TransformationMatrixCameraController) -> SceneView {
         self
             .cameraController(cameraController)
             .attributionBarHidden(true)
