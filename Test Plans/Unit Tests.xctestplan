@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "0F3F2BD0-66A2-44B0-BC2D-AC2983DA8A71",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ArcGISToolkitTests",
+        "name" : "ArcGISToolkitTests"
+      }
+    }
+  ],
+  "version" : 1
+}

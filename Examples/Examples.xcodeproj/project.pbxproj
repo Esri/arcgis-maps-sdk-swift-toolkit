@@ -57,6 +57,7 @@
 		75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksExampleView.swift; sourceTree = "<group>"; };
 		75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalebarExampleView.swift; sourceTree = "<group>"; };
 		882899FC2AB5099300A0BDC1 /* FlyoverExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyoverExampleView.swift; sourceTree = "<group>"; };
+		8AA0A6732B80256900AE1DBE /* Unit Tests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Unit Tests.xctestplan"; path = "../Test Plans/Unit Tests.xctestplan"; sourceTree = "<group>"; };
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; };
 		E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterExampleView.swift; sourceTree = "<group>"; };
 		E47ABE402652FE0900FD2FE3 /* Toolkit Examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Toolkit Examples.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,6 +121,7 @@
 		E47ABE372652FE0900FD2FE3 = {
 			isa = PBXGroup;
 			children = (
+				8AA0A6732B80256900AE1DBE /* Unit Tests.xctestplan */,
 				E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolkit */,
 				E47ABE562652FE7F00FD2FE3 /* Examples */,
 				752A4FC7294D26DC00A49479 /* Utility */,

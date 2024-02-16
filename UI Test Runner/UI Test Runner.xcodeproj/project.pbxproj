@@ -53,6 +53,7 @@
 		75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterTestView.swift; sourceTree = "<group>"; };
 		75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterTests.swift; sourceTree = "<group>"; };
 		75CCCD612A5F691E0098B059 /* UI Test Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "UI Test Runner.entitlements"; sourceTree = "<group>"; };
+		8AA0A6742B8025F200AE1DBE /* UI Tests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = "UI Tests.xctestplan"; path = "../Test Plans/UI Tests.xctestplan"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +78,7 @@
 		7552A7472A573CBB0023DA5A = {
 			isa = PBXGroup;
 			children = (
+				8AA0A6742B8025F200AE1DBE /* UI Tests.xctestplan */,
 				7552A7632A573DA00023DA5A /* Packages */,
 				7552A7522A573CBB0023DA5A /* UI Test Runner */,
 				7552A76A2A573DFB0023DA5A /* UITests */,
