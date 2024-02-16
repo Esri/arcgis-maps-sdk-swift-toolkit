@@ -100,7 +100,6 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if initialCameraIsSet {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.combinedSceneViewModifier(cameraController: cameraController)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.interactiveNavigationDisabled(true)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.all)
