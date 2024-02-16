@@ -115,7 +115,7 @@ struct WorldTrackingSceneView: View {
                 
                 if initialCameraIsSet {
                     sceneViewBuilder(sceneViewProxy)
-                        .combinedSceneViewModifier(cameraController: cameraController)
+                        .worldScaleViewModifier(cameraController: cameraController)
                         .onCameraChanged { camera in
                             currentCamera = camera
                         }

@@ -99,7 +99,7 @@ public struct GeoTrackingSceneView: View {
                 
                 if initialCameraIsSet {
                     sceneViewBuilder(sceneViewProxy)
-                        .combinedSceneViewModifier(cameraController: cameraController)
+                        .worldScaleViewModifier(cameraController: cameraController)
                 }
             }
             .ignoresSafeArea(.all)
