@@ -263,7 +263,8 @@ private extension WorldScaleSceneView {
 ***REMOVED***
 
 extension SceneView {
-***REMOVED***func combinedSceneViewModifier(cameraController: TransformationMatrixCameraController) -> SceneView {
+***REMOVED******REMOVED***/ A modifier to combine various modifiers that apply to both world and geo tracking scene view.
+***REMOVED***func worldScaleViewModifier(cameraController: TransformationMatrixCameraController) -> SceneView {
 ***REMOVED******REMOVED***self
 ***REMOVED******REMOVED******REMOVED***.cameraController(cameraController)
 ***REMOVED******REMOVED******REMOVED***.attributionBarHidden(true)
