@@ -174,7 +174,7 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED*** Do not update the scene view when the coaching overlay is in place.
 ***REMOVED******REMOVED***guard !coachingOverlayIsActive else { return ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Update if the location is more than 10 seconds old.
+***REMOVED******REMOVED******REMOVED*** Do not use cached location more than 10 seconds old.
 ***REMOVED******REMOVED***guard abs(lastLocationTimestamp?.timeIntervalSinceNow ?? 0) < timeThreshold else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Make sure that horizontal and vertical accuracy are valid.
