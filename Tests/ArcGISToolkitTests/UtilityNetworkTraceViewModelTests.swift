@@ -18,11 +18,8 @@ import XCTest
 @testable import ArcGISToolkit
 
 @MainActor final class UtilityNetworkTraceViewModelTests: XCTestCase {
-    private let apiKey = APIKey("<#API Key#>")
-    
     override func setUp() async throws {
-        ArcGISEnvironment.apiKey = apiKey
-        try XCTSkipIf(apiKey == .placeholder)
+        ArcGISEnvironment.apiKey = .default
         
         setNetworkChallengeHandler(NetworkChallengeHandler(allowUntrustedHosts: true))
         ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
