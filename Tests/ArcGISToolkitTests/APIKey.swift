@@ -15,6 +15,6 @@
 ***REMOVED***
 
 extension APIKey {
-***REMOVED******REMOVED***/ The placeholder APIKey. This is not a valid API key.
-***REMOVED***static let placeholder = APIKey("<#API Key#>")
+***REMOVED******REMOVED***/ The default API key.
+***REMOVED***static let `default` = APIKey("<#API Key#>")
 ***REMOVED***
