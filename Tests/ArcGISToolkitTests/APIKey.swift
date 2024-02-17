@@ -15,6 +15,6 @@
 import ArcGIS
 
 extension APIKey {
-    /// The placeholder APIKey. This is not a valid API key.
-    static let placeholder = APIKey("<#API Key#>")
+    /// The default API key.
+    static let `default` = APIKey("<#API Key#>")
 }
