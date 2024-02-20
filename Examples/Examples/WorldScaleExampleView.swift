@@ -39,8 +39,6 @@ struct WorldScaleExampleView: View {
     @State private var graphicsOverlay = GraphicsOverlay()
     /// The location datasource that is used to access the device location.
     @State private var locationDataSource = SystemLocationDataSource()
-    /// The current device location.
-    @State private var currentLocation: Location?
     
     var body: some View {
         WorldScaleSceneView(trackingMode: .worldTracking) { proxy in
@@ -54,9 +52,6 @@ struct WorldScaleExampleView: View {
                 }
         }
         .calibrationButtonAlignment(.bottomLeading)
-        .overlay(alignment: .top) {
-            accuracyView
-        }
         .onDisappear {
             Task { await locationDataSource.stop() }
         }
@@ -80,27 +75,9 @@ struct WorldScaleExampleView: View {
             // Put a circle graphic around the initial location.
             let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
             graphicsOverlay.addGraphic(Graphic(geometry: circle, symbol: SimpleLineSymbol(color: .red, width: 3)))
-        }
-        .task {
-            for await location in locationDataSource.locations {
-                currentLocation = location
-            }
-        }
-    }
-    
-    /// A view that displays the horizontal and vertical accuracy of the current location datasource location.
-    @ViewBuilder var accuracyView: some View {
-        if let currentLocation {
-            VStack {
-                Text("H. Accuracy: \(currentLocation.horizontalAccuracy.formatted(.number.precision(.fractionLength(2))))")
-                Text("V. Accuracy: \(currentLocation.verticalAccuracy.formatted(.number.precision(.fractionLength(2))))")
-            }
-            .multilineTextAlignment(.center)
-            .padding(8)
-            .frame(maxWidth: .infinity, alignment: .center)
-            .background(.regularMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .padding([.horizontal, .top])
+            
+            // Stop the location data source after the initial location is retrieved.
+            await locationDataSource.stop()
         }
     }
 }
