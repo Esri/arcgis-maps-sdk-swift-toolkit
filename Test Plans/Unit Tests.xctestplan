@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+***REMOVED***{
+***REMOVED***  "id" : "AB4F0B9A-30D4-4161-AAB0-9EB74410A4C1",
+***REMOVED***  "name" : "Configuration 1",
+***REMOVED***  "options" : {
+
+  ***REMOVED***
+***REMOVED***
+  ],
+  "defaultOptions" : {
+***REMOVED***"codeCoverage" : false
+  ***REMOVED***,
+  "testTargets" : [
+***REMOVED***{
+***REMOVED***  "target" : {
+***REMOVED******REMOVED***"containerPath" : "container:",
+***REMOVED******REMOVED***"identifier" : "ArcGISToolkitTests",
+***REMOVED******REMOVED***"name" : "ArcGISToolkitTests"
+  ***REMOVED***
+***REMOVED***
+  ],
+  "version" : 1
+***REMOVED***
