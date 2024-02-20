@@ -52,9 +52,6 @@ struct WorldScaleExampleView: View {
                 }
         }
         .calibrationButtonAlignment(.bottomLeading)
-        .onDisappear {
-            Task { await locationDataSource.stop() }
-        }
         .task {
             // Request when-in-use location authorization.
             // This is necessary for 2 reasons:
