@@ -14,7 +14,7 @@
   "testTargets" : [
 ***REMOVED***{
 ***REMOVED***  "target" : {
-***REMOVED******REMOVED***"containerPath" : "container:",
+***REMOVED******REMOVED***"containerPath" : "container:..",
 ***REMOVED******REMOVED***"identifier" : "ArcGISToolkitTests",
 ***REMOVED******REMOVED***"name" : "ArcGISToolkitTests"
   ***REMOVED***
