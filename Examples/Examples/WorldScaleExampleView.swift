@@ -17,10 +17,10 @@
 ***REMOVED***Toolkit
 import CoreLocation
 
-***REMOVED***/ An example that utilizes the `WorldScaleGeoTrackingSceneView` to show an augmented reality view
+***REMOVED***/ An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
 ***REMOVED***/ of your current location. Because this is an example that can be run from anywhere,
 ***REMOVED***/ it places a red circle around your initial location which can be explored.
-struct WorldScaleGeoTrackingExampleView: View {
+struct WorldScaleExampleView: View {
 ***REMOVED***@State private var scene: ArcGIS.Scene = {
 ***REMOVED******REMOVED******REMOVED*** Creates an elevation source from Terrain3D REST service.
 ***REMOVED******REMOVED***let elevationServiceURL = URL(string: "https:***REMOVED***elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")!
@@ -41,7 +41,7 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***WorldScaleGeoTrackingSceneView(locationDataSource: locationDataSource) { proxy in
+***REMOVED******REMOVED***WorldScaleSceneView(trackingMode: .worldTracking) { proxy in
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screen, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Identifying...")
@@ -51,8 +51,7 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.calibrationViewHidden(false)
-***REMOVED******REMOVED***.calibrationViewAlignment(.bottomLeading)
+***REMOVED******REMOVED***.calibrationButtonAlignment(.bottomLeading)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Request when-in-use location authorization.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** This is necessary for 2 reasons:
@@ -65,12 +64,17 @@ struct WorldScaleGeoTrackingExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationManager.requestWhenInUseAuthorization()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***try? await locationDataSource.start()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Retrieve initial location.
 ***REMOVED******REMOVED******REMOVED***guard let initialLocation = await locationDataSource.locations.first(where: { _ in true ***REMOVED***) else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Put a circle graphic around the initial location.
 ***REMOVED******REMOVED******REMOVED***let circle = GeometryEngine.geodeticBuffer(around: initialLocation.position, distance: 20, distanceUnit: .meters, maxDeviation: 1, curveType: .geodesic)
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(Graphic(geometry: circle, symbol: SimpleLineSymbol(color: .red, width: 3)))
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Stop the location data source after the initial location is retrieved.
+***REMOVED******REMOVED******REMOVED***await locationDataSource.stop()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
