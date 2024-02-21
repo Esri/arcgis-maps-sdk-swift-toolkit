@@ -16,7 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***
-struct UITestRunner: App {
+struct TestRunnerApp: App {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***Tests()
