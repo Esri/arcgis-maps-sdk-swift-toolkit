@@ -12,14 +12,7 @@
 ***REMOVED***"codeCoverage" : false
   ***REMOVED***,
   "testTargets" : [
-***REMOVED***{
-***REMOVED***  "parallelizable" : true,
-***REMOVED***  "target" : {
-***REMOVED******REMOVED***"containerPath" : "container:..",
-***REMOVED******REMOVED***"identifier" : "ArcGISToolkitTests",
-***REMOVED******REMOVED***"name" : "ArcGISToolkitTests"
-  ***REMOVED***
-***REMOVED***
+
   ],
   "version" : 1
 ***REMOVED***
