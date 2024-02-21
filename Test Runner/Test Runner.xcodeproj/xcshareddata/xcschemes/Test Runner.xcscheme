@@ -29,11 +29,11 @@
 ***REMOVED***  shouldUseLaunchSchemeArgsEnv = "YES">
 ***REMOVED***  <TestPlans>
 ***REMOVED******REMOVED*** <TestPlanReference
-***REMOVED******REMOVED******REMOVED***reference = "container:../Test Plans/Unit Tests.xctestplan"
-***REMOVED******REMOVED******REMOVED***default = "YES">
+***REMOVED******REMOVED******REMOVED***reference = "container:../Test Plans/UI Tests.xctestplan">
 ***REMOVED******REMOVED*** </TestPlanReference>
 ***REMOVED******REMOVED*** <TestPlanReference
-***REMOVED******REMOVED******REMOVED***reference = "container:../Test Plans/UI Tests.xctestplan">
+***REMOVED******REMOVED******REMOVED***reference = "container:../Test Plans/Unit Tests.xctestplan"
+***REMOVED******REMOVED******REMOVED***default = "YES">
 ***REMOVED******REMOVED*** </TestPlanReference>
 ***REMOVED***  </TestPlans>
 ***REMOVED***  <Testables>

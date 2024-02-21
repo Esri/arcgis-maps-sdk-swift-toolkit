@@ -68,16 +68,8 @@
 ***REMOVED***  buildConfiguration = "Debug"
 ***REMOVED***  selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
 ***REMOVED***  selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-***REMOVED***  shouldUseLaunchSchemeArgsEnv = "YES">
-***REMOVED***  <TestPlans>
-***REMOVED******REMOVED*** <TestPlanReference
-***REMOVED******REMOVED******REMOVED***reference = "container:Test Plans/Unit Tests.xctestplan"
-***REMOVED******REMOVED******REMOVED***default = "YES">
-***REMOVED******REMOVED*** </TestPlanReference>
-***REMOVED******REMOVED*** <TestPlanReference
-***REMOVED******REMOVED******REMOVED***reference = "container:Test Plans/UI Tests.xctestplan">
-***REMOVED******REMOVED*** </TestPlanReference>
-***REMOVED***  </TestPlans>
+***REMOVED***  shouldUseLaunchSchemeArgsEnv = "YES"
+***REMOVED***  shouldAutocreateTestPlan = "YES">
 ***REMOVED***  <Testables>
 ***REMOVED******REMOVED*** <TestableReference
 ***REMOVED******REMOVED******REMOVED***skipped = "NO">
