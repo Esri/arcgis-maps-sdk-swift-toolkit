@@ -165,8 +165,7 @@
 				8A1562F42B86896300000DD6 /* UI Tests.xctestplan */,
 				8A1562F62B86896C00000DD6 /* Unit Tests.xctestplan */,
 			);
-			name = "Test Plans";
-			path = "../Test Plans";
+			path = "Test Plans";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
