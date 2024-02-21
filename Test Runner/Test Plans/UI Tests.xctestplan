@@ -12,13 +12,7 @@
     "testTimeoutsEnabled" : true
   },
   "testTargets" : [
-    {
-      "target" : {
-        "containerPath" : "container:Test Runner.xcodeproj",
-        "identifier" : "7552A7682A573DFB0023DA5A",
-        "name" : "UITests"
-      }
-    }
+
   ],
   "version" : 1
 }
