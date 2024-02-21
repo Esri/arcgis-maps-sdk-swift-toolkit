@@ -12,14 +12,7 @@
     "codeCoverage" : false
   },
   "testTargets" : [
-    {
-      "parallelizable" : true,
-      "target" : {
-        "containerPath" : "container:..",
-        "identifier" : "ArcGISToolkitTests",
-        "name" : "ArcGISToolkitTests"
-      }
-    }
+
   ],
   "version" : 1
 }
