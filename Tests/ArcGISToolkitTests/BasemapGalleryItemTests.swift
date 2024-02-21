@@ -28,8 +28,7 @@ import Combine
 @MainActor
 final class BasemapGalleryItemTests: XCTestCase {
     override func setUp() async throws {
-        ArcGISEnvironment.apiKey = APIKey("<#API Key#>")
-        try XCTSkipIf(ArcGISEnvironment.apiKey == .placeholder)
+        ArcGISEnvironment.apiKey = .default
     }
     
     override func tearDown() {
