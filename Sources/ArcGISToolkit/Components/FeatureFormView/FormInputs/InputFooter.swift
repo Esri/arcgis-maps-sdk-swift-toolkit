@@ -26,19 +26,6 @@ struct InputFooter: View {
     /// The form element the footer belongs to.
     let element: FieldFormElement
     
-    /// An error provided directly to the footer.
-    ///
-    /// In the majority of cases we can grab validation errors directly off the element. One scenario where we
-    /// cannot rely on this mechanism is a text input receiving a non-numeric string in a numeric field via the
-    /// system clipboard. This value cannot be used but it is in the field and a validation error needs to be
-    /// shown.
-    let manualError: FeatureFormError?
-    
-    init(element: FieldFormElement, error: FeatureFormError? = nil) {
-        self.element = element
-        self.manualError = error
-    }
-    
     var body: some View {
         HStack(alignment: .top) {
             Group {
@@ -233,7 +220,6 @@ extension InputFooter {
     /// The error to display for the input. If the element is not focused and has a required error this will be
     /// the primary error. Otherwise the primary error is the first error in the element's set of errors.
     var primaryError: ArcGIS.FeatureFormError? {
-        if let manualError { return manualError }
         let elementErrors = element.validationErrors as? [ArcGIS.FeatureFormError]
         if let requiredError = elementErrors?.first(where: {
             switch $0 {
