@@ -266,7 +266,7 @@ public extension WorldScaleSceneView {
 ***REMOVED******REMOVED***/ Determines the scene point for the given screen point.
 ***REMOVED******REMOVED***/ - Parameter screenPoint: The point in screen's coordinate space.
 ***REMOVED******REMOVED***/ - Returns: The scene point corresponding to screen point.
-***REMOVED***func arScreenToLocation(screenPoint: CGPoint) -> Point? {
+***REMOVED***private func arScreenToLocation(screenPoint: CGPoint) -> Point? {
 ***REMOVED******REMOVED******REMOVED*** Use the `raycast` method to get the matrix of `screenPoint`.
 ***REMOVED******REMOVED***guard let localOffsetMatrix = arViewProxy.raycast(from: screenPoint) else { return nil ***REMOVED***
 ***REMOVED******REMOVED***let originTransformationMatrix = cameraController.originCamera.transformationMatrix
@@ -277,13 +277,15 @@ public extension WorldScaleSceneView {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the closure to call when the scene's nodes are updated.
 ***REMOVED***func onARScreenSingleTapGesture(
-***REMOVED******REMOVED***perform action: @escaping (_ arScreenPoint: CGPoint, _ scenePoint: Point?) -> Void
+***REMOVED******REMOVED***perform action: @escaping (_ screenPoint: CGPoint, _ scenePoint: Point?) -> Void
 ***REMOVED***) -> Self {
-***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***return view
+***REMOVED******REMOVED***self
+***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED***let scenePoint = arScreenToLocation(screenPoint: tapPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED***action(tapPoint, scenePoint)
+***REMOVED******REMOVED*** as! WorldScaleSceneView
 ***REMOVED***
 ***REMOVED***
-
 
 extension SceneView {
 ***REMOVED******REMOVED***/ A modifier to combine various modifiers that apply to both world and geo tracking scene view.
