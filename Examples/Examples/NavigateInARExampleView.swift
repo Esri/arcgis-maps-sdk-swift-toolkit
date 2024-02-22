@@ -74,7 +74,7 @@ struct NavigateInARExampleView: View {
                 }
         } else {
             VStack {
-                WorldScaleSceneView(trackingMode: .worldTracking) { proxy in
+                WorldScaleSceneView(trackingMode: .geoTracking) { proxy in
                     SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
                         .onSingleTapGesture { screen, _ in
                             print("Identifying...")
@@ -84,7 +84,7 @@ struct NavigateInARExampleView: View {
                             }
                         }
                 }
-                .calibrationViewAlignment(.bottomLeading)
+                .calibrationButtonAlignment(.bottomLeading)
                 .task {
                     statusText = "Adjust calibration before starting."
                     Task {
