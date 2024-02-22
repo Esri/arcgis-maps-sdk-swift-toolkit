@@ -129,11 +129,7 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(selectedValue?.code)
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***element.updateValue(selectedValue?.code)
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
 ***REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in

@@ -67,12 +67,8 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***isEditing = focusedElement == element
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: date) { date in
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try element.updateValue(date)
-***REMOVED******REMOVED******REMOVED******REMOVED***formattedValue = element.formattedValue
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***element.updateValue(date)
+***REMOVED******REMOVED******REMOVED***formattedValue = element.formattedValue
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
 ***REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in

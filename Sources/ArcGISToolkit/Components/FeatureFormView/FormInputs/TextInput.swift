@@ -28,9 +28,6 @@ struct TextInput: View {
 ***REMOVED***@State private var isEditable: Bool = false
 ***REMOVED***@State private var formattedValue: String = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ An error encountered while casting and updating input values.
-***REMOVED***@State private var inputError: FeatureFormError?
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
@@ -76,7 +73,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***InputFooter(element: element, error: inputError)
+***REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
 ***REMOVED******REMOVED******REMOVED***if isFocused && isPlaceholder {
@@ -100,14 +97,7 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: text) { text in
 ***REMOVED******REMOVED******REMOVED***guard !isPlaceholder else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***inputError = nil
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try element.convertAndUpdateValue(text)
-***REMOVED******REMOVED*** catch let error as FeatureFormError {
-***REMOVED******REMOVED******REMOVED******REMOVED***inputError = error
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription, String(describing: error))
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED******REMOVED***if element.isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
@@ -233,24 +223,24 @@ private extension TextInput {
 private extension FieldFormElement {
 ***REMOVED******REMOVED***/ Attempts to convert the value to a type suitable for the element's field type and then update
 ***REMOVED******REMOVED***/ the element with the converted value.
-***REMOVED***func convertAndUpdateValue(_ value: String) throws {
+***REMOVED***func convertAndUpdateValue(_ value: String) {
 ***REMOVED******REMOVED***if fieldType == .text {
-***REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED******REMOVED***updateValue(value)
 ***REMOVED*** else if let fieldType {
 ***REMOVED******REMOVED******REMOVED***if fieldType.isNumeric && value.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(nil)
 ***REMOVED******REMOVED*** else if fieldType == .int16, let value = Int16(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
 ***REMOVED******REMOVED*** else if fieldType == .int32, let value = Int32(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
 ***REMOVED******REMOVED*** else if fieldType == .int64, let value = Int64(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
 ***REMOVED******REMOVED*** else if fieldType == .float32, let value = Float32(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
 ***REMOVED******REMOVED*** else if fieldType == .float64, let value = Float64(value) {
-***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***try updateValue(value)
+***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
