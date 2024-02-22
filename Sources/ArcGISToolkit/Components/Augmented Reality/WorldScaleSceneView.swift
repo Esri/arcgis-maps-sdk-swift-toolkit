@@ -278,12 +278,12 @@ public extension WorldScaleSceneView {
 ***REMOVED******REMOVED***/ Sets the closure to call when the scene's nodes are updated.
 ***REMOVED***func onARScreenSingleTapGesture(
 ***REMOVED******REMOVED***perform action: @escaping (_ screenPoint: CGPoint, _ scenePoint: Point?) -> Void
-***REMOVED***) -> Self {
+***REMOVED***) -> some View {
 ***REMOVED******REMOVED***self
 ***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED***let scenePoint = arScreenToLocation(screenPoint: tapPoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED***action(tapPoint, scenePoint)
-***REMOVED******REMOVED*** as! WorldScaleSceneView
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
