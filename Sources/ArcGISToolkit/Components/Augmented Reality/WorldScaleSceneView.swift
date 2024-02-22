@@ -268,7 +268,7 @@ public extension WorldScaleSceneView {
     /// - Returns: The scene point corresponding to screen point.
     private func arScreenToLocation(screenPoint: CGPoint) -> Point? {
         // Use the `raycast` method to get the matrix of `screenPoint`.
-        guard let localOffsetMatrix = arViewProxy.raycast(from: screenPoint) else { return nil }
+        guard let localOffsetMatrix = arViewProxy.raycast(from: screenPoint, allowing: .estimatedPlane) else { return nil }
         let originTransformationMatrix = cameraController.originCamera.transformationMatrix
         let scenePointMatrix = originTransformationMatrix.adding(localOffsetMatrix)
         // Create a camera from transformationMatrix and return its location.
