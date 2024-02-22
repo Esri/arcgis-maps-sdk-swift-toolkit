@@ -32,7 +32,7 @@
 			containerPortal = 7552A7482A573CBB0023DA5A /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 7552A74F2A573CBB0023DA5A;
-			remoteInfo = "UI Test Runner";
+			remoteInfo = "Test Runner";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -187,7 +187,7 @@
 			packageProductDependencies = (
 				7552A7752A573E900023DA5A /* ArcGISToolkit */,
 			);
-			productName = "UI Test Runner";
+			productName = "Test Runner";
 			productReference = 7552A7502A573CBB0023DA5A /* Test Runner.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -491,7 +491,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-ui-test-runner.UITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit.UITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
@@ -510,7 +510,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-ui-test-runner.UITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit.UITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
