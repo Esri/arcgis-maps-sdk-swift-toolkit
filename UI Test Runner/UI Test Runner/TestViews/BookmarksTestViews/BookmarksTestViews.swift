@@ -21,6 +21,7 @@ struct BookmarksTestViews: View {
             NavigationLink("Bookmarks Test Case 2", destination: BookmarksTestCase2View())
             NavigationLink("Bookmarks Test Case 3", destination: BookmarksTestCase3View())
             NavigationLink("Bookmarks Test Case 4", destination: BookmarksTestCase4View())
+            NavigationLink("Bookmarks Test Case 5", destination: BookmarksTestCase5View())
         }
     }
 }

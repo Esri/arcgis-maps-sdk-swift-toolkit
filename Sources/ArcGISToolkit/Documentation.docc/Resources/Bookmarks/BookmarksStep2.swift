@@ -9,7 +9,7 @@ struct BookmarksExampleView: View {
     /// Indicates if the `Bookmarks` component is shown or not.
     /// - Remark: This allows a developer to control when the `Bookmarks` component is
     /// shown/hidden, whether that be in a group of options or a standalone button.
-    @State var showingBookmarks = false
+    @State private var showingBookmarks = false
     
     var body: some View {
         MapViewReader { mapViewProxy in
@@ -17,7 +17,7 @@ struct BookmarksExampleView: View {
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Button {
-                            showingBookmarks.toggle()
+                            showingBookmarks = true
                         } label: {
                             Label(
                                 "Show Bookmarks",
