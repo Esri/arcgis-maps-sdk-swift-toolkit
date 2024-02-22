@@ -278,12 +278,12 @@ public extension WorldScaleSceneView {
     /// Sets the closure to call when the scene's nodes are updated.
     func onARScreenSingleTapGesture(
         perform action: @escaping (_ screenPoint: CGPoint, _ scenePoint: Point?) -> Void
-    ) -> Self {
+    ) -> some View {
         self
             .onSingleTapGesture { tapPoint in
                 let scenePoint = arScreenToLocation(screenPoint: tapPoint)
                 action(tapPoint, scenePoint)
-            } as! WorldScaleSceneView
+            }
     }
 }
 
