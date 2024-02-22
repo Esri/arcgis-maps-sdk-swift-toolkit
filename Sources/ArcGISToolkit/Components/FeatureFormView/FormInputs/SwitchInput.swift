@@ -90,11 +90,7 @@ struct SwitchInput: View {
             }
             .onChange(of: isOn) { isOn in
                 model.focusedElement = element
-                do {
-                    try element.updateValue(isOn ? input.onValue.code : input.offValue.code)
-                } catch {
-                    print(error.localizedDescription)
-                }
+                element.updateValue(isOn ? input.onValue.code : input.offValue.code)
                 model.evaluateExpressions()
             }
             .onChangeOfValue(of: element) { newValue, newFormattedValue in
