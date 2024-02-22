@@ -275,8 +275,8 @@ public extension WorldScaleSceneView {
         return Camera(transformationMatrix: scenePointMatrix).location
     }
     
-    /// Sets the closure to call when the scene's nodes are updated.
-    func onARScreenSingleTapGesture(
+    /// Sets a closure to perform when a single tap occurs on the view.
+    func onSingleTapGesture(
         perform action: @escaping (_ screenPoint: CGPoint, _ scenePoint: Point?) -> Void
     ) -> some View {
         self
