@@ -135,24 +135,6 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
     @objc dynamic var session: ARSession {
         arView.session
     }
-    
-    /// Creates a raycast query that originates from a point on the view, aligned with the center of the camera's field of view.
-    /// - Parameters:
-    ///   - point: The point on the view to extend the raycast from.
-    ///   - target: The type of surface the raycast can interact with.
-    ///   - alignment: The target's alignment with respect to gravity.
-    /// - Returns: An `ARRaycastQuery`.
-    func raycastQuery(
-        from point: CGPoint,
-        allowing target: ARRaycastQuery.Target,
-        alignment: ARRaycastQuery.TargetAlignment
-    ) -> ARRaycastQuery? {
-        return arView.raycastQuery(
-            from: point,
-            allowing: target,
-            alignment: alignment
-        )
-    }
 }
 
 extension ARSwiftUIViewProxy {
@@ -162,7 +144,7 @@ extension ARSwiftUIViewProxy {
     /// - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
     func raycast(from screenPoint: CGPoint) -> TransformationMatrix? {
         // Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
-        guard let query = raycastQuery(
+        guard let query = arView.raycastQuery(
             from: screenPoint,
             allowing: .existingPlaneGeometry,
             alignment: .any
