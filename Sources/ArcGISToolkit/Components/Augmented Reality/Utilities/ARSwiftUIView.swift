@@ -136,24 +136,6 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
 ***REMOVED******REMOVED***arView.session
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a raycast query that originates from a point on the view, aligned with the center of the camera's field of view.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - point: The point on the view to extend the raycast from.
-***REMOVED******REMOVED***/   - target: The type of surface the raycast can interact with.
-***REMOVED******REMOVED***/   - alignment: The target's alignment with respect to gravity.
-***REMOVED******REMOVED***/ - Returns: An `ARRaycastQuery`.
-***REMOVED***func raycastQuery(
-***REMOVED******REMOVED***from point: CGPoint,
-***REMOVED******REMOVED***allowing target: ARRaycastQuery.Target,
-***REMOVED******REMOVED***alignment: ARRaycastQuery.TargetAlignment
-***REMOVED***) -> ARRaycastQuery? {
-***REMOVED******REMOVED***return arView.raycastQuery(
-***REMOVED******REMOVED******REMOVED***from: point,
-***REMOVED******REMOVED******REMOVED***allowing: target,
-***REMOVED******REMOVED******REMOVED***alignment: alignment
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 
 extension ARSwiftUIViewProxy {
 ***REMOVED******REMOVED***/ Performs a raycast to get the transformation matrix representing the corresponding 
@@ -162,7 +144,7 @@ extension ARSwiftUIViewProxy {
 ***REMOVED******REMOVED***/ - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
 ***REMOVED***func raycast(from screenPoint: CGPoint) -> TransformationMatrix? {
 ***REMOVED******REMOVED******REMOVED*** Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
-***REMOVED******REMOVED***guard let query = raycastQuery(
+***REMOVED******REMOVED***guard let query = arView.raycastQuery(
 ***REMOVED******REMOVED******REMOVED***from: screenPoint,
 ***REMOVED******REMOVED******REMOVED***allowing: .existingPlaneGeometry,
 ***REMOVED******REMOVED******REMOVED***alignment: .any
