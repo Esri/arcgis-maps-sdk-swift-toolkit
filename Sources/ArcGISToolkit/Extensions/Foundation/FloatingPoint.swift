@@ -1,4 +1,4 @@
-// Copyright 2022 Esri
+// Copyright 2024 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,9 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
+import Foundation
 
-extension APIKey {
-    /// The default API key.
-    static let `default` = APIKey("<#API Key#>")
+extension FloatingPoint {
+    /// Returns a value clamped to the given range. If the value is `nan`,
+    /// it is clamped to the lower bound of the range.
+    /// - Parameter limits: The range of the resultant value.
+    /// - Returns: A value clamped to `limits`.
+    func clamped(to limits: ClosedRange<Self>) -> Self {
+        Self.minimum(
+            Self.maximum(self, limits.lowerBound),
+            limits.upperBound
+        )
+    }
 }
