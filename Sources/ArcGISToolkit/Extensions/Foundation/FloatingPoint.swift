@@ -1,4 +1,4 @@
-***REMOVED*** Copyright 2022 Esri
+***REMOVED*** Copyright 2024 Esri
 ***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
@@ -12,9 +12,17 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***
+import Foundation
 
-extension APIKey {
-***REMOVED******REMOVED***/ The default API key.
-***REMOVED***static let `default` = APIKey("<#API Key#>")
+extension FloatingPoint {
+***REMOVED******REMOVED***/ Returns a value clamped to the given range. If the value is `nan`,
+***REMOVED******REMOVED***/ it is clamped to the lower bound of the range.
+***REMOVED******REMOVED***/ - Parameter limits: The range of the resultant value.
+***REMOVED******REMOVED***/ - Returns: A value clamped to `limits`.
+***REMOVED***func clamped(to limits: ClosedRange<Self>) -> Self {
+***REMOVED******REMOVED***Self.minimum(
+***REMOVED******REMOVED******REMOVED***Self.maximum(self, limits.lowerBound),
+***REMOVED******REMOVED******REMOVED***limits.upperBound
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
