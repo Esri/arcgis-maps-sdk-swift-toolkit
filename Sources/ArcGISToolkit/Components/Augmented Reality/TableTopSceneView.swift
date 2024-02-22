@@ -239,7 +239,7 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED***using screenPoint: CGPoint
 ***REMOVED***) -> TransformationMatrix? {
 ***REMOVED******REMOVED******REMOVED*** Use the `raycast` method to get the matrix of `screenPoint`.
-***REMOVED******REMOVED***guard let matrix = arViewProxy.raycast(from: screenPoint) else { return nil ***REMOVED***
+***REMOVED******REMOVED***guard let matrix = arViewProxy.raycast(from: screenPoint, allowing: .existingPlaneGeometry) else { return nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the `initialTransformation` as the TransformationMatrix.identity - raycast matrix.
 ***REMOVED******REMOVED***let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
