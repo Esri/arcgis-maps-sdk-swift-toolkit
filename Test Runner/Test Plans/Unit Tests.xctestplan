@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "AB4F0B9A-30D4-4161-AAB0-9EB74410A4C1",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "ArcGISToolkitTests",
+        "name" : "ArcGISToolkitTests"
+      }
+    }
+  ],
+  "version" : 1
+}
