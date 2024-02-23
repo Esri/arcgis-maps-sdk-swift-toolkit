@@ -12,6 +12,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+***REMOVED***
 import ARKit
 ***REMOVED***
 
@@ -135,21 +136,47 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
 ***REMOVED******REMOVED***arView.session
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a raycast query that originates from a point on the view, aligned with the center of the camera's field of view.
+
+extension ARSwiftUIViewProxy {
+***REMOVED******REMOVED***/ Performs a raycast to get the transformation matrix representing the corresponding 
+***REMOVED******REMOVED***/ real-world point for `screenPoint`.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ The method returns `nil` when the raycast query or the raycast fails. They can fail due to
+***REMOVED******REMOVED***/ certain limitations, such as reflective or irregular surfaces, poorly lit environment that
+***REMOVED******REMOVED***/ reduces the amount of visible objects, distance between the camera and the object being
+***REMOVED******REMOVED***/ too far, camera occlusion that blocks the rays, etc.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - point: The point on the view to extend the raycast from.
+***REMOVED******REMOVED***/   - screenPoint: The screen point to determine the real world transformation matrix from.
 ***REMOVED******REMOVED***/   - target: The type of surface the raycast can interact with.
-***REMOVED******REMOVED***/   - alignment: The target's alignment with respect to gravity.
-***REMOVED******REMOVED***/ - Returns: An `ARRaycastQuery`.
-***REMOVED***func raycastQuery(
-***REMOVED******REMOVED***from point: CGPoint,
-***REMOVED******REMOVED***allowing target: ARRaycastQuery.Target,
-***REMOVED******REMOVED***alignment: ARRaycastQuery.TargetAlignment
-***REMOVED***) -> ARRaycastQuery? {
-***REMOVED******REMOVED***return arView.raycastQuery(
-***REMOVED******REMOVED******REMOVED***from: point,
+***REMOVED******REMOVED***/ - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
+***REMOVED***func raycast(from screenPoint: CGPoint, allowing target: ARRaycastQuery.Target) -> TransformationMatrix? {
+***REMOVED******REMOVED******REMOVED*** Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
+***REMOVED******REMOVED***guard let query = arView.raycastQuery(
+***REMOVED******REMOVED******REMOVED***from: screenPoint,
 ***REMOVED******REMOVED******REMOVED***allowing: target,
-***REMOVED******REMOVED******REMOVED***alignment: alignment
+***REMOVED******REMOVED******REMOVED***alignment: .any
+***REMOVED******REMOVED***) else { return nil ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let results = session.raycast(query)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Get the worldTransform from the first result; if there's no worldTransform, return nil.
+***REMOVED******REMOVED***guard let worldTransform = results.first?.worldTransform else { return nil ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create our raycast matrix based on the worldTransform location.
+***REMOVED******REMOVED******REMOVED*** Right now we ignore the orientation of the plane that was hit to find the point
+***REMOVED******REMOVED******REMOVED*** since we only use horizontal planes.
+***REMOVED******REMOVED******REMOVED*** If we start supporting vertical planes we will have to stop suppressing the
+***REMOVED******REMOVED******REMOVED*** quaternion rotation to a null rotation (0,0,0,1).
+***REMOVED******REMOVED***let raycastMatrix = TransformationMatrix.normalized(
+***REMOVED******REMOVED******REMOVED***quaternionX: 0,
+***REMOVED******REMOVED******REMOVED***quaternionY: 0,
+***REMOVED******REMOVED******REMOVED***quaternionZ: 0,
+***REMOVED******REMOVED******REMOVED***quaternionW: 1,
+***REMOVED******REMOVED******REMOVED***translationX: Double(worldTransform.columns.3.x),
+***REMOVED******REMOVED******REMOVED***translationY: Double(worldTransform.columns.3.y),
+***REMOVED******REMOVED******REMOVED***translationZ: Double(worldTransform.columns.3.z)
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return raycastMatrix
 ***REMOVED***
 ***REMOVED***

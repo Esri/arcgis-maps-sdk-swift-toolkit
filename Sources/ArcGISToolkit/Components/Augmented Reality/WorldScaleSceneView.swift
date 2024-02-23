@@ -262,6 +262,33 @@ private extension WorldScaleSceneView {
 ***REMOVED***
 ***REMOVED***
 
+public extension WorldScaleSceneView {
+***REMOVED******REMOVED***/ Determines the scene point for the given screen point.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ If the raycast fails due to certain reasons, this method returns `nil`.
+***REMOVED******REMOVED***/ - Parameter screenPoint: The point in screen's coordinate space.
+***REMOVED******REMOVED***/ - Returns: The scene point corresponding to screen point.
+***REMOVED***private func arScreenToLocation(screenPoint: CGPoint) -> Point? {
+***REMOVED******REMOVED******REMOVED*** Use the `raycast` method to get the matrix of `screenPoint`.
+***REMOVED******REMOVED***guard let localOffsetMatrix = arViewProxy.raycast(from: screenPoint, allowing: .estimatedPlane) else { return nil ***REMOVED***
+***REMOVED******REMOVED***let originTransformationMatrix = cameraController.originCamera.transformationMatrix
+***REMOVED******REMOVED***let scenePointMatrix = originTransformationMatrix.adding(localOffsetMatrix)
+***REMOVED******REMOVED******REMOVED*** Create a camera from transformationMatrix and return its location.
+***REMOVED******REMOVED***return Camera(transformationMatrix: scenePointMatrix).location
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when a single tap occurs on the view.
+***REMOVED***func onSingleTapGesture(
+***REMOVED******REMOVED***perform action: @escaping (_ screenPoint: CGPoint, _ scenePoint: Point?) -> Void
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***self
+***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED***let scenePoint = arScreenToLocation(screenPoint: tapPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED***action(tapPoint, scenePoint)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
 extension SceneView {
 ***REMOVED******REMOVED***/ A modifier to combine various modifiers that apply to both world and geo tracking scene view.
 ***REMOVED***func worldScaleSetup(cameraController: TransformationMatrixCameraController) -> SceneView {
