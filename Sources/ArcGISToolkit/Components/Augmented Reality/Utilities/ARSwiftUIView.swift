@@ -140,6 +140,11 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
 extension ARSwiftUIViewProxy {
     /// Performs a raycast to get the transformation matrix representing the corresponding 
     /// real-world point for `screenPoint`.
+    ///
+    /// The method returns `nil` when the raycast query or the raycast fails. They can fail due to
+    /// certain limitations, such as reflective or irregular surfaces, poorly lit environment that
+    /// reduces the amount of visible objects, distance between the camera and the object being
+    /// too far, camera occlusion that blocks the rays, etc.
     /// - Parameters:
     ///   - screenPoint: The screen point to determine the real world transformation matrix from.
     ///   - target: The type of surface the raycast can interact with.
