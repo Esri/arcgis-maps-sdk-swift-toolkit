@@ -16,7 +16,7 @@ import ArcGIS
 import SwiftUI
 
 @main
-struct UITestRunner: App {
+struct TestRunnerApp: App {
     var body: some SwiftUI.Scene {
         WindowGroup {
             Tests()
