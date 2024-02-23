@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1250"
-   version = "1.3">
+   version = "1.7">
    <BuildAction
 ***REMOVED***  parallelizeBuildables = "YES"
 ***REMOVED***  buildImplicitDependencies = "YES">
@@ -68,7 +68,8 @@
 ***REMOVED***  buildConfiguration = "Debug"
 ***REMOVED***  selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
 ***REMOVED***  selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-***REMOVED***  shouldUseLaunchSchemeArgsEnv = "YES">
+***REMOVED***  shouldUseLaunchSchemeArgsEnv = "YES"
+***REMOVED***  shouldAutocreateTestPlan = "YES">
 ***REMOVED***  <Testables>
 ***REMOVED******REMOVED*** <TestableReference
 ***REMOVED******REMOVED******REMOVED***skipped = "NO">
