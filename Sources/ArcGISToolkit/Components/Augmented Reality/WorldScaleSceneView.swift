@@ -262,6 +262,33 @@ private extension WorldScaleSceneView {
     }
 }
 
+public extension WorldScaleSceneView {
+    /// Determines the scene point for the given screen point.
+    ///
+    /// If the raycast fails due to certain reasons, this method returns `nil`.
+    /// - Parameter screenPoint: The point in screen's coordinate space.
+    /// - Returns: The scene point corresponding to screen point.
+    private func arScreenToLocation(screenPoint: CGPoint) -> Point? {
+        // Use the `raycast` method to get the matrix of `screenPoint`.
+        guard let localOffsetMatrix = arViewProxy.raycast(from: screenPoint, allowing: .estimatedPlane) else { return nil }
+        let originTransformationMatrix = cameraController.originCamera.transformationMatrix
+        let scenePointMatrix = originTransformationMatrix.adding(localOffsetMatrix)
+        // Create a camera from transformationMatrix and return its location.
+        return Camera(transformationMatrix: scenePointMatrix).location
+    }
+    
+    /// Sets a closure to perform when a single tap occurs on the view.
+    func onSingleTapGesture(
+        perform action: @escaping (_ screenPoint: CGPoint, _ scenePoint: Point?) -> Void
+    ) -> some View {
+        self
+            .onSingleTapGesture { tapPoint in
+                let scenePoint = arScreenToLocation(screenPoint: tapPoint)
+                action(tapPoint, scenePoint)
+            }
+    }
+}
+
 extension SceneView {
     /// A modifier to combine various modifiers that apply to both world and geo tracking scene view.
     func worldScaleSetup(cameraController: TransformationMatrixCameraController) -> SceneView {
