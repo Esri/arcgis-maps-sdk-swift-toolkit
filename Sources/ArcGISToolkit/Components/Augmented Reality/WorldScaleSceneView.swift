@@ -264,6 +264,8 @@ private extension WorldScaleSceneView {
 
 public extension WorldScaleSceneView {
     /// Determines the scene point for the given screen point.
+    ///
+    /// If the raycast fails due to certain reasons, this method returns `nil`.
     /// - Parameter screenPoint: The point in screen's coordinate space.
     /// - Returns: The scene point corresponding to screen point.
     private func arScreenToLocation(screenPoint: CGPoint) -> Point? {
