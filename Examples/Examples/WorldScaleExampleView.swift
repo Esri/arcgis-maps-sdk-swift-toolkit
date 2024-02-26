@@ -61,8 +61,7 @@ struct WorldScaleExampleView: View {
         }
         .calibrationButtonAlignment(.bottomLeading)
         .onSingleTapGesture { _, scenePoint in
-            let graphic = Graphic(geometry: scenePoint)
-            graphicsOverlay.addGraphic(graphic)
+            graphicsOverlay.addGraphic(Graphic(geometry: scenePoint))
         }
         .task {
             // Request when-in-use location authorization.
