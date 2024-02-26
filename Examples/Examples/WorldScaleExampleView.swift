@@ -31,14 +31,22 @@ struct WorldScaleExampleView: View {
         surface.navigationConstraint = .unconstrained
         let scene = Scene(basemapStyle: .arcGISImagery)
         scene.baseSurface = surface
-        scene.addOperationalLayer(.parcelsLayer)
+        scene.baseSurface.opacity = 0
         return scene
     }()
-    
     /// The graphics overlay which shows a graphic around your initial location.
     @State private var graphicsOverlay = GraphicsOverlay()
     /// The location datasource that is used to access the device location.
     @State private var locationDataSource = SystemLocationDataSource()
+    
+    init() {
+        guard let markerImage = UIImage(named: "RedMarker") else { return }
+        let markerSymbol = PictureMarkerSymbol(image: markerImage)
+        markerSymbol.height = 150
+        
+        graphicsOverlay.renderer = SimpleRenderer(symbol: markerSymbol)
+        graphicsOverlay.sceneProperties.surfacePlacement = .absolute
+    }
     
     var body: some View {
         WorldScaleSceneView(trackingMode: .worldTracking) { proxy in
@@ -52,6 +60,10 @@ struct WorldScaleExampleView: View {
                 }
         }
         .calibrationButtonAlignment(.bottomLeading)
+        .onSingleTapGesture { _, scenePoint in
+            let graphic = Graphic(geometry: scenePoint)
+            graphicsOverlay.addGraphic(graphic)
+        }
         .task {
             // Request when-in-use location authorization.
             // This is necessary for 2 reasons:
@@ -76,15 +88,5 @@ struct WorldScaleExampleView: View {
             // Stop the location data source after the initial location is retrieved.
             await locationDataSource.stop()
         }
-    }
-}
-
-private extension Layer {
-    /// A feature layer with San Bernardino parcels data.
-    static var parcelsLayer: FeatureLayer {
-        let parcelsTable = ServiceFeatureTable(url: URL(string: "https://services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
-        let featureLayer = FeatureLayer(featureTable: parcelsTable)
-        featureLayer.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .cyan, width: 3))
-        return featureLayer
     }
 }
