@@ -61,8 +61,7 @@ struct WorldScaleExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.calibrationButtonAlignment(.bottomLeading)
 ***REMOVED******REMOVED***.onSingleTapGesture { _, scenePoint in
-***REMOVED******REMOVED******REMOVED***let graphic = Graphic(geometry: scenePoint)
-***REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(graphic)
+***REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(Graphic(geometry: scenePoint))
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Request when-in-use location authorization.
