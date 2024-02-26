@@ -34,19 +34,19 @@ struct WorldScaleExampleView: View {
         scene.baseSurface.opacity = 0
         return scene
     }()
-    /// The graphics overlay which shows a graphic around your initial location.
-    @State private var graphicsOverlay = GraphicsOverlay()
-    /// The location datasource that is used to access the device location.
-    @State private var locationDataSource = SystemLocationDataSource()
-    
-    init() {
-        guard let markerImage = UIImage(named: "RedMarker") else { return }
+    /// The graphics overlay which shows a graphic around your initial location and marker symbols.
+    @State private var graphicsOverlay: GraphicsOverlay = {
+        let graphicsOverlay = GraphicsOverlay()
+        let markerImage = UIImage(named: "RedMarker")!
         let markerSymbol = PictureMarkerSymbol(image: markerImage)
         markerSymbol.height = 150
         
         graphicsOverlay.renderer = SimpleRenderer(symbol: markerSymbol)
         graphicsOverlay.sceneProperties.surfacePlacement = .absolute
-    }
+        return graphicsOverlay
+    }()
+    /// The location datasource that is used to access the device location.
+    @State private var locationDataSource = SystemLocationDataSource()
     
     var body: some View {
         WorldScaleSceneView(trackingMode: .worldTracking) { proxy in
