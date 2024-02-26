@@ -34,19 +34,19 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED***scene.baseSurface.opacity = 0
 ***REMOVED******REMOVED***return scene
 ***REMOVED***()
-***REMOVED******REMOVED***/ The graphics overlay which shows a graphic around your initial location.
-***REMOVED***@State private var graphicsOverlay = GraphicsOverlay()
-***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
-***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
-***REMOVED***
-***REMOVED***init() {
-***REMOVED******REMOVED***guard let markerImage = UIImage(named: "RedMarker") else { return ***REMOVED***
+***REMOVED******REMOVED***/ The graphics overlay which shows a graphic around your initial location and marker symbols.
+***REMOVED***@State private var graphicsOverlay: GraphicsOverlay = {
+***REMOVED******REMOVED***let graphicsOverlay = GraphicsOverlay()
+***REMOVED******REMOVED***let markerImage = UIImage(named: "RedMarker")!
 ***REMOVED******REMOVED***let markerSymbol = PictureMarkerSymbol(image: markerImage)
 ***REMOVED******REMOVED***markerSymbol.height = 150
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***graphicsOverlay.renderer = SimpleRenderer(symbol: markerSymbol)
 ***REMOVED******REMOVED***graphicsOverlay.sceneProperties.surfacePlacement = .absolute
-***REMOVED***
+***REMOVED******REMOVED***return graphicsOverlay
+***REMOVED***()
+***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
+***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***WorldScaleSceneView(trackingMode: .worldTracking) { proxy in
