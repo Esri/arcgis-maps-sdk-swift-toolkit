@@ -42,9 +42,6 @@ import Combine
 ***REMOVED******REMOVED***/ The list of expression evaluation errors.
 ***REMOVED***@Published var expressionEvaluationErrors = [FormExpressionEvaluationError]()
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether evaluation is running.
-***REMOVED***@Published var isEvaluating = true
-***REMOVED***
 ***REMOVED******REMOVED***/ The set of all fields which previously held focus.
 ***REMOVED***@Published var previouslyFocusedFields = [FormElement]()
 ***REMOVED***
@@ -90,11 +87,11 @@ import Combine
 ***REMOVED******REMOVED***/ Performs an evaluation of all form expressions.
 ***REMOVED***func evaluateExpressions() {
 ***REMOVED******REMOVED***evaluateTask?.cancel()
-***REMOVED******REMOVED***isEvaluating = true
 ***REMOVED******REMOVED***evaluateTask = Task {
-***REMOVED******REMOVED******REMOVED***let evaluationErrors = try? await featureForm.evaluateExpressions()
-***REMOVED******REMOVED******REMOVED***expressionEvaluationErrors = evaluationErrors ?? []
-***REMOVED******REMOVED******REMOVED***isEvaluating = false
+***REMOVED******REMOVED******REMOVED***if let evaluationErrors = try? await featureForm.evaluateExpressions(),
+***REMOVED******REMOVED******REMOVED***   !evaluationErrors.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***expressionEvaluationErrors = evaluationErrors
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
