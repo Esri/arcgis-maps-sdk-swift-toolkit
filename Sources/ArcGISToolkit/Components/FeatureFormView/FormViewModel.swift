@@ -42,9 +42,6 @@ import SwiftUI
     /// The list of expression evaluation errors.
     @Published var expressionEvaluationErrors = [FormExpressionEvaluationError]()
     
-    /// A Boolean value indicating whether evaluation is running.
-    @Published var isEvaluating = true
-    
     /// The set of all fields which previously held focus.
     @Published var previouslyFocusedFields = [FormElement]()
     
@@ -90,11 +87,11 @@ import SwiftUI
     /// Performs an evaluation of all form expressions.
     func evaluateExpressions() {
         evaluateTask?.cancel()
-        isEvaluating = true
         evaluateTask = Task {
-            let evaluationErrors = try? await featureForm.evaluateExpressions()
-            expressionEvaluationErrors = evaluationErrors ?? []
-            isEvaluating = false
+            if let evaluationErrors = try? await featureForm.evaluateExpressions(),
+               !evaluationErrors.isEmpty {
+                expressionEvaluationErrors = evaluationErrors
+            }
         }
     }
 }
