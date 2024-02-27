@@ -44,6 +44,8 @@ public struct WorldScaleSceneView: View {
     @State private var locationDataSource = SystemLocationDataSource()
     /// The error from the view.
     @State private var error: Error?
+    /// The closure to call upon a single tap.
+    private var onSingeTapGestureAction: ((CGPoint, Point?) -> Void)? = nil
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -87,6 +89,10 @@ public struct WorldScaleSceneView: View {
                         locationDataSource: locationDataSource,
                         sceneView: sceneViewBuilder
                     )
+                    .onSingleTapGesture { tapPoint in
+                        let scenePoint = arScreenToLocation(screenPoint: tapPoint)
+                        onSingeTapGestureAction?(tapPoint, scenePoint)
+                    }
                 } else {
                     WorldTrackingSceneView(
                         arViewProxy: arViewProxy,
@@ -98,6 +104,10 @@ public struct WorldScaleSceneView: View {
                         locationDataSource: locationDataSource,
                         sceneView: sceneViewBuilder
                     )
+                    .onSingleTapGesture { tapPoint in
+                        let scenePoint = arScreenToLocation(screenPoint: tapPoint)
+                        onSingeTapGestureAction?(tapPoint, scenePoint)
+                    }
                 }
             case .geoTracking:
                 GeoTrackingSceneView(
@@ -110,6 +120,10 @@ public struct WorldScaleSceneView: View {
                     locationDataSource: locationDataSource,
                     sceneView: sceneViewBuilder
                 )
+                .onSingleTapGesture { tapPoint in
+                    let scenePoint = arScreenToLocation(screenPoint: tapPoint)
+                    onSingeTapGestureAction?(tapPoint, scenePoint)
+                }
             case .worldTracking:
                 WorldTrackingSceneView(
                     arViewProxy: arViewProxy,
@@ -121,6 +135,10 @@ public struct WorldScaleSceneView: View {
                     locationDataSource: locationDataSource,
                     sceneView: sceneViewBuilder
                 )
+                .onSingleTapGesture { tapPoint in
+                    let scenePoint = arScreenToLocation(screenPoint: tapPoint)
+                    onSingeTapGestureAction?(tapPoint, scenePoint)
+                }
             }
         }
         .onDisappear {
@@ -281,11 +299,9 @@ public extension WorldScaleSceneView {
     func onSingleTapGesture(
         perform action: @escaping (_ screenPoint: CGPoint, _ scenePoint: Point?) -> Void
     ) -> some View {
-        self
-            .onSingleTapGesture { tapPoint in
-                let scenePoint = arScreenToLocation(screenPoint: tapPoint)
-                action(tapPoint, scenePoint)
-            }
+        var copy = self
+        copy.onSingeTapGestureAction = action
+        return copy
     }
 }
 
