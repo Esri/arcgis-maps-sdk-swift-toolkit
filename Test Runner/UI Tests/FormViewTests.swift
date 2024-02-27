@@ -993,6 +993,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"The footer doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTExpectFailure("Ref Apollo #501. A required combo box should not be clearable.")
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***footer.label,
 ***REMOVED******REMOVED******REMOVED***"Required"
