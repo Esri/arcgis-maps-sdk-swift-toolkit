@@ -90,8 +90,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let scenePoint = arScreenToLocation(screenPoint: tapPoint)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onSingeTapGestureAction?(tapPoint, scenePoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handleSingleTap(tapPoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***WorldTrackingSceneView(
@@ -105,8 +104,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let scenePoint = arScreenToLocation(screenPoint: tapPoint)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onSingeTapGestureAction?(tapPoint, scenePoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handleSingleTap(tapPoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .geoTracking:
@@ -121,8 +119,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let scenePoint = arScreenToLocation(screenPoint: tapPoint)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onSingeTapGestureAction?(tapPoint, scenePoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handleSingleTap(tapPoint)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .worldTracking:
 ***REMOVED******REMOVED******REMOVED******REMOVED***WorldTrackingSceneView(
@@ -136,8 +133,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let scenePoint = arScreenToLocation(screenPoint: tapPoint)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onSingeTapGestureAction?(tapPoint, scenePoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handleSingleTap(tapPoint)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -192,6 +188,13 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Handles a single tap on the view.
+***REMOVED******REMOVED***/ - Parameter tapPoint: The tapped screen point.
+***REMOVED***private func handleSingleTap(_ tapPoint: CGPoint) {
+***REMOVED******REMOVED***let scenePoint = arScreenToLocation(screenPoint: tapPoint)
+***REMOVED******REMOVED***onSingeTapGestureAction?(tapPoint, scenePoint)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the visibility of the calibration view for the AR experience.
