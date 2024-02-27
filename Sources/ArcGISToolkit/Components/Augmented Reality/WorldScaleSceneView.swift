@@ -44,6 +44,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
 ***REMOVED******REMOVED***/ The error from the view.
 ***REMOVED***@State private var error: Error?
+***REMOVED******REMOVED***/ The closure to call upon a single tap.
+***REMOVED***private var onSingeTapGestureAction: ((CGPoint, Point?) -> Void)? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -77,50 +79,14 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** By default we try the geo-tracking configuration. If it is not available at
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the current location, fall back to world-tracking.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if geoTrackingIsAvailable {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeoTrackingSceneView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy: arViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewIsPresented: isCalibrating,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoTrackingSceneView
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***WorldTrackingSceneView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy: arViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewIsPresented: isCalibrating,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***worldTrackingSceneView
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .geoTracking:
-***REMOVED******REMOVED******REMOVED******REMOVED***GeoTrackingSceneView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy: arViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewIsPresented: isCalibrating,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***geoTrackingSceneView
 ***REMOVED******REMOVED******REMOVED***case .worldTracking:
-***REMOVED******REMOVED******REMOVED******REMOVED***WorldTrackingSceneView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***arViewProxy: arViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cameraController: cameraController,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***calibrationViewIsPresented: isCalibrating,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***worldTrackingSceneView
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onDisappear {
@@ -174,6 +140,47 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A world scale geo-tracking scene view.
+***REMOVED***@ViewBuilder private var geoTrackingSceneView: some View {
+***REMOVED******REMOVED***GeoTrackingSceneView(
+***REMOVED******REMOVED******REMOVED***arViewProxy: arViewProxy,
+***REMOVED******REMOVED******REMOVED***cameraController: cameraController,
+***REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
+***REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
+***REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
+***REMOVED******REMOVED******REMOVED***calibrationViewIsPresented: isCalibrating,
+***REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
+***REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
+***REMOVED******REMOVED******REMOVED***handleSingleTap(tapPoint)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A world scale world-tracking scene view.
+***REMOVED***@ViewBuilder private var worldTrackingSceneView : some View {
+***REMOVED******REMOVED***WorldTrackingSceneView(
+***REMOVED******REMOVED******REMOVED***arViewProxy: arViewProxy,
+***REMOVED******REMOVED******REMOVED***cameraController: cameraController,
+***REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
+***REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
+***REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
+***REMOVED******REMOVED******REMOVED***calibrationViewIsPresented: isCalibrating,
+***REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
+***REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
+***REMOVED******REMOVED******REMOVED***handleSingleTap(tapPoint)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Handles a single tap on the view.
+***REMOVED******REMOVED***/ - Parameter tapPoint: The tapped screen point.
+***REMOVED***private func handleSingleTap(_ tapPoint: CGPoint) {
+***REMOVED******REMOVED***let scenePoint = arScreenToLocation(screenPoint: tapPoint)
+***REMOVED******REMOVED***onSingeTapGestureAction?(tapPoint, scenePoint)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the visibility of the calibration view for the AR experience.
@@ -281,11 +288,9 @@ public extension WorldScaleSceneView {
 ***REMOVED***func onSingleTapGesture(
 ***REMOVED******REMOVED***perform action: @escaping (_ screenPoint: CGPoint, _ scenePoint: Point?) -> Void
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED***let scenePoint = arScreenToLocation(screenPoint: tapPoint)
-***REMOVED******REMOVED******REMOVED******REMOVED***action(tapPoint, scenePoint)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onSingeTapGestureAction = action
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
 
