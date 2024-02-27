@@ -90,8 +90,7 @@ public struct WorldScaleSceneView: View {
                         sceneView: sceneViewBuilder
                     )
                     .onSingleTapGesture { tapPoint in
-                        let scenePoint = arScreenToLocation(screenPoint: tapPoint)
-                        onSingeTapGestureAction?(tapPoint, scenePoint)
+                        handleSingleTap(tapPoint)
                     }
                 } else {
                     WorldTrackingSceneView(
@@ -105,8 +104,7 @@ public struct WorldScaleSceneView: View {
                         sceneView: sceneViewBuilder
                     )
                     .onSingleTapGesture { tapPoint in
-                        let scenePoint = arScreenToLocation(screenPoint: tapPoint)
-                        onSingeTapGestureAction?(tapPoint, scenePoint)
+                        handleSingleTap(tapPoint)
                     }
                 }
             case .geoTracking:
@@ -121,8 +119,7 @@ public struct WorldScaleSceneView: View {
                     sceneView: sceneViewBuilder
                 )
                 .onSingleTapGesture { tapPoint in
-                    let scenePoint = arScreenToLocation(screenPoint: tapPoint)
-                    onSingeTapGestureAction?(tapPoint, scenePoint)
+                    handleSingleTap(tapPoint)
                 }
             case .worldTracking:
                 WorldTrackingSceneView(
@@ -136,8 +133,7 @@ public struct WorldScaleSceneView: View {
                     sceneView: sceneViewBuilder
                 )
                 .onSingleTapGesture { tapPoint in
-                    let scenePoint = arScreenToLocation(screenPoint: tapPoint)
-                    onSingeTapGestureAction?(tapPoint, scenePoint)
+                    handleSingleTap(tapPoint)
                 }
             }
         }
@@ -192,6 +188,13 @@ public struct WorldScaleSceneView: View {
                     .padding(.bottom)
             }
         }
+    }
+    
+    /// Handles a single tap on the view.
+    /// - Parameter tapPoint: The tapped screen point.
+    private func handleSingleTap(_ tapPoint: CGPoint) {
+        let scenePoint = arScreenToLocation(screenPoint: tapPoint)
+        onSingeTapGestureAction?(tapPoint, scenePoint)
     }
     
     /// Sets the visibility of the calibration view for the AR experience.
