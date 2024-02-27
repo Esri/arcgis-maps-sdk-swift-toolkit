@@ -993,7 +993,6 @@ final class FeatureFormViewTests: XCTestCase {
             "The footer doesn't exist."
         )
         
-        XCTExpectFailure("Ref Apollo #501. A required combo box should not be clearable.")
         XCTAssertEqual(
             footer.label,
             "Required"
