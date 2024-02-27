@@ -39,9 +39,6 @@ import SwiftUI
     /// The list of visible form elements.
     @Published var visibleElements = [FormElement]()
     
-    /// The list of expression evaluation errors.
-    @Published var expressionEvaluationErrors = [FormExpressionEvaluationError]()
-    
     /// The set of all fields which previously held focus.
     @Published var previouslyFocusedFields = [FormElement]()
     
@@ -79,8 +76,7 @@ import SwiftUI
     
     /// Performs an initial evaluation of all form expressions.
     func initialEvaluation() async {
-        let evaluationErrors = try? await featureForm.evaluateExpressions()
-        expressionEvaluationErrors = evaluationErrors ?? []
+        _ = try? await featureForm.evaluateExpressions()
         initializeIsVisibleTasks()
     }
     
@@ -88,10 +84,7 @@ import SwiftUI
     func evaluateExpressions() {
         evaluateTask?.cancel()
         evaluateTask = Task {
-            if let evaluationErrors = try? await featureForm.evaluateExpressions(),
-               !evaluationErrors.isEmpty {
-                expressionEvaluationErrors = evaluationErrors
-            }
+            _ = try? await featureForm.evaluateExpressions()
         }
     }
 }
