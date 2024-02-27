@@ -39,9 +39,6 @@ import Combine
 ***REMOVED******REMOVED***/ The list of visible form elements.
 ***REMOVED***@Published var visibleElements = [FormElement]()
 ***REMOVED***
-***REMOVED******REMOVED***/ The list of expression evaluation errors.
-***REMOVED***@Published var expressionEvaluationErrors = [FormExpressionEvaluationError]()
-***REMOVED***
 ***REMOVED******REMOVED***/ The set of all fields which previously held focus.
 ***REMOVED***@Published var previouslyFocusedFields = [FormElement]()
 ***REMOVED***
@@ -79,8 +76,7 @@ import Combine
 ***REMOVED***
 ***REMOVED******REMOVED***/ Performs an initial evaluation of all form expressions.
 ***REMOVED***func initialEvaluation() async {
-***REMOVED******REMOVED***let evaluationErrors = try? await featureForm.evaluateExpressions()
-***REMOVED******REMOVED***expressionEvaluationErrors = evaluationErrors ?? []
+***REMOVED******REMOVED***_ = try? await featureForm.evaluateExpressions()
 ***REMOVED******REMOVED***initializeIsVisibleTasks()
 ***REMOVED***
 ***REMOVED***
@@ -88,10 +84,7 @@ import Combine
 ***REMOVED***func evaluateExpressions() {
 ***REMOVED******REMOVED***evaluateTask?.cancel()
 ***REMOVED******REMOVED***evaluateTask = Task {
-***REMOVED******REMOVED******REMOVED***if let evaluationErrors = try? await featureForm.evaluateExpressions(),
-***REMOVED******REMOVED******REMOVED***   !evaluationErrors.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***expressionEvaluationErrors = evaluationErrors
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***_ = try? await featureForm.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
