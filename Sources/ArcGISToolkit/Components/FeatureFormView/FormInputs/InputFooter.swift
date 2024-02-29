@@ -205,7 +205,7 @@ extension InputFooter {
 ***REMOVED***var isShowingError: Bool {
 ***REMOVED******REMOVED***element.isEditable 
 ***REMOVED******REMOVED***&& primaryError != nil
-***REMOVED******REMOVED***&& (model.previouslyFocusedFields.contains(element) || validationErrorVisibility == .visible)
+***REMOVED******REMOVED***&& (model.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The allowable number of characters in the input.
