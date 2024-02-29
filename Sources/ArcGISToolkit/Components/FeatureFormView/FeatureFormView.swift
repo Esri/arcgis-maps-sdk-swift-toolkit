@@ -97,7 +97,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: model.featureForm.title) { newTitle in
+***REMOVED******REMOVED******REMOVED***.onChangeOfTitle(of: model.featureForm) { newTitle in
 ***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -147,8 +147,7 @@ extension FeatureFormView {
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** BarcodeScannerFormInput is not currently supported
 ***REMOVED******REMOVED***if element.isVisible &&
-***REMOVED******REMOVED******REMOVED***!(element.input is BarcodeScannerFormInput) &&
-***REMOVED******REMOVED******REMOVED***element.input != nil {
+***REMOVED******REMOVED******REMOVED***!(element.input is BarcodeScannerFormInput) {
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
