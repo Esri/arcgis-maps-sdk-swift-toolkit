@@ -97,7 +97,7 @@ public struct FeatureFormView: View {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
             }
-            .onChange(of: model.featureForm.title) { newTitle in
+            .onChangeOfTitle(of: model.featureForm) { newTitle in
                 title = newTitle
             }
         }
@@ -147,8 +147,7 @@ extension FeatureFormView {
         }
         // BarcodeScannerFormInput is not currently supported
         if element.isVisible &&
-            !(element.input is BarcodeScannerFormInput) &&
-            element.input != nil {
+            !(element.input is BarcodeScannerFormInput) {
             Divider()
         }
     }
