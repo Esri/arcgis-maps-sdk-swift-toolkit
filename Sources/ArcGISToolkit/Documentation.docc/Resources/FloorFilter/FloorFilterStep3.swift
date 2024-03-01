@@ -3,7 +3,7 @@
 ***REMOVED***
 
 struct FloorFilterExampleView: View {
-***REMOVED***private var floorFilterAlignment: Alignment { .bottomLeading ***REMOVED***
+***REMOVED***let floorFilterAlignment = Alignment.bottomLeading
 ***REMOVED***
 ***REMOVED***@State private var isMapLoaded = false
 ***REMOVED***
