@@ -24,8 +24,8 @@ import Combine
 ***REMOVED******REMOVED***/ The current focused element, if one exists.
 ***REMOVED***@Published var focusedElement: FormElement? {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***if let focusedElement, !previouslyFocusedFields.contains(focusedElement) {
-***REMOVED******REMOVED******REMOVED******REMOVED***previouslyFocusedFields.append(focusedElement)
+***REMOVED******REMOVED******REMOVED***if let focusedElement, !previouslyFocusedElements.contains(focusedElement) {
+***REMOVED******REMOVED******REMOVED******REMOVED***previouslyFocusedElements.append(focusedElement)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -39,8 +39,8 @@ import Combine
 ***REMOVED******REMOVED***/ The list of visible form elements.
 ***REMOVED***@Published var visibleElements = [FormElement]()
 ***REMOVED***
-***REMOVED******REMOVED***/ The set of all fields which previously held focus.
-***REMOVED***@Published var previouslyFocusedFields = [FormElement]()
+***REMOVED******REMOVED***/ The set of all elements which previously held focus.
+***REMOVED***@Published var previouslyFocusedElements = [FormElement]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
 ***REMOVED******REMOVED***/ - Parameter featureForm: The feature form defining the editing experience.
