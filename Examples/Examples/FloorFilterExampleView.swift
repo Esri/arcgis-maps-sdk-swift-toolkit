@@ -18,7 +18,7 @@ import ArcGIS
 
 struct FloorFilterExampleView: View {
     /// Determines the arrangement of the inner `FloorFilter` UI components.
-    private var floorFilterAlignment: Alignment { .bottomLeading }
+    let floorFilterAlignment = Alignment.bottomLeading
     
     /// The height of the map view's attribution bar.
     @State private var attributionBarHeight = 0.0

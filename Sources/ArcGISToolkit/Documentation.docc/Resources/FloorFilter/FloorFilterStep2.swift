@@ -3,7 +3,7 @@ import ArcGISToolkit
 import ArcGIS
 
 struct FloorFilterExampleView: View {
-    private var floorFilterAlignment: Alignment { .bottomLeading }
+    let floorFilterAlignment = Alignment.bottomLeading
     
     @State private var map = Map(
         item: PortalItem(
