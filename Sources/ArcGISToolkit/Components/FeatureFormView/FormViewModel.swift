@@ -24,8 +24,8 @@ import SwiftUI
     /// The current focused element, if one exists.
     @Published var focusedElement: FormElement? {
         didSet {
-            if let focusedElement, !previouslyFocusedFields.contains(focusedElement) {
-                previouslyFocusedFields.append(focusedElement)
+            if let focusedElement, !previouslyFocusedElements.contains(focusedElement) {
+                previouslyFocusedElements.append(focusedElement)
             }
         }
     }
@@ -39,8 +39,8 @@ import SwiftUI
     /// The list of visible form elements.
     @Published var visibleElements = [FormElement]()
     
-    /// The set of all fields which previously held focus.
-    @Published var previouslyFocusedFields = [FormElement]()
+    /// The set of all elements which previously held focus.
+    @Published var previouslyFocusedElements = [FormElement]()
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
