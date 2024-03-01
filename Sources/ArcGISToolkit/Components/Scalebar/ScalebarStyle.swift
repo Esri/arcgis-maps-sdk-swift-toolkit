@@ -16,7 +16,7 @@ import Foundation
 
 /// Visual scalebar styles.
 public enum ScalebarStyle {
-    /// Displays a single unit with segemeted bars of alternating fill color.
+    /// Displays a single unit with segmented bars of alternating fill color.
     case alternatingBar
     
     /// Displays a single unit.
