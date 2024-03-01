@@ -26,6 +26,11 @@ struct InputFooter: View {
 ***REMOVED******REMOVED***/ The form element the footer belongs to.
 ***REMOVED***let element: FieldFormElement
 ***REMOVED***
+***REMOVED******REMOVED***/ An ID regenerated each time the element's value changes.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Allows the footer to be recomputed to reflect changes in validation errors or input length.
+***REMOVED***@State private var id = UUID()
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED***Group {
@@ -56,6 +61,12 @@ struct InputFooter: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.foregroundColor(isShowingError ? .red : .secondary)
+***REMOVED******REMOVED***.id(id)
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***for await _ in element.$value {
+***REMOVED******REMOVED******REMOVED******REMOVED***id = UUID()
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -194,7 +205,7 @@ extension InputFooter {
 ***REMOVED***var isShowingError: Bool {
 ***REMOVED******REMOVED***element.isEditable 
 ***REMOVED******REMOVED***&& primaryError != nil
-***REMOVED******REMOVED***&& (model.previouslyFocusedFields.contains(element) || validationErrorVisibility == .visible)
+***REMOVED******REMOVED***&& (model.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The allowable number of characters in the input.
