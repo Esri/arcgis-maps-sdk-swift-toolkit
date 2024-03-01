@@ -3,7 +3,7 @@
 ***REMOVED***Toolkit
 
 struct SearchExampleView: View {
-***REMOVED***let locatorDataSource = SmartLocatorSearchSource(
+***REMOVED***let locatorSearchSource = SmartLocatorSearchSource(
 ***REMOVED******REMOVED***name: "My locator",
 ***REMOVED******REMOVED***maximumResults: 16,
 ***REMOVED******REMOVED***maximumSuggestions: 16
