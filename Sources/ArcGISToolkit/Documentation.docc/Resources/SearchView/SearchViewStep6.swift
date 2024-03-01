@@ -3,7 +3,7 @@ import ArcGIS
 import ArcGISToolkit
 
 struct SearchExampleView: View {
-    let locatorDataSource = SmartLocatorSearchSource(
+    let locatorSearchSource = SmartLocatorSearchSource(
         name: "My locator",
         maximumResults: 16,
         maximumSuggestions: 16
@@ -37,7 +37,7 @@ struct SearchExampleView: View {
             )
             .overlay {
                 SearchView(
-                    sources: [locatorDataSource],
+                    sources: [locatorSearchSource],
                     viewpoint: $searchResultViewpoint,
                     geoViewProxy: mapViewProxy
                 )
