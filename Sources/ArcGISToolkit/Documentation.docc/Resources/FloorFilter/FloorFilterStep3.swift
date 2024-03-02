@@ -3,7 +3,7 @@ import ArcGISToolkit
 import ArcGIS
 
 struct FloorFilterExampleView: View {
-    let floorFilterAlignment = Alignment.bottomLeading
+    private var floorFilterAlignment: Alignment { .bottomLeading }
     
     @State private var isMapLoaded = false
     
