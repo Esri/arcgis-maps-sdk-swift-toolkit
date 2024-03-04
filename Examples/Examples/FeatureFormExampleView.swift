@@ -144,6 +144,13 @@ private extension URL {
 class Model: ObservableObject {
 ***REMOVED******REMOVED***/ The feature form.
 ***REMOVED***@Published var featureForm: FeatureForm? {
+***REMOVED******REMOVED***willSet {
+***REMOVED******REMOVED******REMOVED***if let featureForm = newValue {
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm.featureLayer?.selectFeature(featureForm.feature)
+***REMOVED******REMOVED*** else if let featureForm = self.featureForm {
+***REMOVED******REMOVED******REMOVED******REMOVED***featureForm.featureLayer?.unselectFeature(featureForm.feature)
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***isFormPresented = featureForm != nil
 ***REMOVED***
@@ -184,5 +191,12 @@ class Model: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.featureForm = nil
+***REMOVED***
+***REMOVED***
+
+private extension FeatureForm {
+***REMOVED******REMOVED***/ The layer to which the feature belongs.
+***REMOVED***var featureLayer: FeatureLayer? {
+***REMOVED******REMOVED***feature.table?.layer as? FeatureLayer
 ***REMOVED***
 ***REMOVED***
