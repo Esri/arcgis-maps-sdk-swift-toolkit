@@ -64,6 +64,7 @@ private extension FeatureFormTestView {
                 guard let feature = result?.features().makeIterator().next() as? ArcGISFeature else { return }
                 try? await feature.load()
                 guard let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition else { return }
+                featureLayer?.selectFeature(feature)
                 featureForm = FeatureForm(feature: feature, definition: formDefinition)
                 isPresented = true
             }
