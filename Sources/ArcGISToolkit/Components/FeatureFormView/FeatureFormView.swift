@@ -145,8 +145,9 @@ extension FeatureFormView {
             EmptyView()
         }
         // BarcodeScannerFormInput is not currently supported
-        if element.isVisible &&
-            !(element.input is BarcodeScannerFormInput) {
+        if element.isVisible,
+            !(element.input is BarcodeScannerFormInput),
+           !(element.input is UnsupportedFormInput) {
             Divider()
         }
     }
