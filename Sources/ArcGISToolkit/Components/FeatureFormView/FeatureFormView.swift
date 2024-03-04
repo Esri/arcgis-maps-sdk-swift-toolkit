@@ -66,13 +66,16 @@ public struct FeatureFormView: View {
     /// A Boolean value indicating whether the initial expression evaluation is running.
     @State var isEvaluatingInitialExpressions = true
     
+    /// The title of the feature form view.
+    @State private var title: String = ""
+
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
     public init(featureForm: FeatureForm) {
         _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
     }
-    
+
     public var body: some View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
@@ -80,7 +83,7 @@ public struct FeatureFormView: View {
                     ProgressView()
                 } else {
                     VStack(alignment: .leading) {
-                        FormHeader(title: model.featureForm.title)
+                        FormHeader(title: title)
                             .padding([.bottom], elementPadding)
                         ForEach(model.visibleElements, id: \.self) { element in
                             makeElement(element)
@@ -92,6 +95,9 @@ public struct FeatureFormView: View {
                 if let focusedElement = model.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
+            }
+            .onTitleChange(of: model.featureForm) { newTitle in
+                title = newTitle
             }
         }
         .scrollDismissesKeyboard(
@@ -140,8 +146,7 @@ extension FeatureFormView {
         }
         // BarcodeScannerFormInput is not currently supported
         if element.isVisible &&
-            !(element.input is BarcodeScannerFormInput) &&
-            element.input != nil {
+            !(element.input is BarcodeScannerFormInput) {
             Divider()
         }
     }
