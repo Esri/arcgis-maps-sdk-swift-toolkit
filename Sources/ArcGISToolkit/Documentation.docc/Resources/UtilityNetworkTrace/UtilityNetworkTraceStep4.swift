@@ -5,13 +5,13 @@ import SwiftUI
 struct UtilityNetworkTraceExampleView: View {
     @State private var map = makeMap()
     
-    @State var mapPoint: Point?
+    @State private var mapPoint: Point?
     
-    @State var screenPoint: CGPoint?
+    @State private var screenPoint: CGPoint?
     
-    @State var resultGraphicsOverlay = GraphicsOverlay()
+    @State private var resultGraphicsOverlay = GraphicsOverlay()
     
-    @State var viewpoint: Viewpoint?
+    @State private var viewpoint: Viewpoint?
     
     var body: some View {
         MapViewReader { mapViewProxy in
