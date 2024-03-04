@@ -49,20 +49,20 @@ struct GroupView<Content>: View where Content: View {
     }
     
     var body: some View {
-        DisclosureGroup(self.element.label, isExpanded: $isExpanded) {
-            Group {
-                Text(element.description)
-                    .accessibilityIdentifier("\(element.label) Description")
-                    .font(.subheadline)
-                Divider()
+        Group {
+            DisclosureGroup(isExpanded: $isExpanded) {
                 ForEach(visibleElements, id: \.label) { formElement in
                     if let element = formElement as? FieldFormElement {
                         viewCreator(element)
                     }
                 }
+            } label: {
+                Header(element: element)
+                    .catalystPadding(4)
             }
-            // Reapply leading alignment for content within the DisclosureGroup
-            .frame(maxWidth: .infinity, alignment: .leading)
+            if !isExpanded {
+                Divider()
+            }
         }
         .onAppear {
             element.elements.forEach { element in
@@ -81,6 +81,37 @@ struct GroupView<Content>: View where Content: View {
                 task.cancel()
             }
             isVisibleTasks.removeAll()
+        }
+    }
+}
+
+extension GroupView {
+    /// A view displaying a label and description of a `GroupFormElement`.
+    struct Header: View {
+        let element: GroupFormElement
+        
+        var body: some View {
+            VStack(alignment: .leading) {
+                // Text views with empty text still take up some vertical space in
+                // a view, so conditionally check for an empty title and description.
+                if !element.label.isEmpty {
+                    Text(element.label)
+                        .multilineTextAlignment(.leading)
+                        .font(.title2)
+                        .foregroundColor(.primary)
+                }
+                
+                if !element.description.isEmpty {
+                    Text(element.description)
+                        .multilineTextAlignment(.leading)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .accessibilityIdentifier("\(element.label) Description")
+                }
+            }
+#if targetEnvironment(macCatalyst)
+            .padding(.leading, 4)
+#endif
         }
     }
 }
