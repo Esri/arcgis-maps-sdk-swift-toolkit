@@ -66,16 +66,15 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the initial expression evaluation is running.
 ***REMOVED***@State var isEvaluatingInitialExpressions = true
 ***REMOVED***
+***REMOVED******REMOVED***/ The title of the feature form view.
+***REMOVED***@State private var title: String = ""
+
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
 ***REMOVED***public init(featureForm: FeatureForm) {
 ***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
-***REMOVED******REMOVED***title = featureForm.title
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The title of the feature form view.
-***REMOVED***@State private var title: String
 
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
@@ -97,7 +96,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChangeOfTitle(of: model.featureForm) { newTitle in
+***REMOVED******REMOVED******REMOVED***.onTitleChange(of: model.featureForm) { newTitle in
 ***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED***
 ***REMOVED***

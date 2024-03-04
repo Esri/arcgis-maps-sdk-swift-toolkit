@@ -136,15 +136,15 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED***element.updateValue(selectedValue?.code)
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
-***REMOVED******REMOVED***.onChangeOfValue(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED***value = newValue
 ***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
 ***REMOVED******REMOVED******REMOVED***selectedValue = element.codedValues.first { $0.name == formattedValue ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChangeOfIsRequired(of: element) { newIsRequired in
+***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
 ***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
 ***REMOVED***
-***REMOVED******REMOVED***.onChangeOfIsEditable(of: element) { newIsEditable in
+***REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in
 ***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED***
 ***REMOVED***
