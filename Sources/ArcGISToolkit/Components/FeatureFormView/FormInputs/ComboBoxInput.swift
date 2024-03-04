@@ -132,15 +132,15 @@ struct ComboBoxInput: View {
             element.updateValue(selectedValue?.code)
             model.evaluateExpressions()
         }
-        .onChangeOfValue(of: element) { newValue, newFormattedValue in
+        .onValueChange(of: element) { newValue, newFormattedValue in
             value = newValue
             formattedValue = newFormattedValue
             selectedValue = element.codedValues.first { $0.name == formattedValue }
         }
-        .onChangeOfIsRequired(of: element) { newIsRequired in
+        .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
         }
-        .onChangeOfIsEditable(of: element) { newIsEditable in
+        .onIsEditableChange(of: element) { newIsEditable in
             isEditable = newIsEditable
         }
     }
