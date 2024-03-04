@@ -93,13 +93,13 @@ struct SwitchInput: View {
                 element.updateValue(isOn ? input.onValue.code : input.offValue.code)
                 model.evaluateExpressions()
             }
-            .onChangeOfValue(of: element) { newValue, newFormattedValue in
+            .onValueChange(of: element) { newValue, newFormattedValue in
                 isOn = newFormattedValue == input.onValue.name
             }
-            .onChangeOfIsRequired(of: element) { newIsRequired in
+            .onIsRequiredChange(of: element) { newIsRequired in
                 isRequired = newIsRequired
             }
-            .onChangeOfIsEditable(of: element) { newIsEditable in
+            .onIsEditableChange(of: element) { newIsEditable in
                 isEditable = newIsEditable
             }
         }
