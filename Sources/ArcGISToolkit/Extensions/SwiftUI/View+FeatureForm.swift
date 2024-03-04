@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import ArcGIS
-import Combine
 import SwiftUI
 
 extension View {
@@ -22,7 +21,7 @@ extension View {
     ///   - featureForm: The feature form to watch for changes on.
     ///   - action: The action which watches for changes.
     /// - Returns: The modified view.
-    func onChangeOfTitle(
+    func onTitleChange(
         of featureForm: FeatureForm,
         action: @escaping (_ newTitle: String) -> Void
     ) -> some View {
