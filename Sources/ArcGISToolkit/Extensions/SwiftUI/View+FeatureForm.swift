@@ -13,7 +13,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Combine
 ***REMOVED***
 
 extension View {
@@ -22,7 +21,7 @@ extension View {
 ***REMOVED******REMOVED***/   - featureForm: The feature form to watch for changes on.
 ***REMOVED******REMOVED***/   - action: The action which watches for changes.
 ***REMOVED******REMOVED***/ - Returns: The modified view.
-***REMOVED***func onChangeOfTitle(
+***REMOVED***func onTitleChange(
 ***REMOVED******REMOVED***of featureForm: FeatureForm,
 ***REMOVED******REMOVED***action: @escaping (_ newTitle: String) -> Void
 ***REMOVED***) -> some View {
