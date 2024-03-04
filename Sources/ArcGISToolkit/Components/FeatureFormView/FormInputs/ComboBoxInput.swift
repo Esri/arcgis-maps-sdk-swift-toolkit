@@ -101,17 +101,21 @@ struct ComboBoxInput: View {
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
                     .accessibilityIdentifier("\(element.label) Value")
                 if isEditable {
-                    if selectedValue == nil {
-                        Image(systemName: "list.bullet")
-                            .foregroundColor(.secondary)
-                            .accessibilityIdentifier("\(element.label) Options Button")
-                    } else {
+                    if selectedValue != nil, !isRequired {
+                        // Only show clear button if we have a value
+                        // and we're not required. (i.e., Don't show clear if
+                        // the field is required.)
                         ClearButton {
                             model.focusedElement = element
                             defer { model.focusedElement = nil }
                             selectedValue = nil
                         }
                         .accessibilityIdentifier("\(element.label) Clear Button")
+                    } else {
+                        // Otherwise, always show list icon.
+                        Image(systemName: "list.bullet")
+                            .foregroundColor(.secondary)
+                            .accessibilityIdentifier("\(element.label) Options Button")
                     }
                 }
             }
