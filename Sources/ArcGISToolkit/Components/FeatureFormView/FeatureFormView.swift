@@ -85,6 +85,17 @@ public struct FeatureFormView: View {
                     VStack(alignment: .leading) {
                         FormHeader(title: title)
                             .padding([.bottom], elementPadding)
+                        
+                        /// - WARNING - Begin temporary implementation  * * * * * * * * * * * *
+                        
+                            AttachmentFormElementView(
+                                element: AttachmentFormElement(
+                                    feature: model.featureForm.feature
+                                )
+                            )
+                        
+                        /// - WARNING - End temporary implementation * * * * * * * * * * * * *
+                        
                         ForEach(model.visibleElements, id: \.self) { element in
                             makeElement(element)
                         }
@@ -118,6 +129,8 @@ extension FeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {
         switch element {
+        case let element as AttachmentFormElement:
+            AttachmentFormElementView(element: element)
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as GroupFormElement:
