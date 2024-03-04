@@ -66,16 +66,15 @@ public struct FeatureFormView: View {
     /// A Boolean value indicating whether the initial expression evaluation is running.
     @State var isEvaluatingInitialExpressions = true
     
+    /// The title of the feature form view.
+    @State private var title: String = ""
+
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
     public init(featureForm: FeatureForm) {
         _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
-        title = featureForm.title
     }
-    
-    /// The title of the feature form view.
-    @State private var title: String
 
     public var body: some View {
         ScrollViewReader { scrollViewProxy in
@@ -97,7 +96,7 @@ public struct FeatureFormView: View {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
             }
-            .onChangeOfTitle(of: model.featureForm) { newTitle in
+            .onTitleChange(of: model.featureForm) { newTitle in
                 title = newTitle
             }
         }
