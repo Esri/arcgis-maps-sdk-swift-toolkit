@@ -144,6 +144,13 @@ private extension URL {
 class Model: ObservableObject {
     /// The feature form.
     @Published var featureForm: FeatureForm? {
+        willSet {
+            if let featureForm = newValue {
+                featureForm.featureLayer?.selectFeature(featureForm.feature)
+            } else if let featureForm = self.featureForm {
+                featureForm.featureLayer?.unselectFeature(featureForm.feature)
+            }
+        }
         didSet {
             isFormPresented = featureForm != nil
         }
@@ -184,5 +191,12 @@ class Model: ObservableObject {
         }
         
         self.featureForm = nil
+    }
+}
+
+private extension FeatureForm {
+    /// The layer to which the feature belongs.
+    var featureLayer: FeatureLayer? {
+        feature.table?.layer as? FeatureLayer
     }
 }
