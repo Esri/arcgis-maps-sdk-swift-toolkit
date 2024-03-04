@@ -96,7 +96,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChangeOfTitle(of: model.featureForm) { newTitle in
+***REMOVED******REMOVED******REMOVED***.onTitleChange(of: model.featureForm) { newTitle in
 ***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED***
 ***REMOVED***
