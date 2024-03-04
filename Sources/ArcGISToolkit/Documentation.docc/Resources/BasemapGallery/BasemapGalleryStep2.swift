@@ -10,13 +10,13 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***scale: 1_000_000
 ***REMOVED***)
 ***REMOVED***
-***REMOVED***@State private var basemaps = initialBasemaps()
+***REMOVED***@State private var basemaps = makeBasemapGalleryItems()
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private static func initialBasemaps() -> [BasemapGalleryItem] {
+***REMOVED***private static func makeBasemapGalleryItems() -> [BasemapGalleryItem] {
 ***REMOVED******REMOVED***let identifiers = [
 ***REMOVED******REMOVED******REMOVED***"46a87c20f09e4fc48fa3c38081e0cae6",
 ***REMOVED******REMOVED******REMOVED***"f33a34de3a294590ab48f246e99958c9"

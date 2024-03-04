@@ -18,7 +18,7 @@
 
 struct SearchExampleView: View {
 ***REMOVED******REMOVED***/ Provides search behavior customization.
-***REMOVED***let locatorDataSource = SmartLocatorSearchSource(
+***REMOVED***@State private var locatorSearchSource = SmartLocatorSearchSource(
 ***REMOVED******REMOVED***name: "My locator",
 ***REMOVED******REMOVED***maximumResults: 16,
 ***REMOVED******REMOVED***maximumSuggestions: 16
@@ -30,7 +30,7 @@ struct SearchExampleView: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
-***REMOVED***private let searchResultsOverlay = GraphicsOverlay()
+***REMOVED***@State private var searchResultsOverlay = GraphicsOverlay()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The height of the map view's attribution bar.
 ***REMOVED***@State private var attributionBarHeight = 0.0
@@ -79,7 +79,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorDataSource],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorSearchSource],
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoViewProxy: mapViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
