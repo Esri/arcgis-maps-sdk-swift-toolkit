@@ -49,20 +49,20 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***DisclosureGroup(self.element.label, isExpanded: $isExpanded) {
-***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Description")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(visibleElements, id: \.label) { formElement in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = formElement as? FieldFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewCreator(element)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Header(element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Reapply leading alignment for content within the DisclosureGroup
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED***if !isExpanded {
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***element.elements.forEach { element in
@@ -81,6 +81,37 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***task.cancel()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***isVisibleTasks.removeAll()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension GroupView {
+***REMOVED******REMOVED***/ A view displaying a label and description of a `GroupFormElement`.
+***REMOVED***struct Header: View {
+***REMOVED******REMOVED***let element: GroupFormElement
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text views with empty text still take up some vertical space in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** a view, so conditionally check for an empty title and description.
+***REMOVED******REMOVED******REMOVED******REMOVED***if !element.label.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.label)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.leading)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if !element.description.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.leading)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Description")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+#if targetEnvironment(macCatalyst)
+***REMOVED******REMOVED******REMOVED***.padding(.leading, 4)
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
