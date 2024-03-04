@@ -22,7 +22,7 @@ extension View {
     ///   - element: The form element to watch for changes on.
     ///   - action: The action which watches for changes.
     /// - Returns: The modified view.
-    func onChangeOfIsEditable(
+    func onIsEditableChange(
         of element: FieldFormElement,
         action: @escaping (_ newIsEditable: Bool) -> Void
     ) -> some View {
@@ -39,7 +39,7 @@ extension View {
     ///   - element: The form element to watch for changes on.
     ///   - action: The action which watches for changes.
     /// - Returns: The modified view.
-    func onChangeOfIsRequired(
+    func onIsRequiredChange(
         of element: FieldFormElement,
         action: @escaping (_ newIsRequired: Bool) -> Void
     ) -> some View {
@@ -56,7 +56,7 @@ extension View {
     ///   - element: The form element to watch for changes on.
     ///   - action: The action which watches for changes.
     /// - Returns: The modified view.
-    func onChangeOfValue(
+    func onValueChange(
         of element: FieldFormElement,
         action: @escaping (_ newValue: Any?, _ newFormattedValue: String) -> Void
     ) -> some View {
