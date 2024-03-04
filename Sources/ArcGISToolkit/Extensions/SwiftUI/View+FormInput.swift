@@ -22,7 +22,7 @@ extension View {
 ***REMOVED******REMOVED***/   - element: The form element to watch for changes on.
 ***REMOVED******REMOVED***/   - action: The action which watches for changes.
 ***REMOVED******REMOVED***/ - Returns: The modified view.
-***REMOVED***func onChangeOfIsEditable(
+***REMOVED***func onIsEditableChange(
 ***REMOVED******REMOVED***of element: FieldFormElement,
 ***REMOVED******REMOVED***action: @escaping (_ newIsEditable: Bool) -> Void
 ***REMOVED***) -> some View {
@@ -39,7 +39,7 @@ extension View {
 ***REMOVED******REMOVED***/   - element: The form element to watch for changes on.
 ***REMOVED******REMOVED***/   - action: The action which watches for changes.
 ***REMOVED******REMOVED***/ - Returns: The modified view.
-***REMOVED***func onChangeOfIsRequired(
+***REMOVED***func onIsRequiredChange(
 ***REMOVED******REMOVED***of element: FieldFormElement,
 ***REMOVED******REMOVED***action: @escaping (_ newIsRequired: Bool) -> Void
 ***REMOVED***) -> some View {
@@ -56,7 +56,7 @@ extension View {
 ***REMOVED******REMOVED***/   - element: The form element to watch for changes on.
 ***REMOVED******REMOVED***/   - action: The action which watches for changes.
 ***REMOVED******REMOVED***/ - Returns: The modified view.
-***REMOVED***func onChangeOfValue(
+***REMOVED***func onValueChange(
 ***REMOVED******REMOVED***of element: FieldFormElement,
 ***REMOVED******REMOVED***action: @escaping (_ newValue: Any?, _ newFormattedValue: String) -> Void
 ***REMOVED***) -> some View {

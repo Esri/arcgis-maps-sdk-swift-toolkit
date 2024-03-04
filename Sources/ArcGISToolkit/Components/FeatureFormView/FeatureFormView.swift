@@ -66,13 +66,16 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the initial expression evaluation is running.
 ***REMOVED***@State var isEvaluatingInitialExpressions = true
 ***REMOVED***
+***REMOVED******REMOVED***/ The title of the feature form view.
+***REMOVED***@State private var title: String = ""
+
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
 ***REMOVED***public init(featureForm: FeatureForm) {
 ***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView {
@@ -80,7 +83,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: model.featureForm.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
@@ -92,6 +95,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement = model.focusedElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onTitleChange(of: model.featureForm) { newTitle in
+***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.scrollDismissesKeyboard(
@@ -140,8 +146,7 @@ extension FeatureFormView {
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** BarcodeScannerFormInput is not currently supported
 ***REMOVED******REMOVED***if element.isVisible &&
-***REMOVED******REMOVED******REMOVED***!(element.input is BarcodeScannerFormInput) &&
-***REMOVED******REMOVED******REMOVED***element.input != nil {
+***REMOVED******REMOVED******REMOVED***!(element.input is BarcodeScannerFormInput) {
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
