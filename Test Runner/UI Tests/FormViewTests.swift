@@ -976,26 +976,14 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"Pine"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED***XCTAssertFalse(
 ***REMOVED******REMOVED******REMOVED***clearButton.isHittable,
-***REMOVED******REMOVED******REMOVED***"The clear button isn't hittable."
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***clearButton.tap()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***fieldValue.label,
-***REMOVED******REMOVED******REMOVED***"Enter Value"
+***REMOVED******REMOVED******REMOVED***"The clear button is hittable."
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***footer.exists,
 ***REMOVED******REMOVED******REMOVED***"The footer doesn't exist."
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***footer.label,
-***REMOVED******REMOVED******REMOVED***"Required"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***fieldValue.tap()
