@@ -96,7 +96,7 @@ public struct FeatureFormView: View {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
             }
-            .onChangeOfTitle(of: model.featureForm) { newTitle in
+            .onTitleChange(of: model.featureForm) { newTitle in
                 title = newTitle
             }
         }

@@ -71,7 +71,7 @@ struct DateTimeInput: View {
             formattedValue = element.formattedValue
             model.evaluateExpressions()
         }
-        .onChangeOfValue(of: element) { newValue, newFormattedValue in
+        .onValueChange(of: element) { newValue, newFormattedValue in
             if newFormattedValue.isEmpty {
                 date = nil
             } else {
@@ -79,10 +79,10 @@ struct DateTimeInput: View {
             }
             formattedValue = newFormattedValue
         }
-        .onChangeOfIsRequired(of: element) { newIsRequired in
+        .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
         }
-        .onChangeOfIsEditable(of: element) { newIsEditable in
+        .onIsEditableChange(of: element) { newIsEditable in
             isEditable = newIsEditable
         }
     }
