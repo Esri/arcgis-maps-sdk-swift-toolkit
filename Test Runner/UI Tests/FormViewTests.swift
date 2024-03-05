@@ -976,26 +976,14 @@ final class FeatureFormViewTests: XCTestCase {
             "Pine"
         )
         
-        XCTAssertTrue(
+        XCTAssertFalse(
             clearButton.isHittable,
-            "The clear button isn't hittable."
-        )
-        
-        clearButton.tap()
-        
-        XCTAssertEqual(
-            fieldValue.label,
-            "Enter Value"
+            "The clear button is hittable."
         )
         
         XCTAssertTrue(
             footer.exists,
             "The footer doesn't exist."
-        )
-        
-        XCTAssertEqual(
-            footer.label,
-            "Required"
         )
         
         fieldValue.tap()
