@@ -146,7 +146,7 @@ extension FeatureFormView {
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** BarcodeScannerFormInput is not currently supported
 ***REMOVED******REMOVED***if element.isVisible,
-***REMOVED******REMOVED******REMOVED***!(element.input is BarcodeScannerFormInput),
+***REMOVED******REMOVED***   !(element.input is BarcodeScannerFormInput),
 ***REMOVED******REMOVED***   !(element.input is UnsupportedFormInput) {
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
