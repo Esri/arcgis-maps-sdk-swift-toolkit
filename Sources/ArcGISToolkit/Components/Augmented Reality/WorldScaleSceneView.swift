@@ -75,7 +75,7 @@ public struct WorldScaleSceneView: View {
     public var body: some View {
         Group {
             switch trackingMode {
-            case .prefersGeoTracking:
+            case .preferGeoTracking:
                 // By default we try the geo-tracking configuration. If it is not available at
                 // the current location, fall back to world-tracking.
                 if geoTrackingIsAvailable {
@@ -231,7 +231,7 @@ public extension WorldScaleSceneView {
     /// The type of tracking configuration used by the view.
     enum TrackingMode {
         /// If geo-tracking is unavailable, fall back to world-tracking.
-        case prefersGeoTracking
+        case preferGeoTracking
         /// Geo-tracking.
         case geoTracking
         /// World-tracking.
