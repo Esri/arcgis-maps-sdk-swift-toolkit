@@ -99,6 +99,7 @@ extension GroupView {
                         .multilineTextAlignment(.leading)
                         .font(.title2)
                         .foregroundColor(.primary)
+                        .accessibilityIdentifier("\(element.label)")
                 }
                 
                 if !element.description.isEmpty {
