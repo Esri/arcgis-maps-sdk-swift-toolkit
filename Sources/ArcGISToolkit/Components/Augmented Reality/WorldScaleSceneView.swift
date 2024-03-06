@@ -75,7 +75,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***switch trackingMode {
-***REMOVED******REMOVED******REMOVED***case .automatic:
+***REMOVED******REMOVED******REMOVED***case .preferGeoTracking:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** By default we try the geo-tracking configuration. If it is not available at
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the current location, fall back to world-tracking.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if geoTrackingIsAvailable {
@@ -231,7 +231,7 @@ public extension WorldScaleSceneView {
 ***REMOVED******REMOVED***/ The type of tracking configuration used by the view.
 ***REMOVED***enum TrackingMode {
 ***REMOVED******REMOVED******REMOVED***/ If geo-tracking is unavailable, fall back to world-tracking.
-***REMOVED******REMOVED***case automatic
+***REMOVED******REMOVED***case preferGeoTracking
 ***REMOVED******REMOVED******REMOVED***/ Geo-tracking.
 ***REMOVED******REMOVED***case geoTracking
 ***REMOVED******REMOVED******REMOVED***/ World-tracking.
