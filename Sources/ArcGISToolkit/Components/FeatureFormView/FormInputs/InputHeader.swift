@@ -38,8 +38,11 @@ struct InputHeader: View {
     }
     
     var body: some View {
-        Text(verbatim: "\(label + (isRequired ? " *" : ""))")
-            .font(.subheadline)
-            .foregroundColor(.secondary)
+        HStack {
+            Text(verbatim: "\(label + (isRequired ? " *" : ""))")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+            Spacer()
+        }
     }
 }
