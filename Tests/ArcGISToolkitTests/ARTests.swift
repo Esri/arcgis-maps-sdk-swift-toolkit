@@ -148,4 +148,92 @@ import XCTest
         
         XCTAssertTrue(view.coachingOverlayIsHidden)
     }
+    
+    func testWorldScaleGeoTrackingInitWithDefaults() throws {
+        let sceneView = SceneView(scene: Scene())
+        
+        let view = WorldScaleSceneView(
+            trackingMode: .geoTracking
+        ) { _ in
+            sceneView
+        }
+        
+        XCTAssertNil(view.clippingDistance)
+        XCTAssertEqual(view.trackingMode, .geoTracking)
+        XCTAssertEqual(view.calibrationButtonAlignment, .bottom)
+        XCTAssertFalse(view.calibrationViewIsHidden)
+    }
+    
+    func testWorldScaleWorldTrackingInitWithDefaults() throws {
+        let sceneView = SceneView(scene: Scene())
+        
+        let view = WorldScaleSceneView(
+            trackingMode: .worldTracking
+        ) { _ in
+            sceneView
+        }
+        
+        XCTAssertNil(view.clippingDistance)
+        XCTAssertEqual(view.trackingMode, .worldTracking)
+        XCTAssertEqual(view.calibrationButtonAlignment, .bottom)
+        XCTAssertFalse(view.calibrationViewIsHidden)
+    }
+    
+    func testWorldScalePreferGeoTrackingInitWithDefaults() throws {
+        let sceneView = SceneView(scene: Scene())
+        
+        let view = WorldScaleSceneView(
+            trackingMode: .preferGeoTracking
+        ) { _ in
+            sceneView
+        }
+        
+        XCTAssertNil(view.clippingDistance)
+        XCTAssertEqual(view.trackingMode, .preferGeoTracking)
+        XCTAssertEqual(view.calibrationButtonAlignment, .bottom)
+        XCTAssertFalse(view.calibrationViewIsHidden)
+    }
+    
+    func testWorldScaleInitWithClippingDistance() throws {
+        let sceneView = SceneView(scene: Scene())
+        
+        let view = WorldScaleSceneView(
+            clippingDistance: 1_000,
+            trackingMode: .geoTracking
+        ) { _ in
+            sceneView
+        }
+        
+        XCTAssertEqual(view.clippingDistance, 1_000)
+        XCTAssertEqual(view.trackingMode, .geoTracking)
+        XCTAssertEqual(view.calibrationButtonAlignment, .bottom)
+        XCTAssertFalse(view.calibrationViewIsHidden)
+    }
+    
+    
+    func testWorldScaleCalibrationViewHiddenViewModifier() throws {
+        let sceneView = SceneView(scene: Scene())
+        
+        let view = WorldScaleSceneView(
+            trackingMode: .geoTracking
+        ) { _ in
+            sceneView
+        }
+        .calibrationViewHidden(true)
+        
+        XCTAssertTrue(view.calibrationViewIsHidden)
+    }
+    
+    func testWorldScaleCalibrationButtonAlignmentViewModifier() throws {
+        let sceneView = SceneView(scene: Scene())
+        
+        let view = WorldScaleSceneView(
+            trackingMode: .geoTracking
+        ) { _ in
+            sceneView
+        }
+        .calibrationButtonAlignment(.bottomLeading)
+        
+        XCTAssertEqual(view.calibrationButtonAlignment, .bottomLeading)
+    }
 }
