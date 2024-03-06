@@ -68,6 +68,7 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***self.arViewProxy = arViewProxy
 ***REMOVED******REMOVED***self.cameraController = cameraController
 ***REMOVED******REMOVED***self.calibrationViewModel = calibrationViewModel
+***REMOVED******REMOVED***self.cameraController.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***_initialCameraIsSet = initialCameraIsSet
 ***REMOVED******REMOVED***self.calibrationViewIsPresented = calibrationViewIsPresented
 ***REMOVED******REMOVED***self.locationDataSource = locationDataSource
