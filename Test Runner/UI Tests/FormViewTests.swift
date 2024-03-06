@@ -1262,9 +1262,9 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_6_1() {
         let app = XCUIApplication()
         let collapsedGroupFirstElement = app.staticTexts["Single Line Text"]
-        let collapsedGroup = app.disclosureTriangles["Group with Multiple Form Elements 2"]
+        let collapsedGroup = app.staticTexts["Group with Multiple Form Elements 2"]
         let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
-        let expandedGroup = app.disclosureTriangles["Group with Multiple Form Elements"]
+        let expandedGroup = app.staticTexts["Group with Multiple Form Elements"]
         let expandedGroupDescription = app.staticTexts["Group with Multiple Form Elements Description"]
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -1321,7 +1321,7 @@ final class FeatureFormViewTests: XCTestCase {
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
         let showElementsButton = app.buttons["show invisible form element"]
-        let hiddenElementsGroup = app.disclosureTriangles["Group with children that are visible dependent"]
+        let hiddenElementsGroup = app.staticTexts["Group with children that are visible dependent"]
         let hiddenElementsGroupDescription = app.staticTexts["Group with children that are visible dependent Description"]
         let groupElement = app.staticTexts["single line text 3"]
         
