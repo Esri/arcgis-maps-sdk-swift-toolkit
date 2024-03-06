@@ -38,8 +38,11 @@ struct InputHeader: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(verbatim: "\(label + (isRequired ? " *" : ""))")
-***REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED***Text(verbatim: "\(label + (isRequired ? " *" : ""))")
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

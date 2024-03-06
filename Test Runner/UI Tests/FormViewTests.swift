@@ -1262,9 +1262,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_6_1() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let collapsedGroupFirstElement = app.staticTexts["Single Line Text"]
-***REMOVED******REMOVED***let collapsedGroup = app.disclosureTriangles["Group with Multiple Form Elements 2"]
+***REMOVED******REMOVED***let collapsedGroup = app.staticTexts["Group with Multiple Form Elements 2"]
 ***REMOVED******REMOVED***let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
-***REMOVED******REMOVED***let expandedGroup = app.disclosureTriangles["Group with Multiple Form Elements"]
+***REMOVED******REMOVED***let expandedGroup = app.staticTexts["Group with Multiple Form Elements"]
 ***REMOVED******REMOVED***let expandedGroupDescription = app.staticTexts["Group with Multiple Form Elements Description"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -1321,7 +1321,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let showElementsButton = app.buttons["show invisible form element"]
-***REMOVED******REMOVED***let hiddenElementsGroup = app.disclosureTriangles["Group with children that are visible dependent"]
+***REMOVED******REMOVED***let hiddenElementsGroup = app.staticTexts["Group with children that are visible dependent"]
 ***REMOVED******REMOVED***let hiddenElementsGroupDescription = app.staticTexts["Group with children that are visible dependent Description"]
 ***REMOVED******REMOVED***let groupElement = app.staticTexts["single line text 3"]
 ***REMOVED******REMOVED***
