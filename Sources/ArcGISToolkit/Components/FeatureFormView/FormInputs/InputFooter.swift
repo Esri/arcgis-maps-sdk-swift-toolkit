@@ -84,7 +84,7 @@ extension InputFooter {
         case .exceedsMaximumDateTime:
             if let input = element.input as? DateTimePickerFormInput, let max = input.max {
                 Text(
-                    "Date must be on or before \(max, format: input.includeTime ? .dateTime : .dateTime.month().day().year())",
+                    "Date must be on or before \(max, format: input.includesTime ? .dateTime : .dateTime.month().day().year())",
                     bundle: .toolkitModule,
                     comment: "Text indicating a field's value must be on or before the maximum date specified in the variable."
                 )
@@ -98,7 +98,7 @@ extension InputFooter {
         case .lessThanMinimumDateTime:
             if let input = element.input as? DateTimePickerFormInput, let min = input.min {
                 Text(
-                    "Date must be on or after \(min, format: input.includeTime ? .dateTime : .dateTime.month().day().year())",
+                    "Date must be on or after \(min, format: input.includesTime ? .dateTime : .dateTime.month().day().year())",
                     bundle: .toolkitModule,
                     comment: "Text indicating a field's value must be on or after the minimum date specified in the variable."
                 )
