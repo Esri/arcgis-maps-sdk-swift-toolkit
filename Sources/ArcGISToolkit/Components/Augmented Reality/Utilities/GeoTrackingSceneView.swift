@@ -42,6 +42,10 @@ public struct GeoTrackingSceneView: View {
     @State private var currentLocation: Location?
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
+    /// The closure to perform when the camera tracking state changes.
+    private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
+    /// The closure to perform when the geo tracking status changes.
+    private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
     
     /// Creates a world scale geo-tracking scene view.
     /// - Parameters:
@@ -95,6 +99,10 @@ public struct GeoTrackingSceneView: View {
                     }
                     .onDidChangeGeoTrackingStatus { _, status in
                         handleGeoTrackingStatusChange(status)
+                        onGeoTrackingStatusChangedAction?(status)
+                    }
+                    .onCameraDidChangeTrackingState { _, trackingState in
+                        onCameraTrackingStateChangedAction?(trackingState)
                     }
                 
                 if initialCameraIsSet {
@@ -189,5 +197,29 @@ public struct GeoTrackingSceneView: View {
         @unknown default:
             fatalError("Unknown ARGeoTrackingStatus.State")
         }
+    }
+    
+    /// Sets a closure to perform when the camera tracking state changes.
+    /// - Parameter action: The closure to perform when the camera tracking state has changed.
+    public func onCameraTrackingStateChanged(
+        perform action: @escaping (
+            _ cameraTrackingState: ARCamera.TrackingState
+        ) -> Void
+    ) -> Self {
+        var view = self
+        view.onCameraTrackingStateChangedAction = action
+        return view
+    }
+    
+    /// Sets a closure to perform when the geo tracking status changes.
+    /// - Parameter action: The closure to perform when the geo tracking status has changed.
+    public func onGeoTrackingStatusChanged(
+        perform action: @escaping (
+            _ geoTrackingStatus: ARGeoTrackingStatus
+        ) -> Void
+    ) -> Self {
+        var view = self
+        view.onGeoTrackingStatusChangedAction = action
+        return view
     }
 }
