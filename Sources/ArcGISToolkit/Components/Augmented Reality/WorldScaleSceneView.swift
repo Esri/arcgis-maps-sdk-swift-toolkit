@@ -46,6 +46,10 @@ public struct WorldScaleSceneView: View {
     @State private var error: Error?
     /// The closure to call upon a single tap.
     private var onSingeTapGestureAction: ((CGPoint, Point?) -> Void)? = nil
+    /// The closure to perform when the camera tracking state changes.
+    private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
+    /// The closure to perform when the geo tracking status changes.
+    private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -154,6 +158,12 @@ public struct WorldScaleSceneView: View {
             locationDataSource: locationDataSource,
             sceneView: sceneViewBuilder
         )
+        .onGeoTrackingStatusChanged { geoTrackingStatus in
+            onGeoTrackingStatusChangedAction?(geoTrackingStatus)
+        }
+        .onCameraTrackingStateChanged { trackingState in
+            onCameraTrackingStateChangedAction?(trackingState)
+        }
         .onSingleTapGesture { tapPoint in
             handleSingleTap(tapPoint)
         }
@@ -171,6 +181,9 @@ public struct WorldScaleSceneView: View {
             locationDataSource: locationDataSource,
             sceneView: sceneViewBuilder
         )
+        .onCameraTrackingStateChanged { trackingState in
+            onCameraTrackingStateChangedAction?(trackingState)
+        }
         .onSingleTapGesture { tapPoint in
             handleSingleTap(tapPoint)
         }
@@ -197,6 +210,30 @@ public struct WorldScaleSceneView: View {
     public func calibrationButtonAlignment(_ alignment: Alignment) -> Self {
         var view = self
         view.calibrationButtonAlignment = alignment
+        return view
+    }
+    
+    /// Sets a closure to perform when the camera tracking state changes.
+    /// - Parameter action: The closure to perform when the camera tracking state has changed.
+    public func onCameraTrackingStateChanged(
+        perform action: @escaping (
+            _ cameraTrackingState: ARCamera.TrackingState
+        ) -> Void
+    ) -> Self {
+        var view = self
+        view.onCameraTrackingStateChangedAction = action
+        return view
+    }
+    
+    /// Sets a closure to perform when the geo tracking status changes.
+    /// - Parameter action: The closure to perform when the geo tracking status has changed.
+    public func onGeoTrackingStatusChanged(
+        perform action: @escaping (
+            _ geoTrackingStatus: ARGeoTrackingStatus
+        ) -> Void
+    ) -> Self {
+        var view = self
+        view.onGeoTrackingStatusChangedAction = action
         return view
     }
     
