@@ -45,7 +45,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The error from the view.
 ***REMOVED***@State private var error: Error?
 ***REMOVED******REMOVED***/ The closure to call upon a single tap.
-***REMOVED***private var onSingeTapGestureAction: ((CGPoint, Point?) -> Void)? = nil
+***REMOVED***private var onSingleTapGestureAction: ((CGPoint, Point?) -> Void)? = nil
 ***REMOVED******REMOVED***/ The closure to perform when the camera tracking state changes.
 ***REMOVED***private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
 ***REMOVED******REMOVED***/ The closure to perform when the geo tracking status changes.
@@ -193,7 +193,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ - Parameter tapPoint: The tapped screen point.
 ***REMOVED***private func handleSingleTap(_ tapPoint: CGPoint) {
 ***REMOVED******REMOVED***let scenePoint = arScreenToLocation(screenPoint: tapPoint)
-***REMOVED******REMOVED***onSingeTapGestureAction?(tapPoint, scenePoint)
+***REMOVED******REMOVED***onSingleTapGestureAction?(tapPoint, scenePoint)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the visibility of the calibration view for the AR experience.
@@ -326,7 +326,7 @@ public extension WorldScaleSceneView {
 ***REMOVED******REMOVED***perform action: @escaping (_ screenPoint: CGPoint, _ scenePoint: Point?) -> Void
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onSingeTapGestureAction = action
+***REMOVED******REMOVED***copy.onSingleTapGestureAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
