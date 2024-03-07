@@ -150,12 +150,10 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testWorldScaleGeoTrackingInitWithDefaults() throws {
-***REMOVED******REMOVED***let sceneView = SceneView(scene: Scene())
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = WorldScaleSceneView(
 ***REMOVED******REMOVED******REMOVED***trackingMode: .geoTracking
 ***REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED***sceneView
+***REMOVED******REMOVED******REMOVED***SceneView(scene: Scene())
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertNil(view.clippingDistance)
@@ -165,12 +163,10 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testWorldScaleWorldTrackingInitWithDefaults() throws {
-***REMOVED******REMOVED***let sceneView = SceneView(scene: Scene())
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = WorldScaleSceneView(
 ***REMOVED******REMOVED******REMOVED***trackingMode: .worldTracking
 ***REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED***sceneView
+***REMOVED******REMOVED******REMOVED***SceneView(scene: Scene())
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertNil(view.clippingDistance)
@@ -180,12 +176,10 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testWorldScalePreferGeoTrackingInitWithDefaults() throws {
-***REMOVED******REMOVED***let sceneView = SceneView(scene: Scene())
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = WorldScaleSceneView(
 ***REMOVED******REMOVED******REMOVED***trackingMode: .preferGeoTracking
 ***REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED***sceneView
+***REMOVED******REMOVED******REMOVED***SceneView(scene: Scene())
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertNil(view.clippingDistance)
@@ -195,13 +189,11 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testWorldScaleInitWithClippingDistance() throws {
-***REMOVED******REMOVED***let sceneView = SceneView(scene: Scene())
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = WorldScaleSceneView(
 ***REMOVED******REMOVED******REMOVED***clippingDistance: 1_000,
 ***REMOVED******REMOVED******REMOVED***trackingMode: .geoTracking
 ***REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED***sceneView
+***REMOVED******REMOVED******REMOVED***SceneView(scene: Scene())
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(view.clippingDistance, 1_000)
@@ -212,12 +204,10 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testWorldScaleCalibrationViewHiddenViewModifier() throws {
-***REMOVED******REMOVED***let sceneView = SceneView(scene: Scene())
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = WorldScaleSceneView(
 ***REMOVED******REMOVED******REMOVED***trackingMode: .geoTracking
 ***REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED***sceneView
+***REMOVED******REMOVED******REMOVED***SceneView(scene: Scene())
 ***REMOVED***
 ***REMOVED******REMOVED***.calibrationViewHidden(true)
 ***REMOVED******REMOVED***
@@ -225,12 +215,10 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testWorldScaleCalibrationButtonAlignmentViewModifier() throws {
-***REMOVED******REMOVED***let sceneView = SceneView(scene: Scene())
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let view = WorldScaleSceneView(
 ***REMOVED******REMOVED******REMOVED***trackingMode: .geoTracking
 ***REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED***sceneView
+***REMOVED******REMOVED******REMOVED***SceneView(scene: Scene())
 ***REMOVED***
 ***REMOVED******REMOVED***.calibrationButtonAlignment(.bottomLeading)
 ***REMOVED******REMOVED***
