@@ -150,12 +150,10 @@ import XCTest
     }
     
     func testWorldScaleGeoTrackingInitWithDefaults() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = WorldScaleSceneView(
             trackingMode: .geoTracking
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         XCTAssertNil(view.clippingDistance)
@@ -165,12 +163,10 @@ import XCTest
     }
     
     func testWorldScaleWorldTrackingInitWithDefaults() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = WorldScaleSceneView(
             trackingMode: .worldTracking
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         XCTAssertNil(view.clippingDistance)
@@ -180,12 +176,10 @@ import XCTest
     }
     
     func testWorldScalePreferGeoTrackingInitWithDefaults() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = WorldScaleSceneView(
             trackingMode: .preferGeoTracking
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         XCTAssertNil(view.clippingDistance)
@@ -195,13 +189,11 @@ import XCTest
     }
     
     func testWorldScaleInitWithClippingDistance() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = WorldScaleSceneView(
             clippingDistance: 1_000,
             trackingMode: .geoTracking
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         XCTAssertEqual(view.clippingDistance, 1_000)
@@ -212,12 +204,10 @@ import XCTest
     
     
     func testWorldScaleCalibrationViewHiddenViewModifier() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = WorldScaleSceneView(
             trackingMode: .geoTracking
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         .calibrationViewHidden(true)
         
@@ -225,12 +215,10 @@ import XCTest
     }
     
     func testWorldScaleCalibrationButtonAlignmentViewModifier() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = WorldScaleSceneView(
             trackingMode: .geoTracking
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         .calibrationButtonAlignment(.bottomLeading)
         
