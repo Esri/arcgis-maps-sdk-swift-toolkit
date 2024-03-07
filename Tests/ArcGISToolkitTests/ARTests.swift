@@ -19,8 +19,6 @@ import XCTest
 
 @MainActor final class ARTests: XCTestCase {
     func testFlyoverLocationInitWithDefaults() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = FlyoverSceneView(
             initialLocation: .init(
                 latitude: 34.056397,
@@ -28,7 +26,7 @@ import XCTest
             ),
             translationFactor: 1_000
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         let initialCamera = view.initialCamera
@@ -43,8 +41,6 @@ import XCTest
     }
     
     func testFlyoverLocationInit() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = FlyoverSceneView(
             initialLocation: .init(
                 latitude: 34.056397,
@@ -53,7 +49,7 @@ import XCTest
             translationFactor: 1_000,
             initialHeading: 90
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         let initialCamera = view.initialCamera
@@ -68,15 +64,13 @@ import XCTest
     }
     
     func testFlyoverLatLongInitWithDefaults() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = FlyoverSceneView(
             initialLatitude: 34.056397,
             initialLongitude: -117.195646,
             initialAltitude: 1_000,
             translationFactor: 1_000
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         let initialCamera = view.initialCamera
@@ -91,8 +85,6 @@ import XCTest
     }
     
     func testFlyoverLatLongInit() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = FlyoverSceneView(
             initialLatitude: 34.056397,
             initialLongitude: -117.195646,
@@ -100,7 +92,7 @@ import XCTest
             translationFactor: 1_000,
             initialHeading: 180
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         let initialCamera = view.initialCamera
@@ -115,14 +107,12 @@ import XCTest
     }
     
     func testTableTopInit() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = TableTopSceneView(
             anchorPoint: .init(latitude: 34.056397, longitude: -117.195646),
             translationFactor: 1_000,
             clippingDistance: 1_000
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         XCTAssertEqual(view.anchorPoint.x, -117.195646)
@@ -135,14 +125,12 @@ import XCTest
     }
     
     func testTableTopARCoachingOverlayViewModifier() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = TableTopSceneView(
             anchorPoint: .init(latitude: 0, longitude: 0),
             translationFactor: 1_000,
             clippingDistance: 1_000
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         .coachingOverlayHidden(true)
         
