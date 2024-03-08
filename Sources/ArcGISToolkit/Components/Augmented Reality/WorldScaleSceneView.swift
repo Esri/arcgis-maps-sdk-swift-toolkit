@@ -19,15 +19,15 @@ import ArcGIS
 /// A scene view that provides an augmented reality world scale experience.
 public struct WorldScaleSceneView: View {
     /// The clipping distance of the scene view.
-    private let clippingDistance: Double?
+    let clippingDistance: Double?
     /// The tracking mode for world scale AR.
-    private let trackingMode: TrackingMode
+    let trackingMode: TrackingMode
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// Determines the alignment of the calibration button.
-    private var calibrationButtonAlignment: Alignment = .bottom
+    var calibrationButtonAlignment: Alignment = .bottom
     /// A Boolean value that indicates whether the calibration view is hidden.
-    private var calibrationViewIsHidden = false
+    var calibrationViewIsHidden = false
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
     /// The camera controller that will be set on the scene view.

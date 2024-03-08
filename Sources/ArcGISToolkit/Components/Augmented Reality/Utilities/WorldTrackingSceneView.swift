@@ -79,6 +79,7 @@ struct WorldTrackingSceneView: View {
         self.arViewProxy = arViewProxy
         self.cameraController = cameraController
         self.calibrationViewModel = calibrationViewModel
+        self.cameraController.clippingDistance = clippingDistance
         self.distanceThreshold = distanceThreshold
         _initialCameraIsSet = initialCameraIsSet
         self.calibrationViewIsPresented = calibrationViewIsPresented
