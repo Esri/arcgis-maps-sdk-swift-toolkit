@@ -19,15 +19,15 @@ import ARKit
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience.
 public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The clipping distance of the scene view.
-***REMOVED***private let clippingDistance: Double?
+***REMOVED***let clippingDistance: Double?
 ***REMOVED******REMOVED***/ The tracking mode for world scale AR.
-***REMOVED***private let trackingMode: TrackingMode
+***REMOVED***let trackingMode: TrackingMode
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ Determines the alignment of the calibration button.
-***REMOVED***private var calibrationButtonAlignment: Alignment = .bottom
+***REMOVED***var calibrationButtonAlignment: Alignment = .bottom
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
-***REMOVED***private var calibrationViewIsHidden = false
+***REMOVED***var calibrationViewIsHidden = false
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
