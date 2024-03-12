@@ -172,7 +172,9 @@ public struct GeoTrackingSceneView: View {
     private func handleGeoTrackingStatusChange(_ status: ARGeoTrackingStatus) {
         switch status.state {
         case .notAvailable, .initializing, .localizing:
-            initialCameraIsSet = false
+            Task.detached { @MainActor in
+                initialCameraIsSet = false
+            }
         case .localized:
             // Update the camera controller every time geo-tracking is localized,
             // to ensure the best experience.
@@ -184,7 +186,9 @@ public struct GeoTrackingSceneView: View {
                     heading: currentHeading + 90,
                     altitude: currentLocation.position.z ?? 0
                 )
-                initialCameraIsSet = true
+                Task.detached { @MainActor in
+                    initialCameraIsSet = true
+                }
             }
         @unknown default:
             fatalError("Unknown ARGeoTrackingStatus.State")
