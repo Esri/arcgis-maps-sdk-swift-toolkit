@@ -172,7 +172,9 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED***private func handleGeoTrackingStatusChange(_ status: ARGeoTrackingStatus) {
 ***REMOVED******REMOVED***switch status.state {
 ***REMOVED******REMOVED***case .notAvailable, .initializing, .localizing:
-***REMOVED******REMOVED******REMOVED***initialCameraIsSet = false
+***REMOVED******REMOVED******REMOVED***Task.detached { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet = false
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .localized:
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Update the camera controller every time geo-tracking is localized,
 ***REMOVED******REMOVED******REMOVED******REMOVED*** to ensure the best experience.
@@ -184,7 +186,9 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: currentHeading + 90,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***altitude: currentLocation.position.z ?? 0
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
+***REMOVED******REMOVED******REMOVED******REMOVED***Task.detached { @MainActor in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***initialCameraIsSet = true
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@unknown default:
 ***REMOVED******REMOVED******REMOVED***fatalError("Unknown ARGeoTrackingStatus.State")
