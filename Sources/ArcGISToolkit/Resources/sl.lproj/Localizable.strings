@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Prebrskaj";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "Š_Calibrate___________________č";
+"Calibrate" = "Kalibriranje";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "Š_Calibration____________č";
+"Calibration" = "Kalibracija";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Prekliči";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "Š_elevation___________________č";
+"elevation" = "višina";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Napaka";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "Š_Error loading bookmarks: %@____________________________č";
+"Error loading bookmarks: %@" = "Napaka pri nalaganju zaznamkov: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Ovrednotenje pojavnih izrazov";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "Š_heading_______________č";
+"heading" = "glava";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Mediji";
