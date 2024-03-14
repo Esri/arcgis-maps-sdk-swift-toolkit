@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "찾아보기";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "한_Calibrate___________________빠";
+"Calibrate" = "보정";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "한_Calibration____________빠";
+"Calibration" = "보정";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "취소";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "한_elevation___________________빠";
+"elevation" = "고도";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "오류";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "한_Error loading bookmarks: %@____________________________빠";
+"Error loading bookmarks: %@" = "북마크를 불러오는 동안 오류가 발생했습니다. %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "팝업 식 평가";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "한_heading_______________빠";
+"heading" = "방향";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "미디어";
