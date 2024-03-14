@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "参照";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "須_Calibrate___________________鷗";
+"Calibrate" = "キャリブレーション";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "須_Calibration____________鷗";
+"Calibration" = "キャリブレーション";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "キャンセル";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "須_elevation___________________鷗";
+"elevation" = "標高";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "エラー";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "須_Error loading bookmarks: %@____________________________鷗";
+"Error loading bookmarks: %@" = "ブックマークの読み込み中にエラーが発生しました: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "ポップアップ式を評価しています";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "須_heading_______________鷗";
+"heading" = "方位";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "メディア";

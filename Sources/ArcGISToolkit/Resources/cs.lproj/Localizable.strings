@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Procházet";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "Ř_Calibrate___________________ů";
+"Calibrate" = "Kalibrovat";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "Ř_Calibration____________ů";
+"Calibration" = "Kalibrace";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Storno";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "Ř_elevation___________________ů";
+"elevation" = "nadmořská výška";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Chyba";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "Ř_Error loading bookmarks: %@____________________________ů";
+"Error loading bookmarks: %@" = "Chyba při načítání záložek: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Vyhodnocování výrazů vyskakovacího okna";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "Ř_heading_______________ů";
+"heading" = "směr";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Multimédia";

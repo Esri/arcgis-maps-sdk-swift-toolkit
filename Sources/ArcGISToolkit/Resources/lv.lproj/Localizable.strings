@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Pārlūkot";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "ķ_Calibrate___________________ū";
+"Calibrate" = "Kalibrēt";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "ķ_Calibration____________ū";
+"Calibration" = "Kalibrēšana";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Atcelt";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "ķ_elevation___________________ū";
+"elevation" = "augstums";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Kļūda";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "ķ_Error loading bookmarks: %@____________________________ū";
+"Error loading bookmarks: %@" = "Ielādējot grāmatzīmes, radās kļūda: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Tiek novērtēti uznirstošie teksti";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "ķ_heading_______________ū";
+"heading" = "kurss";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Multivide";
