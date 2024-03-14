@@ -38,6 +38,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "浏览";
 
+/* A label for a button to show the calibration view. */
+"Calibrate" = "校准";
+
+/* A label for the calibration view used to calibrate the camera
+for the AR experience. */
+"Calibration" = "校准";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "取消";
 
@@ -85,6 +92,10 @@ network element for more than one trace starting point. */
 for a utility network trace. */
 "Element could not be identified." = "无法识别元素。";
 
+/* A label for the slider that adjusts the camera elevation for the
+AR experience. */
+"elevation" = "高程";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "错误";
 
@@ -94,6 +105,10 @@ network certificate. */
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "加载底图时出错。";
+
+/* An error message shown when a GeoModel failed to load.
+The variable provides additional data. */
+"Error loading bookmarks: %@" = "加载书签时出错：%@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "正在评估弹出式表达式";
@@ -129,6 +144,10 @@ contains one or more facilities in a floor-aware map or scene. */
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "函数结果";
+
+/* A label for the slider that adjusts the camera heading for the
+AR experience. */
+"heading" = "标题";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "媒体";
