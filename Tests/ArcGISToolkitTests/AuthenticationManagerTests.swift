@@ -37,10 +37,18 @@ import XCTest
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** This tests that calling setupPersistentCredentialStorage tries to sync with the keychain.
+#if targetEnvironment(macCatalyst)
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***try await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlocked)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***XCTFail("Persistent credential storage setup failed")
+***REMOVED***
+#elseif !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlocked)
 ***REMOVED******REMOVED******REMOVED***XCTFail("Expected an error to be thrown as unit tests should not have access to the keychain")
 ***REMOVED*** catch {***REMOVED***
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testClearCredentialStores() async {
