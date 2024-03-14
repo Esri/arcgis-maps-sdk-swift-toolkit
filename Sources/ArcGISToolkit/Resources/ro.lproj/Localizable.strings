@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Răsfoire";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "Ă_Calibrate___________________ș";
+"Calibrate" = "Calibrare";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "Ă_Calibration____________ș";
+"Calibration" = "Calibrare";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Anulare";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "Ă_elevation___________________ș";
+"elevation" = "elevație";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Eroare";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "Ă_Error loading bookmarks: %@____________________________ș";
+"Error loading bookmarks: %@" = "Eroare la încărcarea semnelor de carte: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Se evaluează expresiile pop-up";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "Ă_heading_______________ș";
+"heading" = "direcție";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";

@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Gözat";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "ı_Calibrate___________________İ";
+"Calibrate" = "Kalibre et";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "ı_Calibration____________İ";
+"Calibration" = "Kalibrasyon";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "İptal";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "ı_elevation___________________İ";
+"elevation" = "yükselti";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Hata";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "ı_Error loading bookmarks: %@____________________________İ";
+"Error loading bookmarks: %@" = "Yer imlerini yükleme hatası: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Açılır menü ifadeleri değerlendiriliyor";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "ı_heading_______________İ";
+"heading" = "başlık";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Ortam";

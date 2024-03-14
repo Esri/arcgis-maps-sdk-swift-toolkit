@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Преглеждане";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "й_Calibrate___________________й";
+"Calibrate" = "Калибрирайте";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "й_Calibration____________й";
+"Calibration" = "Калибриране";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Отказ";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "й_elevation___________________й";
+"elevation" = "височина";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Грешка";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "й_Error loading bookmarks: %@____________________________й";
+"Error loading bookmarks: %@" = "Грешка при зареждане на отметки: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Изчисляване на изрази в изскачащи прозорци";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "й_heading_______________й";
+"heading" = "посока на движение";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Медия";
