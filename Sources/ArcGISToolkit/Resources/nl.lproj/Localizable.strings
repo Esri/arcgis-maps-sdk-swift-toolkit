@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Bladeren";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "Ĳ_Calibrate___________________ä";
+"Calibrate" = "Kalibreren";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "Ĳ_Calibration____________ä";
+"Calibration" = "Kalibratie";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Annuleren";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "Ĳ_elevation___________________ä";
+"elevation" = "hoogte";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Fout";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "Ĳ_Error loading bookmarks: %@____________________________ä";
+"Error loading bookmarks: %@" = "Er is een fout opgetreden bij het laden van bladwijzers: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Bezig met evalueren pop-upexpressies";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "Ĳ_heading_______________ä";
+"heading" = "richting";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";

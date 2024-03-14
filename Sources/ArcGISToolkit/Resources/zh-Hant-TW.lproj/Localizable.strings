@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "瀏覽";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "試_Calibrate___________________驗";
+"Calibrate" = "校正";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "試_Calibration____________驗";
+"Calibration" = "校正";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "取消";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "試_elevation___________________驗";
+"elevation" = "高程";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "錯誤";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "試_Error loading bookmarks: %@____________________________驗";
+"Error loading bookmarks: %@" = "載入書籤時出錯: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "正在評估快顯視窗表達式";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "試_heading_______________驗";
+"heading" = "標題";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "媒體";

@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "เรียกดู";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "ก้_Calibrate___________________ษฺ";
+"Calibrate" = "ปรับเทียบ";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "ก้_Calibration____________ษฺ";
+"Calibration" = "การปรับเทียบ";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "ยกเลิก";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "ก้_elevation___________________ษฺ";
+"elevation" = "ความสูง";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "ข้อผิดพลาด";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "ก้_Error loading bookmarks: %@____________________________ษฺ";
+"Error loading bookmarks: %@" = "ข้อผิดพลาดในการโหลดบุ๊กมาร์ก: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "กำลังประเมินนิพจน์ป็อปอัพ";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "ก้_heading_______________ษฺ";
+"heading" = "มุ่งหน้าสู่";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "มีเดีย";
