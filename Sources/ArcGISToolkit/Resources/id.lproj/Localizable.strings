@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Jelajahi";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "ng_Calibrate___________________ny";
+"Calibrate" = "Kalibrasi";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "ng_Calibration____________ny";
+"Calibration" = "Kalibrasi";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Batalkan";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "ng_elevation___________________ny";
+"elevation" = "elevasi";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Kesalahan";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "ng_Error loading bookmarks: %@____________________________ny";
+"Error loading bookmarks: %@" = "Kesalahan saat memuat bookmark: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Mengevaluasi ekspresi popup";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "ng_heading_______________ny";
+"heading" = "heading";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";

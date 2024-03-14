@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Tallózás";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "í_Calibrate___________________ő";
+"Calibrate" = "Kalibrálás";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "í_Calibration____________ő";
+"Calibration" = "Kalibráció";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Mégse";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "í_elevation___________________ő";
+"elevation" = "magasság";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Hiba";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "í_Error loading bookmarks: %@____________________________ő";
+"Error loading bookmarks: %@" = "Hiba a könyvjelzők betöltése közben: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Felugró kifejezések kiértékelése";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "í_heading_______________ő";
+"heading" = "mozgási irány";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Média";

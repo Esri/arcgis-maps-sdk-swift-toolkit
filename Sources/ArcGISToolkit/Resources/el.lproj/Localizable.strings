@@ -39,11 +39,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 "Browse" = "Περιήγηση για αναζήτηση";
 
 /* A label for a button to show the calibration view. */
-"Calibrate" = "Đ_Calibrate___________________ớ";
+"Calibrate" = "Βαθμονόμηση";
 
 /* A label for the calibration view used to calibrate the camera
 for the AR experience. */
-"Calibration" = "Đ_Calibration____________ớ";
+"Calibration" = "Βαθμονόμηση";
 
 /* A label for a button to cancel an operation. */
 "Cancel" = "Ακύρωση";
@@ -94,7 +94,7 @@ for a utility network trace. */
 
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
-"elevation" = "Đ_elevation___________________ớ";
+"elevation" = "υψόμετρο";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Σφάλμα";
@@ -108,7 +108,7 @@ network certificate. */
 
 /* An error message shown when a GeoModel failed to load.
 The variable provides additional data. */
-"Error loading bookmarks: %@" = "Đ_Error loading bookmarks: %@____________________________ớ";
+"Error loading bookmarks: %@" = "Σφάλμα κατά τη φόρτωση σελιδοδεικτών: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Αξιολόγηση αναδυόμενων εκφράσεων";
@@ -147,7 +147,7 @@ trace operation. */
 
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
-"heading" = "Đ_heading_______________ớ";
+"heading" = "επικεφαλίδα";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Πολυμέσα";
