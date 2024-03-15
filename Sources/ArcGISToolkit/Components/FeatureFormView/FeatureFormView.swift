@@ -130,19 +130,23 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***/ Makes UI for a field form element.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-***REMOVED******REMOVED***switch element.input {
-***REMOVED******REMOVED***case is ComboBoxFormInput:
-***REMOVED******REMOVED******REMOVED***ComboBoxInput(element: element)
-***REMOVED******REMOVED***case is DateTimePickerFormInput:
-***REMOVED******REMOVED******REMOVED***DateTimeInput(element: element)
-***REMOVED******REMOVED***case is RadioButtonsFormInput:
-***REMOVED******REMOVED******REMOVED***RadioButtonsInput(element: element)
-***REMOVED******REMOVED***case is SwitchFormInput:
-***REMOVED******REMOVED******REMOVED***SwitchInput(element: element)
-***REMOVED******REMOVED***case is TextAreaFormInput, is TextBoxFormInput:
-***REMOVED******REMOVED******REMOVED***TextInput(element: element)
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED***if element.isEditable {
+***REMOVED******REMOVED******REMOVED***switch element.input {
+***REMOVED******REMOVED******REMOVED***case is ComboBoxFormInput:
+***REMOVED******REMOVED******REMOVED******REMOVED***ComboBoxInput(element: element)
+***REMOVED******REMOVED******REMOVED***case is DateTimePickerFormInput:
+***REMOVED******REMOVED******REMOVED******REMOVED***DateTimeInput(element: element)
+***REMOVED******REMOVED******REMOVED***case is RadioButtonsFormInput:
+***REMOVED******REMOVED******REMOVED******REMOVED***RadioButtonsInput(element: element)
+***REMOVED******REMOVED******REMOVED***case is SwitchFormInput:
+***REMOVED******REMOVED******REMOVED******REMOVED***SwitchInput(element: element)
+***REMOVED******REMOVED******REMOVED***case is TextAreaFormInput, is TextBoxFormInput:
+***REMOVED******REMOVED******REMOVED******REMOVED***TextInput(element: element)
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***ReadOnlyInput(element: element)
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** BarcodeScannerFormInput is not currently supported
 ***REMOVED******REMOVED***if element.isVisible,
