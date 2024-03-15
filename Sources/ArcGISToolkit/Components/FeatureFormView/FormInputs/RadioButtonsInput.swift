@@ -27,7 +27,6 @@ struct RadioButtonsInput: View {
     // State properties for element events.
     
     @State private var isRequired: Bool = false
-    @State private var isEditable: Bool = false
     @State private var value: Any?
     
     /// The selected option.
@@ -89,7 +88,6 @@ struct RadioButtonsInput: View {
                         }
                     }
                 }
-                .disabled(!isEditable)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color(uiColor: .tertiarySystemFill))
@@ -116,9 +114,6 @@ struct RadioButtonsInput: View {
             }
             .onIsRequiredChange(of: element) { newIsRequired in
                 isRequired = newIsRequired
-            }
-            .onIsEditableChange(of: element) { newIsEditable in
-                isEditable = newIsEditable
             }
         }
     }
