@@ -342,3 +342,28 @@ extension SceneView {
             .interactiveNavigationDisabled(true)
     }
 }
+
+extension View {
+    /// Handles calibration view heading and elevation corrections.
+    /// - Parameters:
+    ///   - calibrationViewModel: The world scale calibration view model.
+    ///   - cameraController: The scene view camera controller.
+    @MainActor
+    func handleCalibrationViewCorrections(
+        calibrationViewModel: WorldScaleCalibrationViewModel,
+        cameraController: TransformationMatrixCameraController
+    ) -> some View {
+        self
+            .onReceive(calibrationViewModel.headingCorrections) { correction in
+                let originCamera = cameraController.originCamera
+                cameraController.originCamera = originCamera.rotatedTo(
+                    heading: originCamera.heading + correction,
+                    pitch: originCamera.pitch,
+                    roll: originCamera.roll
+                )
+            }
+            .onReceive(calibrationViewModel.elevationCorrections) { correction in
+                cameraController.originCamera = cameraController.originCamera.elevated(by: correction)
+            }
+    }
+}

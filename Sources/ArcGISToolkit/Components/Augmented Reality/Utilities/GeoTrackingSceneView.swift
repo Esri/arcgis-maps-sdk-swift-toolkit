@@ -145,17 +145,10 @@ public struct GeoTrackingSceneView: View {
                 currentHeading = heading
             }
         }
-        .onReceive(calibrationViewModel.headingCorrections) { correction in
-            let originCamera = cameraController.originCamera
-            cameraController.originCamera = originCamera.rotatedTo(
-                heading: originCamera.heading + correction,
-                pitch: originCamera.pitch,
-                roll: originCamera.roll
-            )
-        }
-        .onReceive(calibrationViewModel.elevationCorrections) { correction in
-            cameraController.originCamera = cameraController.originCamera.elevated(by: correction)
-        }
+        .handleCalibrationViewCorrections(
+            calibrationViewModel: calibrationViewModel,
+            cameraController: cameraController
+        )
     }
     
     /// Updates the scene view's camera controller with location and heading.
