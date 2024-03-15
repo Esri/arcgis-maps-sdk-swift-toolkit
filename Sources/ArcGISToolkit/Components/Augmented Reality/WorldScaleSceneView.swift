@@ -342,3 +342,28 @@ extension SceneView {
 ***REMOVED******REMOVED******REMOVED***.interactiveNavigationDisabled(true)
 ***REMOVED***
 ***REMOVED***
+
+extension View {
+***REMOVED******REMOVED***/ Handles calibration view heading and elevation corrections.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - calibrationViewModel: The world scale calibration view model.
+***REMOVED******REMOVED***/   - cameraController: The scene view camera controller.
+***REMOVED***@MainActor
+***REMOVED***func handleCalibrationViewCorrections(
+***REMOVED******REMOVED***calibrationViewModel: WorldScaleCalibrationViewModel,
+***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***self
+***REMOVED******REMOVED******REMOVED***.onReceive(calibrationViewModel.headingCorrections) { correction in
+***REMOVED******REMOVED******REMOVED******REMOVED***let originCamera = cameraController.originCamera
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraController.originCamera = originCamera.rotatedTo(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: originCamera.heading + correction,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pitch: originCamera.pitch,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***roll: originCamera.roll
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onReceive(calibrationViewModel.elevationCorrections) { correction in
+***REMOVED******REMOVED******REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.elevated(by: correction)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
