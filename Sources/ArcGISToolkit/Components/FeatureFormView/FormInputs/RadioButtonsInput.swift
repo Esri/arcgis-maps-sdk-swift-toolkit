@@ -27,7 +27,6 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED*** State properties for element events.
 ***REMOVED***
 ***REMOVED***@State private var isRequired: Bool = false
-***REMOVED***@State private var isEditable: Bool = false
 ***REMOVED***@State private var value: Any?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected option.
@@ -89,7 +88,6 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!isEditable)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 10)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .tertiarySystemFill))
@@ -116,9 +114,6 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
 ***REMOVED******REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in
-***REMOVED******REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
