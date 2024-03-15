@@ -68,14 +68,14 @@ public struct FeatureFormView: View {
     
     /// The title of the feature form view.
     @State private var title: String = ""
-
+    
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
     public init(featureForm: FeatureForm) {
         _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
     }
-
+    
     public var body: some View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
