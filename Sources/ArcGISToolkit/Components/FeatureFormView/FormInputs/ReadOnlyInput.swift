@@ -39,6 +39,7 @@ struct ReadOnlyInput: View {
             InputFooter(element: element)
                 .padding(.bottom, elementPadding)
         }
+        .accessibilityIdentifier("\(element.label) Read Only Input")
         .onAppear {
             formattedValue = element.formattedValue
         }
