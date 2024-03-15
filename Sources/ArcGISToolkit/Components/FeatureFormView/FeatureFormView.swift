@@ -127,7 +127,7 @@ extension FeatureFormView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Makes UI for a field form element.
+***REMOVED******REMOVED***/ Makes UI for a field form element including a divider beneath it.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
 ***REMOVED******REMOVED***EditableStateInputWrapper(element: element)
