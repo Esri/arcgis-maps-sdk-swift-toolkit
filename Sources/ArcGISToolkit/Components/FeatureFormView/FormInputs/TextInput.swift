@@ -62,17 +62,7 @@ struct TextInput: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED***if isEditable {
-***REMOVED******REMOVED******REMOVED***textWriter
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***if isMultiline {
-***REMOVED******REMOVED******REMOVED******REMOVED***textReader
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textReader
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***textWriter
 ***REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
@@ -125,15 +115,6 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The body of the text input when the element is non-editable.
-***REMOVED***var textReader: some View {
-***REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
-***REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
-***REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
-***REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
-***REMOVED******REMOVED******REMOVED***.lineLimit(isMultiline ? nil : 1)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
 ***REMOVED***var textWriter: some View {
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
@@ -143,9 +124,9 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $text,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.hint).foregroundColor(.secondary),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: isMultiline ? .vertical : .horizontal
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: element.isMultiline ? .vertical : .horizontal
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** else if isMultiline {
+***REMOVED******REMOVED******REMOVED*** else if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(isPlaceholder ? .secondary : .primary)
 ***REMOVED******REMOVED******REMOVED*** else {
