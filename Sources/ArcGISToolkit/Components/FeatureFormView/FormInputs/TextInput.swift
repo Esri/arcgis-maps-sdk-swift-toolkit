@@ -62,17 +62,7 @@ struct TextInput: View {
     var body: some View {
         InputHeader(label: element.label, isRequired: isRequired)
             .padding([.top], elementPadding)
-        if isEditable {
-            textWriter
-        } else {
-            if isMultiline {
-                textReader
-            } else {
-                ScrollView(.horizontal) {
-                    textReader
-                }
-            }
-        }
+        textWriter
         InputFooter(element: element)
         .padding([.bottom], elementPadding)
         .onChange(of: isFocused) { isFocused in
@@ -125,15 +115,6 @@ private extension TextInput {
         }
     }
     
-    /// The body of the text input when the element is non-editable.
-    var textReader: some View {
-        Text(text.isEmpty ? "--" : text)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
-            .textSelection(.enabled)
-            .lineLimit(isMultiline ? nil : 1)
-    }
-    
     /// The body of the text input when the element is editable.
     var textWriter: some View {
         HStack(alignment: .bottom) {
@@ -143,9 +124,9 @@ private extension TextInput {
                             element.label,
                             text: $text,
                             prompt: Text(element.hint).foregroundColor(.secondary),
-                            axis: isMultiline ? .vertical : .horizontal
+                            axis: element.isMultiline ? .vertical : .horizontal
                         )
-                } else if isMultiline {
+                } else if element.isMultiline {
                     TextEditor(text: $text)
                         .foregroundColor(isPlaceholder ? .secondary : .primary)
                 } else {
