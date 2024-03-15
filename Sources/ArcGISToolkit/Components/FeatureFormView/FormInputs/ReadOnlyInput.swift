@@ -19,50 +19,36 @@ import SwiftUI
 struct ReadOnlyInput: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The view model for the form.
-    @EnvironmentObject var model: FormViewModel
-    
     @State private var formattedValue: String = ""
     
-    /// The current text value.
-    @State private var text = ""
-    
     /// The input's parent element.
-    private let element: FieldFormElement
-    
-    /// Creates a view for text input spanning multiple lines.
-    /// - Parameters:
-    ///   - element: The input's parent element.
-    init(element: FieldFormElement) {
-        precondition(
-            !element.isEditable,
-            "\(Self.self).\(#function) element must not be editable."
-        )
-        self.element = element
-    }
+    let element: FieldFormElement
     
     var body: some View {
-        InputHeader(label: element.label, isRequired: false)
-            .padding([.top], elementPadding)
-        if element.isMultiline {
-            textReader
-        } else {
-            ScrollView(.horizontal) {
+        Group {
+            InputHeader(label: element.label, isRequired: false)
+                .padding(.top, elementPadding)
+            if element.isMultiline {
                 textReader
+            } else {
+                ScrollView(.horizontal) {
+                    textReader
+                }
             }
+            InputFooter(element: element)
+                .padding(.bottom, elementPadding)
         }
-        InputFooter(element: element)
-        .padding([.bottom], elementPadding)
-        .onValueChange(of: element) { newValue, newFormattedValue in
+        .onAppear {
+            formattedValue = element.formattedValue
+        }
+        .onValueChange(of: element) { _, newFormattedValue in
             formattedValue = newFormattedValue
         }
     }
-}
-
-private extension ReadOnlyInput {
+    
     /// The body of the text input when the element is non-editable.
     var textReader: some View {
-        Text(text.isEmpty ? "--" : text)
+        Text(formattedValue.isEmpty ? "--" : formattedValue)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .textSelection(.enabled)
