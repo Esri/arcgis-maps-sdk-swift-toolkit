@@ -69,7 +69,6 @@ private extension FeatureFormTestView {
                 isPresented = true
             }
             .ignoresSafeArea(.keyboard)
-        
             .floatingPanel(
                 attributionBarHeight: attributionBarHeight,
                 selectedDetent: .constant(.full),
@@ -149,7 +148,8 @@ private extension FeatureFormTestView {
         .init("testCase_5_2", objectID: 1, portalID: .switchMapID),
         .init("testCase_5_3", objectID: 1, portalID: .switchMapID),
         .init("testCase_6_1", objectID: 1, portalID: .groupElementMapID),
-        .init("testCase_6_2", objectID: 2, portalID: .groupElementMapID)
+        .init("testCase_6_2", objectID: 2, portalID: .groupElementMapID),
+        .init("testCase_7_1", objectID: 2, portalID: .readOnlyMapID)
     ]}
 }
 
@@ -159,6 +159,7 @@ private extension String {
     static let inputValidationMapID = "5d69e2301ad14ec8a73b568dfc29450a"
     static let radioButtonMapID = "476e9b4180234961809485c8eff83d5d"
     static let rangeDomainMapID = "bb4c5e81740e4e7296943988c78a7ea6"
+    static let readOnlyMapID = "1d6cd4607edf4a50ac10b5165926b597"
     static let switchMapID = "ff98f13b32b349adb55da5528d9174dc"
     static let groupElementMapID = "97495f67bd2e442dbbac485232375b07"
 }
