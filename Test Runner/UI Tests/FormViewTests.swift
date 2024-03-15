@@ -1373,6 +1373,74 @@ final class FeatureFormViewTests: XCTestCase {
             "The first group element doesn't exist."
         )
     }
+    
+    /// Test case 7.1: Test read only elements
+    func testCase_7_1() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
+        let elementsAreEditableSwitch = app.switches["Elements are editable Switch"]
+        let elementInTheGroupIsEditableReadOnlyInput = app.staticTexts["Element in the group is editable Read Only Input"]
+        let elementInTheGroupIsEditableSwitch = app.switches["Element in the group is editable Switch"]
+        
+        let comboBoxReadOnlyInput = app.staticTexts["Combo box Read Only Input"]
+        let comboBox = app.staticTexts["Combo box Combo Box"]
+        
+        let radioButtonsReadOnlyInput = app.staticTexts["Radio buttons Read Only Input"]
+        let radioButtonsInput = app.staticTexts["Radio buttons Radio Buttons"]
+        
+        let dateReadOnlyInput = app.staticTexts["Date Read Only Input"]
+        let dateInput = app.staticTexts["Date Date Time Input"]
+        
+        let shortTextReadOnlyInput = app.staticTexts["Short text Read Only Input"]
+        let shortTextTextInput = app.textFields["Short text Text Input"]
+        
+        let longTextReadOnlyInput = app.staticTexts["Long text Read Only Input"]
+        let longTextTextInput = app.textViews["Long text Text Input"]
+        
+        let groupElement = app.staticTexts["Group"]
+        
+        app.launch()
+        
+        // Open the FeatureFormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(elementInTheGroupIsEditableReadOnlyInput.exists)
+        
+        XCTAssertTrue(comboBoxReadOnlyInput.exists)
+        
+        XCTAssertTrue(radioButtonsReadOnlyInput.exists)
+        
+        XCTAssertTrue(dateReadOnlyInput.exists)
+        
+        XCTAssertTrue(shortTextReadOnlyInput.exists)
+        
+        XCTAssertTrue(longTextReadOnlyInput.exists)
+        
+        elementsAreEditableSwitch.tap()
+        
+        XCTAssertTrue(elementInTheGroupIsEditableSwitch.exists)
+        
+        elementInTheGroupIsEditableSwitch.tap()
+        
+        XCTAssertTrue(comboBox.exists)
+        
+        XCTAssertTrue(radioButtonsInput.exists)
+        
+        XCTAssertTrue(dateInput.exists)
+        
+        XCTAssertTrue(shortTextTextInput.exists)
+        
+        XCTAssertTrue(longTextTextInput.exists)
+    }
 }
 
 private extension String {
