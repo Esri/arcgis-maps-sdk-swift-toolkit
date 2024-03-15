@@ -148,7 +148,7 @@ struct DateTimeInput: View {
         DatePicker(
             selection: Binding($date)!,
             in: dateRange,
-            displayedComponents: input.includeTime ? [.date, .hourAndMinute] : [.date]
+            displayedComponents: input.includesTime ? [.date, .hourAndMinute] : [.date]
         ) { }
             .accessibilityIdentifier("\(element.label) Date Picker")
     }
@@ -189,9 +189,9 @@ struct DateTimeInput: View {
                 date = dateRange.lowerBound
             }
         } label: {
-            input.includeTime ? Text.now : .today
+            input.includesTime ? Text.now : .today
         }
-        .accessibilityIdentifier("\(element.label) \(input.includeTime ? "Now" : "Today") Button")
+        .accessibilityIdentifier("\(element.label) \(input.includesTime ? "Now" : "Today") Button")
     }
 }
 
