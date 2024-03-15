@@ -30,6 +30,7 @@ struct ReadOnlyInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top, elementPadding)
 ***REMOVED******REMOVED******REMOVED***if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED***textReader
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textReader
@@ -49,9 +50,9 @@ struct ReadOnlyInput: View {
 ***REMOVED******REMOVED***/ The body of the text input when the element is non-editable.
 ***REMOVED***var textReader: some View {
 ***REMOVED******REMOVED***Text(formattedValue.isEmpty ? "--" : formattedValue)
+***REMOVED******REMOVED******REMOVED***.lineLimit(element.isMultiline ? nil : 1)
 ***REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
 ***REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
 ***REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
-***REMOVED******REMOVED******REMOVED***.lineLimit(element.isMultiline ? nil : 1)
 ***REMOVED***
 ***REMOVED***
