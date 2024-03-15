@@ -265,14 +265,12 @@ private extension Text {
 ***REMOVED***
 
 extension CodedValue: Equatable {
-***REMOVED******REMOVED***/ - Note: Equatable conformance added temporarily in lieu of finalized API.
 ***REMOVED***public static func == (lhs: CodedValue, rhs: CodedValue) -> Bool {
 ***REMOVED******REMOVED***lhs.name == rhs.name
 ***REMOVED***
 ***REMOVED***
 
 extension CodedValue: Hashable {
-***REMOVED******REMOVED***/ - Note: Hashable conformance added temporarily in lieu of finalized API.
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(name)
 ***REMOVED***
