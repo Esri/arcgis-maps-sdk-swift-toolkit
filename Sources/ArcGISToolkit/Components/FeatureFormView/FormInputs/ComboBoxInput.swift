@@ -127,6 +127,7 @@ struct ComboBoxInput: View {
             
             InputFooter(element: element)
         }
+        .accessibilityIdentifier("\(element.label) Combo Box")
         .padding([.bottom], elementPadding)
         .onChange(of: selectedValue) { selectedValue in
             element.updateValue(selectedValue?.code)
