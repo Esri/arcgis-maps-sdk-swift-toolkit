@@ -25,7 +25,6 @@ struct TextInput: View {
     // State properties for element events.
     
     @State private var isRequired: Bool = false
-    @State private var isEditable: Bool = false
     @State private var formattedValue: String = ""
     
     /// A Boolean value indicating whether or not the field is focused.
@@ -88,9 +87,7 @@ struct TextInput: View {
         .onChange(of: text) { text in
             guard !isPlaceholder else { return }
             element.convertAndUpdateValue(text)
-            if element.isEditable {
-                model.evaluateExpressions()
-            }
+            model.evaluateExpressions()
         }
         .onValueChange(of: element) { newValue, newFormattedValue in
             formattedValue = newFormattedValue
@@ -98,9 +95,6 @@ struct TextInput: View {
         }
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
-        }
-        .onIsEditableChange(of: element) { newIsEditable in
-            isEditable = newIsEditable
         }
     }
 }
@@ -150,7 +144,7 @@ private extension TextInput {
                 }
             }
             .scrollContentBackgroundHidden()
-            if !text.isEmpty && isEditable {
+            if !text.isEmpty {
                 ClearButton {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
