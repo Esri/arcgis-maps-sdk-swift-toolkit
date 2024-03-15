@@ -19,50 +19,36 @@
 struct ReadOnlyInput: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@EnvironmentObject var model: FormViewModel
-***REMOVED***
 ***REMOVED***@State private var formattedValue: String = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ The current text value.
-***REMOVED***@State private var text = ""
-***REMOVED***
 ***REMOVED******REMOVED***/ The input's parent element.
-***REMOVED***private let element: FieldFormElement
-***REMOVED***
-***REMOVED******REMOVED***/ Creates a view for text input spanning multiple lines.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - element: The input's parent element.
-***REMOVED***init(element: FieldFormElement) {
-***REMOVED******REMOVED***precondition(
-***REMOVED******REMOVED******REMOVED***!element.isEditable,
-***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element must not be editable."
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***self.element = element
-***REMOVED***
+***REMOVED***let element: FieldFormElement
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***InputHeader(label: element.label, isRequired: false)
-***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED***if element.isMultiline {
-***REMOVED******REMOVED******REMOVED***textReader
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: false)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top, elementPadding)
+***REMOVED******REMOVED******REMOVED***if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED***textReader
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textReader
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, elementPadding)
 ***REMOVED***
-***REMOVED******REMOVED***InputFooter(element: element)
-***REMOVED******REMOVED***.padding([.bottom], elementPadding)
-***REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***formattedValue = element.formattedValue
+***REMOVED***
+***REMOVED******REMOVED***.onValueChange(of: element) { _, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-private extension ReadOnlyInput {
 ***REMOVED******REMOVED***/ The body of the text input when the element is non-editable.
 ***REMOVED***var textReader: some View {
-***REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
+***REMOVED******REMOVED***Text(formattedValue.isEmpty ? "--" : formattedValue)
 ***REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
 ***REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
 ***REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
