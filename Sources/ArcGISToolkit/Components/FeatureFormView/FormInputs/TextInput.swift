@@ -25,7 +25,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED*** State properties for element events.
 ***REMOVED***
 ***REMOVED***@State private var isRequired: Bool = false
-***REMOVED***@State private var isEditable: Bool = false
 ***REMOVED***@State private var formattedValue: String = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
@@ -88,9 +87,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED***.onChange(of: text) { text in
 ***REMOVED******REMOVED******REMOVED***guard !isPlaceholder else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
-***REMOVED******REMOVED******REMOVED***if element.isEditable {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
 ***REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
@@ -98,9 +95,6 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
 ***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
-***REMOVED***
-***REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in
-***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -150,7 +144,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.scrollContentBackgroundHidden()
-***REMOVED******REMOVED******REMOVED***if !text.isEmpty && isEditable {
+***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the user wasn't already editing the field provide
