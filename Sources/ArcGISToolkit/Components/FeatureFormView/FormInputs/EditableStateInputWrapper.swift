@@ -20,8 +20,10 @@
 ***REMOVED***/ This view specifically handles the logic of monitoring whether a field form element is editable and choosing
 ***REMOVED***/ the correct Toolkit input view based on the element's input type.
 struct EditableStateInputWrapper: View {
+***REMOVED******REMOVED***/ A Boolean value indicating whether the input is editable.
 ***REMOVED***@State private var isEditable = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The input's element.
 ***REMOVED***let element: FieldFormElement
 ***REMOVED***
 ***REMOVED***var body: some View {
