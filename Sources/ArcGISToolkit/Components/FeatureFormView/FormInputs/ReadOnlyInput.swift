@@ -30,6 +30,7 @@ struct ReadOnlyInput: View {
                 .padding(.top, elementPadding)
             if element.isMultiline {
                 textReader
+                    .frame(maxWidth: .infinity, alignment: .leading)
             } else {
                 ScrollView(.horizontal) {
                     textReader
@@ -49,9 +50,9 @@ struct ReadOnlyInput: View {
     /// The body of the text input when the element is non-editable.
     var textReader: some View {
         Text(formattedValue.isEmpty ? "--" : formattedValue)
+            .lineLimit(element.isMultiline ? nil : 1)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
             .textSelection(.enabled)
-            .lineLimit(element.isMultiline ? nil : 1)
     }
 }
