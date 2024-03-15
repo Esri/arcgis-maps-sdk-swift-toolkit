@@ -7,10 +7,11 @@
     @Chapter(name: "Augmented Reality") {
         Augmented reality experiences overlay ArcGIS Scene imagery over a camera feed of the
         physical world. The following views provide augmented reality experiences 
-        for common AR patterns including Flyover and TableTop AR.
-        @Image(source: FlyoverSceneView, alt: "An image of a fly over AR experience.")
+        for common AR patterns including Flyover, TableTop, and World Scale AR.
+        @Image(source: WorldScaleSceneView, alt: "An image of a world scale AR experience.")
         @TutorialReference(tutorial: "doc:FlyoverSceneViewTutorial")
         @TutorialReference(tutorial: "doc:TableTopSceneViewTutorial")
+        @TutorialReference(tutorial: "doc:WorldScaleSceneViewTutorial")
     }
     
     @Chapter(name: "Authenticator") {
