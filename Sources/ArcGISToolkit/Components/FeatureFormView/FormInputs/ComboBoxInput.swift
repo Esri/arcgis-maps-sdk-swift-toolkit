@@ -27,7 +27,6 @@ struct ComboBoxInput: View {
     // State properties for element events.
     
     @State private var isRequired: Bool = false
-    @State private var isEditable: Bool = false
     @State private var value: Any?
     @State private var formattedValue: String = ""
     
@@ -87,7 +86,6 @@ struct ComboBoxInput: View {
         value = element.value
         formattedValue = element.formattedValue
         isRequired = element.isRequired
-        isEditable = element.isEditable
     }
     
     var body: some View {
@@ -100,23 +98,21 @@ struct ComboBoxInput: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
                     .accessibilityIdentifier("\(element.label) Value")
-                if isEditable {
-                    if selectedValue != nil, !isRequired {
-                        // Only show clear button if we have a value
-                        // and we're not required. (i.e., Don't show clear if
-                        // the field is required.)
-                        ClearButton {
-                            model.focusedElement = element
-                            defer { model.focusedElement = nil }
-                            selectedValue = nil
-                        }
-                        .accessibilityIdentifier("\(element.label) Clear Button")
-                    } else {
-                        // Otherwise, always show list icon.
-                        Image(systemName: "list.bullet")
-                            .foregroundColor(.secondary)
-                            .accessibilityIdentifier("\(element.label) Options Button")
+                if selectedValue != nil, !isRequired {
+                    // Only show clear button if we have a value
+                    // and we're not required. (i.e., Don't show clear if
+                    // the field is required.)
+                    ClearButton {
+                        model.focusedElement = element
+                        defer { model.focusedElement = nil }
+                        selectedValue = nil
                     }
+                    .accessibilityIdentifier("\(element.label) Clear Button")
+                } else {
+                    // Otherwise, always show list icon.
+                    Image(systemName: "list.bullet")
+                        .foregroundColor(.secondary)
+                        .accessibilityIdentifier("\(element.label) Options Button")
                 }
             }
             .formInputStyle()
@@ -143,9 +139,6 @@ struct ComboBoxInput: View {
         }
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
-        }
-        .onIsEditableChange(of: element) { newIsEditable in
-            isEditable = newIsEditable
         }
     }
     
@@ -252,7 +245,7 @@ private extension String {
         )
     }
 }
-    
+
 private extension Text {
     /// A label for a text entry field that allows the user to filter a list of values by name.
     static var filter: Self {
