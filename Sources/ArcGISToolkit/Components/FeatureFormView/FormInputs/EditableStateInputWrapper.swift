@@ -20,8 +20,10 @@ import SwiftUI
 /// This view specifically handles the logic of monitoring whether a field form element is editable and choosing
 /// the correct Toolkit input view based on the element's input type.
 struct EditableStateInputWrapper: View {
+    /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
     
+    /// The input's element.
     let element: FieldFormElement
     
     var body: some View {
