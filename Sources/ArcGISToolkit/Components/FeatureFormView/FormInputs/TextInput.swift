@@ -185,11 +185,6 @@ private extension TextInput {
 ***REMOVED******REMOVED***.formInputStyle()
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the input is multiline or not.
-***REMOVED***var isMultiline: Bool {
-***REMOVED******REMOVED***element.input is TextAreaFormInput
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.
 ***REMOVED***var keyboardType: UIKeyboardType {
 ***REMOVED******REMOVED***guard let fieldType = element.fieldType else { return .default ***REMOVED***
