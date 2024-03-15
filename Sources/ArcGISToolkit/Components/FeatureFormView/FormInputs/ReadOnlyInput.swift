@@ -1,0 +1,71 @@
+***REMOVED*** Copyright 2024 Esri
+***REMOVED***
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ A view for a read only field form element.
+struct ReadOnlyInput: View {
+***REMOVED***@Environment(\.formElementPadding) var elementPadding
+***REMOVED***
+***REMOVED******REMOVED***/ The view model for the form.
+***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***
+***REMOVED***@State private var formattedValue: String = ""
+***REMOVED***
+***REMOVED******REMOVED***/ The current text value.
+***REMOVED***@State private var text = ""
+***REMOVED***
+***REMOVED******REMOVED***/ The input's parent element.
+***REMOVED***private let element: FieldFormElement
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a view for text input spanning multiple lines.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - element: The input's parent element.
+***REMOVED***init(element: FieldFormElement) {
+***REMOVED******REMOVED***precondition(
+***REMOVED******REMOVED******REMOVED***!element.isEditable,
+***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element must not be editable."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***self.element = element
+***REMOVED***
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***InputHeader(label: element.label, isRequired: false)
+***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
+***REMOVED******REMOVED***if element.isMultiline {
+***REMOVED******REMOVED******REMOVED***textReader
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
+***REMOVED******REMOVED******REMOVED******REMOVED***textReader
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***InputFooter(element: element)
+***REMOVED******REMOVED***.padding([.bottom], elementPadding)
+***REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension ReadOnlyInput {
+***REMOVED******REMOVED***/ The body of the text input when the element is non-editable.
+***REMOVED***var textReader: some View {
+***REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
+***REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
+***REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
+***REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
+***REMOVED******REMOVED******REMOVED***.lineLimit(element.isMultiline ? nil : 1)
+***REMOVED***
+***REMOVED***
