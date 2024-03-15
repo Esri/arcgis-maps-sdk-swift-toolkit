@@ -96,6 +96,7 @@ struct RadioButtonsInput: View {
                 
                 InputFooter(element: element)
             }
+            .accessibilityIdentifier("\(element.label) Radio Buttons")
             .padding([.bottom], elementPadding)
             .onAppear {
                 if let selectedValue = element.codedValues.first(where: { $0.name == element.formattedValue }) {
