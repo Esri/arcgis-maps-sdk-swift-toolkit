@@ -130,19 +130,23 @@ extension FeatureFormView {
     /// Makes UI for a field form element.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-        switch element.input {
-        case is ComboBoxFormInput:
-            ComboBoxInput(element: element)
-        case is DateTimePickerFormInput:
-            DateTimeInput(element: element)
-        case is RadioButtonsFormInput:
-            RadioButtonsInput(element: element)
-        case is SwitchFormInput:
-            SwitchInput(element: element)
-        case is TextAreaFormInput, is TextBoxFormInput:
-            TextInput(element: element)
-        default:
-            EmptyView()
+        if element.isEditable {
+            switch element.input {
+            case is ComboBoxFormInput:
+                ComboBoxInput(element: element)
+            case is DateTimePickerFormInput:
+                DateTimeInput(element: element)
+            case is RadioButtonsFormInput:
+                RadioButtonsInput(element: element)
+            case is SwitchFormInput:
+                SwitchInput(element: element)
+            case is TextAreaFormInput, is TextBoxFormInput:
+                TextInput(element: element)
+            default:
+                EmptyView()
+            }
+        } else {
+            ReadOnlyInput(element: element)
         }
         // BarcodeScannerFormInput is not currently supported
         if element.isVisible,
