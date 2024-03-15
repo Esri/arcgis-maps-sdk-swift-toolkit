@@ -61,6 +61,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
+***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Date Time Input")
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
 ***REMOVED******REMOVED******REMOVED***isEditing = focusedElement == element
