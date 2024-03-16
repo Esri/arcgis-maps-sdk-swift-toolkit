@@ -64,7 +64,7 @@ public struct FeatureFormView: View {
 ***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the initial expression evaluation is running.
-***REMOVED***@State var isEvaluatingInitialExpressions = true
+***REMOVED***@State private var isEvaluatingInitialExpressions = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title of the feature form view.
 ***REMOVED***@State private var title: String = ""
