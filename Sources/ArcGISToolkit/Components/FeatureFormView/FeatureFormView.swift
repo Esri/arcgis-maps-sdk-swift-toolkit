@@ -64,7 +64,7 @@ public struct FeatureFormView: View {
     @StateObject private var model: FormViewModel
     
     /// A Boolean value indicating whether the initial expression evaluation is running.
-    @State var isEvaluatingInitialExpressions = true
+    @State private var isEvaluatingInitialExpressions = true
     
     /// The title of the feature form view.
     @State private var title: String = ""
