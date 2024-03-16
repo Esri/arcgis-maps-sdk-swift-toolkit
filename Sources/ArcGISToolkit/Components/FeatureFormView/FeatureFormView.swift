@@ -139,18 +139,3 @@ extension FeatureFormView {
         }
     }
 }
-
-private extension View {
-    /// Configures the behavior in which scrollable content interacts with the software keyboard.
-    /// - Returns: A view that dismisses the keyboard when the  scroll.
-    /// - Parameter immediately: A Boolean value that will cause the keyboard to the keyboard to
-    /// dismiss as soon as scrolling starts when `true` and interactively when `false`.
-    func scrollDismissesKeyboard(immediately: Bool) -> some View {
-        if #available(iOS 16.0, *) {
-            return self
-                .scrollDismissesKeyboard(immediately ? .immediately : .interactively)
-        } else {
-            return self
-        }
-    }
-}
