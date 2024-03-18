@@ -95,9 +95,9 @@ struct ComboBoxInput: View {
             
             HStack {
                 Text(selectedValue?.name ?? placeholderValue)
+                    .accessibilityIdentifier("\(element.label) Combo Box Value")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(selectedValue != nil ? .primary : .secondary)
-                    .accessibilityIdentifier("\(element.label) Value")
                 if selectedValue != nil, !isRequired {
                     // Only show clear button if we have a value
                     // and we're not required. (i.e., Don't show clear if
@@ -111,8 +111,8 @@ struct ComboBoxInput: View {
                 } else {
                     // Otherwise, always show list icon.
                     Image(systemName: "list.bullet")
-                        .foregroundColor(.secondary)
                         .accessibilityIdentifier("\(element.label) Options Button")
+                        .foregroundColor(.secondary)
                 }
             }
             .formInputStyle()
