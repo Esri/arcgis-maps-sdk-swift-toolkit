@@ -102,8 +102,10 @@ struct RadioButtonsInput: View {
                     $0.name == element.formattedValue
                 }) {
                     self.selectedValue = selectedValue
-                } else if element.formattedValue != input.noValueLabel {
-                    fallbackToComboBox = true
+                } else {
+                    fallbackToComboBox =
+                    (input.noValueOption == .show && element.formattedValue != input.noValueLabel)
+                    || (input.noValueOption == .hide && !element.formattedValue.isEmpty)
                 }
             }
             .onChange(of: selectedValue) { selectedValue in
