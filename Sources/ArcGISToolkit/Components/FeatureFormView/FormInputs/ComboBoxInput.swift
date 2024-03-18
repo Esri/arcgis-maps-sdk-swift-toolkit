@@ -127,7 +127,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
-***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Combo Box")
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
 ***REMOVED******REMOVED******REMOVED***element.updateValue(selectedValue?.code)
