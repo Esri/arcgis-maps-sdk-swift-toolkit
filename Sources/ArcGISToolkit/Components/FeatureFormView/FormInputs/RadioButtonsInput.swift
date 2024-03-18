@@ -32,8 +32,8 @@ struct RadioButtonsInput: View {
     /// The selected option.
     @State private var selectedValue: CodedValue?
     
-    /// A Boolean value indicating whether a `ComboBoxInput`` should be used instead. This will be `true` if
-    /// the current value doesn't exist as an option in the domain
+    /// A Boolean value indicating whether a ``ComboBoxInput`` should be used instead.
+    /// This will be `true` if the current value doesn't exist as an option in the domain
     @State private var fallbackToComboBox = false
     
     /// The field's parent element.
@@ -98,9 +98,11 @@ struct RadioButtonsInput: View {
             }
             .padding([.bottom], elementPadding)
             .onAppear {
-                if let selectedValue = element.codedValues.first(where: { $0.name == element.formattedValue }) {
+                if let selectedValue = element.codedValues.first(where: {
+                    $0.name == element.formattedValue
+                }) {
                     self.selectedValue = selectedValue
-                } else if !element.formattedValue.isEmpty {
+                } else if element.formattedValue != input.noValueLabel {
                     fallbackToComboBox = true
                 }
             }
