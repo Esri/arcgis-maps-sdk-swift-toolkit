@@ -38,6 +38,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "Naršyti";
 
+/* A label for a button to show the calibration view. */
+"Calibrate" = "Kalibruoti";
+
+/* A label for the calibration view used to calibrate the camera
+for the AR experience. */
+"Calibration" = "Kalibravimas";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Atšaukti";
 
@@ -85,6 +92,10 @@ network element for more than one trace starting point. */
 for a utility network trace. */
 "Element could not be identified." = "Nepavyko identifikuoti elemento.";
 
+/* A label for the slider that adjusts the camera elevation for the
+AR experience. */
+"elevation" = "aukštis";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Klaida";
 
@@ -94,6 +105,10 @@ network certificate. */
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "Klaida įkeliant pagrindo žemėlapį.";
+
+/* An error message shown when a GeoModel failed to load.
+The variable provides additional data. */
+"Error loading bookmarks: %@" = "Įkeliant žymes įvyko klaida: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Iškylančių išraiškų vertinimas";
@@ -129,6 +144,10 @@ contains one or more facilities in a floor-aware map or scene. */
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Funkcijos rezultatai";
+
+/* A label for the slider that adjusts the camera heading for the
+AR experience. */
+"heading" = "antraštė";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Medija";

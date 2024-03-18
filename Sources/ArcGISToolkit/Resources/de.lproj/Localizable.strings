@@ -38,6 +38,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "Durchsuchen";
 
+/* A label for a button to show the calibration view. */
+"Calibrate" = "Kalibrieren";
+
+/* A label for the calibration view used to calibrate the camera
+for the AR experience. */
+"Calibration" = "Kalibrierung";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Abbrechen";
 
@@ -85,6 +92,10 @@ network element for more than one trace starting point. */
 for a utility network trace. */
 "Element could not be identified." = "Das Element konnte nicht identifiziert werden.";
 
+/* A label for the slider that adjusts the camera elevation for the
+AR experience. */
+"elevation" = "Höhe";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Fehler";
 
@@ -94,6 +105,10 @@ network certificate. */
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "Fehler beim Laden der Grundkarte.";
+
+/* An error message shown when a GeoModel failed to load.
+The variable provides additional data. */
+"Error loading bookmarks: %@" = "Fehler beim Laden der Lesezeichen: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Pop-up-Ausdrücke werden ausgewertet";
@@ -129,6 +144,10 @@ contains one or more facilities in a floor-aware map or scene. */
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Funktionsergebnisse";
+
+/* A label for the slider that adjusts the camera heading for the
+AR experience. */
+"heading" = "Kurs";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Medien";

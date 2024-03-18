@@ -42,6 +42,10 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED***@State private var currentLocation: Location?
 ***REMOVED******REMOVED***/ The current interface orientation.
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
+***REMOVED******REMOVED***/ The closure to perform when the camera tracking state changes.
+***REMOVED***private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
+***REMOVED******REMOVED***/ The closure to perform when the geo tracking status changes.
+***REMOVED***private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale geo-tracking scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -68,6 +72,7 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***self.arViewProxy = arViewProxy
 ***REMOVED******REMOVED***self.cameraController = cameraController
 ***REMOVED******REMOVED***self.calibrationViewModel = calibrationViewModel
+***REMOVED******REMOVED***self.cameraController.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***_initialCameraIsSet = initialCameraIsSet
 ***REMOVED******REMOVED***self.calibrationViewIsPresented = calibrationViewIsPresented
 ***REMOVED******REMOVED***self.locationDataSource = locationDataSource
@@ -95,6 +100,10 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDidChangeGeoTrackingStatus { _, status in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handleGeoTrackingStatusChange(status)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onGeoTrackingStatusChangedAction?(status)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCameraDidChangeTrackingState { _, trackingState in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCameraTrackingStateChangedAction?(trackingState)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.worldScaleSetup(cameraController: cameraController)
@@ -187,5 +196,29 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED***@unknown default:
 ***REMOVED******REMOVED******REMOVED***fatalError("Unknown ARGeoTrackingStatus.State")
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when the camera tracking state changes.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the camera tracking state has changed.
+***REMOVED***public func onCameraTrackingStateChanged(
+***REMOVED******REMOVED***perform action: @escaping (
+***REMOVED******REMOVED******REMOVED***_ cameraTrackingState: ARCamera.TrackingState
+***REMOVED******REMOVED***) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onCameraTrackingStateChangedAction = action
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when the geo tracking status changes.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the geo tracking status has changed.
+***REMOVED***public func onGeoTrackingStatusChanged(
+***REMOVED******REMOVED***perform action: @escaping (
+***REMOVED******REMOVED******REMOVED***_ geoTrackingStatus: ARGeoTrackingStatus
+***REMOVED******REMOVED***) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onGeoTrackingStatusChangedAction = action
+***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***

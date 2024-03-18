@@ -19,15 +19,15 @@ import ARKit
 ***REMOVED***/ A scene view that provides an augmented reality world scale experience.
 public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The clipping distance of the scene view.
-***REMOVED***private let clippingDistance: Double?
+***REMOVED***let clippingDistance: Double?
 ***REMOVED******REMOVED***/ The tracking mode for world scale AR.
-***REMOVED***private let trackingMode: TrackingMode
+***REMOVED***let trackingMode: TrackingMode
 ***REMOVED******REMOVED***/ The closure that builds the scene view.
 ***REMOVED***private let sceneViewBuilder: (SceneViewProxy) -> SceneView
 ***REMOVED******REMOVED***/ Determines the alignment of the calibration button.
-***REMOVED***private var calibrationButtonAlignment: Alignment = .bottom
+***REMOVED***var calibrationButtonAlignment: Alignment = .bottom
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the calibration view is hidden.
-***REMOVED***private var calibrationViewIsHidden = false
+***REMOVED***var calibrationViewIsHidden = false
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
 ***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
@@ -45,7 +45,11 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The error from the view.
 ***REMOVED***@State private var error: Error?
 ***REMOVED******REMOVED***/ The closure to call upon a single tap.
-***REMOVED***private var onSingeTapGestureAction: ((CGPoint, Point?) -> Void)? = nil
+***REMOVED***private var onSingleTapGestureAction: ((CGPoint, Point?) -> Void)? = nil
+***REMOVED******REMOVED***/ The closure to perform when the camera tracking state changes.
+***REMOVED***private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
+***REMOVED******REMOVED***/ The closure to perform when the geo tracking status changes.
+***REMOVED***private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -154,6 +158,12 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
 ***REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.onGeoTrackingStatusChanged { geoTrackingStatus in
+***REMOVED******REMOVED******REMOVED***onGeoTrackingStatusChangedAction?(geoTrackingStatus)
+***REMOVED***
+***REMOVED******REMOVED***.onCameraTrackingStateChanged { trackingState in
+***REMOVED******REMOVED******REMOVED***onCameraTrackingStateChangedAction?(trackingState)
+***REMOVED***
 ***REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
 ***REMOVED******REMOVED******REMOVED***handleSingleTap(tapPoint)
 ***REMOVED***
@@ -171,6 +181,9 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***locationDataSource: locationDataSource,
 ***REMOVED******REMOVED******REMOVED***sceneView: sceneViewBuilder
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.onCameraTrackingStateChanged { trackingState in
+***REMOVED******REMOVED******REMOVED***onCameraTrackingStateChangedAction?(trackingState)
+***REMOVED***
 ***REMOVED******REMOVED***.onSingleTapGesture { tapPoint in
 ***REMOVED******REMOVED******REMOVED***handleSingleTap(tapPoint)
 ***REMOVED***
@@ -180,7 +193,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ - Parameter tapPoint: The tapped screen point.
 ***REMOVED***private func handleSingleTap(_ tapPoint: CGPoint) {
 ***REMOVED******REMOVED***let scenePoint = arScreenToLocation(screenPoint: tapPoint)
-***REMOVED******REMOVED***onSingeTapGestureAction?(tapPoint, scenePoint)
+***REMOVED******REMOVED***onSingleTapGestureAction?(tapPoint, scenePoint)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the visibility of the calibration view for the AR experience.
@@ -197,6 +210,30 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***public func calibrationButtonAlignment(_ alignment: Alignment) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.calibrationButtonAlignment = alignment
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when the camera tracking state changes.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the camera tracking state has changed.
+***REMOVED***public func onCameraTrackingStateChanged(
+***REMOVED******REMOVED***perform action: @escaping (
+***REMOVED******REMOVED******REMOVED***_ cameraTrackingState: ARCamera.TrackingState
+***REMOVED******REMOVED***) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onCameraTrackingStateChangedAction = action
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when the geo tracking status changes.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the geo tracking status has changed.
+***REMOVED***public func onGeoTrackingStatusChanged(
+***REMOVED******REMOVED***perform action: @escaping (
+***REMOVED******REMOVED******REMOVED***_ geoTrackingStatus: ARGeoTrackingStatus
+***REMOVED******REMOVED***) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onGeoTrackingStatusChangedAction = action
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
@@ -289,7 +326,7 @@ public extension WorldScaleSceneView {
 ***REMOVED******REMOVED***perform action: @escaping (_ screenPoint: CGPoint, _ scenePoint: Point?) -> Void
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onSingeTapGestureAction = action
+***REMOVED******REMOVED***copy.onSingleTapGestureAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
