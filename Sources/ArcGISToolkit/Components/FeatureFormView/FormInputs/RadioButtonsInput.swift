@@ -32,8 +32,8 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether a `ComboBoxInput`` should be used instead. This will be `true` if
-***REMOVED******REMOVED***/ the current value doesn't exist as an option in the domain
+***REMOVED******REMOVED***/ A Boolean value indicating whether a ``ComboBoxInput`` should be used instead.
+***REMOVED******REMOVED***/ This will be `true` if the current value doesn't exist as an option in the domain
 ***REMOVED***@State private var fallbackToComboBox = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
@@ -98,9 +98,11 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = element.codedValues.first(where: { $0.name == element.formattedValue ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = element.codedValues.first(where: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.name == element.formattedValue
+***REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.selectedValue = selectedValue
-***REMOVED******REMOVED******REMOVED*** else if !element.formattedValue.isEmpty {
+***REMOVED******REMOVED******REMOVED*** else if element.formattedValue != input.noValueLabel {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
