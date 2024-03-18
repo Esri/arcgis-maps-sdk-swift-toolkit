@@ -33,7 +33,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
 ***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The view model for the calibration view.
-***REMOVED***@StateObject private var calibrationViewModel = WorldScaleCalibrationViewModel()
+***REMOVED***@State private var calibrationViewModel: WorldScaleCalibrationViewModel
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the geo-tracking configuration is available.
 ***REMOVED***@State private var geoTrackingIsAvailable = true
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the initial camera is set for the scene view.
@@ -61,6 +61,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
 ***REMOVED******REMOVED***/ be effectively viewed in augmented reality. Properties such as the camera controller,
 ***REMOVED******REMOVED***/ and view drawing mode.
+***REMOVED***@MainActor
 ***REMOVED***public init(
 ***REMOVED******REMOVED***clippingDistance: Double? = nil,
 ***REMOVED******REMOVED***trackingMode: TrackingMode,
@@ -74,6 +75,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***cameraController.translationFactor = 1
 ***REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_calibrationViewModel = .init(initialValue: WorldScaleCalibrationViewModel(cameraController: cameraController))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -340,30 +343,5 @@ extension SceneView {
 ***REMOVED******REMOVED******REMOVED***.spaceEffect(.transparent)
 ***REMOVED******REMOVED******REMOVED***.atmosphereEffect(.off)
 ***REMOVED******REMOVED******REMOVED***.interactiveNavigationDisabled(true)
-***REMOVED***
-***REMOVED***
-
-extension View {
-***REMOVED******REMOVED***/ Handles calibration view heading and elevation corrections.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - calibrationViewModel: The world scale calibration view model.
-***REMOVED******REMOVED***/   - cameraController: The scene view camera controller.
-***REMOVED***@MainActor
-***REMOVED***func handleCalibrationViewCorrections(
-***REMOVED******REMOVED***calibrationViewModel: WorldScaleCalibrationViewModel,
-***REMOVED******REMOVED***cameraController: TransformationMatrixCameraController
-***REMOVED***) -> some View {
-***REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED***.onReceive(calibrationViewModel.headingCorrections) { correction in
-***REMOVED******REMOVED******REMOVED******REMOVED***let originCamera = cameraController.originCamera
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraController.originCamera = originCamera.rotatedTo(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: originCamera.heading + correction,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pitch: originCamera.pitch,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***roll: originCamera.roll
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onReceive(calibrationViewModel.elevationCorrections) { correction in
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.elevated(by: correction)
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

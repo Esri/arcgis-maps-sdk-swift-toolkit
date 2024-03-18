@@ -160,10 +160,6 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateWorldTrackingSceneView(for: location)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.handleCalibrationViewCorrections(
-***REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
-***REMOVED******REMOVED******REMOVED***cameraController: cameraController
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the scene view's camera controller with a new location coming from the
