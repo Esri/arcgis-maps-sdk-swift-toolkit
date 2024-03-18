@@ -105,11 +105,9 @@ public struct GeoTrackingSceneView: View {
                     .onCameraDidChangeTrackingState { _, trackingState in
                         onCameraTrackingStateChangedAction?(trackingState)
                     }
-                
-                if initialCameraIsSet {
-                    sceneViewBuilder(sceneViewProxy)
-                        .worldScaleSetup(cameraController: cameraController)
-                }
+                sceneViewBuilder(sceneViewProxy)
+                    .worldScaleSetup(cameraController: cameraController)
+                    .opacity(initialCameraIsSet ? 1 : 0)
             }
             .ignoresSafeArea(.all)
             .overlay {
