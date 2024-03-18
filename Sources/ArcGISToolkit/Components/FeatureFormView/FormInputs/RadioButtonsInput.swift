@@ -162,16 +162,16 @@ extension RadioButtonsInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if selected {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(label) Checkmark")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding(10)
 ***REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
 ***REMOVED***
+***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(label) Radio Button")
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.foregroundColor(.primary)
-***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(label)")
 ***REMOVED******REMOVED***if addDivider {
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, 10)
