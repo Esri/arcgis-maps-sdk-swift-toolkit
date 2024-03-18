@@ -1089,9 +1089,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Radio Button Text *"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
-***REMOVED******REMOVED***let dogOption = app.buttons["Radio Button Text dog"]
+***REMOVED******REMOVED***let dogOption = app.buttons["Radio Button Text dog Radio Button"]
 ***REMOVED******REMOVED***let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
-***REMOVED******REMOVED***let noValueOption = app.buttons["Radio Button Text No Value"]
+***REMOVED******REMOVED***let noValueOption = app.buttons["Radio Button Text No Value Radio Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
