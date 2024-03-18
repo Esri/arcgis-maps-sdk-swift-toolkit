@@ -127,7 +127,7 @@ struct WorldTrackingSceneView: View {
                         }
                 }
             }
-            .edgesIgnoringSafeArea(.bottom)
+            .ignoresSafeArea(.container, edges: [.horizontal, .bottom])
             .overlay {
                 ARCoachingOverlay(goal: .geoTracking)
                     .sessionProvider(arViewProxy)

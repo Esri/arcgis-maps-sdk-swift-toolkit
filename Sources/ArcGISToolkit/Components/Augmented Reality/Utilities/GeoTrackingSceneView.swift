@@ -111,7 +111,7 @@ public struct GeoTrackingSceneView: View {
                         .worldScaleSetup(cameraController: cameraController)
                 }
             }
-            .edgesIgnoringSafeArea(.bottom)
+            .ignoresSafeArea(.container, edges: [.horizontal, .bottom])
             .overlay {
                 ARCoachingOverlay(goal: .geoTracking)
                     .sessionProvider(arViewProxy)
