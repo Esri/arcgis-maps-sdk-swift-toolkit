@@ -105,11 +105,9 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCameraDidChangeTrackingState { _, trackingState in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCameraTrackingStateChangedAction?(trackingState)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if initialCameraIsSet {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.worldScaleSetup(cameraController: cameraController)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.worldScaleSetup(cameraController: cameraController)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(initialCameraIsSet ? 1 : 0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.all)
 ***REMOVED******REMOVED******REMOVED***.overlay {
