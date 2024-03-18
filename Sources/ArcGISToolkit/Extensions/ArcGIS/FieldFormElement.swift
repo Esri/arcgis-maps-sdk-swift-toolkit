@@ -19,4 +19,9 @@ extension FieldFormElement {
     var codedValues: [CodedValue] {
         return (domain as? CodedValueDomain)?.codedValues ?? []
     }
+    
+    /// A Boolean value indicating whether the input is multiline or not.
+    var isMultiline: Bool {
+        input is TextAreaFormInput
+    }
 }

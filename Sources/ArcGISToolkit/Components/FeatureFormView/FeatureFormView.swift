@@ -68,14 +68,14 @@ public struct FeatureFormView: View {
     
     /// The title of the feature form view.
     @State private var title: String = ""
-
+    
     /// Initializes a form view.
     /// - Parameters:
     ///   - featureForm: The feature form defining the editing experience.
     public init(featureForm: FeatureForm) {
         _model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
     }
-
+    
     public var body: some View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
@@ -127,23 +127,10 @@ extension FeatureFormView {
         }
     }
     
-    /// Makes UI for a field form element.
+    /// Makes UI for a field form element including a divider beneath it.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-        switch element.input {
-        case is ComboBoxFormInput:
-            ComboBoxInput(element: element)
-        case is DateTimePickerFormInput:
-            DateTimeInput(element: element)
-        case is RadioButtonsFormInput:
-            RadioButtonsInput(element: element)
-        case is SwitchFormInput:
-            SwitchInput(element: element)
-        case is TextAreaFormInput, is TextBoxFormInput:
-            TextInput(element: element)
-        default:
-            EmptyView()
-        }
+        EditableStateInputWrapper(element: element)
         // BarcodeScannerFormInput is not currently supported
         if element.isVisible,
            !(element.input is BarcodeScannerFormInput),

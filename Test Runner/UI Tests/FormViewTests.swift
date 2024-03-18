@@ -1086,7 +1086,7 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_4_1() {
         let app = XCUIApplication()
         let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
-        let fieldTitle = app.staticTexts["Radio Button Text"]
+        let fieldTitle = app.staticTexts["Radio Button Text *"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
         let dogOption = app.buttons["Radio Button Text dog"]
@@ -1372,6 +1372,72 @@ final class FeatureFormViewTests: XCTestCase {
             groupElement.exists,
             "The first group element doesn't exist."
         )
+    }
+    
+    /// Test case 7.1: Test read only elements
+    func testCase_7_1() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
+        let elementsAreEditableSwitch = app.switches["Elements are editable Switch"]
+        let elementInTheGroupIsEditableReadOnlyInput = app.staticTexts["Element in the group is editable Read Only Input"]
+        let elementInTheGroupIsEditableSwitch = app.switches["Element in the group is editable Switch"]
+        
+        let comboBoxReadOnlyInput = app.staticTexts["Combo box Read Only Input"]
+        let comboBox = app.staticTexts["Combo box Value"]
+        
+        let radioButtonsReadOnlyInput = app.staticTexts["Radio buttons Read Only Input"]
+        let radioButtonsInput = app.images["Radio buttons 0 Checkmark"]
+        
+        let dateReadOnlyInput = app.staticTexts["Date Read Only Input"]
+        let dateInput = app.staticTexts["Date Value"]
+        
+        let shortTextReadOnlyInput = app.staticTexts["Short text Read Only Input"]
+        let shortTextTextInput = app.textFields["Short text Text Input"]
+        
+        let longTextReadOnlyInput = app.staticTexts["Long text Read Only Input"]
+        let longTextTextInput = app.textViews["Long text Text Input"]
+        
+        app.launch()
+        
+        // Open the FeatureFormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 5),
+            "The form failed to open after 5 seconds."
+        )
+        
+        XCTAssertTrue(elementInTheGroupIsEditableReadOnlyInput.exists)
+        
+        XCTAssertTrue(comboBoxReadOnlyInput.exists)
+        
+        XCTAssertTrue(radioButtonsReadOnlyInput.exists)
+        
+        XCTAssertTrue(dateReadOnlyInput.exists)
+        
+        XCTAssertTrue(shortTextReadOnlyInput.exists)
+        
+        XCTAssertTrue(longTextReadOnlyInput.exists)
+        
+        elementsAreEditableSwitch.tap()
+        
+        XCTAssertTrue(elementInTheGroupIsEditableSwitch.exists)
+        
+        elementInTheGroupIsEditableSwitch.tap()
+        
+        XCTAssertTrue(comboBox.exists)
+        
+        XCTAssertTrue(radioButtonsInput.exists)
+        
+        XCTAssertTrue(dateInput.exists)
+        
+        XCTAssertTrue(shortTextTextInput.exists)
+        
+        XCTAssertTrue(longTextTextInput.exists)
     }
 }
 

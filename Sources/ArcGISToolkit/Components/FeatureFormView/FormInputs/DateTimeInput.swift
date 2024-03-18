@@ -25,7 +25,6 @@ struct DateTimeInput: View {
     // State properties for element events.
     
     @State private var isRequired: Bool = false
-    @State private var isEditable: Bool = false
     @State private var formattedValue: String = ""
     
     /// The current date selection.
@@ -82,9 +81,6 @@ struct DateTimeInput: View {
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
         }
-        .onIsEditableChange(of: element) { newIsEditable in
-            isEditable = newIsEditable
-        }
     }
     
     /// Controls for modifying the date selection.
@@ -108,7 +104,7 @@ struct DateTimeInput: View {
             
             if isEditing {
                 todayOrNowButton
-            } else if isEditable {
+            } else {
                 if date == nil {
                     Image(systemName: "calendar")
                         .foregroundColor(.secondary)
@@ -127,7 +123,6 @@ struct DateTimeInput: View {
         .frame(maxWidth: .infinity)
         .onTapGesture {
             withAnimation {
-                guard isEditable else { return }
                 if date == nil {
                     if dateRange.contains(.now) {
                         date = .now
