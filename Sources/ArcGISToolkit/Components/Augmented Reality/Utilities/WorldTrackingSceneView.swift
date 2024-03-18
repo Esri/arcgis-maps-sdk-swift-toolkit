@@ -112,14 +112,12 @@ struct WorldTrackingSceneView: View {
                             orientation: interfaceOrientation
                         )
                     }
-                
-                if initialCameraIsSet {
-                    sceneViewBuilder(sceneViewProxy)
-                        .worldScaleSetup(cameraController: cameraController)
-                        .onCameraChanged { camera in
-                            currentCamera = camera
-                        }
-                }
+                sceneViewBuilder(sceneViewProxy)
+                    .worldScaleSetup(cameraController: cameraController)
+                    .onCameraChanged { camera in
+                        currentCamera = camera
+                    }
+                    .opacity(initialCameraIsSet ? 1 : 0)
             }
             .ignoresSafeArea(.all)
             .overlay {
