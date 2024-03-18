@@ -15,7 +15,6 @@
 import ARKit
 ***REMOVED***
 ***REMOVED***
-import Combine
 
 ***REMOVED***/ A view model that stores state information for the calibration.
 @MainActor
@@ -28,20 +27,12 @@ class WorldScaleCalibrationViewModel: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***private(set) var totalElevationCorrection: Double = 0
 ***REMOVED***
-***REMOVED******REMOVED*** A subject for the heading corrections to publish as they come in.
-***REMOVED***private var headingSubject = PassthroughSubject<Double, Never>()
+***REMOVED******REMOVED***/ The camera controller for which corrections will be applied.
+***REMOVED***private(set) var cameraController: TransformationMatrixCameraController
 ***REMOVED***
-***REMOVED******REMOVED*** A subject for the elevation corrections to publish as they come in.
-***REMOVED***private var elevationSubject = PassthroughSubject<Double, Never>()
-***REMOVED***
-***REMOVED******REMOVED***/ The heading corrections.
-***REMOVED***var headingCorrections: AnyPublisher<Double, Never> {
-***REMOVED******REMOVED***headingSubject.eraseToAnyPublisher()
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The elevation corrections.
-***REMOVED***var elevationCorrections: AnyPublisher<Double, Never> {
-***REMOVED******REMOVED***elevationSubject.eraseToAnyPublisher()
+***REMOVED******REMOVED***/ Creates a calibration view model with a camera controller.
+***REMOVED***init(cameraController: TransformationMatrixCameraController) {
+***REMOVED******REMOVED***self.cameraController = cameraController
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Proposes a heading correction.
@@ -51,13 +42,22 @@ class WorldScaleCalibrationViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***.clamped(to: -180...180)
 ***REMOVED******REMOVED***let allowedHeadingCorrection = newTotalHeadingCorrection - totalHeadingCorrection
 ***REMOVED******REMOVED***totalHeadingCorrection = newTotalHeadingCorrection
-***REMOVED******REMOVED***headingSubject.send(allowedHeadingCorrection)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Update camera controller.
+***REMOVED******REMOVED***let originCamera = cameraController.originCamera
+***REMOVED******REMOVED***cameraController.originCamera = originCamera.rotatedTo(
+***REMOVED******REMOVED******REMOVED***heading: originCamera.heading + allowedHeadingCorrection,
+***REMOVED******REMOVED******REMOVED***pitch: originCamera.pitch,
+***REMOVED******REMOVED******REMOVED***roll: originCamera.roll
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Proposes an elevation correction.
 ***REMOVED***fileprivate func propose(elevationCorrection: Double) {
 ***REMOVED******REMOVED***totalElevationCorrection += elevationCorrection
-***REMOVED******REMOVED***elevationSubject.send(elevationCorrection)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Update camera controller.
+***REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.elevated(by: elevationCorrection)
 ***REMOVED***
 ***REMOVED***
 

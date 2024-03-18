@@ -145,10 +145,6 @@ public struct GeoTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentHeading = heading
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.handleCalibrationViewCorrections(
-***REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
-***REMOVED******REMOVED******REMOVED***cameraController: cameraController
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the scene view's camera controller with location and heading.
