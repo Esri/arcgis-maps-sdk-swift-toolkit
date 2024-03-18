@@ -102,8 +102,10 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.name == element.formattedValue
 ***REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.selectedValue = selectedValue
-***REMOVED******REMOVED******REMOVED*** else if element.formattedValue != input.noValueLabel {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox =
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***(input.noValueOption == .show && element.formattedValue != input.noValueLabel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***|| (input.noValueOption == .hide && !element.formattedValue.isEmpty)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
