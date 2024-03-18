@@ -15,7 +15,6 @@
 import ARKit
 import SwiftUI
 import ArcGIS
-import Combine
 
 /// A view model that stores state information for the calibration.
 @MainActor
@@ -28,20 +27,12 @@ class WorldScaleCalibrationViewModel: ObservableObject {
     @Published
     private(set) var totalElevationCorrection: Double = 0
     
-    // A subject for the heading corrections to publish as they come in.
-    private var headingSubject = PassthroughSubject<Double, Never>()
+    /// The camera controller for which corrections will be applied.
+    private(set) var cameraController: TransformationMatrixCameraController
     
-    // A subject for the elevation corrections to publish as they come in.
-    private var elevationSubject = PassthroughSubject<Double, Never>()
-    
-    /// The heading corrections.
-    var headingCorrections: AnyPublisher<Double, Never> {
-        headingSubject.eraseToAnyPublisher()
-    }
-    
-    /// The elevation corrections.
-    var elevationCorrections: AnyPublisher<Double, Never> {
-        elevationSubject.eraseToAnyPublisher()
+    /// Creates a calibration view model with a camera controller.
+    init(cameraController: TransformationMatrixCameraController) {
+        self.cameraController = cameraController
     }
     
     /// Proposes a heading correction.
@@ -51,13 +42,22 @@ class WorldScaleCalibrationViewModel: ObservableObject {
             .clamped(to: -180...180)
         let allowedHeadingCorrection = newTotalHeadingCorrection - totalHeadingCorrection
         totalHeadingCorrection = newTotalHeadingCorrection
-        headingSubject.send(allowedHeadingCorrection)
+        
+        // Update camera controller.
+        let originCamera = cameraController.originCamera
+        cameraController.originCamera = originCamera.rotatedTo(
+            heading: originCamera.heading + allowedHeadingCorrection,
+            pitch: originCamera.pitch,
+            roll: originCamera.roll
+        )
     }
     
     /// Proposes an elevation correction.
     fileprivate func propose(elevationCorrection: Double) {
         totalElevationCorrection += elevationCorrection
-        elevationSubject.send(elevationCorrection)
+        
+        // Update camera controller.
+        cameraController.originCamera = cameraController.originCamera.elevated(by: elevationCorrection)
     }
 }
 
