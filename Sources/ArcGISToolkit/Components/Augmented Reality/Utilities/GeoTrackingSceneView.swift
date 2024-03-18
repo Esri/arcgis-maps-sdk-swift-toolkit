@@ -96,11 +96,9 @@ public struct GeoTrackingSceneView: View {
                     .onDidChangeGeoTrackingStatus { _, status in
                         handleGeoTrackingStatusChange(status)
                     }
-                
-                if initialCameraIsSet {
-                    sceneViewBuilder(sceneViewProxy)
-                        .worldScaleSetup(cameraController: cameraController)
-                }
+                sceneViewBuilder(sceneViewProxy)
+                    .worldScaleSetup(cameraController: cameraController)
+                    .opacity(initialCameraIsSet ? 1 : 0)
             }
             .ignoresSafeArea(.all)
             .overlay {
@@ -172,9 +170,7 @@ public struct GeoTrackingSceneView: View {
     private func handleGeoTrackingStatusChange(_ status: ARGeoTrackingStatus) {
         switch status.state {
         case .notAvailable, .initializing, .localizing:
-            Task.detached { @MainActor in
-                initialCameraIsSet = false
-            }
+            initialCameraIsSet = false
         case .localized:
             // Update the camera controller every time geo-tracking is localized,
             // to ensure the best experience.
@@ -186,9 +182,7 @@ public struct GeoTrackingSceneView: View {
                     heading: currentHeading + 90,
                     altitude: currentLocation.position.z ?? 0
                 )
-                Task.detached { @MainActor in
-                    initialCameraIsSet = true
-                }
+                initialCameraIsSet = true
             }
         @unknown default:
             fatalError("Unknown ARGeoTrackingStatus.State")
