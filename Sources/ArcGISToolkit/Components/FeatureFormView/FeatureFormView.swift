@@ -68,14 +68,14 @@ public struct FeatureFormView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title of the feature form view.
 ***REMOVED***@State private var title: String = ""
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - featureForm: The feature form defining the editing experience.
 ***REMOVED***public init(featureForm: FeatureForm) {
 ***REMOVED******REMOVED***_model = StateObject(wrappedValue: FormViewModel(featureForm: featureForm))
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ScrollViewReader { scrollViewProxy in
 ***REMOVED******REMOVED******REMOVED***ScrollView {
@@ -127,23 +127,10 @@ extension FeatureFormView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Makes UI for a field form element.
+***REMOVED******REMOVED***/ Makes UI for a field form element including a divider beneath it.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-***REMOVED******REMOVED***switch element.input {
-***REMOVED******REMOVED***case is ComboBoxFormInput:
-***REMOVED******REMOVED******REMOVED***ComboBoxInput(element: element)
-***REMOVED******REMOVED***case is DateTimePickerFormInput:
-***REMOVED******REMOVED******REMOVED***DateTimeInput(element: element)
-***REMOVED******REMOVED***case is RadioButtonsFormInput:
-***REMOVED******REMOVED******REMOVED***RadioButtonsInput(element: element)
-***REMOVED******REMOVED***case is SwitchFormInput:
-***REMOVED******REMOVED******REMOVED***SwitchInput(element: element)
-***REMOVED******REMOVED***case is TextAreaFormInput, is TextBoxFormInput:
-***REMOVED******REMOVED******REMOVED***TextInput(element: element)
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED***
+***REMOVED******REMOVED***EditableStateInputWrapper(element: element)
 ***REMOVED******REMOVED******REMOVED*** BarcodeScannerFormInput is not currently supported
 ***REMOVED******REMOVED***if element.isVisible,
 ***REMOVED******REMOVED***   !(element.input is BarcodeScannerFormInput),

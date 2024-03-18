@@ -20,3 +20,8 @@ extension FieldFormElement {
 ***REMOVED******REMOVED***return (domain as? CodedValueDomain)?.codedValues ?? []
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the input is multiline or not.
+***REMOVED***var isMultiline: Bool {
+***REMOVED******REMOVED***input is TextAreaFormInput
+***REMOVED***
+***REMOVED***

@@ -25,7 +25,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED*** State properties for element events.
 ***REMOVED***
 ***REMOVED***@State private var isRequired: Bool = false
-***REMOVED***@State private var isEditable: Bool = false
 ***REMOVED***@State private var formattedValue: String = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
@@ -62,17 +61,7 @@ struct TextInput: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
 ***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED***if isEditable {
-***REMOVED******REMOVED******REMOVED***textWriter
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***if isMultiline {
-***REMOVED******REMOVED******REMOVED******REMOVED***textReader
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textReader
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***textWriter
 ***REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
@@ -98,9 +87,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED***.onChange(of: text) { text in
 ***REMOVED******REMOVED******REMOVED***guard !isPlaceholder else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
-***REMOVED******REMOVED******REMOVED***if element.isEditable {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED***
 ***REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
@@ -108,9 +95,6 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
 ***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
-***REMOVED***
-***REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in
-***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -125,15 +109,6 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The body of the text input when the element is non-editable.
-***REMOVED***var textReader: some View {
-***REMOVED******REMOVED***Text(text.isEmpty ? "--" : text)
-***REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
-***REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
-***REMOVED******REMOVED******REMOVED***.textSelection(.enabled)
-***REMOVED******REMOVED******REMOVED***.lineLimit(isMultiline ? nil : 1)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
 ***REMOVED***var textWriter: some View {
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
@@ -143,9 +118,9 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $text,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.hint).foregroundColor(.secondary),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: isMultiline ? .vertical : .horizontal
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: element.isMultiline ? .vertical : .horizontal
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** else if isMultiline {
+***REMOVED******REMOVED******REMOVED*** else if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(isPlaceholder ? .secondary : .primary)
 ***REMOVED******REMOVED******REMOVED*** else {
@@ -169,7 +144,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.scrollContentBackgroundHidden()
-***REMOVED******REMOVED******REMOVED***if !text.isEmpty && isEditable {
+***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the user wasn't already editing the field provide
@@ -183,11 +158,6 @@ private extension TextInput {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.formInputStyle()
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the input is multiline or not.
-***REMOVED***var isMultiline: Bool {
-***REMOVED******REMOVED***element.input is TextAreaFormInput
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The keyboard type to use depending on where the input is numeric and decimal.

@@ -1086,7 +1086,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_4_1() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
-***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Radio Button Text"]
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Radio Button Text *"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let dogOption = app.buttons["Radio Button Text dog"]
@@ -1372,6 +1372,72 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***groupElement.exists,
 ***REMOVED******REMOVED******REMOVED***"The first group element doesn't exist."
 ***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 7.1: Test read only elements
+***REMOVED***func testCase_7_1() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED***let elementsAreEditableSwitch = app.switches["Elements are editable Switch"]
+***REMOVED******REMOVED***let elementInTheGroupIsEditableReadOnlyInput = app.staticTexts["Element in the group is editable Read Only Input"]
+***REMOVED******REMOVED***let elementInTheGroupIsEditableSwitch = app.switches["Element in the group is editable Switch"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let comboBoxReadOnlyInput = app.staticTexts["Combo box Read Only Input"]
+***REMOVED******REMOVED***let comboBox = app.staticTexts["Combo box Value"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let radioButtonsReadOnlyInput = app.staticTexts["Radio buttons Read Only Input"]
+***REMOVED******REMOVED***let radioButtonsInput = app.images["Radio buttons 0 Checkmark"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let dateReadOnlyInput = app.staticTexts["Date Read Only Input"]
+***REMOVED******REMOVED***let dateInput = app.staticTexts["Date Value"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let shortTextReadOnlyInput = app.staticTexts["Short text Read Only Input"]
+***REMOVED******REMOVED***let shortTextTextInput = app.textFields["Short text Text Input"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let longTextReadOnlyInput = app.staticTexts["Long text Read Only Input"]
+***REMOVED******REMOVED***let longTextTextInput = app.textViews["Long text Text Input"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(elementInTheGroupIsEditableReadOnlyInput.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(comboBoxReadOnlyInput.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(radioButtonsReadOnlyInput.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(dateReadOnlyInput.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(shortTextReadOnlyInput.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(longTextReadOnlyInput.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***elementsAreEditableSwitch.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(elementInTheGroupIsEditableSwitch.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***elementInTheGroupIsEditableSwitch.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(comboBox.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(radioButtonsInput.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(dateInput.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(shortTextTextInput.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(longTextTextInput.exists)
 ***REMOVED***
 ***REMOVED***
 

@@ -27,7 +27,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED*** State properties for element events.
 ***REMOVED***
 ***REMOVED***@State private var isRequired: Bool = false
-***REMOVED***@State private var isEditable: Bool = false
 ***REMOVED***@State private var value: Any?
 ***REMOVED***@State private var formattedValue: String = ""
 ***REMOVED***
@@ -87,7 +86,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***value = element.value
 ***REMOVED******REMOVED***formattedValue = element.formattedValue
 ***REMOVED******REMOVED***isRequired = element.isRequired
-***REMOVED******REMOVED***isEditable = element.isEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -100,23 +98,21 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(selectedValue != nil ? .primary : .secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Value")
-***REMOVED******REMOVED******REMOVED******REMOVED***if isEditable {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if selectedValue != nil, !isRequired {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only show clear button if we have a value
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and we're not required. (i.e., Don't show clear if
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the field is required.)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { model.focusedElement = nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise, always show list icon.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "list.bullet")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Options Button")
+***REMOVED******REMOVED******REMOVED******REMOVED***if selectedValue != nil, !isRequired {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only show clear button if we have a value
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and we're not required. (i.e., Don't show clear if
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the field is required.)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { model.focusedElement = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise, always show list icon.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "list.bullet")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Options Button")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.formInputStyle()
@@ -143,9 +139,6 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
 ***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
-***REMOVED***
-***REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in
-***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -252,7 +245,7 @@ private extension String {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
+
 private extension Text {
 ***REMOVED******REMOVED***/ A label for a text entry field that allows the user to filter a list of values by name.
 ***REMOVED***static var filter: Self {

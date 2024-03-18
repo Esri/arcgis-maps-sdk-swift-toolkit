@@ -25,7 +25,6 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED*** State properties for element events.
 ***REMOVED***
 ***REMOVED***@State private var isRequired: Bool = false
-***REMOVED***@State private var isEditable: Bool = false
 ***REMOVED***@State private var formattedValue: String = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current date selection.
@@ -82,9 +81,6 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
 ***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
 ***REMOVED***
-***REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in
-***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Controls for modifying the date selection.
@@ -108,7 +104,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if isEditing {
 ***REMOVED******REMOVED******REMOVED******REMOVED***todayOrNowButton
-***REMOVED******REMOVED*** else if isEditable {
+***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
@@ -127,7 +123,6 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED***guard isEditable else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if dateRange.contains(.now) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = .now
