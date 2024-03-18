@@ -52,6 +52,9 @@ import SwiftUI
 public struct Scalebar: View {
     // - MARK: Internal/Private vars
     
+    /// A timer to allow for the scheduling of the auto-hide animation.
+    @State private var autoHideTimer: Timer?
+    
     /// The vertical amount of space used by the scalebar.
     @State private var height: Double?
     
@@ -176,11 +179,19 @@ public struct Scalebar: View {
             viewModel.update($0)
             viewModel.updateScale()
             if settings.autoHide {
-                withAnimation {
-                    opacity = 1
+                if opacity != 1 {
+                    withAnimation {
+                        opacity = 1
+                    }
                 }
-                withAnimation(.default.delay(settings.autoHideDelay)) {
-                    opacity = .zero
+                autoHideTimer?.invalidate()
+                autoHideTimer = Timer.scheduledTimer(
+                    withTimeInterval: settings.autoHideDelay,
+                    repeats: false
+                ) { _ in
+                    withAnimation {
+                        opacity = .zero
+                    }
                 }
             }
         }

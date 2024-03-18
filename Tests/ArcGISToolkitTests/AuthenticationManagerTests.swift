@@ -37,10 +37,18 @@ import ArcGIS
         }
         
         // This tests that calling setupPersistentCredentialStorage tries to sync with the keychain.
+#if targetEnvironment(macCatalyst)
+        do {
+            try await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlocked)
+        } catch {
+            XCTFail("Persistent credential storage setup failed")
+        }
+#elseif !targetEnvironment(macCatalyst)
         do {
             try await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlocked)
             XCTFail("Expected an error to be thrown as unit tests should not have access to the keychain")
         } catch {}
+#endif
     }
     
     func testClearCredentialStores() async {
