@@ -160,10 +160,6 @@ struct WorldTrackingSceneView: View {
                 updateWorldTrackingSceneView(for: location)
             }
         }
-        .handleCalibrationViewCorrections(
-            calibrationViewModel: calibrationViewModel,
-            cameraController: cameraController
-        )
     }
     
     /// Updates the scene view's camera controller with a new location coming from the
