@@ -27,7 +27,6 @@ struct SwitchInput: View {
     // State properties for element events.
     
     @State private var isRequired: Bool = false
-    @State private var isEditable: Bool = false
     
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
@@ -81,7 +80,6 @@ struct SwitchInput: View {
                 .formInputStyle()
                 InputFooter(element: element)
             }
-            .disabled(!isEditable)
             .padding([.bottom], elementPadding)
             .onAppear {
                 if element.formattedValue.isEmpty {
@@ -98,9 +96,6 @@ struct SwitchInput: View {
             }
             .onIsRequiredChange(of: element) { newIsRequired in
                 isRequired = newIsRequired
-            }
-            .onIsEditableChange(of: element) { newIsEditable in
-                isEditable = newIsEditable
             }
         }
     }

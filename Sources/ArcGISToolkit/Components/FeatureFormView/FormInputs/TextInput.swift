@@ -25,7 +25,6 @@ struct TextInput: View {
     // State properties for element events.
     
     @State private var isRequired: Bool = false
-    @State private var isEditable: Bool = false
     @State private var formattedValue: String = ""
     
     /// A Boolean value indicating whether or not the field is focused.
@@ -62,17 +61,7 @@ struct TextInput: View {
     var body: some View {
         InputHeader(label: element.label, isRequired: isRequired)
             .padding([.top], elementPadding)
-        if isEditable {
-            textWriter
-        } else {
-            if isMultiline {
-                textReader
-            } else {
-                ScrollView(.horizontal) {
-                    textReader
-                }
-            }
-        }
+        textWriter
         InputFooter(element: element)
         .padding([.bottom], elementPadding)
         .onChange(of: isFocused) { isFocused in
@@ -98,9 +87,7 @@ struct TextInput: View {
         .onChange(of: text) { text in
             guard !isPlaceholder else { return }
             element.convertAndUpdateValue(text)
-            if element.isEditable {
-                model.evaluateExpressions()
-            }
+            model.evaluateExpressions()
         }
         .onValueChange(of: element) { newValue, newFormattedValue in
             formattedValue = newFormattedValue
@@ -108,9 +95,6 @@ struct TextInput: View {
         }
         .onIsRequiredChange(of: element) { newIsRequired in
             isRequired = newIsRequired
-        }
-        .onIsEditableChange(of: element) { newIsEditable in
-            isEditable = newIsEditable
         }
     }
 }
@@ -125,15 +109,6 @@ private extension TextInput {
         }
     }
     
-    /// The body of the text input when the element is non-editable.
-    var textReader: some View {
-        Text(text.isEmpty ? "--" : text)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
-            .textSelection(.enabled)
-            .lineLimit(isMultiline ? nil : 1)
-    }
-    
     /// The body of the text input when the element is editable.
     var textWriter: some View {
         HStack(alignment: .bottom) {
@@ -143,9 +118,9 @@ private extension TextInput {
                             element.label,
                             text: $text,
                             prompt: Text(element.hint).foregroundColor(.secondary),
-                            axis: isMultiline ? .vertical : .horizontal
+                            axis: element.isMultiline ? .vertical : .horizontal
                         )
-                } else if isMultiline {
+                } else if element.isMultiline {
                     TextEditor(text: $text)
                         .foregroundColor(isPlaceholder ? .secondary : .primary)
                 } else {
@@ -169,7 +144,7 @@ private extension TextInput {
                 }
             }
             .scrollContentBackgroundHidden()
-            if !text.isEmpty && isEditable {
+            if !text.isEmpty {
                 ClearButton {
                     if !isFocused {
                         // If the user wasn't already editing the field provide
@@ -183,11 +158,6 @@ private extension TextInput {
             }
         }
         .formInputStyle()
-    }
-    
-    /// A Boolean value indicating whether the input is multiline or not.
-    var isMultiline: Bool {
-        element.input is TextAreaFormInput
     }
     
     /// The keyboard type to use depending on where the input is numeric and decimal.
