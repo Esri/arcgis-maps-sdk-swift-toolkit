@@ -22,9 +22,6 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
-***REMOVED***@State private var isRequired = false
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the current value doesn't exist as an option in the domain.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ In this scenario a ``ComboBoxInput`` should be used instead.
@@ -32,6 +29,9 @@ struct SwitchInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the switch is toggled on or off.
 ***REMOVED***@State private var isOn: Bool = false
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
+***REMOVED***@State private var isRequired = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The value represented by the switch.
 ***REMOVED***@State private var selectedValue: Bool?
