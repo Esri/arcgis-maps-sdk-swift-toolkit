@@ -30,8 +30,8 @@ struct RadioButtonsInput: View {
     /// The selected option.
     @State private var selectedValue: CodedValue?
     
-    /// A Boolean value indicating whether a `ComboBoxInput`` should be used instead. This will be `true` if
-    /// the current value doesn't exist as an option in the domain
+    /// A Boolean value indicating whether a ``ComboBoxInput`` should be used instead.
+    /// This will be `true` if the current value doesn't exist as an option in the domain
     @State private var fallbackToComboBox = false
     
     /// The field's parent element.
@@ -94,10 +94,14 @@ struct RadioButtonsInput: View {
                 InputFooter(element: element)
             }
             .onAppear {
-                if let selectedValue = element.codedValues.first(where: { $0.name == element.formattedValue }) {
+                if let selectedValue = element.codedValues.first(where: {
+                    $0.name == element.formattedValue
+                }) {
                     self.selectedValue = selectedValue
-                } else if !element.formattedValue.isEmpty {
-                    fallbackToComboBox = true
+                } else {
+                    fallbackToComboBox =
+                    (input.noValueOption == .show && element.formattedValue != input.noValueLabel)
+                    || (input.noValueOption == .hide && !element.formattedValue.isEmpty)
                 }
             }
             .onChange(of: selectedValue) { selectedValue in
@@ -154,16 +158,16 @@ extension RadioButtonsInput {
                 Spacer()
                 if selected {
                     Image(systemName: "checkmark")
-                        .foregroundColor(.accentColor)
                         .accessibilityIdentifier("\(element.label) \(label) Checkmark")
+                        .foregroundColor(.accentColor)
                 }
             }
             .padding(10)
             .contentShape(Rectangle())
         }
+        .accessibilityIdentifier("\(element.label) \(label) Radio Button")
         .buttonStyle(.plain)
         .foregroundColor(.primary)
-        .accessibilityIdentifier("\(element.label) \(label)")
         if addDivider {
             Divider()
                 .padding(.leading, 10)

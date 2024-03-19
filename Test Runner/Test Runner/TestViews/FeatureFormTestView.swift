@@ -144,6 +144,7 @@ private extension FeatureFormTestView {
         .init("testCase_3_5", objectID: 2, portalID: .comboBoxMapID),
         .init("testCase_3_6", objectID: 2, portalID: .comboBoxMapID),
         .init("testCase_4_1", objectID: 1, portalID: .radioButtonMapID),
+        .init("testCase_4_2", objectID: 1, portalID: .radioButtonMapID),
         .init("testCase_5_1", objectID: 1, portalID: .switchMapID),
         .init("testCase_5_2", objectID: 1, portalID: .switchMapID),
         .init("testCase_5_3", objectID: 1, portalID: .switchMapID),
