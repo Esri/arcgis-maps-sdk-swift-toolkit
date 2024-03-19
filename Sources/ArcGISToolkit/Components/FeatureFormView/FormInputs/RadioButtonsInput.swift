@@ -19,8 +19,6 @@ import SwiftUI
 ///
 /// This is the preferable input type for short lists of coded value domains.
 struct RadioButtonsInput: View {
-    @Environment(\.formElementPadding) var elementPadding
-    
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
@@ -65,7 +63,6 @@ struct RadioButtonsInput: View {
         } else {
             Group {
                 InputHeader(label: element.label, isRequired: isRequired)
-                    .padding([.top], elementPadding)
                 
                 VStack(alignment: .leading, spacing: .zero) {
                     if input.noValueOption == .show {
@@ -96,7 +93,6 @@ struct RadioButtonsInput: View {
                 
                 InputFooter(element: element)
             }
-            .padding([.bottom], elementPadding)
             .onAppear {
                 if let selectedValue = element.codedValues.first(where: { $0.name == element.formattedValue }) {
                     self.selectedValue = selectedValue

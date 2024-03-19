@@ -17,8 +17,6 @@ import SwiftUI
 
 /// A view for text input.
 struct TextInput: View {
-    @Environment(\.formElementPadding) var elementPadding
-    
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
@@ -59,11 +57,13 @@ struct TextInput: View {
     }
     
     var body: some View {
-        InputHeader(label: element.label, isRequired: isRequired)
-            .padding([.top], elementPadding)
-        textWriter
-        InputFooter(element: element)
-        .padding([.bottom], elementPadding)
+        Group {
+            InputHeader(label: element.label, isRequired: isRequired)
+            
+            textWriter
+            
+            InputFooter(element: element)
+        }
         .onChange(of: isFocused) { isFocused in
             if isFocused && isPlaceholder {
                 isPlaceholder = false
@@ -114,12 +114,12 @@ private extension TextInput {
         HStack(alignment: .bottom) {
             Group {
                 if #available(iOS 16.0, *) {
-                        TextField(
-                            element.label,
-                            text: $text,
-                            prompt: Text(element.hint).foregroundColor(.secondary),
-                            axis: element.isMultiline ? .vertical : .horizontal
-                        )
+                    TextField(
+                        element.label,
+                        text: $text,
+                        prompt: Text(element.hint).foregroundColor(.secondary),
+                        axis: element.isMultiline ? .vertical : .horizontal
+                    )
                 } else if element.isMultiline {
                     TextEditor(text: $text)
                         .foregroundColor(isPlaceholder ? .secondary : .primary)

@@ -20,8 +20,8 @@ struct FormInputStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .frame(minHeight: 30)
-            .padding([.horizontal], 10)
-            .padding([.vertical], 5)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
             .background(Color(uiColor: .tertiarySystemFill))
             .cornerRadius(10)
     }
