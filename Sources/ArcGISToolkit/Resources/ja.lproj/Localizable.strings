@@ -38,6 +38,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "参照";
 
+/* A label for a button to show the calibration view. */
+"Calibrate" = "キャリブレーション";
+
+/* A label for the calibration view used to calibrate the camera
+for the AR experience. */
+"Calibration" = "キャリブレーション";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "キャンセル";
 
@@ -85,6 +92,10 @@ network element for more than one trace starting point. */
 for a utility network trace. */
 "Element could not be identified." = "エレメントを識別できません。";
 
+/* A label for the slider that adjusts the camera elevation for the
+AR experience. */
+"elevation" = "標高";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "エラー";
 
@@ -94,6 +105,10 @@ network certificate. */
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "ベースマップの読み込み中にエラーが発生しました。";
+
+/* An error message shown when a GeoModel failed to load.
+The variable provides additional data. */
+"Error loading bookmarks: %@" = "ブックマークの読み込み中にエラーが発生しました: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "ポップアップ式を評価しています";
@@ -129,6 +144,10 @@ contains one or more facilities in a floor-aware map or scene. */
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "関数の結果";
+
+/* A label for the slider that adjusts the camera heading for the
+AR experience. */
+"heading" = "方位";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "メディア";

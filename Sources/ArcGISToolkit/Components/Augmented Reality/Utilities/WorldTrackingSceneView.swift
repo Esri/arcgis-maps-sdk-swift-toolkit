@@ -49,6 +49,8 @@ struct WorldTrackingSceneView: View {
 ***REMOVED***@State private var interfaceOrientation: InterfaceOrientation?
 ***REMOVED******REMOVED***/ The timestamp of the last received location.
 ***REMOVED***@State private var lastLocationTimestamp: Date?
+***REMOVED******REMOVED***/ The closure to perform when the camera tracking state changes.
+***REMOVED***private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a world scale world-tracking scene view.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -79,6 +81,7 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***self.arViewProxy = arViewProxy
 ***REMOVED******REMOVED***self.cameraController = cameraController
 ***REMOVED******REMOVED***self.calibrationViewModel = calibrationViewModel
+***REMOVED******REMOVED***self.cameraController.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***self.distanceThreshold = distanceThreshold
 ***REMOVED******REMOVED***_initialCameraIsSet = initialCameraIsSet
 ***REMOVED******REMOVED***self.calibrationViewIsPresented = calibrationViewIsPresented
@@ -112,16 +115,16 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: interfaceOrientation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCameraDidChangeTrackingState { _, trackingState in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCameraTrackingStateChangedAction?(trackingState)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if initialCameraIsSet {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.worldScaleSetup(cameraController: cameraController)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCameraChanged { camera in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentCamera = camera
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***sceneViewBuilder(sceneViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.worldScaleSetup(cameraController: cameraController)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onCameraChanged { camera in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentCamera = camera
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(initialCameraIsSet ? 1 : 0)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.all)
 ***REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ARCoachingOverlay(goal: .geoTracking)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sessionProvider(arViewProxy)
@@ -241,5 +244,17 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If the location becomes off by over a certain threshold, then update the camera location.
 ***REMOVED******REMOVED***return result.distance.value > distanceThreshold ? true : false
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when the camera tracking state changes.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the camera tracking state has changed.
+***REMOVED***public func onCameraTrackingStateChanged(
+***REMOVED******REMOVED***perform action: @escaping (
+***REMOVED******REMOVED******REMOVED***_ cameraTrackingState: ARCamera.TrackingState
+***REMOVED******REMOVED***) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onCameraTrackingStateChangedAction = action
+***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***

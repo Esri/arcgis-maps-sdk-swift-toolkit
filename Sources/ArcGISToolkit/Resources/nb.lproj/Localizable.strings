@@ -38,6 +38,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "Bla gjennom";
 
+/* A label for a button to show the calibration view. */
+"Calibrate" = "Kalibrer";
+
+/* A label for the calibration view used to calibrate the camera
+for the AR experience. */
+"Calibration" = "Kalibrering";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Avbryt";
 
@@ -85,6 +92,10 @@ network element for more than one trace starting point. */
 for a utility network trace. */
 "Element could not be identified." = "Elementet kunne ikke identifiseres.";
 
+/* A label for the slider that adjusts the camera elevation for the
+AR experience. */
+"elevation" = "høyde";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Feil";
 
@@ -94,6 +105,10 @@ network certificate. */
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "Feil ved lasting av bakgrunnskart.";
+
+/* An error message shown when a GeoModel failed to load.
+The variable provides additional data. */
+"Error loading bookmarks: %@" = "Feil under lasting av bokmerker: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Evaluerer popup-uttrykk";
@@ -129,6 +144,10 @@ contains one or more facilities in a floor-aware map or scene. */
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Funksjonresultater";
+
+/* A label for the slider that adjusts the camera heading for the
+AR experience. */
+"heading" = "kurs";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";

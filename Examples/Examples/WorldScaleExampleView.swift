@@ -31,12 +31,20 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED***surface.navigationConstraint = .unconstrained
 ***REMOVED******REMOVED***let scene = Scene(basemapStyle: .arcGISImagery)
 ***REMOVED******REMOVED***scene.baseSurface = surface
-***REMOVED******REMOVED***scene.addOperationalLayer(.parcelsLayer)
+***REMOVED******REMOVED***scene.baseSurface.opacity = 0
 ***REMOVED******REMOVED***return scene
 ***REMOVED***()
-***REMOVED***
-***REMOVED******REMOVED***/ The graphics overlay which shows a graphic around your initial location.
-***REMOVED***@State private var graphicsOverlay = GraphicsOverlay()
+***REMOVED******REMOVED***/ The graphics overlay which shows a graphic around your initial location and marker symbols.
+***REMOVED***@State private var graphicsOverlay: GraphicsOverlay = {
+***REMOVED******REMOVED***let graphicsOverlay = GraphicsOverlay()
+***REMOVED******REMOVED***let markerImage = UIImage(named: "RedMarker")!
+***REMOVED******REMOVED***let markerSymbol = PictureMarkerSymbol(image: markerImage)
+***REMOVED******REMOVED***markerSymbol.height = 150
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***graphicsOverlay.renderer = SimpleRenderer(symbol: markerSymbol)
+***REMOVED******REMOVED***graphicsOverlay.sceneProperties.surfacePlacement = .absolute
+***REMOVED******REMOVED***return graphicsOverlay
+***REMOVED***()
 ***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
 ***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
 ***REMOVED***
@@ -52,6 +60,10 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.calibrationButtonAlignment(.bottomLeading)
+***REMOVED******REMOVED***.onSingleTapGesture { _, scenePoint in
+***REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(Graphic(geometry: scenePoint))
+***REMOVED***
+***REMOVED******REMOVED***.ignoresSafeArea(edges: [.horizontal, .bottom])
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Request when-in-use location authorization.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** This is necessary for 2 reasons:
@@ -76,15 +88,5 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Stop the location data source after the initial location is retrieved.
 ***REMOVED******REMOVED******REMOVED***await locationDataSource.stop()
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension Layer {
-***REMOVED******REMOVED***/ A feature layer with San Bernardino parcels data.
-***REMOVED***static var parcelsLayer: FeatureLayer {
-***REMOVED******REMOVED***let parcelsTable = ServiceFeatureTable(url: URL(string: "https:***REMOVED***services.arcgis.com/aA3snZwJfFkVyDuP/ArcGIS/rest/services/Parcels_for_San_Bernardino_County/FeatureServer/0")!)
-***REMOVED******REMOVED***let featureLayer = FeatureLayer(featureTable: parcelsTable)
-***REMOVED******REMOVED***featureLayer.renderer = SimpleRenderer(symbol: SimpleLineSymbol(color: .cyan, width: 3))
-***REMOVED******REMOVED***return featureLayer
 ***REMOVED***
 ***REMOVED***

@@ -165,3 +165,28 @@ extension View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+extension View {
+***REMOVED******REMOVED***/ Sets a closure to perform when a single tap occurs on the view.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Note: This is to retrofit the tap gesture to iOS 15.0.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - action: The closure to perform upon single tap.
+***REMOVED******REMOVED***/   - screenPoint: The location of the tap in the view's coordinate space.
+***REMOVED***func onSingleTapGesture(perform action: @escaping (_ screenPoint: CGPoint) -> Void) -> some View {
+***REMOVED******REMOVED***if #available(iOS 16.0, *) {
+***REMOVED******REMOVED******REMOVED***return self.onTapGesture { screenPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED***action(screenPoint)
+***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Use a drag gesture with a minimum dragging distance of zero so the
+***REMOVED******REMOVED******REMOVED******REMOVED*** gesture is recognized with a single tap.
+***REMOVED******REMOVED******REMOVED***return self.gesture(
+***REMOVED******REMOVED******REMOVED******REMOVED***DragGesture(minimumDistance: 0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onEnded { dragAttributes in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(dragAttributes.location)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***
