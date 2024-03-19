@@ -24,6 +24,7 @@ To use Toolkit in your project:
 * **[SearchView](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/searchview)** - Displays a search experience for geo views.
 * **[TableTopSceneView](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/tabletopsceneview)** - Allows you to anchor scene content to a physical surface, as if it were a 3D-printed model.
 * **[UtilityNetworkTrace](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/utilitynetworktrace)** - Runs traces on a web map published with a utility network and trace configurations.
+* **[WorldScaleSceneView](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/worldscalesceneview)** - Allows you to integrate scene content with the real world.
 
 ## Requirements
 * ArcGIS Maps SDK for Swift
