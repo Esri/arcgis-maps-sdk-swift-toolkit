@@ -43,7 +43,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ The input's parent element.
+***REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for text input spanning multiple lines.

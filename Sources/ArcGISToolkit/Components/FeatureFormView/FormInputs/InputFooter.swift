@@ -30,7 +30,7 @@ struct InputFooter: View {
 ***REMOVED******REMOVED***/ Allows the footer to be recomputed to reflect changes in validation errors or input length.
 ***REMOVED***@State private var id = UUID()
 ***REMOVED***
-***REMOVED******REMOVED***/ The form element the footer belongs to.
+***REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED***let element: FieldFormElement
 ***REMOVED***
 ***REMOVED***var body: some View {

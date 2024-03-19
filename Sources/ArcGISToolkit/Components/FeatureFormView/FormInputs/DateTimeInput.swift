@@ -32,7 +32,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
 ***REMOVED***@State private var isRequired = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The input's parent element.
+***REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the view.
