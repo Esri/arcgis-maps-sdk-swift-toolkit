@@ -109,7 +109,6 @@ public struct GeoTrackingSceneView: View {
                     .worldScaleSetup(cameraController: cameraController)
                     .opacity(initialCameraIsSet ? 1 : 0)
             }
-            .ignoresSafeArea(.all)
             .overlay {
                 ARCoachingOverlay(goal: .geoTracking)
                     .sessionProvider(arViewProxy)
