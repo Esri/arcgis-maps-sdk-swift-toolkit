@@ -11,7 +11,7 @@
         
         @Steps {
             @Step {
-                Initialize a `WorldScaleSceneView`. Specify the clipping distance and tracking mode. 
+                Initialize a `WorldScaleSceneView`. Specify the clipping distance. The tracking mode is set to `worldTracking` by default.
                 
                 The clipping distance is the distance in meters that the ArcGIS Scene data will be clipped to.
                 The tracking mode determines the type of tracking configuration that will be used by the AR view. 
