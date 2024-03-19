@@ -22,11 +22,8 @@ struct ComboBoxInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    /// A Boolean value indicating whether a value for the input is required.
-    @State private var isRequired = false
-    
-    /// The element's current value.
-    @State private var value: Any?
+    /// The phrase to use when filtering by coded value name.
+    @State private var filterPhrase = ""
     
     /// The formatted version of the element's current value.
     @State private var formattedValue = ""
@@ -34,11 +31,14 @@ struct ComboBoxInput: View {
     /// A Boolean value indicating if the combo box picker is presented.
     @State private var isPresented = false
     
-    /// The phrase to use when filtering by coded value name.
-    @State private var filterPhrase = ""
+    /// A Boolean value indicating whether a value for the input is required.
+    @State private var isRequired = false
     
     /// The selected option.
     @State private var selectedValue: CodedValue?
+    
+    /// The element's current value.
+    @State private var value: Any?
     
     /// The input's parent element.
     private let element: FieldFormElement

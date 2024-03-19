@@ -22,18 +22,18 @@ struct RadioButtonsInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
+    /// A Boolean value indicating whether a ``ComboBoxInput`` should be used instead.
+    /// This will be `true` if the current value doesn't exist as an option in the domain
+    @State private var fallbackToComboBox = false
+    
     /// A Boolean value indicating whether a value for the input is required.
     @State private var isRequired = false
-    
-    /// The element's current value.
-    @State private var value: Any?
     
     /// The selected option.
     @State private var selectedValue: CodedValue?
     
-    /// A Boolean value indicating whether a ``ComboBoxInput`` should be used instead.
-    /// This will be `true` if the current value doesn't exist as an option in the domain
-    @State private var fallbackToComboBox = false
+    /// The element's current value.
+    @State private var value: Any?
     
     /// The field's parent element.
     private let element: FieldFormElement

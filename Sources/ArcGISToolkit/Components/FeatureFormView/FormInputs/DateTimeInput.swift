@@ -20,17 +20,17 @@ struct DateTimeInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    /// A Boolean value indicating whether a value for the input is required.
-    @State private var isRequired = false
+    /// The current date selection.
+    @State private var date: Date?
     
     /// The formatted version of the element's current value.
     @State private var formattedValue = ""
     
-    /// The current date selection.
-    @State private var date: Date?
-    
     /// A Boolean value indicating whether a new date (or time is being set).
     @State private var isEditing = false
+    
+    /// A Boolean value indicating whether a value for the input is required.
+    @State private var isRequired = false
     
     /// The input's parent element.
     private let element: FieldFormElement

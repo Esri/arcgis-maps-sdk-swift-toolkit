@@ -17,17 +17,17 @@ import SwiftUI
 
 /// Displays a group form element and manages the visibility of the elements within the group.
 struct GroupView<Content>: View where Content: View {
-    /// A Boolean value indicating whether the group is expanded or collapsed.
-    @State private var isExpanded: Bool
-    
-    /// The list of visible group elements.
-    @State private  var visibleElements = [FormElement]()
-    
     /// The group form element.
     @State private var element: GroupFormElement
     
+    /// A Boolean value indicating whether the group is expanded or collapsed.
+    @State private var isExpanded: Bool
+    
     /// The group of visibility tasks.
     @State private var isVisibleTasks = [Task<Void, Never>]()
+    
+    /// The list of visible group elements.
+    @State private  var visibleElements = [FormElement]()
     
     /// The method to build an element in the group.
     private let viewCreator: (FieldFormElement) -> Content

@@ -22,9 +22,6 @@ struct SwitchInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    /// A Boolean value indicating whether a value for the input is required.
-    @State private var isRequired = false
-    
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
     /// In this scenario a ``ComboBoxInput`` should be used instead.
@@ -32,6 +29,9 @@ struct SwitchInput: View {
     
     /// A Boolean value indicating whether the switch is toggled on or off.
     @State private var isOn: Bool = false
+    
+    /// A Boolean value indicating whether a value for the input is required.
+    @State private var isRequired = false
     
     /// The value represented by the switch.
     @State private var selectedValue: Bool?

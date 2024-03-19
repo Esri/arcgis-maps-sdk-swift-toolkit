@@ -23,14 +23,8 @@ struct TextInput: View {
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
-    /// A Boolean value indicating whether a value for the input is required.
-    @State private var isRequired = false
-    
     /// The formatted version of the element's current value.
     @State private var formattedValue = ""
-    
-    /// The current text value.
-    @State private var text = ""
     
     /// A Boolean value indicating whether placeholder text is shown, thereby indicating the
     /// presence of a value.
@@ -42,6 +36,12 @@ struct TextInput: View {
     ///
     /// Once iOS 16.0 is the minimum supported platform this property can be removed.
     @State private var isPlaceholder = false
+    
+    /// A Boolean value indicating whether a value for the input is required.
+    @State private var isRequired = false
+    
+    /// The current text value.
+    @State private var text = ""
     
     /// The input's parent element.
     private let element: FieldFormElement
