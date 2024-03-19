@@ -96,18 +96,18 @@ extension GroupView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** a view, so conditionally check for an empty title and description.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !element.label.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.label)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label)")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label)")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !element.description.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Description")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Description")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 #if targetEnvironment(macCatalyst)
