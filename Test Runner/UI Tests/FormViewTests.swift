@@ -1086,7 +1086,7 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_4_1() {
         let app = XCUIApplication()
         let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
-        let fieldTitle = app.staticTexts["Radio Button Text"]
+        let fieldTitle = app.staticTexts["Radio Button Text *"]
         let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
         let dogOption = app.buttons["Radio Button Text dog"]
@@ -1384,21 +1384,19 @@ final class FeatureFormViewTests: XCTestCase {
         let elementInTheGroupIsEditableSwitch = app.switches["Element in the group is editable Switch"]
         
         let comboBoxReadOnlyInput = app.staticTexts["Combo box Read Only Input"]
-        let comboBox = app.staticTexts["Combo box Combo Box"]
+        let comboBox = app.staticTexts["Combo box Value"]
         
         let radioButtonsReadOnlyInput = app.staticTexts["Radio buttons Read Only Input"]
-        let radioButtonsInput = app.staticTexts["Radio buttons Radio Buttons"]
+        let radioButtonsInput = app.images["Radio buttons 0 Checkmark"]
         
         let dateReadOnlyInput = app.staticTexts["Date Read Only Input"]
-        let dateInput = app.staticTexts["Date Date Time Input"]
+        let dateInput = app.staticTexts["Date Value"]
         
         let shortTextReadOnlyInput = app.staticTexts["Short text Read Only Input"]
         let shortTextTextInput = app.textFields["Short text Text Input"]
         
         let longTextReadOnlyInput = app.staticTexts["Long text Read Only Input"]
         let longTextTextInput = app.textViews["Long text Text Input"]
-        
-        let groupElement = app.staticTexts["Group"]
         
         app.launch()
         
