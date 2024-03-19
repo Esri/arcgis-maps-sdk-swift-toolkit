@@ -15,7 +15,6 @@
 import ArcGIS
 import SwiftUI
 
-/// - Since: 200.4
 @MainActor class FormViewModel: ObservableObject {
     /// The current focused element, if one exists.
     @Published var focusedElement: FormElement? {
