@@ -63,7 +63,7 @@ public struct WorldScaleSceneView: View {
     /// and view drawing mode.
     public init(
         clippingDistance: Double? = nil,
-        trackingMode: TrackingMode,
+        trackingMode: TrackingMode = .worldTracking,
         sceneViewBuilder: @escaping (SceneViewProxy) -> SceneView
     ) {
         self.clippingDistance = clippingDistance
