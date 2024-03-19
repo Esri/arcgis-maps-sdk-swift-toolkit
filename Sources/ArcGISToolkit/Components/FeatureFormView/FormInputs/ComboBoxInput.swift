@@ -27,6 +27,7 @@ struct ComboBoxInput: View {
     @State private var isRequired = false
     
     @State private var value: Any?
+    
     /// The formatted version of the element's current value.
     @State private var formattedValue = ""
     
