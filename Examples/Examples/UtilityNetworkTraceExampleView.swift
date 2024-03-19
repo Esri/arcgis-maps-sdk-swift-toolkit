@@ -20,7 +20,6 @@
 ***REMOVED***/ a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***@Environment(\.isPortraitOrientation)
-***REMOVED***
 ***REMOVED***private var isPortraitOrientation
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map with the utility networks.
