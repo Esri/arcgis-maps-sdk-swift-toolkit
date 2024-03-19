@@ -15,7 +15,6 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ - Since: 200.4
 @MainActor class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The current focused element, if one exists.
 ***REMOVED***@Published var focusedElement: FormElement? {
