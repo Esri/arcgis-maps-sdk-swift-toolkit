@@ -17,8 +17,6 @@ import SwiftUI
 
 /// A view for a read only field form element.
 struct ReadOnlyInput: View {
-    @Environment(\.formElementPadding) var elementPadding
-    
     @State private var formattedValue: String = ""
     
     /// The input's parent element.
@@ -27,7 +25,7 @@ struct ReadOnlyInput: View {
     var body: some View {
         Group {
             InputHeader(label: element.label, isRequired: false)
-                .padding(.top, elementPadding)
+            
             if element.isMultiline {
                 textReader
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -37,7 +35,6 @@ struct ReadOnlyInput: View {
                 }
             }
             InputFooter(element: element)
-                .padding(.bottom, elementPadding)
         }
         .accessibilityIdentifier("\(element.label) Read Only Input")
         .onAppear {

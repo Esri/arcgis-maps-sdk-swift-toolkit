@@ -17,8 +17,6 @@ import ArcGIS
 
 /// A view for date/time input.
 struct DateTimeInput: View {
-    @Environment(\.formElementPadding) var elementPadding
-    
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
@@ -55,13 +53,11 @@ struct DateTimeInput: View {
     var body: some View {
         Group {
             InputHeader(element: element)
-                .padding([.top], elementPadding)
             
             dateEditor
             
             InputFooter(element: element)
         }
-        .padding([.bottom], elementPadding)
         .onChange(of: model.focusedElement) { focusedElement in
             isEditing = focusedElement == element
         }

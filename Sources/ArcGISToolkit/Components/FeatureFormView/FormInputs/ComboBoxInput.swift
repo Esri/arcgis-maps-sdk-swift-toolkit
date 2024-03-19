@@ -19,8 +19,6 @@ import SwiftUI
 ///
 /// This is the preferable input type for long lists of coded value domains.
 struct ComboBoxInput: View {
-    @Environment(\.formElementPadding) var elementPadding
-    
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
@@ -91,7 +89,6 @@ struct ComboBoxInput: View {
     var body: some View {
         VStack(alignment: .leading) {
             InputHeader(label: element.label, isRequired: isRequired)
-                .padding([.top], elementPadding)
             
             HStack {
                 Text(selectedValue?.name ?? placeholderValue)
@@ -127,7 +124,6 @@ struct ComboBoxInput: View {
             
             InputFooter(element: element)
         }
-        .padding([.bottom], elementPadding)
         .onChange(of: selectedValue) { selectedValue in
             element.updateValue(selectedValue?.code)
             model.evaluateExpressions()
