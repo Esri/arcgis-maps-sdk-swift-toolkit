@@ -21,8 +21,8 @@ struct DateTimeInput: View {
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED*** State properties for element events.
+***REMOVED***@State private var isRequired = false
 ***REMOVED***
-***REMOVED***@State private var isRequired: Bool = false
 ***REMOVED***@State private var formattedValue: String = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current date selection.

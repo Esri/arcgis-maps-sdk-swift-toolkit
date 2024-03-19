@@ -67,7 +67,7 @@ public struct FeatureFormView: View {
 ***REMOVED***@State private var isEvaluatingInitialExpressions = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title of the feature form view.
-***REMOVED***@State private var title: String = ""
+***REMOVED***@State private var title = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view.
 ***REMOVED******REMOVED***/ - Parameters:

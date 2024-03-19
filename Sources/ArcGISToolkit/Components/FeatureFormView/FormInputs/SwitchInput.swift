@@ -24,7 +24,7 @@ struct SwitchInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED*** State properties for element events.
 ***REMOVED***
-***REMOVED***@State private var isRequired: Bool = false
+***REMOVED***@State private var isRequired = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the current value doesn't exist as an option in the domain.
 ***REMOVED******REMOVED***/
