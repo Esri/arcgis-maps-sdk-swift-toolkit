@@ -1361,10 +1361,16 @@ final class FeatureFormViewTests: XCTestCase {
         let app = XCUIApplication()
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
+        let groupElement = app.staticTexts["single line text 3"]
         let showElementsButton = app.buttons["show invisible form element"]
+        
+#if targetEnvironment(macCatalyst)
+        let hiddenElementsGroup = app.disclosureTriangles["Group with children that are visible dependent"]
+        let hiddenElementsGroupDescription = app.disclosureTriangles["Group with children that are visible dependent Description"]
+#else
         let hiddenElementsGroup = app.staticTexts["Group with children that are visible dependent"]
         let hiddenElementsGroupDescription = app.staticTexts["Group with children that are visible dependent Description"]
-        let groupElement = app.staticTexts["single line text 3"]
+#endif
         
         app.launch()
         
