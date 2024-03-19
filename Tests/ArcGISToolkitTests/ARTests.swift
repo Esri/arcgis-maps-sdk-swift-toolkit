@@ -151,9 +151,7 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testWorldScaleWorldTrackingInitWithDefaults() throws {
-***REMOVED******REMOVED***let view = WorldScaleSceneView(
-***REMOVED******REMOVED******REMOVED***trackingMode: .worldTracking
-***REMOVED******REMOVED***) { _ in
+***REMOVED******REMOVED***let view = WorldScaleSceneView { _ in
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: Scene())
 ***REMOVED***
 ***REMOVED******REMOVED***
