@@ -27,6 +27,8 @@ struct TextInput: View {
     @FocusState private var isFocused: Bool
     
     @State private var isRequired = false
+    
+    /// The formatted version of the element's current value.
     @State private var formattedValue = ""
     /// The current text value.
     @State private var text = ""
