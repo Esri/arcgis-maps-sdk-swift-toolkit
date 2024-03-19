@@ -25,13 +25,13 @@ struct InputFooter: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    /// The form element the footer belongs to.
-    let element: FieldFormElement
     /// An ID regenerated each time the element's value changes.
     ///
     /// Allows the footer to be recomputed to reflect changes in validation errors or input length.
     @State private var id = UUID()
     
+    /// The form element the footer belongs to.
+    let element: FieldFormElement
     
     var body: some View {
         HStack(alignment: .top) {
