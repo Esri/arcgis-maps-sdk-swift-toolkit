@@ -40,7 +40,7 @@ struct ComboBoxInput: View {
     /// The element's current value.
     @State private var value: Any?
     
-    /// The input's parent element.
+    /// The element the input belongs to.
     private let element: FieldFormElement
     
     /// The text used to represent a `nil` value.

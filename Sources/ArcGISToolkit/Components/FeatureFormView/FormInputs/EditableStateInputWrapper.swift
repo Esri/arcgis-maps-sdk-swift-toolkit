@@ -23,7 +23,7 @@ struct EditableStateInputWrapper: View {
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
     
-    /// The input's element.
+    /// The element the input belongs to.
     let element: FieldFormElement
     
     var body: some View {

@@ -20,7 +20,7 @@ struct ReadOnlyInput: View {
     /// The formatted version of the element's current value.
     @State private var formattedValue = ""
     
-    /// The input's parent element.
+    /// The element the input belongs to.
     let element: FieldFormElement
     
     var body: some View {
