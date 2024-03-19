@@ -17,7 +17,7 @@
 
 ***REMOVED***/ A view for a read only field form element.
 struct ReadOnlyInput: View {
-***REMOVED***@State private var formattedValue: String = ""
+***REMOVED***@State private var formattedValue = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input's parent element.
 ***REMOVED***let element: FieldFormElement
