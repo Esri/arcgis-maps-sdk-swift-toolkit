@@ -25,6 +25,7 @@ struct RadioButtonsInput: View {
     /// A Boolean value indicating whether a value for the input is required.
     @State private var isRequired = false
     
+    /// The element's current value.
     @State private var value: Any?
     
     /// The selected option.
