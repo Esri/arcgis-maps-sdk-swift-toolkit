@@ -38,6 +38,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "Procházet";
 
+/* A label for a button to show the calibration view. */
+"Calibrate" = "Kalibrovat";
+
+/* A label for the calibration view used to calibrate the camera
+for the AR experience. */
+"Calibration" = "Kalibrace";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Storno";
 
@@ -85,6 +92,10 @@ network element for more than one trace starting point. */
 for a utility network trace. */
 "Element could not be identified." = "Element se nepodařilo identifikovat.";
 
+/* A label for the slider that adjusts the camera elevation for the
+AR experience. */
+"elevation" = "nadmořská výška";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Chyba";
 
@@ -94,6 +105,10 @@ network certificate. */
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "Chyba při načítání podkladové mapy.";
+
+/* An error message shown when a GeoModel failed to load.
+The variable provides additional data. */
+"Error loading bookmarks: %@" = "Chyba při načítání záložek: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Vyhodnocování výrazů vyskakovacího okna";
@@ -129,6 +144,10 @@ contains one or more facilities in a floor-aware map or scene. */
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Výsledky funkce";
+
+/* A label for the slider that adjusts the camera heading for the
+AR experience. */
+"heading" = "směr";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Multimédia";

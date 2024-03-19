@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ArcGIS
 import ARKit
 import SwiftUI
 
@@ -21,6 +22,8 @@ typealias ARViewType = ARSCNView
 struct ARSwiftUIView {
     /// The closure to call when the session's geo-tracking state changes.
     private(set) var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
+    /// The closure to call when the session's camera tracking state changes.
+    private(set) var onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
     /// The closure to call when the session's frame updates.
     private(set) var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
     /// The closure to call when a node corresponding to a new anchor has been added to the view.
@@ -46,6 +49,15 @@ struct ARSwiftUIView {
     ) -> Self {
         var view = self
         view.onDidChangeGeoTrackingStatusAction = action
+        return view
+    }
+    
+    /// Sets the closure to call when session's camera tracking state changes.
+    func onCameraDidChangeTrackingState(
+        perform action: @escaping (ARSession, ARCamera.TrackingState) -> Void
+    ) -> Self {
+        var view = self
+        view.onCameraDidChangeTrackingStateAction = action
         return view
     }
     
@@ -89,6 +101,7 @@ extension ARSwiftUIView: UIViewRepresentable {
     
     func updateUIView(_ uiView: ARViewType, context: Context) {
         context.coordinator.onDidChangeGeoTrackingStatusAction = onDidChangeGeoTrackingStatusAction
+        context.coordinator.onCameraDidChangeTrackingStateAction = onCameraDidChangeTrackingStateAction
         context.coordinator.onDidUpdateFrameAction = onDidUpdateFrameAction
         context.coordinator.onAddNodeAction = onAddNodeAction
         context.coordinator.onUpdateNodeAction = onUpdateNodeAction
@@ -102,12 +115,17 @@ extension ARSwiftUIView: UIViewRepresentable {
 extension ARSwiftUIView {
     class Coordinator: NSObject, ARSCNViewDelegate, ARSessionDelegate {
         var onDidChangeGeoTrackingStatusAction: ((ARSession, ARGeoTrackingStatus) -> Void)?
+        var onCameraDidChangeTrackingStateAction: ((ARSession, ARCamera.TrackingState) -> Void)?
         var onDidUpdateFrameAction: ((ARSession, ARFrame) -> Void)?
         var onAddNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
         var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
         
         func session(_ session: ARSession, didChange geoTrackingStatus: ARGeoTrackingStatus) {
             onDidChangeGeoTrackingStatusAction?(session, geoTrackingStatus)
+        }
+        
+        func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
+            onCameraDidChangeTrackingStateAction?(session, camera.trackingState)
         }
         
         func session(_ session: ARSession, didUpdate frame: ARFrame) {
@@ -134,22 +152,48 @@ class ARSwiftUIViewProxy: NSObject, ARSessionProviding {
     @objc dynamic var session: ARSession {
         arView.session
     }
-    
-    /// Creates a raycast query that originates from a point on the view, aligned with the center of the camera's field of view.
+}
+
+extension ARSwiftUIViewProxy {
+    /// Performs a raycast to get the transformation matrix representing the corresponding 
+    /// real-world point for `screenPoint`.
+    ///
+    /// The method returns `nil` when the raycast query or the raycast fails. They can fail due to
+    /// certain limitations, such as reflective or irregular surfaces, poorly lit environment that
+    /// reduces the amount of visible objects, distance between the camera and the object being
+    /// too far, camera occlusion that blocks the rays, etc.
     /// - Parameters:
-    ///   - point: The point on the view to extend the raycast from.
+    ///   - screenPoint: The screen point to determine the real world transformation matrix from.
     ///   - target: The type of surface the raycast can interact with.
-    ///   - alignment: The target's alignment with respect to gravity.
-    /// - Returns: An `ARRaycastQuery`.
-    func raycastQuery(
-        from point: CGPoint,
-        allowing target: ARRaycastQuery.Target,
-        alignment: ARRaycastQuery.TargetAlignment
-    ) -> ARRaycastQuery? {
-        return arView.raycastQuery(
-            from: point,
+    /// - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
+    func raycast(from screenPoint: CGPoint, allowing target: ARRaycastQuery.Target) -> TransformationMatrix? {
+        // Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
+        guard let query = arView.raycastQuery(
+            from: screenPoint,
             allowing: target,
-            alignment: alignment
+            alignment: .any
+        ) else { return nil }
+        
+        let results = session.raycast(query)
+        
+        // Get the worldTransform from the first result; if there's no worldTransform, return nil.
+        guard let worldTransform = results.first?.worldTransform else { return nil }
+        
+        // Create our raycast matrix based on the worldTransform location.
+        // Right now we ignore the orientation of the plane that was hit to find the point
+        // since we only use horizontal planes.
+        // If we start supporting vertical planes we will have to stop suppressing the
+        // quaternion rotation to a null rotation (0,0,0,1).
+        let raycastMatrix = TransformationMatrix.normalized(
+            quaternionX: 0,
+            quaternionY: 0,
+            quaternionZ: 0,
+            quaternionW: 1,
+            translationX: Double(worldTransform.columns.3.x),
+            translationY: Double(worldTransform.columns.3.y),
+            translationZ: Double(worldTransform.columns.3.z)
         )
+        
+        return raycastMatrix
     }
 }

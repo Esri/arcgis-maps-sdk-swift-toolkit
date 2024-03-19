@@ -42,6 +42,10 @@ public struct GeoTrackingSceneView: View {
     @State private var currentLocation: Location?
     /// The current interface orientation.
     @State private var interfaceOrientation: InterfaceOrientation?
+    /// The closure to perform when the camera tracking state changes.
+    private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
+    /// The closure to perform when the geo tracking status changes.
+    private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
     
     /// Creates a world scale geo-tracking scene view.
     /// - Parameters:
@@ -68,6 +72,7 @@ public struct GeoTrackingSceneView: View {
         self.arViewProxy = arViewProxy
         self.cameraController = cameraController
         self.calibrationViewModel = calibrationViewModel
+        self.cameraController.clippingDistance = clippingDistance
         _initialCameraIsSet = initialCameraIsSet
         self.calibrationViewIsPresented = calibrationViewIsPresented
         self.locationDataSource = locationDataSource
@@ -95,14 +100,15 @@ public struct GeoTrackingSceneView: View {
                     }
                     .onDidChangeGeoTrackingStatus { _, status in
                         handleGeoTrackingStatusChange(status)
+                        onGeoTrackingStatusChangedAction?(status)
                     }
-                
-                if initialCameraIsSet {
-                    sceneViewBuilder(sceneViewProxy)
-                        .worldScaleSetup(cameraController: cameraController)
-                }
+                    .onCameraDidChangeTrackingState { _, trackingState in
+                        onCameraTrackingStateChangedAction?(trackingState)
+                    }
+                sceneViewBuilder(sceneViewProxy)
+                    .worldScaleSetup(cameraController: cameraController)
+                    .opacity(initialCameraIsSet ? 1 : 0)
             }
-            .ignoresSafeArea(.all)
             .overlay {
                 ARCoachingOverlay(goal: .geoTracking)
                     .sessionProvider(arViewProxy)
@@ -189,5 +195,29 @@ public struct GeoTrackingSceneView: View {
         @unknown default:
             fatalError("Unknown ARGeoTrackingStatus.State")
         }
+    }
+    
+    /// Sets a closure to perform when the camera tracking state changes.
+    /// - Parameter action: The closure to perform when the camera tracking state has changed.
+    public func onCameraTrackingStateChanged(
+        perform action: @escaping (
+            _ cameraTrackingState: ARCamera.TrackingState
+        ) -> Void
+    ) -> Self {
+        var view = self
+        view.onCameraTrackingStateChangedAction = action
+        return view
+    }
+    
+    /// Sets a closure to perform when the geo tracking status changes.
+    /// - Parameter action: The closure to perform when the geo tracking status has changed.
+    public func onGeoTrackingStatusChanged(
+        perform action: @escaping (
+            _ geoTrackingStatus: ARGeoTrackingStatus
+        ) -> Void
+    ) -> Self {
+        var view = self
+        view.onGeoTrackingStatusChangedAction = action
+        return view
     }
 }

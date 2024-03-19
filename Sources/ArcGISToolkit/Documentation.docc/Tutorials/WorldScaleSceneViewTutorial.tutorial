@@ -1,0 +1,46 @@
+@Tutorial(time: 10) {
+    @Intro(title: "WorldScaleSceneView Tutorial") {
+        `WorldScaleSceneView` provides an augmented reality world scale experience.
+        @Image(source: WorldScaleSceneView, alt: "An image of a world scale AR experience.")
+    }
+    
+    @Section(title: "Using the WorldScaleSceneView") {
+        @ContentAndMedia {
+            @Image(source: WorldScaleSceneView, alt: "An image of a world scale top AR experience.")
+        }
+        
+        @Steps {
+            @Step {
+                Initialize a `WorldScaleSceneView`. Specify the clipping distance and tracking mode. 
+                
+                The clipping distance is the distance in meters that the ArcGIS Scene data will be clipped to.
+                The tracking mode determines the type of tracking configuration that will be used by the AR view. 
+                The `worldTracking` mode uses the `ARWorldTrackingConfiguration` and the `geoTracking` mode uses the `ARGeoTrackingConfiguration`. The `preferGeoTracking` mode uses the `ARGeoTrackingConfiguration` if 
+                geo tracking is available, otherwise, `ARWorldTrackingConfiguration` is used.
+                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep1)
+            }
+            
+            @Step {
+                Add a `SceneView` to the `WorldScaleSceneView` closure. The closure builds and overlays 
+                the scene view on top of the augmented reality video feed. Specify the `scene` state 
+                variable.
+                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep2)
+            }
+            
+            @Step {
+                Set the `scene.baseSurface.opacity` to zero to make the basemap transparent.
+                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep3)
+            }
+            
+            @Step {
+                Request when-in-use location authorization to access the current location.
+                
+                This is necessary because we use a location datasource to get the initial location 
+                in order to display a ring around the initial location. The current location is also
+                necessary because the `WorldScaleSceneView` utilizes a location datasource that
+                will not start until authorized.
+                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep4)
+            }
+        }
+    }
+}

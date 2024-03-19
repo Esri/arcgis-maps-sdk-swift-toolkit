@@ -49,6 +49,8 @@ struct WorldTrackingSceneView: View {
     @State private var interfaceOrientation: InterfaceOrientation?
     /// The timestamp of the last received location.
     @State private var lastLocationTimestamp: Date?
+    /// The closure to perform when the camera tracking state changes.
+    private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     
     /// Creates a world scale world-tracking scene view.
     /// - Parameters:
@@ -79,6 +81,7 @@ struct WorldTrackingSceneView: View {
         self.arViewProxy = arViewProxy
         self.cameraController = cameraController
         self.calibrationViewModel = calibrationViewModel
+        self.cameraController.clippingDistance = clippingDistance
         self.distanceThreshold = distanceThreshold
         _initialCameraIsSet = initialCameraIsSet
         self.calibrationViewIsPresented = calibrationViewIsPresented
@@ -112,16 +115,16 @@ struct WorldTrackingSceneView: View {
                             orientation: interfaceOrientation
                         )
                     }
-                
-                if initialCameraIsSet {
-                    sceneViewBuilder(sceneViewProxy)
-                        .worldScaleSetup(cameraController: cameraController)
-                        .onCameraChanged { camera in
-                            currentCamera = camera
-                        }
-                }
+                    .onCameraDidChangeTrackingState { _, trackingState in
+                        onCameraTrackingStateChangedAction?(trackingState)
+                    }
+                sceneViewBuilder(sceneViewProxy)
+                    .worldScaleSetup(cameraController: cameraController)
+                    .onCameraChanged { camera in
+                        currentCamera = camera
+                    }
+                    .opacity(initialCameraIsSet ? 1 : 0)
             }
-            .ignoresSafeArea(.all)
             .overlay {
                 ARCoachingOverlay(goal: .geoTracking)
                     .sessionProvider(arViewProxy)
@@ -241,5 +244,17 @@ struct WorldTrackingSceneView: View {
         
         // If the location becomes off by over a certain threshold, then update the camera location.
         return result.distance.value > distanceThreshold ? true : false
+    }
+    
+    /// Sets a closure to perform when the camera tracking state changes.
+    /// - Parameter action: The closure to perform when the camera tracking state has changed.
+    public func onCameraTrackingStateChanged(
+        perform action: @escaping (
+            _ cameraTrackingState: ARCamera.TrackingState
+        ) -> Void
+    ) -> Self {
+        var view = self
+        view.onCameraTrackingStateChangedAction = action
+        return view
     }
 }
