@@ -96,18 +96,18 @@ extension GroupView {
                 // a view, so conditionally check for an empty title and description.
                 if !element.label.isEmpty {
                     Text(element.label)
+                        .accessibilityIdentifier("\(element.label)")
                         .multilineTextAlignment(.leading)
                         .font(.title2)
                         .foregroundColor(.primary)
-                        .accessibilityIdentifier("\(element.label)")
                 }
                 
                 if !element.description.isEmpty {
                     Text(element.description)
+                        .accessibilityIdentifier("\(element.label) Description")
                         .multilineTextAlignment(.leading)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
-                        .accessibilityIdentifier("\(element.label) Description")
                 }
             }
 #if targetEnvironment(macCatalyst)
