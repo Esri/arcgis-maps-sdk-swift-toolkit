@@ -144,6 +144,7 @@ public struct WorldScaleSceneView: View {
                     .padding(.bottom)
             }
         }
+        .animation(.default, value: initialCameraIsSet)
     }
     
     /// A world scale geo-tracking scene view.
