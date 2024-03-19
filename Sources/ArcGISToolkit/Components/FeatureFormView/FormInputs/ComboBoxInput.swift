@@ -26,6 +26,7 @@ struct ComboBoxInput: View {
 ***REMOVED***@State private var isRequired = false
 ***REMOVED***
 ***REMOVED***@State private var value: Any?
+***REMOVED******REMOVED***/ The formatted version of the element's current value.
 ***REMOVED***@State private var formattedValue = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the combo box picker is presented.

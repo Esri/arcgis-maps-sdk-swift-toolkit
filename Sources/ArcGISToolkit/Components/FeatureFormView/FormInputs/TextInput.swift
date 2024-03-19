@@ -27,6 +27,8 @@ struct TextInput: View {
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
 ***REMOVED***@State private var isRequired = false
+***REMOVED***
+***REMOVED******REMOVED***/ The formatted version of the element's current value.
 ***REMOVED***@State private var formattedValue = ""
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text = ""
