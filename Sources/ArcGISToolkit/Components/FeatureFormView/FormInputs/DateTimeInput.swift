@@ -183,6 +183,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***input.includesTime ? Text.now : .today
 ***REMOVED***
 ***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(input.includesTime ? "Now" : "Today") Button")
+***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
 ***REMOVED***
 
