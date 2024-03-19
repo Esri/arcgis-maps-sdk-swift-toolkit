@@ -19,8 +19,6 @@ import SwiftUI
 ///
 /// The switch represents two mutually exclusive values, such as: yes/no, on/off, true/false.
 struct SwitchInput: View {
-    @Environment(\.formElementPadding) var elementPadding
-    
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
@@ -68,19 +66,19 @@ struct SwitchInput: View {
         } else {
             Group {
                 InputHeader(label: element.label, isRequired: isRequired)
-                    .padding([.top], elementPadding)
+                
                 HStack {
                     Text(isOn ? input.onValue.name : input.offValue.name)
                         .accessibilityIdentifier("\(element.label) Switch Label")
                     Spacer()
                     Toggle("", isOn: $isOn)
-                        .toggleStyle(.switch)
                         .accessibilityIdentifier("\(element.label) Switch")
+                        .toggleStyle(.switch)
                 }
                 .formInputStyle()
+                
                 InputFooter(element: element)
             }
-            .padding([.bottom], elementPadding)
             .onAppear {
                 if element.formattedValue.isEmpty {
                     fallbackToComboBox = true

@@ -17,6 +17,8 @@ import ArcGIS
 
 /// A view shown at the top of a field element in a form.
 struct InputHeader: View {
+    @Environment(\.formElementPadding) var elementPadding
+    
     /// The name of the form element.
     let label: String
     
@@ -44,5 +46,6 @@ struct InputHeader: View {
                 .foregroundColor(.secondary)
             Spacer()
         }
+        .padding(.top, elementPadding)
     }
 }

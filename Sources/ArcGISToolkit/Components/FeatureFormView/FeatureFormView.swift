@@ -64,7 +64,7 @@ public struct FeatureFormView: View {
     @StateObject private var model: FormViewModel
     
     /// A Boolean value indicating whether the initial expression evaluation is running.
-    @State var isEvaluatingInitialExpressions = true
+    @State private var isEvaluatingInitialExpressions = true
     
     /// The title of the feature form view.
     @State private var title: String = ""
@@ -84,7 +84,7 @@ public struct FeatureFormView: View {
                 } else {
                     VStack(alignment: .leading) {
                         FormHeader(title: title)
-                            .padding([.bottom], elementPadding)
+                            .padding(.bottom, elementPadding)
                         ForEach(model.visibleElements, id: \.self) { element in
                             makeElement(element)
                         }
@@ -136,21 +136,6 @@ extension FeatureFormView {
            !(element.input is BarcodeScannerFormInput),
            !(element.input is UnsupportedFormInput) {
             Divider()
-        }
-    }
-}
-
-private extension View {
-    /// Configures the behavior in which scrollable content interacts with the software keyboard.
-    /// - Returns: A view that dismisses the keyboard when the  scroll.
-    /// - Parameter immediately: A Boolean value that will cause the keyboard to the keyboard to
-    /// dismiss as soon as scrolling starts when `true` and interactively when `false`.
-    func scrollDismissesKeyboard(immediately: Bool) -> some View {
-        if #available(iOS 16.0, *) {
-            return self
-                .scrollDismissesKeyboard(immediately ? .immediately : .interactively)
-        } else {
-            return self
         }
     }
 }

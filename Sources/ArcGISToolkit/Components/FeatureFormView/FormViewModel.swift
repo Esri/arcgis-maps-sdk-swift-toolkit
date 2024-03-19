@@ -13,11 +13,10 @@
 // limitations under the License.
 
 import ArcGIS
-import Combine
 import SwiftUI
 
 /// - Since: 200.4
-@MainActor public class FormViewModel: ObservableObject {
+@MainActor class FormViewModel: ObservableObject {
     /// The feature form.
     private(set) var featureForm: FeatureForm
     
