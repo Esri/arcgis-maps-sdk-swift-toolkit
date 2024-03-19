@@ -23,6 +23,7 @@ struct RadioButtonsInput: View {
     @EnvironmentObject var model: FormViewModel
     
     // State properties for element events.
+    /// A Boolean value indicating whether a value for the input is required.
     @State private var isRequired = false
     
     @State private var value: Any?

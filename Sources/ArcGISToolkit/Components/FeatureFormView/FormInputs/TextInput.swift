@@ -26,6 +26,7 @@ struct TextInput: View {
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
+    /// A Boolean value indicating whether a value for the input is required.
     @State private var isRequired = false
     
     /// The formatted version of the element's current value.
