@@ -20,7 +20,6 @@ struct TextInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    // State properties for element events.
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
