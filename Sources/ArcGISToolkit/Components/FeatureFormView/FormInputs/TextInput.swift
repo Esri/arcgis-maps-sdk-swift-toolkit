@@ -20,7 +20,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED*** State properties for element events.
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
