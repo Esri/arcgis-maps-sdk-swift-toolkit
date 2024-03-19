@@ -43,7 +43,7 @@ struct TextInput: View {
     /// The current text value.
     @State private var text = ""
     
-    /// The input's parent element.
+    /// The element the input belongs to.
     private let element: FieldFormElement
     
     /// Creates a view for text input spanning multiple lines.

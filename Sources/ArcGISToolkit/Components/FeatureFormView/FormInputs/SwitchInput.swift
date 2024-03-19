@@ -36,7 +36,7 @@ struct SwitchInput: View {
     /// The value represented by the switch.
     @State private var selectedValue: Bool?
     
-    /// The field's parent element.
+    /// The element the input belongs to.
     private let element: FieldFormElement
     
     /// The input configuration of the field.

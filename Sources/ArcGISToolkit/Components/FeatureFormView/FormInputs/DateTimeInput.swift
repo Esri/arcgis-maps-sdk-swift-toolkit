@@ -32,7 +32,7 @@ struct DateTimeInput: View {
     /// A Boolean value indicating whether a value for the input is required.
     @State private var isRequired = false
     
-    /// The input's parent element.
+    /// The element the input belongs to.
     private let element: FieldFormElement
     
     /// The input configuration of the view.
