@@ -726,7 +726,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let clearButton = app.buttons["Combo String Clear Button"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo String"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Value"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Combo String Footer"]
@@ -786,7 +786,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_3_2() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo Integer"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo Integer Value"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo Integer Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let optionsButton = app.images["Combo Integer Options Button"]
@@ -830,7 +830,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo String"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Value"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Combo Box Value"]
 ***REMOVED******REMOVED***let firstOptionButton = app.buttons["String 1"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -890,7 +890,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo String"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Value"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo String Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let noValueButton = app.buttons["No value"]
@@ -946,7 +946,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let clearButton = app.buttons["Required Combo Box Clear Button"]
 ***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Required Combo Box *"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Combo Box Value"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Required Combo Box Combo Box Value"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["Required Combo Box Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -1018,7 +1018,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let doneButton = app.buttons["Done"]
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Combo No Value False"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo No Value False Value"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["Combo No Value False Combo Box Value"]
 ***REMOVED******REMOVED***let firstOption = app.buttons["First"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["comboBox"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -1089,9 +1089,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Radio Button Text *"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
-***REMOVED******REMOVED***let dogOption = app.buttons["Radio Button Text dog"]
+***REMOVED******REMOVED***let dogOption = app.buttons["Radio Button Text dog Radio Button"]
 ***REMOVED******REMOVED***let dogOptionCheckmark = app.images["Radio Button Text dog Checkmark"]
-***REMOVED******REMOVED***let noValueOption = app.buttons["Radio Button Text No Value"]
+***REMOVED******REMOVED***let noValueOption = app.buttons["Radio Button Text No Value Radio Button"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -1136,6 +1136,47 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(
 ***REMOVED******REMOVED******REMOVED***noValueOption.exists,
 ***REMOVED******REMOVED******REMOVED***"The no value option doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test case 4.2: Test radio button fallback to combo box
+***REMOVED***func testCase_4_2() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let field1 = app.staticTexts["Fallback 1 Combo Box Value"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED***let noValueDisabledRadioButton = app.buttons["No Value Disabled One Radio Button"]
+***REMOVED******REMOVED***let noValueEnabledRadioButton = app.buttons["No Value Enabled N/A Radio Button"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 5),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 5 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify the Radio Button fallback to Combo Box was successful.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***field1.exists,
+***REMOVED******REMOVED******REMOVED***"The combo box doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify the radio buttons are shown even when the value option is enabled.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***noValueEnabledRadioButton.exists,
+***REMOVED******REMOVED******REMOVED***"The radio button doesn't exist."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify the radio buttons are still shown even when the value option is disabled.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***noValueDisabledRadioButton.exists,
+***REMOVED******REMOVED******REMOVED***"The radio button doesn't exist."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -1230,7 +1271,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_5_3() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let fieldTitle = app.staticTexts["switch double"]
-***REMOVED******REMOVED***let fieldValue = app.staticTexts["switch double Value"]
+***REMOVED******REMOVED***let fieldValue = app.staticTexts["switch double Combo Box Value"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***
@@ -1327,10 +1368,16 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED***let groupElement = app.staticTexts["single line text 3"]
 ***REMOVED******REMOVED***let showElementsButton = app.buttons["show invisible form element"]
+***REMOVED******REMOVED***
+#if targetEnvironment(macCatalyst)
+***REMOVED******REMOVED***let hiddenElementsGroup = app.disclosureTriangles["Group with children that are visible dependent"]
+***REMOVED******REMOVED***let hiddenElementsGroupDescription = app.disclosureTriangles["Group with children that are visible dependent Description"]
+#else
 ***REMOVED******REMOVED***let hiddenElementsGroup = app.staticTexts["Group with children that are visible dependent"]
 ***REMOVED******REMOVED***let hiddenElementsGroupDescription = app.staticTexts["Group with children that are visible dependent Description"]
-***REMOVED******REMOVED***let groupElement = app.staticTexts["single line text 3"]
+#endif
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -1391,7 +1438,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let elementInTheGroupIsEditableSwitch = app.switches["Element in the group is editable Switch"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let comboBoxReadOnlyInput = app.staticTexts["Combo box Read Only Input"]
-***REMOVED******REMOVED***let comboBox = app.staticTexts["Combo box Value"]
+***REMOVED******REMOVED***let comboBox = app.staticTexts["Combo box Combo Box Value"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let radioButtonsReadOnlyInput = app.staticTexts["Radio buttons Read Only Input"]
 ***REMOVED******REMOVED***let radioButtonsInput = app.images["Radio buttons 0 Checkmark"]

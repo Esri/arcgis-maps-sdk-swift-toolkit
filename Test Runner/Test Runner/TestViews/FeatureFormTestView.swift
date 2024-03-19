@@ -144,6 +144,7 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED***.init("testCase_3_5", objectID: 2, portalID: .comboBoxMapID),
 ***REMOVED******REMOVED***.init("testCase_3_6", objectID: 2, portalID: .comboBoxMapID),
 ***REMOVED******REMOVED***.init("testCase_4_1", objectID: 1, portalID: .radioButtonMapID),
+***REMOVED******REMOVED***.init("testCase_4_2", objectID: 1, portalID: .radioButtonMapID),
 ***REMOVED******REMOVED***.init("testCase_5_1", objectID: 1, portalID: .switchMapID),
 ***REMOVED******REMOVED***.init("testCase_5_2", objectID: 1, portalID: .switchMapID),
 ***REMOVED******REMOVED***.init("testCase_5_3", objectID: 1, portalID: .switchMapID),

@@ -30,8 +30,8 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether a `ComboBoxInput`` should be used instead. This will be `true` if
-***REMOVED******REMOVED***/ the current value doesn't exist as an option in the domain
+***REMOVED******REMOVED***/ A Boolean value indicating whether a ``ComboBoxInput`` should be used instead.
+***REMOVED******REMOVED***/ This will be `true` if the current value doesn't exist as an option in the domain
 ***REMOVED***@State private var fallbackToComboBox = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The field's parent element.
@@ -94,10 +94,14 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = element.codedValues.first(where: { $0.name == element.formattedValue ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = element.codedValues.first(where: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.name == element.formattedValue
+***REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.selectedValue = selectedValue
-***REMOVED******REMOVED******REMOVED*** else if !element.formattedValue.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox =
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***(input.noValueOption == .show && element.formattedValue != input.noValueLabel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***|| (input.noValueOption == .hide && !element.formattedValue.isEmpty)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
@@ -154,16 +158,16 @@ extension RadioButtonsInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if selected {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(label) Checkmark")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding(10)
 ***REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
 ***REMOVED***
+***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(label) Radio Button")
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.foregroundColor(.primary)
-***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(label)")
 ***REMOVED******REMOVED***if addDivider {
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, 10)
