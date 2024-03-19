@@ -67,7 +67,7 @@ public struct FeatureFormView: View {
     @State private var isEvaluatingInitialExpressions = true
     
     /// The title of the feature form view.
-    @State private var title: String = ""
+    @State private var title = ""
     
     /// Initializes a form view.
     /// - Parameters:
