@@ -17,7 +17,7 @@ import SwiftUI
 
 /// A view for a read only field form element.
 struct ReadOnlyInput: View {
-    @State private var formattedValue: String = ""
+    @State private var formattedValue = ""
     
     /// The input's parent element.
     let element: FieldFormElement

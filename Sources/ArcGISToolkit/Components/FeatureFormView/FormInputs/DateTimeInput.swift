@@ -23,7 +23,7 @@ struct DateTimeInput: View {
     // State properties for element events.
     @State private var isRequired = false
     
-    @State private var formattedValue: String = ""
+    @State private var formattedValue = ""
     
     /// The current date selection.
     @State private var date: Date?
