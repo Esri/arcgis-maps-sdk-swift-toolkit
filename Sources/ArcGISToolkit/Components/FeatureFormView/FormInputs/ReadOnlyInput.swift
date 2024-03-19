@@ -17,8 +17,6 @@
 
 ***REMOVED***/ A view for a read only field form element.
 struct ReadOnlyInput: View {
-***REMOVED***@Environment(\.formElementPadding) var elementPadding
-***REMOVED***
 ***REMOVED***@State private var formattedValue: String = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input's parent element.
@@ -27,7 +25,7 @@ struct ReadOnlyInput: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: false)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top, elementPadding)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED***textReader
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
@@ -37,7 +35,6 @@ struct ReadOnlyInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, elementPadding)
 ***REMOVED***
 ***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Read Only Input")
 ***REMOVED******REMOVED***.onAppear {

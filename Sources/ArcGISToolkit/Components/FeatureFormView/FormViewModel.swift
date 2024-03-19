@@ -13,11 +13,10 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Combine
 ***REMOVED***
 
 ***REMOVED***/ - Since: 200.4
-@MainActor public class FormViewModel: ObservableObject {
+@MainActor class FormViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The feature form.
 ***REMOVED***private(set) var featureForm: FeatureForm
 ***REMOVED***

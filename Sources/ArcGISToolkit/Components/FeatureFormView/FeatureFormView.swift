@@ -64,7 +64,7 @@ public struct FeatureFormView: View {
 ***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the initial expression evaluation is running.
-***REMOVED***@State var isEvaluatingInitialExpressions = true
+***REMOVED***@State private var isEvaluatingInitialExpressions = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ The title of the feature form view.
 ***REMOVED***@State private var title: String = ""
@@ -84,7 +84,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormHeader(title: title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -136,21 +136,6 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***   !(element.input is BarcodeScannerFormInput),
 ***REMOVED******REMOVED***   !(element.input is UnsupportedFormInput) {
 ***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension View {
-***REMOVED******REMOVED***/ Configures the behavior in which scrollable content interacts with the software keyboard.
-***REMOVED******REMOVED***/ - Returns: A view that dismisses the keyboard when the  scroll.
-***REMOVED******REMOVED***/ - Parameter immediately: A Boolean value that will cause the keyboard to the keyboard to
-***REMOVED******REMOVED***/ dismiss as soon as scrolling starts when `true` and interactively when `false`.
-***REMOVED***func scrollDismissesKeyboard(immediately: Bool) -> some View {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***return self
-***REMOVED******REMOVED******REMOVED******REMOVED***.scrollDismissesKeyboard(immediately ? .immediately : .interactively)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return self
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -17,11 +17,13 @@
 
 ***REMOVED***/ A view shown at the bottom of a field element in a form.
 struct InputFooter: View {
-***REMOVED******REMOVED***/ The view model for the form.
-***REMOVED***@EnvironmentObject var model: FormViewModel
+***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of a form.
 ***REMOVED***@Environment(\.validationErrorVisibility) private var validationErrorVisibility
+***REMOVED***
+***REMOVED******REMOVED***/ The view model for the form.
+***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The form element the footer belongs to.
 ***REMOVED***let element: FieldFormElement
@@ -62,6 +64,7 @@ struct InputFooter: View {
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.foregroundColor(isShowingError ? .red : .secondary)
 ***REMOVED******REMOVED***.id(id)
+***REMOVED******REMOVED***.padding(.bottom, elementPadding)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***for await _ in element.$value {
 ***REMOVED******REMOVED******REMOVED******REMOVED***id = UUID()

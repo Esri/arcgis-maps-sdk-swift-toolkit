@@ -17,6 +17,8 @@
 
 ***REMOVED***/ A view shown at the top of a field element in a form.
 struct InputHeader: View {
+***REMOVED***@Environment(\.formElementPadding) var elementPadding
+***REMOVED***
 ***REMOVED******REMOVED***/ The name of the form element.
 ***REMOVED***let label: String
 ***REMOVED***
@@ -44,5 +46,6 @@ struct InputHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
+***REMOVED******REMOVED***.padding(.top, elementPadding)
 ***REMOVED***
 ***REMOVED***

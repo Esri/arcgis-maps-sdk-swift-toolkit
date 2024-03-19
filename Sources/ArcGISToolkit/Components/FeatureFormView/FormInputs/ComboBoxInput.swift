@@ -19,8 +19,6 @@
 ***REMOVED***/
 ***REMOVED***/ This is the preferable input type for long lists of coded value domains.
 struct ComboBoxInput: View {
-***REMOVED***@Environment(\.formElementPadding) var elementPadding
-***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
@@ -91,7 +89,6 @@ struct ComboBoxInput: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedValue?.name ?? placeholderValue)
@@ -127,7 +124,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
-***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
 ***REMOVED******REMOVED******REMOVED***element.updateValue(selectedValue?.code)
 ***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()

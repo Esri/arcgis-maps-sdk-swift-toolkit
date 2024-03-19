@@ -17,8 +17,6 @@
 
 ***REMOVED***/ A view for date/time input.
 struct DateTimeInput: View {
-***REMOVED***@Environment(\.formElementPadding) var elementPadding
-***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
@@ -55,13 +53,11 @@ struct DateTimeInput: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***dateEditor
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
-***REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
 ***REMOVED******REMOVED******REMOVED***isEditing = focusedElement == element
 ***REMOVED***
@@ -187,6 +183,7 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***input.includesTime ? Text.now : .today
 ***REMOVED***
 ***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(input.includesTime ? "Now" : "Today") Button")
+***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED***
 ***REMOVED***
 

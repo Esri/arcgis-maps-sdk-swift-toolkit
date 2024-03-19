@@ -17,8 +17,6 @@
 
 ***REMOVED***/ A view for text input.
 struct TextInput: View {
-***REMOVED***@Environment(\.formElementPadding) var elementPadding
-***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
@@ -59,11 +57,13 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
-***REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
-***REMOVED******REMOVED***textWriter
-***REMOVED******REMOVED***InputFooter(element: element)
-***REMOVED******REMOVED***.padding([.bottom], elementPadding)
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***textWriter
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
+***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
 ***REMOVED******REMOVED******REMOVED***if isFocused && isPlaceholder {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
@@ -114,12 +114,12 @@ private extension TextInput {
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $text,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.hint).foregroundColor(.secondary),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: element.isMultiline ? .vertical : .horizontal
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $text,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.hint).foregroundColor(.secondary),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: element.isMultiline ? .vertical : .horizontal
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** else if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(isPlaceholder ? .secondary : .primary)

@@ -19,8 +19,6 @@
 ***REMOVED***/
 ***REMOVED***/ The switch represents two mutually exclusive values, such as: yes/no, on/off, true/false.
 struct SwitchInput: View {
-***REMOVED***@Environment(\.formElementPadding) var elementPadding
-***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
@@ -68,19 +66,19 @@ struct SwitchInput: View {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(isOn ? input.onValue.name : input.offValue.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch Label")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle("", isOn: $isOn)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.switch)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.switch)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.formInputStyle()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.formattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true

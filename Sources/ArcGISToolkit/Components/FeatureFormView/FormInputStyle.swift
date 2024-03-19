@@ -20,8 +20,8 @@ struct FormInputStyle: ViewModifier {
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.frame(minHeight: 30)
-***REMOVED******REMOVED******REMOVED***.padding([.horizontal], 10)
-***REMOVED******REMOVED******REMOVED***.padding([.vertical], 5)
+***REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
+***REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
 ***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .tertiarySystemFill))
 ***REMOVED******REMOVED******REMOVED***.cornerRadius(10)
 ***REMOVED***
