@@ -19,15 +19,15 @@ import ArcGIS
 /// A scene view that provides an augmented reality world scale experience.
 public struct WorldScaleSceneView: View {
     /// The clipping distance of the scene view.
-    private let clippingDistance: Double?
+    let clippingDistance: Double?
     /// The tracking mode for world scale AR.
-    private let trackingMode: TrackingMode
+    let trackingMode: TrackingMode
     /// The closure that builds the scene view.
     private let sceneViewBuilder: (SceneViewProxy) -> SceneView
     /// Determines the alignment of the calibration button.
-    private var calibrationButtonAlignment: Alignment = .bottom
+    var calibrationButtonAlignment: Alignment = .bottom
     /// A Boolean value that indicates whether the calibration view is hidden.
-    private var calibrationViewIsHidden = false
+    var calibrationViewIsHidden = false
     /// The proxy for the ARSwiftUIView.
     @State private var arViewProxy = ARSwiftUIViewProxy()
     /// The camera controller that will be set on the scene view.
@@ -44,6 +44,12 @@ public struct WorldScaleSceneView: View {
     @State private var locationDataSource = SystemLocationDataSource()
     /// The error from the view.
     @State private var error: Error?
+    /// The closure to call upon a single tap.
+    private var onSingleTapGestureAction: ((CGPoint, Point?) -> Void)? = nil
+    /// The closure to perform when the camera tracking state changes.
+    private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
+    /// The closure to perform when the geo tracking status changes.
+    private var onGeoTrackingStatusChangedAction: ((ARGeoTrackingStatus) -> Void)?
     
     /// Creates a world scale scene view.
     /// - Parameters:
@@ -73,54 +79,18 @@ public struct WorldScaleSceneView: View {
     public var body: some View {
         Group {
             switch trackingMode {
-            case .automatic:
+            case .preferGeoTracking:
                 // By default we try the geo-tracking configuration. If it is not available at
                 // the current location, fall back to world-tracking.
                 if geoTrackingIsAvailable {
-                    GeoTrackingSceneView(
-                        arViewProxy: arViewProxy,
-                        cameraController: cameraController,
-                        calibrationViewModel: calibrationViewModel,
-                        clippingDistance: clippingDistance,
-                        initialCameraIsSet: $initialCameraIsSet,
-                        calibrationViewIsPresented: isCalibrating,
-                        locationDataSource: locationDataSource,
-                        sceneView: sceneViewBuilder
-                    )
+                    geoTrackingSceneView
                 } else {
-                    WorldTrackingSceneView(
-                        arViewProxy: arViewProxy,
-                        cameraController: cameraController,
-                        calibrationViewModel: calibrationViewModel,
-                        clippingDistance: clippingDistance,
-                        initialCameraIsSet: $initialCameraIsSet,
-                        calibrationViewIsPresented: isCalibrating,
-                        locationDataSource: locationDataSource,
-                        sceneView: sceneViewBuilder
-                    )
+                    worldTrackingSceneView
                 }
             case .geoTracking:
-                GeoTrackingSceneView(
-                    arViewProxy: arViewProxy,
-                    cameraController: cameraController,
-                    calibrationViewModel: calibrationViewModel,
-                    clippingDistance: clippingDistance,
-                    initialCameraIsSet: $initialCameraIsSet,
-                    calibrationViewIsPresented: isCalibrating,
-                    locationDataSource: locationDataSource,
-                    sceneView: sceneViewBuilder
-                )
+                geoTrackingSceneView
             case .worldTracking:
-                WorldTrackingSceneView(
-                    arViewProxy: arViewProxy,
-                    cameraController: cameraController,
-                    calibrationViewModel: calibrationViewModel,
-                    clippingDistance: clippingDistance,
-                    initialCameraIsSet: $initialCameraIsSet,
-                    calibrationViewIsPresented: isCalibrating,
-                    locationDataSource: locationDataSource,
-                    sceneView: sceneViewBuilder
-                )
+                worldTrackingSceneView
             }
         }
         .onDisappear {
@@ -176,6 +146,56 @@ public struct WorldScaleSceneView: View {
         }
     }
     
+    /// A world scale geo-tracking scene view.
+    @ViewBuilder private var geoTrackingSceneView: some View {
+        GeoTrackingSceneView(
+            arViewProxy: arViewProxy,
+            cameraController: cameraController,
+            calibrationViewModel: calibrationViewModel,
+            clippingDistance: clippingDistance,
+            initialCameraIsSet: $initialCameraIsSet,
+            calibrationViewIsPresented: isCalibrating,
+            locationDataSource: locationDataSource,
+            sceneView: sceneViewBuilder
+        )
+        .onGeoTrackingStatusChanged { geoTrackingStatus in
+            onGeoTrackingStatusChangedAction?(geoTrackingStatus)
+        }
+        .onCameraTrackingStateChanged { trackingState in
+            onCameraTrackingStateChangedAction?(trackingState)
+        }
+        .onSingleTapGesture { tapPoint in
+            handleSingleTap(tapPoint)
+        }
+    }
+    
+    /// A world scale world-tracking scene view.
+    @ViewBuilder private var worldTrackingSceneView : some View {
+        WorldTrackingSceneView(
+            arViewProxy: arViewProxy,
+            cameraController: cameraController,
+            calibrationViewModel: calibrationViewModel,
+            clippingDistance: clippingDistance,
+            initialCameraIsSet: $initialCameraIsSet,
+            calibrationViewIsPresented: isCalibrating,
+            locationDataSource: locationDataSource,
+            sceneView: sceneViewBuilder
+        )
+        .onCameraTrackingStateChanged { trackingState in
+            onCameraTrackingStateChangedAction?(trackingState)
+        }
+        .onSingleTapGesture { tapPoint in
+            handleSingleTap(tapPoint)
+        }
+    }
+    
+    /// Handles a single tap on the view.
+    /// - Parameter tapPoint: The tapped screen point.
+    private func handleSingleTap(_ tapPoint: CGPoint) {
+        let scenePoint = arScreenToLocation(screenPoint: tapPoint)
+        onSingleTapGestureAction?(tapPoint, scenePoint)
+    }
+    
     /// Sets the visibility of the calibration view for the AR experience.
     /// - Parameter hidden: A Boolean value that indicates whether to hide the
     ///  calibration view.
@@ -190,6 +210,30 @@ public struct WorldScaleSceneView: View {
     public func calibrationButtonAlignment(_ alignment: Alignment) -> Self {
         var view = self
         view.calibrationButtonAlignment = alignment
+        return view
+    }
+    
+    /// Sets a closure to perform when the camera tracking state changes.
+    /// - Parameter action: The closure to perform when the camera tracking state has changed.
+    public func onCameraTrackingStateChanged(
+        perform action: @escaping (
+            _ cameraTrackingState: ARCamera.TrackingState
+        ) -> Void
+    ) -> Self {
+        var view = self
+        view.onCameraTrackingStateChangedAction = action
+        return view
+    }
+    
+    /// Sets a closure to perform when the geo tracking status changes.
+    /// - Parameter action: The closure to perform when the geo tracking status has changed.
+    public func onGeoTrackingStatusChanged(
+        perform action: @escaping (
+            _ geoTrackingStatus: ARGeoTrackingStatus
+        ) -> Void
+    ) -> Self {
+        var view = self
+        view.onGeoTrackingStatusChangedAction = action
         return view
     }
     
@@ -224,7 +268,7 @@ public extension WorldScaleSceneView {
     /// The type of tracking configuration used by the view.
     enum TrackingMode {
         /// If geo-tracking is unavailable, fall back to world-tracking.
-        case automatic
+        case preferGeoTracking
         /// Geo-tracking.
         case geoTracking
         /// World-tracking.
@@ -259,6 +303,31 @@ private extension WorldScaleSceneView {
                  A label for a button to show the calibration view.
                  """
         )
+    }
+}
+
+public extension WorldScaleSceneView {
+    /// Determines the scene point for the given screen point.
+    ///
+    /// If the raycast fails due to certain reasons, this method returns `nil`.
+    /// - Parameter screenPoint: The point in screen's coordinate space.
+    /// - Returns: The scene point corresponding to screen point.
+    private func arScreenToLocation(screenPoint: CGPoint) -> Point? {
+        // Use the `raycast` method to get the matrix of `screenPoint`.
+        guard let localOffsetMatrix = arViewProxy.raycast(from: screenPoint, allowing: .estimatedPlane) else { return nil }
+        let originTransformationMatrix = cameraController.originCamera.transformationMatrix
+        let scenePointMatrix = originTransformationMatrix.adding(localOffsetMatrix)
+        // Create a camera from transformationMatrix and return its location.
+        return Camera(transformationMatrix: scenePointMatrix).location
+    }
+    
+    /// Sets a closure to perform when a single tap occurs on the view.
+    func onSingleTapGesture(
+        perform action: @escaping (_ screenPoint: CGPoint, _ scenePoint: Point?) -> Void
+    ) -> some View {
+        var copy = self
+        copy.onSingleTapGestureAction = action
+        return copy
     }
 }
 
