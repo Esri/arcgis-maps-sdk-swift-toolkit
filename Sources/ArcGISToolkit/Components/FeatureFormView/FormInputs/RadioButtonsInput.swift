@@ -19,8 +19,6 @@
 ***REMOVED***/
 ***REMOVED***/ This is the preferable input type for short lists of coded value domains.
 struct RadioButtonsInput: View {
-***REMOVED***@Environment(\.formElementPadding) var elementPadding
-***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
@@ -65,7 +63,6 @@ struct RadioButtonsInput: View {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], elementPadding)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: .zero) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if input.noValueOption == .show {
@@ -96,7 +93,6 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = element.codedValues.first(where: { $0.name == element.formattedValue ***REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.selectedValue = selectedValue
