@@ -26,7 +26,7 @@ struct ComboBoxInput: View {
     @State private var isRequired = false
     
     @State private var value: Any?
-    @State private var formattedValue: String = ""
+    @State private var formattedValue = ""
     
     /// A Boolean value indicating if the combo box picker is presented.
     @State private var isPresented = false

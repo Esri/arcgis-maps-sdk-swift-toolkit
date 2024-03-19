@@ -22,12 +22,12 @@ struct TextInput: View {
     
     // State properties for element events.
     
-    @State private var formattedValue: String = ""
     
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
     @State private var isRequired = false
+    @State private var formattedValue = ""
     /// The current text value.
     @State private var text = ""
     
