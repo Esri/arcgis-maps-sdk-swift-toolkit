@@ -28,7 +28,7 @@ struct SwitchInput: View {
     @State private var fallbackToComboBox = false
     
     /// A Boolean value indicating whether the switch is toggled on or off.
-    @State private var isOn: Bool = false
+    @State private var isOn = false
     
     /// A Boolean value indicating whether a value for the input is required.
     @State private var isRequired = false
