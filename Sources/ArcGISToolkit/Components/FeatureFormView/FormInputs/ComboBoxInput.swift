@@ -25,6 +25,7 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
 ***REMOVED***@State private var isRequired = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The element's current value.
 ***REMOVED***@State private var value: Any?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The formatted version of the element's current value.
