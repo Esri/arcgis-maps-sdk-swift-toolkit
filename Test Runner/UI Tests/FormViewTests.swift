@@ -1262,12 +1262,19 @@ final class FeatureFormViewTests: XCTestCase {
     func testCase_6_1() {
         let app = XCUIApplication()
         let collapsedGroupFirstElement = app.staticTexts["Single Line Text"]
-        let collapsedGroup = app.staticTexts["Group with Multiple Form Elements 2"]
         let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
-        let expandedGroup = app.staticTexts["Group with Multiple Form Elements"]
-        let expandedGroupDescription = app.staticTexts["Group with Multiple Form Elements Description"]
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
+        
+#if targetEnvironment(macCatalyst)
+        let collapsedGroup = app.disclosureTriangles["Group with Multiple Form Elements 2"]
+        let expandedGroup = app.disclosureTriangles["Group with Multiple Form Elements"]
+        let expandedGroupDescription = app.disclosureTriangles["Group with Multiple Form Elements Description"]
+#else
+        let collapsedGroup = app.staticTexts["Group with Multiple Form Elements 2"]
+        let expandedGroup = app.staticTexts["Group with Multiple Form Elements"]
+        let expandedGroupDescription = app.staticTexts["Group with Multiple Form Elements Description"]
+#endif
         
         app.launch()
         
