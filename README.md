@@ -14,6 +14,7 @@ To use Toolkit in your project:
 * **[BasemapGallery](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/basemapgallery)** - Displays a collection of basemaps.
 * **[Bookmarks](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/bookmarks)** - Shows bookmarks, from a map, scene, or a list.
 * **[Compass](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map points north.
+* **[FeatureFormView](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/featureformview)** - Enables users to edit field values of a feature using pre-configured forms.
 * **[FloatingPanel](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/floatingpanel)** - Allows display of view-related content in a "bottom sheet". 
 * **[FloorFilter](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/floorfilter)** - Allows filtering of floor plan data in a geo view by a site, a building in the site, or a floor in the building.
 * **[FlyoverSceneView](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/flyoversceneview)** - Allows you to explore a scene using your device as a window into the virtual world.

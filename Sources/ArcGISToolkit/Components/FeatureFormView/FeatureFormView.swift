@@ -15,9 +15,8 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ The `FeatureFormView` component enables users to edit field values of features
-***REMOVED***/ in a layer using forms that have been configured externally, either in
-***REMOVED***/ the Web Map Viewer or the Fields Maps Designer.
+***REMOVED***/ The `FeatureFormView` component enables users to edit field values of a feature using
+***REMOVED***/ pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
 ***REMOVED***/
 ***REMOVED***/ Forms are currently only supported in maps. The form definition is stored
 ***REMOVED***/ in the web map itself and contains a title, description, and a list of "form elements".
