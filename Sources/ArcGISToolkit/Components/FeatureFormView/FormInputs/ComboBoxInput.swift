@@ -23,6 +23,7 @@ struct ComboBoxInput: View {
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
 ***REMOVED******REMOVED*** State properties for element events.
+***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
 ***REMOVED***@State private var isRequired = false
 ***REMOVED***
 ***REMOVED***@State private var value: Any?

@@ -22,7 +22,7 @@ struct InputHeader: View {
 ***REMOVED******REMOVED***/ The name of the form element.
 ***REMOVED***let label: String
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the a value for the input is required.
+***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
 ***REMOVED***let isRequired: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ - Parameter element: The form element the header is for.

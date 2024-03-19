@@ -24,6 +24,7 @@ struct SwitchInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED*** State properties for element events.
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
 ***REMOVED***@State private var isRequired = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the current value doesn't exist as an option in the domain.
