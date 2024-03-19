@@ -17,11 +17,13 @@ import SwiftUI
 
 /// A view shown at the bottom of a field element in a form.
 struct InputFooter: View {
-    /// The view model for the form.
-    @EnvironmentObject var model: FormViewModel
+    @Environment(\.formElementPadding) var elementPadding
     
     /// The validation error visibility configuration of a form.
     @Environment(\.validationErrorVisibility) private var validationErrorVisibility
+    
+    /// The view model for the form.
+    @EnvironmentObject var model: FormViewModel
     
     /// The form element the footer belongs to.
     let element: FieldFormElement
@@ -62,6 +64,7 @@ struct InputFooter: View {
         .font(.footnote)
         .foregroundColor(isShowingError ? .red : .secondary)
         .id(id)
+        .padding(.bottom, elementPadding)
         .task {
             for await _ in element.$value {
                 id = UUID()
