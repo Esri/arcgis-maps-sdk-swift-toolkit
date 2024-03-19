@@ -11,7 +11,7 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a `WorldScaleSceneView`. Specify the clipping distance and tracking mode. 
+***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a `WorldScaleSceneView`. Specify the clipping distance. The tracking mode is set to `worldTracking` by default.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***The clipping distance is the distance in meters that the ArcGIS Scene data will be clipped to.
 ***REMOVED******REMOVED******REMOVED******REMOVED***The tracking mode determines the type of tracking configuration that will be used by the AR view. 
