@@ -23,8 +23,8 @@ struct ComboBoxInput: View {
     @EnvironmentObject var model: FormViewModel
     
     // State properties for element events.
+    @State private var isRequired = false
     
-    @State private var isRequired: Bool = false
     @State private var value: Any?
     @State private var formattedValue: String = ""
     

@@ -24,7 +24,7 @@ struct SwitchInput: View {
     
     // State properties for element events.
     
-    @State private var isRequired: Bool = false
+    @State private var isRequired = false
     
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
