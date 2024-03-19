@@ -84,7 +84,7 @@ public struct FeatureFormView: View {
                 } else {
                     VStack(alignment: .leading) {
                         FormHeader(title: title)
-                            .padding([.bottom], elementPadding)
+                            .padding(.bottom, elementPadding)
                         ForEach(model.visibleElements, id: \.self) { element in
                             makeElement(element)
                         }
