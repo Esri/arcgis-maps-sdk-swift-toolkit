@@ -1086,7 +1086,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***func testCase_4_1() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let birdOptionCheckmark = app.images["Radio Button Text bird Checkmark"]
-***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Radio Button Text"]
+***REMOVED******REMOVED***let fieldTitle = app.staticTexts["Radio Button Text *"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["mainobservation_ExportFeatures"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
 ***REMOVED******REMOVED***let dogOption = app.buttons["Radio Button Text dog"]
@@ -1384,21 +1384,19 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let elementInTheGroupIsEditableSwitch = app.switches["Element in the group is editable Switch"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let comboBoxReadOnlyInput = app.staticTexts["Combo box Read Only Input"]
-***REMOVED******REMOVED***let comboBox = app.staticTexts["Combo box Combo Box"]
+***REMOVED******REMOVED***let comboBox = app.staticTexts["Combo box Value"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let radioButtonsReadOnlyInput = app.staticTexts["Radio buttons Read Only Input"]
-***REMOVED******REMOVED***let radioButtonsInput = app.staticTexts["Radio buttons Radio Buttons"]
+***REMOVED******REMOVED***let radioButtonsInput = app.images["Radio buttons 0 Checkmark"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let dateReadOnlyInput = app.staticTexts["Date Read Only Input"]
-***REMOVED******REMOVED***let dateInput = app.staticTexts["Date Date Time Input"]
+***REMOVED******REMOVED***let dateInput = app.staticTexts["Date Value"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let shortTextReadOnlyInput = app.staticTexts["Short text Read Only Input"]
 ***REMOVED******REMOVED***let shortTextTextInput = app.textFields["Short text Text Input"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let longTextReadOnlyInput = app.staticTexts["Long text Read Only Input"]
 ***REMOVED******REMOVED***let longTextTextInput = app.textViews["Long text Text Input"]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let groupElement = app.staticTexts["Group"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***

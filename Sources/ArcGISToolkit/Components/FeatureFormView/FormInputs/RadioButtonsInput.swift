@@ -96,7 +96,6 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Radio Buttons")
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], elementPadding)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = element.codedValues.first(where: { $0.name == element.formattedValue ***REMOVED***) {
