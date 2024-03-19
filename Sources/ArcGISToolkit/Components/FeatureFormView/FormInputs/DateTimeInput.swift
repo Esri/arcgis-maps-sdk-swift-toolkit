@@ -21,6 +21,7 @@ struct DateTimeInput: View {
     @EnvironmentObject var model: FormViewModel
     
     // State properties for element events.
+    /// A Boolean value indicating whether a value for the input is required.
     @State private var isRequired = false
     
     /// The formatted version of the element's current value.
