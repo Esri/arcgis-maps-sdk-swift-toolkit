@@ -17,11 +17,8 @@
 
 ***REMOVED***/ Displays a group form element and manages the visibility of the elements within the group.
 struct GroupView<Content>: View where Content: View {
-***REMOVED******REMOVED***/ The group form element.
-***REMOVED***@State private var element: GroupFormElement
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the group is expanded or collapsed.
-***REMOVED***@State private var isExpanded: Bool
+***REMOVED***@State private var isExpanded = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The group of visibility tasks.
 ***REMOVED***@State private var isVisibleTasks = [Task<Void, Never>]()
@@ -29,23 +26,15 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The list of visible group elements.
 ***REMOVED***@State private  var visibleElements = [FormElement]()
 ***REMOVED***
-***REMOVED******REMOVED***/ The method to build an element in the group.
-***REMOVED***private let viewCreator: (FieldFormElement) -> Content
+***REMOVED******REMOVED***/ The group form element.
+***REMOVED***let element: GroupFormElement
+***REMOVED***
+***REMOVED******REMOVED***/The closure to perform to build an element in the group.
+***REMOVED***let viewCreator: (FieldFormElement) -> Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ Filters the group's elements by visibility.
 ***REMOVED***private func updateVisibleElements() {
 ***REMOVED******REMOVED***visibleElements = element.elements.filter { $0.isVisible ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ - Creates a view for a group form element and manages the visibility of the elements within
-***REMOVED******REMOVED***/ the group.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - element: The group form element.
-***REMOVED******REMOVED***/   - viewCreator: The method to build an element in the group.
-***REMOVED***init(element: GroupFormElement, viewCreator: @escaping (FieldFormElement) -> Content) {
-***REMOVED******REMOVED***self.element = element
-***REMOVED******REMOVED***self.isExpanded = element.initialState != .collapsed
-***REMOVED******REMOVED***self.viewCreator = viewCreator
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -65,6 +54,7 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***isExpanded = element.initialState == .expanded
 ***REMOVED******REMOVED******REMOVED***element.elements.forEach { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED***let newTask = Task.detached { [self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await _ in element.$isVisible {
