@@ -12,18 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ArcGIS
 import SwiftUI
 
-struct Tests: View {
-    var body: some View {
-        NavigationView {
-            List {
-                NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-                NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
-                NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
-                NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-            }
-        }
-        .navigationViewStyle(.stack)
+extension FormElement {
+    /// The id of the element.
+    public var id: ObjectIdentifier {
+        ObjectIdentifier(self)
     }
 }

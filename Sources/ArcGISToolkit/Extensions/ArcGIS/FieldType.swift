@@ -12,18 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+import ArcGIS
 
-struct Tests: View {
-    var body: some View {
-        NavigationView {
-            List {
-                NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-                NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
-                NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
-                NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-            }
-        }
-        .navigationViewStyle(.stack)
+extension FieldType {
+    /// A Boolean value indicating whether the field has a numeric data type.
+    var isNumeric: Bool {
+        self == .float32 || self == .float64 || self == .int16 || self == .int32 || self == .int64
+    }
+    
+    /// A Boolean value indicating whether the field has a floating point data type.
+    var isFloatingPoint: Bool {
+        self == .float32 || self == .float64
     }
 }

@@ -1,4 +1,4 @@
-// Copyright 2023 Esri
+// Copyright 2024 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,18 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+import ArcGIS
 
-struct Tests: View {
-    var body: some View {
-        NavigationView {
-            List {
-                NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-                NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
-                NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
-                NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-            }
-        }
-        .navigationViewStyle(.stack)
+extension FieldFormElement {
+    /// The coded values of the element's domain.
+    var codedValues: [CodedValue] {
+        return (domain as? CodedValueDomain)?.codedValues ?? []
+    }
+    
+    /// A Boolean value indicating whether the input is multiline or not.
+    var isMultiline: Bool {
+        input is TextAreaFormInput
     }
 }
