@@ -24,7 +24,7 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED***@State private var isVisibleTasks = [Task<Void, Never>]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The list of visible group elements.
-***REMOVED***@State private  var visibleElements = [FormElement]()
+***REMOVED***@State private var visibleElements = [FormElement]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The group form element.
 ***REMOVED***let element: GroupFormElement
