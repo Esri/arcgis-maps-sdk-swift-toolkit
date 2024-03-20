@@ -27,9 +27,6 @@ struct SwitchInput: View {
     /// In this scenario a ``ComboBoxInput`` should be used instead.
     @State private var fallbackToComboBox = false
     
-    /// A Boolean value indicating whether the initial run of the `onChange` modifier has completed.
-    @State private var initialChangeHasCompleted = false
-    
     /// A Boolean value indicating whether the switch is toggled on or off.
     @State private var isOn = false
     
@@ -78,10 +75,12 @@ struct SwitchInput: View {
                 }
             }
             .onChange(of: isOn) { isOn in
-                if initialChangeHasCompleted { model.focusedElement = element }
                 element.updateValue(isOn ? input.onValue.code : input.offValue.code)
                 model.evaluateExpressions()
-                initialChangeHasCompleted = true
+            }
+            .onTapGesture {
+                isOn.toggle()
+                model.focusedElement = element
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 isOn = newFormattedValue == input.onValue.name
