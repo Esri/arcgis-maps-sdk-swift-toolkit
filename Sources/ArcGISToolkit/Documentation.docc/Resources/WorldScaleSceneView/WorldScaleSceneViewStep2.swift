@@ -20,8 +20,7 @@ struct WorldScaleExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***WorldScaleSceneView(
-***REMOVED******REMOVED******REMOVED***clippingDistance: 400,
-***REMOVED******REMOVED******REMOVED***trackingMode: .worldScale
+***REMOVED******REMOVED******REMOVED***clippingDistance: 400
 ***REMOVED******REMOVED***) { _ in
 ***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
 ***REMOVED***
