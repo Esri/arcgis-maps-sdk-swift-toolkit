@@ -46,38 +46,31 @@ struct DateTimeInput: View {
             element.input is DateTimePickerFormInput,
             "\(Self.self).\(#function) element's input must be \(DateTimePickerFormInput.self)."
         )
-        
         self.element = element
         self.input = element.input as! DateTimePickerFormInput
     }
     
     var body: some View {
-        Group {
-            InputHeader(label: element.label, isRequired: isRequired)
-            
-            dateEditor
-            
-            InputFooter(element: element)
-        }
-        .onChange(of: model.focusedElement) { focusedElement in
-            isEditing = focusedElement == element
-        }
-        .onChange(of: date) { date in
-            element.updateValue(date)
-            formattedValue = element.formattedValue
-            model.evaluateExpressions()
-        }
-        .onValueChange(of: element) { newValue, newFormattedValue in
-            if newFormattedValue.isEmpty {
-                date = nil
-            } else {
-                date = newValue as? Date
+        dateEditor
+            .onChange(of: model.focusedElement) { focusedElement in
+                isEditing = focusedElement == element
             }
-            formattedValue = newFormattedValue
-        }
-        .onIsRequiredChange(of: element) { newIsRequired in
-            isRequired = newIsRequired
-        }
+            .onChange(of: date) { date in
+                element.updateValue(date)
+                formattedValue = element.formattedValue
+                model.evaluateExpressions()
+            }
+            .onValueChange(of: element) { newValue, newFormattedValue in
+                if newFormattedValue.isEmpty {
+                    date = nil
+                } else {
+                    date = newValue as? Date
+                }
+                formattedValue = newFormattedValue
+            }
+            .onIsRequiredChange(of: element) { newIsRequired in
+                isRequired = newIsRequired
+            }
     }
     
     /// Controls for modifying the date selection.

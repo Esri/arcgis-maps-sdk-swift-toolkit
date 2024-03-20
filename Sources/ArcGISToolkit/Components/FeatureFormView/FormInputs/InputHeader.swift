@@ -12,34 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view shown at the top of a field element in a form.
 struct InputHeader: View {
     @Environment(\.formElementPadding) var elementPadding
     
-    /// The name of the form element.
-    let label: String
+    /// A Boolean value indicating whether the input is editable.
+    @State private var isEditable = false
     
     /// A Boolean value indicating whether a value for the input is required.
-    let isRequired: Bool
+    @State private var isRequired = false
     
-    /// - Parameters:
-    ///   - label: The name of the form element.
-    ///   - isRequired: A Boolean value indicating whether the a value for the input is required.
-    init(label: String, isRequired: Bool) {
-        self.label = label
-        self.isRequired = isRequired
-    }
+    /// The element the input belongs to.
+    let element: FieldFormElement
     
     var body: some View {
         HStack {
-            Text(verbatim: "\(label + (isRequired ? " *" : ""))")
+            Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             Spacer()
         }
         .padding(.top, elementPadding)
+        .onIsEditableChange(of: element) { newIsEditable in
+            isEditable = newIsEditable
+        }
+        .onIsRequiredChange(of: element) { newIsRequired in
+            isRequired = newIsRequired
+        }
     }
 }
