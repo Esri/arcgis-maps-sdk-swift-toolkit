@@ -53,7 +53,7 @@ struct DateTimeInput: View {
     
     var body: some View {
         Group {
-            InputHeader(element: element)
+            InputHeader(label: element.label, isRequired: isRequired)
             
             dateEditor
             
