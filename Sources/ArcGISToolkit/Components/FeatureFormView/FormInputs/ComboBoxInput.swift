@@ -83,10 +83,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.noValueLabel = noValueLabel
 ***REMOVED******REMOVED***self.noValueOption = noValueOption
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***value = element.value
-***REMOVED******REMOVED***formattedValue = element.formattedValue
-***REMOVED******REMOVED***isRequired = element.isRequired
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
