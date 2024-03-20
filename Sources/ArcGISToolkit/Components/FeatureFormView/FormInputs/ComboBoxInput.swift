@@ -67,7 +67,6 @@ struct ComboBoxInput: View {
             element.input is ComboBoxFormInput,
             "\(Self.self).\(#function) element's input must be \(ComboBoxFormInput.self)."
         )
-        
         self.element = element
         let input = element.input as! ComboBoxFormInput
         self.noValueLabel = input.noValueLabel
@@ -86,42 +85,36 @@ struct ComboBoxInput: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            InputHeader(label: element.label, isRequired: isRequired)
-            
-            HStack {
-                Text(selectedValue?.name ?? placeholderValue)
-                    .accessibilityIdentifier("\(element.label) Combo Box Value")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundColor(selectedValue != nil ? .primary : .secondary)
-                if selectedValue != nil, !isRequired {
-                    // Only show clear button if we have a value
-                    // and we're not required. (i.e., Don't show clear if
-                    // the field is required.)
-                    ClearButton {
-                        model.focusedElement = element
-                        defer { model.focusedElement = nil }
-                        selectedValue = nil
-                    }
-                    .accessibilityIdentifier("\(element.label) Clear Button")
-                } else {
-                    // Otherwise, always show list icon.
-                    Image(systemName: "list.bullet")
-                        .accessibilityIdentifier("\(element.label) Options Button")
-                        .foregroundColor(.secondary)
+        HStack {
+            Text(selectedValue?.name ?? placeholderValue)
+                .accessibilityIdentifier("\(element.label) Combo Box Value")
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .foregroundColor(selectedValue != nil ? .primary : .secondary)
+            if selectedValue != nil, !isRequired {
+                // Only show clear button if we have a value
+                // and we're not required. (i.e., Don't show clear if
+                // the field is required.)
+                ClearButton {
+                    model.focusedElement = element
+                    defer { model.focusedElement = nil }
+                    selectedValue = nil
                 }
+                .accessibilityIdentifier("\(element.label) Clear Button")
+            } else {
+                // Otherwise, always show list icon.
+                Image(systemName: "list.bullet")
+                    .accessibilityIdentifier("\(element.label) Options Button")
+                    .foregroundColor(.secondary)
             }
-            .formInputStyle()
-            // Pass `matchingValues` via a capture list so that the sheet receives up-to-date values.
-            .sheet(isPresented: $isPresented) { [matchingValues] in
-                makePicker(for: matchingValues)
-            }
-            .onTapGesture {
-                model.focusedElement = element
-                isPresented = true
-            }
-            
-            InputFooter(element: element)
+        }
+        .formInputStyle()
+        // Pass `matchingValues` via a capture list so that the sheet receives up-to-date values.
+        .sheet(isPresented: $isPresented) { [matchingValues] in
+            makePicker(for: matchingValues)
+        }
+        .onTapGesture {
+            model.focusedElement = element
+            isPresented = true
         }
         .onChange(of: selectedValue) { selectedValue in
             element.updateValue(selectedValue?.code)

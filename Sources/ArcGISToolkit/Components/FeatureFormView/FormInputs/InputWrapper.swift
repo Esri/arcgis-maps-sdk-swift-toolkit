@@ -17,9 +17,9 @@ import SwiftUI
 
 /// A view which wraps the creation of a view for the underlying field form element.
 ///
-/// This view specifically handles the logic of monitoring whether a field form element is editable and choosing
-/// the correct Toolkit input view based on the element's input type.
-struct EditableStateInputWrapper: View {
+/// This view injects a header and footer. It also monitors whether a field form element is editable and
+/// chooses the correct input view based on the input type.
+struct InputWrapper: View {
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
     
@@ -27,7 +27,8 @@ struct EditableStateInputWrapper: View {
     let element: FieldFormElement
     
     var body: some View {
-        Group {
+        VStack(alignment: .leading) {
+            InputHeader(element: element)
             if isEditable {
                 switch element.input {
                 case is ComboBoxFormInput:
@@ -46,9 +47,7 @@ struct EditableStateInputWrapper: View {
             } else {
                 ReadOnlyInput(element: element)
             }
-        }
-        .onAppear {
-            isEditable = element.isEditable
+            InputFooter(element: element)
         }
         .onIsEditableChange(of: element) { newIsEditable in
             isEditable = newIsEditable
