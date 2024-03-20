@@ -27,6 +27,9 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***/ In this scenario a ``ComboBoxInput`` should be used instead.
 ***REMOVED***@State private var fallbackToComboBox = false
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the initial run of the `onChange` modifier has completed.
+***REMOVED***@State private var initialChangeHasCompleted = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the switch is toggled on or off.
 ***REMOVED***@State private var isOn = false
 ***REMOVED***
@@ -75,9 +78,10 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: isOn) { isOn in
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED***if initialChangeHasCompleted { model.focusedElement = element ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.updateValue(isOn ? input.onValue.code : input.offValue.code)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED******REMOVED***initialChangeHasCompleted = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***isOn = newFormattedValue == input.onValue.name
