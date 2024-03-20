@@ -29,7 +29,7 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The group form element.
 ***REMOVED***let element: GroupFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/The closure to perform to build an element in the group.
+***REMOVED******REMOVED***/ The closure to perform to build an element in the group.
 ***REMOVED***let viewCreator: (FieldFormElement) -> Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ Filters the group's elements by visibility.
