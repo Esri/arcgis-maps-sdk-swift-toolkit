@@ -15,11 +15,7 @@
 import ArcGIS
 import SwiftUI
 
-/// - Since: 200.4
 @MainActor class FormViewModel: ObservableObject {
-    /// The feature form.
-    private(set) var featureForm: FeatureForm
-    
     /// The current focused element, if one exists.
     @Published var focusedElement: FormElement? {
         didSet {
@@ -29,17 +25,20 @@ import SwiftUI
         }
     }
     
-    /// The expression evaluation task.
-    private var evaluateTask: Task<Void, Never>?
-    
-    /// The visibility tasks group.
-    private var isVisibleTask: Task<Void, Never>?
+    /// The set of all elements which previously held focus.
+    @Published var previouslyFocusedElements = [FormElement]()
     
     /// The list of visible form elements.
     @Published var visibleElements = [FormElement]()
     
-    /// The set of all elements which previously held focus.
-    @Published var previouslyFocusedElements = [FormElement]()
+    /// The expression evaluation task.
+    private var evaluateTask: Task<Void, Never>?
+    
+    /// The feature form.
+    private(set) var featureForm: FeatureForm
+    
+    /// The visibility tasks group.
+    private var isVisibleTask: Task<Void, Never>?
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
