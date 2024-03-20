@@ -83,10 +83,6 @@ struct ComboBoxInput: View {
         self.element = element
         self.noValueLabel = noValueLabel
         self.noValueOption = noValueOption
-        
-        value = element.value
-        formattedValue = element.formattedValue
-        isRequired = element.isRequired
     }
     
     var body: some View {
