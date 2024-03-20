@@ -49,7 +49,7 @@ struct WorldScaleExampleView: View {
     @State private var locationDataSource = SystemLocationDataSource()
     
     var body: some View {
-        WorldScaleSceneView(trackingMode: .worldTracking) { proxy in
+        WorldScaleSceneView { proxy in
             SceneView(scene: scene, graphicsOverlays: [graphicsOverlay])
                 .onSingleTapGesture { screen, _ in
                     print("Identifying...")

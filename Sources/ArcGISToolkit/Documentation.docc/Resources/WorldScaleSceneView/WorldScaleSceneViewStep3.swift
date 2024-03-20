@@ -21,8 +21,7 @@ struct WorldScaleExampleView: View {
     
     var body: some View {
         WorldScaleSceneView(
-            clippingDistance: 400,
-            trackingMode: .worldScale
+            clippingDistance: 400
         ) { _ in
             SceneView(scene: scene)
         }

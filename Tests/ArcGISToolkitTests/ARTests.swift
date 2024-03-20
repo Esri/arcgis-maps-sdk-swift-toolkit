@@ -151,9 +151,7 @@ import XCTest
     }
     
     func testWorldScaleWorldTrackingInitWithDefaults() throws {
-        let view = WorldScaleSceneView(
-            trackingMode: .worldTracking
-        ) { _ in
+        let view = WorldScaleSceneView { _ in
             SceneView(scene: Scene())
         }
         
