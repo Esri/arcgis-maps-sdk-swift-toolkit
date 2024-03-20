@@ -25,12 +25,6 @@ struct InputHeader: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
 ***REMOVED***let isRequired: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ - Parameter element: The form element the header is for.
-***REMOVED***init(element: FieldFormElement) {
-***REMOVED******REMOVED***self.label = element.label
-***REMOVED******REMOVED***self.isRequired = element.isRequired
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - label: The name of the form element.
 ***REMOVED******REMOVED***/   - isRequired: A Boolean value indicating whether the a value for the input is required.
