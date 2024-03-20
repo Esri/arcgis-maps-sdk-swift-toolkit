@@ -144,6 +144,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.animation(.default.speed(0.25), value: initialCameraIsSet)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A world scale geo-tracking scene view.
