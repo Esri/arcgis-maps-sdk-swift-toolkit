@@ -74,11 +74,15 @@ struct DateTimeInput: View {
     }
     
     /// Controls for modifying the date selection.
+    ///
+    /// Because the value/date can be cleared out at a higher level (e.g. from discarding edits) we must
+    /// confirm a value is present to include a date picker in the hierarchy.
     @ViewBuilder var dateEditor: some View {
         dateDisplay
-        if isEditing {
-            datePicker
-                .datePickerStyle(.graphical)
+        if isEditing, let date {
+            makeDatePicker(
+                with: Binding(get: { date }, set: { self.date = $0 })
+            )
         }
     }
     
@@ -128,14 +132,15 @@ struct DateTimeInput: View {
         }
     }
     
-    /// Controls for making a specific date selection.
-    @ViewBuilder var datePicker: some View {
+    /// Makes control for date selection.
+    @ViewBuilder func makeDatePicker(with date: Binding<Date>) -> some View {
         DatePicker(
-            selection: Binding($date)!,
+            selection: date,
             in: dateRange,
             displayedComponents: input.includesTime ? [.date, .hourAndMinute] : [.date]
         ) { }
             .accessibilityIdentifier("\(element.label) Date Picker")
+            .datePickerStyle(.graphical)
     }
     
     /// The range of dates available for selection, if applicable.
