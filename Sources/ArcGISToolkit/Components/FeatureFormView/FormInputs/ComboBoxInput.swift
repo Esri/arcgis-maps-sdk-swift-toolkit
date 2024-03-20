@@ -22,22 +22,25 @@ struct ComboBoxInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    // State properties for element events.
+    /// The phrase to use when filtering by coded value name.
+    @State private var filterPhrase = ""
     
-    @State private var isRequired: Bool = false
-    @State private var value: Any?
-    @State private var formattedValue: String = ""
+    /// The formatted version of the element's current value.
+    @State private var formattedValue = ""
     
     /// A Boolean value indicating if the combo box picker is presented.
     @State private var isPresented = false
     
-    /// The phrase to use when filtering by coded value name.
-    @State private var filterPhrase = ""
+    /// A Boolean value indicating whether a value for the input is required.
+    @State private var isRequired = false
     
     /// The selected option.
     @State private var selectedValue: CodedValue?
     
-    /// The input's parent element.
+    /// The element's current value.
+    @State private var value: Any?
+    
+    /// The element the input belongs to.
     private let element: FieldFormElement
     
     /// The text used to represent a `nil` value.
@@ -80,10 +83,6 @@ struct ComboBoxInput: View {
         self.element = element
         self.noValueLabel = noValueLabel
         self.noValueOption = noValueOption
-        
-        value = element.value
-        formattedValue = element.formattedValue
-        isRequired = element.isRequired
     }
     
     var body: some View {

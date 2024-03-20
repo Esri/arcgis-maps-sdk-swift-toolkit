@@ -20,18 +20,19 @@ struct DateTimeInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    // State properties for element events.
-    
-    @State private var isRequired: Bool = false
-    @State private var formattedValue: String = ""
-    
     /// The current date selection.
     @State private var date: Date?
+    
+    /// The formatted version of the element's current value.
+    @State private var formattedValue = ""
     
     /// A Boolean value indicating whether a new date (or time is being set).
     @State private var isEditing = false
     
-    /// The input's parent element.
+    /// A Boolean value indicating whether a value for the input is required.
+    @State private var isRequired = false
+    
+    /// The element the input belongs to.
     private let element: FieldFormElement
     
     /// The input configuration of the view.
@@ -52,7 +53,7 @@ struct DateTimeInput: View {
     
     var body: some View {
         Group {
-            InputHeader(element: element)
+            InputHeader(label: element.label, isRequired: isRequired)
             
             dateEditor
             
@@ -103,8 +104,8 @@ struct DateTimeInput: View {
             } else {
                 if date == nil {
                     Image(systemName: "calendar")
-                        .foregroundColor(.secondary)
                         .accessibilityIdentifier("\(element.label) Calendar Image")
+                        .foregroundColor(.secondary)
                 } else if !isRequired {
                     ClearButton {
                         model.focusedElement = element

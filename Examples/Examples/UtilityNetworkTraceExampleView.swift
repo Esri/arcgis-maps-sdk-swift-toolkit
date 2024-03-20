@@ -20,7 +20,6 @@ import SwiftUI
 /// a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
     @Environment(\.isPortraitOrientation)
-    
     private var isPortraitOrientation
     
     /// The map with the utility networks.

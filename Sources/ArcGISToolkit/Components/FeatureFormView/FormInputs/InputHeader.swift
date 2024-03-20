@@ -22,14 +22,8 @@ struct InputHeader: View {
     /// The name of the form element.
     let label: String
     
-    /// A Boolean value indicating whether the a value for the input is required.
+    /// A Boolean value indicating whether a value for the input is required.
     let isRequired: Bool
-    
-    /// - Parameter element: The form element the header is for.
-    init(element: FieldFormElement) {
-        self.label = element.label
-        self.isRequired = element.isRequired
-    }
     
     /// - Parameters:
     ///   - label: The name of the form element.

@@ -22,22 +22,21 @@ struct SwitchInput: View {
     /// The view model for the form.
     @EnvironmentObject var model: FormViewModel
     
-    // State properties for element events.
-    
-    @State private var isRequired: Bool = false
-    
     /// A Boolean value indicating whether the current value doesn't exist as an option in the domain.
     ///
     /// In this scenario a ``ComboBoxInput`` should be used instead.
     @State private var fallbackToComboBox = false
     
     /// A Boolean value indicating whether the switch is toggled on or off.
-    @State private var isOn: Bool = false
+    @State private var isOn = false
+    
+    /// A Boolean value indicating whether a value for the input is required.
+    @State private var isRequired = false
     
     /// The value represented by the switch.
     @State private var selectedValue: Bool?
     
-    /// The field's parent element.
+    /// The element the input belongs to.
     private let element: FieldFormElement
     
     /// The input configuration of the field.
