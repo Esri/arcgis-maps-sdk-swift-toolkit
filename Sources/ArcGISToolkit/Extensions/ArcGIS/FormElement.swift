@@ -13,17 +13,11 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-
-struct Tests: View {
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.navigationViewStyle(.stack)
+
+extension FormElement {
+***REMOVED******REMOVED***/ The id of the element.
+***REMOVED***public var id: ObjectIdentifier {
+***REMOVED******REMOVED***ObjectIdentifier(self)
 ***REMOVED***
 ***REMOVED***

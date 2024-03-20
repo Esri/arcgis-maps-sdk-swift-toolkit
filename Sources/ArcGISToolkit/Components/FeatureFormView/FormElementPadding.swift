@@ -14,16 +14,14 @@
 
 ***REMOVED***
 
-struct Tests: View {
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-***REMOVED******REMOVED***
+private struct FormElementPaddingKey: EnvironmentKey {
+***REMOVED***static let defaultValue: CGFloat = 10
 ***REMOVED***
-***REMOVED******REMOVED***.navigationViewStyle(.stack)
+
+extension EnvironmentValues {
+***REMOVED******REMOVED***/ A vertical amount of padding to use between form elements.
+***REMOVED***var formElementPadding: CGFloat {
+***REMOVED******REMOVED***get { self[FormElementPaddingKey.self] ***REMOVED***
+***REMOVED******REMOVED***set { self[FormElementPaddingKey.self] = newValue ***REMOVED***
 ***REMOVED***
 ***REMOVED***

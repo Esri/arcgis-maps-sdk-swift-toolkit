@@ -14,16 +14,19 @@
 
 ***REMOVED***
 
-struct Tests: View {
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-***REMOVED******REMOVED***
+***REMOVED***/ A circular button with a cross in the center, intended to be used to clear form inputs.
+struct ClearButton: View {
+***REMOVED******REMOVED***/ The action to be performed when the button is pressed.
+***REMOVED***let action: () -> Void
 ***REMOVED***
-***REMOVED******REMOVED***.navigationViewStyle(.stack)
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***action()
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED***.padding(2)
 ***REMOVED***
 ***REMOVED***

@@ -14,16 +14,14 @@
 
 ***REMOVED***
 
-struct Tests: View {
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-***REMOVED******REMOVED***
+extension FieldType {
+***REMOVED******REMOVED***/ A Boolean value indicating whether the field has a numeric data type.
+***REMOVED***var isNumeric: Bool {
+***REMOVED******REMOVED***self == .float32 || self == .float64 || self == .int16 || self == .int32 || self == .int64
 ***REMOVED***
-***REMOVED******REMOVED***.navigationViewStyle(.stack)
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the field has a floating point data type.
+***REMOVED***var isFloatingPoint: Bool {
+***REMOVED******REMOVED***self == .float32 || self == .float64
 ***REMOVED***
 ***REMOVED***

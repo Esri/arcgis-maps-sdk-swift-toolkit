@@ -14,16 +14,15 @@
 
 ***REMOVED***
 
-struct Tests: View {
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-***REMOVED******REMOVED***
+***REMOVED***/ A view shown at the top of a form. If the provided title is `nil`, no text is rendered.
+struct FormHeader: View {
+***REMOVED******REMOVED***/ The title defined for the form.
+***REMOVED***let title: String?
 ***REMOVED***
-***REMOVED******REMOVED***.navigationViewStyle(.stack)
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***if let title {
+***REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.largeTitle)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
