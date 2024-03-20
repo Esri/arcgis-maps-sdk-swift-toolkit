@@ -75,7 +75,7 @@
 ***REMOVED***
 ***REMOVED******REMOVED***/ Performs an initial evaluation of all form expressions.
 ***REMOVED***func initialEvaluation() async {
-***REMOVED******REMOVED***await featureForm.evaluateExpressions()
+***REMOVED******REMOVED***try? await featureForm.evaluateExpressions()
 ***REMOVED******REMOVED***initializeIsVisibleTasks()
 ***REMOVED***
 ***REMOVED***
@@ -83,7 +83,7 @@
 ***REMOVED***func evaluateExpressions() {
 ***REMOVED******REMOVED***evaluateTask?.cancel()
 ***REMOVED******REMOVED***evaluateTask = Task {
-***REMOVED******REMOVED******REMOVED***await featureForm.evaluateExpressions()
+***REMOVED******REMOVED******REMOVED***try? await featureForm.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
