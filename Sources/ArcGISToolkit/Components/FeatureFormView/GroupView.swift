@@ -17,11 +17,8 @@ import SwiftUI
 
 /// Displays a group form element and manages the visibility of the elements within the group.
 struct GroupView<Content>: View where Content: View {
-    /// The group form element.
-    @State private var element: GroupFormElement
-    
     /// A Boolean value indicating whether the group is expanded or collapsed.
-    @State private var isExpanded: Bool
+    @State private var isExpanded = false
     
     /// The group of visibility tasks.
     @State private var isVisibleTasks = [Task<Void, Never>]()
@@ -29,23 +26,15 @@ struct GroupView<Content>: View where Content: View {
     /// The list of visible group elements.
     @State private  var visibleElements = [FormElement]()
     
-    /// The method to build an element in the group.
-    private let viewCreator: (FieldFormElement) -> Content
+    /// The group form element.
+    let element: GroupFormElement
+    
+    ///The closure to perform to build an element in the group.
+    let viewCreator: (FieldFormElement) -> Content
     
     /// Filters the group's elements by visibility.
     private func updateVisibleElements() {
         visibleElements = element.elements.filter { $0.isVisible }
-    }
-    
-    /// - Creates a view for a group form element and manages the visibility of the elements within
-    /// the group.
-    /// - Parameters:
-    ///   - element: The group form element.
-    ///   - viewCreator: The method to build an element in the group.
-    init(element: GroupFormElement, viewCreator: @escaping (FieldFormElement) -> Content) {
-        self.element = element
-        self.isExpanded = element.initialState != .collapsed
-        self.viewCreator = viewCreator
     }
     
     var body: some View {
@@ -65,6 +54,7 @@ struct GroupView<Content>: View where Content: View {
             }
         }
         .onAppear {
+            isExpanded = element.initialState == .expanded
             element.elements.forEach { element in
                 let newTask = Task.detached { [self] in
                     for await _ in element.$isVisible {
