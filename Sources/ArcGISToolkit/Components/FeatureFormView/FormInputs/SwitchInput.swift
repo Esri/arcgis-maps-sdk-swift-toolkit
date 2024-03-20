@@ -30,9 +30,6 @@ struct SwitchInput: View {
     /// A Boolean value indicating whether the switch is toggled on or off.
     @State private var isOn = false
     
-    /// A Boolean value indicating whether a value for the input is required.
-    @State private var isRequired = false
-    
     /// The value represented by the switch.
     @State private var selectedValue: Bool?
     
@@ -63,21 +60,15 @@ struct SwitchInput: View {
                 noValueOption: .show
             )
         } else {
-            Group {
-                InputHeader(label: element.label, isRequired: isRequired)
-                
-                HStack {
-                    Text(isOn ? input.onValue.name : input.offValue.name)
-                        .accessibilityIdentifier("\(element.label) Switch Label")
-                    Spacer()
-                    Toggle("", isOn: $isOn)
-                        .accessibilityIdentifier("\(element.label) Switch")
-                        .toggleStyle(.switch)
-                }
-                .formInputStyle()
-                
-                InputFooter(element: element)
+            HStack {
+                Text(isOn ? input.onValue.name : input.offValue.name)
+                    .accessibilityIdentifier("\(element.label) Switch Label")
+                Spacer()
+                Toggle("", isOn: $isOn)
+                    .accessibilityIdentifier("\(element.label) Switch")
+                    .toggleStyle(.switch)
             }
+            .formInputStyle()
             .onAppear {
                 if element.formattedValue.isEmpty {
                     fallbackToComboBox = true
@@ -90,9 +81,6 @@ struct SwitchInput: View {
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 isOn = newFormattedValue == input.onValue.name
-            }
-            .onIsRequiredChange(of: element) { newIsRequired in
-                isRequired = newIsRequired
             }
         }
     }
