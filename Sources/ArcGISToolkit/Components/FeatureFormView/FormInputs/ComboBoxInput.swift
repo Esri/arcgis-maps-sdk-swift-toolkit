@@ -22,22 +22,25 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED*** State properties for element events.
+***REMOVED******REMOVED***/ The phrase to use when filtering by coded value name.
+***REMOVED***@State private var filterPhrase = ""
 ***REMOVED***
-***REMOVED***@State private var isRequired: Bool = false
-***REMOVED***@State private var value: Any?
-***REMOVED***@State private var formattedValue: String = ""
+***REMOVED******REMOVED***/ The formatted version of the element's current value.
+***REMOVED***@State private var formattedValue = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the combo box picker is presented.
 ***REMOVED***@State private var isPresented = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The phrase to use when filtering by coded value name.
-***REMOVED***@State private var filterPhrase = ""
+***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
+***REMOVED***@State private var isRequired = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
 ***REMOVED***
-***REMOVED******REMOVED***/ The input's parent element.
+***REMOVED******REMOVED***/ The element's current value.
+***REMOVED***@State private var value: Any?
+***REMOVED***
+***REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The text used to represent a `nil` value.
@@ -80,10 +83,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.noValueLabel = noValueLabel
 ***REMOVED******REMOVED***self.noValueOption = noValueOption
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***value = element.value
-***REMOVED******REMOVED***formattedValue = element.formattedValue
-***REMOVED******REMOVED***isRequired = element.isRequired
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {

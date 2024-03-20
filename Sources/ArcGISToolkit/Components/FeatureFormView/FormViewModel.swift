@@ -15,11 +15,7 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ - Since: 200.4
 @MainActor class FormViewModel: ObservableObject {
-***REMOVED******REMOVED***/ The feature form.
-***REMOVED***private(set) var featureForm: FeatureForm
-***REMOVED***
 ***REMOVED******REMOVED***/ The current focused element, if one exists.
 ***REMOVED***@Published var focusedElement: FormElement? {
 ***REMOVED******REMOVED***didSet {
@@ -29,17 +25,20 @@
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The expression evaluation task.
-***REMOVED***private var evaluateTask: Task<Void, Never>?
-***REMOVED***
-***REMOVED******REMOVED***/ The visibility tasks group.
-***REMOVED***private var isVisibleTask: Task<Void, Never>?
+***REMOVED******REMOVED***/ The set of all elements which previously held focus.
+***REMOVED***@Published var previouslyFocusedElements = [FormElement]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The list of visible form elements.
 ***REMOVED***@Published var visibleElements = [FormElement]()
 ***REMOVED***
-***REMOVED******REMOVED***/ The set of all elements which previously held focus.
-***REMOVED***@Published var previouslyFocusedElements = [FormElement]()
+***REMOVED******REMOVED***/ The expression evaluation task.
+***REMOVED***private var evaluateTask: Task<Void, Never>?
+***REMOVED***
+***REMOVED******REMOVED***/ The feature form.
+***REMOVED***private(set) var featureForm: FeatureForm
+***REMOVED***
+***REMOVED******REMOVED***/ The visibility tasks group.
+***REMOVED***private var isVisibleTask: Task<Void, Never>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Initializes a form view model.
 ***REMOVED******REMOVED***/ - Parameter featureForm: The feature form defining the editing experience.

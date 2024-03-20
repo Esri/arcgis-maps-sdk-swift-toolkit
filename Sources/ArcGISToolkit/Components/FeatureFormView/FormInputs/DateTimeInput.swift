@@ -20,18 +20,19 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED*** State properties for element events.
-***REMOVED***
-***REMOVED***@State private var isRequired: Bool = false
-***REMOVED***@State private var formattedValue: String = ""
-***REMOVED***
 ***REMOVED******REMOVED***/ The current date selection.
 ***REMOVED***@State private var date: Date?
+***REMOVED***
+***REMOVED******REMOVED***/ The formatted version of the element's current value.
+***REMOVED***@State private var formattedValue = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether a new date (or time is being set).
 ***REMOVED***@State private var isEditing = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The input's parent element.
+***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
+***REMOVED***@State private var isRequired = false
+***REMOVED***
+***REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ The input configuration of the view.
@@ -52,7 +53,7 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***InputHeader(element: element)
+***REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***dateEditor
 ***REMOVED******REMOVED******REMOVED***
@@ -103,8 +104,8 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if date == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "calendar")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Calendar Image")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED*** else if !isRequired {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element

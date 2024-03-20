@@ -20,16 +20,11 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@EnvironmentObject var model: FormViewModel
 ***REMOVED***
-***REMOVED******REMOVED*** State properties for element events.
-***REMOVED***
-***REMOVED***@State private var isRequired: Bool = false
-***REMOVED***@State private var formattedValue: String = ""
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ The current text value.
-***REMOVED***@State private var text = ""
+***REMOVED******REMOVED***/ The formatted version of the element's current value.
+***REMOVED***@State private var formattedValue = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether placeholder text is shown, thereby indicating the
 ***REMOVED******REMOVED***/ presence of a value.
@@ -42,7 +37,13 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ Once iOS 16.0 is the minimum supported platform this property can be removed.
 ***REMOVED***@State private var isPlaceholder = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The input's parent element.
+***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
+***REMOVED***@State private var isRequired = false
+***REMOVED***
+***REMOVED******REMOVED***/ The current text value.
+***REMOVED***@State private var text = ""
+***REMOVED***
+***REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED***private let element: FieldFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view for text input spanning multiple lines.

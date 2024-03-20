@@ -17,17 +17,17 @@
 
 ***REMOVED***/ Displays a group form element and manages the visibility of the elements within the group.
 struct GroupView<Content>: View where Content: View {
-***REMOVED******REMOVED***/ A Boolean value indicating whether the group is expanded or collapsed.
-***REMOVED***@State private var isExpanded: Bool
-***REMOVED***
-***REMOVED******REMOVED***/ The list of visible group elements.
-***REMOVED***@State private  var visibleElements = [FormElement]()
-***REMOVED***
 ***REMOVED******REMOVED***/ The group form element.
 ***REMOVED***@State private var element: GroupFormElement
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the group is expanded or collapsed.
+***REMOVED***@State private var isExpanded: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ The group of visibility tasks.
 ***REMOVED***@State private var isVisibleTasks = [Task<Void, Never>]()
+***REMOVED***
+***REMOVED******REMOVED***/ The list of visible group elements.
+***REMOVED***@State private  var visibleElements = [FormElement]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The method to build an element in the group.
 ***REMOVED***private let viewCreator: (FieldFormElement) -> Content
@@ -96,18 +96,18 @@ extension GroupView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** a view, so conditionally check for an empty title and description.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !element.label.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.label)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label)")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label)")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !element.description.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Description")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Description")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 #if targetEnvironment(macCatalyst)
