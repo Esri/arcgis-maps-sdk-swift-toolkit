@@ -26,9 +26,6 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED***/ This will be `true` if the current value doesn't exist as an option in the domain
 ***REMOVED***@State private var fallbackToComboBox = false
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
-***REMOVED***@State private var isRequired = false
-***REMOVED***
 ***REMOVED******REMOVED***/ The selected option.
 ***REMOVED***@State private var selectedValue: CodedValue?
 ***REMOVED***
@@ -49,7 +46,6 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED***element.input is RadioButtonsFormInput,
 ***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(RadioButtonsFormInput.self)."
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = element.input as! RadioButtonsFormInput
 ***REMOVED***
@@ -62,38 +58,32 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***noValueOption: input.noValueOption
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: .zero) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if input.noValueOption == .show {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeRadioButtonRow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***placeholderValue,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue == nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***!element.codedValues.isEmpty,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***useNoValueStyle: true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(element.codedValues, id: \.self) { codedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeRadioButtonRow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue.name,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue == selectedValue,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue != element.codedValues.last
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValue
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: .zero) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if input.noValueOption == .show {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeRadioButtonRow(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***placeholderValue,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue == nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***!element.codedValues.isEmpty,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***useNoValueStyle: true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 10)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .tertiarySystemFill))
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(element.codedValues, id: \.self) { codedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeRadioButtonRow(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue.name,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue == selectedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***codedValue != element.codedValues.last
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = codedValue
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.background(
+***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 10)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .tertiarySystemFill))
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedValue = element.codedValues.first(where: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.name == element.formattedValue
@@ -112,9 +102,6 @@ struct RadioButtonsInput: View {
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***value = newValue
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = element.codedValues.first { $0.name == newFormattedValue ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
-***REMOVED******REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

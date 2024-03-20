@@ -37,9 +37,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ Once iOS 16.0 is the minimum supported platform this property can be removed.
 ***REMOVED***@State private var isPlaceholder = false
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
-***REMOVED***@State private var isRequired = false
-***REMOVED***
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text = ""
 ***REMOVED***
@@ -58,45 +55,36 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
+***REMOVED******REMOVED***textWriter
+***REMOVED******REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
+***REMOVED******REMOVED******REMOVED******REMOVED***if isFocused && isPlaceholder {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text = ""
+***REMOVED******REMOVED******REMOVED*** else if !isFocused && text.isEmpty && !iOS16MinimumIsSupported {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***textWriter
+***REMOVED******REMOVED******REMOVED******REMOVED***if isFocused {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED*** else if model.focusedElement == element {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = nil
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
-***REMOVED******REMOVED******REMOVED***if isFocused && isPlaceholder {
-***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
-***REMOVED******REMOVED******REMOVED******REMOVED***text = ""
-***REMOVED******REMOVED*** else if !isFocused && text.isEmpty && !iOS16MinimumIsSupported {
-***REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
-***REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if isFocused {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED*** else if model.focusedElement == element {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = nil
+***REMOVED******REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Another form input took focus
+***REMOVED******REMOVED******REMOVED******REMOVED***if focusedElement != element {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFocused  = false
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
-***REMOVED******REMOVED******REMOVED******REMOVED*** Another form input took focus
-***REMOVED******REMOVED******REMOVED***if focusedElement != element {
-***REMOVED******REMOVED******REMOVED******REMOVED***isFocused  = false
+***REMOVED******REMOVED******REMOVED***.onChange(of: text) { text in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard !isPlaceholder else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
+***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: text) { text in
-***REMOVED******REMOVED******REMOVED***guard !isPlaceholder else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
-***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
-***REMOVED***
-***REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
-***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
-***REMOVED******REMOVED******REMOVED***updateText()
-***REMOVED***
-***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
-***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
+***REMOVED******REMOVED******REMOVED******REMOVED***updateText()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 

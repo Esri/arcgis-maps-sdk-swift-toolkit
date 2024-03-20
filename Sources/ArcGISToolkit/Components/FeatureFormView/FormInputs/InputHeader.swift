@@ -19,27 +19,28 @@
 struct InputHeader: View {
 ***REMOVED***@Environment(\.formElementPadding) var elementPadding
 ***REMOVED***
-***REMOVED******REMOVED***/ The name of the form element.
-***REMOVED***let label: String
+***REMOVED******REMOVED***/ A Boolean value indicating whether the input is editable.
+***REMOVED***@State private var isEditable = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
-***REMOVED***let isRequired: Bool
+***REMOVED***@State private var isRequired = false
 ***REMOVED***
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - label: The name of the form element.
-***REMOVED******REMOVED***/   - isRequired: A Boolean value indicating whether the a value for the input is required.
-***REMOVED***init(label: String, isRequired: Bool) {
-***REMOVED******REMOVED***self.label = label
-***REMOVED******REMOVED***self.isRequired = isRequired
-***REMOVED***
+***REMOVED******REMOVED***/ The element the input belongs to.
+***REMOVED***let element: FieldFormElement
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Text(verbatim: "\(label + (isRequired ? " *" : ""))")
+***REMOVED******REMOVED******REMOVED***Text(verbatim: "\(element.label + (isEditable && isRequired ? " *" : ""))")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
 ***REMOVED******REMOVED***.padding(.top, elementPadding)
+***REMOVED******REMOVED***.onIsEditableChange(of: element) { newIsEditable in
+***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
+***REMOVED***
+***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
+***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

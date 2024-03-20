@@ -46,38 +46,31 @@ struct DateTimeInput: View {
 ***REMOVED******REMOVED******REMOVED***element.input is DateTimePickerFormInput,
 ***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(DateTimePickerFormInput.self)."
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.input = element.input as! DateTimePickerFormInput
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***dateEditor
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
-***REMOVED******REMOVED******REMOVED***isEditing = focusedElement == element
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: date) { date in
-***REMOVED******REMOVED******REMOVED***element.updateValue(date)
-***REMOVED******REMOVED******REMOVED***formattedValue = element.formattedValue
-***REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
-***REMOVED***
-***REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
-***REMOVED******REMOVED******REMOVED***if newFormattedValue.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***date = nil
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***date = newValue as? Date
+***REMOVED******REMOVED***dateEditor
+***REMOVED******REMOVED******REMOVED***.onChange(of: model.focusedElement) { focusedElement in
+***REMOVED******REMOVED******REMOVED******REMOVED***isEditing = focusedElement == element
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
-***REMOVED***
-***REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
-***REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: date) { date in
+***REMOVED******REMOVED******REMOVED******REMOVED***element.updateValue(date)
+***REMOVED******REMOVED******REMOVED******REMOVED***formattedValue = element.formattedValue
+***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***if newFormattedValue.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = nil
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***date = newValue as? Date
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
+***REMOVED******REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Controls for modifying the date selection.

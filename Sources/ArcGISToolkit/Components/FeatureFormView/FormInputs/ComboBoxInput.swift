@@ -67,7 +67,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED***element.input is ComboBoxFormInput,
 ***REMOVED******REMOVED******REMOVED***"\(Self.self).\(#function) element's input must be \(ComboBoxFormInput.self)."
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***let input = element.input as! ComboBoxFormInput
 ***REMOVED******REMOVED***self.noValueLabel = input.noValueLabel
@@ -86,42 +85,36 @@ struct ComboBoxInput: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
+***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED***Text(selectedValue?.name ?? placeholderValue)
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Combo Box Value")
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(selectedValue != nil ? .primary : .secondary)
+***REMOVED******REMOVED******REMOVED***if selectedValue != nil, !isRequired {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only show clear button if we have a value
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and we're not required. (i.e., Don't show clear if
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the field is required.)
+***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { model.focusedElement = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedValue?.name ?? placeholderValue)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Combo Box Value")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(selectedValue != nil ? .primary : .secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***if selectedValue != nil, !isRequired {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only show clear button if we have a value
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and we're not required. (i.e., Don't show clear if
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the field is required.)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { model.focusedElement = nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedValue = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise, always show list icon.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "list.bullet")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Options Button")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Clear Button")
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise, always show list icon.
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "list.bullet")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Options Button")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.formInputStyle()
-***REMOVED******REMOVED******REMOVED******REMOVED*** Pass `matchingValues` via a capture list so that the sheet receives up-to-date values.
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) { [matchingValues] in
-***REMOVED******REMOVED******REMOVED******REMOVED***makePicker(for: matchingValues)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = true
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
+***REMOVED***
+***REMOVED******REMOVED***.formInputStyle()
+***REMOVED******REMOVED******REMOVED*** Pass `matchingValues` via a capture list so that the sheet receives up-to-date values.
+***REMOVED******REMOVED***.sheet(isPresented: $isPresented) { [matchingValues] in
+***REMOVED******REMOVED******REMOVED***makePicker(for: matchingValues)
+***REMOVED***
+***REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED***model.focusedElement = element
+***REMOVED******REMOVED******REMOVED***isPresented = true
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: selectedValue) { selectedValue in
 ***REMOVED******REMOVED******REMOVED***element.updateValue(selectedValue?.code)

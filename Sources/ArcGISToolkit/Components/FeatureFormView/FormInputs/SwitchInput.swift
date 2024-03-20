@@ -30,9 +30,6 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the switch is toggled on or off.
 ***REMOVED***@State private var isOn = false
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether a value for the input is required.
-***REMOVED***@State private var isRequired = false
-***REMOVED***
 ***REMOVED******REMOVED***/ The value represented by the switch.
 ***REMOVED***@State private var selectedValue: Bool?
 ***REMOVED***
@@ -63,21 +60,15 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***noValueOption: .show
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: isRequired)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(isOn ? input.onValue.name : input.offValue.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch Label")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle("", isOn: $isOn)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.switch)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.formInputStyle()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element)
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(isOn ? input.onValue.name : input.offValue.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch Label")
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***Toggle("", isOn: $isOn)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Switch")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.switch)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.formInputStyle()
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.formattedValue.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallbackToComboBox = true
@@ -90,9 +81,6 @@ struct SwitchInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***isOn = newFormattedValue == input.onValue.name
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onIsRequiredChange(of: element) { newIsRequired in
-***REMOVED******REMOVED******REMOVED******REMOVED***isRequired = newIsRequired
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -25,8 +25,6 @@ struct ReadOnlyInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***InputHeader(label: element.label, isRequired: false)
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED***textReader
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
@@ -35,9 +33,7 @@ struct ReadOnlyInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textReader
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
-***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Read Only Input")
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***formattedValue = element.formattedValue
 ***REMOVED***
@@ -49,6 +45,7 @@ struct ReadOnlyInput: View {
 ***REMOVED******REMOVED***/ The body of the text input when the element is non-editable.
 ***REMOVED***var textReader: some View {
 ***REMOVED******REMOVED***Text(formattedValue.isEmpty ? "--" : formattedValue)
+***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Read Only Input")
 ***REMOVED******REMOVED******REMOVED***.lineLimit(element.isMultiline ? nil : 1)
 ***REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
 ***REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
