@@ -24,7 +24,7 @@ struct GroupView<Content>: View where Content: View {
     @State private var isVisibleTasks = [Task<Void, Never>]()
     
     /// The list of visible group elements.
-    @State private  var visibleElements = [FormElement]()
+    @State private var visibleElements = [FormElement]()
     
     /// The group form element.
     let element: GroupFormElement
