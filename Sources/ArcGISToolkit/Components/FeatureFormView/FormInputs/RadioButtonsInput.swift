@@ -26,9 +26,6 @@ struct RadioButtonsInput: View {
     /// This will be `true` if the current value doesn't exist as an option in the domain
     @State private var fallbackToComboBox = false
     
-    /// A Boolean value indicating whether a value for the input is required.
-    @State private var isRequired = false
-    
     /// The selected option.
     @State private var selectedValue: CodedValue?
     
@@ -49,7 +46,6 @@ struct RadioButtonsInput: View {
             element.input is RadioButtonsFormInput,
             "\(Self.self).\(#function) element's input must be \(RadioButtonsFormInput.self)."
         )
-        
         self.element = element
         self.input = element.input as! RadioButtonsFormInput
     }
@@ -62,38 +58,32 @@ struct RadioButtonsInput: View {
                 noValueOption: input.noValueOption
             )
         } else {
-            Group {
-                InputHeader(label: element.label, isRequired: isRequired)
-                
-                VStack(alignment: .leading, spacing: .zero) {
-                    if input.noValueOption == .show {
-                        makeRadioButtonRow(
-                            placeholderValue,
-                            selectedValue == nil,
-                            !element.codedValues.isEmpty,
-                            useNoValueStyle: true
-                        ) {
-                            selectedValue = nil
-                        }
-                    }
-                    ForEach(element.codedValues, id: \.self) { codedValue in
-                        makeRadioButtonRow(
-                            codedValue.name,
-                            codedValue == selectedValue,
-                            codedValue != element.codedValues.last
-                        ) {
-                            selectedValue = codedValue
-                        }
+            VStack(alignment: .leading, spacing: .zero) {
+                if input.noValueOption == .show {
+                    makeRadioButtonRow(
+                        placeholderValue,
+                        selectedValue == nil,
+                        !element.codedValues.isEmpty,
+                        useNoValueStyle: true
+                    ) {
+                        selectedValue = nil
                     }
                 }
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color(uiColor: .tertiarySystemFill))
-                )
-                .frame(maxWidth: .infinity, alignment: .leading)
-                
-                InputFooter(element: element)
+                ForEach(element.codedValues, id: \.self) { codedValue in
+                    makeRadioButtonRow(
+                        codedValue.name,
+                        codedValue == selectedValue,
+                        codedValue != element.codedValues.last
+                    ) {
+                        selectedValue = codedValue
+                    }
+                }
             }
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(uiColor: .tertiarySystemFill))
+            )
+            .frame(maxWidth: .infinity, alignment: .leading)
             .onAppear {
                 if let selectedValue = element.codedValues.first(where: {
                     $0.name == element.formattedValue
@@ -112,9 +102,6 @@ struct RadioButtonsInput: View {
             .onValueChange(of: element) { newValue, newFormattedValue in
                 value = newValue
                 selectedValue = element.codedValues.first { $0.name == newFormattedValue }
-            }
-            .onIsRequiredChange(of: element) { newIsRequired in
-                isRequired = newIsRequired
             }
         }
     }

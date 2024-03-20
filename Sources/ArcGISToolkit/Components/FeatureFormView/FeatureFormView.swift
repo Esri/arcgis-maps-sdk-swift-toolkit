@@ -130,7 +130,7 @@ extension FeatureFormView {
     /// Makes UI for a field form element including a divider beneath it.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-        EditableStateInputWrapper(element: element)
+        InputWrapper(element: element)
         // BarcodeScannerFormInput is not currently supported
         if element.isVisible,
            !(element.input is BarcodeScannerFormInput),

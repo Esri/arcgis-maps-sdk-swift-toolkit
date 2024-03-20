@@ -25,8 +25,6 @@ struct ReadOnlyInput: View {
     
     var body: some View {
         Group {
-            InputHeader(label: element.label, isRequired: false)
-            
             if element.isMultiline {
                 textReader
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -35,9 +33,7 @@ struct ReadOnlyInput: View {
                     textReader
                 }
             }
-            InputFooter(element: element)
         }
-        .accessibilityIdentifier("\(element.label) Read Only Input")
         .onAppear {
             formattedValue = element.formattedValue
         }
@@ -49,6 +45,7 @@ struct ReadOnlyInput: View {
     /// The body of the text input when the element is non-editable.
     var textReader: some View {
         Text(formattedValue.isEmpty ? "--" : formattedValue)
+            .accessibilityIdentifier("\(element.label) Read Only Input")
             .lineLimit(element.isMultiline ? nil : 1)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)

@@ -37,9 +37,6 @@ struct TextInput: View {
     /// Once iOS 16.0 is the minimum supported platform this property can be removed.
     @State private var isPlaceholder = false
     
-    /// A Boolean value indicating whether a value for the input is required.
-    @State private var isRequired = false
-    
     /// The current text value.
     @State private var text = ""
     
@@ -58,45 +55,36 @@ struct TextInput: View {
     }
     
     var body: some View {
-        Group {
-            InputHeader(label: element.label, isRequired: isRequired)
-            
-            textWriter
-            
-            InputFooter(element: element)
-        }
-        .onChange(of: isFocused) { isFocused in
-            if isFocused && isPlaceholder {
-                isPlaceholder = false
-                text = ""
-            } else if !isFocused && text.isEmpty && !iOS16MinimumIsSupported {
-                isPlaceholder = true
-                text = element.hint
+        textWriter
+            .onChange(of: isFocused) { isFocused in
+                if isFocused && isPlaceholder {
+                    isPlaceholder = false
+                    text = ""
+                } else if !isFocused && text.isEmpty && !iOS16MinimumIsSupported {
+                    isPlaceholder = true
+                    text = element.hint
+                }
+                if isFocused {
+                    model.focusedElement = element
+                } else if model.focusedElement == element {
+                    model.focusedElement = nil
+                }
             }
-            if isFocused {
-                model.focusedElement = element
-            } else if model.focusedElement == element {
-                model.focusedElement = nil
+            .onChange(of: model.focusedElement) { focusedElement in
+                // Another form input took focus
+                if focusedElement != element {
+                    isFocused  = false
+                }
             }
-        }
-        .onChange(of: model.focusedElement) { focusedElement in
-            // Another form input took focus
-            if focusedElement != element {
-                isFocused  = false
+            .onChange(of: text) { text in
+                guard !isPlaceholder else { return }
+                element.convertAndUpdateValue(text)
+                model.evaluateExpressions()
             }
-        }
-        .onChange(of: text) { text in
-            guard !isPlaceholder else { return }
-            element.convertAndUpdateValue(text)
-            model.evaluateExpressions()
-        }
-        .onValueChange(of: element) { newValue, newFormattedValue in
-            formattedValue = newFormattedValue
-            updateText()
-        }
-        .onIsRequiredChange(of: element) { newIsRequired in
-            isRequired = newIsRequired
-        }
+            .onValueChange(of: element) { newValue, newFormattedValue in
+                formattedValue = newFormattedValue
+                updateText()
+            }
     }
 }
 
