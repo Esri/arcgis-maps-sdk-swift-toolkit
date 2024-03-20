@@ -33,6 +33,15 @@ extension String {
         )
     }
     
+    /// A localized string for the phrase "No Value".
+    static var noValue: Self {
+        .init(
+            localized: "No Value",
+            bundle: .toolkitModule,
+            comment: "A string indicating that no value has been set for a form field."
+        )
+    }
+    
     /// A localized string for the word "Value".
     static var value: Self {
         .init(

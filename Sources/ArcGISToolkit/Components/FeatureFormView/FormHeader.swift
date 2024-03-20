@@ -14,16 +14,15 @@
 
 import SwiftUI
 
-struct Tests: View {
+/// A view shown at the top of a form. If the provided title is `nil`, no text is rendered.
+struct FormHeader: View {
+    /// The title defined for the form.
+    let title: String?
+    
     var body: some View {
-        NavigationView {
-            List {
-                NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-                NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
-                NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
-                NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-            }
+        if let title {
+            Text(title)
+                .font(.largeTitle)
         }
-        .navigationViewStyle(.stack)
     }
 }

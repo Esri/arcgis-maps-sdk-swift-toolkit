@@ -14,16 +14,22 @@
 
 import SwiftUI
 
-struct Tests: View {
-    var body: some View {
-        NavigationView {
-            List {
-                NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-                NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
-                NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
-                NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-            }
-        }
-        .navigationViewStyle(.stack)
+extension Text {
+    /// Localized text for the word "Done".
+    static var done: Self {
+        .init(
+            "Done",
+            bundle: .toolkitModule,
+            comment: "A label for a button for the user to indicate completion of the current task."
+        )
+    }
+    
+    /// Localized text for the word "Required".
+    static var required: Self {
+        Text(
+            "Required",
+            bundle: .toolkitModule,
+            comment: "A label indicating a field is required"
+        )
     }
 }

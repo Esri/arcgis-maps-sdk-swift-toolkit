@@ -14,16 +14,14 @@
 
 import SwiftUI
 
-struct Tests: View {
-    var body: some View {
-        NavigationView {
-            List {
-                NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
-                NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
-                NavigationLink("Feature Form Tests", destination: FeatureFormTestView())
-                NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
-            }
-        }
-        .navigationViewStyle(.stack)
+private struct FormElementPaddingKey: EnvironmentKey {
+    static let defaultValue: CGFloat = 10
+}
+
+extension EnvironmentValues {
+    /// A vertical amount of padding to use between form elements.
+    var formElementPadding: CGFloat {
+        get { self[FormElementPaddingKey.self] }
+        set { self[FormElementPaddingKey.self] = newValue }
     }
 }
