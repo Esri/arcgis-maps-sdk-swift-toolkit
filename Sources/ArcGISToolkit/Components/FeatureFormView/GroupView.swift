@@ -29,7 +29,7 @@ struct GroupView<Content>: View where Content: View {
     /// The group form element.
     let element: GroupFormElement
     
-    ///The closure to perform to build an element in the group.
+    /// The closure to perform to build an element in the group.
     let viewCreator: (FieldFormElement) -> Content
     
     /// Filters the group's elements by visibility.
