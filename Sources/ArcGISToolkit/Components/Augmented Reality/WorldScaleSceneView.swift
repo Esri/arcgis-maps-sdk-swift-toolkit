@@ -33,7 +33,7 @@ public struct WorldScaleSceneView: View {
     /// The camera controller that will be set on the scene view.
     @State private var cameraController: TransformationMatrixCameraController
     /// The view model for the calibration view.
-    @StateObject private var calibrationViewModel = WorldScaleCalibrationViewModel()
+    @State private var calibrationViewModel: WorldScaleCalibrationViewModel
     /// A Boolean value that indicates whether the geo-tracking configuration is available.
     @State private var geoTrackingIsAvailable = true
     /// A Boolean value that indicates whether the initial camera is set for the scene view.
@@ -61,6 +61,7 @@ public struct WorldScaleSceneView: View {
     /// - Remark: The provided scene view will have certain properties overridden in order to
     /// be effectively viewed in augmented reality. Properties such as the camera controller,
     /// and view drawing mode.
+    @MainActor
     public init(
         clippingDistance: Double? = nil,
         trackingMode: TrackingMode = .worldTracking,
@@ -74,6 +75,8 @@ public struct WorldScaleSceneView: View {
         cameraController.translationFactor = 1
         cameraController.clippingDistance = clippingDistance
         _cameraController = .init(initialValue: cameraController)
+        
+        _calibrationViewModel = .init(initialValue: WorldScaleCalibrationViewModel(cameraController: cameraController))
     }
     
     public var body: some View {
