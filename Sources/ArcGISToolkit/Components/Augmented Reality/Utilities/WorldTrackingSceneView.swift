@@ -157,17 +157,6 @@ struct WorldTrackingSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateWorldTrackingSceneView(for: location)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onReceive(calibrationViewModel.headingCorrections) { correction in
-***REMOVED******REMOVED******REMOVED***let originCamera = cameraController.originCamera
-***REMOVED******REMOVED******REMOVED***cameraController.originCamera = originCamera.rotatedTo(
-***REMOVED******REMOVED******REMOVED******REMOVED***heading: originCamera.heading + correction,
-***REMOVED******REMOVED******REMOVED******REMOVED***pitch: originCamera.pitch,
-***REMOVED******REMOVED******REMOVED******REMOVED***roll: originCamera.roll
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED******REMOVED***.onReceive(calibrationViewModel.elevationCorrections) { correction in
-***REMOVED******REMOVED******REMOVED***cameraController.originCamera = cameraController.originCamera.elevated(by: correction)
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the scene view's camera controller with a new location coming from the
