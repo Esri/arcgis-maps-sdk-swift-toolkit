@@ -81,7 +81,7 @@ east, etc.). */
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Eliminar";
 
-/* A button to close the bookmark selection menu. */
+/* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Listo";
 
 /* A message indicating that the user attempted to use a single utility
@@ -95,6 +95,15 @@ for a utility network trace. */
 /* A label for the slider that adjusts the camera elevation for the
 AR experience. */
 "elevation" = "elevación";
+
+/* Text indicating the user should enter a field's exact number of required characters. */
+"Enter %lld characters" = "á_Enter %lld characters______________________Ó";
+
+/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
+"Enter %lld to %lld characters" = "á_Enter %lld to %lld characters______________________________Ó";
+
+/* A label for a combo box input that prompts the user to enter a value. */
+"Enter Value" = "á_Enter Value____________Ó";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Error";
@@ -127,6 +136,9 @@ trace operation. */
 /* A label in reference to fields in a set of data contained in a popup. */
 "Fields" = "Campos";
 
+/* A label for a text entry field that allows the user to filter a list of values by name. */
+"Filter" = "á_Filter_____________Ó";
+
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "Filtrar instalaciones";
@@ -148,6 +160,9 @@ trace operation. */
 /* A label for the slider that adjusts the camera heading for the
 AR experience. */
 "heading" = "grado";
+
+/* Text indicating a field's maximum number of allowed characters. */
+"Maximum %lld characters" = "á_Maximum %lld characters________________________Ó";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Contenido multimedia";
@@ -182,11 +197,17 @@ AR experience. */
 /* A label indicating that no utility networks are available. */
 "No utility networks found." = "No se han encontrado redes de servicios públicos.";
 
+/* A string indicating that no value has been set for a form field. */
+"No Value" = "á_No Value_________________Ó";
+
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Nada seleccionado";
 
 /* A trace function output result was not provided. */
 "Not Available" = "No disponible";
+
+/* A label for a button to choose the current time and date for a field. */
+"Now" = "á_Now_______Ó";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Id. de objeto: %@";
@@ -219,6 +240,9 @@ variable provides additional data. */
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
 "Repeat Search Here" = "Repetir la búsqueda aquí";
+
+/* A label indicating a field is required */
+"Required" = "á_Required_________________Ó";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Resultados";
@@ -283,6 +307,9 @@ match the spatial reference of the map. */
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "No se ha podido acceder a la URL o no contenía datos de imagen.";
+
+/* A label for a button to choose the current date for a field. */
+"Today" = "á_Today___________Ó";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Trazado";
