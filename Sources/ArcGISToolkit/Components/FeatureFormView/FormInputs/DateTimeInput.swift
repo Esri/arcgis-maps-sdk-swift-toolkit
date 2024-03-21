@@ -178,6 +178,7 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) \(input.includesTime ? "Now" : "Today") Button")
 ***REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED***.foregroundStyle(.tint)
 ***REMOVED***
 ***REMOVED***
 
