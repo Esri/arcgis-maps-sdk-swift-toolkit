@@ -75,9 +75,12 @@ struct SwitchInput: View {
                 }
             }
             .onChange(of: isOn) { isOn in
-                model.focusedElement = element
                 element.updateValue(isOn ? input.onValue.code : input.offValue.code)
                 model.evaluateExpressions()
+            }
+            .onTapGesture {
+                isOn.toggle()
+                model.focusedElement = element
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 isOn = newFormattedValue == input.onValue.name
