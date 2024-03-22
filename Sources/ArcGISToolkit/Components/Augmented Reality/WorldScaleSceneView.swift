@@ -46,6 +46,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***@State private var error: Error?
 ***REMOVED******REMOVED***/ The closure to call upon a single tap.
 ***REMOVED***private var onSingleTapGestureAction: ((CGPoint, Point?) -> Void)? = nil
+***REMOVED******REMOVED***/ The closure to perform when the calibration view visibility changes.
+***REMOVED***private var onCalibrationViewVisibilityChangedAction: ((Bool) -> Void)?
 ***REMOVED******REMOVED***/ The closure to perform when the camera tracking state changes.
 ***REMOVED***private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
 ***REMOVED******REMOVED***/ The closure to perform when the geo tracking status changes.
@@ -148,6 +150,9 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.animation(.default.speed(0.25), value: initialCameraIsSet)
+***REMOVED******REMOVED***.onChange(of: isCalibrating) { value in
+***REMOVED******REMOVED******REMOVED***onCalibrationViewVisibilityChangedAction?(value)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A world scale geo-tracking scene view.
@@ -214,6 +219,18 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***public func calibrationButtonAlignment(_ alignment: Alignment) -> Self {
 ***REMOVED******REMOVED***var view = self
 ***REMOVED******REMOVED***view.calibrationButtonAlignment = alignment
+***REMOVED******REMOVED***return view
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when the calibration view visibility changes.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the calibration view visibility has changed.
+***REMOVED***public func onCalibrationViewVisibilityChanged(
+***REMOVED******REMOVED***perform action: @escaping (
+***REMOVED******REMOVED******REMOVED***_ isPresented: Bool
+***REMOVED******REMOVED***) -> Void
+***REMOVED***) -> Self {
+***REMOVED******REMOVED***var view = self
+***REMOVED******REMOVED***view.onCalibrationViewVisibilityChangedAction = action
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
