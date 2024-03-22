@@ -74,7 +74,7 @@ import SwiftUI
     
     /// Performs an initial evaluation of all form expressions.
     func initialEvaluation() async {
-        try? await featureForm.evaluateExpressions()
+        _ = try? await featureForm.evaluateExpressions()
         initializeIsVisibleTasks()
     }
     
@@ -82,7 +82,7 @@ import SwiftUI
     func evaluateExpressions() {
         evaluateTask?.cancel()
         evaluateTask = Task {
-            try? await featureForm.evaluateExpressions()
+            _ = try? await featureForm.evaluateExpressions()
         }
     }
 }
