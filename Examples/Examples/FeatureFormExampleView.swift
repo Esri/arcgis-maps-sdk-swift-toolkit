@@ -17,11 +17,11 @@
 ***REMOVED***
 
 struct FeatureFormExampleView: View {
+***REMOVED******REMOVED***/ The height of the map view's attribution bar.
+***REMOVED***@State private var attributionBarHeight: CGFloat = 0
+***REMOVED***
 ***REMOVED******REMOVED***/ The height to present the form at.
 ***REMOVED***@State private var detent: FloatingPanelDetent = .full
-***REMOVED***
-***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
-***REMOVED***@State private var map = Map(url: .sampleData)!
 ***REMOVED***
 ***REMOVED******REMOVED***/ The point on the screen the user tapped on to identify a feature.
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
@@ -29,14 +29,14 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
 ***REMOVED***@State private var isCancelConfirmationPresented = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
+***REMOVED***@State private var map = Map(url: .sampleData)!
+***REMOVED***
 ***REMOVED******REMOVED***/ The validation error visibility configuration of the form.
-***REMOVED***@State var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
+***REMOVED***@State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
 ***REMOVED***
 ***REMOVED******REMOVED***/ The form view model provides a channel of communication between the form view and its host.
 ***REMOVED***@StateObject private var model = Model()
-***REMOVED***
-***REMOVED******REMOVED***/ The height of the map view's attribution bar.
-***REMOVED***@State private var attributionBarHeight: CGFloat = 0
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in
@@ -53,9 +53,8 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.task(id: identifyScreenPoint) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await identifyFeature(with: mapViewProxy),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let featureForm = FeatureForm(feature: feature, definition: formDefinition) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.featureForm = featureForm
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.featureForm = FeatureForm(feature: feature, definition: formDefinition)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
