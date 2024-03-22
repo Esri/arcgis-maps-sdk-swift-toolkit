@@ -17,11 +17,11 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FeatureFormExampleView: View {
+    /// The height of the map view's attribution bar.
+    @State private var attributionBarHeight: CGFloat = 0
+    
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
-    
-    /// The `Map` displayed in the `MapView`.
-    @State private var map = Map(url: .sampleData)!
     
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
@@ -29,14 +29,14 @@ struct FeatureFormExampleView: View {
     /// A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
     @State private var isCancelConfirmationPresented = false
     
+    /// The `Map` displayed in the `MapView`.
+    @State private var map = Map(url: .sampleData)!
+    
     /// The validation error visibility configuration of the form.
-    @State var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
+    @State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
     
     /// The form view model provides a channel of communication between the form view and its host.
     @StateObject private var model = Model()
-    
-    /// The height of the map view's attribution bar.
-    @State private var attributionBarHeight: CGFloat = 0
     
     var body: some View {
         MapViewReader { mapViewProxy in
@@ -53,9 +53,8 @@ struct FeatureFormExampleView: View {
                 }
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy),
-                       let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition,
-                       let featureForm = FeatureForm(feature: feature, definition: formDefinition) {
-                        model.featureForm = featureForm
+                       let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
+                        model.featureForm = FeatureForm(feature: feature, definition: formDefinition)
                     }
                 }
                 .ignoresSafeArea(.keyboard)
