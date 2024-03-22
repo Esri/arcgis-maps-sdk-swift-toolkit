@@ -53,9 +53,8 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.task(id: identifyScreenPoint) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await identifyFeature(with: mapViewProxy),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let featureForm = FeatureForm(feature: feature, definition: formDefinition) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.featureForm = featureForm
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.featureForm = FeatureForm(feature: feature, definition: formDefinition)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard)
