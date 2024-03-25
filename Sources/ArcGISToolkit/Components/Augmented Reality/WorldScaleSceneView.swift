@@ -46,6 +46,8 @@ public struct WorldScaleSceneView: View {
     @State private var error: Error?
     /// The closure to call upon a single tap.
     private var onSingleTapGestureAction: ((CGPoint, Point?) -> Void)? = nil
+    /// The closure to perform when the calibration view visibility changes.
+    private var onCalibrationViewVisibilityChangedAction: ((Bool) -> Void)?
     /// The closure to perform when the camera tracking state changes.
     private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
     /// The closure to perform when the geo tracking status changes.
@@ -148,6 +150,9 @@ public struct WorldScaleSceneView: View {
             }
         }
         .animation(.default.speed(0.25), value: initialCameraIsSet)
+        .onChange(of: isCalibrating) { value in
+            onCalibrationViewVisibilityChangedAction?(value)
+        }
     }
     
     /// A world scale geo-tracking scene view.
@@ -214,6 +219,18 @@ public struct WorldScaleSceneView: View {
     public func calibrationButtonAlignment(_ alignment: Alignment) -> Self {
         var view = self
         view.calibrationButtonAlignment = alignment
+        return view
+    }
+    
+    /// Sets a closure to perform when the calibration view visibility changes.
+    /// - Parameter action: The closure to perform when the calibration view visibility has changed.
+    public func onCalibrationViewVisibilityChanged(
+        perform action: @escaping (
+            _ isPresented: Bool
+        ) -> Void
+    ) -> Self {
+        var view = self
+        view.onCalibrationViewVisibilityChangedAction = action
         return view
     }
     
