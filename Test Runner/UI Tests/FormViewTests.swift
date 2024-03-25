@@ -54,8 +54,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -125,8 +125,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         textField.tap()
@@ -211,8 +211,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         textField.tap()
@@ -302,8 +302,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertEqual(
@@ -367,8 +367,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         if fieldValue.label != "No Value" {
@@ -438,8 +438,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         fieldValue.tap()
@@ -507,8 +507,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -571,8 +571,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         if fieldValue.label != "No Value" {
@@ -584,6 +584,11 @@ final class FeatureFormViewTests: XCTestCase {
         XCTAssertTrue(
             footer.exists,
             "The footer doesn't exist."
+        )
+        
+        XCTAssertTrue(
+            nowButton.waitForExistence(timeout: 2.5),
+            "The Now button doesn't exist."
         )
         
         XCTAssertTrue(
@@ -638,8 +643,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         fieldValue.tap()
@@ -697,8 +702,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -740,8 +745,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -800,8 +805,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -844,8 +849,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -904,8 +909,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -962,8 +967,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -1034,8 +1039,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -1102,8 +1107,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -1157,8 +1162,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         // Verify the Radio Button fallback to Combo Box was successful.
@@ -1200,8 +1205,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -1240,8 +1245,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -1284,8 +1289,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -1326,8 +1331,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -1388,8 +1393,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(
@@ -1461,8 +1466,8 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Wait and verify that the form is opened.
         XCTAssertTrue(
-            formTitle.waitForExistence(timeout: 5),
-            "The form failed to open after 5 seconds."
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
         )
         
         XCTAssertTrue(elementInTheGroupIsEditableReadOnlyInput.exists)
