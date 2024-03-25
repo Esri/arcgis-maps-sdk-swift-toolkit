@@ -26,6 +26,13 @@ struct ClearButton: View {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle.fill")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED***
+***REMOVED******REMOVED***.accessibilityLabel(
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Clear",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "The label of a button that clears a form's input."
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED***.padding(2)
 ***REMOVED***
