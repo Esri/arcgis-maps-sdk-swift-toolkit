@@ -57,6 +57,9 @@ for the AR experience. */
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "Certificate Trust Warning";
 
+/* The label of a button that clears a form's input. */
+"Clear" = "Clear";
+
 /* A directive to clear all of the completed utility network traces. */
 "Clear all results" = "Clear all results";
 
