@@ -133,6 +133,7 @@ struct DateTimeInput: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Makes control for date selection.
+***REMOVED******REMOVED***/ - Bug: Apple Feedback #FB13699023 "DatePicker time input cutoff". Original ref Apollo #567.
 ***REMOVED***@ViewBuilder func makeDatePicker(with date: Binding<Date>) -> some View {
 ***REMOVED******REMOVED***DatePicker(
 ***REMOVED******REMOVED******REMOVED***selection: date,
