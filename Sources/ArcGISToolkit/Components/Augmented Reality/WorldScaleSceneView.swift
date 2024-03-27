@@ -222,8 +222,8 @@ public struct WorldScaleSceneView: View {
         return view
     }
     
-    /// Sets a closure to perform when the calibration view visibility changes.
-    /// - Parameter action: The closure to perform when the calibration view visibility has changed.
+    /// Sets a closure to perform when calibration begins or ends.
+    /// - Parameter action: The closure to perform when calibration begins or ends.
     public func onCalibratingChanged(
         perform action: @escaping (
             _ isPresented: Bool
