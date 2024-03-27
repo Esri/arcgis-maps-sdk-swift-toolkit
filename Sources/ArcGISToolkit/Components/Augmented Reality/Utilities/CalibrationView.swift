@@ -28,11 +28,11 @@ class WorldScaleCalibrationViewModel: ObservableObject {
     private(set) var totalElevationCorrection: Double = 0
     
     /// The camera controller for which corrections will be applied.
-    private(set) var cameraController: TransformationMatrixCameraController
+    let cameraController = TransformationMatrixCameraController()
     
-    /// Creates a calibration view model with a camera controller.
-    init(cameraController: TransformationMatrixCameraController) {
-        self.cameraController = cameraController
+    /// Creates a calibration view model.
+    init() {
+        cameraController.translationFactor = 1
     }
     
     /// Proposes a heading correction.
