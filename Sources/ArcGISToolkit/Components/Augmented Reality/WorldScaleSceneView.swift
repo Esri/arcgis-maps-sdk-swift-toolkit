@@ -222,8 +222,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets a closure to perform when the calibration view visibility changes.
-***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the calibration view visibility has changed.
+***REMOVED******REMOVED***/ Sets a closure to perform when calibration begins or ends.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when calibration begins or ends.
 ***REMOVED***public func onCalibratingChanged(
 ***REMOVED******REMOVED***perform action: @escaping (
 ***REMOVED******REMOVED******REMOVED***_ isPresented: Bool
