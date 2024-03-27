@@ -329,10 +329,11 @@ final class FeatureFormViewTests: XCTestCase {
         textField.doubleTap()
         textField.typeText("2.1")
         
-        XCTAssertEqual(
-            footer.label,
-            "Range domain 2-5"
+        expectation(
+            for: NSPredicate(format: "label == \"Range domain 2-5\""),
+            evaluatedWith: footer
         )
+        waitForExpectations(timeout: 5, handler: nil)
         
         // Highlight/select the current value and replace it
         textField.doubleTap()
