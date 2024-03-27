@@ -226,7 +226,7 @@ public struct WorldScaleSceneView: View {
     /// - Parameter action: The closure to perform when calibration begins or ends.
     public func onCalibratingChanged(
         perform action: @escaping (
-            _ isPresented: Bool
+            _ newCalibrating: Bool
         ) -> Void
     ) -> Self {
         var view = self
