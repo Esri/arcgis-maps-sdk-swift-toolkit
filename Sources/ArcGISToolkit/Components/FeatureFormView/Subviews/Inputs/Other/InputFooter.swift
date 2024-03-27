@@ -200,6 +200,7 @@ extension InputFooter {
 ***REMOVED******REMOVED***/ A Boolean value which indicates whether or not the character indicator is showing in the footer.
 ***REMOVED***var isShowingCharacterIndicator: Bool {
 ***REMOVED******REMOVED***model.focusedElement == element
+***REMOVED******REMOVED***&& !(element.fieldType?.isNumeric ?? false)
 ***REMOVED******REMOVED***&& (element.input is TextAreaFormInput || element.input is TextBoxFormInput)
 ***REMOVED******REMOVED***&& (element.description.isEmpty || primaryError != nil)
 ***REMOVED***
