@@ -46,8 +46,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***@State private var error: Error?
 ***REMOVED******REMOVED***/ The closure to call upon a single tap.
 ***REMOVED***private var onSingleTapGestureAction: ((CGPoint, Point?) -> Void)? = nil
-***REMOVED******REMOVED***/ The closure to perform when the calibration view visibility changes.
-***REMOVED***private var onCalibrationViewVisibilityChangedAction: ((Bool) -> Void)?
+***REMOVED******REMOVED***/ The closure to perform when the `isCalibrating` property has changed.
+***REMOVED***private var onCalibratingChangedAction: ((Bool) -> Void)?
 ***REMOVED******REMOVED***/ The closure to perform when the camera tracking state changes.
 ***REMOVED***private var onCameraTrackingStateChangedAction: ((ARCamera.TrackingState) -> Void)?
 ***REMOVED******REMOVED***/ The closure to perform when the geo tracking status changes.
@@ -151,7 +151,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.animation(.default.speed(0.25), value: initialCameraIsSet)
 ***REMOVED******REMOVED***.onChange(of: isCalibrating) { value in
-***REMOVED******REMOVED******REMOVED***onCalibrationViewVisibilityChangedAction?(value)
+***REMOVED******REMOVED******REMOVED***onCalibratingChangedAction?(value)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -222,15 +222,15 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets a closure to perform when the calibration view visibility changes.
-***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the calibration view visibility has changed.
-***REMOVED***public func onCalibrationViewVisibilityChanged(
+***REMOVED******REMOVED***/ Sets a closure to perform when calibration begins or ends.
+***REMOVED******REMOVED***/ - Parameter action: The closure to perform when calibration begins or ends.
+***REMOVED***public func onCalibratingChanged(
 ***REMOVED******REMOVED***perform action: @escaping (
-***REMOVED******REMOVED******REMOVED***_ isPresented: Bool
+***REMOVED******REMOVED******REMOVED***_ newCalibrating: Bool
 ***REMOVED******REMOVED***) -> Void
 ***REMOVED***) -> Self {
 ***REMOVED******REMOVED***var view = self
-***REMOVED******REMOVED***view.onCalibrationViewVisibilityChangedAction = action
+***REMOVED******REMOVED***view.onCalibratingChangedAction = action
 ***REMOVED******REMOVED***return view
 ***REMOVED***
 ***REMOVED***
