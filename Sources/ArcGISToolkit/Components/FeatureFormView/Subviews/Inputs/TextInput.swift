@@ -81,7 +81,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if text.last == "\n" {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.lastTextFieldExpansion = .now
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.lastTextFieldSizeChange = .now
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in

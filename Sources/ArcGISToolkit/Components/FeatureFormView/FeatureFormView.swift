@@ -99,7 +99,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: model.lastTextFieldExpansion) { _ in
+***REMOVED******REMOVED******REMOVED***.onChange(of: model.lastTextFieldSizeChange) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Keep the input caret visible as a text field's height changes.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement = model.focusedElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
