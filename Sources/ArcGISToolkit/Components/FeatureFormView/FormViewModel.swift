@@ -25,6 +25,12 @@
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The time of the most recent text field expansion in the form.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ When a multiline text input grows or shrinks vertically, the form needs to be automatically scrolled to
+***REMOVED******REMOVED***/ keep the input caret visible.
+***REMOVED***@Published var lastTextFieldExpansion: Date?
+***REMOVED***
 ***REMOVED******REMOVED***/ The set of all elements which previously held focus.
 ***REMOVED***@Published var previouslyFocusedElements = [FormElement]()
 ***REMOVED***
