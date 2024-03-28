@@ -99,7 +99,7 @@ public struct FeatureFormView: View {
                     }
                 }
             }
-            .onChange(of: model.lastTextFieldExpansion) { _ in
+            .onChange(of: model.lastTextFieldSizeChange) { _ in
                 // Keep the input caret visible as a text field's height changes.
                 if let focusedElement = model.focusedElement {
                     withAnimation {

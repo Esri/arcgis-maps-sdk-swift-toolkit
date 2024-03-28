@@ -25,11 +25,11 @@ import SwiftUI
         }
     }
     
-    /// The time of the most recent text field expansion in the form.
+    /// The time of the most recent text field size change in the form.
     ///
     /// When a multiline text input grows or shrinks vertically, the form needs to be automatically scrolled to
     /// keep the input caret visible.
-    @Published var lastTextFieldExpansion: Date?
+    @Published var lastTextFieldSizeChange: Date?
     
     /// The set of all elements which previously held focus.
     @Published var previouslyFocusedElements = [FormElement]()
