@@ -41,6 +41,13 @@
         @TutorialReference(tutorial: "doc:CompassTutorial")
     }
     
+    @Chapter(name: "FeatureFormView") {
+        A `FeatureFormView` is a view that provides an easy way for developers to
+        add feature attribute editing capabilities to their existing applications.
+        @Image(source: FeatureFormView, alt: "An image of the FeatureFormView component.")
+        @TutorialReference(tutorial: "doc:FeatureFormViewTutorial")
+    }
+
     @Chapter(name: "FloatingPanel") {
         A `FloatingPanel` is a view that overlays a view and supplies view-related content.
         @Image(source: FloatingPanel, alt: "An image of the FloatingPanel component.")
