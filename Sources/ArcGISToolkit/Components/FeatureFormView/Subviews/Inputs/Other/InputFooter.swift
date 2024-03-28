@@ -200,6 +200,7 @@ extension InputFooter {
     /// A Boolean value which indicates whether or not the character indicator is showing in the footer.
     var isShowingCharacterIndicator: Bool {
         model.focusedElement == element
+        && !(element.fieldType?.isNumeric ?? false)
         && (element.input is TextAreaFormInput || element.input is TextBoxFormInput)
         && (element.description.isEmpty || primaryError != nil)
     }

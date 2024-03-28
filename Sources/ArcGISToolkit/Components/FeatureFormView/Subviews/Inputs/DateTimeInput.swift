@@ -133,6 +133,7 @@ struct DateTimeInput: View {
     }
     
     /// Makes control for date selection.
+    /// - Bug: Apple Feedback #FB13699023 "DatePicker time input cutoff". Original ref Apollo #567.
     @ViewBuilder func makeDatePicker(with date: Binding<Date>) -> some View {
         DatePicker(
             selection: date,
