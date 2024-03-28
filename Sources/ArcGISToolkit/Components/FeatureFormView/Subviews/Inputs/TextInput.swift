@@ -80,6 +80,9 @@ struct TextInput: View {
                 guard !isPlaceholder else { return }
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
+                if text.last == "\n" {
+                    model.lastTextFieldExpansion = .now
+                }
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 formattedValue = newFormattedValue
