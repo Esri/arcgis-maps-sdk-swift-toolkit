@@ -80,9 +80,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard !isPlaceholder else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
-***REMOVED******REMOVED******REMOVED******REMOVED***if text.last == "\n" {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.lastTextFieldSizeChange = .now
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
@@ -134,6 +131,9 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onSizeChange { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***model.lastTextFieldSizeChange = .now
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.scrollContentBackgroundHidden()
 ***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
