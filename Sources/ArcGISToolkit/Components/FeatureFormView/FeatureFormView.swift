@@ -101,6 +101,8 @@ public struct FeatureFormView: View {
             }
             .onChange(of: model.lastTextFieldSizeChange) { _ in
                 // Keep the input caret visible as a text field's height changes.
+                // Note that this can cause an issue if the use was editing
+                // higher up in the text field and it caused the size to change.
                 if let focusedElement = model.focusedElement {
                     withAnimation {
                         scrollViewProxy.scrollTo(
