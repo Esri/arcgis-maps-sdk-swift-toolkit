@@ -80,9 +80,6 @@ struct TextInput: View {
                 guard !isPlaceholder else { return }
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
-                if text.last == "\n" {
-                    model.lastTextFieldSizeChange = .now
-                }
             }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 formattedValue = newFormattedValue
@@ -134,6 +131,9 @@ private extension TextInput {
                         Spacer()
                     }
                 }
+            }
+            .onSizeChange { _ in
+                model.lastTextFieldSizeChange = .now
             }
             .scrollContentBackgroundHidden()
             if !text.isEmpty {
