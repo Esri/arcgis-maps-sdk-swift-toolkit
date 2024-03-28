@@ -23,7 +23,7 @@
             }
             
             @Step {
-                Add the `MapView` and with the `Popup` data.
+                Add the `MapView` with the `Popup` data.
                 @Code(name: "PopupExampleView.swift", file: PopupViewStep3)
             }
             
