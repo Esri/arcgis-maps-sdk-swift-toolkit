@@ -54,7 +54,7 @@ import SwiftUI
 /// and refer to
 /// [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
 /// in the project. To learn more about using the `FeatureFormView` see the [FeatureFormView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/featureformviewtutorial) [Coming Soon].
-/// 
+///
 /// - Since: 200.4
 public struct FeatureFormView: View {
     @Environment(\.formElementPadding) var elementPadding
@@ -90,9 +90,14 @@ public struct FeatureFormView: View {
                     }
                 }
             }
-            .task(id: model.focusedElement) {
+            .onChange(of: model.lastTextFieldExpansion) { _ in
                 if let focusedElement = model.focusedElement {
-                    withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
+                    withAnimation {
+                        scrollViewProxy.scrollTo(
+                            "\(focusedElement.label) Bottom Divider",
+                            anchor: .bottom
+                        )
+                    }
                 }
             }
             .onTitleChange(of: model.featureForm) { newTitle in
@@ -132,6 +137,7 @@ extension FeatureFormView {
         if !(element.input is UnsupportedFormInput) {
             InputWrapper(element: element)
             Divider()
+                .id("\(element.label) Bottom Divider")
         }
     }
 }
