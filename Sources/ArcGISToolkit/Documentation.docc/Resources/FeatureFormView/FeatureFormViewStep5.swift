@@ -1,6 +1,6 @@
-import SwiftUI
 import ArcGIS
 import ArcGISToolkit
+import SwiftUI
 
 struct FeatureFormExampleView: View {
     static func makeMap() -> Map {
