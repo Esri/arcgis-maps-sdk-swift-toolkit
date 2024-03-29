@@ -22,7 +22,8 @@ struct FormHeader: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if let title {
 ***REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.largeTitle)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
