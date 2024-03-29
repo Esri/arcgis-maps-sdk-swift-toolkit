@@ -24,6 +24,7 @@ struct FormHeader: View {
             Text(title)
                 .font(.title)
                 .fontWeight(.bold)
+            Divider()
         }
     }
 }
