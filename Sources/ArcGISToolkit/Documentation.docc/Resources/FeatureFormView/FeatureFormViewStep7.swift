@@ -1,6 +1,6 @@
-import SwiftUI
 import ArcGIS
 import ArcGISToolkit
+import SwiftUI
 
 struct FeatureFormExampleView: View {
     static func makeMap() -> Map {
@@ -27,7 +27,7 @@ struct FeatureFormExampleView: View {
     
     /// A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
     @State private var isCancelConfirmationPresented = false
-
+    
     var body: some View {
         MapViewReader { proxy in
             MapView(map: dataModel.map)
