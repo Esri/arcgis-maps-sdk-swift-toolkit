@@ -91,12 +91,8 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: model.focusedElement) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Scroll the element to the top of the visible area to allow
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** room for its input UI to render.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement = model.focusedElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewProxy.scrollTo(focusedElement, anchor: .top)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onTitleChange(of: model.featureForm) { newTitle in
