@@ -1,6 +1,6 @@
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+***REMOVED***
 
 struct FeatureFormExampleView: View {
 ***REMOVED***static func makeMap() -> Map {
@@ -27,7 +27,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
 ***REMOVED***@State private var isCancelConfirmationPresented = false
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED***MapView(map: dataModel.map)
