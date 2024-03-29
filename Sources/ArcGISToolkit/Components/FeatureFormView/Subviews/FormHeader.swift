@@ -22,7 +22,8 @@ struct FormHeader: View {
     var body: some View {
         if let title {
             Text(title)
-                .font(.largeTitle)
+                .font(.title)
+                .fontWeight(.bold)
         }
     }
 }
