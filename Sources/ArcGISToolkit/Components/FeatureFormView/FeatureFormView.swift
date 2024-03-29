@@ -99,19 +99,6 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: model.lastTextFieldSizeChange) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Keep the input caret visible as a text field's height changes.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note that this can cause an issue if the use was editing
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** higher up in the text field and it caused the size to change.
-***REMOVED******REMOVED******REMOVED******REMOVED***if let focusedElement = model.focusedElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewProxy.scrollTo(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"\(focusedElement.label) Bottom Divider",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***anchor: .bottom
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onTitleChange(of: model.featureForm) { newTitle in
 ***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED***
@@ -149,7 +136,6 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***if !(element.input is UnsupportedFormInput) {
 ***REMOVED******REMOVED******REMOVED***InputWrapper(element: element)
 ***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***.id("\(element.label) Bottom Divider")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
