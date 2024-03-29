@@ -91,12 +91,8 @@ public struct FeatureFormView: View {
                 }
             }
             .onChange(of: model.focusedElement) { _ in
-                // Scroll the element to the top of the visible area to allow
-                // room for its input UI to render.
                 if let focusedElement = model.focusedElement {
-                    withAnimation {
-                        scrollViewProxy.scrollTo(focusedElement, anchor: .top)
-                    }
+                    withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
             }
             .onTitleChange(of: model.featureForm) { newTitle in
