@@ -24,6 +24,7 @@ struct FormHeader: View {
 ***REMOVED******REMOVED******REMOVED***Text(title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
+***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
