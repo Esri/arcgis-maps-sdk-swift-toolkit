@@ -132,9 +132,6 @@ private extension TextInput {
                     }
                 }
             }
-            .onSizeChange { _ in
-                model.lastTextFieldSizeChange = .now
-            }
             .scrollContentBackgroundHidden()
             if !text.isEmpty {
                 ClearButton {
