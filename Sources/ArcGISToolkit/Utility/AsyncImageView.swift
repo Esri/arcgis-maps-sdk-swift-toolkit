@@ -94,8 +94,7 @@ public struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom])
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, macCatalyst 16.0, *),
-***REMOVED******REMOVED******REMOVED***   let progressInterval = viewModel.progressInterval {
+***REMOVED******REMOVED******REMOVED***if let progressInterval = viewModel.progressInterval {
 #if canImport(Charts)
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(
