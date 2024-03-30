@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "висота";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "ґ_Enter %lld characters______________________Ї";
+"Enter %lld characters" = "Введіть %lld символи(-ів)";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "ґ_Enter %lld to %lld characters______________________________Ї";
+"Enter %lld to %lld characters" = "Введіть від %lld до %lld символів";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "ґ_Enter Value____________Ї";
+"Enter Value" = "Ввести значення";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Помилка";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "Поля";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "ґ_Filter_____________Ї";
+"Filter" = "Фільтр";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "курс";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "ґ_Maximum %lld characters________________________Ї";
+"Maximum %lld characters" = "Максимум %lld символи(-ів)";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Середовище";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "Інженерні мережі не знайдені.";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "ґ_No Value_________________Ї";
+"No Value" = "Немає значення";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Нічого не вибрано";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "Недоступно";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "ґ_Now_______Ї";
+"Now" = "Зараз";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Ідентифікатор об'єкту: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "Повторіть пошук тут";
 
 /* A label indicating a field is required */
-"Required" = "ґ_Required_________________Ї";
+"Required" = "Потрібні відомості";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Результати";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "URL-адреса недоступна або не містить даних зображення.";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "ґ_Today___________Ї";
+"Today" = "Сьогодні";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Трасування";

@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "標高";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "須_Enter %lld characters______________________鷗";
+"Enter %lld characters" = "%lld 文字入力";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "須_Enter %lld to %lld characters______________________________鷗";
+"Enter %lld to %lld characters" = "%lld から %lld 文字入力";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "須_Enter Value____________鷗";
+"Enter Value" = "値を入力";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "エラー";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "フィールド";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "須_Filter_____________鷗";
+"Filter" = "フィルター";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "方位";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "須_Maximum %lld characters________________________鷗";
+"Maximum %lld characters" = "最大 %lld 文字";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "メディア";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "ユーティリティ ネットワークが見つかりません。";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "須_No Value_________________鷗";
+"No Value" = "値なし";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "選択されていません";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "利用不可";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "須_Now_______鷗";
+"Now" = "現在";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Object ID: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "ここで検索の繰り返し";
 
 /* A label indicating a field is required */
-"Required" = "須_Required_________________鷗";
+"Required" = "必須";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "結果";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "URL に到達できなかったか、画像データが含まれていませんでした。";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "須_Today___________鷗";
+"Today" = "今日";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "トレース";
