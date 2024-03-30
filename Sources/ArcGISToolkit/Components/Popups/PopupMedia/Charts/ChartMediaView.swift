@@ -42,37 +42,34 @@ struct ChartMediaView: View {
     @State private var isShowingDetailView = false
     
     var body: some View {
-        if #available(iOS 16, macCatalyst 16, *) {
-            ZStack {
-                ChartView(popupMedia: popupMedia, data: chartData)
-                VStack {
-                    Spacer()
-                    PopupMediaFooter(
-                        popupMedia: popupMedia,
-                        mediaSize: mediaSize
-                    )
-                }
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(.gray, lineWidth: 1)
-                    .frame(width: mediaSize.width, height: mediaSize.height)
-            }
-            .frame(width: mediaSize.width, height: mediaSize.height)
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-            .onTapGesture {
-                isShowingDetailView = true
-            }
-            .sheet(isPresented: $isShowingDetailView) {
-                MediaDetailView(
+        ZStack {
+            ChartView(popupMedia: popupMedia, data: chartData)
+            VStack {
+                Spacer()
+                PopupMediaFooter(
                     popupMedia: popupMedia,
-                    isShowingDetailView: $isShowingDetailView
+                    mediaSize: mediaSize
                 )
-                .padding()
             }
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .stroke(.gray, lineWidth: 1)
+                .frame(width: mediaSize.width, height: mediaSize.height)
+        }
+        .frame(width: mediaSize.width, height: mediaSize.height)
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+        .onTapGesture {
+            isShowingDetailView = true
+        }
+        .sheet(isPresented: $isShowingDetailView) {
+            MediaDetailView(
+                popupMedia: popupMedia,
+                isShowingDetailView: $isShowingDetailView
+            )
+            .padding()
         }
     }
 }
 
-@available(iOS 16, macCatalyst 16, *)
 /// A view describing a chart.
 struct ChartView: View {
     /// The popup media to display.
