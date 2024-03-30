@@ -141,28 +141,3 @@ extension View {
         }
     }
 }
-
-extension View {
-    /// Sets a closure to perform when a single tap occurs on the view.
-    ///
-    /// - Note: This is to retrofit the tap gesture to iOS 15.0.
-    /// - Parameters:
-    ///   - action: The closure to perform upon single tap.
-    ///   - screenPoint: The location of the tap in the view's coordinate space.
-    func onSingleTapGesture(perform action: @escaping (_ screenPoint: CGPoint) -> Void) -> some View {
-        if #available(iOS 16.0, *) {
-            return self.onTapGesture { screenPoint in
-                action(screenPoint)
-            }
-        } else {
-            // Use a drag gesture with a minimum dragging distance of zero so the
-            // gesture is recognized with a single tap.
-            return self.gesture(
-                DragGesture(minimumDistance: 0)
-                    .onEnded { dragAttributes in
-                        action(dragAttributes.location)
-                    }
-            )
-        }
-    }
-}
