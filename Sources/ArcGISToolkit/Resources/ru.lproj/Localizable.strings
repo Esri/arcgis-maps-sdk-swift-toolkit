@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "высота";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Ж_Enter %lld characters______________________Я";
+"Enter %lld characters" = "Введите %lld символов";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Ж_Enter %lld to %lld characters______________________________Я";
+"Enter %lld to %lld characters" = "Введите от %lld до %lld символов";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "Ж_Enter Value____________Я";
+"Enter Value" = "Введите значение";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Ошибка";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "Поля";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "Ж_Filter_____________Я";
+"Filter" = "Фильтр";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "курс";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Ж_Maximum %lld characters________________________Я";
+"Maximum %lld characters" = "Максимум %lld символов";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Медиа";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "Инженерные сети не найдены";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "Ж_No Value_________________Я";
+"No Value" = "Нет значения";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Нет выбранных";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "Недоступно";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "Ж_Now_______Я";
+"Now" = "Сейчас";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Object ID: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "Повторить поиск здесь";
 
 /* A label indicating a field is required */
-"Required" = "Ж_Required_________________Я";
+"Required" = "Обязательное";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Результаты";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "URL-адрес недоступен или не содержит данных изображения.";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "Ж_Today___________Я";
+"Today" = "Сегодня";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Трассировать";

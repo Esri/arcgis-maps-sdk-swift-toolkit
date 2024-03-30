@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "nadmorská výška";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "ĺ_Enter %lld characters______________________ľ";
+"Enter %lld characters" = "Zadajte %lld znakov";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "ĺ_Enter %lld to %lld characters______________________________ľ";
+"Enter %lld to %lld characters" = "Zadajte od %lld do %lld znakov";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "ĺ_Enter Value____________ľ";
+"Enter Value" = "Zadajte hodnotu";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Chyba";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "Polia";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "ĺ_Filter_____________ľ";
+"Filter" = "Filter";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "nadpis";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "ĺ_Maximum %lld characters________________________ľ";
+"Maximum %lld characters" = "Maximálne %lld znakov";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Médiá";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "Neboli nájdené žiadne utility siete.";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "ĺ_No Value_________________ľ";
+"No Value" = "Žiadna hodnota";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Žiadne vybrané";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "Nie je k dispozícii";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "ĺ_Now_______ľ";
+"Now" = "Teraz";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "ID objektu: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "Opakujte vyhľadávanie tu";
 
 /* A label indicating a field is required */
-"Required" = "ĺ_Required_________________ľ";
+"Required" = "Vyžadované";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Výsledky";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "URL adresa nebola dostupná alebo neobsahovala obrazové dáta.";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "ĺ_Today___________ľ";
+"Today" = "Dnes";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Trasovať";

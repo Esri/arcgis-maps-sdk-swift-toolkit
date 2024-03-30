@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "ความสูง";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "ก้_Enter %lld characters______________________ษฺ";
+"Enter %lld characters" = "ป้อนอักขระ %lld ตัว";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "ก้_Enter %lld to %lld characters______________________________ษฺ";
+"Enter %lld to %lld characters" = "ป้อนอักขระ %lld ถึง %lld ตัว";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "ก้_Enter Value____________ษฺ";
+"Enter Value" = "ป้อนค่า";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "ข้อผิดพลาด";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "ฟิลด์";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "ก้_Filter_____________ษฺ";
+"Filter" = "ตัวกรอง";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "มุ่งหน้าสู่";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "ก้_Maximum %lld characters________________________ษฺ";
+"Maximum %lld characters" = "สูงสุด %lld อักขระ";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "มีเดีย";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "ไม่พบเครือข่ายสาธารณูปโภค";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "ก้_No Value_________________ษฺ";
+"No Value" = "ไม่มีค่า";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "ไม่ได้เลือก";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "ไม่พร้อมใช้งาน";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "ก้_Now_______ษฺ";
+"Now" = "ตอนนี้";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "ID วัตถุ: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "ทำซ้ำการค้นหาที่นี่";
 
 /* A label indicating a field is required */
-"Required" = "ก้_Required_________________ษฺ";
+"Required" = "ต้องการ";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "ผลลัพธ์";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "ไม่สามารถเข้าถึง URL ได้ หรือไม่มีข้อมูลภาพ";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "ก้_Today___________ษฺ";
+"Today" = "วันนี้";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "การติดตาม";
