@@ -166,7 +166,7 @@ class Model: ObservableObject {
     
     /// Submit the changes made to the form.
     func submitChanges() async {
-        guard let featureForm = featureForm,
+        guard let featureForm,
               let table = featureForm.feature.table as? ServiceFeatureTable,
               table.isEditable,
               let database = table.serviceGeodatabase else {
