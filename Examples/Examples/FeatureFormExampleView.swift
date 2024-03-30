@@ -166,7 +166,7 @@ class Model: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Submit the changes made to the form.
 ***REMOVED***func submitChanges() async {
-***REMOVED******REMOVED***guard let featureForm = featureForm,
+***REMOVED******REMOVED***guard let featureForm,
 ***REMOVED******REMOVED******REMOVED***  let table = featureForm.feature.table as? ServiceFeatureTable,
 ***REMOVED******REMOVED******REMOVED***  table.isEditable,
 ***REMOVED******REMOVED******REMOVED***  let database = table.serviceGeodatabase else {
