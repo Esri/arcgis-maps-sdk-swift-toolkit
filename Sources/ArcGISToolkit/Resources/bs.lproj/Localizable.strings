@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "visina terena";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Č_Enter %lld characters______________________ž";
+"Enter %lld characters" = "Unesite znakove %lld";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Č_Enter %lld to %lld characters______________________________ž";
+"Enter %lld to %lld characters" = "Unesite znakove %lld do %lld";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "Č_Enter Value____________ž";
+"Enter Value" = "Unesite vrijednost";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Pogreška";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "Polja";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "Č_Filter_____________ž";
+"Filter" = "Filtriraj";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "naslov";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Č_Maximum %lld characters________________________ž";
+"Maximum %lld characters" = "Maksimalno %lld znakova";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Mediji";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "Nisu pronađene uslu\\ne mreže.";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "Č_No Value_________________ž";
+"No Value" = "Nema vrijednosti";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Ništa nije odabrano";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "Nije dostupno";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "Č_Now_______ž";
+"Now" = "Sada";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "ID objekta: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "Ponovi pretraživanje ovdje";
 
 /* A label indicating a field is required */
-"Required" = "Č_Required_________________ž";
+"Required" = "Potrebno";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Rezultati";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "Nije bilo moguće doći do URL-a ili nije sadržavao slikovne podatke.";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "Č_Today___________ž";
+"Today" = "Danas";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Prati";

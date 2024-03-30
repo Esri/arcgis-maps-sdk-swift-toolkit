@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "高程";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "試_Enter %lld characters______________________驗";
+"Enter %lld characters" = "輸入 %lld 個字元";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "試_Enter %lld to %lld characters______________________________驗";
+"Enter %lld to %lld characters" = "輸入 %lld 到 %lld 個字元";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "試_Enter Value____________驗";
+"Enter Value" = "輸入值";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "錯誤";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "欄位";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "試_Filter_____________驗";
+"Filter" = "篩選器";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "標題";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "試_Maximum %lld characters________________________驗";
+"Maximum %lld characters" = "最多 %lld 個字元";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "媒體";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "找不到公用事業網路。";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "試_No Value_________________驗";
+"No Value" = "沒有值";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "未選擇";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "不可用";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "試_Now_______驗";
+"Now" = "我現在";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "物件 ID: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "在這裡重複尋";
 
 /* A label indicating a field is required */
-"Required" = "試_Required_________________驗";
+"Required" = "必填資訊";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "結果";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "URL 無法連線或不包含圖像資料。";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "試_Today___________驗";
+"Today" = "今天";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "軌跡";

@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "độ cao";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Đ_Enter %lld characters______________________ớ";
+"Enter %lld characters" = "Nhập %lld ký tự";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Đ_Enter %lld to %lld characters______________________________ớ";
+"Enter %lld to %lld characters" = "Nhập %lld đến %lld ký tự";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "Đ_Enter Value____________ớ";
+"Enter Value" = "Nhập Giá trị";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Lỗi";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "Trường";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "Đ_Filter_____________ớ";
+"Filter" = "Bộ lọc";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "đầu mục";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Đ_Maximum %lld characters________________________ớ";
+"Maximum %lld characters" = "Tối đa %lld ký tự";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Phương tiện truyền thông";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "Không tìm thấy mạng lưới tiện ích.";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "Đ_No Value_________________ớ";
+"No Value" = "Không có Giá trị";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Không được chọn";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "Không khả dụng";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "Đ_Now_______ớ";
+"Now" = "Bây giờ";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "ID Đối tượng: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "Lặp lại Tìm kiếm Tại đây";
 
 /* A label indicating a field is required */
-"Required" = "Đ_Required_________________ớ";
+"Required" = "Bắt buộc";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Kết quả";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "URL không thể truy cập được hoặc không chứa dữ liệu hình ảnh.";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "Đ_Today___________ớ";
+"Today" = "Hôm nay";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Truy dấu";
