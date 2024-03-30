@@ -133,7 +133,6 @@ struct ComboBoxInput: View {
     /// The view that allows the user to filter and select coded values by name.
     ///
     /// Adds navigation context to support toolbar items and other visual elements in the picker.
-    /// - Note `NavigationView` is deprecated after iOS 17.0.
     func makePicker(for values: [CodedValue]) -> some View {
         NavigationStack {
             VStack {
