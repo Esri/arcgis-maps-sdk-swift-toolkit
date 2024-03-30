@@ -27,20 +27,13 @@ struct ThumbnailView: View  {
         Group {
             if attachmentModel.usingDefaultImage,
                let systemName = attachmentModel.defaultSystemName {
-                if #available(iOS 16, macCatalyst 16, *) {
-                    Image(systemName: systemName)
-                        .resizable()
-                        .renderingMode(.template)
-                        .aspectRatio(contentMode: .fit)
+                Image(systemName: systemName)
+                    .resizable()
+                    .renderingMode(.template)
+                    .aspectRatio(contentMode: .fit)
 #if canImport(Charts)
-                        .fontWeight(.light)
+                    .fontWeight(.light)
 #endif
-                } else {
-                    Image(systemName: systemName)
-                        .resizable()
-                        .renderingMode(.template)
-                        .aspectRatio(contentMode: .fit)
-                }
             } else if let image = attachmentModel.thumbnail {
                 Image(uiImage: image)
                     .resizable()
