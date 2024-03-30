@@ -101,17 +101,6 @@ extension View {
         modifier(SelectedModifier(isSelected: isSelected))
     }
     
-    /// Returns a new view with medium presentation detents, if presentation
-    /// detents are supported (iOS 16 and up).
-    func mediumPresentationDetents() -> some View {
-        if #available(iOS 16.0, *) {
-            return self
-                .presentationDetents([.medium])
-        } else {
-            return self
-        }
-    }
-    
     /// Performs the provided action when the view appears after a slight delay.
     /// - Tip: Occasionally delaying allows a sheet's presentation animation to work correctly.
     /// - Parameters:
