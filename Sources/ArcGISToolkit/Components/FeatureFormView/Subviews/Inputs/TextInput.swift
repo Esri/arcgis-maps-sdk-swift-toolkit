@@ -132,7 +132,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.scrollContentBackgroundHidden()
+***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
 ***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isFocused {
@@ -201,18 +201,6 @@ private extension FieldFormElement {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension View {
-***REMOVED******REMOVED***/ - Returns: A view with the scroll content background hidden.
-***REMOVED***func scrollContentBackgroundHidden() -> some View {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***return self
-***REMOVED******REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return self
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
