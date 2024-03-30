@@ -17,7 +17,6 @@ import Charts
 #endif
 
 /// A view displaying details for line chart popup media.
-@available(iOS 16, macCatalyst 16, *)
 struct LineChart: View {
     /// The chart data to display.
     let chartData: [ChartData]
