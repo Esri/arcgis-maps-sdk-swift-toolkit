@@ -132,7 +132,7 @@ private extension TextInput {
                     }
                 }
             }
-            .scrollContentBackgroundHidden()
+            .scrollContentBackground(.hidden)
             if !text.isEmpty {
                 ClearButton {
                     if !isFocused {
@@ -201,18 +201,6 @@ private extension FieldFormElement {
             } else {
                 updateValue(value)
             }
-        }
-    }
-}
-
-private extension View {
-    /// - Returns: A view with the scroll content background hidden.
-    func scrollContentBackgroundHidden() -> some View {
-        if #available(iOS 16.0, *) {
-            return self
-                .scrollContentBackground(.hidden)
-        } else {
-            return self
         }
     }
 }
