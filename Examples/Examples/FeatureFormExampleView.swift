@@ -26,8 +26,8 @@ struct FeatureFormExampleView: View {
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
     
-    /// A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
-    @State private var isCancelConfirmationPresented = false
+    /// A Boolean value indicating whether the alert confirming the user's intent to cancel is presented.
+    @State private var cancelConfirmationIsPresented = false
     
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
@@ -46,7 +46,7 @@ struct FeatureFormExampleView: View {
                 }
                 .onSingleTapGesture { screenPoint, _ in
                     if model.isFormPresented {
-                        isCancelConfirmationPresented = true
+                        cancelConfirmationIsPresented = true
                     } else {
                         identifyScreenPoint = screenPoint
                     }
@@ -73,7 +73,7 @@ struct FeatureFormExampleView: View {
                 .onChange(of: model.isFormPresented) { isFormPresented in
                     if !isFormPresented { validationErrorVisibility = .automatic }
                 }
-                .alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
+                .alert("Discard edits", isPresented: $cancelConfirmationIsPresented) {
                         Button("Discard edits", role: .destructive) {
                             model.discardEdits()
                         }
@@ -89,7 +89,7 @@ struct FeatureFormExampleView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         if model.isFormPresented {
                             Button("Cancel", role: .cancel) {
-                                isCancelConfirmationPresented = true
+                                cancelConfirmationIsPresented = true
                             }
                         }
                     }
