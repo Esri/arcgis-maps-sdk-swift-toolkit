@@ -47,14 +47,9 @@ struct MediaPopupElementView: View {
 #else
 ***REMOVED******REMOVED***let buildsWithMacCatalyst16 = false
 #endif
-***REMOVED******REMOVED***if #available(iOS 16, macCatalyst 16, *),
-***REMOVED******REMOVED***   buildsWithMacCatalyst16 {
+***REMOVED******REMOVED***if buildsWithMacCatalyst16 {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Include all images and charts.
 ***REMOVED******REMOVED******REMOVED***return popupElement.media.count
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Only include image media.
-***REMOVED******REMOVED******REMOVED***let imageMedia = popupElement.media.filter { $0.kind == .image ***REMOVED***
-***REMOVED******REMOVED******REMOVED***return imageMedia.count
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
