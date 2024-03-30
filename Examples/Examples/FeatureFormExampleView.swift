@@ -20,14 +20,14 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***/ The height of the map view's attribution bar.
 ***REMOVED***@State private var attributionBarHeight: CGFloat = 0
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the alert confirming the user's intent to cancel is presented.
+***REMOVED***@State private var cancelConfirmationIsPresented = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The height to present the form at.
 ***REMOVED***@State private var detent: FloatingPanelDetent = .full
 ***REMOVED***
 ***REMOVED******REMOVED***/ The point on the screen the user tapped on to identify a feature.
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the alert confirming the user's intent to cancel is presented.
-***REMOVED***@State private var cancelConfirmationIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
 ***REMOVED***@State private var map = Map(url: .sampleData)!
