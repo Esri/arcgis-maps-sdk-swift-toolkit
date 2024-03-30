@@ -17,7 +17,6 @@ import Charts
 #endif
 
 ***REMOVED***/ A view displaying details for bar chart popup media.
-@available(iOS 16, macCatalyst 16, *)
 struct BarChart: View {
 ***REMOVED******REMOVED***/ The chart data to display.
 ***REMOVED***let chartData: [ChartData]
