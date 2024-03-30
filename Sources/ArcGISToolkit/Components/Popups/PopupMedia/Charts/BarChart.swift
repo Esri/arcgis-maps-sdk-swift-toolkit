@@ -17,7 +17,6 @@ import Charts
 #endif
 
 /// A view displaying details for bar chart popup media.
-@available(iOS 16, macCatalyst 16, *)
 struct BarChart: View {
     /// The chart data to display.
     let chartData: [ChartData]
