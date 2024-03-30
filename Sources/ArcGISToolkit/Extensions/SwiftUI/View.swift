@@ -92,19 +92,6 @@ extension View {
 ***REMOVED******REMOVED******REMOVED***.padding(isMacCatalyst ? [.horizontal] : [], length)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Configures the behavior in which scrollable content interacts with the software keyboard.
-***REMOVED******REMOVED***/ - Returns: A view that dismisses the keyboard when the  scroll.
-***REMOVED******REMOVED***/ - Parameter immediately: A Boolean value that will cause the keyboard to the keyboard to
-***REMOVED******REMOVED***/ dismiss as soon as scrolling starts when `true` and interactively when `false`.
-***REMOVED***func scrollDismissesKeyboard(immediately: Bool) -> some View {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***return self
-***REMOVED******REMOVED******REMOVED******REMOVED***.scrollDismissesKeyboard(immediately ? .immediately : .interactively)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return self
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ View modifier used to denote the view is selected.
 ***REMOVED******REMOVED***/ - Parameter isSelected: `true` if the view is selected, `false` otherwise.
 ***REMOVED******REMOVED***/ - Returns: The modified view.
