@@ -133,7 +133,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The view that allows the user to filter and select coded values by name.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ Adds navigation context to support toolbar items and other visual elements in the picker.
-***REMOVED******REMOVED***/ - Note `NavigationView` is deprecated after iOS 17.0.
 ***REMOVED***func makePicker(for values: [CodedValue]) -> some View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***VStack {
