@@ -25,7 +25,7 @@ struct FeatureFormExampleView: View {
     
     @State private var floatingPanelDetent: FloatingPanelDetent = .full
     
-    @State private var isCancelConfirmationPresented = false
+    @State private var cancelConfirmationIsPresented = false
     
     var body: some View {
         MapViewReader { proxy in
@@ -63,7 +63,7 @@ struct FeatureFormExampleView: View {
                             .padding([.horizontal])
                     }
                 }
-                .alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
+                .alert("Discard edits", isPresented: $cancelConfirmationIsPresented) {
                     Button("Discard edits", role: .destructive) {
                         featureForm?.discardEdits()
                         featureForm = nil
@@ -76,7 +76,7 @@ struct FeatureFormExampleView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         if showFeatureForm {
                             Button("Cancel", role: .cancel) {
-                                isCancelConfirmationPresented = true
+                                cancelConfirmationIsPresented = true
                             }
                         }
                     }
