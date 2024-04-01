@@ -216,7 +216,14 @@ private extension TextInput {
         let element: FieldFormElement
         
         var body: some View {
-            InputHeader(element: element)
+            HStack {
+                InputHeader(element: element)
+                Button("Done") {
+                    dismiss()
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.accentColor)
+            }
             TextField(
                 element.label,
                 text: $text,
@@ -228,14 +235,7 @@ private extension TextInput {
                 textFieldIsFocused = true
             }
             Spacer()
-            HStack {
-                InputFooter(element: element)
-                Button("Done") {
-                    dismiss()
-                }
-                .buttonStyle(.plain)
-                .foregroundColor(.accentColor)
-            }
+            InputFooter(element: element)
         }
     }
 }
