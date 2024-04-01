@@ -273,6 +273,7 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED***return self
 ***REMOVED******REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
 ***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***UITextView.appearance().backgroundColor = .clear
 ***REMOVED******REMOVED******REMOVED***return self
 ***REMOVED***
 ***REMOVED***
