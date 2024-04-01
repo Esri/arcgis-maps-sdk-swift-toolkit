@@ -122,7 +122,7 @@ public struct WorldScaleSceneView: View {
                 self.error = error
             }
         }
-        .ignoresSafeArea(.container, edges: [.horizontal])
+        .ignoresSafeArea(.container, edges: [.horizontal, .bottom])
         .overlay(alignment: calibrationButtonAlignment) {
             if !calibrationViewIsHidden && !isCalibrating {
                 Button {
