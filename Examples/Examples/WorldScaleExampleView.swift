@@ -63,7 +63,6 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED***.onSingleTapGesture { _, scenePoint in
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(Graphic(geometry: scenePoint))
 ***REMOVED***
-***REMOVED******REMOVED***.ignoresSafeArea(edges: [.horizontal, .bottom])
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Request when-in-use location authorization.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** This is necessary for 2 reasons:

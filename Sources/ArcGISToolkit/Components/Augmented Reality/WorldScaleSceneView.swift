@@ -30,10 +30,8 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***var calibrationViewIsHidden = false
 ***REMOVED******REMOVED***/ The proxy for the ARSwiftUIView.
 ***REMOVED***@State private var arViewProxy = ARSwiftUIViewProxy()
-***REMOVED******REMOVED***/ The camera controller that will be set on the scene view.
-***REMOVED***@State private var cameraController: TransformationMatrixCameraController
 ***REMOVED******REMOVED***/ The view model for the calibration view.
-***REMOVED***@State private var calibrationViewModel: WorldScaleCalibrationViewModel
+***REMOVED***@StateObject private var calibrationViewModel = WorldScaleCalibrationViewModel()
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the geo-tracking configuration is available.
 ***REMOVED***@State private var geoTrackingIsAvailable = true
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the initial camera is set for the scene view.
@@ -63,7 +61,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***/ - Remark: The provided scene view will have certain properties overridden in order to
 ***REMOVED******REMOVED***/ be effectively viewed in augmented reality. Properties such as the camera controller,
 ***REMOVED******REMOVED***/ and view drawing mode.
-***REMOVED***@MainActor
 ***REMOVED***public init(
 ***REMOVED******REMOVED***clippingDistance: Double? = nil,
 ***REMOVED******REMOVED***trackingMode: TrackingMode = .worldTracking,
@@ -72,13 +69,6 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED***self.clippingDistance = clippingDistance
 ***REMOVED******REMOVED***self.trackingMode = trackingMode
 ***REMOVED******REMOVED***self.sceneViewBuilder = sceneViewBuilder
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cameraController = TransformationMatrixCameraController()
-***REMOVED******REMOVED***cameraController.translationFactor = 1
-***REMOVED******REMOVED***cameraController.clippingDistance = clippingDistance
-***REMOVED******REMOVED***_cameraController = .init(initialValue: cameraController)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***_calibrationViewModel = .init(initialValue: WorldScaleCalibrationViewModel(cameraController: cameraController))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -97,6 +87,12 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED***case .worldTracking:
 ***REMOVED******REMOVED******REMOVED******REMOVED***worldTrackingSceneView
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***calibrationViewModel.cameraController.clippingDistance = clippingDistance
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: clippingDistance) { newClippingDistance in
+***REMOVED******REMOVED******REMOVED***calibrationViewModel.cameraController.clippingDistance = newClippingDistance
 ***REMOVED***
 ***REMOVED******REMOVED***.onDisappear {
 ***REMOVED******REMOVED******REMOVED***Task { await locationDataSource.stop() ***REMOVED***
@@ -126,6 +122,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.ignoresSafeArea(.container, edges: [.horizontal])
 ***REMOVED******REMOVED***.overlay(alignment: calibrationButtonAlignment) {
 ***REMOVED******REMOVED******REMOVED***if !calibrationViewIsHidden && !isCalibrating {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -159,7 +156,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***@ViewBuilder private var geoTrackingSceneView: some View {
 ***REMOVED******REMOVED***GeoTrackingSceneView(
 ***REMOVED******REMOVED******REMOVED***arViewProxy: arViewProxy,
-***REMOVED******REMOVED******REMOVED***cameraController: cameraController,
+***REMOVED******REMOVED******REMOVED***cameraController: calibrationViewModel.cameraController,
 ***REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
@@ -182,7 +179,7 @@ public struct WorldScaleSceneView: View {
 ***REMOVED***@ViewBuilder private var worldTrackingSceneView : some View {
 ***REMOVED******REMOVED***WorldTrackingSceneView(
 ***REMOVED******REMOVED******REMOVED***arViewProxy: arViewProxy,
-***REMOVED******REMOVED******REMOVED***cameraController: cameraController,
+***REMOVED******REMOVED******REMOVED***cameraController: calibrationViewModel.cameraController,
 ***REMOVED******REMOVED******REMOVED***calibrationViewModel: calibrationViewModel,
 ***REMOVED******REMOVED******REMOVED***clippingDistance: clippingDistance,
 ***REMOVED******REMOVED******REMOVED***initialCameraIsSet: $initialCameraIsSet,
@@ -336,7 +333,7 @@ public extension WorldScaleSceneView {
 ***REMOVED***private func arScreenToLocation(screenPoint: CGPoint) -> Point? {
 ***REMOVED******REMOVED******REMOVED*** Use the `raycast` method to get the matrix of `screenPoint`.
 ***REMOVED******REMOVED***guard let localOffsetMatrix = arViewProxy.raycast(from: screenPoint, allowing: .estimatedPlane) else { return nil ***REMOVED***
-***REMOVED******REMOVED***let originTransformationMatrix = cameraController.originCamera.transformationMatrix
+***REMOVED******REMOVED***let originTransformationMatrix = calibrationViewModel.cameraController.originCamera.transformationMatrix
 ***REMOVED******REMOVED***let scenePointMatrix = originTransformationMatrix.adding(localOffsetMatrix)
 ***REMOVED******REMOVED******REMOVED*** Create a camera from transformationMatrix and return its location.
 ***REMOVED******REMOVED***return Camera(transformationMatrix: scenePointMatrix).location
