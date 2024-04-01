@@ -11,10 +11,8 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@StateObject private var dataModel = MapDataModel(
-***REMOVED******REMOVED***map: makeMap()
-***REMOVED***)
-***REMOVED***
+***REMOVED***@State private var map = makeMap()
+
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED***@State private var featureForm: FeatureForm? {
@@ -25,7 +23,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
-***REMOVED******REMOVED******REMOVED***MapView(map: dataModel.map)
+***REMOVED******REMOVED******REMOVED***MapView(map: map)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identifyScreenPoint = screenPoint
 ***REMOVED******REMOVED******REMOVED***
