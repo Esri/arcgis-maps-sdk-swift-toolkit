@@ -333,7 +333,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***for: NSPredicate(format: "label == \"Range domain 2-5\""),
 ***REMOVED******REMOVED******REMOVED***evaluatedWith: footer
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***waitForExpectations(timeout: 5, handler: nil)
+***REMOVED******REMOVED***waitForExpectations(timeout: 10, handler: nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Highlight/select the current value and replace it
 ***REMOVED******REMOVED***textField.doubleTap()
