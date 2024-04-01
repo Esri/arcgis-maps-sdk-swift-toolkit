@@ -63,7 +63,6 @@ struct WorldScaleExampleView: View {
         .onSingleTapGesture { _, scenePoint in
             graphicsOverlay.addGraphic(Graphic(geometry: scenePoint))
         }
-        .ignoresSafeArea(edges: [.horizontal, .bottom])
         .task {
             // Request when-in-use location authorization.
             // This is necessary for 2 reasons:
