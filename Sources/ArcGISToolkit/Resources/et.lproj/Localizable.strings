@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "kõrgus merepinnast";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Š_Enter %lld characters______________________ä";
+"Enter %lld characters" = "Sisestage %lld tähemärki";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Š_Enter %lld to %lld characters______________________________ä";
+"Enter %lld to %lld characters" = "Sisestage %lld kuni %lld tähemärki";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "Š_Enter Value____________ä";
+"Enter Value" = "Sisestage väärtus";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Viga";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "Väljad";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "Š_Filter_____________ä";
+"Filter" = "Filter";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "suund";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Š_Maximum %lld characters________________________ä";
+"Maximum %lld characters" = "Maksimaalselt %lld tähemärki";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Meedia";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "Kommunaalvõrke ei leitud.";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "Š_No Value_________________ä";
+"No Value" = "Väärtus puudub";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Midagi pole valitud";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "Pole saadaval";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "Š_Now_______ä";
+"Now" = "Praegu";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Objekti ID: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "Korda otsingut siin";
 
 /* A label indicating a field is required */
-"Required" = "Š_Required_________________ä";
+"Required" = "Nõutud";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Tulemused";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "URL-ile ei pääsenud juurde või see ei sisaldanud pildiandmeid.";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "Š_Today___________ä";
+"Today" = "Täna";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Jälgimisfail";

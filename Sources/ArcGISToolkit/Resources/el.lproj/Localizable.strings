@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "υψόμετρο";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Đ_Enter %lld characters______________________ớ";
+"Enter %lld characters" = "Καταχωρίστε %lld χαρακτήρες";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Đ_Enter %lld to %lld characters______________________________ớ";
+"Enter %lld to %lld characters" = "Καταχωρίστε από %lld έως %lld χαρακτήρες";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "Đ_Enter Value____________ớ";
+"Enter Value" = "Καταχωρίστε τιμή";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Σφάλμα";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "Πεδία";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "Đ_Filter_____________ớ";
+"Filter" = "Φίλτρο";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "επικεφαλίδα";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Đ_Maximum %lld characters________________________ớ";
+"Maximum %lld characters" = "Μέγιστο %lld χαρακτήρες";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Πολυμέσα";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "Δεν βρέθηκαν utility networks.";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "Đ_No Value_________________ớ";
+"No Value" = "Καμία τιμή";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Καμία επιλογή";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "Μη διαθέσιμο";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "Đ_Now_______ớ";
+"Now" = "Τώρα";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Αναγνωριστικό αντικειμένου: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "Επανάληψη Αναζήτησης Εδώ";
 
 /* A label indicating a field is required */
-"Required" = "Đ_Required_________________ớ";
+"Required" = "Απαιτείται";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Αποτελέσματα";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "Η διεύθυνση URL δεν ήταν προσβάσιμη ή δεν περιείχε δεδομένα εικόνας.";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "Đ_Today___________ớ";
+"Today" = "Σήμερα";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Ιχνηλάτηση";
