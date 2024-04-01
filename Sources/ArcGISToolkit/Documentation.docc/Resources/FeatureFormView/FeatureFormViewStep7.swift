@@ -23,8 +23,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED***@State private var floatingPanelDetent: FloatingPanelDetent = .full
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
-***REMOVED***@State private var isCancelConfirmationPresented = false
+***REMOVED***@State private var cancelConfirmationIsPresented = false
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
@@ -62,7 +61,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal])
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***.alert("Discard edits", isPresented: $cancelConfirmationIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard edits", role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.discardEdits()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm = nil
@@ -75,7 +74,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showFeatureForm {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCancelConfirmationPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelConfirmationIsPresented = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -95,7 +94,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Submit the changes made to the form.
 ***REMOVED***func submitChanges() async {
-***REMOVED******REMOVED***guard let featureForm = featureForm,
+***REMOVED******REMOVED***guard let featureForm,
 ***REMOVED******REMOVED******REMOVED***  let table = featureForm.feature.table as? ServiceFeatureTable,
 ***REMOVED******REMOVED******REMOVED***  table.isEditable,
 ***REMOVED******REMOVED******REMOVED***  let database = table.serviceGeodatabase else {
