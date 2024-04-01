@@ -32,12 +32,12 @@ struct ARSwiftUIView {
     private(set) var onUpdateNodeAction: ((SCNSceneRenderer, SCNNode, ARAnchor) -> Void)?
     
     /// The proxy.
-    private let proxy: ARSwiftUIViewProxy?
+    private let proxy: ARSwiftUIViewProxy
     
     /// Creates an ARSwiftUIView.
     /// - Parameter proxy: The provided proxy which will have it's state filled out
     /// when available by the underlying view.
-    init(proxy: ARSwiftUIViewProxy? = nil) {
+    init(proxy: ARSwiftUIViewProxy) {
         self.proxy = proxy
     }
     
@@ -95,7 +95,7 @@ extension ARSwiftUIView: UIViewRepresentable {
         arView.delegate = context.coordinator
         arView.session.delegate = context.coordinator
         // Set the AR view on the proxy.
-        proxy?.arView = arView
+        proxy.arView = arView
         return arView
     }
     
