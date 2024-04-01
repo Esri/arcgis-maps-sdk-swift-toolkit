@@ -17,5 +17,5 @@ struct FeatureFormExampleView: View {
     
     @State private var featureForm: FeatureForm?
     
-    @State private var showFeatureForm = false
+    @State private var featureFormIsPresented = false
 }
