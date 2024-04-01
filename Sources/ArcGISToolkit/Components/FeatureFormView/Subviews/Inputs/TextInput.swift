@@ -273,6 +273,7 @@ private extension View {
             return self
                 .scrollContentBackground(.hidden)
         } else {
+            UITextView.appearance().backgroundColor = .clear
             return self
         }
     }
