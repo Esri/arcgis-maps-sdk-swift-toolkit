@@ -25,7 +25,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED***@State private var floatingPanelDetent: FloatingPanelDetent = .full
 ***REMOVED***
-***REMOVED***@State private var isCancelConfirmationPresented = false
+***REMOVED***@State private var cancelConfirmationIsPresented = false
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
@@ -63,7 +63,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal])
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***.alert("Discard edits", isPresented: $cancelConfirmationIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard edits", role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm?.discardEdits()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureForm = nil
@@ -76,7 +76,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showFeatureForm {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCancelConfirmationPresented = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelConfirmationIsPresented = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
