@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "elevazione";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "é_Enter %lld characters______________________È";
+"Enter %lld characters" = "Inserire %lld caratteri";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "é_Enter %lld to %lld characters______________________________È";
+"Enter %lld to %lld characters" = "Inserire da %lld a %lld caratteri";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "é_Enter Value____________È";
+"Enter Value" = "Inserisci valore";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Errore";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "Campi";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "é_Filter_____________È";
+"Filter" = "Filtro";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "intestazione";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "é_Maximum %lld characters________________________È";
+"Maximum %lld characters" = "Massimo %lld caratteri";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Supporti";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "Nessuna utility network trovata.";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "é_No Value_________________È";
+"No Value" = "Nessun valore";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Nessuno selezionato";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "Non disponibile";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "é_Now_______È";
+"Now" = "Adesso";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "ID oggetto: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "Ripeti ricerca qui";
 
 /* A label indicating a field is required */
-"Required" = "é_Required_________________È";
+"Required" = "Richiesti";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Risultati";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "Impossibile raggiungere l'URL oppure non conteneva dati immagine.";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "é_Today___________È";
+"Today" = "Oggi";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Traccia";

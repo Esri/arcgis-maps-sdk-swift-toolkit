@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "גובה";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "כן_Enter %lld characters______________________ש";
+"Enter %lld characters" = "הזן %lld תווים";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "כן_Enter %lld to %lld characters______________________________ש";
+"Enter %lld to %lld characters" = "הזן בין %lld ל-%lld תווים";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "כן_Enter Value____________ש";
+"Enter Value" = "הזן ערך";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "שגיאה";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "שדות";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "כן_Filter_____________ש";
+"Filter" = "פילטר";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "כיוון";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "כן_Maximum %lld characters________________________ש";
+"Maximum %lld characters" = "לכל היותר %lld תווים";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "מדיה";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "לא נמצאו Utility networks.";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "כן_No Value_________________ש";
+"No Value" = "אין ערך";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "דבר לא נבחר";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "לא זמין";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "כן_Now_______ש";
+"Now" = "כעת";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "מזהה אובייקט: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "חזור על החיפוש כאן";
 
 /* A label indicating a field is required */
-"Required" = "כן_Required_________________ש";
+"Required" = "נדרש";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "תוצאות";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "לא ניתן להגיע לכתובת ה-URL או שהכתובת לא הכילה נתוני תמונה.";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "כן_Today___________ש";
+"Today" = "היום";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "עקיבה";

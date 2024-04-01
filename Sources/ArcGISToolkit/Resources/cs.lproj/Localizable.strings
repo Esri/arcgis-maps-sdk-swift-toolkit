@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "nadmořská výška";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "Ř_Enter %lld characters______________________ů";
+"Enter %lld characters" = "Zadejte %lld znaků";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "Ř_Enter %lld to %lld characters______________________________ů";
+"Enter %lld to %lld characters" = "Zadejte %lld až %lld znaků";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "Ř_Enter Value____________ů";
+"Enter Value" = "Zadat hodnotu";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Chyba";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "Pole";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "Ř_Filter_____________ů";
+"Filter" = "Filtr";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "směr";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "Ř_Maximum %lld characters________________________ů";
+"Maximum %lld characters" = "Maximální počet %lld znaků";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Multimédia";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "Nebyly nalezeny žádné inženýrské sítě.";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "Ř_No Value_________________ů";
+"No Value" = "Žádná hodnota";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Nevybráno nic";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "Není k dispozici";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "Ř_Now_______ů";
+"Now" = "Nyní";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "ID objektu: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "Opakujte hledání zde";
 
 /* A label indicating a field is required */
-"Required" = "Ř_Required_________________ů";
+"Required" = "Povinné";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Výsledky";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "Adresa URL není dostupná nebo neobsahuje obrazová data.";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "Ř_Today___________ů";
+"Today" = "Dnes";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Trasování";

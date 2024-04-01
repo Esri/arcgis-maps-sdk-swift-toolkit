@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "augstums";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "ķ_Enter %lld characters______________________ū";
+"Enter %lld characters" = "Ievadiet %lld rakstzīmes";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "ķ_Enter %lld to %lld characters______________________________ū";
+"Enter %lld to %lld characters" = "Ievadiet no %lld līdz %lld rakstzīmēm";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "ķ_Enter Value____________ū";
+"Enter Value" = "Ievadiet vērtību";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Kļūda";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "Lauki";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "ķ_Filter_____________ū";
+"Filter" = "Filtrēt";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "kurss";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "ķ_Maximum %lld characters________________________ū";
+"Maximum %lld characters" = "Ne vairāk kā %lld rakstzīmes";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Multivide";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "Nav atrasts neviens Utility Network.";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "ķ_No Value_________________ū";
+"No Value" = "Nav vērtības";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Nekas nav izvēlēts";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "Nav pieejams";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "ķ_Now_______ū";
+"Now" = "Tagad";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Objekta ID: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "Atkārtot ''Meklēt šeit''";
 
 /* A label indicating a field is required */
-"Required" = "ķ_Required_________________ū";
+"Required" = "Nepieciešams";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Rezultāti";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "URL nevarēja sasniegt vai tas nesaturēja attēla datus.";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "ķ_Today___________ū";
+"Today" = "Šodien";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Izsekot";
