@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "Höhe";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "ä_Enter %lld characters______________________Ü";
+"Enter %lld characters" = "%lld Zeichen eingeben";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "ä_Enter %lld to %lld characters______________________________Ü";
+"Enter %lld to %lld characters" = "%lld bis %lld Zeichen eingeben";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "ä_Enter Value____________Ü";
+"Enter Value" = "Wert eingeben";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Fehler";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "Felder";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "ä_Filter_____________Ü";
+"Filter" = "Filter";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "Kurs";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "ä_Maximum %lld characters________________________Ü";
+"Maximum %lld characters" = "Maximal %lld Zeichen";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Medien";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "Keine Versorgungsnetze gefunden";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "ä_No Value_________________Ü";
+"No Value" = "Kein Wert";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Keine(s) ausgewählt";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "Nicht verfügbar";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "ä_Now_______Ü";
+"Now" = "Jetzt";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Objekt-ID: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "Suche hier wiederholen";
 
 /* A label indicating a field is required */
-"Required" = "ä_Required_________________Ü";
+"Required" = "Erforderlich";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Ergebnisse";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "Die URL war nicht erreichbar oder beinhaltete keine Bilddaten.";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "ä_Today___________Ü";
+"Today" = "Heute";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Verfolgung";

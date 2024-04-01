@@ -97,13 +97,13 @@ AR experience. */
 "elevation" = "højde";
 
 /* Text indicating the user should enter a field's exact number of required characters. */
-"Enter %lld characters" = "ø_Enter %lld characters______________________å";
+"Enter %lld characters" = "Indtast %lld tegn";
 
 /* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
-"Enter %lld to %lld characters" = "ø_Enter %lld to %lld characters______________________________å";
+"Enter %lld to %lld characters" = "Indtast %lld til %lld tegn";
 
 /* A label for a combo box input that prompts the user to enter a value. */
-"Enter Value" = "ø_Enter Value____________å";
+"Enter Value" = "Indtast værdi";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Fejl";
@@ -137,7 +137,7 @@ trace operation. */
 "Fields" = "Felter";
 
 /* A label for a text entry field that allows the user to filter a list of values by name. */
-"Filter" = "ø_Filter_____________å";
+"Filter" = "Filtrér";
 
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
@@ -162,7 +162,7 @@ AR experience. */
 "heading" = "kurs";
 
 /* Text indicating a field's maximum number of allowed characters. */
-"Maximum %lld characters" = "ø_Maximum %lld characters________________________å";
+"Maximum %lld characters" = "Højst %lld tegn";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Medier";
@@ -198,7 +198,7 @@ AR experience. */
 "No utility networks found." = "Ingen forsyningsnetværk fundet.";
 
 /* A string indicating that no value has been set for a form field. */
-"No Value" = "ø_No Value_________________å";
+"No Value" = "Ingen værdi";
 
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Ingen valgt";
@@ -207,7 +207,7 @@ AR experience. */
 "Not Available" = "Ikke tilgængelig";
 
 /* A label for a button to choose the current time and date for a field. */
-"Now" = "ø_Now_______å";
+"Now" = "Nu";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "Objekt-id: %@";
@@ -242,7 +242,7 @@ current visible extent of the map or scene. */
 "Repeat Search Here" = "Gentag søgning her";
 
 /* A label indicating a field is required */
-"Required" = "ø_Required_________________å";
+"Required" = "Påkrævet";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Resultater";
@@ -309,7 +309,7 @@ match the spatial reference of the map. */
 "The URL could not be reached or did not contain image data." = "URL kunne ikke nås eller indeholdt ingen billeddata.";
 
 /* A label for a button to choose the current date for a field. */
-"Today" = "ø_Today___________å";
+"Today" = "I dag";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Spor";
