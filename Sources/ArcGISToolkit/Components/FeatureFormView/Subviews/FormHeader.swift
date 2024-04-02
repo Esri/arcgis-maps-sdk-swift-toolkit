@@ -24,6 +24,9 @@ struct FormHeader: View {
             Text(title)
                 .font(.title)
                 .fontWeight(.bold)
+            // Having this padding on `FormHeader`, caused padding on both
+            // the top AND bottom of the header. Odd...
+                .padding(.top, 16)
             Divider()
         }
     }

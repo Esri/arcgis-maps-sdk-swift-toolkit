@@ -15,7 +15,7 @@
 import SwiftUI
 
 private struct FormElementPaddingKey: EnvironmentKey {
-    static let defaultValue: CGFloat = 10
+    static let defaultValue: CGFloat = 4
 }
 
 extension EnvironmentValues {
