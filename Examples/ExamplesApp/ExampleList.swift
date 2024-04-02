@@ -25,7 +25,8 @@ struct ExampleList: View {
         List(examples, id: \.name) { (example) in
             NavigationLink(example.name, destination: ExampleView(example: example))
         }
-        .navigationBarTitle(Text(name), displayMode: .inline)
+        .navigationTitle(name)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
