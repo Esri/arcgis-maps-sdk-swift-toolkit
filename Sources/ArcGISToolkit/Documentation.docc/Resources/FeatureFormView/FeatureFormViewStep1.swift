@@ -1,6 +1,6 @@
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+***REMOVED***
 
 struct FeatureFormExampleView: View {
 ***REMOVED***static func makeMap() -> Map {
@@ -11,7 +11,5 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@StateObject private var dataModel = MapDataModel(
-***REMOVED******REMOVED***map: makeMap()
-***REMOVED***)
+***REMOVED***@State private var map = makeMap()
 ***REMOVED***

@@ -1,6 +1,6 @@
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+***REMOVED***
 
 struct FeatureFormExampleView: View {
 ***REMOVED***static func makeMap() -> Map {
@@ -11,13 +11,11 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@StateObject private var dataModel = MapDataModel(
-***REMOVED******REMOVED***map: makeMap()
-***REMOVED***)
-***REMOVED***
+***REMOVED***@State private var map = makeMap()
+
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED***@State private var featureForm: FeatureForm?
 ***REMOVED***
-***REMOVED***@State private var showFeatureForm = false
+***REMOVED***@State private var featureFormIsPresented = false
 ***REMOVED***
