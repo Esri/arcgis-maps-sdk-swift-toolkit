@@ -43,11 +43,21 @@ struct GroupView<Content>: View where Content: View {
                 ForEach(visibleElements, id: \.label) { formElement in
                     if let element = formElement as? FieldFormElement {
                         viewCreator(element)
+                            .padding(.leading, 16)
                     }
                 }
             } label: {
-                Header(element: element)
-                    .catalystPadding(4)
+                VStack {
+                    HStack {
+                        Header(element: element)
+                            .catalystPadding(4)
+                        Spacer()
+                    }
+                    if isExpanded {
+                        Divider()
+                    }
+                        
+                }
             }
             if !isExpanded {
                 Divider()
