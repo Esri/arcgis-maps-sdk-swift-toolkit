@@ -30,7 +30,7 @@ struct FeatureFormExampleView: View {
                     identifyScreenPoint = screenPoint
                 }
                 .task(id: identifyScreenPoint) {
-                    guard let identifyScreenPoint else { return nil }
+                    guard let identifyScreenPoint else { return }
                     let identifyResult = try? await proxy.identifyLayers(
                         screenPoint: identifyScreenPoint,
                         tolerance: 10
