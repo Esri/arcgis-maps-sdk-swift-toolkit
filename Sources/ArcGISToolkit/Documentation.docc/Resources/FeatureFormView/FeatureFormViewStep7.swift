@@ -1,6 +1,6 @@
-import SwiftUI
 import ArcGIS
 import ArcGISToolkit
+import SwiftUI
 
 struct FeatureFormExampleView: View {
     static func makeMap() -> Map {
@@ -11,10 +11,8 @@ struct FeatureFormExampleView: View {
         return Map(item: portalItem)
     }
     
-    @StateObject private var dataModel = MapDataModel(
-        map: makeMap()
-    )
-    
+    @State private var map = makeMap()
+
     @State private var identifyScreenPoint: CGPoint?
     
     @State private var featureForm: FeatureForm? {
@@ -25,17 +23,16 @@ struct FeatureFormExampleView: View {
     
     @State private var floatingPanelDetent: FloatingPanelDetent = .full
     
-    /// A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
-    @State private var isCancelConfirmationPresented = false
-
+    @State private var cancelConfirmationIsPresented = false
+    
     var body: some View {
         MapViewReader { proxy in
-            MapView(map: dataModel.map)
+            MapView(map: map)
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
                 }
                 .task(id: identifyScreenPoint) {
-                    guard let identifyScreenPoint else { return nil }
+                    guard let identifyScreenPoint else { return }
                     let identifyResult = try? await proxy.identifyLayers(
                         screenPoint: identifyScreenPoint,
                         tolerance: 10
@@ -64,7 +61,7 @@ struct FeatureFormExampleView: View {
                             .padding([.horizontal])
                     }
                 }
-                .alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
+                .alert("Discard edits", isPresented: $cancelConfirmationIsPresented) {
                     Button("Discard edits", role: .destructive) {
                         featureForm?.discardEdits()
                         featureForm = nil
@@ -77,7 +74,7 @@ struct FeatureFormExampleView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         if showFeatureForm {
                             Button("Cancel", role: .cancel) {
-                                isCancelConfirmationPresented = true
+                                cancelConfirmationIsPresented = true
                             }
                         }
                     }
@@ -97,7 +94,7 @@ struct FeatureFormExampleView: View {
     
     /// Submit the changes made to the form.
     func submitChanges() async {
-        guard let featureForm = featureForm,
+        guard let featureForm,
               let table = featureForm.feature.table as? ServiceFeatureTable,
               table.isEditable,
               let database = table.serviceGeodatabase else {

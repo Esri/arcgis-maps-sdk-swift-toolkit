@@ -27,9 +27,10 @@ struct Examples: View {
             List(lists) { (list) in
                 NavigationLink(list.name, destination: list)
             }
-            .navigationBarTitle(Text("Toolkit Examples"), displayMode: .inline)
+            .navigationTitle("Toolkit Examples")
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        .navigationViewStyle(.stack)
     }
 }
 

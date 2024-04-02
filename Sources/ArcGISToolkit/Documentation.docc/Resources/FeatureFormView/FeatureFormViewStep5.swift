@@ -1,6 +1,6 @@
-import SwiftUI
 import ArcGIS
 import ArcGISToolkit
+import SwiftUI
 
 struct FeatureFormExampleView: View {
     static func makeMap() -> Map {
@@ -11,10 +11,8 @@ struct FeatureFormExampleView: View {
         return Map(item: portalItem)
     }
     
-    @StateObject private var dataModel = MapDataModel(
-        map: makeMap()
-    )
-    
+    @State private var map = makeMap()
+
     @State private var identifyScreenPoint: CGPoint?
     
     @State private var featureForm: FeatureForm? {
@@ -25,12 +23,12 @@ struct FeatureFormExampleView: View {
     
     var body: some View {
         MapViewReader { proxy in
-            MapView(map: dataModel.map)
+            MapView(map: map)
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
                 }
                 .task(id: identifyScreenPoint) {
-                    guard let identifyScreenPoint else { return nil }
+                    guard let identifyScreenPoint else { return }
                     let identifyResult = try? await proxy.identifyLayers(
                         screenPoint: identifyScreenPoint,
                         tolerance: 10

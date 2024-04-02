@@ -1,6 +1,6 @@
-import SwiftUI
 import ArcGIS
 import ArcGISToolkit
+import SwiftUI
 
 struct FeatureFormExampleView: View {
     static func makeMap() -> Map {
@@ -11,7 +11,5 @@ struct FeatureFormExampleView: View {
         return Map(item: portalItem)
     }
     
-    @StateObject private var dataModel = MapDataModel(
-        map: makeMap()
-    )
+    @State private var map = makeMap()
 }
