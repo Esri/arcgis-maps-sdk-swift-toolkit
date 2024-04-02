@@ -25,7 +25,8 @@ struct ExampleList: View {
 ***REMOVED******REMOVED***List(examples, id: \.name) { (example) in
 ***REMOVED******REMOVED******REMOVED***NavigationLink(example.name, destination: ExampleView(example: example))
 ***REMOVED***
-***REMOVED******REMOVED***.navigationBarTitle(Text(name), displayMode: .inline)
+***REMOVED******REMOVED***.navigationTitle(name)
+***REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
 ***REMOVED***
 
