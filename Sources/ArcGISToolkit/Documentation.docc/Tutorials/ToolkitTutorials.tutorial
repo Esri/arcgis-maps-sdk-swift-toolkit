@@ -41,6 +41,13 @@
 ***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:CompassTutorial")
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@Chapter(name: "FeatureFormView") {
+***REMOVED******REMOVED***A `FeatureFormView` is a view that provides an easy way for developers to
+***REMOVED******REMOVED***add feature attribute editing capabilities to their existing applications.
+***REMOVED******REMOVED***@Image(source: FeatureFormView, alt: "An image of the FeatureFormView component.")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:FeatureFormViewTutorial")
+***REMOVED***
+
 ***REMOVED***@Chapter(name: "FloatingPanel") {
 ***REMOVED******REMOVED***A `FloatingPanel` is a view that overlays a view and supplies view-related content.
 ***REMOVED******REMOVED***@Image(source: FloatingPanel, alt: "An image of the FloatingPanel component.")
