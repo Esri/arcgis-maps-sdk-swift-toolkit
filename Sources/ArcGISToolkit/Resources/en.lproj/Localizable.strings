@@ -1,3 +1,6 @@
+/* No comment provided by engineer. */
+"" = "";
+
 /* A label declaring the number of starting points selected for a utility network trace. */
 "%lld selected" = "%lld selected";
 
@@ -19,9 +22,6 @@ content on a remote host. The variable is the host that prompted the challenge. 
 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Allow";
-
-/* A fallback message to display when an image cannot be loaded. */
-"An error occurred loading the image: %@." = "An error occurred loading the image: %@.";
 
 /* A label in reference to attachments in a popup. */
 "Attachments" = "Attachments";
@@ -81,6 +81,18 @@ east, etc.). */
 /* A warning that the host service (challenge.host) is providing a potentially unsafe certificate. */
 "Dangerous: The certificate provided by '%@' is not signed by a trusted authority." = "Dangerous: The certificate provided by '%@' is not signed by a trusted authority.";
 
+/* Text indicating a field's value must not exceed a maximum date. */
+"Date exceeds maximum" = "Date exceeds maximum";
+
+/* Text indicating a field's value must meet a minimum date. */
+"Date less than minimum" = "Date less than minimum";
+
+/* Text indicating a field's value must be on or after the minimum date specified in the variable. */
+"Date must be on or after %@" = "Date must be on or after %@";
+
+/* Text indicating a field's value must be on or before the maximum date specified in the variable. */
+"Date must be on or before %@" = "Date must be on or before %@";
+
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Delete";
 
@@ -102,11 +114,17 @@ AR experience. */
 /* Text indicating the user should enter a field's exact number of required characters. */
 "Enter %lld characters" = "Enter %lld characters";
 
-/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
+/* Text indicating a field's value must be within the
+allowed length range. The first and second parameter
+hold the minimum and maximum length respectively. */
 "Enter %lld to %lld characters" = "Enter %lld to %lld characters";
 
 /* A label for a combo box input that prompts the user to enter a value. */
 "Enter Value" = "Enter Value";
+
+/* Text indicating a field's value must be within the allowed range.
+The first and second parameter hold the minimum and maximum values respectively. */
+"Enter value from %@ to %@" = "Enter value from %@ to %@";
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Error";
@@ -124,6 +142,9 @@ The variable provides additional data. */
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "Evaluating popup expressions";
+
+/* Text indicating a field's value exceeds the maximum allowed value. */
+"Exceeds maximum value" = "Exceeds maximum value";
 
 /* A message indicating that the chosen utility network element wasn't able
 to be used as a trace starting point. */
@@ -164,11 +185,20 @@ trace operation. */
 AR experience. */
 "heading" = "heading";
 
+/* Text indicating a field's value must be within the allowed range. */
+"Less than minimum value" = "Less than minimum value";
+
 /* Text indicating a field's maximum number of allowed characters. */
 "Maximum %lld characters" = "Maximum %lld characters";
 
+/* Text indicating a field's maximum number of allowed characters is exceeded. */
+"Maximum character length exceeded" = "Maximum character length exceeded";
+
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Media";
+
+/* Text indicating a field's minimum number of allowed characters is not met. */
+"Minimum character length not met" = "Minimum character length not met";
 
 /* The mode in which the utility network trace tool is being used (either creating traces or viewing traces). */
 "Mode" = "Mode";
@@ -326,6 +356,9 @@ match the spatial reference of the map. */
 /* A label for a button allowing the user to retry an operation. */
 "Try Again" = "Try Again";
 
+/* Text indicating a field has an unknown validation error. */
+"Unknown validation error" = "Unknown validation error";
+
 /* A label to use in place of a utility element asset type name. */
 "Unnamed Asset Type" = "Unnamed Asset Type";
 
@@ -334,6 +367,21 @@ match the spatial reference of the map. */
 
 /* A value in a set of data contained in a popup. */
 "Value" = "Value";
+
+/* Text indicating a field's value must be convertible to a number. */
+"Value must be a number" = "Value must be a number";
+
+/* Text indicating a field's value must be convertible to a whole number. */
+"Value must be a whole number" = "Value must be a whole number";
+
+/* Text indicating a field's value must be of the correct type. */
+"Value must be of correct type" = "Value must be of correct type";
+
+/* Text indicating a field's value must exist in the domain. */
+"Value must be within domain" = "Value must be within domain";
+
+/* Text indicating a field's value must not be empty. */
+"Value must not be empty" = "Value must not be empty";
 
 /* A label explaining that credentials are required to authenticate with specified host.
 The host is indicated in the variable. */
