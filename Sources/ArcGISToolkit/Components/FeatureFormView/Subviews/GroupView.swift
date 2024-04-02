@@ -56,7 +56,6 @@ struct GroupView<Content>: View where Content: View {
                     if isExpanded {
                         Divider()
                     }
-                        
                 }
             }
             if !isExpanded {
