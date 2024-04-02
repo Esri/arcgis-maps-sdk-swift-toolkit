@@ -26,6 +26,9 @@ struct TextInput: View {
     /// The formatted version of the element's current value.
     @State private var formattedValue = ""
     
+    /// A Boolean value indicating whether the full screen text input is presented.
+    @State private var fullScreenTextInputIsPresented = false
+    
     /// A Boolean value indicating whether placeholder text is shown, thereby indicating the
     /// presence of a value.
     ///
@@ -81,6 +84,12 @@ struct TextInput: View {
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
             }
+            .onTapGesture {
+                if element.isMultiline {
+                    fullScreenTextInputIsPresented = true
+                    model.focusedElement = element
+                }
+            }
             .onValueChange(of: element) { newValue, newFormattedValue in
                 formattedValue = newFormattedValue
                 updateText()
@@ -109,6 +118,14 @@ private extension TextInput {
                         prompt: Text(element.hint).foregroundColor(.secondary),
                         axis: element.isMultiline ? .vertical : .horizontal
                     )
+                    .disabled(element.isMultiline)
+                    .sheet(isPresented: $fullScreenTextInputIsPresented) {
+                        FullScreenTextInput(text: $text, element: element)
+#if targetEnvironment(macCatalyst)
+                            .environmentObject(model)
+#endif
+                            .padding()
+                    }
                 } else if element.isMultiline {
                     TextEditor(text: $text)
                         .foregroundColor(isPlaceholder ? .secondary : .primary)
@@ -179,6 +196,50 @@ private extension TextInput {
     }
 }
 
+@available(iOS 16.0, *)
+private extension TextInput {
+    /// A view for displaying a multiline text input outside the body of the feature form view.
+    ///
+    /// By moving outside of the feature form view's scroll view we let the text field naturally manage
+    /// keeping the input caret visible.
+    struct FullScreenTextInput: View {
+        /// The current text value.
+        @Binding var text: String
+        
+        /// An action that dismisses the current presentation.
+        @Environment(\.dismiss) private var dismiss
+        
+        /// A Boolean value indicating whether the text field is focused.
+        @FocusState private var textFieldIsFocused: Bool
+        
+        /// The element the input belongs to.
+        let element: FieldFormElement
+        
+        var body: some View {
+            HStack {
+                InputHeader(element: element)
+                Button("Done") {
+                    dismiss()
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.accentColor)
+            }
+            TextField(
+                element.label,
+                text: $text,
+                prompt: Text(element.hint).foregroundColor(.secondary),
+                axis: .vertical
+            )
+            .focused($textFieldIsFocused, equals: true)
+            .onAppear {
+                textFieldIsFocused = true
+            }
+            Spacer()
+            InputFooter(element: element)
+        }
+    }
+}
+
 private extension FieldFormElement {
     /// Attempts to convert the value to a type suitable for the element's field type and then update
     /// the element with the converted value.
@@ -212,6 +273,7 @@ private extension View {
             return self
                 .scrollContentBackground(.hidden)
         } else {
+            UITextView.appearance().backgroundColor = .clear
             return self
         }
     }
