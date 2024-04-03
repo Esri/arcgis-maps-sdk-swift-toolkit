@@ -57,8 +57,6 @@ import SwiftUI
 /// 
 /// - Since: 200.4
 public struct FeatureFormView: View {
-    @Environment(\.formElementPadding) var elementPadding
-    
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     
@@ -82,8 +80,10 @@ public struct FeatureFormView: View {
                     ProgressView()
                 } else {
                     VStack(alignment: .leading) {
-                        FormHeader(title: title)
-                            .padding(.bottom, elementPadding)
+                        if !title.isEmpty {
+                            FormHeader(title: title)
+                            Divider()
+                        }
                         ForEach(model.visibleElements, id: \.self) { element in
                             makeElement(element)
                         }
