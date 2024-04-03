@@ -57,8 +57,6 @@ import SwiftUI
 /// 
 /// - Since: 200.4
 public struct FeatureFormView: View {
-    @Environment(\.formElementPadding) var elementPadding
-    
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     

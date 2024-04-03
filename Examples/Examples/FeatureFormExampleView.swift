@@ -67,7 +67,8 @@ struct FeatureFormExampleView: View {
                     if let featureForm = model.featureForm {
                         FeatureFormView(featureForm: featureForm)
                             .validationErrors(validationErrorVisibility)
-                            .padding([.horizontal])
+                            .padding(.horizontal)
+                            .padding(.top, 16)
                     }
                 }
                 .onChange(of: model.isFormPresented) { isFormPresented in
