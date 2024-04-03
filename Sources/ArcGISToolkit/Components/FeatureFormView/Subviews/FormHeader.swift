@@ -24,9 +24,6 @@ struct FormHeader: View {
 ***REMOVED******REMOVED******REMOVED***Text(title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
-***REMOVED******REMOVED******REMOVED******REMOVED*** Having this padding on `FormHeader`, caused padding on both
-***REMOVED******REMOVED******REMOVED******REMOVED*** the top AND bottom of the header. Odd...
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.top, 16)
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***

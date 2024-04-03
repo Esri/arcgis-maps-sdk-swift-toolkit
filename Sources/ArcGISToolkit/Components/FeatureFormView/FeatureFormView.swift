@@ -57,8 +57,6 @@
 ***REMOVED***/ 
 ***REMOVED***/ - Since: 200.4
 public struct FeatureFormView: View {
-***REMOVED***@Environment(\.formElementPadding) var elementPadding
-***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the form.
 ***REMOVED***@StateObject private var model: FormViewModel
 ***REMOVED***
