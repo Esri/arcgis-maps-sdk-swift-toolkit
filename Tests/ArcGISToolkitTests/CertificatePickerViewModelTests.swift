@@ -16,8 +16,8 @@ import XCTest
 import ArcGIS
 @testable import ArcGISToolkit
 
-@MainActor final class CertificatePickerViewModelTests: XCTestCase {
-    func testViewModel() async throws {
+final class CertificatePickerViewModelTests: XCTestCase {
+    @MainActor func testViewModel() async throws {
         let challenge = NetworkChallengeContinuation(host: "host.com", kind: .certificate)
         let model = CertificatePickerViewModel(challenge: challenge)
         
@@ -29,9 +29,17 @@ import ArcGIS
         XCTAssertEqual(model.challengingHost, "host.com")
         
         model.proceedToPicker()
+        
         // Have to wait here because the proceed function is delayed to avoid a bug.
-        try? await Task.sleep(nanoseconds: 300_000_000)
-        XCTAssertTrue(model.showPicker)
+        await fulfillment(
+            of: [
+                expectation(
+                    for: NSPredicate(value: true),
+                    evaluatedWith: model.showPicker
+                )
+            ],
+            timeout: 2.5
+        )
         
         let url = URL(fileURLWithPath: "/does-not-exist.pfx")
         model.proceedToPasswordEntry(forCertificateWithURL: url)
@@ -39,15 +47,16 @@ import ArcGIS
         XCTAssertTrue(model.showPassword)
         
         model.proceedToUseCertificate(withPassword: "1234")
-        // Have to yield here because the proceed function kicks off a task.
-        await Task.yield()
-        // Have to wait here because the proceed function waits to avoid a bug.
-        try? await Task.sleep(nanoseconds: 300_000_000)
-        // Another yield seems to be required to deal with timing when running the test
-        // repeatedly.
-        await Task.yield()
-        // Sometime this fails. See details in https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/245.
-        XCTAssertTrue(model.showCertificateError)
+        
+        await fulfillment(
+            of: [
+                expectation(
+                    for: NSPredicate(value: true),
+                    evaluatedWith: model.showCertificateError
+                )
+            ],
+            timeout: 5.0
+        )
         
         model.cancel()
         let disposition = await challenge.value
@@ -57,10 +66,10 @@ import ArcGIS
     func testCertificateErrorLocalizedDescription() {
         let couldNotAccessCertificateFileError = CertificatePickerViewModel.CertificateError.couldNotAccessCertificateFile
         XCTAssertEqual(couldNotAccessCertificateFileError.localizedDescription, "Could not access the certificate file.")
-
+        
         let importErrorInvalidData = CertificatePickerViewModel.CertificateError.importError(.invalidData)
         XCTAssertEqual(importErrorInvalidData.localizedDescription, "The certificate file was invalid.")
-
+        
         let importErrorInvalidPassword = CertificatePickerViewModel.CertificateError.importError(.invalidPassword)
         XCTAssertEqual(importErrorInvalidPassword.localizedDescription, "The password was invalid.")
         
