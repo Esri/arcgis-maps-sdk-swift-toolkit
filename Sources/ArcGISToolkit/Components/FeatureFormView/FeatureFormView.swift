@@ -80,7 +80,10 @@ public struct FeatureFormView: View {
                     ProgressView()
                 } else {
                     VStack(alignment: .leading) {
-                        FormHeader(title: title)
+                        if !title.isEmpty {
+                            FormHeader(title: title)
+                            Divider()
+                        }
                         ForEach(model.visibleElements, id: \.self) { element in
                             makeElement(element)
                         }
