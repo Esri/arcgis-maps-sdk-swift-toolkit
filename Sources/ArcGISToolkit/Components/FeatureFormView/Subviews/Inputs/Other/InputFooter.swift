@@ -64,7 +64,7 @@ struct InputFooter: View {
 ***REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***.foregroundColor(isShowingError ? .red : .secondary)
 ***REMOVED******REMOVED***.id(id)
-***REMOVED******REMOVED***.padding(.bottom, elementPadding)
+***REMOVED******REMOVED***.padding(.vertical, elementPadding / 2)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***for await _ in element.$value {
 ***REMOVED******REMOVED******REMOVED******REMOVED***id = UUID()

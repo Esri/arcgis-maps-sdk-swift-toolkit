@@ -43,14 +43,18 @@ struct GroupView<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(visibleElements, id: \.label) { formElement in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let element = formElement as? FieldFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewCreator(element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, 16)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Header(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if !isExpanded {
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Header(element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
