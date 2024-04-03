@@ -53,13 +53,8 @@ struct GroupView<Content>: View where Content: View {
                             .catalystPadding(4)
                         Spacer()
                     }
-                    if isExpanded {
-                        Divider()
-                    }
+                    Divider()
                 }
-            }
-            if !isExpanded {
-                Divider()
             }
         }
         .onAppear {
