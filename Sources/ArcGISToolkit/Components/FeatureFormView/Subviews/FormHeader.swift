@@ -17,12 +17,11 @@ import SwiftUI
 /// A view shown at the top of a form. If the provided title is `nil`, no text is rendered.
 struct FormHeader: View {
     /// The title defined for the form.
-    let title: String?
+    let title: String
     
     var body: some View {
-        if let title {
-            Text(title)
-                .font(.largeTitle)
-        }
+        Text(title)
+            .font(.title)
+            .fontWeight(.bold)
     }
 }
