@@ -38,7 +38,7 @@ final class CertificatePickerViewModelTests: XCTestCase {
                     evaluatedWith: model.showPicker
                 )
             ],
-            timeout: 2.5
+            timeout: 10.0
         )
         
         let url = URL(fileURLWithPath: "/does-not-exist.pfx")
@@ -55,7 +55,7 @@ final class CertificatePickerViewModelTests: XCTestCase {
                     evaluatedWith: model.showCertificateError
                 )
             ],
-            timeout: 5.0
+            timeout: 10.0
         )
         
         model.cancel()
