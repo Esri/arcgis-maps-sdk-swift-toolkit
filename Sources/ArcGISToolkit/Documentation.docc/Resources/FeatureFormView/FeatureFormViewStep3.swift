@@ -6,7 +6,7 @@ struct FeatureFormExampleView: View {
     static func makeMap() -> Map {
         let portalItem = PortalItem(
             portal: .arcGISOnline(connection: .anonymous),
-            id: Item.ID("9f3a674e998f461580006e626611f9ad")!
+            id: Item.ID("f72207ac170a40d8992b7a3507b44fad")!
         )
         return Map(item: portalItem)
     }
