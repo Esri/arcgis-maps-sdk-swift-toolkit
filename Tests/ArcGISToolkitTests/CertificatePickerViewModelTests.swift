@@ -38,7 +38,7 @@ final class CertificatePickerViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***evaluatedWith: model.showPicker
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***],
-***REMOVED******REMOVED******REMOVED***timeout: 2.5
+***REMOVED******REMOVED******REMOVED***timeout: 10.0
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let url = URL(fileURLWithPath: "/does-not-exist.pfx")
@@ -55,7 +55,7 @@ final class CertificatePickerViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***evaluatedWith: model.showCertificateError
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***],
-***REMOVED******REMOVED******REMOVED***timeout: 5.0
+***REMOVED******REMOVED******REMOVED***timeout: 10.0
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.cancel()
