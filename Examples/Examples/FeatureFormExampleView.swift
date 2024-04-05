@@ -135,7 +135,7 @@ extension FeatureFormExampleView {
 
 private extension URL {
     static var sampleData: Self {
-        .init(string: "<#URL#>")!
+        .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
     }
 }
 
