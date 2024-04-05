@@ -118,14 +118,17 @@ private extension TextInput {
                         prompt: Text(element.hint).foregroundColor(.secondary),
                         axis: element.isMultiline ? .vertical : .horizontal
                     )
+#if !targetEnvironment(macCatalyst)
+                    // Built apps on Catalyst don't receive the FormViewModel in
+                    // the environment even when it's specifically provided with
+                    // .environmentObject(model) on FullScreenTextInput below.
+                    // Ref Apollo 587
                     .disabled(element.isMultiline)
                     .sheet(isPresented: $fullScreenTextInputIsPresented) {
                         FullScreenTextInput(text: $text, element: element)
-#if targetEnvironment(macCatalyst)
-                            .environmentObject(model)
-#endif
                             .padding()
                     }
+#endif
                 } else if element.isMultiline {
                     TextEditor(text: $text)
                         .foregroundColor(isPlaceholder ? .secondary : .primary)
