@@ -162,68 +162,6 @@ extension FormViewExampleView {
 
 private extension URL {
     static var sampleData: Self {
-        .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=ec09090060664cbda8d814e017337837")!
-    }
-}
-
-/// The model class for the form example view
-@MainActor
-class Model: ObservableObject {
-    /// The feature form.
-    @Published var featureForm: FeatureForm? {
-        willSet {
-            if let featureForm = newValue {
-                featureForm.featureLayer?.selectFeature(featureForm.feature)
-            } else if let featureForm = self.featureForm {
-                featureForm.featureLayer?.unselectFeature(featureForm.feature)
-            }
-        }
-        didSet {
-            isFormPresented = featureForm != nil
-        }
-    }
-    
-    /// A Boolean value indicating whether or not the form is displayed.
-    @Published var isFormPresented = false
-    
-    /// Reverts any local edits that haven't yet been saved to service geodatabase.
-    func discardEdits() {
-        featureForm?.discardEdits()
-        featureForm = nil
-    }
-    
-    /// Submit the changes made to the form.
-    func submitChanges() async {
-        guard let featureForm,
-              let table = featureForm.feature.table as? ServiceFeatureTable,
-              table.isEditable,
-              let database = table.serviceGeodatabase else {
-            print("A precondition to submit the changes wasn't met.")
-            return
-        }
-        
-        guard featureForm.validationErrors.isEmpty else { return }
-        
-        try? await table.update(featureForm.feature)
-        
-        guard database.hasLocalEdits else {
-            print("No submittable changes found.")
-            return
-        }
-        
-        let results = try? await database.applyEdits()
-        
-        if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
-            print("An error occurred while submitting the changes.")
-        }
-        
-        self.featureForm = nil
-    }
-}
-
-private extension FeatureForm {
-    /// The layer to which the feature belongs.
-    var featureLayer: FeatureLayer? {
-        feature.table?.layer as? FeatureLayer
+        .init(string: "<#URL#>")!
     }
 }
