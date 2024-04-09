@@ -86,8 +86,8 @@ struct FeatureFormExampleView: View {
                                 .onChange(of: geometryProxy.size) { size in
                                     contentInsets = .init(
                                         top: .zero,
-                                        leading: isFormPresented && !isPortraitOrientation ? size.width : .zero,
-                                        bottom: isFormPresented && isPortraitOrientation && detent != .full ? size.height : .zero,
+                                        leading: model.isFormPresented && !isPortraitOrientation ? size.width : .zero,
+                                        bottom: model.isFormPresented && isPortraitOrientation && detent != .full ? size.height : .zero,
                                         trailing: .zero
                                     )
                                 }
