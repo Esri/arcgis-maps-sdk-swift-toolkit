@@ -186,7 +186,7 @@ public struct Bookmarks: View {
 extension Bookmarks {
 ***REMOVED******REMOVED***/ Sets an action to perform when the bookmark selection changes.
 ***REMOVED******REMOVED***/ - Parameter action: The action to perform when the bookmark selection has changed.
-***REMOVED***@available(*, deprecated, message: "Monitor changes on a bound Bookmark or Viewpoint instead.")
+***REMOVED***@available(*, deprecated)
 ***REMOVED***public func onSelectionChanged(
 ***REMOVED******REMOVED***perform action: @escaping (Bookmark) -> Void
 ***REMOVED***) -> Bookmarks {
