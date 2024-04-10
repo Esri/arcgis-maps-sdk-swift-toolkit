@@ -19,9 +19,9 @@
 ***REMOVED***/ bookmark and perform some action. You can create the component with either an array of
 ***REMOVED***/ `Bookmark` values, or with a `Map` or `Scene` containing the bookmarks to display.
 ***REMOVED***/
-***REMOVED***/ `Bookmarks` can be configured to handle automated bookmark selection (zooming the map/scene to
-***REMOVED***/ the bookmark’s viewpoint) by passing in a `Viewpoint` binding or the client can handle bookmark
-***REMOVED***/ selection changes manually using ``onSelectionChanged(perform:)``.
+***REMOVED***/ The map or scene will automatically pan and zoom to the selected bookmark when a `GeoViewProxy`
+***REMOVED***/ is provided in the initializer. Alternatively, handle selection changes manually using the bound
+***REMOVED***/ `selection` property.
 ***REMOVED***/
 ***REMOVED***/ | iPhone | iPad |
 ***REMOVED***/ | ------ | ---- |
@@ -31,7 +31,7 @@
 ***REMOVED***/
 ***REMOVED***/ - Can be configured to display bookmarks from a map or scene, or from an array of user-defined
 ***REMOVED***/ bookmarks.
-***REMOVED***/ - Can be configured to automatically zoom the map or scene to a bookmark selection.
+***REMOVED***/ - Can be configured to automatically pan and zoom the map or scene to a bookmark selection.
 ***REMOVED***/ - Can be configured to perform a user-defined action when a bookmark is selected.
 ***REMOVED***/ - Will automatically hide when a bookmark is selected.
 ***REMOVED***/
@@ -81,6 +81,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
 ***REMOVED******REMOVED***/   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
 ***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+***REMOVED***@available(*, deprecated)
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***bookmarks: [Bookmark],
@@ -122,6 +123,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
 ***REMOVED******REMOVED***/   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
 ***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+***REMOVED***@available(*, deprecated)
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***geoModel: GeoModel,
