@@ -52,6 +52,9 @@ public struct Bookmarks: View {
     /// A map or scene model containing bookmarks.
     private let geoModel: GeoModel?
     
+    /// The proxy to provide access to geo view operations.
+    private let geoViewProxy: GeoViewProxy?
+    
     /// An error that occurred while loading the geo model.
     @State private var loadingError: Error?
     
@@ -85,6 +88,7 @@ public struct Bookmarks: View {
     ) {
         self.bookmarks = bookmarks
         self.geoModel = nil
+        self.geoViewProxy = nil
         self.selection = nil
         self.viewpoint = viewpoint
         _isPresented = isPresented
@@ -95,14 +99,17 @@ public struct Bookmarks: View {
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
     ///   - selection: A selected Bookmark.
+    ///   - geoViewProxy: The proxy to provide access to geo view operations.
     public init(
         isPresented: Binding<Bool>,
         bookmarks: [Bookmark],
-        selection: Binding<Bookmark?>
+        selection: Binding<Bookmark?>,
+        geoViewProxy: GeoViewProxy? = nil
     ) {
         self.bookmarks = bookmarks
         self.geoModel = nil
-        self.selection = nil
+        self.geoViewProxy = geoViewProxy
+        self.selection = selection
         self.viewpoint = nil
         _isPresented = isPresented
     }
@@ -119,6 +126,7 @@ public struct Bookmarks: View {
     ) {
         self.bookmarks = nil
         self.geoModel = geoModel
+        self.geoViewProxy = nil
         self.selection = nil
         self.viewpoint = viewpoint
         _isPresented = isPresented
@@ -129,13 +137,16 @@ public struct Bookmarks: View {
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
     ///   - selection: A selected Bookmark.
+    ///   - geoViewProxy: The proxy to provide access to geo view operations.
     public init(
         isPresented: Binding<Bool>,
         geoModel: GeoModel,
-        selection: Binding<Bookmark?>
+        selection: Binding<Bookmark?>,
+        geoViewProxy: GeoViewProxy? = nil
     ) {
         self.bookmarks = nil
         self.geoModel = geoModel
+        self.geoViewProxy = geoViewProxy
         self.selection = selection
         self.viewpoint = nil
         _isPresented = isPresented
@@ -196,6 +207,10 @@ extension Bookmarks {
             viewpoint.wrappedValue = bookmark.viewpoint
         } else if let onSelectionChanged = selectionChangedAction {
             onSelectionChanged(bookmark)
+        } else if let geoViewProxy, let viewpoint = bookmark.viewpoint {
+            Task {
+                try await geoViewProxy.setViewpoint(viewpoint, duration: nil)
+            }
         }
     }
     
