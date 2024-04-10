@@ -19,9 +19,9 @@ import SwiftUI
 /// bookmark and perform some action. You can create the component with either an array of
 /// `Bookmark` values, or with a `Map` or `Scene` containing the bookmarks to display.
 ///
-/// `Bookmarks` can be configured to handle automated bookmark selection (zooming the map/scene to
-/// the bookmark’s viewpoint) by passing in a `Viewpoint` binding or the client can handle bookmark
-/// selection changes manually using ``onSelectionChanged(perform:)``.
+/// The map or scene will automatically pan and zoom to the selected bookmark when a `GeoViewProxy`
+/// is provided in the initializer. Alternatively, handle selection changes manually using the bound
+/// `selection` property.
 ///
 /// | iPhone | iPad |
 /// | ------ | ---- |
@@ -31,7 +31,7 @@ import SwiftUI
 ///
 /// - Can be configured to display bookmarks from a map or scene, or from an array of user-defined
 /// bookmarks.
-/// - Can be configured to automatically zoom the map or scene to a bookmark selection.
+/// - Can be configured to automatically pan and zoom the map or scene to a bookmark selection.
 /// - Can be configured to perform a user-defined action when a bookmark is selected.
 /// - Will automatically hide when a bookmark is selected.
 ///
@@ -81,6 +81,7 @@ public struct Bookmarks: View {
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
     ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+    @available(*, deprecated)
     public init(
         isPresented: Binding<Bool>,
         bookmarks: [Bookmark],
@@ -122,6 +123,7 @@ public struct Bookmarks: View {
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
     ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+    @available(*, deprecated)
     public init(
         isPresented: Binding<Bool>,
         geoModel: GeoModel,
