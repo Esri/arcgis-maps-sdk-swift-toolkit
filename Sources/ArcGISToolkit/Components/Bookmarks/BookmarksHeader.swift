@@ -47,14 +47,12 @@ struct BookmarksHeader: View {
                 maxWidth: .infinity,
                 alignment: .leading
             )
-            if horizontalSizeClass == .compact || verticalSizeClass == .compact {
-                Spacer()
-                Button {
-                    isPresented.toggle()
-                } label: {
-                    Text.done
-                        .fontWeight(.semibold)
-                }
+            Spacer()
+            Button {
+                isPresented.toggle()
+            } label: {
+                Text.done
+                    .fontWeight(.semibold)
             }
         }
     }
