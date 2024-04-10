@@ -26,7 +26,11 @@ struct BookmarksTestCase5View: View {
     var body: some View {
         MapView(map: map)
             .sheet(isPresented: .constant(true)) {
-                Bookmarks(isPresented: .constant(true), bookmarks: bookmarks)
+                Bookmarks(
+                    isPresented: .constant(true),
+                    bookmarks: bookmarks,
+                    selection: .constant(nil)
+                )
                 Button("Add New") {
                     bookmarks.append(Bookmark(name: "Bookmark \(bookmarks.count + 1)"))
                 }

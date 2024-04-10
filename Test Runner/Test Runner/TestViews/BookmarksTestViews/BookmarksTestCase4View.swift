@@ -26,7 +26,8 @@ struct BookmarksTestCase4View: View {
             .sheet(isPresented: .constant(true)) {
                 Bookmarks(
                     isPresented: .constant(true),
-                    bookmarks: [Bookmark(name: "Redlands")]
+                    bookmarks: [Bookmark(name: "Redlands")],
+                    selection: .constant(nil)
                 )
             }
     }
