@@ -18,6 +18,46 @@ import XCTest
 @testable import ArcGISToolkit
 
 final class BookmarksTests: DejavuTestCase {
+    func testBookmarksWithGeoModel() async throws {
+        var _isPresented = true
+        var _selection: Bookmark?
+        
+        let map = Map.portlandTreeSurvey
+        let bookmarks = Bookmarks(
+            isPresented: Binding(get: { _isPresented }, set: { _isPresented = $0 }),
+            geoModel: map,
+            selection: Binding(get: { _selection }, set: { _selection = $0 }),
+            geoViewProxy: nil
+        )
+        
+        do {
+            try await map.load()
+        } catch {
+            XCTFail("Web map failed to load \(error.localizedDescription)")
+        }
+        
+        bookmarks.selectBookmark(map.bookmarks.first!)
+        
+        XCTAssertFalse(_isPresented)
+        XCTAssertEqual(_selection, map.bookmarks.first)
+    }
+    
+    func testBookmarksWithList() {
+        var _isPresented = true
+        var _selection: Bookmark?
+        
+        let bookmarks = Bookmarks(
+            isPresented: Binding(get: { _isPresented }, set: { _isPresented = $0 }),
+            bookmarks: sampleBookmarks,
+            selection: Binding(get: { _selection }, set: { _selection = $0 })
+        )
+        
+        bookmarks.selectBookmark(sampleBookmarks.first!)
+        
+        XCTAssertFalse(_isPresented)
+        XCTAssertEqual(_selection, sampleBookmarks.first)
+    }
+    
     /// Asserts that the list properly handles a selection when provided a modifier.
     @available(*, deprecated)
     func testSelectBookmarkWithModifier() {
