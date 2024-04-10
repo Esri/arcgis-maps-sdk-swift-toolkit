@@ -31,11 +31,6 @@ struct BookmarksExampleView: View {
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
-                .task(id: selection) {
-                    if let viewpoint = selection?.viewpoint {
-                        await mapViewProxy.setViewpoint(viewpoint)
-                    }
-                }
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Button {
@@ -51,7 +46,8 @@ struct BookmarksExampleView: View {
                             Bookmarks(
                                 isPresented: $showingBookmarks,
                                 geoModel: map,
-                                selection: $selection
+                                selection: $selection,
+                                geoViewProxy: mapViewProxy
                             )
                         }
                     }
