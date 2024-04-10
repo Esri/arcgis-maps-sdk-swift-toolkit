@@ -19,6 +19,7 @@ import XCTest
 
 final class BookmarksTests: DejavuTestCase {
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a modifier.
+***REMOVED***@available(*, deprecated)
 ***REMOVED***func testSelectBookmarkWithModifier() {
 ***REMOVED******REMOVED***let expectation = XCTestExpectation(
 ***REMOVED******REMOVED******REMOVED***description: "Modifier action was performed"
@@ -31,7 +32,7 @@ final class BookmarksTests: DejavuTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***let isPresented = Binding(
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
-***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***set: { _isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var bookmarks = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
@@ -56,7 +57,7 @@ final class BookmarksTests: DejavuTestCase {
 ***REMOVED******REMOVED***var _isPresented = true
 ***REMOVED******REMOVED***let isPresented = Binding(
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
-***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***set: { _isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var selectedBookmark: Bookmark?
@@ -70,12 +71,13 @@ final class BookmarksTests: DejavuTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a viewpoint.
+***REMOVED***@available(*, deprecated)
 ***REMOVED***func testSelectBookmarkWithViewpoint() {
 ***REMOVED******REMOVED***let sampleBookmarks = sampleBookmarks
 ***REMOVED******REMOVED***var _isPresented = true
 ***REMOVED******REMOVED***let isPresented = Binding(
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
-***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***set: { _isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = Viewpoint.esriRedlandsCampus
 ***REMOVED******REMOVED***let viewpoint = Binding(
@@ -95,6 +97,7 @@ final class BookmarksTests: DejavuTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a viewpoint and web map.
+***REMOVED***@available(*, deprecated)
 ***REMOVED***func testSelectBookmarkWithViewpointAndMap() async throws {
 ***REMOVED******REMOVED***let map = Map.portlandTreeSurvey
 ***REMOVED******REMOVED***do {
@@ -105,7 +108,7 @@ final class BookmarksTests: DejavuTestCase {
 ***REMOVED******REMOVED***var _isPresented = true
 ***REMOVED******REMOVED***let isPresented = Binding(
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
-***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***set: { _isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = Viewpoint.esriRedlandsCampus
 ***REMOVED******REMOVED***let viewpoint = Binding(
