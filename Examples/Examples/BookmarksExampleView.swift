@@ -34,7 +34,7 @@ struct BookmarksExampleView: View {
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Button {
-                            showingBookmarks = true
+                            showingBookmarks.toggle()
                         } label: {
                             Label(
                                 "Show Bookmarks",
