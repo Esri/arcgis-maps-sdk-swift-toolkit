@@ -21,9 +21,9 @@
             }
             
             @Step {
-                Add a toolbar button to open the bookmark selector. 
+                Add a button within a toolbar to open the bookmark selector.
                 
-                The property `showingBookmarks` will control when the bookmarks are shown or hidden.
+                The property `bookmarksIsPresented` will control when the bookmarks are shown or hidden.
                 @Code(name: "BookmarksExampleView.swift", file: BookmarksStep2)
             }
             
