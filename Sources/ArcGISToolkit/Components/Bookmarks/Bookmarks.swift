@@ -15,32 +15,17 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ The `Bookmarks` component will display a list of bookmarks and allow the user to select a
-***REMOVED***/ bookmark and perform some action. You can create the component with either an array of
-***REMOVED***/ `Bookmark` values, or with a `Map` or `Scene` containing the bookmarks to display.
+***REMOVED***/ The `Bookmarks` component displays a list of bookmarks and allows the user to make a selection.
+***REMOVED***/ You can initialize the component with an array of `Bookmark`s or with a `GeoModel` containing
+***REMOVED***/ bookmarks.
 ***REMOVED***/
 ***REMOVED***/ The map or scene will automatically pan and zoom to the selected bookmark when a `GeoViewProxy`
 ***REMOVED***/ is provided in the initializer. Alternatively, handle selection changes manually using the bound
 ***REMOVED***/ `selection` property.
 ***REMOVED***/
-***REMOVED***/ | iPhone | iPad |
-***REMOVED***/ | ------ | ---- |
-***REMOVED***/ | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202765630-894bee44-a0c2-4435-86f4-c80c4cc4a0b9.png) | ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202765729-91c52555-4677-4c2b-b62b-215e6c3790a6.png) |
+***REMOVED***/ The component will automatically hide itself when a selection is made.
 ***REMOVED***/
-***REMOVED***/ **Features**
-***REMOVED***/
-***REMOVED***/ - Can be configured to display bookmarks from a map or scene, or from an array of user-defined
-***REMOVED***/ bookmarks.
-***REMOVED***/ - Can be configured to automatically pan and zoom the map or scene to a bookmark selection.
-***REMOVED***/ - Can be configured to perform a user-defined action when a bookmark is selected.
-***REMOVED***/ - Will automatically hide when a bookmark is selected.
-***REMOVED***/
-***REMOVED***/ **Behavior**
-***REMOVED***/ 
-***REMOVED***/ If a `Viewpoint` binding is provided to the `Bookmarks` view, selecting a bookmark will set that
-***REMOVED***/ viewpoint binding to the viewpoint of the bookmark. Selecting a bookmark will dismiss the
-***REMOVED***/ `Bookmarks` view. If a `GeoModel` is provided, that geo model's bookmarks will be displayed to
-***REMOVED***/ the user.
+***REMOVED***/ @Image(source: Bookmarks, alt: "An image of the Bookmarks component.")
 ***REMOVED***/
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [BookmarksExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
