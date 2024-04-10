@@ -100,6 +100,9 @@ public struct Bookmarks: View {
     ///   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
     ///   - selection: A selected Bookmark.
     ///   - geoViewProxy: The proxy to provide access to geo view operations.
+    ///
+    /// When a `GeoViewProxy` is provided, the map or scene  will automatically pan and zoom to the
+    /// selected bookmark.
     public init(
         isPresented: Binding<Bool>,
         bookmarks: [Bookmark],
@@ -138,6 +141,9 @@ public struct Bookmarks: View {
     ///   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
     ///   - selection: A selected Bookmark.
     ///   - geoViewProxy: The proxy to provide access to geo view operations.
+    ///
+    /// When a `GeoViewProxy` is provided, the map or scene  will automatically pan and zoom to the
+    /// selected bookmark.
     public init(
         isPresented: Binding<Bool>,
         geoModel: GeoModel,
