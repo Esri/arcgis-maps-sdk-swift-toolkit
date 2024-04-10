@@ -20,6 +20,7 @@ struct BookmarksExampleView: View {
                                 systemImage: "bookmark"
                             )
                         }
+                        .buttonStyle(.plain)
                     }
                 }
         }
