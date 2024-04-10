@@ -20,14 +20,14 @@ struct FeatureFormExampleView: View {
     /// The height of the map view's attribution bar.
     @State private var attributionBarHeight: CGFloat = 0
     
+    /// A Boolean value indicating whether the alert confirming the user's intent to cancel is presented.
+    @State private var cancelConfirmationIsPresented = false
+    
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
     
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
-    
-    /// A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
-    @State private var isCancelConfirmationPresented = false
     
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(url: .sampleData)!
@@ -46,7 +46,7 @@ struct FeatureFormExampleView: View {
                 }
                 .onSingleTapGesture { screenPoint, _ in
                     if model.isFormPresented {
-                        isCancelConfirmationPresented = true
+                        cancelConfirmationIsPresented = true
                     } else {
                         identifyScreenPoint = screenPoint
                     }
@@ -67,13 +67,14 @@ struct FeatureFormExampleView: View {
                     if let featureForm = model.featureForm {
                         FeatureFormView(featureForm: featureForm)
                             .validationErrors(validationErrorVisibility)
-                            .padding([.horizontal])
+                            .padding(.horizontal)
+                            .padding(.top, 16)
                     }
                 }
                 .onChange(of: model.isFormPresented) { isFormPresented in
                     if !isFormPresented { validationErrorVisibility = .automatic }
                 }
-                .alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
+                .alert("Discard edits", isPresented: $cancelConfirmationIsPresented) {
                         Button("Discard edits", role: .destructive) {
                             model.discardEdits()
                         }
@@ -89,7 +90,7 @@ struct FeatureFormExampleView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         if model.isFormPresented {
                             Button("Cancel", role: .cancel) {
-                                isCancelConfirmationPresented = true
+                                cancelConfirmationIsPresented = true
                             }
                         }
                     }
@@ -134,7 +135,7 @@ extension FeatureFormExampleView {
 
 private extension URL {
     static var sampleData: Self {
-        .init(string: "<#URL#>")!
+        .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
     }
 }
 
@@ -166,7 +167,7 @@ class Model: ObservableObject {
     
     /// Submit the changes made to the form.
     func submitChanges() async {
-        guard let featureForm = featureForm,
+        guard let featureForm,
               let table = featureForm.feature.table as? ServiceFeatureTable,
               table.isEditable,
               let database = table.serviceGeodatabase else {
