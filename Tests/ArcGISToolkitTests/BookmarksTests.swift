@@ -18,6 +18,46 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 final class BookmarksTests: DejavuTestCase {
+***REMOVED***func testBookmarksWithGeoModel() async throws {
+***REMOVED******REMOVED***var _isPresented = true
+***REMOVED******REMOVED***var _selection: Bookmark?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let map = Map.portlandTreeSurvey
+***REMOVED******REMOVED***let bookmarks = Bookmarks(
+***REMOVED******REMOVED******REMOVED***isPresented: Binding(get: { _isPresented ***REMOVED***, set: { _isPresented = $0 ***REMOVED***),
+***REMOVED******REMOVED******REMOVED***geoModel: map,
+***REMOVED******REMOVED******REMOVED***selection: Binding(get: { _selection ***REMOVED***, set: { _selection = $0 ***REMOVED***),
+***REMOVED******REMOVED******REMOVED***geoViewProxy: nil
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***try await map.load()
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***XCTFail("Web map failed to load \(error.localizedDescription)")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***bookmarks.selectBookmark(map.bookmarks.first!)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
+***REMOVED******REMOVED***XCTAssertEqual(_selection, map.bookmarks.first)
+***REMOVED***
+***REMOVED***
+***REMOVED***func testBookmarksWithList() {
+***REMOVED******REMOVED***var _isPresented = true
+***REMOVED******REMOVED***var _selection: Bookmark?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let bookmarks = Bookmarks(
+***REMOVED******REMOVED******REMOVED***isPresented: Binding(get: { _isPresented ***REMOVED***, set: { _isPresented = $0 ***REMOVED***),
+***REMOVED******REMOVED******REMOVED***bookmarks: sampleBookmarks,
+***REMOVED******REMOVED******REMOVED***selection: Binding(get: { _selection ***REMOVED***, set: { _selection = $0 ***REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***bookmarks.selectBookmark(sampleBookmarks.first!)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
+***REMOVED******REMOVED***XCTAssertEqual(_selection, sampleBookmarks.first)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a modifier.
 ***REMOVED***@available(*, deprecated)
 ***REMOVED***func testSelectBookmarkWithModifier() {
