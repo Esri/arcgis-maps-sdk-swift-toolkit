@@ -238,11 +238,10 @@ extension Bookmarks {
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                // For the selected row we apply no row background color to allow for automatic 
-                // system selection styling. Otherwise we apply clear coloring to avoid mismatched
-                // backgrounds on Mac Catalyst.
+#if targetEnvironment(macCatalyst)
                 .listRowBackground(bookmark == selection?.wrappedValue ? nil : Color.clear)
                 .padding(4)
+#endif
             }
             .frame(idealWidth: 320, idealHeight: 428)
             .listStyle(.plain)
