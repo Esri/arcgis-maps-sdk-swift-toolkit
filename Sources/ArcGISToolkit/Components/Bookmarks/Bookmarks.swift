@@ -240,7 +240,6 @@ extension Bookmarks {
                 .buttonStyle(.plain)
 #if targetEnvironment(macCatalyst)
                 .listRowBackground(bookmark == selection?.wrappedValue ? nil : Color.clear)
-                .padding(4)
 #endif
             }
             .frame(idealWidth: 320, idealHeight: 428)
