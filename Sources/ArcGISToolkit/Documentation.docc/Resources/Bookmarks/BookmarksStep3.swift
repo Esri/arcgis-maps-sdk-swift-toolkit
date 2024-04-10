@@ -22,6 +22,7 @@ struct BookmarksExampleView: View {
                                 systemImage: "bookmark"
                             )
                         }
+                        .buttonStyle(.plain)
                         .popover(isPresented: $bookmarksIsPresented) {
                             Bookmarks(
                                 isPresented: $bookmarksIsPresented,
