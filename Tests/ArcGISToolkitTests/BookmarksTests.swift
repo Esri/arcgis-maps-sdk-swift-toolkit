@@ -19,6 +19,7 @@ import XCTest
 
 final class BookmarksTests: DejavuTestCase {
     /// Asserts that the list properly handles a selection when provided a modifier.
+    @available(*, deprecated)
     func testSelectBookmarkWithModifier() {
         let expectation = XCTestExpectation(
             description: "Modifier action was performed"
@@ -31,7 +32,7 @@ final class BookmarksTests: DejavuTestCase {
         }
         let isPresented = Binding(
             get: { _isPresented },
-            set: {_isPresented = $0 }
+            set: { _isPresented = $0 }
         )
         var bookmarks = Bookmarks(
             isPresented: isPresented,
@@ -56,7 +57,7 @@ final class BookmarksTests: DejavuTestCase {
         var _isPresented = true
         let isPresented = Binding(
             get: { _isPresented },
-            set: {_isPresented = $0 }
+            set: { _isPresented = $0 }
         )
         
         var selectedBookmark: Bookmark?
@@ -70,12 +71,13 @@ final class BookmarksTests: DejavuTestCase {
     }
     
     /// Asserts that the list properly handles a selection when provided a viewpoint.
+    @available(*, deprecated)
     func testSelectBookmarkWithViewpoint() {
         let sampleBookmarks = sampleBookmarks
         var _isPresented = true
         let isPresented = Binding(
             get: { _isPresented },
-            set: {_isPresented = $0 }
+            set: { _isPresented = $0 }
         )
         var _viewpoint: Viewpoint? = Viewpoint.esriRedlandsCampus
         let viewpoint = Binding(
@@ -95,6 +97,7 @@ final class BookmarksTests: DejavuTestCase {
     }
     
     /// Asserts that the list properly handles a selection when provided a viewpoint and web map.
+    @available(*, deprecated)
     func testSelectBookmarkWithViewpointAndMap() async throws {
         let map = Map.portlandTreeSurvey
         do {
@@ -105,7 +108,7 @@ final class BookmarksTests: DejavuTestCase {
         var _isPresented = true
         let isPresented = Binding(
             get: { _isPresented },
-            set: {_isPresented = $0 }
+            set: { _isPresented = $0 }
         )
         var _viewpoint: Viewpoint? = Viewpoint.esriRedlandsCampus
         let viewpoint = Binding(
