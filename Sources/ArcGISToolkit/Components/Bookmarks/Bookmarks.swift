@@ -52,6 +52,9 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ A map or scene model containing bookmarks.
 ***REMOVED***private let geoModel: GeoModel?
 ***REMOVED***
+***REMOVED******REMOVED***/ The proxy to provide access to geo view operations.
+***REMOVED***private let geoViewProxy: GeoViewProxy?
+***REMOVED***
 ***REMOVED******REMOVED***/ An error that occurred while loading the geo model.
 ***REMOVED***@State private var loadingError: Error?
 ***REMOVED***
@@ -85,6 +88,7 @@ public struct Bookmarks: View {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.bookmarks = bookmarks
 ***REMOVED******REMOVED***self.geoModel = nil
+***REMOVED******REMOVED***self.geoViewProxy = nil
 ***REMOVED******REMOVED***self.selection = nil
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***_isPresented = isPresented
@@ -95,14 +99,17 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
 ***REMOVED******REMOVED***/   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
 ***REMOVED******REMOVED***/   - selection: A selected Bookmark.
+***REMOVED******REMOVED***/   - geoViewProxy: The proxy to provide access to geo view operations.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***bookmarks: [Bookmark],
-***REMOVED******REMOVED***selection: Binding<Bookmark?>
+***REMOVED******REMOVED***selection: Binding<Bookmark?>,
+***REMOVED******REMOVED***geoViewProxy: GeoViewProxy? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.bookmarks = bookmarks
 ***REMOVED******REMOVED***self.geoModel = nil
-***REMOVED******REMOVED***self.selection = nil
+***REMOVED******REMOVED***self.geoViewProxy = geoViewProxy
+***REMOVED******REMOVED***self.selection = selection
 ***REMOVED******REMOVED***self.viewpoint = nil
 ***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED***
@@ -119,6 +126,7 @@ public struct Bookmarks: View {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.bookmarks = nil
 ***REMOVED******REMOVED***self.geoModel = geoModel
+***REMOVED******REMOVED***self.geoViewProxy = nil
 ***REMOVED******REMOVED***self.selection = nil
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***_isPresented = isPresented
@@ -129,13 +137,16 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
 ***REMOVED******REMOVED***/   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
 ***REMOVED******REMOVED***/   - selection: A selected Bookmark.
+***REMOVED******REMOVED***/   - geoViewProxy: The proxy to provide access to geo view operations.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***geoModel: GeoModel,
-***REMOVED******REMOVED***selection: Binding<Bookmark?>
+***REMOVED******REMOVED***selection: Binding<Bookmark?>,
+***REMOVED******REMOVED***geoViewProxy: GeoViewProxy? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.bookmarks = nil
 ***REMOVED******REMOVED***self.geoModel = geoModel
+***REMOVED******REMOVED***self.geoViewProxy = geoViewProxy
 ***REMOVED******REMOVED***self.selection = selection
 ***REMOVED******REMOVED***self.viewpoint = nil
 ***REMOVED******REMOVED***_isPresented = isPresented
@@ -196,6 +207,10 @@ extension Bookmarks {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark.viewpoint
 ***REMOVED*** else if let onSelectionChanged = selectionChangedAction {
 ***REMOVED******REMOVED******REMOVED***onSelectionChanged(bookmark)
+***REMOVED*** else if let geoViewProxy, let viewpoint = bookmark.viewpoint {
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await geoViewProxy.setViewpoint(viewpoint, duration: nil)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
