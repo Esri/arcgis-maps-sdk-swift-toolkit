@@ -15,32 +15,17 @@
 import ArcGIS
 import SwiftUI
 
-/// The `Bookmarks` component will display a list of bookmarks and allow the user to select a
-/// bookmark and perform some action. You can create the component with either an array of
-/// `Bookmark` values, or with a `Map` or `Scene` containing the bookmarks to display.
+/// The `Bookmarks` component displays a list of bookmarks and allows the user to make a selection.
+/// You can initialize the component with an array of `Bookmark`s or with a `GeoModel` containing
+/// bookmarks.
 ///
 /// The map or scene will automatically pan and zoom to the selected bookmark when a `GeoViewProxy`
 /// is provided in the initializer. Alternatively, handle selection changes manually using the bound
 /// `selection` property.
 ///
-/// | iPhone | iPad |
-/// | ------ | ---- |
-/// | ![image](https://user-images.githubusercontent.com/3998072/202765630-894bee44-a0c2-4435-86f4-c80c4cc4a0b9.png) | ![image](https://user-images.githubusercontent.com/3998072/202765729-91c52555-4677-4c2b-b62b-215e6c3790a6.png) |
+/// The component will automatically hide itself when a selection is made.
 ///
-/// **Features**
-///
-/// - Can be configured to display bookmarks from a map or scene, or from an array of user-defined
-/// bookmarks.
-/// - Can be configured to automatically pan and zoom the map or scene to a bookmark selection.
-/// - Can be configured to perform a user-defined action when a bookmark is selected.
-/// - Will automatically hide when a bookmark is selected.
-///
-/// **Behavior**
-/// 
-/// If a `Viewpoint` binding is provided to the `Bookmarks` view, selecting a bookmark will set that
-/// viewpoint binding to the viewpoint of the bookmark. Selecting a bookmark will dismiss the
-/// `Bookmarks` view. If a `GeoModel` is provided, that geo model's bookmarks will be displayed to
-/// the user.
+/// @Image(source: Bookmarks, alt: "An image of the Bookmarks component.")
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [BookmarksExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
