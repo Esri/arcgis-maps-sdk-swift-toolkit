@@ -209,7 +209,7 @@ extension Bookmarks {
 ***REMOVED******REMOVED******REMOVED***onSelectionChanged(bookmark)
 ***REMOVED*** else if let geoViewProxy, let viewpoint = bookmark.viewpoint {
 ***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await geoViewProxy.setViewpoint(viewpoint, duration: nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***await geoViewProxy.setViewpoint(viewpoint, duration: nil)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
