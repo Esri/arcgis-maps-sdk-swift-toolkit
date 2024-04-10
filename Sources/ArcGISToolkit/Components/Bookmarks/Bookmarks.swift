@@ -240,7 +240,6 @@ extension Bookmarks {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 #if targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(bookmark == selection?.wrappedValue ? nil : Color.clear)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
 #endif
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(idealWidth: 320, idealHeight: 428)
