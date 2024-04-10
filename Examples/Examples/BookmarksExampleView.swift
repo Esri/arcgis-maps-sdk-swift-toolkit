@@ -29,14 +29,6 @@ struct BookmarksExampleView: View {
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
-                .popover(isPresented: $bookmarksIsPresented) {
-                    Bookmarks(
-                        isPresented: $bookmarksIsPresented,
-                        geoModel: map,
-                        selection: $selection,
-                        geoViewProxy: mapViewProxy
-                    )
-                }
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Button {
@@ -45,6 +37,14 @@ struct BookmarksExampleView: View {
                             Label(
                                 "Show Bookmarks",
                                 systemImage: "bookmark"
+                            )
+                        }
+                        .popover(isPresented: $bookmarksIsPresented) {
+                            Bookmarks(
+                                isPresented: $bookmarksIsPresented,
+                                geoModel: map,
+                                selection: $selection,
+                                geoViewProxy: mapViewProxy
                             )
                         }
                     }
