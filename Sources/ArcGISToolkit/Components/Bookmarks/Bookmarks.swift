@@ -211,14 +211,17 @@ extension Bookmarks {
 ***REMOVED***func selectBookmark(_ bookmark: Bookmark) {
 ***REMOVED******REMOVED***selection?.wrappedValue = bookmark
 ***REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED***if let viewpoint = viewpoint {
-***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark.viewpoint
-***REMOVED*** else if let onSelectionChanged = selectionChangedAction {
-***REMOVED******REMOVED******REMOVED***onSelectionChanged(bookmark)
-***REMOVED*** else if let geoViewProxy, let viewpoint = bookmark.viewpoint {
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if let geoViewProxy, let viewpoint = bookmark.viewpoint {
 ***REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await geoViewProxy.setViewpoint(viewpoint, duration: nil)
 ***REMOVED******REMOVED***
+***REMOVED*** else if let viewpoint = viewpoint {
+***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark.viewpoint
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if let selectionChangedAction {
+***REMOVED******REMOVED******REMOVED***selectionChangedAction(bookmark)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
