@@ -38,6 +38,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "Examina";
 
+/* A label for a button to show the calibration view. */
+"Calibrate" = "Calibra";
+
+/* A label for the calibration view used to calibrate the camera
+for the AR experience. */
+"Calibration" = "Calibratge";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "Cancel·la";
 
@@ -74,7 +81,7 @@ east, etc.). */
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "Suprimeix";
 
-/* A button to close the bookmark selection menu. */
+/* A label for a button for the user to indicate completion of the current task. */
 "Done" = "Fet";
 
 /* A message indicating that the user attempted to use a single utility
@@ -85,6 +92,19 @@ network element for more than one trace starting point. */
 for a utility network trace. */
 "Element could not be identified." = "No s'ha pogut identificar l'element.";
 
+/* A label for the slider that adjusts the camera elevation for the
+AR experience. */
+"elevation" = "elevació";
+
+/* Text indicating the user should enter a field's exact number of required characters. */
+"Enter %lld characters" = "Introduïu %lld caràcters";
+
+/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
+"Enter %lld to %lld characters" = "Introduïu entre %lld i %lld caràcters";
+
+/* A label for a combo box input that prompts the user to enter a value. */
+"Enter Value" = "Introduïu un valor";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Error";
 
@@ -94,6 +114,10 @@ network certificate. */
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "Error en carregar el mapa de base.";
+
+/* An error message shown when a GeoModel failed to load.
+The variable provides additional data. */
+"Error loading bookmarks: %@" = "Error en carregar els marcadors: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "S'estan avaluant les expressions de la finestra emergent";
@@ -112,6 +136,9 @@ trace operation. */
 /* A label in reference to fields in a set of data contained in a popup. */
 "Fields" = "Camps";
 
+/* A label for a text entry field that allows the user to filter a list of values by name. */
+"Filter" = "Filtra";
+
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "Filtra les instal·lacions";
@@ -129,6 +156,13 @@ contains one or more facilities in a floor-aware map or scene. */
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "Resultats de la funció";
+
+/* A label for the slider that adjusts the camera heading for the
+AR experience. */
+"heading" = "capçalera";
+
+/* Text indicating a field's maximum number of allowed characters. */
+"Maximum %lld characters" = "%lld caràcters com a màxim";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "Contingut multimèdia";
@@ -163,11 +197,17 @@ trace operation. */
 /* A label indicating that no utility networks are available. */
 "No utility networks found." = "No s'ha trobat cap xarxa de serveis.";
 
+/* A string indicating that no value has been set for a form field. */
+"No Value" = "No hi ha cap valor";
+
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "Cap opció seleccionada";
 
 /* A trace function output result was not provided. */
 "Not Available" = "No disponible";
+
+/* A label for a button to choose the current time and date for a field. */
+"Now" = "Ara";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "ID d'objecte: %@";
@@ -200,6 +240,9 @@ variable provides additional data. */
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
 "Repeat Search Here" = "Repeteix la cerca aquí";
+
+/* A label indicating a field is required */
+"Required" = "Obligatori";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "Resultats";
@@ -264,6 +307,9 @@ match the spatial reference of the map. */
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "No s'ha pogut accedir a l'URL o l'URL no contenia dades d'imatge.";
+
+/* A label for a button to choose the current date for a field. */
+"Today" = "Avui";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "Traçat";

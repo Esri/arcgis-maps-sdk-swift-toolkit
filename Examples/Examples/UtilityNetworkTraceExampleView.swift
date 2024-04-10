@@ -20,26 +20,25 @@ import SwiftUI
 /// a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
     @Environment(\.isPortraitOrientation)
-    
     private var isPortraitOrientation
     
     /// The map with the utility networks.
     @State private var map = makeMap()
     
     /// The current detent of the floating panel presenting the trace tool.
-    @State var activeDetent: FloatingPanelDetent = .half
+    @State private var activeDetent: FloatingPanelDetent = .half
     
     /// Provides the ability to detect tap locations in the context of the map view.
-    @State var mapPoint: Point?
+    @State private var mapPoint: Point?
     
     /// Provides the ability to detect tap locations in the context of the screen.
-    @State var screenPoint: CGPoint?
+    @State private var screenPoint: CGPoint?
     
     /// A container for graphical trace results.
-    @State var resultGraphicsOverlay = GraphicsOverlay()
+    @State private var resultGraphicsOverlay = GraphicsOverlay()
     
     /// The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
-    @State var viewpoint: Viewpoint?
+    @State private var viewpoint: Viewpoint?
     
     var body: some View {
         GeometryReader { geometryProxy in

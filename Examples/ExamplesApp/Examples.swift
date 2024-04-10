@@ -27,9 +27,10 @@ struct Examples: View {
             List(lists) { (list) in
                 NavigationLink(list.name, destination: list)
             }
-            .navigationBarTitle(Text("Toolkit Examples"), displayMode: .inline)
+            .navigationTitle("Toolkit Examples")
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        .navigationViewStyle(.stack)
     }
 }
 
@@ -39,7 +40,7 @@ extension ExampleList {
         examples: [
             AnyExample("Flyover", content: FlyoverExampleView()),
             AnyExample("Tabletop", content: TableTopExampleView()),
-            AnyExample("World Scale", content: WorldScaleGeoTrackingExampleView())
+            AnyExample("World Scale", content: WorldScaleExampleView())
         ]
     )
     
@@ -49,8 +50,8 @@ extension ExampleList {
             AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
             AnyExample("Bookmarks", content: BookmarksExampleView()),
             AnyExample("Compass", content: CompassExampleView()),
-            AnyExample("Floor Filter", content: FloorFilterExampleView()),
             AnyExample("Feature Form", content: FeatureFormExampleView()),
+            AnyExample("Floor Filter", content: FloorFilterExampleView()),
             AnyExample("Overview Map", content: OverviewMapExampleView()),
             AnyExample("Popup", content: PopupExampleView()),
             AnyExample("Scalebar", content: ScalebarExampleView()),

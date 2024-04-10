@@ -15,9 +15,8 @@
 import ArcGIS
 import SwiftUI
 
-/// The `FeatureFormView` component enables users to edit field values of features
-/// in a layer using forms that have been configured externally, either in
-/// the Web Map Viewer or the Fields Maps Designer.
+/// The `FeatureFormView` component enables users to edit field values of a feature using
+/// pre-configured forms, either from the Web Map Viewer or the Fields Maps Designer.
 ///
 /// Forms are currently only supported in maps. The form definition is stored
 /// in the web map itself and contains a title, description, and a list of "form elements".
@@ -54,17 +53,18 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/Forms/Examples/Examples)
 /// and refer to
 /// [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
-/// in the project. To learn more about using the `FeatureFormView` see the [FeatureFormView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/featureformviewtutorial) [Coming Soon].
+/// in the project. To learn more about using the `FeatureFormView` see the [FeatureFormView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/featureformviewtutorial).
 /// 
 /// - Since: 200.4
 public struct FeatureFormView: View {
-    @Environment(\.formElementPadding) var elementPadding
-    
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     
     /// A Boolean value indicating whether the initial expression evaluation is running.
-    @State var isEvaluatingInitialExpressions = true
+    @State private var isEvaluatingInitialExpressions = true
+    
+    /// The title of the feature form view.
+    @State private var title = ""
     
     /// Initializes a form view.
     /// - Parameters:
@@ -80,29 +80,28 @@ public struct FeatureFormView: View {
                     ProgressView()
                 } else {
                     VStack(alignment: .leading) {
-                        FormHeader(title: model.featureForm.title)
-                            .padding([.bottom], elementPadding)
-                        
-                        /// - WARNING - Begin temporary implementation  * * * * * * * * * * * *
-                        
-                            AttachmentFormElementView(
-                                element: AttachmentFormElement(
-                                    feature: model.featureForm.feature
-                                )
+                        if !title.isEmpty {
+                            FormHeader(title: title)
+                            Divider()
+                        }
+                        AttachmentFormElementView(
+                            element: AttachmentFormElement(
+                                feature: model.featureForm.feature
                             )
-                        
-                        /// - WARNING - End temporary implementation * * * * * * * * * * * * *
-                        
+                        )
                         ForEach(model.visibleElements, id: \.self) { element in
                             makeElement(element)
                         }
                     }
                 }
             }
-            .task(id: model.focusedElement) {
+            .onChange(of: model.focusedElement) { _ in
                 if let focusedElement = model.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }
+            }
+            .onTitleChange(of: model.featureForm) { newTitle in
+                title = newTitle
             }
         }
         .scrollDismissesKeyboard(
@@ -134,41 +133,12 @@ extension FeatureFormView {
         }
     }
     
-    /// Makes UI for a field form element.
+    /// Makes UI for a field form element including a divider beneath it.
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-        switch element.input {
-        case is ComboBoxFormInput:
-            ComboBoxInput(element: element)
-        case is DateTimePickerFormInput:
-            DateTimeInput(element: element)
-        case is RadioButtonsFormInput:
-            RadioButtonsInput(element: element)
-        case is SwitchFormInput:
-            SwitchInput(element: element)
-        case is TextAreaFormInput, is TextBoxFormInput:
-            TextInput(element: element)
-        default:
-            EmptyView()
-        }
-        // BarcodeScannerFormInput is not currently supported
-        if element.isVisible && !(element.input is BarcodeScannerFormInput) {
+        if !(element.input is UnsupportedFormInput) {
+            InputWrapper(element: element)
             Divider()
-        }
-    }
-}
-
-private extension View {
-    /// Configures the behavior in which scrollable content interacts with the software keyboard.
-    /// - Returns: A view that dismisses the keyboard when the  scroll.
-    /// - Parameter immediately: A Boolean value that will cause the keyboard to the keyboard to
-    /// dismiss as soon as scrolling starts when `true` and interactively when `false`.
-    func scrollDismissesKeyboard(immediately: Bool) -> some View {
-        if #available(iOS 16.0, *) {
-            return self
-                .scrollDismissesKeyboard(immediately ? .immediately : .interactively)
-        } else {
-            return self
         }
     }
 }

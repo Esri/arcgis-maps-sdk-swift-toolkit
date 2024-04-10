@@ -13,40 +13,32 @@
 // limitations under the License.
 
 import ArcGIS
-import Combine
 import SwiftUI
 
-/// - Since: 200.4
-@MainActor public class FormViewModel: ObservableObject {
-    /// The feature form.
-    private(set) var featureForm: FeatureForm
-    
+@MainActor class FormViewModel: ObservableObject {
     /// The current focused element, if one exists.
     @Published var focusedElement: FormElement? {
         didSet {
-            if let focusedElement, !previouslyFocusedFields.contains(focusedElement) {
-                previouslyFocusedFields.append(focusedElement)
+            if let focusedElement, !previouslyFocusedElements.contains(focusedElement) {
+                previouslyFocusedElements.append(focusedElement)
             }
         }
     }
     
-    /// The expression evaluation task.
-    private var evaluateTask: Task<Void, Never>?
-    
-    /// The visibility tasks group.
-    private var isVisibleTask: Task<Void, Never>?
+    /// The set of all elements which previously held focus.
+    @Published var previouslyFocusedElements = [FormElement]()
     
     /// The list of visible form elements.
     @Published var visibleElements = [FormElement]()
     
-    /// The list of expression evaluation errors.
-    @Published var expressionEvaluationErrors = [FormExpressionEvaluationError]()
+    /// The expression evaluation task.
+    private var evaluateTask: Task<Void, Never>?
     
-    /// A Boolean value indicating whether evaluation is running.
-    @Published var isEvaluating = true
+    /// The feature form.
+    private(set) var featureForm: FeatureForm
     
-    /// The set of all fields which previously held focus.
-    @Published var previouslyFocusedFields = [FormElement]()
+    /// The visibility tasks group.
+    private var isVisibleTask: Task<Void, Never>?
     
     /// Initializes a form view model.
     /// - Parameter featureForm: The feature form defining the editing experience.
@@ -82,19 +74,15 @@ import SwiftUI
     
     /// Performs an initial evaluation of all form expressions.
     func initialEvaluation() async {
-        let evaluationErrors = try? await featureForm.evaluateExpressions()
-        expressionEvaluationErrors = evaluationErrors ?? []
+        _ = try? await featureForm.evaluateExpressions()
         initializeIsVisibleTasks()
     }
     
     /// Performs an evaluation of all form expressions.
     func evaluateExpressions() {
         evaluateTask?.cancel()
-        isEvaluating = true
         evaluateTask = Task {
-            let evaluationErrors = try? await featureForm.evaluateExpressions()
-            expressionEvaluationErrors = evaluationErrors ?? []
-            isEvaluating = false
+            _ = try? await featureForm.evaluateExpressions()
         }
     }
 }

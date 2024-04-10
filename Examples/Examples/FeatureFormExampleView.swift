@@ -17,26 +17,26 @@ import ArcGISToolkit
 import SwiftUI
 
 struct FeatureFormExampleView: View {
+    /// The height of the map view's attribution bar.
+    @State private var attributionBarHeight: CGFloat = 0
+    
+    /// A Boolean value indicating whether the alert confirming the user's intent to cancel is presented.
+    @State private var cancelConfirmationIsPresented = false
+    
     /// The height to present the form at.
     @State private var detent: FloatingPanelDetent = .full
-    
-    /// The `Map` displayed in the `MapView`.
-    @State private var map = Map(url: .sampleData)!
     
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
     
-    /// A Boolean value indicating whether the alert confirming the user's intent to cancel is displayed.
-    @State private var isCancelConfirmationPresented = false
+    /// The `Map` displayed in the `MapView`.
+    @State private var map = Map(url: .sampleData)!
     
     /// The validation error visibility configuration of the form.
-    @State var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
+    @State private var validationErrorVisibility = FeatureFormView.ValidationErrorVisibility.automatic
     
     /// The form view model provides a channel of communication between the form view and its host.
     @StateObject private var model = Model()
-    
-    /// The height of the map view's attribution bar.
-    @State private var attributionBarHeight: CGFloat = 0
     
     var body: some View {
         MapViewReader { mapViewProxy in
@@ -46,16 +46,15 @@ struct FeatureFormExampleView: View {
                 }
                 .onSingleTapGesture { screenPoint, _ in
                     if model.isFormPresented {
-                        isCancelConfirmationPresented = true
+                        cancelConfirmationIsPresented = true
                     } else {
                         identifyScreenPoint = screenPoint
                     }
                 }
                 .task(id: identifyScreenPoint) {
                     if let feature = await identifyFeature(with: mapViewProxy),
-                       let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition,
-                       let featureForm = FeatureForm(feature: feature, definition: formDefinition) {
-                        model.featureForm = featureForm
+                       let formDefinition = (feature.table?.layer as? FeatureLayer)?.featureFormDefinition {
+                        model.featureForm = FeatureForm(feature: feature, definition: formDefinition)
                     }
                 }
                 .ignoresSafeArea(.keyboard)
@@ -68,13 +67,14 @@ struct FeatureFormExampleView: View {
                     if let featureForm = model.featureForm {
                         FeatureFormView(featureForm: featureForm)
                             .validationErrors(validationErrorVisibility)
-                            .padding([.horizontal])
+                            .padding(.horizontal)
+                            .padding(.top, 16)
                     }
                 }
                 .onChange(of: model.isFormPresented) { isFormPresented in
                     if !isFormPresented { validationErrorVisibility = .automatic }
                 }
-                .alert("Discard edits", isPresented: $isCancelConfirmationPresented) {
+                .alert("Discard edits", isPresented: $cancelConfirmationIsPresented) {
                         Button("Discard edits", role: .destructive) {
                             model.discardEdits()
                         }
@@ -90,7 +90,7 @@ struct FeatureFormExampleView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         if model.isFormPresented {
                             Button("Cancel", role: .cancel) {
-                                isCancelConfirmationPresented = true
+                                cancelConfirmationIsPresented = true
                             }
                         }
                     }
@@ -135,7 +135,7 @@ extension FeatureFormExampleView {
 
 private extension URL {
     static var sampleData: Self {
-        .init(string: "<#URL#>")!
+        .init(string: "https://www.arcgis.com/apps/mapviewer/index.html?webmap=f72207ac170a40d8992b7a3507b44fad")!
     }
 }
 
@@ -144,6 +144,13 @@ private extension URL {
 class Model: ObservableObject {
     /// The feature form.
     @Published var featureForm: FeatureForm? {
+        willSet {
+            if let featureForm = newValue {
+                featureForm.featureLayer?.selectFeature(featureForm.feature)
+            } else if let featureForm = self.featureForm {
+                featureForm.featureLayer?.unselectFeature(featureForm.feature)
+            }
+        }
         didSet {
             isFormPresented = featureForm != nil
         }
@@ -160,7 +167,7 @@ class Model: ObservableObject {
     
     /// Submit the changes made to the form.
     func submitChanges() async {
-        guard let featureForm = featureForm,
+        guard let featureForm,
               let table = featureForm.feature.table as? ServiceFeatureTable,
               table.isEditable,
               let database = table.serviceGeodatabase else {
@@ -184,5 +191,12 @@ class Model: ObservableObject {
         }
         
         self.featureForm = nil
+    }
+}
+
+private extension FeatureForm {
+    /// The layer to which the feature belongs.
+    var featureLayer: FeatureLayer? {
+        feature.table?.layer as? FeatureLayer
     }
 }
