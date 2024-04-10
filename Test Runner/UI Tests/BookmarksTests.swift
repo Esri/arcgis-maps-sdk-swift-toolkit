@@ -167,4 +167,29 @@ final class BookmarksTests: XCTestCase {
         
         XCTAssertTrue(secondBookmark.exists, "The second bookmark wasn't found.")
     }
+    
+    /// Test automatic pan and zoom to the selected bookmark.
+    func testCase6() {
+        let app = XCUIApplication()
+        app.launch()
+        
+        let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
+        let bookmarksTestCase6Button = app.buttons["Bookmarks Test Case 6"]
+        let firstBookmark = app.buttons["San Diego Convention Center"].firstMatch
+        let expectedCoordinatesLabel = app.staticTexts["32.7N 117.2W"]
+        
+        // Open the Bookmarks component test views.
+        XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
+        bookmarksTestsButton.tap()
+        
+        // Open the Bookmarks component test view.
+        XCTAssertTrue(bookmarksTestCase6Button.exists, "The Bookmarks Test Case 6 button wasn't found.")
+        bookmarksTestCase6Button.tap()
+        
+        XCTAssertTrue(firstBookmark.exists, "The first bookmark wasn't found.")
+        
+        firstBookmark.tap()
+        
+        XCTAssertTrue(expectedCoordinatesLabel.exists)
+    }
 }
