@@ -211,14 +211,17 @@ extension Bookmarks {
     func selectBookmark(_ bookmark: Bookmark) {
         selection?.wrappedValue = bookmark
         isPresented = false
-        if let viewpoint = viewpoint {
-            viewpoint.wrappedValue = bookmark.viewpoint
-        } else if let onSelectionChanged = selectionChangedAction {
-            onSelectionChanged(bookmark)
-        } else if let geoViewProxy, let viewpoint = bookmark.viewpoint {
+        
+        if let geoViewProxy, let viewpoint = bookmark.viewpoint {
             Task {
                 await geoViewProxy.setViewpoint(viewpoint, duration: nil)
             }
+        } else if let viewpoint = viewpoint {
+            viewpoint.wrappedValue = bookmark.viewpoint
+        }
+        
+        if let selectionChangedAction {
+            selectionChangedAction(bookmark)
         }
     }
     
