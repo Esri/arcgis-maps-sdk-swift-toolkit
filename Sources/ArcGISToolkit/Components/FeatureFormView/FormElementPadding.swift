@@ -1,0 +1,27 @@
+***REMOVED*** Copyright 2023 Esri
+***REMOVED***
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+***REMOVED***
+
+private struct FormElementPaddingKey: EnvironmentKey {
+***REMOVED***static let defaultValue: CGFloat = 4
+***REMOVED***
+
+extension EnvironmentValues {
+***REMOVED******REMOVED***/ A vertical amount of padding to use between form elements.
+***REMOVED***var formElementPadding: CGFloat {
+***REMOVED******REMOVED***get { self[FormElementPaddingKey.self] ***REMOVED***
+***REMOVED******REMOVED***set { self[FormElementPaddingKey.self] = newValue ***REMOVED***
+***REMOVED***
+***REMOVED***

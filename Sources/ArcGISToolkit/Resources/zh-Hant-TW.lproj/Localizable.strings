@@ -38,6 +38,13 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A label for a button to open the system file browser. */
 "Browse" = "瀏覽";
 
+/* A label for a button to show the calibration view. */
+"Calibrate" = "校正";
+
+/* A label for the calibration view used to calibrate the camera
+for the AR experience. */
+"Calibration" = "校正";
+
 /* A label for a button to cancel an operation. */
 "Cancel" = "取消";
 
@@ -74,7 +81,7 @@ east, etc.). */
 /* A label for a button used to delete a utility network trace input component or result. */
 "Delete" = "刪除";
 
-/* A button to close the bookmark selection menu. */
+/* A label for a button for the user to indicate completion of the current task. */
 "Done" = "完成";
 
 /* A message indicating that the user attempted to use a single utility
@@ -85,6 +92,19 @@ network element for more than one trace starting point. */
 for a utility network trace. */
 "Element could not be identified." = "無法識別元素。";
 
+/* A label for the slider that adjusts the camera elevation for the
+AR experience. */
+"elevation" = "高程";
+
+/* Text indicating the user should enter a field's exact number of required characters. */
+"Enter %lld characters" = "輸入 %lld 個字元";
+
+/* Text indicating the user should enter a number of characters between a field's minimum and maximum number of allowed characters. */
+"Enter %lld to %lld characters" = "輸入 %lld 到 %lld 個字元";
+
+/* A label for a combo box input that prompts the user to enter a value. */
+"Enter Value" = "輸入值";
+
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "錯誤";
 
@@ -94,6 +114,10 @@ network certificate. */
 
 /* An error to be displayed when a basemap chosen from the basemap gallery fails to load. */
 "Error loading basemap." = "載入底圖時出錯。";
+
+/* An error message shown when a GeoModel failed to load.
+The variable provides additional data. */
+"Error loading bookmarks: %@" = "載入書籤時出錯: %@";
 
 /* A label indicating popup expressions are being evaluated. */
 "Evaluating popup expressions" = "正在評估快顯視窗表達式";
@@ -112,6 +136,9 @@ trace operation. */
 /* A label in reference to fields in a set of data contained in a popup. */
 "Fields" = "欄位";
 
+/* A label for a text entry field that allows the user to filter a list of values by name. */
+"Filter" = "篩選器";
+
 /* A field allowing the user to filter a list of facilities by name. A
 facility contains one or more levels in a floor-aware map or scene. */
 "Filter facilities" = "篩選機構";
@@ -129,6 +156,13 @@ contains one or more facilities in a floor-aware map or scene. */
 /* A label in reference to function outputs returned as results of a utility network
 trace operation. */
 "Function Results" = "函數結果";
+
+/* A label for the slider that adjusts the camera heading for the
+AR experience. */
+"heading" = "標題";
+
+/* Text indicating a field's maximum number of allowed characters. */
+"Maximum %lld characters" = "最多 %lld 個字元";
 
 /* A label in reference to media elements contained within a popup. */
 "Media" = "媒體";
@@ -163,11 +197,17 @@ trace operation. */
 /* A label indicating that no utility networks are available. */
 "No utility networks found." = "找不到公用事業網路。";
 
+/* A string indicating that no value has been set for a form field. */
+"No Value" = "沒有值";
+
 /* A label indicating that no utility network trace configuration has been selected. */
 "None selected" = "未選擇";
 
 /* A trace function output result was not provided. */
 "Not Available" = "不可用";
+
+/* A label for a button to choose the current time and date for a field. */
+"Now" = "我現在";
 
 /* A string identifying a utility network object. */
 "Object ID: %@" = "物件 ID: %@";
@@ -200,6 +240,9 @@ variable provides additional data. */
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
 "Repeat Search Here" = "在這裡重複尋";
+
+/* A label indicating a field is required */
+"Required" = "必填資訊";
 
 /* A label for a button to show utility network trace results. */
 "Results" = "結果";
@@ -264,6 +307,9 @@ match the spatial reference of the map. */
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "URL 無法連線或不包含圖像資料。";
+
+/* A label for a button to choose the current date for a field. */
+"Today" = "今天";
 
 /* A label for a button to begin a utility network trace operation. */
 "Trace" = "軌跡";

@@ -52,6 +52,9 @@
 public struct Scalebar: View {
 ***REMOVED******REMOVED*** - MARK: Internal/Private vars
 ***REMOVED***
+***REMOVED******REMOVED***/ A timer to allow for the scheduling of the auto-hide animation.
+***REMOVED***@State private var autoHideTimer: Timer?
+***REMOVED***
 ***REMOVED******REMOVED***/ The vertical amount of space used by the scalebar.
 ***REMOVED***@State private var height: Double?
 ***REMOVED***
@@ -176,11 +179,19 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED***viewModel.update($0)
 ***REMOVED******REMOVED******REMOVED***viewModel.updateScale()
 ***REMOVED******REMOVED******REMOVED***if settings.autoHide {
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = 1
+***REMOVED******REMOVED******REMOVED******REMOVED***if opacity != 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = 1
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.default.delay(settings.autoHideDelay)) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = .zero
+***REMOVED******REMOVED******REMOVED******REMOVED***autoHideTimer?.invalidate()
+***REMOVED******REMOVED******REMOVED******REMOVED***autoHideTimer = Timer.scheduledTimer(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withTimeInterval: settings.autoHideDelay,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***repeats: false
+***REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = .zero
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

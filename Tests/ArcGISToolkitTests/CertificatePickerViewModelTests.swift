@@ -16,8 +16,8 @@ import XCTest
 ***REMOVED***
 @testable ***REMOVED***Toolkit
 
-@MainActor final class CertificatePickerViewModelTests: XCTestCase {
-***REMOVED***func testViewModel() async throws {
+final class CertificatePickerViewModelTests: XCTestCase {
+***REMOVED***@MainActor func testViewModel() async throws {
 ***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .certificate)
 ***REMOVED******REMOVED***let model = CertificatePickerViewModel(challenge: challenge)
 ***REMOVED******REMOVED***
@@ -29,9 +29,17 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertEqual(model.challengingHost, "host.com")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.proceedToPicker()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Have to wait here because the proceed function is delayed to avoid a bug.
-***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 300_000_000)
-***REMOVED******REMOVED***XCTAssertTrue(model.showPicker)
+***REMOVED******REMOVED***await fulfillment(
+***REMOVED******REMOVED******REMOVED***of: [
+***REMOVED******REMOVED******REMOVED******REMOVED***expectation(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: NSPredicate(value: true),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***evaluatedWith: model.showPicker
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***],
+***REMOVED******REMOVED******REMOVED***timeout: 10.0
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let url = URL(fileURLWithPath: "/does-not-exist.pfx")
 ***REMOVED******REMOVED***model.proceedToPasswordEntry(forCertificateWithURL: url)
@@ -39,15 +47,16 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertTrue(model.showPassword)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.proceedToUseCertificate(withPassword: "1234")
-***REMOVED******REMOVED******REMOVED*** Have to yield here because the proceed function kicks off a task.
-***REMOVED******REMOVED***await Task.yield()
-***REMOVED******REMOVED******REMOVED*** Have to wait here because the proceed function waits to avoid a bug.
-***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 300_000_000)
-***REMOVED******REMOVED******REMOVED*** Another yield seems to be required to deal with timing when running the test
-***REMOVED******REMOVED******REMOVED*** repeatedly.
-***REMOVED******REMOVED***await Task.yield()
-***REMOVED******REMOVED******REMOVED*** Sometime this fails. See details in https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/245.
-***REMOVED******REMOVED***XCTAssertTrue(model.showCertificateError)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await fulfillment(
+***REMOVED******REMOVED******REMOVED***of: [
+***REMOVED******REMOVED******REMOVED******REMOVED***expectation(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: NSPredicate(value: true),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***evaluatedWith: model.showCertificateError
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***],
+***REMOVED******REMOVED******REMOVED***timeout: 10.0
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.cancel()
 ***REMOVED******REMOVED***let disposition = await challenge.value
@@ -57,10 +66,10 @@ import XCTest
 ***REMOVED***func testCertificateErrorLocalizedDescription() {
 ***REMOVED******REMOVED***let couldNotAccessCertificateFileError = CertificatePickerViewModel.CertificateError.couldNotAccessCertificateFile
 ***REMOVED******REMOVED***XCTAssertEqual(couldNotAccessCertificateFileError.localizedDescription, "Could not access the certificate file.")
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let importErrorInvalidData = CertificatePickerViewModel.CertificateError.importError(.invalidData)
 ***REMOVED******REMOVED***XCTAssertEqual(importErrorInvalidData.localizedDescription, "The certificate file was invalid.")
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let importErrorInvalidPassword = CertificatePickerViewModel.CertificateError.importError(.invalidPassword)
 ***REMOVED******REMOVED***XCTAssertEqual(importErrorInvalidPassword.localizedDescription, "The password was invalid.")
 ***REMOVED******REMOVED***

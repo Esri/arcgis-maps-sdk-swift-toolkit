@@ -7,10 +7,11 @@
 ***REMOVED***@Chapter(name: "Augmented Reality") {
 ***REMOVED******REMOVED***Augmented reality experiences overlay ArcGIS Scene imagery over a camera feed of the
 ***REMOVED******REMOVED***physical world. The following views provide augmented reality experiences 
-***REMOVED******REMOVED***for common AR patterns including Flyover and TableTop AR.
-***REMOVED******REMOVED***@Image(source: FlyoverSceneView, alt: "An image of a fly over AR experience.")
+***REMOVED******REMOVED***for common AR patterns including Flyover, TableTop, and World Scale AR.
+***REMOVED******REMOVED***@Image(source: WorldScaleSceneView, alt: "An image of a world scale AR experience.")
 ***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:FlyoverSceneViewTutorial")
 ***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:TableTopSceneViewTutorial")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:WorldScaleSceneViewTutorial")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Chapter(name: "Authenticator") {
@@ -40,6 +41,13 @@
 ***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:CompassTutorial")
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@Chapter(name: "FeatureFormView") {
+***REMOVED******REMOVED***A `FeatureFormView` is a view that provides an easy way for developers to
+***REMOVED******REMOVED***add feature attribute editing capabilities to their existing applications.
+***REMOVED******REMOVED***@Image(source: FeatureFormView, alt: "An image of the FeatureFormView component.")
+***REMOVED******REMOVED***@TutorialReference(tutorial: "doc:FeatureFormViewTutorial")
+***REMOVED***
+
 ***REMOVED***@Chapter(name: "FloatingPanel") {
 ***REMOVED******REMOVED***A `FloatingPanel` is a view that overlays a view and supplies view-related content.
 ***REMOVED******REMOVED***@Image(source: FloatingPanel, alt: "An image of the FloatingPanel component.")

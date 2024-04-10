@@ -3,7 +3,7 @@
 Augmented reality experiences are designed to "augment" the physical world with virtual 
 content that respects real world scale, position, and orientation of a device. The following 
 views overlay ArcGIS Scene imagery over a camera feed of the physical world to provide augmented 
-reality experiences for common AR patterns including Flyover and TableTop AR.
+reality experiences for common AR patterns including Flyover, TableTop, and World Scale AR.
 
 **FlyoverSceneView**
 
@@ -19,6 +19,17 @@ the device to focus on specific content in the scene. To learn more about using 
 is anchored to a physical surface. To learn more about using the TableTopSceneView see the 
 [TableTopSceneView Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/tabletopsceneviewtutorial).
 
+**WorldScaleSceneView**
+
+`WorldScaleSceneView` provides an augmented reality world scale experience where ArcGIS Scene content
+is integrated with the real world. To learn more about using the WorldScaleSceneView see the 
+[WorldScaleSceneView Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/worldscalesceneviewtutorial).
+
 ###### Requirements
-* Set the [`Privacy - Camera Usage Description`](https:***REMOVED***developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription) property in the app's **info.plist** to request camera permissions.
-* To restrict your app to installing only on devices that support ARKit, add `arkit` to the required device capabilities section of the app's **info.plist**.
+* Set the following properties in the app's **info.plist**:
+***REMOVED**** [`Privacy - Camera Usage Description`](https:***REMOVED***developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription) to request camera permissions.
+***REMOVED**** [`Privacy - Location When In Use Usage Description`](https:***REMOVED***developer.apple.com/documentation/bundleresources/information_property_list/nslocationwheninuseusagedescription) to request the user's location.
+* To restrict your app to installing only on devices that support the following device capabilities, add the device capability to the required device capabilities section of the app's **info.plist**:
+***REMOVED**** `arkit` to require support for ARKit.
+***REMOVED**** `gps` to require GPS hardware for tracking locations.
+***REMOVED**** `iphone-ipad-minimum-performance-a12` to require the performance and capabilities of A12 Bionic and later chips.

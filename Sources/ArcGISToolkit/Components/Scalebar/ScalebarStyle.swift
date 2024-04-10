@@ -16,7 +16,7 @@ import Foundation
 
 ***REMOVED***/ Visual scalebar styles.
 public enum ScalebarStyle {
-***REMOVED******REMOVED***/ Displays a single unit with segemeted bars of alternating fill color.
+***REMOVED******REMOVED***/ Displays a single unit with segmented bars of alternating fill color.
 ***REMOVED***case alternatingBar
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays a single unit.

@@ -5,13 +5,13 @@
 struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***@State private var map = makeMap()
 ***REMOVED***
-***REMOVED***@State var mapPoint: Point?
+***REMOVED***@State private var mapPoint: Point?
 ***REMOVED***
-***REMOVED***@State var screenPoint: CGPoint?
+***REMOVED***@State private var screenPoint: CGPoint?
 ***REMOVED***
-***REMOVED***@State var resultGraphicsOverlay = GraphicsOverlay()
+***REMOVED***@State private var resultGraphicsOverlay = GraphicsOverlay()
 ***REMOVED***
-***REMOVED***@State var viewpoint: Viewpoint?
+***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED***static func makeMap() -> Map {
 ***REMOVED******REMOVED***let portalItem = PortalItem(
