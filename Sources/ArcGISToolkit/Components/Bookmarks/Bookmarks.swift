@@ -186,7 +186,7 @@ public struct Bookmarks: View {
 extension Bookmarks {
     /// Sets an action to perform when the bookmark selection changes.
     /// - Parameter action: The action to perform when the bookmark selection has changed.
-    @available(*, deprecated, message: "Monitor changes on a bound Bookmark or Viewpoint instead.")
+    @available(*, deprecated)
     public func onSelectionChanged(
         perform action: @escaping (Bookmark) -> Void
     ) -> Bookmarks {
