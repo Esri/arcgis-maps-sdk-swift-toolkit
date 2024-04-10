@@ -64,7 +64,7 @@ struct SwitchInput: View {
                 Text(isOn ? input.onValue.name : input.offValue.name)
                     .accessibilityIdentifier("\(element.label) Switch Label")
                 Spacer()
-                Toggle("", isOn: $isOn)
+                Toggle(isOn: $isOn) {}
                     .accessibilityIdentifier("\(element.label) Switch")
                     .toggleStyle(.switch)
             }

@@ -53,12 +53,10 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/Forms/Examples/Examples)
 /// and refer to
 /// [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
-/// in the project. To learn more about using the `FeatureFormView` see the [FeatureFormView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/featureformviewtutorial) [Coming Soon].
+/// in the project. To learn more about using the `FeatureFormView` see the [FeatureFormView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/featureformviewtutorial).
 /// 
 /// - Since: 200.4
 public struct FeatureFormView: View {
-    @Environment(\.formElementPadding) var elementPadding
-    
     /// The view model for the form.
     @StateObject private var model: FormViewModel
     
@@ -82,15 +80,17 @@ public struct FeatureFormView: View {
                     ProgressView()
                 } else {
                     VStack(alignment: .leading) {
-                        FormHeader(title: title)
-                            .padding(.bottom, elementPadding)
+                        if !title.isEmpty {
+                            FormHeader(title: title)
+                            Divider()
+                        }
                         ForEach(model.visibleElements, id: \.self) { element in
                             makeElement(element)
                         }
                     }
                 }
             }
-            .task(id: model.focusedElement) {
+            .onChange(of: model.focusedElement) { _ in
                 if let focusedElement = model.focusedElement {
                     withAnimation { scrollViewProxy.scrollTo(focusedElement, anchor: .top) }
                 }

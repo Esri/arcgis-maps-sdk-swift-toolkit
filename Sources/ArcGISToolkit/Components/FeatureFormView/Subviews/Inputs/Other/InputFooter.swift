@@ -64,7 +64,7 @@ struct InputFooter: View {
         .font(.footnote)
         .foregroundColor(isShowingError ? .red : .secondary)
         .id(id)
-        .padding(.bottom, elementPadding)
+        .padding(.vertical, elementPadding / 2)
         .task {
             for await _ in element.$value {
                 id = UUID()
