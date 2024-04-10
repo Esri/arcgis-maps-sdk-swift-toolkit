@@ -46,7 +46,7 @@ final class BookmarksTests: XCTestCase {
         bookmarksButton.tap()
         
         // Verify that the directive UI label is present.
-        XCTAssertTrue(selectABookmarkText.exists, "The Select a bookmark text wasn't found.")
+        XCTAssertTrue(selectABookmarkText.waitForExistence(timeout: 1.0), "The Select a bookmark text wasn't found.")
         
         // Select a bookmark and confirm the component notified the test view of the selection.
         XCTAssertTrue(giantSequoiasButton.waitForExistence(timeout: 1.0), "The Giant Sequoias button wasn't found.")
@@ -190,6 +190,9 @@ final class BookmarksTests: XCTestCase {
         
         firstBookmark.tap()
         
-        XCTAssertTrue(expectedCoordinatesLabel.exists)
+        XCTAssertTrue(
+            expectedCoordinatesLabel.waitForExistence(timeout: 5.0),
+            "The expected coordinate label doesn't exist."
+        )
     }
 }
