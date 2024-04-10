@@ -86,16 +86,11 @@ public struct AsyncImageView: View {
                 } else {
                     ProgressView()
                 }
-            case .failure(let error):
+            case .failure(_):
                 HStack(alignment: .center) {
                     Image(systemName: "exclamationmark.circle")
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(.red)
-                    Text(
-                        "An error occurred loading the image: \(error.localizedDescription).",
-                        bundle: .toolkitModule,
-                        comment: "A fallback message to display when an image cannot be loaded."
-                    )
                 }
                 .padding([.top, .bottom])
             }
