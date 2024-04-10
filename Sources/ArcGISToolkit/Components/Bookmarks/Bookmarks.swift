@@ -238,11 +238,10 @@ extension Bookmarks {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For the selected row we apply no row background color to allow for automatic 
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** system selection styling. Otherwise we apply clear coloring to avoid mismatched
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** backgrounds on Mac Catalyst.
+#if targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(bookmark == selection?.wrappedValue ? nil : Color.clear)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
+#endif
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(idealWidth: 320, idealHeight: 428)
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
