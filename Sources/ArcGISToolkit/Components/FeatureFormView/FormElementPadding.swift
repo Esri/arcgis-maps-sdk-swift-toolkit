@@ -15,7 +15,7 @@
 ***REMOVED***
 
 private struct FormElementPaddingKey: EnvironmentKey {
-***REMOVED***static let defaultValue: CGFloat = 10
+***REMOVED***static let defaultValue: CGFloat = 4
 ***REMOVED***
 
 extension EnvironmentValues {

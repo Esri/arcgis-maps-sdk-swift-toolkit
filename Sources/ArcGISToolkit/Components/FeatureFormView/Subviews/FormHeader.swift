@@ -17,12 +17,11 @@
 ***REMOVED***/ A view shown at the top of a form. If the provided title is `nil`, no text is rendered.
 struct FormHeader: View {
 ***REMOVED******REMOVED***/ The title defined for the form.
-***REMOVED***let title: String?
+***REMOVED***let title: String
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***if let title {
-***REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.largeTitle)
-***REMOVED***
+***REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED***
 ***REMOVED***
