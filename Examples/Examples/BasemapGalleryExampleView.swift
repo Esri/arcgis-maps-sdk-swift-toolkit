@@ -30,7 +30,7 @@ struct BasemapGalleryExampleView: View {
     )
     
     /// The initial list of basemaps.
-    @State private var basemaps = initialBasemaps()
+    @State private var basemaps = makeBasemapGalleryItems()
     
     var body: some View {
         MapView(map: map, viewpoint: initialViewpoint)
@@ -63,7 +63,7 @@ struct BasemapGalleryExampleView: View {
         }
     }
     
-    private static func initialBasemaps() -> [BasemapGalleryItem] {
+    private static func makeBasemapGalleryItems() -> [BasemapGalleryItem] {
         let identifiers = [
             "46a87c20f09e4fc48fa3c38081e0cae6",
             "f33a34de3a294590ab48f246e99958c9",

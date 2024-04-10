@@ -92,6 +92,19 @@ extension View {
             .padding(isMacCatalyst ? [.horizontal] : [], length)
     }
     
+    /// Configures the behavior in which scrollable content interacts with the software keyboard.
+    /// - Returns: A view that dismisses the keyboard when the  scroll.
+    /// - Parameter immediately: A Boolean value that will cause the keyboard to the keyboard to
+    /// dismiss as soon as scrolling starts when `true` and interactively when `false`.
+    func scrollDismissesKeyboard(immediately: Bool) -> some View {
+        if #available(iOS 16.0, *) {
+            return self
+                .scrollDismissesKeyboard(immediately ? .immediately : .interactively)
+        } else {
+            return self
+        }
+    }
+    
     /// View modifier used to denote the view is selected.
     /// - Parameter isSelected: `true` if the view is selected, `false` otherwise.
     /// - Returns: The modified view.
@@ -149,6 +162,31 @@ extension View {
             }
         } else {
             self
+        }
+    }
+}
+
+extension View {
+    /// Sets a closure to perform when a single tap occurs on the view.
+    ///
+    /// - Note: This is to retrofit the tap gesture to iOS 15.0.
+    /// - Parameters:
+    ///   - action: The closure to perform upon single tap.
+    ///   - screenPoint: The location of the tap in the view's coordinate space.
+    func onSingleTapGesture(perform action: @escaping (_ screenPoint: CGPoint) -> Void) -> some View {
+        if #available(iOS 16.0, *) {
+            return self.onTapGesture { screenPoint in
+                action(screenPoint)
+            }
+        } else {
+            // Use a drag gesture with a minimum dragging distance of zero so the
+            // gesture is recognized with a single tap.
+            return self.gesture(
+                DragGesture(minimumDistance: 0)
+                    .onEnded { dragAttributes in
+                        action(dragAttributes.location)
+                    }
+            )
         }
     }
 }

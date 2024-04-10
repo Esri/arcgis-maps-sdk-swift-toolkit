@@ -19,8 +19,6 @@ import XCTest
 
 @MainActor final class ARTests: XCTestCase {
     func testFlyoverLocationInitWithDefaults() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = FlyoverSceneView(
             initialLocation: .init(
                 latitude: 34.056397,
@@ -28,7 +26,7 @@ import XCTest
             ),
             translationFactor: 1_000
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         let initialCamera = view.initialCamera
@@ -43,8 +41,6 @@ import XCTest
     }
     
     func testFlyoverLocationInit() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = FlyoverSceneView(
             initialLocation: .init(
                 latitude: 34.056397,
@@ -53,7 +49,7 @@ import XCTest
             translationFactor: 1_000,
             initialHeading: 90
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         let initialCamera = view.initialCamera
@@ -68,15 +64,13 @@ import XCTest
     }
     
     func testFlyoverLatLongInitWithDefaults() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = FlyoverSceneView(
             initialLatitude: 34.056397,
             initialLongitude: -117.195646,
             initialAltitude: 1_000,
             translationFactor: 1_000
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         let initialCamera = view.initialCamera
@@ -91,8 +85,6 @@ import XCTest
     }
     
     func testFlyoverLatLongInit() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = FlyoverSceneView(
             initialLatitude: 34.056397,
             initialLongitude: -117.195646,
@@ -100,7 +92,7 @@ import XCTest
             translationFactor: 1_000,
             initialHeading: 180
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         let initialCamera = view.initialCamera
@@ -115,14 +107,12 @@ import XCTest
     }
     
     func testTableTopInit() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = TableTopSceneView(
             anchorPoint: .init(latitude: 34.056397, longitude: -117.195646),
             translationFactor: 1_000,
             clippingDistance: 1_000
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         
         XCTAssertEqual(view.anchorPoint.x, -117.195646)
@@ -135,17 +125,89 @@ import XCTest
     }
     
     func testTableTopARCoachingOverlayViewModifier() throws {
-        let sceneView = SceneView(scene: Scene())
-        
         let view = TableTopSceneView(
             anchorPoint: .init(latitude: 0, longitude: 0),
             translationFactor: 1_000,
             clippingDistance: 1_000
         ) { _ in
-            sceneView
+            SceneView(scene: Scene())
         }
         .coachingOverlayHidden(true)
         
         XCTAssertTrue(view.coachingOverlayIsHidden)
+    }
+    
+    func testWorldScaleGeoTrackingInitWithDefaults() throws {
+        let view = WorldScaleSceneView(
+            trackingMode: .geoTracking
+        ) { _ in
+            SceneView(scene: Scene())
+        }
+        
+        XCTAssertNil(view.clippingDistance)
+        XCTAssertEqual(view.trackingMode, .geoTracking)
+        XCTAssertEqual(view.calibrationButtonAlignment, .bottom)
+        XCTAssertFalse(view.calibrationViewIsHidden)
+    }
+    
+    func testWorldScaleWorldTrackingInitWithDefaults() throws {
+        let view = WorldScaleSceneView { _ in
+            SceneView(scene: Scene())
+        }
+        
+        XCTAssertNil(view.clippingDistance)
+        XCTAssertEqual(view.trackingMode, .worldTracking)
+        XCTAssertEqual(view.calibrationButtonAlignment, .bottom)
+        XCTAssertFalse(view.calibrationViewIsHidden)
+    }
+    
+    func testWorldScalePreferGeoTrackingInitWithDefaults() throws {
+        let view = WorldScaleSceneView(
+            trackingMode: .preferGeoTracking
+        ) { _ in
+            SceneView(scene: Scene())
+        }
+        
+        XCTAssertNil(view.clippingDistance)
+        XCTAssertEqual(view.trackingMode, .preferGeoTracking)
+        XCTAssertEqual(view.calibrationButtonAlignment, .bottom)
+        XCTAssertFalse(view.calibrationViewIsHidden)
+    }
+    
+    func testWorldScaleInitWithClippingDistance() throws {
+        let view = WorldScaleSceneView(
+            clippingDistance: 1_000,
+            trackingMode: .geoTracking
+        ) { _ in
+            SceneView(scene: Scene())
+        }
+        
+        XCTAssertEqual(view.clippingDistance, 1_000)
+        XCTAssertEqual(view.trackingMode, .geoTracking)
+        XCTAssertEqual(view.calibrationButtonAlignment, .bottom)
+        XCTAssertFalse(view.calibrationViewIsHidden)
+    }
+    
+    
+    func testWorldScaleCalibrationViewHiddenViewModifier() throws {
+        let view = WorldScaleSceneView(
+            trackingMode: .geoTracking
+        ) { _ in
+            SceneView(scene: Scene())
+        }
+        .calibrationViewHidden(true)
+        
+        XCTAssertTrue(view.calibrationViewIsHidden)
+    }
+    
+    func testWorldScaleCalibrationButtonAlignmentViewModifier() throws {
+        let view = WorldScaleSceneView(
+            trackingMode: .geoTracking
+        ) { _ in
+            SceneView(scene: Scene())
+        }
+        .calibrationButtonAlignment(.bottomLeading)
+        
+        XCTAssertEqual(view.calibrationButtonAlignment, .bottomLeading)
     }
 }

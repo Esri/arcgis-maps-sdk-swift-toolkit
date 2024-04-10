@@ -1,0 +1,61 @@
+import SwiftUI
+import ArcGIS
+import ArcGISToolkit
+
+struct WorldScaleExampleView: View {
+    @State private var scene: ArcGIS.Scene = {
+        // Creates an elevation source from Terrain3D REST service.
+        let elevationServiceURL = URL(
+            string: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer"
+        )!
+        let elevationSource = ArcGISTiledElevationSource(url: elevationServiceURL)
+        let surface = Surface()
+        surface.addElevationSource(elevationSource)
+        surface.backgroundGrid.isVisible = false
+        surface.navigationConstraint = .unconstrained
+        let scene = Scene(basemapStyle: .arcGISImagery)
+        scene.baseSurface = surface
+        scene.baseSurface.opacity = 0
+        return scene
+    }()
+    
+    var body: some View {
+        WorldScaleSceneView(
+            clippingDistance: 400
+        ) { _ in
+            SceneView(scene: scene)
+        }
+        .task {
+            let locationManager = CLLocationManager()
+            if locationManager.authorizationStatus == .notDetermined {
+                locationManager.requestWhenInUseAuthorization()
+            }
+            
+            try? await locationDataSource.start()
+            
+            // Retrieve initial location.
+            guard let initialLocation = await locationDataSource.locations.first(where: { _ in true }) else { return }
+            
+            // Put a circle graphic around the initial location.
+            let circle = GeometryEngine.geodeticBuffer(
+                around: initialLocation.position,
+                distance: 20,
+                distanceUnit: .meters,
+                maxDeviation: 1,
+                curveType: .geodesic
+            )
+            graphicsOverlay.addGraphic(
+                Graphic(
+                    geometry: circle,
+                    symbol: SimpleLineSymbol(
+                        color: .red,
+                        width: 3
+                    )
+                )
+            )
+            
+            // Stop the location data source after the initial location is retrieved.
+            await locationDataSource.stop()
+        }
+    }
+}
