@@ -168,3 +168,28 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(secondBookmark.exists, "The second bookmark wasn't found.")
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test automatic pan and zoom to the selected bookmark.
+***REMOVED***func testCase6() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
+***REMOVED******REMOVED***let bookmarksTestCase6Button = app.buttons["Bookmarks Test Case 6"]
+***REMOVED******REMOVED***let firstBookmark = app.buttons["San Diego Convention Center"].firstMatch
+***REMOVED******REMOVED***let expectedCoordinatesLabel = app.staticTexts["32.7N 117.2W"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test views.
+***REMOVED******REMOVED***XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
+***REMOVED******REMOVED***bookmarksTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the Bookmarks component test view.
+***REMOVED******REMOVED***XCTAssertTrue(bookmarksTestCase6Button.exists, "The Bookmarks Test Case 6 button wasn't found.")
+***REMOVED******REMOVED***bookmarksTestCase6Button.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(firstBookmark.exists, "The first bookmark wasn't found.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***firstBookmark.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(expectedCoordinatesLabel.exists)
+***REMOVED***
+***REMOVED***
