@@ -108,7 +108,7 @@ public struct Bookmarks: View {
     }
     
     public var body: some View {
-        Group {
+        VStack {
             BookmarksHeader(isPresented: $isPresented)
                 .padding([.horizontal, .top])
             Divider()
