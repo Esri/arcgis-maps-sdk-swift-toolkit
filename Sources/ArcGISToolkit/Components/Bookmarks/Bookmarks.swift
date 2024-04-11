@@ -31,11 +31,8 @@ import SwiftUI
 /// and refer to [BookmarksExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
 /// in the project. To learn more about using the `Bookmarks` component see <doc:BookmarksTutorial>.
 public struct Bookmarks: View {
-    /// A list of bookmarks provided directly via initializer.
-    private let bookmarks: [Bookmark]?
-    
-    /// A map or scene model containing bookmarks.
-    private let geoModel: GeoModel?
+    /// The bookmark data source.
+    let bookmarkSource: BookmarkSource
     
     /// The proxy to provide access to geo view operations.
     private let geoViewProxy: GeoViewProxy?
@@ -76,8 +73,7 @@ public struct Bookmarks: View {
         selection: Binding<Bookmark?>,
         geoViewProxy: GeoViewProxy? = nil
     ) {
-        self.bookmarks = bookmarks
-        self.geoModel = nil
+        self.bookmarkSource = .array(bookmarks)
         self.geoViewProxy = geoViewProxy
         self.selection = selection
         self.viewpoint = nil
@@ -99,8 +95,7 @@ public struct Bookmarks: View {
         selection: Binding<Bookmark?>,
         geoViewProxy: GeoViewProxy? = nil
     ) {
-        self.bookmarks = nil
-        self.geoModel = geoModel
+        self.bookmarkSource = .geoModel(geoModel)
         self.geoViewProxy = geoViewProxy
         self.selection = selection
         self.viewpoint = nil
@@ -108,37 +103,32 @@ public struct Bookmarks: View {
     }
     
     public var body: some View {
-        VStack {
-            BookmarksHeader(isPresented: $isPresented)
-                .padding([.horizontal, .top])
-            Divider()
-            if let bookmarks {
-                makeList(bookmarks: bookmarks)
-            } else if let geoModel {
-                if isGeoModelLoaded {
-                    makeList(bookmarks: geoModel.bookmarks)
-                } else if let loadingError {
-                    makeErrorMessage(with: loadingError)
-                } else if !isGeoModelLoaded {
-                    loading
-                }
-            }
-            // Push content to the top edge.
-            Spacer()
-        }
-        .task(id: geoModel) {
-            guard let geoModel else { return }
-            do {
-                try await geoModel.load()
-                isGeoModelLoaded = true
-            } catch {
-                loadingError = error
+        BookmarksHeader(isPresented: $isPresented)
+            .padding([.horizontal, .top])
+        Divider()
+        switch bookmarkSource {
+        case .array(let array):
+            makeList(bookmarks: array)
+        case .geoModel(let geoModel):
+            if isGeoModelLoaded {
+                makeList(bookmarks: geoModel.bookmarks)
+            } else if let loadingError {
+                makeErrorMessage(with: loadingError)
+            } else if !isGeoModelLoaded {
+                makeLoadingView(with: geoModel)
             }
         }
+        Spacer()
     }
 }
 
 extension Bookmarks {
+    /// Contains the data source used to initialize the view.
+    enum BookmarkSource {
+        case array([Bookmark])
+        case geoModel(GeoModel)
+    }
+    
     /// Performs the necessary actions when a bookmark is selected.
     ///
     /// This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
@@ -198,10 +188,18 @@ extension Bookmarks {
         }
     }
     
-    /// A view that is shown while a `GeoModel` is loading.
-    private var loading: some View {
-        ProgressView()
+    /// Makes a view that is shown while a `GeoModel` is loading.
+    private func makeLoadingView(with geoModel: GeoModel) -> some View {
+        return ProgressView()
             .padding()
+            .task(id: geoModel) {
+                do {
+                    try await geoModel.load()
+                    isGeoModelLoaded = true
+                } catch {
+                    loadingError = error
+                }
+            }
     }
     
     /// A view that is shown when no bookmarks are present.
@@ -233,8 +231,7 @@ extension Bookmarks {
         bookmarks: [Bookmark],
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
-        self.bookmarks = bookmarks
-        self.geoModel = nil
+        self.bookmarkSource = .array(bookmarks)
         self.geoViewProxy = nil
         self.selection = nil
         self.viewpoint = viewpoint
@@ -253,8 +250,7 @@ extension Bookmarks {
         geoModel: GeoModel,
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
-        self.bookmarks = nil
-        self.geoModel = geoModel
+        self.bookmarkSource = .geoModel(geoModel)
         self.geoViewProxy = nil
         self.selection = nil
         self.viewpoint = viewpoint
