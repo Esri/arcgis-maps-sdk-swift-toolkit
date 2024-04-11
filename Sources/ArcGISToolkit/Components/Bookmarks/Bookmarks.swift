@@ -68,7 +68,7 @@ public struct Bookmarks: View {
     ///   - selection: A selected Bookmark.
     ///   - geoViewProxy: The proxy to provide access to geo view operations.
     ///
-    /// When a `GeoViewProxy` is provided, the map or scene  will automatically pan and zoom to the
+    /// When a `GeoViewProxy` is provided, the map or scene will automatically pan and zoom to the
     /// selected bookmark.
     public init(
         isPresented: Binding<Bool>,
