@@ -30,7 +30,7 @@ struct BookmarksExampleView: View {
         MapViewReader { mapViewProxy in
             MapView(map: map)
                 .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
+                    ToolbarItem(placement: .topBarTrailing) {
                         Button {
                             bookmarksIsPresented = true
                         } label: {
@@ -39,7 +39,6 @@ struct BookmarksExampleView: View {
                                 systemImage: "bookmark"
                             )
                         }
-                        .buttonStyle(.plain)
                         .popover(isPresented: $bookmarksIsPresented) {
                             Bookmarks(
                                 isPresented: $bookmarksIsPresented,
