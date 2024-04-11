@@ -66,7 +66,8 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
 ***REMOVED******REMOVED***/   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
 ***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
-***REMOVED***@available(*, deprecated)
+***REMOVED******REMOVED***/ - Attention: Deprecated at 200.5.
+***REMOVED***@available(*, deprecated, message: "Use 'init(isPresented:bookmarks:selection:geoViewProxy:)' instead.")
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***bookmarks: [Bookmark],
@@ -108,7 +109,8 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
 ***REMOVED******REMOVED***/   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
 ***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
-***REMOVED***@available(*, deprecated)
+***REMOVED******REMOVED***/ - Attention: Deprecated at 200.5.
+***REMOVED***@available(*, deprecated, message: "Use 'init(isPresented:geoModel:selection:geoViewProxy:)' instead.")
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***geoModel: GeoModel,
@@ -179,6 +181,7 @@ public struct Bookmarks: View {
 extension Bookmarks {
 ***REMOVED******REMOVED***/ Sets an action to perform when the bookmark selection changes.
 ***REMOVED******REMOVED***/ - Parameter action: The action to perform when the bookmark selection has changed.
+***REMOVED******REMOVED***/ - Attention: Deprecated at 200.5.
 ***REMOVED***@available(*, deprecated)
 ***REMOVED***public func onSelectionChanged(
 ***REMOVED******REMOVED***perform action: @escaping (Bookmark) -> Void
