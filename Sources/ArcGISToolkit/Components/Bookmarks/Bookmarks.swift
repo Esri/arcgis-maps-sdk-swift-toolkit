@@ -103,22 +103,25 @@ public struct Bookmarks: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
-***REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
-***REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED***switch bookmarkSource {
-***REMOVED******REMOVED***case .array(let array):
-***REMOVED******REMOVED******REMOVED***makeList(bookmarks: array)
-***REMOVED******REMOVED***case .geoModel(let geoModel):
-***REMOVED******REMOVED******REMOVED***if isGeoModelLoaded {
-***REMOVED******REMOVED******REMOVED******REMOVED***makeList(bookmarks: geoModel.bookmarks)
-***REMOVED******REMOVED*** else if let loadingError {
-***REMOVED******REMOVED******REMOVED******REMOVED***makeErrorMessage(with: loadingError)
-***REMOVED******REMOVED*** else if !isGeoModelLoaded {
-***REMOVED******REMOVED******REMOVED******REMOVED***makeLoadingView(with: geoModel)
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
+***REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED***switch bookmarkSource {
+***REMOVED******REMOVED******REMOVED***case .array(let array):
+***REMOVED******REMOVED******REMOVED******REMOVED***makeList(bookmarks: array)
+***REMOVED******REMOVED******REMOVED***case .geoModel(let geoModel):
+***REMOVED******REMOVED******REMOVED******REMOVED***if isGeoModelLoaded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeList(bookmarks: geoModel.bookmarks)
+***REMOVED******REMOVED******REMOVED*** else if let loadingError {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeErrorMessage(with: loadingError)
+***REMOVED******REMOVED******REMOVED*** else if !isGeoModelLoaded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeLoadingView(with: geoModel)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
-***REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED***.frame(idealWidth: 320, idealHeight: 428)
 ***REMOVED***
 ***REMOVED***
 
@@ -183,7 +186,6 @@ extension Bookmarks {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(bookmark == selection?.wrappedValue ? nil : Color.clear)
 #endif
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(idealWidth: 320, idealHeight: 428)
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
 ***REMOVED***
