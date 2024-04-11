@@ -31,11 +31,8 @@
 ***REMOVED***/ and refer to [BookmarksExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `Bookmarks` component see <doc:BookmarksTutorial>.
 public struct Bookmarks: View {
-***REMOVED******REMOVED***/ A list of bookmarks provided directly via initializer.
-***REMOVED***private let bookmarks: [Bookmark]?
-***REMOVED***
-***REMOVED******REMOVED***/ A map or scene model containing bookmarks.
-***REMOVED***private let geoModel: GeoModel?
+***REMOVED******REMOVED***/ The bookmark data source.
+***REMOVED***let bookmarkSource: BookmarkSource
 ***REMOVED***
 ***REMOVED******REMOVED***/ The proxy to provide access to geo view operations.
 ***REMOVED***private let geoViewProxy: GeoViewProxy?
@@ -76,8 +73,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***selection: Binding<Bookmark?>,
 ***REMOVED******REMOVED***geoViewProxy: GeoViewProxy? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.bookmarks = bookmarks
-***REMOVED******REMOVED***self.geoModel = nil
+***REMOVED******REMOVED***self.bookmarkSource = .array(bookmarks)
 ***REMOVED******REMOVED***self.geoViewProxy = geoViewProxy
 ***REMOVED******REMOVED***self.selection = selection
 ***REMOVED******REMOVED***self.viewpoint = nil
@@ -99,8 +95,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***selection: Binding<Bookmark?>,
 ***REMOVED******REMOVED***geoViewProxy: GeoViewProxy? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.bookmarks = nil
-***REMOVED******REMOVED***self.geoModel = geoModel
+***REMOVED******REMOVED***self.bookmarkSource = .geoModel(geoModel)
 ***REMOVED******REMOVED***self.geoViewProxy = geoViewProxy
 ***REMOVED******REMOVED***self.selection = selection
 ***REMOVED******REMOVED***self.viewpoint = nil
@@ -108,37 +103,32 @@ public struct Bookmarks: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
-***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED***if let bookmarks {
-***REMOVED******REMOVED******REMOVED******REMOVED***makeList(bookmarks: bookmarks)
-***REMOVED******REMOVED*** else if let geoModel {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isGeoModelLoaded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeList(bookmarks: geoModel.bookmarks)
-***REMOVED******REMOVED******REMOVED*** else if let loadingError {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeErrorMessage(with: loadingError)
-***REMOVED******REMOVED******REMOVED*** else if !isGeoModelLoaded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***loading
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Push content to the top edge.
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED***
-***REMOVED******REMOVED***.task(id: geoModel) {
-***REMOVED******REMOVED******REMOVED***guard let geoModel else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await geoModel.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***isGeoModelLoaded = true
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***loadingError = error
+***REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
+***REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
+***REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED***switch bookmarkSource {
+***REMOVED******REMOVED***case .array(let array):
+***REMOVED******REMOVED******REMOVED***makeList(bookmarks: array)
+***REMOVED******REMOVED***case .geoModel(let geoModel):
+***REMOVED******REMOVED******REMOVED***if isGeoModelLoaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***makeList(bookmarks: geoModel.bookmarks)
+***REMOVED******REMOVED*** else if let loadingError {
+***REMOVED******REMOVED******REMOVED******REMOVED***makeErrorMessage(with: loadingError)
+***REMOVED******REMOVED*** else if !isGeoModelLoaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***makeLoadingView(with: geoModel)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***Spacer()
 ***REMOVED***
 ***REMOVED***
 
 extension Bookmarks {
+***REMOVED******REMOVED***/ Contains the data source used to initialize the view.
+***REMOVED***enum BookmarkSource {
+***REMOVED******REMOVED***case array([Bookmark])
+***REMOVED******REMOVED***case geoModel(GeoModel)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Performs the necessary actions when a bookmark is selected.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
@@ -198,10 +188,18 @@ extension Bookmarks {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A view that is shown while a `GeoModel` is loading.
-***REMOVED***private var loading: some View {
-***REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED***/ Makes a view that is shown while a `GeoModel` is loading.
+***REMOVED***private func makeLoadingView(with geoModel: GeoModel) -> some View {
+***REMOVED******REMOVED***return ProgressView()
 ***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***.task(id: geoModel) {
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await geoModel.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isGeoModelLoaded = true
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***loadingError = error
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view that is shown when no bookmarks are present.
@@ -233,8 +231,7 @@ extension Bookmarks {
 ***REMOVED******REMOVED***bookmarks: [Bookmark],
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.bookmarks = bookmarks
-***REMOVED******REMOVED***self.geoModel = nil
+***REMOVED******REMOVED***self.bookmarkSource = .array(bookmarks)
 ***REMOVED******REMOVED***self.geoViewProxy = nil
 ***REMOVED******REMOVED***self.selection = nil
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
@@ -253,8 +250,7 @@ extension Bookmarks {
 ***REMOVED******REMOVED***geoModel: GeoModel,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.bookmarks = nil
-***REMOVED******REMOVED***self.geoModel = geoModel
+***REMOVED******REMOVED***self.bookmarkSource = .geoModel(geoModel)
 ***REMOVED******REMOVED***self.geoViewProxy = nil
 ***REMOVED******REMOVED***self.selection = nil
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
