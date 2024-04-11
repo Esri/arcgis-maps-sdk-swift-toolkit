@@ -3,7 +3,7 @@ import ArcGIS
 import ArcGISToolkit
 
 struct SearchExampleView: View {
-    let locatorDataSource = SmartLocatorSearchSource(
+    @State private var locatorSearchSource = SmartLocatorSearchSource(
         name: "My locator",
         maximumResults: 16,
         maximumSuggestions: 16

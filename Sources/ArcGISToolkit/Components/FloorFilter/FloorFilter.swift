@@ -1,25 +1,26 @@
-// Copyright 2022 Esri.
-
+// Copyright 2022 Esri
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a
 /// building in your application. It allows you to filter the floor plan data displayed in your map
 /// or scene view to a site, a facility (building) in the site, or a floor in the facility.
 ///
-/// The ArcGIS Maps SDK currently supports filtering a 2D floor aware map based on the sites,
-/// buildings, or levels in the map.
+/// The ArcGIS Maps SDK currently supports filtering a floor aware map or scene based on the sites,
+/// buildings, or levels in the geo model's floor definition.
 ///
 /// | iPhone | iPad |
 /// | ------ | ---- |
@@ -39,7 +40,7 @@ import ArcGIS
 /// - Adjusts layout and presentation to work well regardless of positioning - left/right and
 /// top/bottom.
 /// - Keeps the selected facility visible in the list while the selection is changing in response to
-/// map navigation.
+/// map or scene navigation.
 ///
 /// **Behavior**
 ///
@@ -71,7 +72,7 @@ public struct FloorFilter: View {
     ///   - alignment: Determines the display configuration of Floor Filter elements.
     ///   - automaticSelectionMode: The selection behavior of the floor filter.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
-    ///   - isNavigating: A Boolean value indicating whether the map is currently being navigated.
+    ///   - isNavigating: A Boolean value indicating whether the map or scene is currently being navigated.
     ///   - selection: The selected site, facility, or level.
     public init(
         floorManager: FloorManager,
@@ -156,7 +157,7 @@ public struct FloorFilter: View {
         )
     }
     
-    /// A Boolean value indicating whether the map is currently being navigated.
+    /// A Boolean value indicating whether the map or scene is currently being navigated.
     private var isNavigating: Binding<Bool>
     
     /// Indicates that the selector should be presented with a top oriented alignment configuration.

@@ -1,9 +1,10 @@
-// Copyright 2023 Esri.
+// Copyright 2023 Esri
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,6 +30,15 @@ extension String {
             localized: "Field",
             bundle: .toolkitModule,
             comment: "A field in a set of data contained in a popup."
+        )
+    }
+    
+    /// A localized string for the phrase "No Value".
+    static var noValue: Self {
+        .init(
+            localized: "No Value",
+            bundle: .toolkitModule,
+            comment: "A string indicating that no value has been set for a form field."
         )
     }
     

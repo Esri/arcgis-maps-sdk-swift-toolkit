@@ -1,8 +1,11 @@
-// Copyright 2023 Esri.
+// Copyright 2023 Esri
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,6 +47,26 @@ extension SceneViewProxy {
         } else {
             cameraController.transformationMatrix = transformationMatrix
         }
+    }
+    
+    /// Sets the field of view for the scene view's camera for a given augmented reality frame.
+    /// - Parameters:
+    ///   - frame: The current AR frame.
+    ///   - orientation: The interface orientation.
+    func setFieldOfView(for frame: ARFrame, orientation: InterfaceOrientation) {
+        let camera = frame.camera
+        let intrinsics = camera.intrinsics
+        let imageResolution = camera.imageResolution
+        
+        setFieldOfViewFromLensIntrinsics(
+            xFocalLength: intrinsics[0][0],
+            yFocalLength: intrinsics[1][1],
+            xPrincipal: intrinsics[2][0],
+            yPrincipal: intrinsics[2][1],
+            xImageSize: Float(imageResolution.width),
+            yImageSize: Float(imageResolution.height),
+            interfaceOrientation: orientation
+        )
     }
 }
 

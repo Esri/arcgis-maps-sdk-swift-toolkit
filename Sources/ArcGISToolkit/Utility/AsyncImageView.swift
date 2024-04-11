@@ -1,10 +1,11 @@
-// Copyright 2022 Esri.
-
+// Copyright 2022 Esri
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -85,16 +86,11 @@ public struct AsyncImageView: View {
                 } else {
                     ProgressView()
                 }
-            case .failure(let error):
+            case .failure(_):
                 HStack(alignment: .center) {
                     Image(systemName: "exclamationmark.circle")
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(.red)
-                    Text(
-                        "An error occurred loading the image: \(error.localizedDescription).",
-                        bundle: .toolkitModule,
-                        comment: "A fallback message to display when an image cannot be loaded."
-                    )
                 }
                 .padding([.top, .bottom])
             }

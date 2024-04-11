@@ -1,10 +1,11 @@
-// Copyright 2022 Esri.
-
+// Copyright 2022 Esri
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -50,6 +51,9 @@ import SwiftUI
 /// in the project. To learn more about using the `Scalebar` see the [Scalebar Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/scalebartutorial).
 public struct Scalebar: View {
     // - MARK: Internal/Private vars
+    
+    /// A timer to allow for the scheduling of the auto-hide animation.
+    @State private var autoHideTimer: Timer?
     
     /// The vertical amount of space used by the scalebar.
     @State private var height: Double?
@@ -175,11 +179,19 @@ public struct Scalebar: View {
             viewModel.update($0)
             viewModel.updateScale()
             if settings.autoHide {
-                withAnimation {
-                    opacity = 1
+                if opacity != 1 {
+                    withAnimation {
+                        opacity = 1
+                    }
                 }
-                withAnimation(.default.delay(settings.autoHideDelay)) {
-                    opacity = .zero
+                autoHideTimer?.invalidate()
+                autoHideTimer = Timer.scheduledTimer(
+                    withTimeInterval: settings.autoHideDelay,
+                    repeats: false
+                ) { _ in
+                    withAnimation {
+                        opacity = .zero
+                    }
                 }
             }
         }
