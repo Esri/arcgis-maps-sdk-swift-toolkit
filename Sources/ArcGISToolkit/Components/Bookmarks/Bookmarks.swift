@@ -16,8 +16,8 @@
 ***REMOVED***
 
 ***REMOVED***/ The `Bookmarks` component displays a list of bookmarks and allows the user to make a selection.
-***REMOVED***/ You can initialize the component with an array of `Bookmark`s or with a `GeoModel` containing
-***REMOVED***/ bookmarks.
+***REMOVED***/ You can initialize the component with an array of bookmarks or with a `GeoModel`
+***REMOVED***/ containing bookmarks.
 ***REMOVED***/
 ***REMOVED***/ The map or scene will automatically pan and zoom to the selected bookmark when a `GeoViewProxy`
 ***REMOVED***/ is provided in the initializer. Alternatively, handle selection changes manually using the bound
