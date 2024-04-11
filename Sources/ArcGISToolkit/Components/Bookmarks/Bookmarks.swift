@@ -66,7 +66,8 @@ public struct Bookmarks: View {
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
     ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
-    @available(*, deprecated)
+    /// - Attention: Deprecated at 200.5.
+    @available(*, deprecated, message: "Use 'init(isPresented:bookmarks:selection:geoViewProxy:)' instead.")
     public init(
         isPresented: Binding<Bool>,
         bookmarks: [Bookmark],
@@ -108,7 +109,8 @@ public struct Bookmarks: View {
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
     ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
-    @available(*, deprecated)
+    /// - Attention: Deprecated at 200.5.
+    @available(*, deprecated, message: "Use 'init(isPresented:geoModel:selection:geoViewProxy:)' instead.")
     public init(
         isPresented: Binding<Bool>,
         geoModel: GeoModel,
@@ -179,6 +181,7 @@ public struct Bookmarks: View {
 extension Bookmarks {
     /// Sets an action to perform when the bookmark selection changes.
     /// - Parameter action: The action to perform when the bookmark selection has changed.
+    /// - Attention: Deprecated at 200.5.
     @available(*, deprecated)
     public func onSelectionChanged(
         perform action: @escaping (Bookmark) -> Void
