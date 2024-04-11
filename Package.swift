@@ -1,12 +1,13 @@
 ***REMOVED*** swift-tools-version:5.9
 ***REMOVED*** The swift-tools-version declares the minimum version of Swift required to build this package.
-***REMOVED***.
-
+***REMOVED***
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +30,8 @@ let package = Package(
 ***REMOVED******REMOVED***),
 ***REMOVED***],
 ***REMOVED***dependencies: [
-***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.3.0"))
+***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.4.0")),
+***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/Dejavu", .upToNextMinor(from: "1.0.0"))
 ***REMOVED***],
 ***REMOVED***targets: [
 ***REMOVED******REMOVED***.target(
@@ -43,7 +45,7 @@ let package = Package(
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***.testTarget(
 ***REMOVED******REMOVED******REMOVED***name: "ArcGISToolkitTests",
-***REMOVED******REMOVED******REMOVED***dependencies: ["ArcGISToolkit"]
+***REMOVED******REMOVED******REMOVED***dependencies: ["ArcGISToolkit", "Dejavu"]
 ***REMOVED******REMOVED***)
 ***REMOVED***]
 )

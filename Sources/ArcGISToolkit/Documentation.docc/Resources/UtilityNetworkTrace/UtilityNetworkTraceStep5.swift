@@ -5,15 +5,15 @@
 struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***@State private var map = makeMap()
 ***REMOVED***
-***REMOVED***@State var activeDetent: FloatingPanelDetent = .half
+***REMOVED***@State private var activeDetent: FloatingPanelDetent = .half
 ***REMOVED***
-***REMOVED***@State var mapPoint: Point?
+***REMOVED***@State private var mapPoint: Point?
 ***REMOVED***
-***REMOVED***@State var screenPoint: CGPoint?
+***REMOVED***@State private var screenPoint: CGPoint?
 ***REMOVED***
-***REMOVED***@State var resultGraphicsOverlay = GraphicsOverlay()
+***REMOVED***@State private var resultGraphicsOverlay = GraphicsOverlay()
 ***REMOVED***
-***REMOVED***@State var viewpoint: Viewpoint?
+***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in

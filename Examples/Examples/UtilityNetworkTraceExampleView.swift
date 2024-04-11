@@ -1,10 +1,11 @@
-***REMOVED*** Copyright 2022 Esri.
-
+***REMOVED*** Copyright 2022 Esri
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,34 +19,26 @@
 ***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with
 ***REMOVED***/ a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-***REMOVED***@Environment(\.horizontalSizeClass)
-***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
-***REMOVED***
-***REMOVED***@Environment(\.verticalSizeClass)
-***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the environment is compact.
-***REMOVED***private var isCompact: Bool {
-***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
-***REMOVED***
+***REMOVED***@Environment(\.isPortraitOrientation)
+***REMOVED***private var isPortraitOrientation
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map with the utility networks.
 ***REMOVED***@State private var map = makeMap()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current detent of the floating panel presenting the trace tool.
-***REMOVED***@State var activeDetent: FloatingPanelDetent = .half
+***REMOVED***@State private var activeDetent: FloatingPanelDetent = .half
 ***REMOVED***
 ***REMOVED******REMOVED***/ Provides the ability to detect tap locations in the context of the map view.
-***REMOVED***@State var mapPoint: Point?
+***REMOVED***@State private var mapPoint: Point?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Provides the ability to detect tap locations in the context of the screen.
-***REMOVED***@State var screenPoint: CGPoint?
+***REMOVED***@State private var screenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A container for graphical trace results.
-***REMOVED***@State var resultGraphicsOverlay = GraphicsOverlay()
+***REMOVED***@State private var resultGraphicsOverlay = GraphicsOverlay()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
-***REMOVED***@State var viewpoint: Viewpoint?
+***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
@@ -83,7 +76,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanelDetent($activeDetent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Manually account for a device's bottom safe area when using a Floating Panel.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** See also #518.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? geometryProxy.safeAreaInsets.bottom : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isPortraitOrientation ? geometryProxy.safeAreaInsets.bottom : nil)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -108,5 +101,13 @@ private extension ArcGISCredential {
 ***REMOVED******REMOVED******REMOVED******REMOVED***password: "I68VGU^nMurF"
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension EnvironmentValues {
+***REMOVED******REMOVED***/ A Boolean value indicating whether this environment has a compact horizontal size class and
+***REMOVED******REMOVED***/ a regular vertical size class.
+***REMOVED***var isPortraitOrientation: Bool {
+***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
 ***REMOVED***
 ***REMOVED***

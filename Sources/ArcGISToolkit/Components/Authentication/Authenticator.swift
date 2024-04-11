@@ -1,10 +1,11 @@
-***REMOVED*** Copyright 2022 Esri.
-
+***REMOVED*** Copyright 2022 Esri
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -121,6 +122,10 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
 ***REMOVED******REMOVED***   let pivToken = TKTokenWatcher().tokenIDs.filter({ $0.localizedCaseInsensitiveContains("pivtoken") ***REMOVED***).first,
 ***REMOVED******REMOVED***   let credential = try? NetworkCredential.smartCard(pivToken: pivToken) {
 ***REMOVED******REMOVED******REMOVED***return .continueWithCredential(credential)
+***REMOVED*** else if challenge.kind == .negotiate {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Reject the negotiate challenge so next authentication protection
+***REMOVED******REMOVED******REMOVED******REMOVED*** space is tried.
+***REMOVED******REMOVED******REMOVED***return .rejectProtectionSpace
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)

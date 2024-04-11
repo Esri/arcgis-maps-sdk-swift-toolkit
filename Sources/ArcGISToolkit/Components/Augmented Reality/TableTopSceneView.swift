@@ -1,10 +1,11 @@
-***REMOVED*** Copyright 2023 Esri.
-
+***REMOVED*** Copyright 2023 Esri
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -226,65 +227,6 @@ public struct TableTopSceneView: View {
 ***REMOVED***
 ***REMOVED***
 
-private extension View {
-***REMOVED******REMOVED***/ Sets a closure to perform when a single tap occurs on the view.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - action: The closure to perform upon single tap.
-***REMOVED******REMOVED***/   - screenPoint: The location of the tap in the view's coordinate space.
-***REMOVED***func onSingleTapGesture(perform action: @escaping (_ screenPoint: CGPoint) -> Void) -> some View {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***return self.onTapGesture { screenPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED***action(screenPoint)
-***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Use a drag gesture with a minimum dragging distance of zero so the
-***REMOVED******REMOVED******REMOVED******REMOVED*** gesture is recognized with a single tap.
-***REMOVED******REMOVED******REMOVED***return self.gesture(
-***REMOVED******REMOVED******REMOVED******REMOVED***DragGesture(minimumDistance: 0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onEnded { dragAttributes in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(dragAttributes.location)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension ARSwiftUIViewProxy {
-***REMOVED******REMOVED***/ Performs a hit test operation to get the transformation matrix representing the corresponding real-world point for `screenPoint`.
-***REMOVED******REMOVED***/ - Parameter screenPoint: The screen point to determine the real world transformation matrix from.
-***REMOVED******REMOVED***/ - Returns: A `TransformationMatrix` representing the real-world point corresponding to `screenPoint`.
-***REMOVED***func hitTest(at screenPoint: CGPoint) -> TransformationMatrix? {
-***REMOVED******REMOVED******REMOVED*** Use the `raycastQuery` method on ARSCNView to get the location of `screenPoint`.
-***REMOVED******REMOVED***guard let query = raycastQuery(
-***REMOVED******REMOVED******REMOVED***from: screenPoint,
-***REMOVED******REMOVED******REMOVED***allowing: .existingPlaneGeometry,
-***REMOVED******REMOVED******REMOVED***alignment: .any
-***REMOVED******REMOVED***) else { return nil ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let results = session.raycast(query)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Get the worldTransform from the first result; if there's no worldTransform, return nil.
-***REMOVED******REMOVED***guard let worldTransform = results.first?.worldTransform else { return nil ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Create our hit test matrix based on the worldTransform location.
-***REMOVED******REMOVED******REMOVED*** Right now we ignore the orientation of the plane that was hit to find the point
-***REMOVED******REMOVED******REMOVED*** since we only use horizontal planes.
-***REMOVED******REMOVED******REMOVED*** If we start supporting vertical planes we will have to stop suppressing the
-***REMOVED******REMOVED******REMOVED*** quaternion rotation to a null rotation (0,0,0,1).
-***REMOVED******REMOVED***let hitTestMatrix = TransformationMatrix.normalized(
-***REMOVED******REMOVED******REMOVED***quaternionX: 0,
-***REMOVED******REMOVED******REMOVED***quaternionY: 0,
-***REMOVED******REMOVED******REMOVED***quaternionZ: 0,
-***REMOVED******REMOVED******REMOVED***quaternionW: 1,
-***REMOVED******REMOVED******REMOVED***translationX: Double(worldTransform.columns.3.x),
-***REMOVED******REMOVED******REMOVED***translationY: Double(worldTransform.columns.3.y),
-***REMOVED******REMOVED******REMOVED***translationZ: Double(worldTransform.columns.3.z)
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return hitTestMatrix
-***REMOVED***
-***REMOVED***
-
 private extension SceneViewProxy {
 ***REMOVED******REMOVED***/ Sets the initial transformation used to offset the originCamera.  The initial transformation is based on an AR point determined
 ***REMOVED******REMOVED***/ via existing plane hit detection from `screenPoint`.  If an AR point cannot be determined, this method will return `false`.
@@ -296,33 +238,13 @@ private extension SceneViewProxy {
 ***REMOVED******REMOVED***for arViewProxy: ARSwiftUIViewProxy,
 ***REMOVED******REMOVED***using screenPoint: CGPoint
 ***REMOVED***) -> TransformationMatrix? {
-***REMOVED******REMOVED******REMOVED*** Use the `hitTest` method to get the matrix of `screenPoint`.
-***REMOVED******REMOVED***guard let matrix = arViewProxy.hitTest(at: screenPoint) else { return nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Use the `raycast` method to get the matrix of `screenPoint`.
+***REMOVED******REMOVED***guard let matrix = arViewProxy.raycast(from: screenPoint, allowing: .existingPlaneGeometry) else { return nil ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Set the `initialTransformation` as the TransformationMatrix.identity - hit test matrix.
+***REMOVED******REMOVED******REMOVED*** Set the `initialTransformation` as the TransformationMatrix.identity - raycast matrix.
 ***REMOVED******REMOVED***let initialTransformation = TransformationMatrix.identity.subtracting(matrix)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return initialTransformation
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Sets the field of view for the scene view's camera for a given augmented reality frame.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - frame: The current AR frame.
-***REMOVED******REMOVED***/   - orientation: The interface orientation.
-***REMOVED***func setFieldOfView(for frame: ARFrame, orientation: InterfaceOrientation) {
-***REMOVED******REMOVED***let camera = frame.camera
-***REMOVED******REMOVED***let intrinsics = camera.intrinsics
-***REMOVED******REMOVED***let imageResolution = camera.imageResolution
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***setFieldOfViewFromLensIntrinsics(
-***REMOVED******REMOVED******REMOVED***xFocalLength: intrinsics[0][0],
-***REMOVED******REMOVED******REMOVED***yFocalLength: intrinsics[1][1],
-***REMOVED******REMOVED******REMOVED***xPrincipal: intrinsics[2][0],
-***REMOVED******REMOVED******REMOVED***yPrincipal: intrinsics[2][1],
-***REMOVED******REMOVED******REMOVED***xImageSize: Float(imageResolution.width),
-***REMOVED******REMOVED******REMOVED***yImageSize: Float(imageResolution.height),
-***REMOVED******REMOVED******REMOVED***interfaceOrientation: orientation
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 

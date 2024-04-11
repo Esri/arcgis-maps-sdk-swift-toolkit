@@ -1,10 +1,11 @@
-***REMOVED*** Copyright 2022 Esri.
-
+***REMOVED*** Copyright 2022 Esri
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,12 +21,6 @@ struct BookmarksHeader: View {
 ***REMOVED***
 ***REMOVED***@Environment(\.verticalSizeClass)
 ***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
-***REMOVED***
-***REMOVED******REMOVED***/ If `true`, the bookmarks will display as sheet.
-***REMOVED******REMOVED***/ If `false`, the bookmarks will display as a popover.
-***REMOVED***private var isCompact: Bool {
-***REMOVED******REMOVED***return horizontalSizeClass == .compact || verticalSizeClass == .compact
-***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
 ***REMOVED***@Binding var isPresented: Bool
@@ -52,17 +47,13 @@ struct BookmarksHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
 ***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***if isCompact {
+***REMOVED******REMOVED******REMOVED***if horizontalSizeClass == .compact || verticalSizeClass == .compact {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.toggle()
 ***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Done",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A button to close the bookmark selection menu."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text.done
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

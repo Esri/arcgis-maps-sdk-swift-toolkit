@@ -3,7 +3,7 @@
 ***REMOVED***Toolkit
 
 struct SearchExampleView: View {
-***REMOVED***let locatorDataSource = SmartLocatorSearchSource(
+***REMOVED***@State private var locatorSearchSource = SmartLocatorSearchSource(
 ***REMOVED******REMOVED***name: "My locator",
 ***REMOVED******REMOVED***maximumResults: 16,
 ***REMOVED******REMOVED***maximumSuggestions: 16
@@ -13,7 +13,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISImagery)
 ***REMOVED***)
 ***REMOVED***
-***REMOVED***private let searchResultsOverlay = GraphicsOverlay()
+***REMOVED***@State private var searchResultsOverlay = GraphicsOverlay()
 ***REMOVED***
 ***REMOVED***@State private var searchResultViewpoint: Viewpoint? = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
@@ -44,7 +44,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorDataSource],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorSearchSource],
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoViewProxy: mapViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***)

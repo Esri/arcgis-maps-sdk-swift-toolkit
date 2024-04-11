@@ -1,10 +1,11 @@
-***REMOVED*** Copyright 2023 Esri.
-
+***REMOVED*** Copyright 2023 Esri
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,10 +37,18 @@ import XCTest
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** This tests that calling setupPersistentCredentialStorage tries to sync with the keychain.
+#if targetEnvironment(macCatalyst)
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***try await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlocked)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***XCTFail("Persistent credential storage setup failed")
+***REMOVED***
+#elseif !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlocked)
 ***REMOVED******REMOVED******REMOVED***XCTFail("Expected an error to be thrown as unit tests should not have access to the keychain")
 ***REMOVED*** catch {***REMOVED***
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testClearCredentialStores() async {

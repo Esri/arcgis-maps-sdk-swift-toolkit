@@ -1,10 +1,11 @@
-***REMOVED*** Copyright 2022 Esri.
-
+***REMOVED*** Copyright 2022 Esri
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,8 +19,8 @@
 ***REMOVED***/ building in your application. It allows you to filter the floor plan data displayed in your map
 ***REMOVED***/ or scene view to a site, a facility (building) in the site, or a floor in the facility.
 ***REMOVED***/
-***REMOVED***/ The ArcGIS Maps SDK currently supports filtering a 2D floor aware map based on the sites,
-***REMOVED***/ buildings, or levels in the map.
+***REMOVED***/ The ArcGIS Maps SDK currently supports filtering a floor aware map or scene based on the sites,
+***REMOVED***/ buildings, or levels in the geo model's floor definition.
 ***REMOVED***/
 ***REMOVED***/ | iPhone | iPad |
 ***REMOVED***/ | ------ | ---- |
@@ -39,7 +40,7 @@
 ***REMOVED***/ - Adjusts layout and presentation to work well regardless of positioning - left/right and
 ***REMOVED***/ top/bottom.
 ***REMOVED***/ - Keeps the selected facility visible in the list while the selection is changing in response to
-***REMOVED***/ map navigation.
+***REMOVED***/ map or scene navigation.
 ***REMOVED***/
 ***REMOVED***/ **Behavior**
 ***REMOVED***/
@@ -71,7 +72,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/   - alignment: Determines the display configuration of Floor Filter elements.
 ***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
-***REMOVED******REMOVED***/   - isNavigating: A Boolean value indicating whether the map is currently being navigated.
+***REMOVED******REMOVED***/   - isNavigating: A Boolean value indicating whether the map or scene is currently being navigated.
 ***REMOVED******REMOVED***/   - selection: The selected site, facility, or level.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***floorManager: FloorManager,
@@ -156,7 +157,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the map is currently being navigated.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the map or scene is currently being navigated.
 ***REMOVED***private var isNavigating: Binding<Bool>
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented alignment configuration.

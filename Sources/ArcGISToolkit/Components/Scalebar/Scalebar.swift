@@ -1,10 +1,11 @@
-***REMOVED*** Copyright 2022 Esri.
-
+***REMOVED*** Copyright 2022 Esri
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -50,6 +51,9 @@
 ***REMOVED***/ in the project. To learn more about using the `Scalebar` see the [Scalebar Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/scalebartutorial).
 public struct Scalebar: View {
 ***REMOVED******REMOVED*** - MARK: Internal/Private vars
+***REMOVED***
+***REMOVED******REMOVED***/ A timer to allow for the scheduling of the auto-hide animation.
+***REMOVED***@State private var autoHideTimer: Timer?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The vertical amount of space used by the scalebar.
 ***REMOVED***@State private var height: Double?
@@ -175,11 +179,19 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED***viewModel.update($0)
 ***REMOVED******REMOVED******REMOVED***viewModel.updateScale()
 ***REMOVED******REMOVED******REMOVED***if settings.autoHide {
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = 1
+***REMOVED******REMOVED******REMOVED******REMOVED***if opacity != 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = 1
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.default.delay(settings.autoHideDelay)) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = .zero
+***REMOVED******REMOVED******REMOVED******REMOVED***autoHideTimer?.invalidate()
+***REMOVED******REMOVED******REMOVED******REMOVED***autoHideTimer = Timer.scheduledTimer(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withTimeInterval: settings.autoHideDelay,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***repeats: false
+***REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = .zero
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

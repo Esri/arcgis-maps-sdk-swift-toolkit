@@ -1,10 +1,11 @@
-***REMOVED*** Copyright 2022 Esri.
-
+***REMOVED*** Copyright 2022 Esri
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,8 +28,7 @@ import Combine
 @MainActor
 final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED***override func setUp() async throws {
-***REMOVED******REMOVED***ArcGISEnvironment.apiKey = APIKey("<#API Key#>")
-***REMOVED******REMOVED***try XCTSkipIf(ArcGISEnvironment.apiKey == .placeholder)
+***REMOVED******REMOVED***ArcGISEnvironment.apiKey = .default
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***override func tearDown() {
