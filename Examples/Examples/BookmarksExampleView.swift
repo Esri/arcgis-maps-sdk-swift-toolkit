@@ -24,7 +24,7 @@ struct BookmarksExampleView: View {
     @State private var map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
     
     /// The selected bookmark.
-    @State private var selection: Bookmark?
+    @State private var selectedBookmark: Bookmark?
     
     var body: some View {
         MapViewReader { mapViewProxy in
@@ -44,7 +44,7 @@ struct BookmarksExampleView: View {
                             Bookmarks(
                                 isPresented: $bookmarksIsPresented,
                                 geoModel: map,
-                                selection: $selection,
+                                selection: $selectedBookmark,
                                 geoViewProxy: mapViewProxy
                             )
                         }
