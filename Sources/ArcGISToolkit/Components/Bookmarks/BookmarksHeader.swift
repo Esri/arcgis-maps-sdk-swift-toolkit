@@ -49,7 +49,7 @@ struct BookmarksHeader: View {
             )
             Spacer()
             Button {
-                isPresented.toggle()
+                isPresented = false
             } label: {
                 Text.done
                     .fontWeight(.semibold)
