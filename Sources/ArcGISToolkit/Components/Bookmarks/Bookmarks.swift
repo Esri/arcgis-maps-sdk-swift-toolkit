@@ -65,26 +65,6 @@ public struct Bookmarks: View {
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
-    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
-    /// - Attention: Deprecated at 200.5.
-    @available(*, deprecated, message: "Use 'init(isPresented:bookmarks:selection:geoViewProxy:)' instead.")
-    public init(
-        isPresented: Binding<Bool>,
-        bookmarks: [Bookmark],
-        viewpoint: Binding<Viewpoint?>? = nil
-    ) {
-        self.bookmarks = bookmarks
-        self.geoModel = nil
-        self.geoViewProxy = nil
-        self.selection = nil
-        self.viewpoint = viewpoint
-        _isPresented = isPresented
-    }
-    
-    /// Creates a `Bookmarks` component.
-    /// - Parameters:
-    ///   - isPresented: Determines if the bookmarks list is presented.
-    ///   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
     ///   - selection: A selected Bookmark.
     ///   - geoViewProxy: The proxy to provide access to geo view operations.
     ///
@@ -101,26 +81,6 @@ public struct Bookmarks: View {
         self.geoViewProxy = geoViewProxy
         self.selection = selection
         self.viewpoint = nil
-        _isPresented = isPresented
-    }
-    
-    /// Creates a `Bookmarks` component.
-    /// - Parameters:
-    ///   - isPresented: Determines if the bookmarks list is presented.
-    ///   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
-    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
-    /// - Attention: Deprecated at 200.5.
-    @available(*, deprecated, message: "Use 'init(isPresented:geoModel:selection:geoViewProxy:)' instead.")
-    public init(
-        isPresented: Binding<Bool>,
-        geoModel: GeoModel,
-        viewpoint: Binding<Viewpoint?>? = nil
-    ) {
-        self.bookmarks = nil
-        self.geoModel = geoModel
-        self.geoViewProxy = nil
-        self.selection = nil
-        self.viewpoint = viewpoint
         _isPresented = isPresented
     }
     
@@ -179,18 +139,6 @@ public struct Bookmarks: View {
 }
 
 extension Bookmarks {
-    /// Sets an action to perform when the bookmark selection changes.
-    /// - Parameter action: The action to perform when the bookmark selection has changed.
-    /// - Attention: Deprecated at 200.5.
-    @available(*, deprecated)
-    public func onSelectionChanged(
-        perform action: @escaping (Bookmark) -> Void
-    ) -> Bookmarks {
-        var copy = self
-        copy.selectionChangedAction = action
-        return copy
-    }
-    
     /// Performs the necessary actions when a bookmark is selected.
     ///
     /// This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
@@ -269,5 +217,59 @@ extension Bookmarks {
         }
         .foregroundColor(.primary)
         .padding()
+    }
+}
+
+extension Bookmarks {
+    /// Creates a `Bookmarks` component.
+    /// - Parameters:
+    ///   - isPresented: Determines if the bookmarks list is presented.
+    ///   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
+    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+    /// - Attention: Deprecated at 200.5.
+    @available(*, deprecated, message: "Use 'init(isPresented:bookmarks:selection:geoViewProxy:)' instead.")
+    public init(
+        isPresented: Binding<Bool>,
+        bookmarks: [Bookmark],
+        viewpoint: Binding<Viewpoint?>? = nil
+    ) {
+        self.bookmarks = bookmarks
+        self.geoModel = nil
+        self.geoViewProxy = nil
+        self.selection = nil
+        self.viewpoint = viewpoint
+        _isPresented = isPresented
+    }
+    
+    /// Creates a `Bookmarks` component.
+    /// - Parameters:
+    ///   - isPresented: Determines if the bookmarks list is presented.
+    ///   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
+    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+    /// - Attention: Deprecated at 200.5.
+    @available(*, deprecated, message: "Use 'init(isPresented:geoModel:selection:geoViewProxy:)' instead.")
+    public init(
+        isPresented: Binding<Bool>,
+        geoModel: GeoModel,
+        viewpoint: Binding<Viewpoint?>? = nil
+    ) {
+        self.bookmarks = nil
+        self.geoModel = geoModel
+        self.geoViewProxy = nil
+        self.selection = nil
+        self.viewpoint = viewpoint
+        _isPresented = isPresented
+    }
+    
+    /// Sets an action to perform when the bookmark selection changes.
+    /// - Parameter action: The action to perform when the bookmark selection has changed.
+    /// - Attention: Deprecated at 200.5.
+    @available(*, deprecated)
+    public func onSelectionChanged(
+        perform action: @escaping (Bookmark) -> Void
+    ) -> Bookmarks {
+        var copy = self
+        copy.selectionChangedAction = action
+        return copy
     }
 }
