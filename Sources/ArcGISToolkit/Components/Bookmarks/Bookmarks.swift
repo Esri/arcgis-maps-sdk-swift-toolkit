@@ -178,7 +178,7 @@ extension Bookmarks {
                 } label: {
                     Text(bookmark.name)
                         // Make the entire row tappable.
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
