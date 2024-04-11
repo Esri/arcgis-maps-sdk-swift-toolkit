@@ -91,7 +91,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/   - selection: A selected Bookmark.
 ***REMOVED******REMOVED***/   - geoViewProxy: The proxy to provide access to geo view operations.
 ***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ When a `GeoViewProxy` is provided, the map or scene  will automatically pan and zoom to the
+***REMOVED******REMOVED***/ When a `GeoViewProxy` is provided, the map or scene will automatically pan and zoom to the
 ***REMOVED******REMOVED***/ selected bookmark.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
