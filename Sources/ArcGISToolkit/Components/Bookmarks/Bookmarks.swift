@@ -108,7 +108,7 @@ public struct Bookmarks: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
 ***REMOVED******REMOVED******REMOVED***Divider()
