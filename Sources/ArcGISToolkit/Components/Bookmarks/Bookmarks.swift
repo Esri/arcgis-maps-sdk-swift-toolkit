@@ -103,22 +103,25 @@ public struct Bookmarks: View {
     }
     
     public var body: some View {
-        BookmarksHeader(isPresented: $isPresented)
-            .padding([.horizontal, .top])
-        Divider()
-        switch bookmarkSource {
-        case .array(let array):
-            makeList(bookmarks: array)
-        case .geoModel(let geoModel):
-            if isGeoModelLoaded {
-                makeList(bookmarks: geoModel.bookmarks)
-            } else if let loadingError {
-                makeErrorMessage(with: loadingError)
-            } else if !isGeoModelLoaded {
-                makeLoadingView(with: geoModel)
+        VStack {
+            BookmarksHeader(isPresented: $isPresented)
+                .padding([.horizontal, .top])
+            Divider()
+            switch bookmarkSource {
+            case .array(let array):
+                makeList(bookmarks: array)
+            case .geoModel(let geoModel):
+                if isGeoModelLoaded {
+                    makeList(bookmarks: geoModel.bookmarks)
+                } else if let loadingError {
+                    makeErrorMessage(with: loadingError)
+                } else if !isGeoModelLoaded {
+                    makeLoadingView(with: geoModel)
+                }
             }
+            Spacer()
         }
-        Spacer()
+        .frame(idealWidth: 320, idealHeight: 428)
     }
 }
 
@@ -183,7 +186,6 @@ extension Bookmarks {
                 .listRowBackground(bookmark == selection?.wrappedValue ? nil : Color.clear)
 #endif
             }
-            .frame(idealWidth: 320, idealHeight: 428)
             .listStyle(.plain)
         }
     }
