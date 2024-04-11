@@ -1,10 +1,11 @@
-// Copyright 2021 Esri.
-
+// Copyright 2021 Esri
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +30,7 @@ struct BasemapGalleryExampleView: View {
     )
     
     /// The initial list of basemaps.
-    @State private var basemaps = initialBasemaps()
+    @State private var basemaps = makeBasemapGalleryItems()
     
     var body: some View {
         MapView(map: map, viewpoint: initialViewpoint)
@@ -62,7 +63,7 @@ struct BasemapGalleryExampleView: View {
         }
     }
     
-    private static func initialBasemaps() -> [BasemapGalleryItem] {
+    private static func makeBasemapGalleryItems() -> [BasemapGalleryItem] {
         let identifiers = [
             "46a87c20f09e4fc48fa3c38081e0cae6",
             "f33a34de3a294590ab48f246e99958c9",

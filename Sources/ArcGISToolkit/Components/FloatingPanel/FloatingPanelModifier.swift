@@ -1,10 +1,11 @@
-// Copyright 2022 Esri.
-
+// Copyright 2022 Esri
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,7 +41,7 @@ public extension View {
     func floatingPanel<Content>(
         attributionBarHeight: CGFloat = 0,
         backgroundColor: Color = Color(uiColor: .systemBackground),
-        selectedDetent: Binding<FloatingPanelDetent> = .constant(.half),
+        selectedDetent: Binding<FloatingPanelDetent>? = nil,
         horizontalAlignment: HorizontalAlignment = .trailing,
         isPresented: Binding<Bool> = .constant(true),
         maxWidth: CGFloat = 400,
@@ -50,7 +51,7 @@ public extension View {
             FloatingPanelModifier(
                 attributionBarHeight: attributionBarHeight,
                 backgroundColor: backgroundColor,
-                selectedDetent: selectedDetent,
+                boundDetent: selectedDetent,
                 horizontalAlignment: horizontalAlignment,
                 isPresented: isPresented,
                 maxWidth: maxWidth,
@@ -62,13 +63,7 @@ public extension View {
 
 /// Overlays a floating panel on the parent content.
 private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelContent: View {
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) var verticalSizeClass
-    
-    /// A Boolean value indicating whether the environment is compact.
-    private var isCompact: Bool {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular
-    }
+    @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
     /// The height of a geo-view's attribution bar.
     ///
@@ -80,8 +75,11 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
     /// The background color of the floating panel.
     let backgroundColor: Color
     
-    /// A binding to the currently selected detent.
-    let selectedDetent: Binding<FloatingPanelDetent>
+    /// A user provided detent.
+    let boundDetent: Binding<FloatingPanelDetent>?
+    
+    /// A managed detent when a user bound one isn't provided.
+    @State private var managedDetent: FloatingPanelDetent = .half
     
     /// The horizontal alignment of the floating panel.
     let horizontalAlignment: HorizontalAlignment
@@ -101,11 +99,11 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
                 FloatingPanel(
                     attributionBarHeight: attributionBarHeight,
                     backgroundColor: backgroundColor,
-                    selectedDetent: selectedDetent,
+                    selectedDetent: boundDetent ?? $managedDetent,
                     isPresented: isPresented,
                     content: panelContent
                 )
-                .frame(maxWidth: isCompact ? .infinity : maxWidth)
+                .frame(maxWidth: isPortraitOrientation ? .infinity : maxWidth)
             }
     }
 }

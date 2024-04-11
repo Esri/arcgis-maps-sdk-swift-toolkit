@@ -1,10 +1,11 @@
-// Copyright 2022 Esri.
-
+// Copyright 2022 Esri
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,8 +40,7 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The content shown in the floating panel.
     let content: () -> Content
     
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
     /// The color of the handle.
     @State private var handleColor: Color = .defaultHandleColor
@@ -60,24 +60,19 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .zero
     
-    /// A Boolean value indicating whether the panel should be configured for a compact environment.
-    private var isCompact: Bool {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular
-    }
-    
     var body: some View {
         GeometryReader { geometryProxy in
             VStack(spacing: 0) {
                 if isPresented {
-                    if isCompact {
+                    if isPortraitOrientation {
                         makeHandleView()
                         Divider()
                     }
                     content()
-                        .padding(.bottom, isCompact ? keyboardHeight - geometryProxy.safeAreaInsets.bottom : .zero)
+                        .padding(.bottom, isPortraitOrientation ? keyboardHeight - geometryProxy.safeAreaInsets.bottom : .zero)
                         .frame(height: height)
                         .clipped()
-                    if !isCompact {
+                    if !isPortraitOrientation {
                         Divider()
                         makeHandleView()
                     }
@@ -88,7 +83,7 @@ struct FloatingPanel<Content>: View where Content: View {
             .background(backgroundColor)
             .clipShape(
                 RoundedCorners(
-                    corners: isCompact ? [.topLeft, .topRight] : .allCorners,
+                    corners: isPortraitOrientation ? [.topLeft, .topRight] : .allCorners,
                     radius: 10
                 )
             )
@@ -96,7 +91,7 @@ struct FloatingPanel<Content>: View where Content: View {
             .frame(
                 maxWidth: .infinity,
                 maxHeight: .infinity,
-                alignment: isCompact ? .bottom : .top
+                alignment: isPortraitOrientation ? .bottom : .top
             )
             .animation(.easeInOut, value: isPresented)
             .animation(.default, value: attributionBarHeight)
@@ -128,20 +123,20 @@ struct FloatingPanel<Content>: View where Content: View {
         
         // If compact, ignore the device's bottom safe area so content reaches the physical bottom
         // edge of the screen.
-        .ignoresSafeArea(.container, edges: isCompact && keyboardState == .closed ? .bottom : [])
+        .ignoresSafeArea(.container, edges: isPortraitOrientation && keyboardState == .closed ? .bottom : [])
         
         // If non-compact, add uniform padding around all edges.
-        .padding(.all, isCompact ? 0 : .externalPadding)
+        .padding(.all, isPortraitOrientation ? 0 : .externalPadding)
         
         // If non-compact, and the keyboard isn't open add padding for the attribution bar.
-        .padding(.bottom, !isCompact && !(keyboardState == .open) ? attributionBarHeight : 0)
+        .padding(.bottom, !isPortraitOrientation && !(keyboardState == .open) ? attributionBarHeight : 0)
     }
     
     var drag: some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .global)
             .onChanged {
                 let deltaY = $0.location.y - (latestDragGesture?.location.y ?? $0.location.y)
-                let proposedHeight = height + ((isCompact ? -1 : +1) * deltaY)
+                let proposedHeight = height + ((isPortraitOrientation ? -1 : +1) * deltaY)
                 
                 handleColor = .activeHandleColor
                 height = min(max(.minHeight, proposedHeight), maximumHeight)
@@ -149,7 +144,7 @@ struct FloatingPanel<Content>: View where Content: View {
             }
             .onEnded {
                 let predictedEndLocation = $0.predictedEndLocation.y
-                let inferredHeight = isCompact ? maximumHeight - predictedEndLocation : predictedEndLocation
+                let inferredHeight = isPortraitOrientation ? maximumHeight - predictedEndLocation : predictedEndLocation
                 
                 selectedDetent = [.summary, .half, .full]
                     .map { (detent: $0, height: heightFor(detent: $0)) }

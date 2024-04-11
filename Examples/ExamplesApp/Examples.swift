@@ -1,10 +1,11 @@
-// Copyright 2021 Esri.
-
+// Copyright 2021 Esri
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,9 +27,10 @@ struct Examples: View {
             List(lists) { (list) in
                 NavigationLink(list.name, destination: list)
             }
-            .navigationBarTitle(Text("Toolkit Examples"), displayMode: .inline)
+            .navigationTitle("Toolkit Examples")
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        .navigationViewStyle(.stack)
     }
 }
 
@@ -37,7 +39,8 @@ extension ExampleList {
         name: "Augmented Reality",
         examples: [
             AnyExample("Flyover", content: FlyoverExampleView()),
-            AnyExample("Tabletop", content: TableTopExampleView())
+            AnyExample("Tabletop", content: TableTopExampleView()),
+            AnyExample("World Scale", content: WorldScaleExampleView())
         ]
     )
     
@@ -47,6 +50,7 @@ extension ExampleList {
             AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
             AnyExample("Bookmarks", content: BookmarksExampleView()),
             AnyExample("Compass", content: CompassExampleView()),
+            AnyExample("Feature Form", content: FeatureFormExampleView()),
             AnyExample("Floor Filter", content: FloorFilterExampleView()),
             AnyExample("Overview Map", content: OverviewMapExampleView()),
             AnyExample("Popup", content: PopupExampleView()),
