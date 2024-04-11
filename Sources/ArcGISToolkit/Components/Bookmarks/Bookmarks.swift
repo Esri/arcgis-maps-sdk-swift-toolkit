@@ -16,8 +16,8 @@ import ArcGIS
 import SwiftUI
 
 /// The `Bookmarks` component displays a list of bookmarks and allows the user to make a selection.
-/// You can initialize the component with an array of `Bookmark`s or with a `GeoModel` containing
-/// bookmarks.
+/// You can initialize the component with an array of bookmarks or with a `GeoModel`
+/// containing bookmarks.
 ///
 /// The map or scene will automatically pan and zoom to the selected bookmark when a `GeoViewProxy`
 /// is provided in the initializer. Alternatively, handle selection changes manually using the bound
