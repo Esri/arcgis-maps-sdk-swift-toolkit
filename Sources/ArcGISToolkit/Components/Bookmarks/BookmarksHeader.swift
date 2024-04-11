@@ -49,7 +49,7 @@ struct BookmarksHeader: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text.done
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
