@@ -17,7 +17,7 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-final class BookmarksTests: DejavuTestCase {
+final class BookmarksTests: XCTestCase {
 ***REMOVED***func testBookmarksWithGeoModel() async throws {
 ***REMOVED******REMOVED***var _isPresented = true
 ***REMOVED******REMOVED***var _selection: Bookmark?
