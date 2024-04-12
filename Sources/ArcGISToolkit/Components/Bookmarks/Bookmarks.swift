@@ -267,7 +267,6 @@ public extension Bookmarks {
 ***REMOVED******REMOVED******REMOVED***bookmarkSource: .geoModel(geoModel),
 ***REMOVED******REMOVED******REMOVED***geoViewProxy: nil,
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***selection: nil,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED***
