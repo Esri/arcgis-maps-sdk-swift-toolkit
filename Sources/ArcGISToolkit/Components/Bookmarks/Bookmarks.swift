@@ -228,8 +228,7 @@ extension Bookmarks {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ Deprecated members
-public extension Bookmarks {
+public extension Bookmarks /* Deprecated */ {
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
