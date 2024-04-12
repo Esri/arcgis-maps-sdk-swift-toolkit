@@ -64,50 +64,6 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ If non-`nil`, this viewpoint is updated when a bookmark is selected.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>?
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
-***REMOVED******REMOVED***/   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
-***REMOVED******REMOVED***/   - selection: A selected Bookmark.
-***REMOVED******REMOVED***/   - geoViewProxy: The proxy to provide access to geo view operations.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ When a `GeoViewProxy` is provided, the map or scene will automatically pan and zoom to the
-***REMOVED******REMOVED***/ selected bookmark.
-***REMOVED***public init(
-***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***bookmarks: [Bookmark],
-***REMOVED******REMOVED***selection: Binding<Bookmark?>,
-***REMOVED******REMOVED***geoViewProxy: GeoViewProxy? = nil
-***REMOVED***) {
-***REMOVED******REMOVED***self.bookmarkSource = .array(bookmarks)
-***REMOVED******REMOVED***self.geoViewProxy = geoViewProxy
-***REMOVED******REMOVED***self.selection = selection
-***REMOVED******REMOVED***self.viewpoint = nil
-***REMOVED******REMOVED***_isPresented = isPresented
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
-***REMOVED******REMOVED***/   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
-***REMOVED******REMOVED***/   - selection: A selected Bookmark.
-***REMOVED******REMOVED***/   - geoViewProxy: The proxy to provide access to geo view operations.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ When a `GeoViewProxy` is provided, the map or scene will automatically pan and zoom to the
-***REMOVED******REMOVED***/ selected bookmark.
-***REMOVED***public init(
-***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***geoModel: GeoModel,
-***REMOVED******REMOVED***selection: Binding<Bookmark?>,
-***REMOVED******REMOVED***geoViewProxy: GeoViewProxy? = nil
-***REMOVED***) {
-***REMOVED******REMOVED***self.bookmarkSource = .geoModel(geoModel)
-***REMOVED******REMOVED***self.geoViewProxy = geoViewProxy
-***REMOVED******REMOVED***self.selection = selection
-***REMOVED******REMOVED***self.viewpoint = nil
-***REMOVED******REMOVED***_isPresented = isPresented
-***REMOVED***
-***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
@@ -128,6 +84,54 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(idealWidth: 320, idealHeight: 428)
+***REMOVED***
+***REMOVED***
+
+public extension Bookmarks {
+***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
+***REMOVED******REMOVED***/   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
+***REMOVED******REMOVED***/   - selection: A selected Bookmark.
+***REMOVED******REMOVED***/   - geoViewProxy: The proxy to provide access to geo view operations.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ When a `GeoViewProxy` is provided, the map or scene will automatically pan and zoom to the
+***REMOVED******REMOVED***/ selected bookmark.
+***REMOVED***init(
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***bookmarks: [Bookmark],
+***REMOVED******REMOVED***selection: Binding<Bookmark?>,
+***REMOVED******REMOVED***geoViewProxy: GeoViewProxy? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***bookmarkSource: .array(bookmarks),
+***REMOVED******REMOVED******REMOVED***geoViewProxy: geoViewProxy,
+***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED***selection: selection
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
+***REMOVED******REMOVED***/   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
+***REMOVED******REMOVED***/   - selection: A selected Bookmark.
+***REMOVED******REMOVED***/   - geoViewProxy: The proxy to provide access to geo view operations.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ When a `GeoViewProxy` is provided, the map or scene will automatically pan and zoom to the
+***REMOVED******REMOVED***/ selected bookmark.
+***REMOVED***init(
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***geoModel: GeoModel,
+***REMOVED******REMOVED***selection: Binding<Bookmark?>,
+***REMOVED******REMOVED***geoViewProxy: GeoViewProxy? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***bookmarkSource: .geoModel(geoModel),
+***REMOVED******REMOVED******REMOVED***geoViewProxy: geoViewProxy,
+***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED***selection: selection
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
@@ -238,11 +242,13 @@ public extension Bookmarks {
 ***REMOVED******REMOVED***bookmarks: [Bookmark],
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.bookmarkSource = .array(bookmarks)
-***REMOVED******REMOVED***self.geoViewProxy = nil
-***REMOVED******REMOVED***self.selection = nil
-***REMOVED******REMOVED***self.viewpoint = viewpoint
-***REMOVED******REMOVED***_isPresented = isPresented
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***bookmarkSource: .array(bookmarks),
+***REMOVED******REMOVED******REMOVED***geoViewProxy: nil,
+***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED***selection: nil,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
@@ -257,11 +263,13 @@ public extension Bookmarks {
 ***REMOVED******REMOVED***geoModel: GeoModel,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.bookmarkSource = .geoModel(geoModel)
-***REMOVED******REMOVED***self.geoViewProxy = nil
-***REMOVED******REMOVED***self.selection = nil
-***REMOVED******REMOVED***self.viewpoint = viewpoint
-***REMOVED******REMOVED***_isPresented = isPresented
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***bookmarkSource: .geoModel(geoModel),
+***REMOVED******REMOVED******REMOVED***geoViewProxy: nil,
+***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED***selection: nil,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets an action to perform when the bookmark selection changes.
