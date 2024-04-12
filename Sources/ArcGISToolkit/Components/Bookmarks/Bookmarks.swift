@@ -64,50 +64,6 @@ public struct Bookmarks: View {
     /// If non-`nil`, this viewpoint is updated when a bookmark is selected.
     private var viewpoint: Binding<Viewpoint?>?
     
-    /// Creates a `Bookmarks` component.
-    /// - Parameters:
-    ///   - isPresented: Determines if the bookmarks list is presented.
-    ///   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
-    ///   - selection: A selected Bookmark.
-    ///   - geoViewProxy: The proxy to provide access to geo view operations.
-    ///
-    /// When a `GeoViewProxy` is provided, the map or scene will automatically pan and zoom to the
-    /// selected bookmark.
-    public init(
-        isPresented: Binding<Bool>,
-        bookmarks: [Bookmark],
-        selection: Binding<Bookmark?>,
-        geoViewProxy: GeoViewProxy? = nil
-    ) {
-        self.bookmarkSource = .array(bookmarks)
-        self.geoViewProxy = geoViewProxy
-        self.selection = selection
-        self.viewpoint = nil
-        _isPresented = isPresented
-    }
-    
-    /// Creates a `Bookmarks` component.
-    /// - Parameters:
-    ///   - isPresented: Determines if the bookmarks list is presented.
-    ///   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
-    ///   - selection: A selected Bookmark.
-    ///   - geoViewProxy: The proxy to provide access to geo view operations.
-    ///
-    /// When a `GeoViewProxy` is provided, the map or scene will automatically pan and zoom to the
-    /// selected bookmark.
-    public init(
-        isPresented: Binding<Bool>,
-        geoModel: GeoModel,
-        selection: Binding<Bookmark?>,
-        geoViewProxy: GeoViewProxy? = nil
-    ) {
-        self.bookmarkSource = .geoModel(geoModel)
-        self.geoViewProxy = geoViewProxy
-        self.selection = selection
-        self.viewpoint = nil
-        _isPresented = isPresented
-    }
-    
     public var body: some View {
         VStack {
             BookmarksHeader(isPresented: $isPresented)
@@ -128,6 +84,54 @@ public struct Bookmarks: View {
             Spacer()
         }
         .frame(idealWidth: 320, idealHeight: 428)
+    }
+}
+
+public extension Bookmarks {
+    /// Creates a `Bookmarks` component.
+    /// - Parameters:
+    ///   - isPresented: Determines if the bookmarks list is presented.
+    ///   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
+    ///   - selection: A selected Bookmark.
+    ///   - geoViewProxy: The proxy to provide access to geo view operations.
+    ///
+    /// When a `GeoViewProxy` is provided, the map or scene will automatically pan and zoom to the
+    /// selected bookmark.
+    init(
+        isPresented: Binding<Bool>,
+        bookmarks: [Bookmark],
+        selection: Binding<Bookmark?>,
+        geoViewProxy: GeoViewProxy? = nil
+    ) {
+        self.init(
+            bookmarkSource: .array(bookmarks),
+            geoViewProxy: geoViewProxy,
+            isPresented: isPresented,
+            selection: selection
+        )
+    }
+    
+    /// Creates a `Bookmarks` component.
+    /// - Parameters:
+    ///   - isPresented: Determines if the bookmarks list is presented.
+    ///   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
+    ///   - selection: A selected Bookmark.
+    ///   - geoViewProxy: The proxy to provide access to geo view operations.
+    ///
+    /// When a `GeoViewProxy` is provided, the map or scene will automatically pan and zoom to the
+    /// selected bookmark.
+    init(
+        isPresented: Binding<Bool>,
+        geoModel: GeoModel,
+        selection: Binding<Bookmark?>,
+        geoViewProxy: GeoViewProxy? = nil
+    ) {
+        self.init(
+            bookmarkSource: .geoModel(geoModel),
+            geoViewProxy: geoViewProxy,
+            isPresented: isPresented,
+            selection: selection
+        )
     }
 }
 
@@ -238,11 +242,13 @@ public extension Bookmarks {
         bookmarks: [Bookmark],
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
-        self.bookmarkSource = .array(bookmarks)
-        self.geoViewProxy = nil
-        self.selection = nil
-        self.viewpoint = viewpoint
-        _isPresented = isPresented
+        self.init(
+            bookmarkSource: .array(bookmarks),
+            geoViewProxy: nil,
+            isPresented: isPresented,
+            selection: nil,
+            viewpoint: viewpoint
+        )
     }
     
     /// Creates a `Bookmarks` component.
@@ -257,11 +263,13 @@ public extension Bookmarks {
         geoModel: GeoModel,
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
-        self.bookmarkSource = .geoModel(geoModel)
-        self.geoViewProxy = nil
-        self.selection = nil
-        self.viewpoint = viewpoint
-        _isPresented = isPresented
+        self.init(
+            bookmarkSource: .geoModel(geoModel),
+            geoViewProxy: nil,
+            isPresented: isPresented,
+            selection: nil,
+            viewpoint: viewpoint
+        )
     }
     
     /// Sets an action to perform when the bookmark selection changes.
