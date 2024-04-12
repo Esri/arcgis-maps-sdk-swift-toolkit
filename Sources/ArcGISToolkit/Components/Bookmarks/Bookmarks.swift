@@ -173,10 +173,10 @@ extension Bookmarks {
 ***REMOVED******REMOVED******REMOVED***noBookmarks
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***List(bookmarks.sorted { $0.name <  $1.name ***REMOVED***, id: \.self, selection: selection) { bookmark in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** When init(isPresented:bookmarks:viewpoint:) and
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** init(isPresented:geoModel:viewpoint:) are removed, this
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** button can be replaced with Text and the list's selection
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** mechanism and onChange(of: selection) can be used instead.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** When 'init(isPresented:bookmarks:viewpoint:)' and
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** 'init(isPresented:geoModel:viewpoint:)' are removed, this
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** button can be replaced with 'Text' and the list's selection
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** mechanism and 'onChange(of: selection)' can be used instead.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectBookmark(bookmark)
 ***REMOVED******REMOVED******REMOVED*** label: {
