@@ -224,7 +224,8 @@ extension Bookmarks {
 ***REMOVED***
 ***REMOVED***
 
-extension Bookmarks {
+***REMOVED***/ Deprecated members
+public extension Bookmarks {
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
@@ -232,7 +233,7 @@ extension Bookmarks {
 ***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
 ***REMOVED******REMOVED***/ - Attention: Deprecated at 200.5.
 ***REMOVED***@available(*, deprecated, message: "Use 'init(isPresented:bookmarks:selection:geoViewProxy:)' instead.")
-***REMOVED***public init(
+***REMOVED***init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***bookmarks: [Bookmark],
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
@@ -251,7 +252,7 @@ extension Bookmarks {
 ***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
 ***REMOVED******REMOVED***/ - Attention: Deprecated at 200.5.
 ***REMOVED***@available(*, deprecated, message: "Use 'init(isPresented:geoModel:selection:geoViewProxy:)' instead.")
-***REMOVED***public init(
+***REMOVED***init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***geoModel: GeoModel,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
@@ -267,7 +268,7 @@ extension Bookmarks {
 ***REMOVED******REMOVED***/ - Parameter action: The action to perform when the bookmark selection has changed.
 ***REMOVED******REMOVED***/ - Attention: Deprecated at 200.5.
 ***REMOVED***@available(*, deprecated)
-***REMOVED***public func onSelectionChanged(
+***REMOVED***func onSelectionChanged(
 ***REMOVED******REMOVED***perform action: @escaping (Bookmark) -> Void
 ***REMOVED***) -> Bookmarks {
 ***REMOVED******REMOVED***var copy = self
