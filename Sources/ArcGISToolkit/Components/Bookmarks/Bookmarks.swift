@@ -78,7 +78,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED*** else if let loadingError {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeErrorMessage(with: loadingError)
 ***REMOVED******REMOVED******REMOVED*** else if !isGeoModelLoaded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeLoadingView(with: geoModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeLoadingView(geoModel: geoModel)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
@@ -199,7 +199,7 @@ extension Bookmarks {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Makes a view that is shown while a `GeoModel` is loading.
-***REMOVED***private func makeLoadingView(with geoModel: GeoModel) -> some View {
+***REMOVED***private func makeLoadingView(geoModel: GeoModel) -> some View {
 ***REMOVED******REMOVED***return ProgressView()
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***.task(id: geoModel) {
