@@ -228,8 +228,7 @@ extension Bookmarks {
     }
 }
 
-/// Deprecated members
-public extension Bookmarks {
+public extension Bookmarks /* Deprecated */ {
     /// Creates a `Bookmarks` component.
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
