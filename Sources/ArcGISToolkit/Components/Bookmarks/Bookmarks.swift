@@ -173,10 +173,10 @@ extension Bookmarks {
             noBookmarks
         } else {
             List(bookmarks.sorted { $0.name <  $1.name }, id: \.self, selection: selection) { bookmark in
-                // When init(isPresented:bookmarks:viewpoint:) and
-                // init(isPresented:geoModel:viewpoint:) are removed, this
-                // button can be replaced with Text and the list's selection
-                // mechanism and onChange(of: selection) can be used instead.
+                // When 'init(isPresented:bookmarks:viewpoint:)' and
+                // 'init(isPresented:geoModel:viewpoint:)' are removed, this
+                // button can be replaced with 'Text' and the list's selection
+                // mechanism and 'onChange(of: selection)' can be used instead.
                 Button {
                     selectBookmark(bookmark)
                 } label: {
