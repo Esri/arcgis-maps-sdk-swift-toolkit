@@ -17,7 +17,7 @@ import ArcGIS
 @testable import ArcGISToolkit
 
 @MainActor
-class SearchViewModelTests: DejavuTestCase {
+class SearchViewModelTests: XCTestCase {
     func testAcceptSuggestion() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         model.currentQuery = "Magers & Quinn Booksellers"
