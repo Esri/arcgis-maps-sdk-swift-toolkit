@@ -30,8 +30,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.3.0")),
-        .package(url: "https://github.com/Esri/Dejavu", .upToNextMinor(from: "1.0.0"))
+        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.4.0"))
     ],
     targets: [
         .target(
@@ -45,7 +44,7 @@ let package = Package(
         ),
         .testTarget(
             name: "ArcGISToolkitTests",
-            dependencies: ["ArcGISToolkit", "Dejavu"]
+            dependencies: ["ArcGISToolkit"]
         )
     ]
 )

@@ -19,7 +19,7 @@ import XCTest
 @testable import ArcGISToolkit
 
 @MainActor
-final class FloorFilterViewModelTests: DejavuTestCase {
+final class FloorFilterViewModelTests: XCTestCase {
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
     func testAutoSelectAlways() async throws {
         let floorManager = try await floorManager(
