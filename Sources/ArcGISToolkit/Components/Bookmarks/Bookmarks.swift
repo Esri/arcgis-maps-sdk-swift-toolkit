@@ -78,7 +78,7 @@ public struct Bookmarks: View {
                 } else if let loadingError {
                     makeErrorMessage(with: loadingError)
                 } else if !isGeoModelLoaded {
-                    makeLoadingView(with: geoModel)
+                    makeLoadingView(geoModel: geoModel)
                 }
             }
             Spacer()
@@ -199,7 +199,7 @@ extension Bookmarks {
     }
     
     /// Makes a view that is shown while a `GeoModel` is loading.
-    private func makeLoadingView(with geoModel: GeoModel) -> some View {
+    private func makeLoadingView(geoModel: GeoModel) -> some View {
         return ProgressView()
             .padding()
             .task(id: geoModel) {
