@@ -267,7 +267,6 @@ public extension Bookmarks {
             bookmarkSource: .geoModel(geoModel),
             geoViewProxy: nil,
             isPresented: isPresented,
-            selection: nil,
             viewpoint: viewpoint
         )
     }
