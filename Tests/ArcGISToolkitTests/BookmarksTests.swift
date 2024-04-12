@@ -17,7 +17,7 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
-final class BookmarksTests: DejavuTestCase {
+final class BookmarksTests: XCTestCase {
     func testBookmarksWithGeoModel() async throws {
         var _isPresented = true
         var _selection: Bookmark?
