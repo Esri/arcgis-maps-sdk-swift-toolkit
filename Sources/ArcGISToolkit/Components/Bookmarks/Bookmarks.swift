@@ -31,6 +31,12 @@
 ***REMOVED***/ and refer to [BookmarksExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `Bookmarks` component see <doc:BookmarksTutorial>.
 public struct Bookmarks: View {
+***REMOVED******REMOVED***/ The data source used to initialize the view.
+***REMOVED***enum BookmarkSource {
+***REMOVED******REMOVED***case array([Bookmark])
+***REMOVED******REMOVED***case geoModel(GeoModel)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The bookmark data source.
 ***REMOVED***let bookmarkSource: BookmarkSource
 ***REMOVED***
@@ -126,12 +132,6 @@ public struct Bookmarks: View {
 ***REMOVED***
 
 extension Bookmarks {
-***REMOVED******REMOVED***/ Contains the data source used to initialize the view.
-***REMOVED***enum BookmarkSource {
-***REMOVED******REMOVED***case array([Bookmark])
-***REMOVED******REMOVED***case geoModel(GeoModel)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Performs the necessary actions when a bookmark is selected.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
