@@ -246,7 +246,6 @@ public extension Bookmarks {
             bookmarkSource: .array(bookmarks),
             geoViewProxy: nil,
             isPresented: isPresented,
-            selection: nil,
             viewpoint: viewpoint
         )
     }
