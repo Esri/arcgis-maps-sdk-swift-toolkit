@@ -11,9 +11,7 @@ struct PopupExampleView: View {
         return Map(item: portalItem)
     }
     
-    @StateObject private var dataModel = MapDataModel(
-        map: makeMap()
-    )
+    @State private var map = makeMap()
     
     @State private var identifyScreenPoint: CGPoint?
     
@@ -27,7 +25,7 @@ struct PopupExampleView: View {
     
     var body: some View {
         MapViewReader { proxy in
-            MapView(map: dataModel.map)
+            MapView(map: map)
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
                 }
