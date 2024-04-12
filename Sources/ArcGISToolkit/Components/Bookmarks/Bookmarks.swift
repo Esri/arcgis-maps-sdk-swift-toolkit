@@ -224,7 +224,8 @@ extension Bookmarks {
     }
 }
 
-extension Bookmarks {
+/// Deprecated members
+public extension Bookmarks {
     /// Creates a `Bookmarks` component.
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
@@ -232,7 +233,7 @@ extension Bookmarks {
     ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
     /// - Attention: Deprecated at 200.5.
     @available(*, deprecated, message: "Use 'init(isPresented:bookmarks:selection:geoViewProxy:)' instead.")
-    public init(
+    init(
         isPresented: Binding<Bool>,
         bookmarks: [Bookmark],
         viewpoint: Binding<Viewpoint?>? = nil
@@ -251,7 +252,7 @@ extension Bookmarks {
     ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
     /// - Attention: Deprecated at 200.5.
     @available(*, deprecated, message: "Use 'init(isPresented:geoModel:selection:geoViewProxy:)' instead.")
-    public init(
+    init(
         isPresented: Binding<Bool>,
         geoModel: GeoModel,
         viewpoint: Binding<Viewpoint?>? = nil
@@ -267,7 +268,7 @@ extension Bookmarks {
     /// - Parameter action: The action to perform when the bookmark selection has changed.
     /// - Attention: Deprecated at 200.5.
     @available(*, deprecated)
-    public func onSelectionChanged(
+    func onSelectionChanged(
         perform action: @escaping (Bookmark) -> Void
     ) -> Bookmarks {
         var copy = self
