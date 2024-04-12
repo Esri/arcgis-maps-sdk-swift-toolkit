@@ -30,8 +30,7 @@ let package = Package(
 ***REMOVED******REMOVED***),
 ***REMOVED***],
 ***REMOVED***dependencies: [
-***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.4.0")),
-***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/Dejavu", .upToNextMinor(from: "1.0.0"))
+***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.4.0"))
 ***REMOVED***],
 ***REMOVED***targets: [
 ***REMOVED******REMOVED***.target(
@@ -45,7 +44,7 @@ let package = Package(
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***.testTarget(
 ***REMOVED******REMOVED******REMOVED***name: "ArcGISToolkitTests",
-***REMOVED******REMOVED******REMOVED***dependencies: ["ArcGISToolkit", "Dejavu"]
+***REMOVED******REMOVED******REMOVED***dependencies: ["ArcGISToolkit"]
 ***REMOVED******REMOVED***)
 ***REMOVED***]
 )

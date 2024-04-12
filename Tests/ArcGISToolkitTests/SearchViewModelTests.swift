@@ -17,7 +17,7 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 @MainActor
-class SearchViewModelTests: DejavuTestCase {
+class SearchViewModelTests: XCTestCase {
 ***REMOVED***func testAcceptSuggestion() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
