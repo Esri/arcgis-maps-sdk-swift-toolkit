@@ -16,7 +16,7 @@ import XCTest
 import ArcGIS
 import ArcGISToolkit
 
-final class SmartLocatorSearchSourceTests: DejavuTestCase {
+final class SmartLocatorSearchSourceTests: XCTestCase {
     func testRepeatSearchResultThreshold() async throws {
         let locator = SmartLocatorSearchSource()
         
