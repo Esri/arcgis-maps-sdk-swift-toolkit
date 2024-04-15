@@ -11,15 +11,15 @@ struct FeatureFormExampleView: View {
         return Map(item: portalItem)
     }
     
-    @State private var map = makeMap()
-    
-    @State private var identifyScreenPoint: CGPoint?
-    
     @State private var featureForm: FeatureForm? {
         didSet { featureFormIsPresented = featureForm != nil }
     }
     
     @State private var featureFormIsPresented = false
+    
+    @State private var identifyScreenPoint: CGPoint?
+    
+    @State private var map = makeMap()
     
     @State private var submissionError: Text?
     
