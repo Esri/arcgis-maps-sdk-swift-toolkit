@@ -21,9 +21,9 @@ struct FeatureFormExampleView: View {
     
     @State private var featureFormIsPresented = false
     
-    @State private var submissionError: Text?
-    
     @State private var floatingPanelDetent: FloatingPanelDetent = .full
+    
+    @State private var submissionError: Text?
     
     var body: some View {
         MapViewReader { proxy in
