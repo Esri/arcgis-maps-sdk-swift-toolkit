@@ -84,7 +84,10 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"The form wasn't submitted",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: Binding(get: { model.submissionError != nil ***REMOVED***, set: { _ in ***REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { model.submissionError != nil ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in model.submissionError = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) { ***REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let submissionError = model.submissionError {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***submissionError
