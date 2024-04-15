@@ -95,7 +95,6 @@ public struct AsyncImageView: View {
                 .padding([.top, .bottom])
             }
             if let progressInterval = viewModel.progressInterval {
-#if canImport(Charts)
                 VStack {
                     ProgressView(
                         timerInterval: progressInterval,
@@ -107,7 +106,6 @@ public struct AsyncImageView: View {
                     .frame(width: mediaSize?.width)
                     Spacer()
                 }
-#endif
             }
         }
         .onAppear() {

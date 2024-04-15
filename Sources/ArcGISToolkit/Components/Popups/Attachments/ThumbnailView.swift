@@ -31,9 +31,7 @@ struct ThumbnailView: View  {
                     .resizable()
                     .renderingMode(.template)
                     .aspectRatio(contentMode: .fit)
-#if canImport(Charts)
                     .fontWeight(.light)
-#endif
             } else if let image = attachmentModel.thumbnail {
                 Image(uiImage: image)
                     .resizable()
