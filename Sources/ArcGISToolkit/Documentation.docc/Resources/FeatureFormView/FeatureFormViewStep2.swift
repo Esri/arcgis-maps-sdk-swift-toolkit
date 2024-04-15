@@ -18,4 +18,6 @@ struct FeatureFormExampleView: View {
     @State private var featureForm: FeatureForm?
     
     @State private var featureFormIsPresented = false
+    
+    @State private var submissionError: Text?
 }
