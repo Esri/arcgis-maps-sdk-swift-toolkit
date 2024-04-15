@@ -16,10 +16,10 @@ struct FeatureFormExampleView: View {
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED***@State private var featureForm: FeatureForm? {
-***REMOVED******REMOVED***didSet { showFeatureForm = featureForm != nil ***REMOVED***
+***REMOVED******REMOVED***didSet { featureFormIsPresented = featureForm != nil ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State private var showFeatureForm = false
+***REMOVED***@State private var featureFormIsPresented = false
 ***REMOVED***
 ***REMOVED***@State private var submissionError: Text?
 ***REMOVED***
@@ -56,7 +56,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $floatingPanelDetent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showFeatureForm
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $featureFormIsPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let featureForm {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(featureForm: featureForm)
@@ -74,7 +74,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showFeatureForm {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if featureFormIsPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelConfirmationIsPresented = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -82,7 +82,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showFeatureForm {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if featureFormIsPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Submit") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await submitChanges()

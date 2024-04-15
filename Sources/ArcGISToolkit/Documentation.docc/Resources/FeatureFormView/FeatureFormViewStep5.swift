@@ -16,10 +16,10 @@ struct FeatureFormExampleView: View {
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED***@State private var featureForm: FeatureForm? {
-***REMOVED******REMOVED***didSet { showFeatureForm = featureForm != nil ***REMOVED***
+***REMOVED******REMOVED***didSet { featureFormIsPresented = featureForm != nil ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State private var showFeatureForm = false
+***REMOVED***@State private var featureFormIsPresented = false
 ***REMOVED***
 ***REMOVED***@State private var submissionError: Text?
 ***REMOVED***

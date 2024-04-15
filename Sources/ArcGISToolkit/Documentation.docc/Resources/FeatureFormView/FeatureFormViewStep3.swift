@@ -17,7 +17,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED***@State private var featureForm: FeatureForm?
 ***REMOVED***
-***REMOVED***@State private var showFeatureForm = false
+***REMOVED***@State private var featureFormIsPresented = false
 ***REMOVED***
 ***REMOVED***@State private var submissionError: Text?
 ***REMOVED***
