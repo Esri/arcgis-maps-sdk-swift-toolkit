@@ -11,10 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-#if canImport(Charts)
 import Charts
-#endif
+import SwiftUI
 
 /// A view displaying details for line chart popup media.
 struct LineChart: View {
@@ -36,30 +34,26 @@ struct LineChart: View {
     }
     
     var body: some View {
-        Group {
-#if canImport(Charts)
-            Chart(chartData) {
-                LineMark(
-                    x: .value(String.field, $0.label),
-                    y: .value(String.value, $0.value)
-                )
-                PointMark(
-                    x: .value(String.field, $0.label),
-                    y: .value(String.value, $0.value)
-                )
-            }
-            .chartXAxis {
-                AxisMarks { _ in
-                    if showXAxisLabels {
-                        AxisValueLabel(
-                            collisionResolution: .greedy,
-                            orientation: .verticalReversed
-                        )
-                    }
-                    AxisGridLine()
+        Chart(chartData) {
+            LineMark(
+                x: .value(String.field, $0.label),
+                y: .value(String.value, $0.value)
+            )
+            PointMark(
+                x: .value(String.field, $0.label),
+                y: .value(String.value, $0.value)
+            )
+        }
+        .chartXAxis {
+            AxisMarks { _ in
+                if showXAxisLabels {
+                    AxisValueLabel(
+                        collisionResolution: .greedy,
+                        orientation: .verticalReversed
+                    )
                 }
+                AxisGridLine()
             }
-#endif
         }
     }
 }
