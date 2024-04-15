@@ -15,9 +15,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A floating panel is a view that overlays a view and supplies view-related
-***REMOVED***/ content. For a map view, for instance, it could display a legend, bookmarks, search results, etc..
-***REMOVED***/ Apple Maps, Google Maps, Windows 10, and Collector have floating panel
-***REMOVED***/ implementations, sometimes referred to as a "bottom sheet".
+***REMOVED***/ content. A map view, for instance, could display a legend, bookmarks, search results, etc..
 ***REMOVED***/
 ***REMOVED***/ Floating panels are non-modal and can be transient, only displaying
 ***REMOVED***/ information for a short period of time like identify results,
