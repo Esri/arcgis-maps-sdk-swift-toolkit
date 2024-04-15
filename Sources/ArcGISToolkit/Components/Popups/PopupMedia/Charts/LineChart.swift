@@ -11,10 +11,8 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***
-#if canImport(Charts)
 import Charts
-#endif
+***REMOVED***
 
 ***REMOVED***/ A view displaying details for line chart popup media.
 struct LineChart: View {
@@ -36,30 +34,26 @@ struct LineChart: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
-#if canImport(Charts)
-***REMOVED******REMOVED******REMOVED***Chart(chartData) {
-***REMOVED******REMOVED******REMOVED******REMOVED***LineMark(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.field, $0.label),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.value, $0.value)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***PointMark(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.field, $0.label),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.value, $0.value)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.chartXAxis {
-***REMOVED******REMOVED******REMOVED******REMOVED***AxisMarks { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showXAxisLabels {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisValueLabel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***collisionResolution: .greedy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: .verticalReversed
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisGridLine()
+***REMOVED******REMOVED***Chart(chartData) {
+***REMOVED******REMOVED******REMOVED***LineMark(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.field, $0.label),
+***REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.value, $0.value)
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***PointMark(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.field, $0.label),
+***REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.value, $0.value)
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED******REMOVED***.chartXAxis {
+***REMOVED******REMOVED******REMOVED***AxisMarks { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***if showXAxisLabels {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisValueLabel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***collisionResolution: .greedy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: .verticalReversed
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***AxisGridLine()
 ***REMOVED******REMOVED***
-#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

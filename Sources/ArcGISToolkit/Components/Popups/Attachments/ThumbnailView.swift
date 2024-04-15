@@ -31,9 +31,7 @@ struct ThumbnailView: View  {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.template)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
-#if canImport(Charts)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.light)
-#endif
 ***REMOVED******REMOVED*** else if let image = attachmentModel.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
