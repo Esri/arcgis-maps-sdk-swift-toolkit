@@ -9,9 +9,7 @@ struct SearchExampleView: View {
         maximumSuggestions: 16
     )
     
-    @StateObject private var dataModel = MapDataModel(
-        map: Map(basemapStyle: .arcGISImagery)
-    )
+    @State private var map = Map(basemapStyle: .arcGISImagery)
     
     @State private var searchResultsOverlay = GraphicsOverlay()
     

@@ -20,13 +20,11 @@ struct FloatingPanelExampleView: View {
     /// The height of the map view's attribution bar.
     @State private var attributionBarHeight: CGFloat = 0
     
-    /// The data model containing the `Map` displayed in the `MapView`.
-    @StateObject private var dataModel = MapDataModel(
-        map: Map(basemapStyle: .arcGISImagery)
-    )
-    
     /// The Floating Panel's current content.
     @State private var demoContent: FloatingPanelDemoContent?
+    
+    /// The `Map` displayed in the `MapView`.
+    @State private var map = Map(basemapStyle: .arcGISImagery)
     
     /// The Floating Panel's current detent.
     @State private var selectedDetent: FloatingPanelDetent = .half
@@ -39,7 +37,7 @@ struct FloatingPanelExampleView: View {
     
     var body: some View {
         MapView(
-            map: dataModel.map,
+            map: map,
             viewpoint: initialViewpoint
         )
         .onAttributionBarHeightChanged {
