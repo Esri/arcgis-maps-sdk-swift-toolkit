@@ -21,9 +21,9 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED***@State private var featureFormIsPresented = false
 ***REMOVED***
-***REMOVED***@State private var submissionError: Text?
-***REMOVED***
 ***REMOVED***@State private var floatingPanelDetent: FloatingPanelDetent = .full
+***REMOVED***
+***REMOVED***@State private var submissionError: Text?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
