@@ -75,12 +75,20 @@ struct FeatureFormExampleView: View {
                     if !isFormPresented { validationErrorVisibility = .automatic }
                 }
                 .alert("Discard edits", isPresented: $cancelConfirmationIsPresented) {
-                        Button("Discard edits", role: .destructive) {
-                            model.discardEdits()
-                        }
-                        Button("Continue editing", role: .cancel) { }
+                    Button("Discard edits", role: .destructive) {
+                        model.discardEdits()
+                    }
+                    Button("Continue editing", role: .cancel) { }
                 } message: {
                     Text("Updates to this feature will be lost.")
+                }
+                .alert(
+                    "The form wasn't submitted",
+                    isPresented: Binding(get: { model.submissionError != nil }, set: { _ in })
+                ) { } message: {
+                    if let submissionError = model.submissionError {
+                        submissionError
+                    }
                 }
                 .navigationBarBackButtonHidden(model.isFormPresented)
                 .toolbar {
@@ -159,6 +167,9 @@ class Model: ObservableObject {
     /// A Boolean value indicating whether or not the form is displayed.
     @Published var isFormPresented = false
     
+    /// A description of the error that prevented the form from being submitted.
+    @Published var submissionError: Text?
+    
     /// Reverts any local edits that haven't yet been saved to service geodatabase.
     func discardEdits() {
         featureForm?.discardEdits()
@@ -169,13 +180,20 @@ class Model: ObservableObject {
     func submitChanges() async {
         guard let featureForm,
               let table = featureForm.feature.table as? ServiceFeatureTable,
-              table.isEditable,
               let database = table.serviceGeodatabase else {
             print("A precondition to submit the changes wasn't met.")
             return
         }
         
-        guard featureForm.validationErrors.isEmpty else { return }
+        guard table.isEditable else {
+            submissionError = Text("The feature table isn't editable.")
+            return
+        }
+        
+        guard featureForm.validationErrors.isEmpty else {
+            submissionError = Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true).")
+            return
+        }
         
         try? await table.update(featureForm.feature)
         
