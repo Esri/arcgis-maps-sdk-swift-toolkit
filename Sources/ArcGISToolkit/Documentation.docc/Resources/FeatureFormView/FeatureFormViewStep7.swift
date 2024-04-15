@@ -21,6 +21,8 @@ struct FeatureFormExampleView: View {
     
     @State private var showFeatureForm = false
     
+    @State private var submissionError: Text?
+    
     @State private var floatingPanelDetent: FloatingPanelDetent = .full
     
     @State private var cancelConfirmationIsPresented = false

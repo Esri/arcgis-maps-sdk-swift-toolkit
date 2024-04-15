@@ -21,6 +21,8 @@ struct FeatureFormExampleView: View {
     
     @State private var showFeatureForm = false
     
+    @State private var submissionError: Text?
+    
     var body: some View {
         MapViewReader { proxy in
             MapView(map: map)
