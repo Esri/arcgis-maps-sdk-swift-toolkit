@@ -19,6 +19,8 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED***@State private var showFeatureForm = false
 ***REMOVED***
+***REMOVED***@State private var submissionError: Text?
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED***MapView(map: map)

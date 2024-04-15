@@ -21,6 +21,8 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED***@State private var showFeatureForm = false
 ***REMOVED***
+***REMOVED***@State private var submissionError: Text?
+***REMOVED***
 ***REMOVED***@State private var floatingPanelDetent: FloatingPanelDetent = .full
 ***REMOVED***
 ***REMOVED***@State private var cancelConfirmationIsPresented = false
