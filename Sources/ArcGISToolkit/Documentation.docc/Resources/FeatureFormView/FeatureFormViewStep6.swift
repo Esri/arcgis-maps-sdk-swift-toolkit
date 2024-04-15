@@ -11,10 +11,6 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State private var map = makeMap()
-***REMOVED***
-***REMOVED***@State private var identifyScreenPoint: CGPoint?
-***REMOVED***
 ***REMOVED***@State private var featureForm: FeatureForm? {
 ***REMOVED******REMOVED***didSet { featureFormIsPresented = featureForm != nil ***REMOVED***
 ***REMOVED***
@@ -22,6 +18,10 @@ struct FeatureFormExampleView: View {
 ***REMOVED***@State private var featureFormIsPresented = false
 ***REMOVED***
 ***REMOVED***@State private var floatingPanelDetent: FloatingPanelDetent = .full
+***REMOVED***
+***REMOVED***@State private var identifyScreenPoint: CGPoint?
+***REMOVED***
+***REMOVED***@State private var map = makeMap()
 ***REMOVED***
 ***REMOVED***@State private var submissionError: Text?
 ***REMOVED***

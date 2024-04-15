@@ -11,9 +11,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State private var map = makeMap()
-***REMOVED***
-***REMOVED***@State private var identifyScreenPoint: CGPoint?
+***REMOVED***@State private var cancelConfirmationIsPresented = false
 ***REMOVED***
 ***REMOVED***@State private var featureForm: FeatureForm? {
 ***REMOVED******REMOVED***didSet { featureFormIsPresented = featureForm != nil ***REMOVED***
@@ -23,9 +21,11 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED***@State private var floatingPanelDetent: FloatingPanelDetent = .full
 ***REMOVED***
-***REMOVED***@State private var submissionError: Text?
+***REMOVED***@State private var identifyScreenPoint: CGPoint?
 ***REMOVED***
-***REMOVED***@State private var cancelConfirmationIsPresented = false
+***REMOVED***@State private var map = makeMap()
+***REMOVED***
+***REMOVED***@State private var submissionError: Text?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
