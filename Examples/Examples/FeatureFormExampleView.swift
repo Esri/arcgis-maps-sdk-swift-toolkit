@@ -84,7 +84,10 @@ struct FeatureFormExampleView: View {
                 }
                 .alert(
                     "The form wasn't submitted",
-                    isPresented: Binding(get: { model.submissionError != nil }, set: { _ in })
+                    isPresented: Binding(
+                        get: { model.submissionError != nil },
+                        set: { _ in model.submissionError = nil }
+                    )
                 ) { } message: {
                     if let submissionError = model.submissionError {
                         submissionError
