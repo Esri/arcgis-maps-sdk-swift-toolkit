@@ -11,13 +11,15 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State private var map = makeMap()
-
-***REMOVED***@State private var identifyScreenPoint: CGPoint?
-***REMOVED***
 ***REMOVED***@State private var featureForm: FeatureForm?
 ***REMOVED***
-***REMOVED***@State private var showFeatureForm = false
+***REMOVED***@State private var featureFormIsPresented = false
+***REMOVED***
+***REMOVED***@State private var identifyScreenPoint: CGPoint?
+***REMOVED***
+***REMOVED***@State private var map = makeMap()
+***REMOVED***
+***REMOVED***@State private var submissionError: Text?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
