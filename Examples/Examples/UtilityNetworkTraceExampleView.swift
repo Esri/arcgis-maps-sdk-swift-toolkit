@@ -19,23 +19,22 @@
 ***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with
 ***REMOVED***/ a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-***REMOVED***@Environment(\.isPortraitOrientation)
-***REMOVED***private var isPortraitOrientation
-***REMOVED***
-***REMOVED******REMOVED***/ The map with the utility networks.
-***REMOVED***@State private var map = makeMap()
+***REMOVED***@Environment(\.isPortraitOrientation) private var isPortraitOrientation
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current detent of the floating panel presenting the trace tool.
 ***REMOVED***@State private var activeDetent: FloatingPanelDetent = .half
 ***REMOVED***
+***REMOVED******REMOVED***/ The map with the utility networks.
+***REMOVED***@State private var map = makeMap()
+***REMOVED***
 ***REMOVED******REMOVED***/ Provides the ability to detect tap locations in the context of the map view.
 ***REMOVED***@State private var mapPoint: Point?
 ***REMOVED***
-***REMOVED******REMOVED***/ Provides the ability to detect tap locations in the context of the screen.
-***REMOVED***@State private var screenPoint: CGPoint?
-***REMOVED***
 ***REMOVED******REMOVED***/ A container for graphical trace results.
 ***REMOVED***@State private var resultGraphicsOverlay = GraphicsOverlay()
+***REMOVED***
+***REMOVED******REMOVED***/ Provides the ability to detect tap locations in the context of the screen.
+***REMOVED***@State private var screenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
 ***REMOVED***@State private var viewpoint: Viewpoint?
