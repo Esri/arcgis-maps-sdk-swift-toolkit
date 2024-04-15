@@ -10,13 +10,12 @@ struct OverviewMapForSceneView: View {
     var body: some View {
         SceneView(scene: scene)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
-            .overlay(
+            .overlay(alignment: .topTrailing) {
                 OverviewMap.forSceneView(
                     with: viewpoint
                 )
                 .frame(width: 200, height: 132)
-                .padding(),
-                alignment: .topTrailing
-            )
+                .padding()
+            }
     }
 }
