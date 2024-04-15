@@ -12,7 +12,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@State private var map = makeMap()
-
+***REMOVED***
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED***@State private var featureForm: FeatureForm?
