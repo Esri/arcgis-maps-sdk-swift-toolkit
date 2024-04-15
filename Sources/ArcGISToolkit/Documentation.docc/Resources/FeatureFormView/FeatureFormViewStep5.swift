@@ -16,10 +16,10 @@ struct FeatureFormExampleView: View {
     @State private var identifyScreenPoint: CGPoint?
     
     @State private var featureForm: FeatureForm? {
-        didSet { showFeatureForm = featureForm != nil }
+        didSet { featureFormIsPresented = featureForm != nil }
     }
     
-    @State private var showFeatureForm = false
+    @State private var featureFormIsPresented = false
     
     @State private var submissionError: Text?
     
