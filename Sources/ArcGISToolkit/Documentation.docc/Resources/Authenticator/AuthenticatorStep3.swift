@@ -10,7 +10,6 @@ struct AuthenticationApp: App {
         WindowGroup {
             HomeView()
                 .authenticator(authenticator)
-                .environmentObject(authenticator)
                 .task {
                     ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
                     try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
