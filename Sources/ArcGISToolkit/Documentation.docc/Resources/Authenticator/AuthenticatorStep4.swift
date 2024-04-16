@@ -13,14 +13,12 @@ struct AuthenticationApp: App {
     
     var body: some SwiftUI.Scene {
         WindowGroup {
-            Group {
-                HomeView()
-            }
-            .authenticator(authenticator)
-            .environmentObject(authenticator)
-            .task {
-                try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
-            }
+            HomeView()
+                .authenticator(authenticator)
+                .environmentObject(authenticator)
+                .task {
+                    try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+                }
         }
     }
 }
