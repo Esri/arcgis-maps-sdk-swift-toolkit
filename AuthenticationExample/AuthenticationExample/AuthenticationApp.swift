@@ -18,19 +18,9 @@ import ArcGIS
 
 @main
 struct AuthenticationApp: App {
-    @ObservedObject var authenticator: Authenticator
-    @State var isSettingUp = true
+    @StateObject private var authenticator = Authenticator()
     
-    init() {
-        // Create an authenticator.
-        authenticator = Authenticator(
-            // If you want to use OAuth, uncomment this code:
-            //oAuthUserConfigurations: [.arcgisDotCom]
-        )
-        // Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
-        // challenges.
-        ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
-    }
+    @State private var isSettingUp = true
     
     var body: some SwiftUI.Scene {
         WindowGroup {
@@ -51,6 +41,7 @@ struct AuthenticationApp: App {
             .environmentObject(authenticator)
             .task {
                 isSettingUp = true
+                ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
                 // Here we setup credential stores to be persistent, which means that it will
                 // synchronize with the keychain for storing credentials.
                 // It also means that a user can sign in without having to be prompted for
