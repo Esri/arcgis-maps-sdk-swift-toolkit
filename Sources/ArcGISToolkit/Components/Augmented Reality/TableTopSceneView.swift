@@ -102,7 +102,7 @@ public struct TableTopSceneView: View {
                     .onUpdateNode { _, node, anchor in
                         updatePlane(with: node, for: anchor)
                     }
-                    .onSingleTapGesture { screenPoint in
+                    .onTapGesture { screenPoint in
                         guard !initialTransformationIsSet else { return }
                         
                         if let transformation = sceneViewProxy.initialTransformation(
