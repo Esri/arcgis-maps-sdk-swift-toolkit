@@ -18,19 +18,9 @@
 
 ***REMOVED***
 struct AuthenticationApp: App {
-***REMOVED***@ObservedObject var authenticator: Authenticator
-***REMOVED***@State var isSettingUp = true
+***REMOVED***@StateObject private var authenticator = Authenticator()
 ***REMOVED***
-***REMOVED***init() {
-***REMOVED******REMOVED******REMOVED*** Create an authenticator.
-***REMOVED******REMOVED***authenticator = Authenticator(
-***REMOVED******REMOVED******REMOVED******REMOVED*** If you want to use OAuth, uncomment this code:
-***REMOVED******REMOVED******REMOVED******REMOVED***oAuthUserConfigurations: [.arcgisDotCom]
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
-***REMOVED******REMOVED******REMOVED*** challenges.
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
-***REMOVED***
+***REMOVED***@State private var isSettingUp = true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -51,6 +41,7 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED***.environmentObject(authenticator)
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isSettingUp = true
+***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Here we setup credential stores to be persistent, which means that it will
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** synchronize with the keychain for storing credentials.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** It also means that a user can sign in without having to be prompted for
