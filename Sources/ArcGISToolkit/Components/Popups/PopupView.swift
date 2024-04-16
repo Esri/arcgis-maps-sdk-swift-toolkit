@@ -50,7 +50,7 @@ import ArcGIS
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to
 /// [PopupExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/PopupExampleView.swift)
-/// in the project. To learn more about using the `PopupView` see the [PopupView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/popupviewtutorial).
+/// in the project. To learn more about using the `PopupView` see the <doc:PopupViewTutorial>.
 public struct PopupView: View {
     /// Creates a `PopupView` with the given popup.
     /// - Parameters

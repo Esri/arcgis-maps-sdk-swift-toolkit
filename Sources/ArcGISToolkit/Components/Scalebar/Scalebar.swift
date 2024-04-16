@@ -48,7 +48,7 @@ import SwiftUI
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [ScalebarExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/ScalebarExampleView.swift) 
-/// in the project. To learn more about using the `Scalebar` see the [Scalebar Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/scalebartutorial).
+/// in the project. To learn more about using the `Scalebar` see the <doc:ScalebarTutorial>.
 public struct Scalebar: View {
     // - MARK: Internal/Private vars
     
