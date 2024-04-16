@@ -43,4 +43,3 @@ struct MapItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
