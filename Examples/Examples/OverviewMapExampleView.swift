@@ -13,8 +13,8 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+***REMOVED***
 
 struct OverviewMapExampleView: View {
 ***REMOVED***enum MapOrScene {
