@@ -24,7 +24,9 @@ extension View {
     ///   The value emitted by `sequence` is passed as a parameter to `action`.
     ///   The `action` is called on the `MainActor`.
     /// - Returns: A view that triggers `action` when `sequence` emits a value.
-    @MainActor @ViewBuilder func onReceive<S>(
+    @MainActor
+    @ViewBuilder
+    func onReceive<S>(
         _ sequence: S,
         perform action: ((S.Element) -> Void)?
     ) -> some View where S: AsyncSequence {
