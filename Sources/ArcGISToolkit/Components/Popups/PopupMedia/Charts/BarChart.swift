@@ -1,23 +1,21 @@
-***REMOVED*** Copyright 2022 Esri.
-
+***REMOVED*** Copyright 2022 Esri
+***REMOVED***
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
 ***REMOVED*** You may obtain a copy of the License at
-***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
-
+***REMOVED***
+***REMOVED***   https:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+***REMOVED***
 ***REMOVED*** Unless required by applicable law or agreed to in writing, software
 ***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
 ***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***
-#if canImport(Charts)
 import Charts
-#endif
+***REMOVED***
 
 ***REMOVED***/ A view displaying details for bar chart popup media.
-@available(iOS 16, macCatalyst 16, *)
 struct BarChart: View {
 ***REMOVED******REMOVED***/ The chart data to display.
 ***REMOVED***let chartData: [ChartData]
@@ -43,34 +41,30 @@ struct BarChart: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
-#if canImport(Charts)
-***REMOVED******REMOVED******REMOVED***Chart(chartData) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isColumnChart {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Vertical bars.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BarMark(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.field, $0.label),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.value, $0.value)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Horizontal bars.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BarMark(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.value, $0.value),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.field, $0.label)
+***REMOVED******REMOVED***Chart(chartData) {
+***REMOVED******REMOVED******REMOVED***if isColumnChart {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Vertical bars.
+***REMOVED******REMOVED******REMOVED******REMOVED***BarMark(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.field, $0.label),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.value, $0.value)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Horizontal bars.
+***REMOVED******REMOVED******REMOVED******REMOVED***BarMark(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value(String.value, $0.value),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value(String.field, $0.label)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.chartXAxis {
+***REMOVED******REMOVED******REMOVED***AxisMarks { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***if showXAxisLabels {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisValueLabel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***collisionResolution: .greedy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: .verticalReversed
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.chartXAxis {
-***REMOVED******REMOVED******REMOVED******REMOVED***AxisMarks { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showXAxisLabels {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisValueLabel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***collisionResolution: .greedy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: .verticalReversed
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
