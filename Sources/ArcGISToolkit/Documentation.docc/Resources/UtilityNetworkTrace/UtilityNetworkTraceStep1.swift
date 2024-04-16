@@ -7,9 +7,9 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***
 ***REMOVED***@State private var mapPoint: Point?
 ***REMOVED***
-***REMOVED***@State private var screenPoint: CGPoint?
-***REMOVED***
 ***REMOVED***@State private var resultGraphicsOverlay = GraphicsOverlay()
+***REMOVED***
+***REMOVED***@State private var screenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
