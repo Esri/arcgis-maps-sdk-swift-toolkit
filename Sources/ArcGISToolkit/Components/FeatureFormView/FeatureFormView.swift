@@ -99,10 +99,7 @@ public struct FeatureFormView: View {
                 title = newTitle
             }
         }
-        .scrollDismissesKeyboard(
-            // Allow tall multiline text fields to be scrolled
-            immediately: (model.focusedElement as? FieldFormElement)?.input is TextAreaFormInput ? false : true
-        )
+        .scrollDismissesKeyboard(.immediately)
         .environmentObject(model)
         .task {
             // Perform the initial expression evaluation.
