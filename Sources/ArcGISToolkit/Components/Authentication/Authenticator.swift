@@ -49,7 +49,7 @@ import CryptoTokenKit
 ***REMOVED***/
 ***REMOVED***/ To see the `Authenticator` in action, check out the [Authentication Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/AuthenticationExample)
 ***REMOVED***/ and refer to [AuthenticationApp.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/AuthenticationExample/AuthenticationExample/AuthenticationApp.swift).
-***REMOVED***/ To learn more about using the `Authenticator`, see the [Authenticator Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/authenticatortutorial).
+***REMOVED***/ To learn more about using the `Authenticator`, see the <doc:AuthenticatorTutorial>.
 @MainActor
 public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ A value indicating whether we should prompt the user when encountering an untrusted host.

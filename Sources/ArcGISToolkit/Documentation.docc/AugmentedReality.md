@@ -10,20 +10,17 @@ reality experiences for common AR patterns including Flyover, TableTop, and Worl
 `FlyoverSceneView` provides an augmented reality flyover experience that allows you to 
 explore a scene using your device as a window into the virtual world. The experience begins
 with the ArcGIS Scene's camera positioned over an area of interest. Walk around and reorient
-the device to focus on specific content in the scene. To learn more about using the FlyoverSceneView see the 
- [FlyoverSceneView Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/flyoversceneviewtutorial).
+the device to focus on specific content in the scene. To learn more about using the FlyoverSceneView see the <doc:FlyoverSceneViewTutorial>.
 
 **TableTopSceneView**
 
 `TableTopSceneView` provides an augmented reality table top experience where ArcGIS Scene content
-is anchored to a physical surface. To learn more about using the TableTopSceneView see the 
-[TableTopSceneView Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/tabletopsceneviewtutorial).
+is anchored to a physical surface. To learn more about using the TableTopSceneView see the <doc:TableTopSceneViewTutorial>.
 
 **WorldScaleSceneView**
 
 `WorldScaleSceneView` provides an augmented reality world scale experience where ArcGIS Scene content
-is integrated with the real world. To learn more about using the WorldScaleSceneView see the 
-[WorldScaleSceneView Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/worldscalesceneviewtutorial).
+is integrated with the real world. To learn more about using the WorldScaleSceneView see the <doc:WorldScaleSceneViewTutorial>.
 
 ###### Requirements
 * Set the following properties in the app's **info.plist**:
