@@ -99,10 +99,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.scrollDismissesKeyboard(
-***REMOVED******REMOVED******REMOVED******REMOVED*** Allow tall multiline text fields to be scrolled
-***REMOVED******REMOVED******REMOVED***immediately: (model.focusedElement as? FieldFormElement)?.input is TextAreaFormInput ? false : true
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
 ***REMOVED******REMOVED***.environmentObject(model)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Perform the initial expression evaluation.
