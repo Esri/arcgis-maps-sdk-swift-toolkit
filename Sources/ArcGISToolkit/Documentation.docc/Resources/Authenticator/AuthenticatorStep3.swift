@@ -4,18 +4,17 @@ import ArcGIS
 
 @main
 struct AuthenticationApp: App {
-    @ObservedObject var authenticator: Authenticator
-    
-    init() {
-        authenticator = Authenticator()
-        ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
-    }
+    @StateObject private var authenticator = Authenticator()
     
     var body: some SwiftUI.Scene {
         WindowGroup {
             HomeView()
                 .authenticator(authenticator)
                 .environmentObject(authenticator)
+                .task {
+                    ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
+                    try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+                }
         }
     }
 }
