@@ -53,8 +53,8 @@ import SwiftUI
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/Forms/Examples/Examples)
 /// and refer to
 /// [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
-/// in the project. To learn more about using the `FeatureFormView` see the [FeatureFormView Tutorial](https://developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/featureformviewtutorial).
-/// 
+/// in the project. To learn more about using the `FeatureFormView` see the <doc:FeatureFormViewTutorial>.
+///
 /// - Since: 200.4
 public struct FeatureFormView: View {
     /// The view model for the form.
@@ -99,10 +99,7 @@ public struct FeatureFormView: View {
                 title = newTitle
             }
         }
-        .scrollDismissesKeyboard(
-            // Allow tall multiline text fields to be scrolled
-            immediately: (model.focusedElement as? FieldFormElement)?.input is TextAreaFormInput ? false : true
-        )
+        .scrollDismissesKeyboard(.immediately)
         .environmentObject(model)
         .task {
             // Perform the initial expression evaluation.

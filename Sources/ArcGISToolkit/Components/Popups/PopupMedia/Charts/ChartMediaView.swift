@@ -1,10 +1,11 @@
-// Copyright 2022 Esri.
-
+// Copyright 2022 Esri
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,37 +43,34 @@ struct ChartMediaView: View {
     @State private var isShowingDetailView = false
     
     var body: some View {
-        if #available(iOS 16, macCatalyst 16, *) {
-            ZStack {
-                ChartView(popupMedia: popupMedia, data: chartData)
-                VStack {
-                    Spacer()
-                    PopupMediaFooter(
-                        popupMedia: popupMedia,
-                        mediaSize: mediaSize
-                    )
-                }
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(.gray, lineWidth: 1)
-                    .frame(width: mediaSize.width, height: mediaSize.height)
-            }
-            .frame(width: mediaSize.width, height: mediaSize.height)
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-            .onTapGesture {
-                isShowingDetailView = true
-            }
-            .sheet(isPresented: $isShowingDetailView) {
-                MediaDetailView(
+        ZStack {
+            ChartView(popupMedia: popupMedia, data: chartData)
+            VStack {
+                Spacer()
+                PopupMediaFooter(
                     popupMedia: popupMedia,
-                    isShowingDetailView: $isShowingDetailView
+                    mediaSize: mediaSize
                 )
-                .padding()
             }
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .stroke(.gray, lineWidth: 1)
+                .frame(width: mediaSize.width, height: mediaSize.height)
+        }
+        .frame(width: mediaSize.width, height: mediaSize.height)
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+        .onTapGesture {
+            isShowingDetailView = true
+        }
+        .sheet(isPresented: $isShowingDetailView) {
+            MediaDetailView(
+                popupMedia: popupMedia,
+                isShowingDetailView: $isShowingDetailView
+            )
+            .padding()
         }
     }
 }
 
-@available(iOS 16, macCatalyst 16, *)
 /// A view describing a chart.
 struct ChartView: View {
     /// The popup media to display.

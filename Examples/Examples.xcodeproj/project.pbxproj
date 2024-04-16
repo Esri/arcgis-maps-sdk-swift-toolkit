@@ -12,8 +12,6 @@
 		4D19FCB52881C8F3002601E8 /* PopupExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */; };
 		4D995CD72B5B01DB00AD45FE /* FeatureFormExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B615012AD76158009D19B6 /* FeatureFormExampleView.swift */; };
 		75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */; };
-		752A4FC4294D268000A49479 /* MapDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752A4FC2294D268000A49479 /* MapDataModel.swift */; };
-		752A4FC5294D268000A49479 /* SceneDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752A4FC3294D268000A49479 /* SceneDataModel.swift */; };
 		75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75657E4727ABAC8400EE865B /* CompassExampleView.swift */; };
 		75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */; };
 		75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */; };
@@ -52,8 +50,6 @@
 		1CC376D32ABA0B3700A83300 /* TableTopExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableTopExampleView.swift; sourceTree = "<group>"; };
 		4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupExampleView.swift; sourceTree = "<group>"; };
 		75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityNetworkTraceExampleView.swift; sourceTree = "<group>"; };
-		752A4FC2294D268000A49479 /* MapDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataModel.swift; sourceTree = "<group>"; };
-		752A4FC3294D268000A49479 /* SceneDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDataModel.swift; sourceTree = "<group>"; };
 		75657E4727ABAC8400EE865B /* CompassExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassExampleView.swift; sourceTree = "<group>"; };
 		75B615012AD76158009D19B6 /* FeatureFormExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormExampleView.swift; sourceTree = "<group>"; };
 		75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksExampleView.swift; sourceTree = "<group>"; };
@@ -90,15 +86,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		752A4FC7294D26DC00A49479 /* Utility */ = {
-			isa = PBXGroup;
-			children = (
-				752A4FC2294D268000A49479 /* MapDataModel.swift */,
-				752A4FC3294D268000A49479 /* SceneDataModel.swift */,
-			);
-			path = Utility;
-			sourceTree = "<group>";
-		};
 		E40F58042656E509006F5CB9 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,7 +112,6 @@
 			children = (
 				E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolkit */,
 				E47ABE562652FE7F00FD2FE3 /* Examples */,
-				752A4FC7294D26DC00A49479 /* Utility */,
 				E47ABE422652FE0900FD2FE3 /* ExamplesApp */,
 				E47ABE412652FE0900FD2FE3 /* Products */,
 				E47ABE5A2652FF1200FD2FE3 /* Frameworks */,
@@ -279,8 +265,6 @@
 				4D995CD72B5B01DB00AD45FE /* FeatureFormExampleView.swift in Sources */,
 				1C40F3322B46118800C00ED5 /* WorldScaleExampleView.swift in Sources */,
 				1CC376D42ABA0B3700A83300 /* TableTopExampleView.swift in Sources */,
-				752A4FC4294D268000A49479 /* MapDataModel.swift in Sources */,
-				752A4FC5294D268000A49479 /* SceneDataModel.swift in Sources */,
 				75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */,
 				E48A73452658227100F5C118 /* Examples.swift in Sources */,
 				75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */,
@@ -355,7 +339,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -410,7 +394,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -432,8 +416,8 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ExamplesApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -461,8 +445,8 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ExamplesApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

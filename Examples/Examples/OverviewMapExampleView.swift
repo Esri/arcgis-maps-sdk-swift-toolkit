@@ -48,10 +48,8 @@ struct OverviewMapExampleView: View {
 }
 
 struct OverviewMapForMapView: View {
-    /// The data model containing the `Map` displayed in the `MapView`.
-    @StateObject private var dataModel = MapDataModel(
-        map: Map(basemapStyle: .arcGISImagery)
-    )
+    /// The `Map` displayed in the `MapView`.
+    @State private var map = Map(basemapStyle: .arcGISImagery)
     
     @State private var viewpoint: Viewpoint?
     
@@ -61,7 +59,7 @@ struct OverviewMapForMapView: View {
 //    @State var customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
     
     var body: some View {
-        MapView(map: dataModel.map)
+        MapView(map: map)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .onVisibleAreaChanged { visibleArea = $0 }
             .overlay(
@@ -82,10 +80,8 @@ struct OverviewMapForMapView: View {
 }
 
 struct OverviewMapForSceneView: View {
-    /// The data model containing the `Scene` displayed in the `SceneView`.
-    @StateObject private var dataModel = SceneDataModel(
-        scene: Scene(basemapStyle: .arcGISImagery)
-    )
+    /// The `Scene` displayed in the `SceneView`.
+    @State private var scene = Scene(basemapStyle: .arcGISImagery)
     
     @State private var viewpoint: Viewpoint?
     
@@ -93,7 +89,7 @@ struct OverviewMapForSceneView: View {
     //    @State var customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
 
     var body: some View {
-        SceneView(scene: dataModel.scene)
+        SceneView(scene: scene)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .overlay(
                 OverviewMap.forSceneView(
