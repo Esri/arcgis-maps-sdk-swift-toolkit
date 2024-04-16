@@ -10,7 +10,6 @@ struct AuthenticationApp: App {
         WindowGroup {
             HomeView()
                 .authenticator(authenticator)
-                .environmentObject(authenticator)
         }
     }
 }

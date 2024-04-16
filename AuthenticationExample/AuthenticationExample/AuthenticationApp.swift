@@ -38,7 +38,6 @@ struct AuthenticationApp: App {
             // - Integrated Windows Authentication (IWA)
             // - Client Certificate (PKI)
             .authenticator(authenticator)
-            .environmentObject(authenticator)
             .task {
                 isSettingUp = true
                 ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
