@@ -25,10 +25,8 @@ struct PopupExampleView: View {
         return Map(item: portalItem)
     }
     
-    /// The data model containing the `Map` displayed in the `MapView`.
-    @StateObject private var dataModel = MapDataModel(
-        map: makeMap()
-    )
+    /// The `Map` displayed in the `MapView`.
+    @State private var map = makeMap()
     
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
@@ -46,7 +44,7 @@ struct PopupExampleView: View {
     
     var body: some View {
         MapViewReader { proxy in
-            MapView(map: dataModel.map)
+            MapView(map: map)
                 .onSingleTapGesture { screenPoint, _ in
                     identifyScreenPoint = screenPoint
                 }
