@@ -95,19 +95,13 @@ struct FeatureFormExampleView: View {
                 }
                 .navigationBarBackButtonHidden(model.isFormPresented)
                 .toolbar {
-                    // Once iOS 16.0 is the minimum supported, the two conditionals to show the
-                    // buttons can be merged and hoisted up as the root content of the toolbar.
-                    
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        if model.isFormPresented {
+                    if model.isFormPresented {
+                        ToolbarItem(placement: .navigationBarLeading) {
                             Button("Cancel", role: .cancel) {
                                 cancelConfirmationIsPresented = true
                             }
                         }
-                    }
-                    
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        if model.isFormPresented {
+                        ToolbarItem(placement: .navigationBarTrailing) {
                             Button("Submit") {
                                 validationErrorVisibility = .visible
                                 Task {
