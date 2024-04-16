@@ -18,7 +18,10 @@ import ArcGIS
 
 @main
 struct AuthenticationApp: App {
-    @StateObject private var authenticator = Authenticator()
+    @StateObject private var authenticator = Authenticator(
+        // If you want to use OAuth, uncomment this code:
+//      oAuthUserConfigurations: [.arcgisDotCom]
+    )
     
     @State private var isSettingUp = true
     
@@ -54,7 +57,7 @@ struct AuthenticationApp: App {
 }
 
 // If you want to use OAuth, you can uncomment this code:
-//private extension OAuthUserConfiguration {
+private extension OAuthUserConfiguration {
 //    static let arcgisDotCom = OAuthUserConfiguration(
 //        portalURL: .portal,
 //        clientID: "<#Your client ID goes here#>",
@@ -63,7 +66,7 @@ struct AuthenticationApp: App {
 //        // The scheme of the redirect URL is also specified in the Info.plist file.
 //        redirectURL: URL(string: "authexample://auth")!
 //    )
-//}
+}
 
 extension URL {
     // If you want to use your own portal, provide your own URL here:
