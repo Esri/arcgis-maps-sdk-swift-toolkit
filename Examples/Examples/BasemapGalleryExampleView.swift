@@ -17,7 +17,7 @@
 ***REMOVED***
 
 struct BasemapGalleryExampleView: View {
-***REMOVED******REMOVED***/ A Boolean value indicating whether to the basemap gallery is presented.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the basemap gallery is presented.
 ***REMOVED***@State private var basemapGalleryIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The initial list of basemaps.
