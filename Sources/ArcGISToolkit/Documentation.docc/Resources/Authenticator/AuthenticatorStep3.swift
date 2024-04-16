@@ -13,11 +13,9 @@ struct AuthenticationApp: App {
     
     var body: some SwiftUI.Scene {
         WindowGroup {
-            Group {
-                HomeView()
-            }
-            .authenticator(authenticator)
-            .environmentObject(authenticator)
+            HomeView()
+                .authenticator(authenticator)
+                .environmentObject(authenticator)
         }
     }
 }
