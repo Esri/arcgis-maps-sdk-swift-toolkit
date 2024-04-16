@@ -11,17 +11,19 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State private var map = makeMap()
-
-***REMOVED***@State private var identifyScreenPoint: CGPoint?
-***REMOVED***
 ***REMOVED***@State private var featureForm: FeatureForm? {
-***REMOVED******REMOVED***didSet { showFeatureForm = featureForm != nil ***REMOVED***
+***REMOVED******REMOVED***didSet { featureFormIsPresented = featureForm != nil ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State private var showFeatureForm = false
+***REMOVED***@State private var featureFormIsPresented = false
 ***REMOVED***
 ***REMOVED***@State private var floatingPanelDetent: FloatingPanelDetent = .full
+***REMOVED***
+***REMOVED***@State private var identifyScreenPoint: CGPoint?
+***REMOVED***
+***REMOVED***@State private var map = makeMap()
+***REMOVED***
+***REMOVED***@State private var submissionError: Text?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
@@ -52,7 +54,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent: $floatingPanelDetent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showFeatureForm
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $featureFormIsPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let featureForm {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FeatureFormView(featureForm: featureForm)

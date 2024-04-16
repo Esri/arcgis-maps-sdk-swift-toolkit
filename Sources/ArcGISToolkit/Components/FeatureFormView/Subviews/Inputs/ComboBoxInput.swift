@@ -133,9 +133,8 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED***/ The view that allows the user to filter and select coded values by name.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ Adds navigation context to support toolbar items and other visual elements in the picker.
-***REMOVED******REMOVED***/ - Note `NavigationView` is deprecated after iOS 17.0.
 ***REMOVED***func makePicker(for values: [CodedValue]) -> some View {
-***REMOVED******REMOVED***let picker = {
+***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(element.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
@@ -191,16 +190,6 @@ struct ComboBoxInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if #available(iOS 16, macCatalyst 16, *) {
-***REMOVED******REMOVED******REMOVED***return NavigationStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***picker()
-***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return NavigationView {
-***REMOVED******REMOVED******REMOVED******REMOVED***picker()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

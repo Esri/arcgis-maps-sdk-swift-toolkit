@@ -40,22 +40,9 @@ struct MediaPopupElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The number of popup media that can be displayed. The count includes
-***REMOVED******REMOVED***/ all image media and chart media when running on iOS 16 or newer.
+***REMOVED******REMOVED***/ all image media and chart media.
 ***REMOVED***var displayableMediaCount: Int {
-#if canImport(Charts)
-***REMOVED******REMOVED***let buildsWithMacCatalyst16 = true
-#else
-***REMOVED******REMOVED***let buildsWithMacCatalyst16 = false
-#endif
-***REMOVED******REMOVED***if #available(iOS 16, macCatalyst 16, *),
-***REMOVED******REMOVED***   buildsWithMacCatalyst16 {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Include all images and charts.
-***REMOVED******REMOVED******REMOVED***return popupElement.media.count
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Only include image media.
-***REMOVED******REMOVED******REMOVED***let imageMedia = popupElement.media.filter { $0.kind == .image ***REMOVED***
-***REMOVED******REMOVED******REMOVED***return imageMedia.count
-***REMOVED***
+***REMOVED******REMOVED***popupElement.media.count
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying an array of `PopupMedia`.
