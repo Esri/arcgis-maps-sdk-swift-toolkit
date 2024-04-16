@@ -38,7 +38,6 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** - Integrated Windows Authentication (IWA)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** - Client Certificate (PKI)
 ***REMOVED******REMOVED******REMOVED***.authenticator(authenticator)
-***REMOVED******REMOVED******REMOVED***.environmentObject(authenticator)
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isSettingUp = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)

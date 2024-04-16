@@ -10,7 +10,6 @@ struct AuthenticationApp: App {
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***HomeView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.authenticator(authenticator)
-***REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(authenticator)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
