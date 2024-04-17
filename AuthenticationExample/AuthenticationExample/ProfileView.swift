@@ -22,7 +22,7 @@ struct ProfileView: View {
 ***REMOVED***@State var portal: Portal
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean indicating whether the user is signing out.
-***REMOVED***@State var isSigningOut = false
+***REMOVED***@State private var isSigningOut = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to call once the user has signed out.
 ***REMOVED***var signOutAction: () -> Void

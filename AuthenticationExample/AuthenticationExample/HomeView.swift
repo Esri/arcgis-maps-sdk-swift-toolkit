@@ -18,10 +18,10 @@
 ***REMOVED***/ The view that is displayed after successfully signing in.
 struct HomeView: View {
 ***REMOVED******REMOVED***/ The portal that the user is signed in to.
-***REMOVED***@State var portal: Portal?
+***REMOVED***@State private var portal: Portal?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the profile view should be presented.
-***REMOVED***@State var showProfile = false
+***REMOVED***@State private var showProfile = false
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if let portal = portal {

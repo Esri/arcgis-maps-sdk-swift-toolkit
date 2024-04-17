@@ -21,10 +21,10 @@ struct WebMapsView: View {
 ***REMOVED***var portal: Portal
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the featured content is being loaded.
-***REMOVED***@State var isLoading = true
+***REMOVED***@State private var isLoading = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ The web map portal items.
-***REMOVED***@State var webMapItems = [PortalItem]()
+***REMOVED***@State private var webMapItems = [PortalItem]()
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {

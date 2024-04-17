@@ -20,10 +20,10 @@ import CryptoKit
 ***REMOVED***/ A view that allows the user to sign in to a portal.
 struct SignInView: View {
 ***REMOVED******REMOVED***/ The error that occurred during an attempt to sign in.
-***REMOVED***@State var error: Error?
+***REMOVED***@State private var error: Error?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the user is currently signing in.
-***REMOVED***@State var isSigningIn = false
+***REMOVED***@State private var isSigningIn = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The portal that the user successfully signed in to.
 ***REMOVED***@Binding var portal: Portal?
@@ -34,7 +34,7 @@ struct SignInView: View {
 ***REMOVED******REMOVED***/ credential did not have a username.
 ***REMOVED******REMOVED***/ - If the property is non-nil and non-empty, then it contains the previously used and
 ***REMOVED******REMOVED***/ persisted username.
-***REMOVED***@State var lastSignedInUser: String?
+***REMOVED***@State private var lastSignedInUser: String?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {

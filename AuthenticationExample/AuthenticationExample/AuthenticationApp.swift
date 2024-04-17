@@ -19,7 +19,7 @@
 ***REMOVED***
 struct AuthenticationApp: App {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
-***REMOVED***@State var isSettingUp = true
+***REMOVED***@State private var isSettingUp = true
 ***REMOVED***
 ***REMOVED***init() {
 ***REMOVED******REMOVED******REMOVED*** Create an authenticator.
