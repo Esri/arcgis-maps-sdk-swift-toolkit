@@ -18,12 +18,12 @@ import CryptoKit
 import SwiftUI
 
 /// A view that allows the user to sign in to a portal.
-struct SignInView: View {    
+struct SignInView: View {
     /// The error that occurred during an attempt to sign in.
     @State var error: Error?
     
     /// A Boolean value indicating if the user is currently signing in.
-    @State var isSigningIn: Bool = false
+    @State var isSigningIn = false
     
     /// The portal that the user successfully signed in to.
     @Binding var portal: Portal?

@@ -23,7 +23,7 @@ struct LoadableImageView: View {
     let loadableImage: LoadableImage
     
     /// The result of loading the image.
-    @State var result: Result<UIImage, Error>? = nil
+    @State var result: Result<UIImage, Error>?
     
     var body: some View {
         Group {
@@ -38,7 +38,8 @@ struct LoadableImageView: View {
                 Image(uiImage: image)
                     .resizable()
             }
-        }.task {
+        }
+        .task {
             result = await Result {
                 try await loadableImage.load()
                 return loadableImage.image ?? UIImage()
