@@ -48,15 +48,17 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***@State private var isExpanded: Bool = true
 ***REMOVED***
+***REMOVED******REMOVED***/ A boolean which determines whether attachment editing controls are enabled.
+***REMOVED***private var shouldEnableEditControls: Bool = false
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***switch attachmentLoadingState {
 ***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Not loaded, loading")
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***case .loaded(let attachmentModels):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !attachmentModels.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !attachmentModels.isEmpty || shouldEnableEditControls {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch featureElement.displayType {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .list:
@@ -75,13 +77,20 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: featureElement.displayTitle,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: featureElement.description
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: featureElement.displayTitle,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: featureElement.description
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if shouldEnableEditControls,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let element = featureElement.attachmentFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportMenu(element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
@@ -90,10 +99,10 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***var attachments = (try? await featureElement.attachments) ?? []
 ***REMOVED******REMOVED******REMOVED***print("attachment count: \(attachments.count)")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***try? await addDemoAttachments()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***attachments = (try? await featureElement.attachments) ?? []
-***REMOVED******REMOVED******REMOVED***print("attachment count: \(attachments.count)")
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await addDemoAttachments()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***attachments = (try? await featureElement.attachments) ?? []
+***REMOVED******REMOVED******REMOVED******REMOVED***print("attachment count: \(attachments.count)")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let attachmentModels = attachments
 ***REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
@@ -157,5 +166,17 @@ private extension AttachmentsFeatureElement {
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label in reference to attachments."
 ***REMOVED******REMOVED***) : title
+***REMOVED***
+***REMOVED***
+
+extension AttachmentsFeatureElementView {
+***REMOVED******REMOVED***/ Controls if the attachment editing controls should be enabled.
+***REMOVED******REMOVED***/ - Parameter newShouldShowEditControls: The new value.
+***REMOVED******REMOVED***/ - Returns: The `AttachmentsFeatureElementView`.
+***REMOVED***public func shouldEnableEditControls(_ newShouldEnableEditControls: Bool) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.shouldEnableEditControls = newShouldEnableEditControls
+***REMOVED******REMOVED***return copy
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
