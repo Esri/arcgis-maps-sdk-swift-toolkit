@@ -13,8 +13,9 @@
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***To begin, set up the parent view.
-***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a map with a basemap style, create member variable to control when the gallery is shown or hidden and pick an initial viewpoint.
-***REMOVED******REMOVED******REMOVED******REMOVED***Finally, add a `MapView` to the body of view, passing in the map and initial viewpoint.
+***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a map with a basemap style and an initial viewpoint. 
+***REMOVED******REMOVED******REMOVED******REMOVED***Create a member variable to control when the gallery is shown or hidden.
+***REMOVED******REMOVED******REMOVED******REMOVED***Finally, add a `MapView` to the body of view, passing in the map.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BasemapGalleryExampleView.swift", file: BasemapGalleryStep1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***

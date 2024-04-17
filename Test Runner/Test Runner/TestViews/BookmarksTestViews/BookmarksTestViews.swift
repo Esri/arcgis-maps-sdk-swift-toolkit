@@ -21,6 +21,8 @@ struct BookmarksTestViews: View {
 ***REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Test Case 2", destination: BookmarksTestCase2View())
 ***REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Test Case 3", destination: BookmarksTestCase3View())
 ***REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Test Case 4", destination: BookmarksTestCase4View())
+***REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Test Case 5", destination: BookmarksTestCase5View())
+***REMOVED******REMOVED******REMOVED***NavigationLink("Bookmarks Test Case 6", destination: BookmarksTestCase6View())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
