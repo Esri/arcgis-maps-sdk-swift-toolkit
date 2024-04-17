@@ -17,24 +17,25 @@ import ArcGISToolkit
 import SwiftUI
 
 struct BasemapGalleryExampleView: View {
-    /// The `Map` displayed in the `MapView`.
-    @State private var map = Map(basemapStyle: .arcGISImagery)
-    
-    /// A Boolean value indicating whether to show the basemap gallery.
-    @State private var showBasemapGallery = false
-    
-    /// The initial viewpoint of the map.
-    let initialViewpoint = Viewpoint(
-        center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-        scale: 1_000_000
-    )
+    /// A Boolean value indicating whether the basemap gallery is presented.
+    @State private var basemapGalleryIsPresented = false
     
     /// The initial list of basemaps.
     @State private var basemaps = makeBasemapGalleryItems()
     
+    /// The `Map` displayed in the `MapView`.
+    @State private var map: Map = {
+        let map = Map(basemapStyle: .arcGISImagery)
+        map.initialViewpoint = Viewpoint(
+            center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
+            scale: 1_000_000
+        )
+        return map
+    }()
+    
     var body: some View {
-        MapView(map: map, viewpoint: initialViewpoint)
-            .sheet(isPresented: $showBasemapGallery) {
+        MapView(map: map)
+            .sheet(isPresented: $basemapGalleryIsPresented) {
                 VStack(alignment: .trailing) {
                     doneButton
                         .padding()
@@ -45,7 +46,7 @@ struct BasemapGalleryExampleView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Toggle(isOn: $showBasemapGallery) {
+                    Toggle(isOn: $basemapGalleryIsPresented) {
                         Image("basemap", label: Text("Show base map"))
                     }
                 }
@@ -57,7 +58,7 @@ struct BasemapGalleryExampleView: View {
     /// This is especially useful for when the sheet is open an iPhone in landscape.
     private var doneButton: some View {
         Button {
-            showBasemapGallery.toggle()
+            basemapGalleryIsPresented.toggle()
         } label: {
             Text("Done")
         }
