@@ -27,26 +27,26 @@ public class FeatureAttachment {
         /// An attachment of another type.
         case other
     }
-
+    
     let popupAttachment: PopupAttachment?
-    let featureFormAttachment: FeatureFormAttachment?
+    let formAttachment: FormAttachment?
     
     init(popupAttachment: PopupAttachment) {
         self.popupAttachment = popupAttachment
-        self.featureFormAttachment = nil
+        self.formAttachment = nil
     }
     
-    init(featureFormAttachment: FeatureFormAttachment) {
+    init(featureFormAttachment: FormAttachment) {
         self.popupAttachment = nil
-        self.featureFormAttachment = featureFormAttachment
+        self.formAttachment = featureFormAttachment
     }
     
     /// The underlying ``Attachment``.
     public var attachment: Attachment? {
         if let popupAttachment {
             return popupAttachment.attachment
-//        } else if let formAttachment {
-//            return formAttachment.attachment
+        } else if let formAttachment {
+            return formAttachment.attachment
         }
         return nil
     }
@@ -55,8 +55,8 @@ public class FeatureAttachment {
     public var contentType: String {
         if let popupAttachment {
             return popupAttachment.contentType
-//        } else if let formAttachment {
-//            return formAttachment.contentType
+        } else if let formAttachment {
+            return formAttachment.contentType
         }
         return ""
     }
@@ -65,8 +65,8 @@ public class FeatureAttachment {
     public var fileURL: URL? {
         if let popupAttachment {
             return popupAttachment.fileURL
-//        } else if let formAttachment {
-//            return formAttachment.fileURL
+        } else if let formAttachment {
+            return formAttachment.fileURL
         }
         return nil
     }
@@ -78,8 +78,8 @@ public class FeatureAttachment {
     public var isLocal: Bool {
         if let popupAttachment {
             return popupAttachment.isLocal
-            //        } else if let formAttachment {
-            //            return formAttachment.isLocal
+        } else if let formAttachment {
+            return formAttachment.isLocal
         }
         return false
     }
@@ -89,8 +89,8 @@ public class FeatureAttachment {
         // Need to map popup attachment.kind to Kind
         if let popupAttachment {
             return Kind(kind: popupAttachment.kind)
-            //        } else if let formAttachment {
-            //            return formAttachment.contentType
+        } else if let formAttachment {
+            return Kind(contentType: formAttachment.contentType)
         }
         return Kind.other
     }
@@ -99,8 +99,8 @@ public class FeatureAttachment {
     public var name: String {
         if let popupAttachment {
             return popupAttachment.name
-            //        } else if let formAttachment {
-            //            return formAttachment.contentType
+        } else if let formAttachment {
+            return formAttachment.name
         }
         return ""
     }
@@ -109,39 +109,76 @@ public class FeatureAttachment {
     public var size: Int {
         if let popupAttachment {
             return popupAttachment.size
-            //        } else if let formAttachment {
-            //            return formAttachment.contentType
+        } else if let formAttachment {
+            return formAttachment.size
         }
         return 0
     }
     
     // MARK: Methods
-//    
-//    /// Creates asynchronously the full image for displaying the attachment in full screen or some UI larger than a thumbnail.
-//    ///
-//    /// This is only supported if the ``kind-swift.property`` is ``Kind-swift.enum/image``.
-//    /// - Returns: A task that represents the asynchronous operation. The task result contains the full image as an `UIImage`.
-//    public func makeFullImage() async throws -> UIImage {
-//        let coreFuture: CoreFuture<UIImage> = RT_PopupAttachment_createFullImageAsync(coreHandle, nil).toAPI()
-//        return try await coreFuture.getResult()
-//    }
-//    
-//    /// Creates asynchronously a thumbnail image with the specified width and height.
-//    ///
-//    /// This is only supported if the ``kind-swift.property`` is ``Kind-swift.enum/image``.
-//    /// - Parameters:
-//    ///   - width: Width of the thumbnail.
-//    ///   - height: Height of the thumbnail.
-//    /// - Returns: A task that represents the asynchronous operation. The task result contains the thumbnail as an `UIImage`.
-//    public func makeThumbnail(width: Int, height: Int) async throws -> UIImage {
-//        let coreFuture: CoreFuture<UIImage> = RT_PopupAttachment_createThumbnailAsync(coreHandle, Int32(clamping: width), Int32(clamping: height), nil).toAPI()
-//        return try await coreFuture.getResult()
-//    }
-//
-}
-
-public class FeatureFormAttachment {
+    //
+    //    /// Creates asynchronously the full image for displaying the attachment in full screen or some UI larger than a thumbnail.
+    //    ///
+    //    /// This is only supported if the ``kind-swift.property`` is ``Kind-swift.enum/image``.
+    //    /// - Returns: A task that represents the asynchronous operation. The task result contains the full image as an `UIImage`.
+    //    public func makeFullImage() async throws -> UIImage {
+    //        let coreFuture: CoreFuture<UIImage> = RT_PopupAttachment_createFullImageAsync(coreHandle, nil).toAPI()
+    //        return try await coreFuture.getResult()
+    //    }
+    //
+    //    /// Creates asynchronously a thumbnail image with the specified width and height.
+    //    ///
+    //    /// This is only supported if the ``kind-swift.property`` is ``Kind-swift.enum/image``.
+    //    /// - Parameters:
+    //    ///   - width: Width of the thumbnail.
+    //    ///   - height: Height of the thumbnail.
+    //    /// - Returns: A task that represents the asynchronous operation. The task result contains the thumbnail as an `UIImage`.
+    //    public func makeThumbnail(width: Int, height: Int) async throws -> UIImage {
+    //        let coreFuture: CoreFuture<UIImage> = RT_PopupAttachment_createThumbnailAsync(coreHandle, Int32(clamping: width), Int32(clamping: height), nil).toAPI()
+    //        return try await coreFuture.getResult()
+    //    }
+    //
     
+    // MARK: Loadable Protocol Conformance
+    
+    //    @Streamed
+    public var loadStatus: LoadStatus {
+        get {
+            if let popupAttachment {
+                return popupAttachment.loadStatus
+                //            } else if let featureFormAttachment {
+                //                return featureFormAttachment.loadStatus
+            }
+            return .notLoaded
+        }
+    }
+    
+    @Streamed
+    public private(set) var loadError: Swift.Error?
+    
+    public func load() async throws {
+        if let popupAttachment {
+            try await popupAttachment.load()
+        } else if let formAttachment {
+            try await formAttachment.load()
+        }
+    }
+    
+    public func retryLoad() async throws {
+        if let popupAttachment {
+            try await popupAttachment.retryLoad()
+        } else if let formAttachment {
+            try await formAttachment.retryLoad()
+        }
+    }
+    
+    public func cancelLoad() {
+        if let popupAttachment {
+            popupAttachment.cancelLoad()
+        } else if let formAttachment {
+            formAttachment.cancelLoad()
+        }
+    }
 }
 
 extension FeatureAttachment.Kind {
@@ -155,6 +192,16 @@ extension FeatureAttachment.Kind {
             self = .document
         case .other:
             self = .other
+        }
+    }
+    
+    init(contentType: String) {
+        if contentType.contains("image") {
+            self = .image
+        } else if contentType.contains("video") {
+            self = .video
+        } else {
+            self = .document
         }
     }
 }

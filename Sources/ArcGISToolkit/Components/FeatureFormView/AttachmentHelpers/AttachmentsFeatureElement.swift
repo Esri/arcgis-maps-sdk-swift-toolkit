@@ -16,7 +16,7 @@ import Foundation
 import ArcGIS
 
 /// Represents an element of type attachments that is displayed in a pop-up or feature form.
-public final class FeatureAttachmentElement {
+public final class AttachmentsFeatureElement {
     // MARK: Nested Types
     
     /// Indicates how to display the attachments. If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
@@ -31,7 +31,7 @@ public final class FeatureAttachmentElement {
     
     //    public let displayType: DisplayType
     public let attachmentsPopupElement: AttachmentsPopupElement?
-    public let attachmentsFeatureFormElement: AttachmentsFeatureFormElement?
+    public let attachmentFormElement: AttachmentFormElement?
     
     // MARK: Inits
     
@@ -39,12 +39,12 @@ public final class FeatureAttachmentElement {
     /// - Parameter displayType: Indicates how to display the attachments.
     public init(attachmentsPopupElement: AttachmentsPopupElement) {
         self.attachmentsPopupElement = attachmentsPopupElement
-        self.attachmentsFeatureFormElement = nil
+        self.attachmentFormElement = nil
     }
     
-    public init(attachmentsFeatureFormElement: AttachmentsFeatureFormElement) {
+    public init(attachmentFormElement: AttachmentFormElement) {
         self.attachmentsPopupElement = nil
-        self.attachmentsFeatureFormElement = attachmentsFeatureFormElement
+        self.attachmentFormElement = attachmentFormElement
     }
     
     // MARK: Properties
@@ -53,8 +53,8 @@ public final class FeatureAttachmentElement {
     public var description: String {
         if let attachmentsPopupElement {
             return attachmentsPopupElement.description
-            //        } else if let attachmentsFeatureFormElement {
-            //            return attachmentsFeatureFormElement.description
+        } else if let attachmentFormElement {
+            return attachmentFormElement.description
         }
         return ""
     }
@@ -72,8 +72,8 @@ public final class FeatureAttachmentElement {
     public var title: String {
         if let attachmentsPopupElement {
             return attachmentsPopupElement.title
-            //        } else if let attachmentsFeatureFormElement {
-            //            return attachmentsFeatureFormElement.title
+        } else if let attachmentFormElement {
+            return attachmentFormElement.label
         }
         return ""
     }
@@ -87,20 +87,18 @@ public final class FeatureAttachmentElement {
             if let attachmentsPopupElement {
                 let attachments = try await attachmentsPopupElement.attachments
                 return attachments.map { FeatureAttachment(popupAttachment: $0) }
-//            } else if let attachmentsFeatureFormElement {
-//                let attachments = try await attachmentsFeatureFormElement.attachments
-//                return attachments.map { FeatureAttachment(featureFormAttachment: $0) }
+            } else if let attachmentFormElement {
+                try await attachmentFormElement.fetchAttachments()
+                let attachments = attachmentFormElement.attachments
+//                let attachments = try await attachmentFormElement.attachments
+                return attachments.map { FeatureAttachment(featureFormAttachment: $0) }
             }
             return []
         }
     }
 }
 
-public class AttachmentsFeatureFormElement {
-    
-}
-
-extension FeatureAttachmentElement.DisplayType {
+extension AttachmentsFeatureElement.DisplayType {
     init(kind: AttachmentsPopupElement.DisplayType) {
         switch kind {
         case .list:

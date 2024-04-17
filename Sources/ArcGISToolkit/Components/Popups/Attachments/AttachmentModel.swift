@@ -17,11 +17,11 @@ import Combine
 import QuickLook
 import SwiftUI
 
-/// A view model representing the combination of a `PopupAttachment` and
+/// A view model representing the combination of a `FeatureAttachment` and
 /// an associated `UIImage` used as a thumbnail.
 @MainActor class AttachmentModel: ObservableObject {
-    /// The `PopupAttachment`.
-    let attachment: PopupAttachment
+    /// The `FeatureAttachment`.
+    let attachment: FeatureAttachment
     
     /// The thumbnail representing the attachment.
     @Published var thumbnail: UIImage? {
@@ -44,7 +44,7 @@ import SwiftUI
     
     @Environment(\.displayScale) var displayScale
     
-    init(attachment: PopupAttachment) {
+    init(attachment: FeatureAttachment) {
         self.attachment = attachment
         
         switch attachment.kind {
