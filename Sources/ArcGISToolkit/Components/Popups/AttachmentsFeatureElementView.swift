@@ -48,15 +48,17 @@ struct AttachmentsFeatureElementView: View {
     
     @State private var isExpanded: Bool = true
     
+    /// A boolean which determines whether attachment editing controls are enabled.
+    private var shouldEnableEditControls: Bool = false
+    
     var body: some View {
         Group {
             switch attachmentLoadingState {
             case .notLoaded, .loading:
-                Text("Not loaded, loading")
                 ProgressView()
                     .padding()
             case .loaded(let attachmentModels):
-//                if !attachmentModels.isEmpty {
+                if !attachmentModels.isEmpty || shouldEnableEditControls {
                     DisclosureGroup(isExpanded: $isExpanded) {
                         switch featureElement.displayType {
                         case .list:
@@ -75,13 +77,20 @@ struct AttachmentsFeatureElementView: View {
                             EmptyView()
                         }
                     } label: {
-                        PopupElementHeader(
-                            title: featureElement.displayTitle,
-                            description: featureElement.description
-                        )
+                        HStack {
+                            PopupElementHeader(
+                                title: featureElement.displayTitle,
+                                description: featureElement.description
+                            )
+                            Spacer()
+                            if shouldEnableEditControls,
+                               let element = featureElement.attachmentFormElement {
+                                AttachmentImportMenu(element: element)
+                            }
+                        }
                         .catalystPadding(4)
                     }
-//                }
+                }
             }
         }
         .task {
@@ -90,10 +99,10 @@ struct AttachmentsFeatureElementView: View {
             var attachments = (try? await featureElement.attachments) ?? []
             print("attachment count: \(attachments.count)")
             
-            try? await addDemoAttachments()
-            
-            attachments = (try? await featureElement.attachments) ?? []
-            print("attachment count: \(attachments.count)")
+//            try? await addDemoAttachments()
+//            
+//            attachments = (try? await featureElement.attachments) ?? []
+//            print("attachment count: \(attachments.count)")
             
             let attachmentModels = attachments
                 .reversed()
@@ -158,4 +167,16 @@ private extension AttachmentsFeatureElement {
             comment: "A label in reference to attachments."
         ) : title
     }
+}
+
+extension AttachmentsFeatureElementView {
+    /// Controls if the attachment editing controls should be enabled.
+    /// - Parameter newShouldShowEditControls: The new value.
+    /// - Returns: The `AttachmentsFeatureElementView`.
+    public func shouldEnableEditControls(_ newShouldEnableEditControls: Bool) -> Self {
+        var copy = self
+        copy.shouldEnableEditControls = newShouldEnableEditControls
+        return copy
+    }
+    
 }
