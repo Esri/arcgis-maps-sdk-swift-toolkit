@@ -62,7 +62,7 @@ struct OverviewMapForMapView: View {
         MapView(map: map)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .onVisibleAreaChanged { visibleArea = $0 }
-            .overlay(
+            .overlay(alignment: .topTrailing) {
                 OverviewMap.forMapView(
                     with: viewpoint,
                     visibleArea: visibleArea// ,
@@ -73,9 +73,8 @@ struct OverviewMapForMapView: View {
 //                    .symbol(.customFillSymbol)
 //                    .scaleFactor(15.0)
                     .frame(width: 200, height: 132)
-                    .padding(),
-                alignment: .topTrailing
-            )
+                    .padding()
+            }
     }
 }
 
@@ -91,7 +90,7 @@ struct OverviewMapForSceneView: View {
     var body: some View {
         SceneView(scene: scene)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
-            .overlay(
+            .overlay(alignment: .topTrailing) {
                 OverviewMap.forSceneView(
                     with: viewpoint// ,
                     // map: customOverviewMap // Uncomment to use a custom map.
@@ -101,9 +100,8 @@ struct OverviewMapForSceneView: View {
 //                    .symbol(.customMarkerSymbol)
 //                    .scaleFactor(15.0)
                     .frame(width: 200, height: 132)
-                    .padding(),
-                alignment: .topTrailing
-            )
+                    .padding()
+            }
     }
 }
 
