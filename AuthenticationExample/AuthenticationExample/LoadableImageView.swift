@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view that loads a `LoadableImage` and displays it.
 /// While the image is loading a progress view is displayed.
