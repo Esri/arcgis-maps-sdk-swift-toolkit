@@ -16,8 +16,10 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-***REMOVED***/ A view that displays the Bookmarks component initialized with no bookmarks.
-struct BookmarksTestCase3View: View {
+***REMOVED***/ A view that displays the Bookmarks component initialized with bookmarks.
+struct BookmarksTestCase5View: View {
+***REMOVED***@State private var bookmarks = [Bookmark(name: "Bookmark 1")]
+***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` with no predefined bookmarks.
 ***REMOVED***@State private var map = Map(basemapStyle: .arcGISCommunity)
 ***REMOVED***
@@ -26,9 +28,12 @@ struct BookmarksTestCase3View: View {
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: .constant(true)) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks: [],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks: bookmarks,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: .constant(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Add New") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks.append(Bookmark(name: "Bookmark \(bookmarks.count + 1)"))
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		75022F962A7AC9A0000ED7B7 /* FormViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */; ***REMOVED***;
+		75384C112B2D1BD800D97E6C /* BookmarksTestCase5View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */; ***REMOVED***;
 		7552A7542A573CBB0023DA5A /* TestRunnerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7532A573CBB0023DA5A /* TestRunnerApp.swift */; ***REMOVED***;
 		7552A7562A573CBB0023DA5A /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7552A7552A573CBB0023DA5A /* Tests.swift */; ***REMOVED***;
 		7552A7582A573CBD0023DA5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7552A7572A573CBD0023DA5A /* Assets.xcassets */; ***REMOVED***;
@@ -23,9 +24,10 @@
 		75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */; ***REMOVED***;
 		75B2366D2A5CC78C00AEFACE /* FloorFilterTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */; ***REMOVED***;
 		75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */; ***REMOVED***;
-		8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */; ***REMOVED***;
+		8A1138132BC7407D007E0BFB /* BookmarksTestCase6View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1138122BC7407D007E0BFB /* BookmarksTestCase6View.swift */; ***REMOVED***;
 		8A1562F52B86896300000DD6 /* UI Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F42B86896300000DD6 /* UI Tests.xctestplan */; ***REMOVED***;
 		8A1562F72B86896C00000DD6 /* Unit Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F62B86896C00000DD6 /* Unit Tests.xctestplan */; ***REMOVED***;
+		8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */; ***REMOVED***;
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewTests.swift; sourceTree = "<group>"; ***REMOVED***;
+		75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase5View.swift; sourceTree = "<group>"; ***REMOVED***;
 		7552A7502A573CBB0023DA5A /* Test Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Test Runner.app"; sourceTree = BUILT_PRODUCTS_DIR; ***REMOVED***;
 		7552A7532A573CBB0023DA5A /* TestRunnerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestRunnerApp.swift; sourceTree = "<group>"; ***REMOVED***;
 		7552A7552A573CBB0023DA5A /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; ***REMOVED***;
@@ -57,10 +60,11 @@
 		75B2366A2A5CB8CE00AEFACE /* BasemapGalleryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasemapGalleryTests.swift; sourceTree = "<group>"; ***REMOVED***;
 		75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterTestView.swift; sourceTree = "<group>"; ***REMOVED***;
 		75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterTests.swift; sourceTree = "<group>"; ***REMOVED***;
-		8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormTestView.swift; sourceTree = "<group>"; ***REMOVED***;
 		75CCCD612A5F691E0098B059 /* Test Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Test Runner.entitlements"; sourceTree = "<group>"; ***REMOVED***;
+		8A1138122BC7407D007E0BFB /* BookmarksTestCase6View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksTestCase6View.swift; sourceTree = "<group>"; ***REMOVED***;
 		8A1562F42B86896300000DD6 /* UI Tests.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "UI Tests.xctestplan"; sourceTree = "<group>"; ***REMOVED***;
 		8A1562F62B86896C00000DD6 /* Unit Tests.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Unit Tests.xctestplan"; sourceTree = "<group>"; ***REMOVED***;
+		8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormTestView.swift; sourceTree = "<group>"; ***REMOVED***;
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +153,8 @@
 				7584B7562B1A7AF100772AB7 /* BookmarksTestCase2View.swift */,
 				7584B7582B1A817A00772AB7 /* BookmarksTestCase3View.swift */,
 				7584B75A2B1A824300772AB7 /* BookmarksTestCase4View.swift */,
+				75384C102B2D1BD800D97E6C /* BookmarksTestCase5View.swift */,
+				8A1138122BC7407D007E0BFB /* BookmarksTestCase6View.swift */,
 				7584B7542B1A79DD00772AB7 /* BookmarksTestViews.swift */,
 			);
 			path = BookmarksTestViews;
@@ -283,10 +289,12 @@
 				7552A7542A573CBB0023DA5A /* TestRunnerApp.swift in Sources */,
 				7584B7552B1A79DD00772AB7 /* BookmarksTestViews.swift in Sources */,
 				75B2366D2A5CC78C00AEFACE /* FloorFilterTestView.swift in Sources */,
+				75384C112B2D1BD800D97E6C /* BookmarksTestCase5View.swift in Sources */,
 				7552A7622A573D810023DA5A /* BookmarksTestCase1View.swift in Sources */,
 				7584B7592B1A817A00772AB7 /* BookmarksTestCase3View.swift in Sources */,
 				7584B7572B1A7AF100772AB7 /* BookmarksTestCase2View.swift in Sources */,
 				8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */,
+				8A1138132BC7407D007E0BFB /* BookmarksTestCase6View.swift in Sources */,
 				7584B75B2B1A824300772AB7 /* BookmarksTestCase4View.swift in Sources */,
 				75B236692A5CB49B00AEFACE /* BasemapGalleryTestView.swift in Sources */,
 			);
