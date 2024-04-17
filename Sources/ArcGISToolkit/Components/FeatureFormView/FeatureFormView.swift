@@ -121,6 +121,7 @@ extension FeatureFormView {
             AttachmentsFeatureElementView(
                 featureElement: AttachmentsFeatureElement(attachmentFormElement: attachmentElement)
             )
+            .shouldEnableEditControls(true)
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as GroupFormElement:
