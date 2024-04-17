@@ -13,14 +13,13 @@ struct OverviewMapForMapView: View {
         MapView(map: map)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .onVisibleAreaChanged { visibleArea = $0 }
-            .overlay(
+            .overlay(alignment: .topTrailing) {
                 OverviewMap.forMapView(
                     with: viewpoint,
                     visibleArea: visibleArea
                 )
                 .frame(width: 200, height: 132)
-                .padding(),
-                alignment: .topTrailing
-            )
+                .padding()
+            }
     }
 }
