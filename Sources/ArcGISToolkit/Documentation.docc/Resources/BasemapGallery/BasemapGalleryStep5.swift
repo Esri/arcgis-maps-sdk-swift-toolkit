@@ -1,22 +1,24 @@
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+***REMOVED***
 
 struct BasemapGalleryExampleView: View {
-***REMOVED***@State private var map = Map(basemapStyle: .arcGISImagery)
-***REMOVED***
-***REMOVED***@State private var showBasemapGallery = false
-***REMOVED***
-***REMOVED***let initialViewpoint = Viewpoint(
-***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-***REMOVED******REMOVED***scale: 1_000_000
-***REMOVED***)
+***REMOVED***@State private var basemapGalleryIsPresented = false
 ***REMOVED***
 ***REMOVED***@State private var basemaps = makeBasemapGalleryItems()
 ***REMOVED***
+***REMOVED***@State private var map: Map = {
+***REMOVED******REMOVED***let map = Map(basemapStyle: .arcGISImagery)
+***REMOVED******REMOVED***map.initialViewpoint = Viewpoint(
+***REMOVED******REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
+***REMOVED******REMOVED******REMOVED***scale: 1_000_000
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***return map
+***REMOVED***()
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showBasemapGallery) {
+***REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $basemapGalleryIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .trailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***doneButton
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
@@ -27,7 +29,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(isOn: $showBasemapGallery) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(isOn: $basemapGalleryIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image("basemap", label: Text("Show base map"))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -36,7 +38,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***
 ***REMOVED***private var doneButton: some View {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
+***REMOVED******REMOVED******REMOVED***basemapGalleryIsPresented.toggle()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text("Done")
 ***REMOVED***
