@@ -13,8 +13,8 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+***REMOVED***
 
 struct SearchExampleView: View {
 ***REMOVED******REMOVED***/ Provides search behavior customization.
