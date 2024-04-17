@@ -19,7 +19,7 @@
 ***REMOVED***/ A view that displays the profile of a user.
 struct ProfileView: View {
 ***REMOVED******REMOVED***/ The portal that the user is signed in to.
-***REMOVED***@State var portal: Portal
+***REMOVED***let portal: Portal
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean indicating whether the user is signing out.
 ***REMOVED***@State private var isSigningOut = false
