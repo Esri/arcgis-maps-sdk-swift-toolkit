@@ -13,8 +13,8 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+***REMOVED***
 
 ***REMOVED***/ A view that displays the profile of a user.
 struct ProfileView: View {

@@ -13,9 +13,9 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
 import CryptoKit
+***REMOVED***
 
 ***REMOVED***/ A view that allows the user to sign in to a portal.
 struct SignInView: View {***REMOVED***
