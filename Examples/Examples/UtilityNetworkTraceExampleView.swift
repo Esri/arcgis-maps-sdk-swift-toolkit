@@ -19,7 +19,7 @@
 ***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with
 ***REMOVED***/ a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-***REMOVED***@Environment(\.isPortraitOrientation) 
+***REMOVED***@Environment(\.isPortraitOrientation)
 ***REMOVED***private var isPortraitOrientation
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current detent of the floating panel presenting the trace tool.
