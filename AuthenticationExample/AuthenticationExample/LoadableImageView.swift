@@ -23,7 +23,7 @@ struct LoadableImageView: View {
     let loadableImage: LoadableImage
     
     /// The result of loading the image.
-    @State var result: Result<UIImage, Error>?
+    @State private var result: Result<UIImage, Error>?
     
     var body: some View {
         Group {

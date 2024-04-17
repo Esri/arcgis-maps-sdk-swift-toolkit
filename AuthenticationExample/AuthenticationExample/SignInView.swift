@@ -20,10 +20,10 @@ import SwiftUI
 /// A view that allows the user to sign in to a portal.
 struct SignInView: View {
     /// The error that occurred during an attempt to sign in.
-    @State var error: Error?
+    @State private var error: Error?
     
     /// A Boolean value indicating if the user is currently signing in.
-    @State var isSigningIn = false
+    @State private var isSigningIn = false
     
     /// The portal that the user successfully signed in to.
     @Binding var portal: Portal?
@@ -34,7 +34,7 @@ struct SignInView: View {
     /// credential did not have a username.
     /// - If the property is non-nil and non-empty, then it contains the previously used and
     /// persisted username.
-    @State var lastSignedInUser: String?
+    @State private var lastSignedInUser: String?
     
     var body: some View {
         VStack {

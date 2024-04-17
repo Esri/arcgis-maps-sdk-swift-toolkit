@@ -21,7 +21,7 @@ struct MapItemView: View {
     let map: Map
     
     /// The result of loading the map.
-    @State var loadResult: Result<Void, Error>?
+    @State private var loadResult: Result<Void, Error>?
     
     var body: some View {
         VStack {
