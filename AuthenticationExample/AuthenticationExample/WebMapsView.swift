@@ -21,10 +21,10 @@ struct WebMapsView: View {
     var portal: Portal
     
     /// A Boolean value indicating whether the featured content is being loaded.
-    @State var isLoading = true
+    @State private var isLoading = true
     
     /// The web map portal items.
-    @State var webMapItems = [PortalItem]()
+    @State private var webMapItems = [PortalItem]()
     
     var body: some View {
         VStack {

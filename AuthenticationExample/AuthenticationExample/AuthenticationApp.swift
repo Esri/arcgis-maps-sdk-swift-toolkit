@@ -19,7 +19,7 @@ import SwiftUI
 @main
 struct AuthenticationApp: App {
     @ObservedObject var authenticator: Authenticator
-    @State var isSettingUp = true
+    @State private var isSettingUp = true
     
     init() {
         // Create an authenticator.
