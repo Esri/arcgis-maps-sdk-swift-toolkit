@@ -25,7 +25,7 @@ struct HomeView: View {
     
     var body: some View {
         if let portal = portal {
-            NavigationView{
+            NavigationView {
                 WebMapsView(portal: portal)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
