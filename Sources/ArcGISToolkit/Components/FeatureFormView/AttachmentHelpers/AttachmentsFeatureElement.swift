@@ -16,7 +16,7 @@ import Foundation
 ***REMOVED***
 
 ***REMOVED***/ Represents an element of type attachments that is displayed in a pop-up or feature form.
-public final class FeatureAttachmentElement {
+public final class AttachmentsFeatureElement {
 ***REMOVED******REMOVED*** MARK: Nested Types
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates how to display the attachments. If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
@@ -31,7 +31,7 @@ public final class FeatureAttachmentElement {
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***public let displayType: DisplayType
 ***REMOVED***public let attachmentsPopupElement: AttachmentsPopupElement?
-***REMOVED***public let attachmentsFeatureFormElement: AttachmentsFeatureFormElement?
+***REMOVED***public let attachmentFormElement: AttachmentFormElement?
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Inits
 ***REMOVED***
@@ -39,12 +39,12 @@ public final class FeatureAttachmentElement {
 ***REMOVED******REMOVED***/ - Parameter displayType: Indicates how to display the attachments.
 ***REMOVED***public init(attachmentsPopupElement: AttachmentsPopupElement) {
 ***REMOVED******REMOVED***self.attachmentsPopupElement = attachmentsPopupElement
-***REMOVED******REMOVED***self.attachmentsFeatureFormElement = nil
+***REMOVED******REMOVED***self.attachmentFormElement = nil
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public init(attachmentsFeatureFormElement: AttachmentsFeatureFormElement) {
+***REMOVED***public init(attachmentFormElement: AttachmentFormElement) {
 ***REMOVED******REMOVED***self.attachmentsPopupElement = nil
-***REMOVED******REMOVED***self.attachmentsFeatureFormElement = attachmentsFeatureFormElement
+***REMOVED******REMOVED***self.attachmentFormElement = attachmentFormElement
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Properties
@@ -53,8 +53,8 @@ public final class FeatureAttachmentElement {
 ***REMOVED***public var description: String {
 ***REMOVED******REMOVED***if let attachmentsPopupElement {
 ***REMOVED******REMOVED******REMOVED***return attachmentsPopupElement.description
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let attachmentsFeatureFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return attachmentsFeatureFormElement.description
+***REMOVED*** else if let attachmentFormElement {
+***REMOVED******REMOVED******REMOVED***return attachmentFormElement.description
 ***REMOVED***
 ***REMOVED******REMOVED***return ""
 ***REMOVED***
@@ -72,8 +72,8 @@ public final class FeatureAttachmentElement {
 ***REMOVED***public var title: String {
 ***REMOVED******REMOVED***if let attachmentsPopupElement {
 ***REMOVED******REMOVED******REMOVED***return attachmentsPopupElement.title
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let attachmentsFeatureFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return attachmentsFeatureFormElement.title
+***REMOVED*** else if let attachmentFormElement {
+***REMOVED******REMOVED******REMOVED***return attachmentFormElement.label
 ***REMOVED***
 ***REMOVED******REMOVED***return ""
 ***REMOVED***
@@ -87,20 +87,18 @@ public final class FeatureAttachmentElement {
 ***REMOVED******REMOVED******REMOVED***if let attachmentsPopupElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let attachments = try await attachmentsPopupElement.attachments
 ***REMOVED******REMOVED******REMOVED******REMOVED***return attachments.map { FeatureAttachment(popupAttachment: $0) ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** else if let attachmentsFeatureFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let attachments = try await attachmentsFeatureFormElement.attachments
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return attachments.map { FeatureAttachment(featureFormAttachment: $0) ***REMOVED***
+***REMOVED******REMOVED*** else if let attachmentFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await attachmentFormElement.fetchAttachments()
+***REMOVED******REMOVED******REMOVED******REMOVED***let attachments = attachmentFormElement.attachments
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let attachments = try await attachmentFormElement.attachments
+***REMOVED******REMOVED******REMOVED******REMOVED***return attachments.map { FeatureAttachment(featureFormAttachment: $0) ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return []
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-public class AttachmentsFeatureFormElement {
-***REMOVED***
-***REMOVED***
-
-extension FeatureAttachmentElement.DisplayType {
+extension AttachmentsFeatureElement.DisplayType {
 ***REMOVED***init(kind: AttachmentsPopupElement.DisplayType) {
 ***REMOVED******REMOVED***switch kind {
 ***REMOVED******REMOVED***case .list:

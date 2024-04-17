@@ -27,26 +27,26 @@ public class FeatureAttachment {
 ***REMOVED******REMOVED******REMOVED***/ An attachment of another type.
 ***REMOVED******REMOVED***case other
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***let popupAttachment: PopupAttachment?
-***REMOVED***let featureFormAttachment: FeatureFormAttachment?
+***REMOVED***let formAttachment: FormAttachment?
 ***REMOVED***
 ***REMOVED***init(popupAttachment: PopupAttachment) {
 ***REMOVED******REMOVED***self.popupAttachment = popupAttachment
-***REMOVED******REMOVED***self.featureFormAttachment = nil
+***REMOVED******REMOVED***self.formAttachment = nil
 ***REMOVED***
 ***REMOVED***
-***REMOVED***init(featureFormAttachment: FeatureFormAttachment) {
+***REMOVED***init(featureFormAttachment: FormAttachment) {
 ***REMOVED******REMOVED***self.popupAttachment = nil
-***REMOVED******REMOVED***self.featureFormAttachment = featureFormAttachment
+***REMOVED******REMOVED***self.formAttachment = featureFormAttachment
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The underlying ``Attachment``.
 ***REMOVED***public var attachment: Attachment? {
 ***REMOVED******REMOVED***if let popupAttachment {
 ***REMOVED******REMOVED******REMOVED***return popupAttachment.attachment
-***REMOVED******REMOVED*** else if let formAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED***return formAttachment.attachment
+***REMOVED*** else if let formAttachment {
+***REMOVED******REMOVED******REMOVED***return formAttachment.attachment
 ***REMOVED***
 ***REMOVED******REMOVED***return nil
 ***REMOVED***
@@ -55,8 +55,8 @@ public class FeatureAttachment {
 ***REMOVED***public var contentType: String {
 ***REMOVED******REMOVED***if let popupAttachment {
 ***REMOVED******REMOVED******REMOVED***return popupAttachment.contentType
-***REMOVED******REMOVED*** else if let formAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED***return formAttachment.contentType
+***REMOVED*** else if let formAttachment {
+***REMOVED******REMOVED******REMOVED***return formAttachment.contentType
 ***REMOVED***
 ***REMOVED******REMOVED***return ""
 ***REMOVED***
@@ -65,8 +65,8 @@ public class FeatureAttachment {
 ***REMOVED***public var fileURL: URL? {
 ***REMOVED******REMOVED***if let popupAttachment {
 ***REMOVED******REMOVED******REMOVED***return popupAttachment.fileURL
-***REMOVED******REMOVED*** else if let formAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED***return formAttachment.fileURL
+***REMOVED*** else if let formAttachment {
+***REMOVED******REMOVED******REMOVED***return formAttachment.fileURL
 ***REMOVED***
 ***REMOVED******REMOVED***return nil
 ***REMOVED***
@@ -78,8 +78,8 @@ public class FeatureAttachment {
 ***REMOVED***public var isLocal: Bool {
 ***REMOVED******REMOVED***if let popupAttachment {
 ***REMOVED******REMOVED******REMOVED***return popupAttachment.isLocal
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let formAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return formAttachment.isLocal
+***REMOVED*** else if let formAttachment {
+***REMOVED******REMOVED******REMOVED***return formAttachment.isLocal
 ***REMOVED***
 ***REMOVED******REMOVED***return false
 ***REMOVED***
@@ -89,8 +89,8 @@ public class FeatureAttachment {
 ***REMOVED******REMOVED******REMOVED*** Need to map popup attachment.kind to Kind
 ***REMOVED******REMOVED***if let popupAttachment {
 ***REMOVED******REMOVED******REMOVED***return Kind(kind: popupAttachment.kind)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let formAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return formAttachment.contentType
+***REMOVED*** else if let formAttachment {
+***REMOVED******REMOVED******REMOVED***return Kind(contentType: formAttachment.contentType)
 ***REMOVED***
 ***REMOVED******REMOVED***return Kind.other
 ***REMOVED***
@@ -99,8 +99,8 @@ public class FeatureAttachment {
 ***REMOVED***public var name: String {
 ***REMOVED******REMOVED***if let popupAttachment {
 ***REMOVED******REMOVED******REMOVED***return popupAttachment.name
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let formAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return formAttachment.contentType
+***REMOVED*** else if let formAttachment {
+***REMOVED******REMOVED******REMOVED***return formAttachment.name
 ***REMOVED***
 ***REMOVED******REMOVED***return ""
 ***REMOVED***
@@ -109,38 +109,75 @@ public class FeatureAttachment {
 ***REMOVED***public var size: Int {
 ***REMOVED******REMOVED***if let popupAttachment {
 ***REMOVED******REMOVED******REMOVED***return popupAttachment.size
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let formAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return formAttachment.contentType
+***REMOVED*** else if let formAttachment {
+***REMOVED******REMOVED******REMOVED***return formAttachment.size
 ***REMOVED***
 ***REMOVED******REMOVED***return 0
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Methods
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Creates asynchronously the full image for displaying the attachment in full screen or some UI larger than a thumbnail.
-***REMOVED******REMOVED******REMOVED***/
-***REMOVED******REMOVED******REMOVED***/ This is only supported if the ``kind-swift.property`` is ``Kind-swift.enum/image``.
-***REMOVED******REMOVED******REMOVED***/ - Returns: A task that represents the asynchronous operation. The task result contains the full image as an `UIImage`.
-***REMOVED******REMOVED***public func makeFullImage() async throws -> UIImage {
-***REMOVED******REMOVED******REMOVED***let coreFuture: CoreFuture<UIImage> = RT_PopupAttachment_createFullImageAsync(coreHandle, nil).toAPI()
-***REMOVED******REMOVED******REMOVED***return try await coreFuture.getResult()
+***REMOVED******REMOVED******REMOVED******REMOVED***/ Creates asynchronously the full image for displaying the attachment in full screen or some UI larger than a thumbnail.
+***REMOVED******REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED******REMOVED******REMOVED***/ This is only supported if the ``kind-swift.property`` is ``Kind-swift.enum/image``.
+***REMOVED******REMOVED******REMOVED******REMOVED***/ - Returns: A task that represents the asynchronous operation. The task result contains the full image as an `UIImage`.
+***REMOVED******REMOVED******REMOVED***public func makeFullImage() async throws -> UIImage {
+***REMOVED******REMOVED******REMOVED******REMOVED***let coreFuture: CoreFuture<UIImage> = RT_PopupAttachment_createFullImageAsync(coreHandle, nil).toAPI()
+***REMOVED******REMOVED******REMOVED******REMOVED***return try await coreFuture.getResult()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Creates asynchronously a thumbnail image with the specified width and height.
-***REMOVED******REMOVED******REMOVED***/
-***REMOVED******REMOVED******REMOVED***/ This is only supported if the ``kind-swift.property`` is ``Kind-swift.enum/image``.
-***REMOVED******REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED******REMOVED***/   - width: Width of the thumbnail.
-***REMOVED******REMOVED******REMOVED***/   - height: Height of the thumbnail.
-***REMOVED******REMOVED******REMOVED***/ - Returns: A task that represents the asynchronous operation. The task result contains the thumbnail as an `UIImage`.
-***REMOVED******REMOVED***public func makeThumbnail(width: Int, height: Int) async throws -> UIImage {
-***REMOVED******REMOVED******REMOVED***let coreFuture: CoreFuture<UIImage> = RT_PopupAttachment_createThumbnailAsync(coreHandle, Int32(clamping: width), Int32(clamping: height), nil).toAPI()
-***REMOVED******REMOVED******REMOVED***return try await coreFuture.getResult()
+***REMOVED******REMOVED******REMOVED******REMOVED***/ Creates asynchronously a thumbnail image with the specified width and height.
+***REMOVED******REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED******REMOVED******REMOVED***/ This is only supported if the ``kind-swift.property`` is ``Kind-swift.enum/image``.
+***REMOVED******REMOVED******REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED******REMOVED******REMOVED***/   - width: Width of the thumbnail.
+***REMOVED******REMOVED******REMOVED******REMOVED***/   - height: Height of the thumbnail.
+***REMOVED******REMOVED******REMOVED******REMOVED***/ - Returns: A task that represents the asynchronous operation. The task result contains the thumbnail as an `UIImage`.
+***REMOVED******REMOVED******REMOVED***public func makeThumbnail(width: Int, height: Int) async throws -> UIImage {
+***REMOVED******REMOVED******REMOVED******REMOVED***let coreFuture: CoreFuture<UIImage> = RT_PopupAttachment_createThumbnailAsync(coreHandle, Int32(clamping: width), Int32(clamping: height), nil).toAPI()
+***REMOVED******REMOVED******REMOVED******REMOVED***return try await coreFuture.getResult()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED*** MARK: Loadable Protocol Conformance
 ***REMOVED***
-
-public class FeatureFormAttachment {
+***REMOVED******REMOVED******REMOVED***@Streamed
+***REMOVED***public var loadStatus: LoadStatus {
+***REMOVED******REMOVED***get {
+***REMOVED******REMOVED******REMOVED***if let popupAttachment {
+***REMOVED******REMOVED******REMOVED******REMOVED***return popupAttachment.loadStatus
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let featureFormAttachment {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return featureFormAttachment.loadStatus
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return .notLoaded
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@Streamed
+***REMOVED***public private(set) var loadError: Swift.Error?
+***REMOVED***
+***REMOVED***public func load() async throws {
+***REMOVED******REMOVED***if let popupAttachment {
+***REMOVED******REMOVED******REMOVED***try await popupAttachment.load()
+***REMOVED*** else if let formAttachment {
+***REMOVED******REMOVED******REMOVED***try await formAttachment.load()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***public func retryLoad() async throws {
+***REMOVED******REMOVED***if let popupAttachment {
+***REMOVED******REMOVED******REMOVED***try await popupAttachment.retryLoad()
+***REMOVED*** else if let formAttachment {
+***REMOVED******REMOVED******REMOVED***try await formAttachment.retryLoad()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***public func cancelLoad() {
+***REMOVED******REMOVED***if let popupAttachment {
+***REMOVED******REMOVED******REMOVED***popupAttachment.cancelLoad()
+***REMOVED*** else if let formAttachment {
+***REMOVED******REMOVED******REMOVED***formAttachment.cancelLoad()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -155,6 +192,16 @@ extension FeatureAttachment.Kind {
 ***REMOVED******REMOVED******REMOVED***self = .document
 ***REMOVED******REMOVED***case .other:
 ***REMOVED******REMOVED******REMOVED***self = .other
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***init(contentType: String) {
+***REMOVED******REMOVED***if contentType.contains("image") {
+***REMOVED******REMOVED******REMOVED***self = .image
+***REMOVED*** else if contentType.contains("video") {
+***REMOVED******REMOVED******REMOVED***self = .video
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***self = .document
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

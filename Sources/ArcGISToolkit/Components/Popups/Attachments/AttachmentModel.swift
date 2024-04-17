@@ -17,11 +17,11 @@ import Combine
 import QuickLook
 ***REMOVED***
 
-***REMOVED***/ A view model representing the combination of a `PopupAttachment` and
+***REMOVED***/ A view model representing the combination of a `FeatureAttachment` and
 ***REMOVED***/ an associated `UIImage` used as a thumbnail.
 @MainActor class AttachmentModel: ObservableObject {
-***REMOVED******REMOVED***/ The `PopupAttachment`.
-***REMOVED***let attachment: PopupAttachment
+***REMOVED******REMOVED***/ The `FeatureAttachment`.
+***REMOVED***let attachment: FeatureAttachment
 ***REMOVED***
 ***REMOVED******REMOVED***/ The thumbnail representing the attachment.
 ***REMOVED***@Published var thumbnail: UIImage? {
@@ -44,7 +44,7 @@ import QuickLook
 ***REMOVED***
 ***REMOVED***@Environment(\.displayScale) var displayScale
 ***REMOVED***
-***REMOVED***init(attachment: PopupAttachment) {
+***REMOVED***init(attachment: FeatureAttachment) {
 ***REMOVED******REMOVED***self.attachment = attachment
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch attachment.kind {
