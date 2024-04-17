@@ -1,22 +1,24 @@
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+***REMOVED***
 
 struct BasemapGalleryExampleView: View {
-***REMOVED***@State private var map = Map(basemapStyle: .arcGISImagery)
-***REMOVED***
-***REMOVED***@State private var showBasemapGallery = false
-***REMOVED***
-***REMOVED***let initialViewpoint = Viewpoint(
-***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-***REMOVED******REMOVED***scale: 1_000_000
-***REMOVED***)
+***REMOVED***@State private var basemapGalleryIsPresented = false
 ***REMOVED***
 ***REMOVED***@State private var basemaps = makeBasemapGalleryItems()
 ***REMOVED***
+***REMOVED***@State private var map: Map = {
+***REMOVED******REMOVED***let map = Map(basemapStyle: .arcGISImagery)
+***REMOVED******REMOVED***map.initialViewpoint = Viewpoint(
+***REMOVED******REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
+***REMOVED******REMOVED******REMOVED***scale: 1_000_000
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***return map
+***REMOVED***()
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showBasemapGallery) {
+***REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $basemapGalleryIsPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(items: basemaps, geoModel: map)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.grid(maxItemWidth: 100))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()

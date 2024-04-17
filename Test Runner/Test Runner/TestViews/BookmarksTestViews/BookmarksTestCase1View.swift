@@ -22,7 +22,7 @@ struct BookmarksTestCase1View: View {
 ***REMOVED***@State private var map = Map(url: URL(string: "https:***REMOVED***www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 ***REMOVED***
 ***REMOVED******REMOVED***/ The last selected bookmark.
-***REMOVED***@State private var selectedBookmark: Bookmark?
+***REMOVED***@State private var selection: Bookmark?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates if the `Bookmarks` component is shown or not.
 ***REMOVED******REMOVED***/ - Remark: This allows a developer to control when the `Bookmarks` component is
@@ -30,13 +30,13 @@ struct BookmarksTestCase1View: View {
 ***REMOVED***@State private var showingBookmarks = false
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: map, viewpoint: selectedBookmark?.viewpoint)
+***REMOVED******REMOVED***MapView(map: map, viewpoint: selection?.viewpoint)
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showingBookmarks) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showingBookmarks,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModel: map
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModel: map,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: $selection
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged { selectedBookmark = $0 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
@@ -45,9 +45,9 @@ struct BookmarksTestCase1View: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedBookmark {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let selection {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .bottomBar) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedBookmark.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(selection.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
