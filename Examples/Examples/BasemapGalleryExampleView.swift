@@ -13,8 +13,8 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+***REMOVED***
 
 struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
