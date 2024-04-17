@@ -17,7 +17,9 @@ import ArcGISToolkit
 import SwiftUI
 
 /// A view that displays the Bookmarks component initialized with bookmarks.
-struct BookmarksTestCase4View: View {
+struct BookmarksTestCase5View: View {
+    @State private var bookmarks = [Bookmark(name: "Bookmark 1")]
+    
     /// The `Map` with no predefined bookmarks.
     @State private var map = Map(basemapStyle: .arcGISCommunity)
     
@@ -26,9 +28,12 @@ struct BookmarksTestCase4View: View {
             .sheet(isPresented: .constant(true)) {
                 Bookmarks(
                     isPresented: .constant(true),
-                    bookmarks: [Bookmark(name: "Redlands")],
+                    bookmarks: bookmarks,
                     selection: .constant(nil)
                 )
+                Button("Add New") {
+                    bookmarks.append(Bookmark(name: "Bookmark \(bookmarks.count + 1)"))
+                }
             }
     }
 }
