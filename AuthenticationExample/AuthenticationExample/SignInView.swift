@@ -18,12 +18,12 @@ import CryptoKit
 ***REMOVED***
 
 ***REMOVED***/ A view that allows the user to sign in to a portal.
-struct SignInView: View {***REMOVED***
+struct SignInView: View {
 ***REMOVED******REMOVED***/ The error that occurred during an attempt to sign in.
 ***REMOVED***@State var error: Error?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the user is currently signing in.
-***REMOVED***@State var isSigningIn: Bool = false
+***REMOVED***@State var isSigningIn = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The portal that the user successfully signed in to.
 ***REMOVED***@Binding var portal: Portal?
