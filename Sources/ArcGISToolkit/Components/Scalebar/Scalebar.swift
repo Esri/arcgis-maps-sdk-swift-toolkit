@@ -134,7 +134,7 @@ public struct Scalebar: View {
         settings: ScalebarSettings = ScalebarSettings(),
         spatialReference: SpatialReference?,
         style: ScalebarStyle = .alternatingBar,
-        units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
+        units: ScalebarUnits = NSLocale.current.measurementSystem == .metric ? .metric : .imperial,
         unitsPerPoint: Double?,
         useGeodeticCalculations: Bool = true,
         viewpoint: Viewpoint?
