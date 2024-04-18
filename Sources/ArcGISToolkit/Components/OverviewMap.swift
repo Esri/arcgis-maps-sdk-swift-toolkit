@@ -46,7 +46,7 @@ import Combine
 ***REMOVED***/ To see the `OverviewMap` in action, and for examples of `OverviewMap` customization, check out
 ***REMOVED***/ the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [OverviewMapExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/OverviewMapExampleView.swift)
-***REMOVED***/ in the project. To learn more about using the `OverviewMap` see the [OverviewMap Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/overviewmaptutorial).
+***REMOVED***/ in the project. To learn more about using the `OverviewMap` see the <doc:OverviewMapTutorial>.
 public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ The `Viewpoint` of the main `GeoView`.
 ***REMOVED***let viewpoint: Viewpoint?
