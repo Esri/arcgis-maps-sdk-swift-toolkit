@@ -15,13 +15,7 @@
 import SwiftUI
 
 /// A floating panel is a view that overlays a view and supplies view-related
-/// content. A map view, for instance, could display a legend, bookmarks, search results, etc..
-///
-/// Floating panels are non-modal and can be transient, only displaying
-/// information for a short period of time like identify results,
-/// or persistent, where the information is always displayed, for example a
-/// dedicated search panel. They will also be primarily simple containers
-/// that clients will fill with their own content.
+/// content. For more information see <doc:FloatingPanel>.
 struct FloatingPanel<Content>: View where Content: View {
     /// The height of a geo-view's attribution bar.
     ///
