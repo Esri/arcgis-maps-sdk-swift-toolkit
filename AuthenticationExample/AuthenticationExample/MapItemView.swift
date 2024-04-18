@@ -21,7 +21,7 @@ struct MapItemView: View {
 ***REMOVED***let map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ The result of loading the map.
-***REMOVED***@State var loadResult: Result<Void, Error>?
+***REMOVED***@State private var loadResult: Result<Void, Error>?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -43,4 +43,3 @@ struct MapItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-

@@ -18,7 +18,7 @@
 ***REMOVED***/ A view that displays details of a portal user.
 struct UserView: View {
 ***REMOVED******REMOVED***/ The user to display the details for.
-***REMOVED***@State var user: PortalUser
+***REMOVED***let user: PortalUser
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
