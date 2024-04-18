@@ -60,8 +60,8 @@ struct AttachmentImportMenu: View {
                     .labelStyle(.titleAndIcon)
             }
         } label: {
-            Text("+")
-                .font(.largeTitle)
+            Image(systemName: "plus")
+                .font(.title2)
         }
         .task(id: newAttachmentData) {
             guard let newAttachmentData else { return }
