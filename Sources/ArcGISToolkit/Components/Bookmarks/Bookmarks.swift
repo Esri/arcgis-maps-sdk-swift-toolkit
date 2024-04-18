@@ -29,7 +29,7 @@ import SwiftUI
 ///
 /// To see it in action, try out the [Examples](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 /// and refer to [BookmarksExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
-/// in the project. To learn more about using the `Bookmarks` component see <doc:BookmarksTutorial>.
+/// in the project. To learn more about using the `Bookmarks` component see the <doc:BookmarksTutorial>.
 public struct Bookmarks: View {
     /// The data source used to initialize the view.
     enum BookmarkSource {
