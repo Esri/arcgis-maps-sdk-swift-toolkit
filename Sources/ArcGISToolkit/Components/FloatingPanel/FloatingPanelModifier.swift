@@ -16,17 +16,7 @@
 
 public extension View {
 ***REMOVED******REMOVED***/ A floating panel is a view that overlays a view and supplies view-related
-***REMOVED******REMOVED***/ content. For a map view, for instance, it could display a legend, bookmarks, search results, etc..
-***REMOVED******REMOVED***/ Apple Maps, Google Maps, Windows 10, and Collector have floating panel
-***REMOVED******REMOVED***/ implementations, sometimes referred to as a "bottom sheet".
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ Floating panels are non-modal and can be transient, only displaying
-***REMOVED******REMOVED***/ information for a short period of time like identify results,
-***REMOVED******REMOVED***/ or persistent, where the information is always displayed, for example a
-***REMOVED******REMOVED***/ dedicated search panel. They will also be primarily simple containers
-***REMOVED******REMOVED***/ that clients will fill with their own content.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ The floating panel allows for interaction with background contents, unlike native sheets or popovers.
+***REMOVED******REMOVED***/ content. For more information see <doc:FloatingPanel>.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - attributionBarHeight: The height of a geo-view's attribution bar.
