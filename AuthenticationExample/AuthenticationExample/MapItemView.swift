@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view that displays a map.
 struct MapItemView: View {
@@ -21,7 +21,7 @@ struct MapItemView: View {
     let map: Map
     
     /// The result of loading the map.
-    @State var loadResult: Result<Void, Error>?
+    @State private var loadResult: Result<Void, Error>?
     
     var body: some View {
         VStack {
@@ -43,4 +43,3 @@ struct MapItemView: View {
         }
     }
 }
-
