@@ -45,5 +45,4 @@ properties, including:
 
 To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 and refer to [FloatingPanelExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloatingPanelExampleView.swift)
-in the project. To learn more about using the Floating Panel see the 
-[FloatingPanel Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/floatingpaneltutorial).
+in the project. To learn more about using the Floating Panel see the <doc:FloatingPanelTutorial>.

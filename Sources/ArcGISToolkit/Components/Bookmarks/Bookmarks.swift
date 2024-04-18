@@ -29,7 +29,7 @@
 ***REMOVED***/
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [BookmarksExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BookmarksExampleView.swift)
-***REMOVED***/ in the project. To learn more about using the `Bookmarks` component see <doc:BookmarksTutorial>.
+***REMOVED***/ in the project. To learn more about using the `Bookmarks` component see the <doc:BookmarksTutorial>.
 public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ The data source used to initialize the view.
 ***REMOVED***enum BookmarkSource {
