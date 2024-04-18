@@ -47,7 +47,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@State private var isExpanded: Bool = true
-***REMOVED***
+
 ***REMOVED******REMOVED***/ A boolean which determines whether attachment editing controls are enabled.
 ***REMOVED***private var shouldEnableEditControls: Bool = false
 ***REMOVED***
@@ -64,11 +64,21 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .preview:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentModels: attachmentModels)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldEnableEditControls: shouldEnableEditControls,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .auto:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentModels: attachmentModels)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldEnableEditControls: shouldEnableEditControls,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -111,6 +121,20 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***func onRename(attachment: FeatureAttachment, newAttachmentName: String) async throws -> Void {
+***REMOVED******REMOVED***if let element = featureElement.attachmentFormElement,
+***REMOVED******REMOVED***   let attachment = attachment.formAttachment {
+***REMOVED******REMOVED******REMOVED***try await element.renameAttachment(attachment, name: newAttachmentName)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func onDelete(attachment: FeatureAttachment) async throws -> Void {
+***REMOVED******REMOVED***if let element = featureElement.attachmentFormElement,
+***REMOVED******REMOVED***   let attachment = attachment.formAttachment {
+***REMOVED******REMOVED******REMOVED***try await element.deleteAttachment(attachment)
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***private func addDemoAttachments() async throws {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***let data = UIImage(named: "forest.jpg")!.jpegData(compressionQuality: 1.0)!
@@ -177,6 +201,5 @@ extension AttachmentsFeatureElementView {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.shouldEnableEditControls = newShouldEnableEditControls
 ***REMOVED******REMOVED***return copy
-***REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -20,15 +20,103 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ The attachment models displayed in the list.
 ***REMOVED***var attachmentModels: [AttachmentModel]
 ***REMOVED***
+***REMOVED***@State var shouldEnableEditControls: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be deleted.
+***REMOVED***@State private var deletionWillStart: Bool = false
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
+***REMOVED***@State private var renameDialogueIsShowing = false
+***REMOVED***
+***REMOVED******REMOVED***/ The name for the existing attachment being edited.
+***REMOVED***@State private var currentAttachmentName = ""
+***REMOVED***
+***REMOVED******REMOVED***/ The new name the user has provided for the attachment.
+***REMOVED***@State private var newAttachmentName = ""
+***REMOVED***
+***REMOVED******REMOVED***/ The new name the user has provided for the attachment.
+***REMOVED***@State private var editedAttachment: FeatureAttachment?
+
+***REMOVED***let onRename: ((FeatureAttachment, String) async throws -> Void)?
+***REMOVED***
+***REMOVED***let onDelete: ((FeatureAttachment) async throws -> Void)?
+***REMOVED***
+***REMOVED***init(
+***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
+***REMOVED******REMOVED***shouldEnableEditControls: Bool = false,
+***REMOVED******REMOVED***onRename: ((FeatureAttachment, String) async throws -> Void)? = nil,
+***REMOVED******REMOVED***onDelete: ((FeatureAttachment) async throws -> Void)? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***self.attachmentModels = attachmentModels
+***REMOVED******REMOVED***self.onRename = onRename
+***REMOVED******REMOVED***self.onDelete = onDelete
+***REMOVED******REMOVED***self.shouldEnableEditControls = shouldEnableEditControls
+***REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ScrollView(.horizontal) {
 ***REMOVED******REMOVED******REMOVED***HStack(alignment: .top, spacing: 8) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contextMenu {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if shouldEnableEditControls {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editedAttachment = attachmentModel.attachment
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = attachmentModel.attachment.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***renameDialogueIsShowing = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Rename", systemImage: "pencil")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***deletionWillStart = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Delete", systemImage: "trash")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
+***REMOVED******REMOVED******REMOVED***TextField("New name", text: $newAttachmentName)
+***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) { ***REMOVED***
+***REMOVED******REMOVED******REMOVED***Button("Ok") {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let editedAttachment {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await onRename?(editedAttachment, newAttachmentName)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.task(id: deletionWillStart) {
+***REMOVED******REMOVED******REMOVED***guard deletionWillStart else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***if let editedAttachment {
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await onDelete?(editedAttachment)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***@ViewBuilder var attachmentContextMenu: some View {
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***onRename()
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label("Rename", systemImage: "pencil")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED***onDelete()
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label("Delete", systemImage: "trash")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***private func onRename() {
+***REMOVED******REMOVED******REMOVED***newAttachmentName = formAttachment.name
+***REMOVED******REMOVED******REMOVED***renameDialogueIsShowing = true
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***private func onDelete() {
+***REMOVED******REMOVED******REMOVED***deletionWillStart = true
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view representing a single cell in an `AttachmentPreview`.
 ***REMOVED***struct AttachmentCell: View  {
@@ -83,3 +171,4 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+
