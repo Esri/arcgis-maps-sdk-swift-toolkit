@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view that displays the web maps of a portal.
 struct WebMapsView: View {
@@ -21,10 +21,10 @@ struct WebMapsView: View {
     var portal: Portal
     
     /// A Boolean value indicating whether the featured content is being loaded.
-    @State var isLoading = true
+    @State private var isLoading = true
     
     /// The web map portal items.
-    @State var webMapItems = [PortalItem]()
+    @State private var webMapItems = [PortalItem]()
     
     var body: some View {
         VStack {

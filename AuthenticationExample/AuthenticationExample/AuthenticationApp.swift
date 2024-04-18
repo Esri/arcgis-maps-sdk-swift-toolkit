@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-import ArcGISToolkit
 import ArcGIS
+import ArcGISToolkit
+import SwiftUI
 
 @main
 struct AuthenticationApp: App {
     @ObservedObject var authenticator: Authenticator
-    @State var isSettingUp = true
+    @State private var isSettingUp = true
     
     init() {
         // Create an authenticator.
         authenticator = Authenticator(
             // If you want to use OAuth, uncomment this code:
-            //oAuthUserConfigurations: [.arcgisDotCom]
+//            oAuthUserConfigurations: [.arcgisDotCom]
         )
         // Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
         // challenges.
@@ -63,8 +63,8 @@ struct AuthenticationApp: App {
     }
 }
 
-// If you want to use OAuth, you can uncomment this code:
-//private extension OAuthUserConfiguration {
+private extension OAuthUserConfiguration {
+    // If you want to use OAuth, you can uncomment this code:
 //    static let arcgisDotCom = OAuthUserConfiguration(
 //        portalURL: .portal,
 //        clientID: "<#Your client ID goes here#>",
@@ -73,7 +73,7 @@ struct AuthenticationApp: App {
 //        // The scheme of the redirect URL is also specified in the Info.plist file.
 //        redirectURL: URL(string: "authexample://auth")!
 //    )
-//}
+}
 
 extension URL {
     // If you want to use your own portal, provide your own URL here:
