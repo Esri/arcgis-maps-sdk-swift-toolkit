@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-import ArcGISToolkit
 import ArcGIS
+import ArcGISToolkit
+import SwiftUI
 
 @main
 struct AuthenticationApp: App {
@@ -56,8 +56,8 @@ struct AuthenticationApp: App {
     }
 }
 
-// If you want to use OAuth, you can uncomment this code:
 private extension OAuthUserConfiguration {
+    // If you want to use OAuth, uncomment this code:
 //    static let arcgisDotCom = OAuthUserConfiguration(
 //        portalURL: .portal,
 //        clientID: "<#Your client ID goes here#>",
