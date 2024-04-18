@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// The view that is displayed after successfully signing in.
 struct HomeView: View {
     /// The portal that the user is signed in to.
-    @State var portal: Portal?
+    @State private var portal: Portal?
     
     /// A Boolean value indicating whether the profile view should be presented.
-    @State var showProfile = false
+    @State private var showProfile = false
     
     var body: some View {
         if let portal = portal {
-            NavigationView{
+            NavigationView {
                 WebMapsView(portal: portal)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {

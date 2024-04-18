@@ -19,7 +19,8 @@ import SwiftUI
 /// A demonstration of the utility network trace tool which runs traces on a web map published with
 /// a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-    @Environment(\.isPortraitOrientation) private var isPortraitOrientation
+    @Environment(\.isPortraitOrientation)
+    private var isPortraitOrientation
     
     /// The current detent of the floating panel presenting the trace tool.
     @State private var activeDetent: FloatingPanelDetent = .half
