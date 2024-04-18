@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view which allows selection of sites and facilities represented in a `FloorManager`.
 struct SiteAndFacilitySelector: View {
@@ -30,7 +30,7 @@ struct SiteAndFacilitySelector: View {
     private var isHidden: Binding<Bool>
     
     var body: some View {
-        NavigationView {
+        let innerContent = {
             Group {
                 // If there's more than one site
                 if viewModel.sites.count > 1 {
@@ -53,7 +53,16 @@ struct SiteAndFacilitySelector: View {
                 }
             }
         }
-        .navigationViewStyle(.stack)
+        if #available(iOS 17.0, *) {
+            NavigationStack { innerContent() }
+        } else {
+            // `NavigationStack` doesn't work properly with the
+            // `NavigationLink(_:tag:selection:destination:)`s in
+            // `SitesList.siteListView` so we must continue to use 
+            // `NavigationView` in iOS 16.
+            NavigationView { innerContent() }
+                .navigationViewStyle(.stack)
+        }
     }
     
     /// A view displaying the sites contained in a `FloorManager`.
@@ -85,6 +94,44 @@ struct SiteAndFacilitySelector: View {
             }
         }
         
+        /// The selected list item.
+        var selectedSite: Binding<FloorSite?> {
+            .init(
+                get: {
+                    userBackedOutOfSelectedSite ? nil : viewModel.selection?.site
+                },
+                set: { newSite in
+                    guard let newSite = newSite else { return }
+                    userBackedOutOfSelectedSite = false
+                    viewModel.setSite(newSite, zoomTo: true)
+                }
+            )
+        }
+        
+        /// Make the navigation destination for an item in the site list.
+        func makeNavigationDestination(site: FloorSite) -> some View {
+            FacilitiesList(
+                usesAllSitesStyling: false,
+                facilities: site.facilities,
+                isHidden: isHidden
+            )
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        userBackedOutOfSelectedSite = true
+                    } label: {
+                        Image(systemName: "chevron.left")
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    CloseButton { isHidden.wrappedValue.toggle() }
+                }
+            }
+        }
+        
         /// A view with a filter-via-name field, a list of site names and an "All sites" button.
         var body: some View {
             VStack {
@@ -112,11 +159,13 @@ struct SiteAndFacilitySelector: View {
             )
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
-            .navigationTitle(String(
-                localized: "Sites",
-                bundle: .toolkitModule,
-                comment: "A label in reference to all of the sites in a floor-aware map or scene."
-            ))
+            .navigationTitle(
+                String(
+                    localized: "Sites",
+                    bundle: .toolkitModule,
+                    comment: "A label in reference to all of the sites in a floor-aware map or scene."
+                )
+            )
         }
         
         /// The "All sites" button.
@@ -143,7 +192,7 @@ struct SiteAndFacilitySelector: View {
                 )
             }
             .buttonStyle(.bordered)
-            .padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
+            .padding(.bottom, horizontalSizeClass == .compact ? 5 : 0)
         }
         
         /// A view containing a list of the site names.
@@ -151,39 +200,20 @@ struct SiteAndFacilitySelector: View {
         /// If `AutomaticSelectionMode` mode is in use, items will automatically be
         /// selected/deselected.
         var siteListView: some View {
-            List(matchingSites) { site in
-                NavigationLink(
-                    site.name,
-                    tag: site,
-                    selection: Binding(
-                        get: {
-                            userBackedOutOfSelectedSite ? nil : viewModel.selection?.site
-                        },
-                        set: { newSite in
-                            guard let newSite = newSite else { return }
-                            userBackedOutOfSelectedSite = false
-                            viewModel.setSite(newSite, zoomTo: true)
-                        }
-                    )
-                ) {
-                    FacilitiesList(
-                        usesAllSitesStyling: false,
-                        facilities: site.facilities,
-                        isHidden: isHidden
-                    )
-                    .navigationBarBackButtonHidden(true)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button {
-                                userBackedOutOfSelectedSite = true
-                            } label: {
-                                Image(systemName: "chevron.left")
-                            }
+            Group {
+                if #available(iOS 17.0, *) {
+                    List(matchingSites) { site in
+                        Button(site.name) {
+                            viewModel.setSite(site)
                         }
                     }
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            CloseButton { isHidden.wrappedValue.toggle() }
+                    .navigationDestination(item: selectedSite) { site in
+                        makeNavigationDestination(site: site)
+                    }
+                } else {
+                    List(matchingSites) { site in
+                        NavigationLink(site.name, tag: site, selection: selectedSite) {
+                            makeNavigationDestination(site: site)
                         }
                     }
                 }
@@ -206,7 +236,7 @@ struct SiteAndFacilitySelector: View {
         /// A facility name filter phrase entered by the user.
         @State var query: String = ""
         
-        /// When `true`, the facilites list will be display with all sites styling.
+        /// When `true`, the facilities list will be display with all sites styling.
         let usesAllSitesStyling: Bool
         
         /// `FloorFacility`s to be displayed by this view.
