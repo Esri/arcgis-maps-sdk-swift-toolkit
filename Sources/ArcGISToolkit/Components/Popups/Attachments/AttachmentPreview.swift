@@ -20,15 +20,103 @@ struct AttachmentPreview: View {
     /// The attachment models displayed in the list.
     var attachmentModels: [AttachmentModel]
     
+    @State var shouldEnableEditControls: Bool
+    
+    /// A Boolean value indicating the user has requested that the attachment be deleted.
+    @State private var deletionWillStart: Bool = false
+    
+    /// A Boolean value indicating the user has requested that the attachment be renamed.
+    @State private var renameDialogueIsShowing = false
+    
+    /// The name for the existing attachment being edited.
+    @State private var currentAttachmentName = ""
+    
+    /// The new name the user has provided for the attachment.
+    @State private var newAttachmentName = ""
+    
+    /// The new name the user has provided for the attachment.
+    @State private var editedAttachment: FeatureAttachment?
+
+    let onRename: ((FeatureAttachment, String) async throws -> Void)?
+    
+    let onDelete: ((FeatureAttachment) async throws -> Void)?
+    
+    init(
+        attachmentModels: [AttachmentModel],
+        shouldEnableEditControls: Bool = false,
+        onRename: ((FeatureAttachment, String) async throws -> Void)? = nil,
+        onDelete: ((FeatureAttachment) async throws -> Void)? = nil
+    ) {
+        self.attachmentModels = attachmentModels
+        self.onRename = onRename
+        self.onDelete = onDelete
+        self.shouldEnableEditControls = shouldEnableEditControls
+    }
+    
     var body: some View {
         ScrollView(.horizontal) {
             HStack(alignment: .top, spacing: 8) {
                 ForEach(attachmentModels) { attachmentModel in
                     AttachmentCell(attachmentModel: attachmentModel)
+                        .contextMenu {
+                            if shouldEnableEditControls {
+                                Button {
+                                    editedAttachment = attachmentModel.attachment
+                                    newAttachmentName = attachmentModel.attachment.name
+                                    renameDialogueIsShowing = true
+                                } label: {
+                                    Label("Rename", systemImage: "pencil")
+                                }
+                                Button(role: .destructive) {
+                                    deletionWillStart = true
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                            }
+                        }
                 }
             }
         }
+        .alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
+            TextField("New name", text: $newAttachmentName)
+            Button("Cancel", role: .cancel) { }
+            Button("Ok") {
+                Task {
+                    if let editedAttachment {
+                        try? await onRename?(editedAttachment, newAttachmentName)
+                    }
+                }
+            }
+        }
+        .task(id: deletionWillStart) {
+            guard deletionWillStart else { return }
+            if let editedAttachment {
+                try? await onDelete?(editedAttachment)
+            }
+        }
     }
+    
+//    @ViewBuilder var attachmentContextMenu: some View {
+//        Button {
+//            onRename()
+//        } label: {
+//            Label("Rename", systemImage: "pencil")
+//        }
+//        Button(role: .destructive) {
+//            onDelete()
+//        } label: {
+//            Label("Delete", systemImage: "trash")
+//        }
+//    }
+//    
+//    private func onRename() {
+//        newAttachmentName = formAttachment.name
+//        renameDialogueIsShowing = true
+//    }
+//    
+//    private func onDelete() {
+//        deletionWillStart = true
+//    }
     
     /// A view representing a single cell in an `AttachmentPreview`.
     struct AttachmentCell: View  {
@@ -83,3 +171,4 @@ struct AttachmentPreview: View {
         }
     }
 }
+

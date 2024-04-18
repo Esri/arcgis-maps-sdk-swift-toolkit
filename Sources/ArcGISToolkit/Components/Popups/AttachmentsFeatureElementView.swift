@@ -47,7 +47,7 @@ struct AttachmentsFeatureElementView: View {
     }
     
     @State private var isExpanded: Bool = true
-    
+
     /// A boolean which determines whether attachment editing controls are enabled.
     private var shouldEnableEditControls: Bool = false
     
@@ -64,11 +64,21 @@ struct AttachmentsFeatureElementView: View {
                         case .list:
                             AttachmentList(attachmentModels: attachmentModels)
                         case .preview:
-                            AttachmentPreview(attachmentModels: attachmentModels)
+                            AttachmentPreview(
+                                attachmentModels: attachmentModels,
+                                shouldEnableEditControls: shouldEnableEditControls,
+                                onRename: onRename,
+                                onDelete: onDelete
+                            )
                         case .auto:
                             Group {
                                 if isRegularWidth {
-                                    AttachmentPreview(attachmentModels: attachmentModels)
+                                    AttachmentPreview(
+                                        attachmentModels: attachmentModels,
+                                        shouldEnableEditControls: shouldEnableEditControls,
+                                        onRename: onRename,
+                                        onDelete: onDelete
+                                    )
                                 } else {
                                     AttachmentList(attachmentModels: attachmentModels)
                                 }
@@ -111,6 +121,20 @@ struct AttachmentsFeatureElementView: View {
         }
     }
     
+    func onRename(attachment: FeatureAttachment, newAttachmentName: String) async throws -> Void {
+        if let element = featureElement.attachmentFormElement,
+           let attachment = attachment.formAttachment {
+            try await element.renameAttachment(attachment, name: newAttachmentName)
+        }
+    }
+    
+    func onDelete(attachment: FeatureAttachment) async throws -> Void {
+        if let element = featureElement.attachmentFormElement,
+           let attachment = attachment.formAttachment {
+            try await element.deleteAttachment(attachment)
+        }
+    }
+
     private func addDemoAttachments() async throws {
         do {
             let data = UIImage(named: "forest.jpg")!.jpegData(compressionQuality: 1.0)!
@@ -178,5 +202,4 @@ extension AttachmentsFeatureElementView {
         copy.shouldEnableEditControls = newShouldEnableEditControls
         return copy
     }
-    
 }
