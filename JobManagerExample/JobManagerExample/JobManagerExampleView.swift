@@ -155,7 +155,7 @@ private struct JobView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack (alignment: .leading, spacing: 5) {
+***REMOVED******REMOVED***VStack(alignment: .leading, spacing: 5) {
 ***REMOVED******REMOVED******REMOVED***Text(jobType)
 ***REMOVED******REMOVED******REMOVED***Text(status.displayText)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
@@ -286,7 +286,7 @@ extension JobManagerExampleView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if syncModel == .layer, let featureServiceInfo = task.featureServiceInfo {
 ***REMOVED******REMOVED******REMOVED***let layerOptions = featureServiceInfo.layerInfos
-***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap( { $0 as? FeatureServiceLayerIDInfo ***REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 as? FeatureServiceLayerIDInfo ***REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap(\.id)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.map(GenerateLayerOption.init(layerID:))
 ***REMOVED******REMOVED******REMOVED***params.addLayerOptions(layerOptions)
@@ -323,9 +323,9 @@ extension FileManager {
 ***REMOVED***
 ***REMOVED***
 
-extension JobProtocol {
+public extension JobProtocol {
 ***REMOVED******REMOVED***/ The id of the job.
-***REMOVED***public var id: ObjectIdentifier {
+***REMOVED***var id: ObjectIdentifier {
 ***REMOVED******REMOVED***ObjectIdentifier(self)
 ***REMOVED***
 ***REMOVED***

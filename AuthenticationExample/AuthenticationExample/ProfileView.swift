@@ -13,16 +13,16 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+***REMOVED***
 
 ***REMOVED***/ A view that displays the profile of a user.
 struct ProfileView: View {
 ***REMOVED******REMOVED***/ The portal that the user is signed in to.
-***REMOVED***@State var portal: Portal
+***REMOVED***let portal: Portal
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean indicating whether the user is signing out.
-***REMOVED***@State var isSigningOut: Bool = false
+***REMOVED***@State private var isSigningOut = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to call once the user has signed out.
 ***REMOVED***var signOutAction: () -> Void
