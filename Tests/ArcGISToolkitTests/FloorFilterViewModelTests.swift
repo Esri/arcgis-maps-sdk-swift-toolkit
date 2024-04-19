@@ -18,10 +18,9 @@ import Combine
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor
 final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-***REMOVED***func testAutoSelectAlways() async throws {
+***REMOVED***@MainActor func testAutoSelectAlways() async throws {
 ***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
@@ -52,7 +51,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-***REMOVED***func testAutoSelectAlwaysNotClearing() async throws {
+***REMOVED***@MainActor func testAutoSelectAlwaysNotClearing() async throws {
 ***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
@@ -79,7 +78,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-***REMOVED***func testAutoSelectNever() async throws {
+***REMOVED***@MainActor func testAutoSelectNever() async throws {
 ***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
@@ -104,7 +103,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Tests that a `FloorFilterViewModel` successfully initializes.
-***REMOVED***func testInitWithFloorManagerAndViewpoint() async throws {
+***REMOVED***@MainActor func testInitWithFloorManagerAndViewpoint() async throws {
 ***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
@@ -118,7 +117,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the proper level is visible and all others are hidden.
-***REMOVED***func testLevelVisibility() async throws {
+***REMOVED***@MainActor func testLevelVisibility() async throws {
 ***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
@@ -139,7 +138,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties are correctly updated.
-***REMOVED***func testSelectedProperties() async throws {
+***REMOVED***@MainActor func testSelectedProperties() async throws {
 ***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
@@ -174,7 +173,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selection property indicates the correct facility (and therefore level) value.
-***REMOVED***func testSelectionOfFacility() async throws {
+***REMOVED***@MainActor func testSelectionOfFacility() async throws {
 ***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
@@ -191,7 +190,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selection property indicates the correct level value.
-***REMOVED***func testSelectionOfLevel() async throws {
+***REMOVED***@MainActor func testSelectionOfLevel() async throws {
 ***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
@@ -207,7 +206,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selection property indicates the correct site value.
-***REMOVED***func testSelectionOfSite() async throws {
+***REMOVED***@MainActor func testSelectionOfSite() async throws {
 ***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
@@ -223,7 +222,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the  viewpoint is correctly updated.
-***REMOVED***func testViewpointUpdates() async throws {
+***REMOVED***@MainActor func testViewpointUpdates() async throws {
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .researchAnnexLattice
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let floorManager = try await floorManager(
