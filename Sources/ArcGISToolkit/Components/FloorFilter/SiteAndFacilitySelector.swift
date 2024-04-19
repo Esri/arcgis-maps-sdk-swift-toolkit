@@ -30,7 +30,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***private var isHidden: Binding<Bool>
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***let innerContent = {
+***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If there's more than one site
 ***REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.sites.count > 1 {
@@ -52,16 +52,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***if #available(iOS 17.0, *) {
-***REMOVED******REMOVED******REMOVED***NavigationStack { innerContent() ***REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** `NavigationStack` doesn't work properly with the
-***REMOVED******REMOVED******REMOVED******REMOVED*** `NavigationLink(_:tag:selection:destination:)`s in
-***REMOVED******REMOVED******REMOVED******REMOVED*** `SitesList.siteListView` so we must continue to use 
-***REMOVED******REMOVED******REMOVED******REMOVED*** `NavigationView` in iOS 16.
-***REMOVED******REMOVED******REMOVED***NavigationView { innerContent() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationViewStyle(.stack)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -211,11 +201,23 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeNavigationDestination(site: site)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(matchingSites) { site in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(site.name, tag: site, selection: selectedSite) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeNavigationDestination(site: site)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(matchingSites, selection: selectedSite) { site in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(site.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: Binding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedSite.wrappedValue != nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** set: { isPresented in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.clearSelection()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***destination: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedSite = viewModel.selection?.site {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeNavigationDestination(site: selectedSite)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
