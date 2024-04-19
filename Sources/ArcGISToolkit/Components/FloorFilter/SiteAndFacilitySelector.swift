@@ -162,7 +162,7 @@ struct SiteAndFacilitySelector: View {
                         }
                     }
                     .navigationDestination(item: selectedSite) { site in
-                        makeNavigationDestination(site: site)
+                        makeFacilitiesList(site: site)
                     }
                 } else {
                     List(matchingSites, selection: selectedSite) { site in
@@ -178,7 +178,7 @@ struct SiteAndFacilitySelector: View {
                         },
                         destination: {
                             if let selectedSite = viewModel.selection?.site {
-                                makeNavigationDestination(site: selectedSite)
+                                makeFacilitiesList(site: selectedSite)
                             }
                         }
                     )
@@ -331,8 +331,8 @@ extension SiteAndFacilitySelector.SitesList {
         )
     }
     
-    /// Make the navigation destination for an item in the site list.
-    func makeNavigationDestination(site: FloorSite) -> some View {
+    /// Makes the list of facilities for a site from the sites list.
+    func makeFacilitiesList(site: FloorSite) -> some View {
         SiteAndFacilitySelector.FacilitiesList(
             usesAllSitesStyling: false,
             facilities: site.facilities,
