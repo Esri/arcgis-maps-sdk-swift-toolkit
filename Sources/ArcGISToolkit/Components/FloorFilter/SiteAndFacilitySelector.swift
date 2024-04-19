@@ -358,7 +358,6 @@ extension SiteAndFacilitySelector.SitesList {
     }
 }
 
-
 /// Displays text "No matches found".
 private struct NoMatchesView: View {
     var body: some View {
