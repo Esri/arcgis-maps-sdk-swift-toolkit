@@ -23,6 +23,8 @@ struct AttachmentsFeatureElementView: View {
     
     @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
+    @Environment(\.displayScale) var displayScale
+    
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
         !isPortraitOrientation
@@ -58,46 +60,14 @@ struct AttachmentsFeatureElementView: View {
                 ProgressView()
                     .padding()
             case .loaded(let attachmentModels):
-                if !attachmentModels.isEmpty || shouldEnableEditControls {
+                if shouldEnableEditControls {
+                    attachmentHeader
+                    attachmentBody(attachmentModels: attachmentModels)
+                } else if !attachmentModels.isEmpty {
                     DisclosureGroup(isExpanded: $isExpanded) {
-                        switch featureElement.displayType {
-                        case .list:
-                            AttachmentList(attachmentModels: attachmentModels)
-                        case .preview:
-                            AttachmentPreview(
-                                attachmentModels: attachmentModels,
-                                shouldEnableEditControls: shouldEnableEditControls,
-                                onRename: onRename,
-                                onDelete: onDelete
-                            )
-                        case .auto:
-                            Group {
-                                if isRegularWidth {
-                                    AttachmentPreview(
-                                        attachmentModels: attachmentModels,
-                                        shouldEnableEditControls: shouldEnableEditControls,
-                                        onRename: onRename,
-                                        onDelete: onDelete
-                                    )
-                                } else {
-                                    AttachmentList(attachmentModels: attachmentModels)
-                                }
-                            }
-                        @unknown default:
-                            EmptyView()
-                        }
+                        attachmentBody(attachmentModels: attachmentModels)
                     } label: {
-                        HStack {
-                            PopupElementHeader(
-                                title: featureElement.displayTitle,
-                                description: featureElement.description
-                            )
-                            Spacer()
-                            if shouldEnableEditControls,
-                               let element = featureElement.attachmentFormElement {
-                                AttachmentImportMenu(element: element)
-                            }
-                        }
+                        attachmentHeader
                         .catalystPadding(4)
                     }
                 }
@@ -106,7 +76,7 @@ struct AttachmentsFeatureElementView: View {
         .task {
             guard case .notLoaded = attachmentLoadingState else { return }
             attachmentLoadingState = .loading
-            var attachments = (try? await featureElement.attachments) ?? []
+            var attachments = (try? await featureElement.featureAttachments) ?? []
             print("attachment count: \(attachments.count)")
             
 //            try? await addDemoAttachments()
@@ -116,20 +86,63 @@ struct AttachmentsFeatureElementView: View {
             
             let attachmentModels = attachments
                 .reversed()
-                .map { AttachmentModel(attachment: $0) }
+                .map { AttachmentModel(attachment: $0, displayScale: displayScale) }
             attachmentLoadingState = .loaded(attachmentModels)
         }
     }
     
+    @ViewBuilder private func attachmentBody(attachmentModels: [AttachmentModel]) -> some View {
+        switch featureElement.attachmentDisplayType {
+        case .list:
+            AttachmentList(attachmentModels: attachmentModels)
+        case .preview:
+            AttachmentPreview(
+                attachmentModels: attachmentModels,
+                shouldEnableEditControls: shouldEnableEditControls,
+                onRename: onRename,
+                onDelete: onDelete
+            )
+        case .auto:
+            Group {
+                if isRegularWidth {
+                    AttachmentPreview(
+                        attachmentModels: attachmentModels,
+                        shouldEnableEditControls: shouldEnableEditControls,
+                        onRename: onRename,
+                        onDelete: onDelete
+                    )
+                } else {
+                    AttachmentList(attachmentModels: attachmentModels)
+                }
+            }
+        @unknown default:
+            EmptyView()
+        }
+    }
+    
+    private var attachmentHeader: some View {
+        HStack {
+            PopupElementHeader(
+                title: featureElement.displayTitle,
+                description: featureElement.description
+            )
+            Spacer()
+            if shouldEnableEditControls,
+               let element = featureElement as? AttachmentFormElement {
+                AttachmentImportMenu(element: element)
+            }
+        }
+    }
+    
     func onRename(attachment: FeatureAttachment, newAttachmentName: String) async throws -> Void {
-        if let element = featureElement.attachmentFormElement,
+        if let element = featureElement as? AttachmentFormElement,
            let attachment = attachment.formAttachment {
             try await element.renameAttachment(attachment, name: newAttachmentName)
         }
     }
     
     func onDelete(attachment: FeatureAttachment) async throws -> Void {
-        if let element = featureElement.attachmentFormElement,
+        if let element = featureElement as? AttachmentFormElement,
            let attachment = attachment.formAttachment {
             try await element.deleteAttachment(attachment)
         }
@@ -146,7 +159,7 @@ struct AttachmentsFeatureElementView: View {
 //            let image = UIImage(contentsOfFile: url.absoluteString)
 //            print("image = \(image)")
 //            var data = try? Data(contentsOf: url)
-            let attachment = try await featureElement.attachmentFormElement?.addAttachment(
+            let attachment = try await (featureElement as? AttachmentFormElement)?.addAttachment(
                 name: "forest",
                 contentType: "image/jpg",
                 data: data

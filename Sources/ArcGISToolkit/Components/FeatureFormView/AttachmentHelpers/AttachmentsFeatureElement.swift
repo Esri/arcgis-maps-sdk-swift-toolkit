@@ -15,8 +15,35 @@
 import Foundation
 import ArcGIS
 
+/// Indicates how to display the attachments. If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
+public enum AttachmentsFeatureElementDisplayType {
+    /// Show attachments as links.
+    case list
+    /// Attachments expand to the width of the pop-up.
+    case preview
+    /// Allows applications to choose the most suitable default experience for their application.
+    case auto
+}
+
+public protocol AttachmentsFeatureElement {
+    /// A string value describing the element in detail. Can be an empty string.
+    var description: String { get }
+    
+    /// Indicates how to display the attachments.
+    /// If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
+    var attachmentDisplayType: AttachmentsFeatureElementDisplayType { get }
+    
+    /// A string value indicating what the element represents. Can be an empty string.
+    var title: String { get set }
+    
+    /// The list of attachments.
+    ///
+    /// This property will be empty if ``PopupElement/isEvaluated`` is `false`.
+    var featureAttachments: [FeatureAttachment] { get async throws }
+}
+
 /// Represents an element of type attachments that is displayed in a pop-up or feature form.
-public final class AttachmentsFeatureElement {
+public final class AttachmentsFeatureElementxx {
     // MARK: Nested Types
     
     /// Indicates how to display the attachments. If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
@@ -63,9 +90,9 @@ public final class AttachmentsFeatureElement {
     /// If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
     public var displayType: DisplayType {
         if let attachmentsPopupElement {
-            return DisplayType(kind: attachmentsPopupElement.displayType)
+            return .preview//DisplayType(kind: attachmentsPopupElement.displayType)
         }
-        return .auto
+        return .preview
     }
     
     /// A string value indicating what the element represents. Can be an empty string.
@@ -98,7 +125,7 @@ public final class AttachmentsFeatureElement {
     }
 }
 
-extension AttachmentsFeatureElement.DisplayType {
+extension AttachmentsFeatureElementDisplayType {
     init(kind: AttachmentsPopupElement.DisplayType) {
         switch kind {
         case .list:

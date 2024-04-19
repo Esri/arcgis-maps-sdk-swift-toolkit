@@ -146,8 +146,8 @@ public class FeatureAttachment {
         get {
             if let popupAttachment {
                 return popupAttachment.loadStatus
-                //            } else if let featureFormAttachment {
-                //                return featureFormAttachment.loadStatus
+            } else if let formAttachment {
+                return formAttachment.loadStatus
             }
             return .notLoaded
         }
