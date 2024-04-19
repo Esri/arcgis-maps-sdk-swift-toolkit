@@ -166,7 +166,9 @@ struct SiteAndFacilitySelector: View {
                     }
                 } else {
                     List(matchingSites, selection: selectedSite) { site in
-                        Text(site.name)
+                        Button(site.name) {
+                            viewModel.setSite(site)
+                        }
                     }
                     .navigationDestination(
                         isPresented: Binding {
