@@ -66,8 +66,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
 ***REMOVED******REMOVED***@State private var query: String = ""
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Indicates that the user pressed the back button in the navigation view, indicating the
-***REMOVED******REMOVED******REMOVED***/ site should appear "de-selected" even though the viewpoint hasn't changed.
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the user pressed the back button in the navigation stack.
+***REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED******REMOVED***/ This allows for programatic navigation back to the list of sites without clearing the view model's
+***REMOVED******REMOVED******REMOVED***/ selection. Leaving the view model's selection unmodified keeps the level selector visible.
+***REMOVED******REMOVED******REMOVED***/ visible.
 ***REMOVED******REMOVED***@State private var userBackedOutOfSelectedSite = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
@@ -84,7 +87,10 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The selected list item.
+***REMOVED******REMOVED******REMOVED***/ The selected site as reflected in the state of the navigation stack.
+***REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED******REMOVED***/ Note that the selection state of the navigation stack can differ from the selection state of the
+***REMOVED******REMOVED******REMOVED***/ view model. See `userBackedOutOfSelectedSite` for further explanation.
 ***REMOVED******REMOVED***var selectedSite: Binding<FloorSite?> {
 ***REMOVED******REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED******REMOVED***get: {
