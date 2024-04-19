@@ -118,9 +118,7 @@ extension FeatureFormView {
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {
         switch element {
         case let attachmentElement as AttachmentFormElement:
-            AttachmentsFeatureElementView(
-                featureElement: AttachmentsFeatureElement(attachmentFormElement: attachmentElement)
-            )
+            AttachmentsFeatureElementView(featureElement: attachmentElement)
             .shouldEnableEditControls(true)
         case let element as FieldFormElement:
             makeFieldElement(element)

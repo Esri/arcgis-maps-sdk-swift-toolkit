@@ -42,10 +42,11 @@ import SwiftUI
         defaultSystemName != nil
     }
     
-    @Environment(\.displayScale) var displayScale
-    
-    init(attachment: FeatureAttachment) {
+    private var displayScale: CGFloat
+
+    init(attachment: FeatureAttachment, displayScale: CGFloat) {
         self.attachment = attachment
+        self.displayScale = displayScale
         
         switch attachment.kind {
         case .image:
@@ -64,12 +65,15 @@ import SwiftUI
     func load(thumbnailSize: CGSize = CGSize(width: 40, height: 40)) {
         Task {
             loadStatus = .loading
-            try await self.attachment.load()
-            loadStatus = attachment.loadStatus
+            try await attachment.load()
             if attachment.loadStatus == .failed || attachment.fileURL == nil {
                 defaultSystemName = "exclamationmark.circle.fill"
                 return
             }
+            
+//            self.thumbnail = try? await attachment.popupAttachment?.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
+//
+//            self.loadStatus = self.attachment.loadStatus
             
             let request = QLThumbnailGenerator.Request(
                 fileAt: attachment.fileURL!,
@@ -84,6 +88,7 @@ import SwiftUI
                     if let thumbnail = thumbnail {
                         self.thumbnail = thumbnail.uiImage
                     }
+                    self.loadStatus = self.attachment.loadStatus
                 }
             }
         }

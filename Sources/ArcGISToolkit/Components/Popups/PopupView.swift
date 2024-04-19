@@ -166,9 +166,7 @@ extension PopupView {
                 Group {
                     switch popupElement {
                     case let popupElement as AttachmentsPopupElement:
-                        AttachmentsFeatureElementView(
-                            featureElement: AttachmentsFeatureElement(attachmentsPopupElement: popupElement)
-                        )
+                        AttachmentsFeatureElementView(featureElement: popupElement)
                     case let popupElement as FieldsPopupElement:
                         FieldsPopupElementView(popupElement: popupElement)
                     case let popupElement as MediaPopupElement:
