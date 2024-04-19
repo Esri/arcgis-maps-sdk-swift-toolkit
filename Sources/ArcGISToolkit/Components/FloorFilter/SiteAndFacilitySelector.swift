@@ -66,8 +66,11 @@ struct SiteAndFacilitySelector: View {
         /// A site name filter phrase entered by the user.
         @State private var query: String = ""
         
-        /// Indicates that the user pressed the back button in the navigation view, indicating the
-        /// site should appear "de-selected" even though the viewpoint hasn't changed.
+        /// A Boolean value indicating whether the user pressed the back button in the navigation stack.
+        ///
+        /// This allows for programatic navigation back to the list of sites without clearing the view model's
+        /// selection. Leaving the view model's selection unmodified keeps the level selector visible.
+        /// visible.
         @State private var userBackedOutOfSelectedSite = false
         
         /// Allows the user to toggle the visibility of the site and facility selector.
@@ -84,7 +87,10 @@ struct SiteAndFacilitySelector: View {
             }
         }
         
-        /// The selected list item.
+        /// The selected site as reflected in the state of the navigation stack.
+        ///
+        /// Note that the selection state of the navigation stack can differ from the selection state of the
+        /// view model. See `userBackedOutOfSelectedSite` for further explanation.
         var selectedSite: Binding<FloorSite?> {
             .init(
                 get: {
