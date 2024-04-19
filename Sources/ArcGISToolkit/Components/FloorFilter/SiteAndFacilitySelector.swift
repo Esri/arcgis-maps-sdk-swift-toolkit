@@ -70,7 +70,6 @@ struct SiteAndFacilitySelector: View {
         ///
         /// This allows for programatic navigation back to the list of sites without clearing the view model's
         /// selection. Leaving the view model's selection unmodified keeps the level selector visible.
-        /// visible.
         @State private var userBackedOutOfSelectedSite = false
         
         /// Allows the user to toggle the visibility of the site and facility selector.
