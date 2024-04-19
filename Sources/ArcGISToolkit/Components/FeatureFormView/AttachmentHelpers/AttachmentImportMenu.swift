@@ -15,9 +15,16 @@
 import ArcGIS
 import OSLog
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// The popup menu shown when the new attachment button is pressed.
 struct AttachmentImportMenu: View {
+    
+    private struct AttachmentData: Equatable {
+        var data: Data
+        var contentType: String
+        var fileName: String = ""
+    }
     private let element: AttachmentFormElement
     
     init(element: AttachmentFormElement) {
@@ -33,9 +40,12 @@ struct AttachmentImportMenu: View {
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photosPickerIsShowing = false
     
-    /// The new attachment data retrieved from the photos picker.
-    @State private var newAttachmentData: Data?
+    /// The new image attachment data retrieved from the photos picker.
+    @State private var newAttachmentData: AttachmentData?
     
+    /// The new image attachment data retrieved from the photos picker.
+    @State private var newImageData: Data?
+
     /// The new attachment retrieved from the device's camera.
     @State private var capturedImage: UIImage?
     
@@ -66,10 +76,22 @@ struct AttachmentImportMenu: View {
         .task(id: newAttachmentData) {
             guard let newAttachmentData else { return }
             do {
+                var fileName: String
+                if !newAttachmentData.fileName.isEmpty {
+                    fileName = newAttachmentData.fileName
+                } else {
+                    // This is probably not good and shoudl be re-thought.
+                    // Look at how the `AGSPopupAttachmentsViewController` handles this
+                    // https://devtopia.esri.com/runtime/cocoa/blob/b788189d3d2eb43b7da8f9cc9af18ed2f3aa6925/api/iOS/Popup/ViewController/AGSPopupAttachmentsViewController.m#L755
+                    // and
+                    // https://devtopia.esri.com/runtime/cocoa/blob/b788189d3d2eb43b7da8f9cc9af18ed2f3aa6925/api/iOS/Popup/ViewController/AGSPopupAttachmentsViewController.m#L725
+                    fileName = "Attachment \(element.attachments.count + 1).\(newAttachmentData.contentType.split(separator: "/").last!)"
+                }
                 _ = try await element.addAttachment(
-                    name: "Attachment \(element.attachments.count + 1)",
-                    contentType: "image/png",
-                    data: newAttachmentData
+                    // Can this be better? What does legacy do?
+                    name: fileName,
+                    contentType: newAttachmentData.contentType,
+                    data: newAttachmentData.data
                 )
             } catch {
                 print("Error adding attachment: \(error)")
@@ -78,8 +100,12 @@ struct AttachmentImportMenu: View {
         }
         .task(id: capturedImage) {
             guard let capturedImage, let data = capturedImage.pngData() else { return }
-            newAttachmentData = data
+            newAttachmentData = AttachmentData(data: data, contentType: "image/png")
             self.capturedImage = nil
+        }
+        .task(id: newImageData) {
+            guard let newImageData else { return }
+            newAttachmentData = AttachmentData(data: newImageData, contentType: "image/png")
         }
         .fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
             switch result {
@@ -88,7 +114,11 @@ struct AttachmentImportMenu: View {
                     print("File picker data was empty")
                     return
                 }
-                newAttachmentData = data
+                newAttachmentData = AttachmentData(
+                    data: data,
+                    contentType: url.mimeType(),
+                    fileName: url.lastPathComponent
+                )
             case .failure(let error):
                 print("Error importing from file importer: \(error)")
             }
@@ -98,9 +128,20 @@ struct AttachmentImportMenu: View {
         }
         .modifier(
             AttachmentPhotoPicker(
-                newAttachmentData: $newAttachmentData,
+                newAttachmentData: $newImageData,
                 photoPickerIsShowing: $photosPickerIsShowing
             )
         )
+    }
+}
+
+extension URL {
+    public func mimeType() -> String {
+        if let mimeType = UTType(filenameExtension: self.pathExtension)?.preferredMIMEType {
+            return mimeType
+        }
+        else {
+            return "application/octet-stream"
+        }
     }
 }

@@ -147,9 +147,13 @@ struct AttachmentPreview: View {
                         .lineLimit(1)
                         .truncationMode(.middle)
                         .padding([.leading, .trailing], 4)
-                    Text(Int64(attachmentModel.attachment.size), format: .byteCount(style: .file))
-                        .foregroundColor(.secondary)
-                        .padding([.leading, .trailing], 4)
+                    HStack(alignment: .bottom) {
+                        Spacer()
+                        Text(Int64(attachmentModel.attachment.size), format: .byteCount(style: .file))
+                        Image(systemName: "square.and.arrow.down")
+                        Spacer()
+                    }
+                    .foregroundColor(.secondary)
                 }
             }
             .font(.caption)
@@ -159,7 +163,16 @@ struct AttachmentPreview: View {
             .onTapGesture {
                 if attachmentModel.attachment.loadStatus == .loaded {
                     // Set the url to trigger `.quickLookPreview`.
-                    url = attachmentModel.attachment.fileURL
+
+                    // WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
+                    var tmpURL =  attachmentModel.attachment.fileURL
+                    if let formAttachment = attachmentModel.attachment.formAttachment {
+                        tmpURL = tmpURL?.deletingLastPathComponent()
+                        tmpURL = tmpURL?.appending(path: formAttachment.name)
+                        
+                        _ = FileManager.default.secureCopyItem(at: attachmentModel.attachment.fileURL!, to: tmpURL!)
+                    }
+                    url = tmpURL
                 } else if attachmentModel.attachment.loadStatus == .notLoaded {
                     // Load the attachment model with the given size.
                     attachmentModel.load(thumbnailSize: CGSize(width: 120, height: 120))
@@ -172,3 +185,18 @@ struct AttachmentPreview: View {
     }
 }
 
+extension FileManager {
+    func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
+        do {
+            if FileManager.default.fileExists(atPath: dstURL.path) {
+                try FileManager.default.removeItem(at: dstURL)
+            }
+            try FileManager.default.copyItem(at: srcURL, to: dstURL)
+        } catch (let error) {
+            print("Cannot copy item at \(srcURL) to \(dstURL): \(error)")
+            return false
+        }
+        return true
+    }
+    
+}
