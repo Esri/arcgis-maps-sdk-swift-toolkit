@@ -70,7 +70,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/
 ***REMOVED******REMOVED******REMOVED***/ This allows for programatic navigation back to the list of sites without clearing the view model's
 ***REMOVED******REMOVED******REMOVED***/ selection. Leaving the view model's selection unmodified keeps the level selector visible.
-***REMOVED******REMOVED******REMOVED***/ visible.
 ***REMOVED******REMOVED***@State private var userBackedOutOfSelectedSite = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
