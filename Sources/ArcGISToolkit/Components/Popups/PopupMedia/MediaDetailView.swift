@@ -74,15 +74,11 @@ struct MediaDetailView : View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .barChart, .columnChart, .pieChart, .lineChart:
-***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16, macCatalyst 16, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ChartView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: ChartData.getChartData(from: popupMedia),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView: true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***ChartView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: ChartData.getChartData(from: popupMedia),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView: true
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***

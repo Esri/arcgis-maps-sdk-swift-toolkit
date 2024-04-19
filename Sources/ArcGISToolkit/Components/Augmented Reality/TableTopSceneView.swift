@@ -102,7 +102,7 @@ public struct TableTopSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onUpdateNode { _, node, anchor in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updatePlane(with: node, for: anchor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture { screenPoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard !initialTransformationIsSet else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let transformation = sceneViewProxy.initialTransformation(

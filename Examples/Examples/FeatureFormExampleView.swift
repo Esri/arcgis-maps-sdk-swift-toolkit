@@ -75,28 +75,33 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isFormPresented { validationErrorVisibility = .automatic ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.alert("Discard edits", isPresented: $cancelConfirmationIsPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard edits", role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.discardEdits()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Continue editing", role: .cancel) { ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Discard edits", role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.discardEdits()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Continue editing", role: .cancel) { ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Updates to this feature will be lost.")
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.alert(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"The form wasn't submitted",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { model.submissionError != nil ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in model.submissionError = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***) { ***REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let submissionError = model.submissionError {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***submissionError
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(model.isFormPresented)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Once iOS 16.0 is the minimum supported, the two conditionals to show the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** buttons can be merged and hoisted up as the root content of the toolbar.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.isFormPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.isFormPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelConfirmationIsPresented = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.isFormPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Submit") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***validationErrorVisibility = .visible
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
@@ -159,6 +164,9 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the form is displayed.
 ***REMOVED***@Published var isFormPresented = false
 ***REMOVED***
+***REMOVED******REMOVED***/ A description of the error that prevented the form from being submitted.
+***REMOVED***@Published var submissionError: Text?
+***REMOVED***
 ***REMOVED******REMOVED***/ Reverts any local edits that haven't yet been saved to service geodatabase.
 ***REMOVED***func discardEdits() {
 ***REMOVED******REMOVED***featureForm?.discardEdits()
@@ -169,13 +177,20 @@ class Model: ObservableObject {
 ***REMOVED***func submitChanges() async {
 ***REMOVED******REMOVED***guard let featureForm,
 ***REMOVED******REMOVED******REMOVED***  let table = featureForm.feature.table as? ServiceFeatureTable,
-***REMOVED******REMOVED******REMOVED***  table.isEditable,
 ***REMOVED******REMOVED******REMOVED***  let database = table.serviceGeodatabase else {
 ***REMOVED******REMOVED******REMOVED***print("A precondition to submit the changes wasn't met.")
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard featureForm.validationErrors.isEmpty else { return ***REMOVED***
+***REMOVED******REMOVED***guard table.isEditable else {
+***REMOVED******REMOVED******REMOVED***submissionError = Text("The feature table isn't editable.")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard featureForm.validationErrors.isEmpty else {
+***REMOVED******REMOVED******REMOVED***submissionError = Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true).")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***try? await table.update(featureForm.feature)
 ***REMOVED******REMOVED***

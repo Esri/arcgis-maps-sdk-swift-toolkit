@@ -13,8 +13,8 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
+***REMOVED***
 
 struct PopupExampleView: View {
 ***REMOVED***static func makeMap() -> Map {
@@ -25,10 +25,8 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
-***REMOVED***@StateObject private var dataModel = MapDataModel(
-***REMOVED******REMOVED***map: makeMap()
-***REMOVED***)
+***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
+***REMOVED***@State private var map = makeMap()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The point on the screen the user tapped on to identify a feature.
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
@@ -46,7 +44,7 @@ struct PopupExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
-***REMOVED******REMOVED******REMOVED***MapView(map: dataModel.map)
+***REMOVED******REMOVED******REMOVED***MapView(map: map)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identifyScreenPoint = screenPoint
 ***REMOVED******REMOVED******REMOVED***

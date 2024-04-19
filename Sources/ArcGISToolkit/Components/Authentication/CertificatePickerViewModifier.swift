@@ -287,7 +287,7 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED******REMOVED***.mediumPresentationDetents()
+***REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
@@ -378,7 +378,7 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED******REMOVED***.mediumPresentationDetents()
+***REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
 ***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***

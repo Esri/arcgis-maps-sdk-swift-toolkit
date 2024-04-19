@@ -61,7 +61,7 @@
 ***REMOVED***/
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [FloorFilterExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/FloorFilterExampleView.swift)
-***REMOVED***/ in the project. To learn more about using the `FloorFilter` see the [FloorFilter Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/floorfiltertutorial).
+***REMOVED***/ in the project. To learn more about using the `FloorFilter` see the <doc:FloorFilterTutorial>.
 public struct FloorFilter: View {
 ***REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?

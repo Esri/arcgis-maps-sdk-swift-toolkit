@@ -13,9 +13,9 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
 ***REMOVED***Toolkit
 import CoreLocation
+***REMOVED***
 
 ***REMOVED***/ An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
 ***REMOVED***/ of your current location. Because this is an example that can be run from anywhere,

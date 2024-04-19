@@ -27,20 +27,11 @@ struct ThumbnailView: View  {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if attachmentModel.usingDefaultImage,
 ***REMOVED******REMOVED******REMOVED***   let systemName = attachmentModel.defaultSystemName {
-***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16, macCatalyst 16, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: systemName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.template)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
-#if canImport(Charts)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.light)
-#endif
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: systemName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.template)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: systemName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.template)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.light)
 ***REMOVED******REMOVED*** else if let image = attachmentModel.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()

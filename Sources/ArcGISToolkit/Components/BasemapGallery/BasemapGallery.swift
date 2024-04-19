@@ -51,7 +51,7 @@
 ***REMOVED***/
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/main/Examples/Examples)
 ***REMOVED***/ and refer to [BasemapGalleryExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/main/Examples/Examples/BasemapGalleryExampleView.swift)
-***REMOVED***/ in the project. To learn more about using the `BasemapGallery` see the [BasemapGallery Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/basemapgallerytutorial).
+***REMOVED***/ in the project. To learn more about using the `BasemapGallery` see the <doc:BasemapGalleryTutorial>.
 public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ The view style of the gallery.
 ***REMOVED***public enum Style {

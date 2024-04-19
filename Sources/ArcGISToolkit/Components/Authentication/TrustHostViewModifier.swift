@@ -94,7 +94,7 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***.mediumPresentationDetents()
+***REMOVED******REMOVED******REMOVED******REMOVED***.presentationDetents([.medium])
 ***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED******REMOVED***
 ***REMOVED***

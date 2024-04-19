@@ -53,8 +53,8 @@
 ***REMOVED***/ To see it in action, try out the [Examples](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/tree/Forms/Examples/Examples)
 ***REMOVED***/ and refer to
 ***REMOVED***/ [FeatureFormExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
-***REMOVED***/ in the project. To learn more about using the `FeatureFormView` see the [FeatureFormView Tutorial](https:***REMOVED***developers.arcgis.com/swift/toolkit-api-reference/tutorials/arcgistoolkit/featureformviewtutorial).
-***REMOVED***/ 
+***REMOVED***/ in the project. To learn more about using the `FeatureFormView` see the <doc:FeatureFormViewTutorial>.
+***REMOVED***/
 ***REMOVED***/ - Since: 200.4
 public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
@@ -99,10 +99,7 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***title = newTitle
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.scrollDismissesKeyboard(
-***REMOVED******REMOVED******REMOVED******REMOVED*** Allow tall multiline text fields to be scrolled
-***REMOVED******REMOVED******REMOVED***immediately: (model.focusedElement as? FieldFormElement)?.input is TextAreaFormInput ? false : true
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.scrollDismissesKeyboard(.immediately)
 ***REMOVED******REMOVED***.environmentObject(model)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Perform the initial expression evaluation.

@@ -19,7 +19,7 @@
 ***REMOVED***
 struct AuthenticationApp: App {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
-***REMOVED***@State var isSettingUp = true
+***REMOVED***@State private var isSettingUp = true
 ***REMOVED***
 ***REMOVED***init() {
 ***REMOVED******REMOVED******REMOVED*** Create an authenticator.
@@ -63,8 +63,8 @@ struct AuthenticationApp: App {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED*** If you want to use OAuth, you can uncomment this code:
-***REMOVED***private extension OAuthUserConfiguration {
+private extension OAuthUserConfiguration {
+***REMOVED******REMOVED*** If you want to use OAuth, you can uncomment this code:
 ***REMOVED******REMOVED***static let arcgisDotCom = OAuthUserConfiguration(
 ***REMOVED******REMOVED******REMOVED***portalURL: .portal,
 ***REMOVED******REMOVED******REMOVED***clientID: "<#Your client ID goes here#>",
@@ -73,7 +73,7 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** The scheme of the redirect URL is also specified in the Info.plist file.
 ***REMOVED******REMOVED******REMOVED***redirectURL: URL(string: "authexample:***REMOVED***auth")!
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED***
 
 extension URL {
 ***REMOVED******REMOVED*** If you want to use your own portal, provide your own URL here:

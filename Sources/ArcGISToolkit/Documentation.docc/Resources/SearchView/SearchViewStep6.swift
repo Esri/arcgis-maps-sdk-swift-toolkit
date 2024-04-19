@@ -9,9 +9,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***maximumSuggestions: 16
 ***REMOVED***)
 ***REMOVED***
-***REMOVED***@StateObject private var dataModel = MapDataModel(
-***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISImagery)
-***REMOVED***)
+***REMOVED***@State private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED***@State private var searchResultsOverlay = GraphicsOverlay()
 ***REMOVED***
@@ -31,7 +29,7 @@ struct SearchExampleView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in
 ***REMOVED******REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED******REMOVED***map: dataModel.map,
+***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: searchResultViewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [searchResultsOverlay]
 ***REMOVED******REMOVED******REMOVED***)

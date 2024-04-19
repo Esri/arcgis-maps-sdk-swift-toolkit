@@ -29,17 +29,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the full screen text input is presented.
 ***REMOVED***@State private var fullScreenTextInputIsPresented = false
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether placeholder text is shown, thereby indicating the
-***REMOVED******REMOVED***/ presence of a value.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ If iOS 16.0 minimum APIs are not supported we use a TextField for single line entry and a
-***REMOVED******REMOVED***/ TextEditor for multiline entry. TextEditors don't have placeholder support so instead we
-***REMOVED******REMOVED***/ replace empty text with the configured placeholder message and adjust the font
-***REMOVED******REMOVED***/ color.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ Once iOS 16.0 is the minimum supported platform this property can be removed.
-***REMOVED***@State private var isPlaceholder = false
-***REMOVED***
 ***REMOVED******REMOVED***/ The current text value.
 ***REMOVED***@State private var text = ""
 ***REMOVED***
@@ -60,13 +49,6 @@ struct TextInput: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***textWriter
 ***REMOVED******REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
-***REMOVED******REMOVED******REMOVED******REMOVED***if isFocused && isPlaceholder {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text = ""
-***REMOVED******REMOVED******REMOVED*** else if !isFocused && text.isEmpty && !iOS16MinimumIsSupported {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPlaceholder = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text = element.hint
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED*** else if model.focusedElement == element {
@@ -80,7 +62,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: text) { text in
-***REMOVED******REMOVED******REMOVED******REMOVED***guard !isPlaceholder else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED***
@@ -92,50 +73,28 @@ struct TextInput: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
-***REMOVED******REMOVED******REMOVED******REMOVED***updateText()
+***REMOVED******REMOVED******REMOVED******REMOVED***text = formattedValue
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 private extension TextInput {
-***REMOVED******REMOVED***/ A Boolean value indicating whether iOS 16.0 minimum APIs are supported.
-***REMOVED***var iOS16MinimumIsSupported: Bool {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***return true
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return false
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
 ***REMOVED***var textWriter: some View {
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $text,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.hint).foregroundColor(.secondary),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: element.isMultiline ? .vertical : .horizontal
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(element.isMultiline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $fullScreenTextInputIsPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(text: $text, element: element)
+***REMOVED******REMOVED******REMOVED***TextField(
+***REMOVED******REMOVED******REMOVED******REMOVED***element.label,
+***REMOVED******REMOVED******REMOVED******REMOVED***text: $text,
+***REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.hint).foregroundColor(.secondary),
+***REMOVED******REMOVED******REMOVED******REMOVED***axis: element.isMultiline ? .vertical : .horizontal
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.disabled(element.isMultiline)
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $fullScreenTextInputIsPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(text: $text, element: element)
 #if targetEnvironment(macCatalyst)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
 #endif
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** else if element.isMultiline {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextEditor(text: $text)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(isPlaceholder ? .secondary : .primary)
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $text,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.hint).foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input")
 ***REMOVED******REMOVED******REMOVED***.background(.clear)
@@ -149,7 +108,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.scrollContentBackgroundHidden()
+***REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
 ***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ClearButton {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isFocused {
@@ -187,16 +146,7 @@ private extension TextInput {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Updates ``text`` and ``placeholder`` values in response to
-***REMOVED******REMOVED***/ a change in ``formattedValue``.
-***REMOVED***private func updateText() {
-***REMOVED******REMOVED***let text = formattedValue
-***REMOVED******REMOVED***isPlaceholder = text.isEmpty && !iOS16MinimumIsSupported
-***REMOVED******REMOVED***self.text = isPlaceholder ? element.hint : text
-***REMOVED***
-***REMOVED***
 
-@available(iOS 16.0, *)
 private extension TextInput {
 ***REMOVED******REMOVED***/ A view for displaying a multiline text input outside the body of the feature form view.
 ***REMOVED******REMOVED***/
@@ -262,19 +212,6 @@ private extension FieldFormElement {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension View {
-***REMOVED******REMOVED***/ - Returns: A view with the scroll content background hidden.
-***REMOVED***func scrollContentBackgroundHidden() -> some View {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***return self
-***REMOVED******REMOVED******REMOVED******REMOVED***.scrollContentBackground(.hidden)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***UITextView.appearance().backgroundColor = .clear
-***REMOVED******REMOVED******REMOVED***return self
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
