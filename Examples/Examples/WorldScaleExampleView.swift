@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
 import ArcGISToolkit
 import CoreLocation
+import SwiftUI
 
 /// An example that utilizes the `WorldScaleSceneView` to show an augmented reality view
 /// of your current location. Because this is an example that can be run from anywhere,

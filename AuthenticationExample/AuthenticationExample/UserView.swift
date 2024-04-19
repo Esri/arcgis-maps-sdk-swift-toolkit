@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view that displays details of a portal user.
 struct UserView: View {
     /// The user to display the details for.
-    @State var user: PortalUser
+    let user: PortalUser
     
     var body: some View {
         VStack {

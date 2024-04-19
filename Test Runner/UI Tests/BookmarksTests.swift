@@ -46,7 +46,7 @@ final class BookmarksTests: XCTestCase {
         bookmarksButton.tap()
         
         // Verify that the directive UI label is present.
-        XCTAssertTrue(selectABookmarkText.exists, "The Select a bookmark text wasn't found.")
+        XCTAssertTrue(selectABookmarkText.waitForExistence(timeout: 1.0), "The Select a bookmark text wasn't found.")
         
         // Select a bookmark and confirm the component notified the test view of the selection.
         XCTAssertTrue(giantSequoiasButton.waitForExistence(timeout: 1.0), "The Giant Sequoias button wasn't found.")
@@ -137,5 +137,62 @@ final class BookmarksTests: XCTestCase {
         bookmarksTestCase4Button.tap()
         
         XCTAssertTrue(redlandsButton.exists, "The Redlands button wasn't found.")
+    }
+    
+    /// Test using the Bookmarks component with bookmarks provided directly, creating new bookmarks
+    /// while the component is displayed.
+    func testCase5() throws {
+        let app = XCUIApplication()
+        app.launch()
+        
+        let addNewButton = app.buttons["Add New"].firstMatch
+        let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
+        let bookmarksTestCase5Button = app.buttons["Bookmarks Test Case 5"]
+        let firstBookmark = app.buttons["Bookmark 1"].firstMatch
+        let secondBookmark = app.buttons["Bookmark 2"].firstMatch
+        
+        // Open the Bookmarks component test views.
+        XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
+        bookmarksTestsButton.tap()
+        
+        // Open the Bookmarks component test view.
+        XCTAssertTrue(bookmarksTestCase5Button.exists, "The Bookmarks Test Case 5 button wasn't found.")
+        bookmarksTestCase5Button.tap()
+        
+        XCTAssertTrue(firstBookmark.exists, "The first bookmark wasn't found.")
+        
+        XCTAssertFalse(secondBookmark.exists, "The second bookmark was present before it should've been.")
+        
+        addNewButton.tap()
+        
+        XCTAssertTrue(secondBookmark.exists, "The second bookmark wasn't found.")
+    }
+    
+    /// Test automatic pan and zoom to the selected bookmark.
+    func testCase6() {
+        let app = XCUIApplication()
+        app.launch()
+        
+        let bookmarksTestsButton = app.buttons["Bookmarks Tests"]
+        let bookmarksTestCase6Button = app.buttons["Bookmarks Test Case 6"]
+        let firstBookmark = app.buttons["San Diego Convention Center"].firstMatch
+        let expectedCoordinatesLabel = app.staticTexts["32.7N 117.2W"]
+        
+        // Open the Bookmarks component test views.
+        XCTAssertTrue(bookmarksTestsButton.exists, "The Bookmarks Tests button wasn't found.")
+        bookmarksTestsButton.tap()
+        
+        // Open the Bookmarks component test view.
+        XCTAssertTrue(bookmarksTestCase6Button.exists, "The Bookmarks Test Case 6 button wasn't found.")
+        bookmarksTestCase6Button.tap()
+        
+        XCTAssertTrue(firstBookmark.exists, "The first bookmark wasn't found.")
+        
+        firstBookmark.tap()
+        
+        XCTAssertTrue(
+            expectedCoordinatesLabel.waitForExistence(timeout: 5.0),
+            "The expected coordinate label doesn't exist."
+        )
     }
 }

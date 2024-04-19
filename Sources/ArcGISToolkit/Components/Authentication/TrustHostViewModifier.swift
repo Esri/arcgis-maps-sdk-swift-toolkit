@@ -94,7 +94,7 @@ struct TrustHostViewModifier: ViewModifier {
                     Spacer()
                 }
                 .padding()
-                .mediumPresentationDetents()
+                .presentationDetents([.medium])
                 .interactiveDismissDisabled()
             }
     }
