@@ -68,15 +68,29 @@ import SwiftUI
             try await attachment.load()
             if attachment.loadStatus == .failed || attachment.fileURL == nil {
                 defaultSystemName = "exclamationmark.circle.fill"
+                self.loadStatus = .failed
                 return
             }
             
-//            self.thumbnail = try? await attachment.popupAttachment?.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
-//
-//            self.loadStatus = self.attachment.loadStatus
-            
+//            if attachment is FormAttachment {  // To be done after that class inherits from a protocol
+            var url = attachment.fileURL!
+            if let formAttachment = attachment.formAttachment {
+//                self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
+//                self.loadStatus = formAttachment.loadStatus
+  
+                // WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
+                var tmpURL = attachment.fileURL
+                if let formAttachment = attachment.formAttachment {
+                    tmpURL = tmpURL?.deletingLastPathComponent()
+                    tmpURL = tmpURL?.appending(path: attachment.name)
+                    
+                    _ = FileManager.default.secureCopyItem(at: attachment.fileURL!, to: tmpURL!)
+                }
+                url = tmpURL!
+            }
             let request = QLThumbnailGenerator.Request(
-                fileAt: attachment.fileURL!,
+                fileAt: url,
+//                fileAt: attachment.fileURL!,
                 size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
                 scale: displayScale,
                 representationTypes: .thumbnail)
