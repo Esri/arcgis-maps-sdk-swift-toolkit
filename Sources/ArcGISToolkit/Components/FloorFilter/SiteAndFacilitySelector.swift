@@ -87,47 +87,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The selected site as reflected in the state of the navigation stack.
-***REMOVED******REMOVED******REMOVED***/
-***REMOVED******REMOVED******REMOVED***/ Note that the selection state of the navigation stack can differ from the selection state of the
-***REMOVED******REMOVED******REMOVED***/ view model. See `userBackedOutOfSelectedSite` for further explanation.
-***REMOVED******REMOVED***var selectedSite: Binding<FloorSite?> {
-***REMOVED******REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED******REMOVED***get: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite ? nil : viewModel.selection?.site
-***REMOVED******REMOVED******REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED***set: { newSite in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let newSite = newSite else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(newSite, zoomTo: true)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Make the navigation destination for an item in the site list.
-***REMOVED******REMOVED***func makeNavigationDestination(site: FloorSite) -> some View {
-***REMOVED******REMOVED******REMOVED***FacilitiesList(
-***REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
-***REMOVED******REMOVED******REMOVED******REMOVED***facilities: site.facilities,
-***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
-***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite = true
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.left")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A view with a filter-via-name field, a list of site names and an "All sites" button.
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
@@ -354,6 +313,50 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+extension SiteAndFacilitySelector.SitesList {
+***REMOVED******REMOVED***/ The selected site as reflected in the state of the navigation stack.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Note that the selection state of the navigation stack can differ from the selection state of the
+***REMOVED******REMOVED***/ view model. See `userBackedOutOfSelectedSite` for further explanation.
+***REMOVED***var selectedSite: Binding<FloorSite?> {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***get: {
+***REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite ? nil : viewModel.selection?.site
+***REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED***set: { newSite in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let newSite = newSite else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite = false
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(newSite, zoomTo: true)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Make the navigation destination for an item in the site list.
+***REMOVED***func makeNavigationDestination(site: FloorSite) -> some View {
+***REMOVED******REMOVED***SiteAndFacilitySelector.FacilitiesList(
+***REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
+***REMOVED******REMOVED******REMOVED***facilities: site.facilities,
+***REMOVED******REMOVED******REMOVED***isHidden: isHidden
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
+***REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite = true
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.left")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 
 ***REMOVED***/ Displays text "No matches found".
 private struct NoMatchesView: View {
