@@ -95,7 +95,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show the filtered set of sites
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***siteListView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sitesList
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***allSitesButton
 ***REMOVED******REMOVED***
@@ -153,7 +153,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/
 ***REMOVED******REMOVED******REMOVED***/ If `AutomaticSelectionMode` mode is in use, items will automatically be
 ***REMOVED******REMOVED******REMOVED***/ selected/deselected.
-***REMOVED******REMOVED***var siteListView: some View {
+***REMOVED******REMOVED***var sitesList: some View {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 17.0, *) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(matchingSites) { site in
