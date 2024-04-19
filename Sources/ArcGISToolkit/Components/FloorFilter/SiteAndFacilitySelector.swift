@@ -166,7 +166,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(matchingSites, selection: selectedSite) { site in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(site.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(site.name) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: Binding {
