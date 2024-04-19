@@ -68,15 +68,29 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED***try await attachment.load()
 ***REMOVED******REMOVED******REMOVED***if attachment.loadStatus == .failed || attachment.fileURL == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED***defaultSystemName = "exclamationmark.circle.fill"
+***REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = .failed
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = try? await attachment.popupAttachment?.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
-***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = self.attachment.loadStatus
+***REMOVED******REMOVED******REMOVED******REMOVED***if attachment is FormAttachment {  ***REMOVED*** To be done after that class inherits from a protocol
+***REMOVED******REMOVED******REMOVED***var url = attachment.fileURL!
+***REMOVED******REMOVED******REMOVED***if let formAttachment = attachment.formAttachment {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = formAttachment.loadStatus
+  
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
+***REMOVED******REMOVED******REMOVED******REMOVED***var tmpURL = attachment.fileURL
+***REMOVED******REMOVED******REMOVED******REMOVED***if let formAttachment = attachment.formAttachment {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.deletingLastPathComponent()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.appending(path: attachment.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_ = FileManager.default.secureCopyItem(at: attachment.fileURL!, to: tmpURL!)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***url = tmpURL!
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let request = QLThumbnailGenerator.Request(
-***REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
+***REMOVED******REMOVED******REMOVED******REMOVED***fileAt: url,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
 ***REMOVED******REMOVED******REMOVED******REMOVED***size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
 ***REMOVED******REMOVED******REMOVED******REMOVED***scale: displayScale,
 ***REMOVED******REMOVED******REMOVED******REMOVED***representationTypes: .thumbnail)

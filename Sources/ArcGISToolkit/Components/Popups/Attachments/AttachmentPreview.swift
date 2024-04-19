@@ -147,9 +147,13 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.middle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .trailing], 4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(Int64(attachmentModel.attachment.size), format: .byteCount(style: .file))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .trailing], 4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(Int64(attachmentModel.attachment.size), format: .byteCount(style: .file))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "square.and.arrow.down")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.font(.caption)
@@ -159,7 +163,16 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the url to trigger `.quickLookPreview`.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url = attachmentModel.attachment.fileURL
+
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var tmpURL =  attachmentModel.attachment.fileURL
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let formAttachment = attachmentModel.attachment.formAttachment {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.deletingLastPathComponent()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.appending(path: formAttachment.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_ = FileManager.default.secureCopyItem(at: attachmentModel.attachment.fileURL!, to: tmpURL!)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url = tmpURL
 ***REMOVED******REMOVED******REMOVED*** else if attachmentModel.attachment.loadStatus == .notLoaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Load the attachment model with the given size.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load(thumbnailSize: CGSize(width: 120, height: 120))
@@ -172,3 +185,18 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***
 
+extension FileManager {
+***REMOVED***func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***if FileManager.default.fileExists(atPath: dstURL.path) {
+***REMOVED******REMOVED******REMOVED******REMOVED***try FileManager.default.removeItem(at: dstURL)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***try FileManager.default.copyItem(at: srcURL, to: dstURL)
+***REMOVED*** catch (let error) {
+***REMOVED******REMOVED******REMOVED***print("Cannot copy item at \(srcURL) to \(dstURL): \(error)")
+***REMOVED******REMOVED******REMOVED***return false
+***REMOVED***
+***REMOVED******REMOVED***return true
+***REMOVED***
+***REMOVED***
+***REMOVED***
