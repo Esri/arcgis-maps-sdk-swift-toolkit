@@ -95,7 +95,7 @@ struct SiteAndFacilitySelector: View {
                     NoMatchesView()
                 } else {
                     // Show the filtered set of sites
-                    siteListView
+                    sitesList
                 }
                 allSitesButton
             }
@@ -153,7 +153,7 @@ struct SiteAndFacilitySelector: View {
         ///
         /// If `AutomaticSelectionMode` mode is in use, items will automatically be
         /// selected/deselected.
-        var siteListView: some View {
+        var sitesList: some View {
             Group {
                 if #available(iOS 17.0, *) {
                     List(matchingSites) { site in
