@@ -358,7 +358,6 @@ extension SiteAndFacilitySelector.SitesList {
 ***REMOVED***
 ***REMOVED***
 
-
 ***REMOVED***/ Displays text "No matches found".
 private struct NoMatchesView: View {
 ***REMOVED***var body: some View {
