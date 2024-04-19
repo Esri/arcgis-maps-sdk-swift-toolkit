@@ -162,7 +162,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationDestination(item: selectedSite) { site in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeNavigationDestination(site: site)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFacilitiesList(site: site)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(matchingSites, selection: selectedSite) { site in
@@ -178,7 +178,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***destination: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedSite = viewModel.selection?.site {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeNavigationDestination(site: selectedSite)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeFacilitiesList(site: selectedSite)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -331,8 +331,8 @@ extension SiteAndFacilitySelector.SitesList {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Make the navigation destination for an item in the site list.
-***REMOVED***func makeNavigationDestination(site: FloorSite) -> some View {
+***REMOVED******REMOVED***/ Makes the list of facilities for a site from the sites list.
+***REMOVED***func makeFacilitiesList(site: FloorSite) -> some View {
 ***REMOVED******REMOVED***SiteAndFacilitySelector.FacilitiesList(
 ***REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
 ***REMOVED******REMOVED******REMOVED***facilities: site.facilities,
