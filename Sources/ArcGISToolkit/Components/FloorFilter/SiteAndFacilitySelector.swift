@@ -30,7 +30,7 @@ struct SiteAndFacilitySelector: View {
     private var isHidden: Binding<Bool>
     
     var body: some View {
-        let innerContent = {
+        NavigationStack {
             Group {
                 // If there's more than one site
                 if viewModel.sites.count > 1 {
@@ -52,16 +52,6 @@ struct SiteAndFacilitySelector: View {
                     CloseButton { isHidden.wrappedValue.toggle() }
                 }
             }
-        }
-        if #available(iOS 17.0, *) {
-            NavigationStack { innerContent() }
-        } else {
-            // `NavigationStack` doesn't work properly with the
-            // `NavigationLink(_:tag:selection:destination:)`s in
-            // `SitesList.siteListView` so we must continue to use 
-            // `NavigationView` in iOS 16.
-            NavigationView { innerContent() }
-                .navigationViewStyle(.stack)
         }
     }
     
@@ -211,11 +201,23 @@ struct SiteAndFacilitySelector: View {
                         makeNavigationDestination(site: site)
                     }
                 } else {
-                    List(matchingSites) { site in
-                        NavigationLink(site.name, tag: site, selection: selectedSite) {
-                            makeNavigationDestination(site: site)
-                        }
+                    List(matchingSites, selection: selectedSite) { site in
+                        Text(site.name)
                     }
+                    .navigationDestination(
+                        isPresented: Binding {
+                            selectedSite.wrappedValue != nil
+                        } set: { isPresented in
+                            if !isPresented {
+                                viewModel.clearSelection()
+                            }
+                        },
+                        destination: {
+                            if let selectedSite = viewModel.selection?.site {
+                                makeNavigationDestination(site: selectedSite)
+                            }
+                        }
+                    )
                 }
             }
             .listStyle(.plain)
