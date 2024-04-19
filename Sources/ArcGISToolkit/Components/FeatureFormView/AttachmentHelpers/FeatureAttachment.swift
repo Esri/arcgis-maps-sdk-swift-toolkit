@@ -146,8 +146,8 @@ public class FeatureAttachment {
 ***REMOVED******REMOVED***get {
 ***REMOVED******REMOVED******REMOVED***if let popupAttachment {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return popupAttachment.loadStatus
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let featureFormAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return featureFormAttachment.loadStatus
+***REMOVED******REMOVED*** else if let formAttachment {
+***REMOVED******REMOVED******REMOVED******REMOVED***return formAttachment.loadStatus
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return .notLoaded
 ***REMOVED***

@@ -118,9 +118,7 @@ extension FeatureFormView {
 ***REMOVED***@ViewBuilder func makeElement(_ element: FormElement) -> some View {
 ***REMOVED******REMOVED***switch element {
 ***REMOVED******REMOVED***case let attachmentElement as AttachmentFormElement:
-***REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(
-***REMOVED******REMOVED******REMOVED******REMOVED***featureElement: AttachmentsFeatureElement(attachmentFormElement: attachmentElement)
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentElement)
 ***REMOVED******REMOVED******REMOVED***.shouldEnableEditControls(true)
 ***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)

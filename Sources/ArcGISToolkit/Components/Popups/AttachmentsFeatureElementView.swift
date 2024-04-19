@@ -23,6 +23,8 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***@Environment(\.isPortraitOrientation) var isPortraitOrientation
 ***REMOVED***
+***REMOVED***@Environment(\.displayScale) var displayScale
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value denoting if the view should be shown as regular width.
 ***REMOVED***var isRegularWidth: Bool {
 ***REMOVED******REMOVED***!isPortraitOrientation
@@ -58,46 +60,14 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***case .loaded(let attachmentModels):
-***REMOVED******REMOVED******REMOVED******REMOVED***if !attachmentModels.isEmpty || shouldEnableEditControls {
+***REMOVED******REMOVED******REMOVED******REMOVED***if shouldEnableEditControls {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentHeader
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)
+***REMOVED******REMOVED******REMOVED*** else if !attachmentModels.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch featureElement.displayType {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .list:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .preview:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldEnableEditControls: shouldEnableEditControls,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .auto:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldEnableEditControls: shouldEnableEditControls,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: featureElement.displayTitle,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: featureElement.description
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if shouldEnableEditControls,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let element = featureElement.attachmentFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportMenu(element: element)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentHeader
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -106,7 +76,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***guard case .notLoaded = attachmentLoadingState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loading
-***REMOVED******REMOVED******REMOVED***var attachments = (try? await featureElement.attachments) ?? []
+***REMOVED******REMOVED******REMOVED***var attachments = (try? await featureElement.featureAttachments) ?? []
 ***REMOVED******REMOVED******REMOVED***print("attachment count: \(attachments.count)")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await addDemoAttachments()
@@ -116,20 +86,63 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let attachmentModels = attachments
 ***REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
-***REMOVED******REMOVED******REMOVED******REMOVED***.map { AttachmentModel(attachment: $0) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.map { AttachmentModel(attachment: $0, displayScale: displayScale) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loaded(attachmentModels)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@ViewBuilder private func attachmentBody(attachmentModels: [AttachmentModel]) -> some View {
+***REMOVED******REMOVED***switch featureElement.attachmentDisplayType {
+***REMOVED******REMOVED***case .list:
+***REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
+***REMOVED******REMOVED***case .preview:
+***REMOVED******REMOVED******REMOVED***AttachmentPreview(
+***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
+***REMOVED******REMOVED******REMOVED******REMOVED***shouldEnableEditControls: shouldEnableEditControls,
+***REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
+***REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case .auto:
+***REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldEnableEditControls: shouldEnableEditControls,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private var attachmentHeader: some View {
+***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED***PopupElementHeader(
+***REMOVED******REMOVED******REMOVED******REMOVED***title: featureElement.displayTitle,
+***REMOVED******REMOVED******REMOVED******REMOVED***description: featureElement.description
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***if shouldEnableEditControls,
+***REMOVED******REMOVED******REMOVED***   let element = featureElement as? AttachmentFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportMenu(element: element)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***func onRename(attachment: FeatureAttachment, newAttachmentName: String) async throws -> Void {
-***REMOVED******REMOVED***if let element = featureElement.attachmentFormElement,
+***REMOVED******REMOVED***if let element = featureElement as? AttachmentFormElement,
 ***REMOVED******REMOVED***   let attachment = attachment.formAttachment {
 ***REMOVED******REMOVED******REMOVED***try await element.renameAttachment(attachment, name: newAttachmentName)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func onDelete(attachment: FeatureAttachment) async throws -> Void {
-***REMOVED******REMOVED***if let element = featureElement.attachmentFormElement,
+***REMOVED******REMOVED***if let element = featureElement as? AttachmentFormElement,
 ***REMOVED******REMOVED***   let attachment = attachment.formAttachment {
 ***REMOVED******REMOVED******REMOVED***try await element.deleteAttachment(attachment)
 ***REMOVED***
@@ -146,7 +159,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let image = UIImage(contentsOfFile: url.absoluteString)
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("image = \(image)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***var data = try? Data(contentsOf: url)
-***REMOVED******REMOVED******REMOVED***let attachment = try await featureElement.attachmentFormElement?.addAttachment(
+***REMOVED******REMOVED******REMOVED***let attachment = try await (featureElement as? AttachmentFormElement)?.addAttachment(
 ***REMOVED******REMOVED******REMOVED******REMOVED***name: "forest",
 ***REMOVED******REMOVED******REMOVED******REMOVED***contentType: "image/jpg",
 ***REMOVED******REMOVED******REMOVED******REMOVED***data: data

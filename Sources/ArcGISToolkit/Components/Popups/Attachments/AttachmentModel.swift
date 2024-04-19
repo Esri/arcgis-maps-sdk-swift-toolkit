@@ -42,10 +42,11 @@ import QuickLook
 ***REMOVED******REMOVED***defaultSystemName != nil
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Environment(\.displayScale) var displayScale
-***REMOVED***
-***REMOVED***init(attachment: FeatureAttachment) {
+***REMOVED***private var displayScale: CGFloat
+
+***REMOVED***init(attachment: FeatureAttachment, displayScale: CGFloat) {
 ***REMOVED******REMOVED***self.attachment = attachment
+***REMOVED******REMOVED***self.displayScale = displayScale
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch attachment.kind {
 ***REMOVED******REMOVED***case .image:
@@ -64,12 +65,15 @@ import QuickLook
 ***REMOVED***func load(thumbnailSize: CGSize = CGSize(width: 40, height: 40)) {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***loadStatus = .loading
-***REMOVED******REMOVED******REMOVED***try await self.attachment.load()
-***REMOVED******REMOVED******REMOVED***loadStatus = attachment.loadStatus
+***REMOVED******REMOVED******REMOVED***try await attachment.load()
 ***REMOVED******REMOVED******REMOVED***if attachment.loadStatus == .failed || attachment.fileURL == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED***defaultSystemName = "exclamationmark.circle.fill"
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = try? await attachment.popupAttachment?.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
+***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = self.attachment.loadStatus
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let request = QLThumbnailGenerator.Request(
 ***REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
@@ -84,6 +88,7 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnail = thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = self.attachment.loadStatus
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

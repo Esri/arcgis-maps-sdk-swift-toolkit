@@ -15,8 +15,35 @@
 import Foundation
 ***REMOVED***
 
+***REMOVED***/ Indicates how to display the attachments. If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
+public enum AttachmentsFeatureElementDisplayType {
+***REMOVED******REMOVED***/ Show attachments as links.
+***REMOVED***case list
+***REMOVED******REMOVED***/ Attachments expand to the width of the pop-up.
+***REMOVED***case preview
+***REMOVED******REMOVED***/ Allows applications to choose the most suitable default experience for their application.
+***REMOVED***case auto
+***REMOVED***
+
+public protocol AttachmentsFeatureElement {
+***REMOVED******REMOVED***/ A string value describing the element in detail. Can be an empty string.
+***REMOVED***var description: String { get ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Indicates how to display the attachments.
+***REMOVED******REMOVED***/ If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
+***REMOVED***var attachmentDisplayType: AttachmentsFeatureElementDisplayType { get ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A string value indicating what the element represents. Can be an empty string.
+***REMOVED***var title: String { get set ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The list of attachments.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This property will be empty if ``PopupElement/isEvaluated`` is `false`.
+***REMOVED***var featureAttachments: [FeatureAttachment] { get async throws ***REMOVED***
+***REMOVED***
+
 ***REMOVED***/ Represents an element of type attachments that is displayed in a pop-up or feature form.
-public final class AttachmentsFeatureElement {
+public final class AttachmentsFeatureElementxx {
 ***REMOVED******REMOVED*** MARK: Nested Types
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates how to display the attachments. If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
@@ -63,9 +90,9 @@ public final class AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
 ***REMOVED***public var displayType: DisplayType {
 ***REMOVED******REMOVED***if let attachmentsPopupElement {
-***REMOVED******REMOVED******REMOVED***return DisplayType(kind: attachmentsPopupElement.displayType)
+***REMOVED******REMOVED******REMOVED***return .preview***REMOVED***DisplayType(kind: attachmentsPopupElement.displayType)
 ***REMOVED***
-***REMOVED******REMOVED***return .auto
+***REMOVED******REMOVED***return .preview
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A string value indicating what the element represents. Can be an empty string.
@@ -98,7 +125,7 @@ public final class AttachmentsFeatureElement {
 ***REMOVED***
 ***REMOVED***
 
-extension AttachmentsFeatureElement.DisplayType {
+extension AttachmentsFeatureElementDisplayType {
 ***REMOVED***init(kind: AttachmentsPopupElement.DisplayType) {
 ***REMOVED******REMOVED***switch kind {
 ***REMOVED******REMOVED***case .list:
