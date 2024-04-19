@@ -10,7 +10,7 @@ struct FloatingPanelExampleView: View {
         LinearGradient(colors: [.blue, .black], startPoint: .top, endPoint: .bottom)
             .floatingPanel(selectedDetent: $selectedDetent, isPresented: $isPresented) {
                 List(1..<10) { number in
-                    Text(String(describing: number))
+                    Text(number, format: .number)
                 }
             }
     }

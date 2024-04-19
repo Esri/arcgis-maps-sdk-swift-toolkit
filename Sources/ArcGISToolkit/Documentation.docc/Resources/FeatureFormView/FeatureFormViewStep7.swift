@@ -11,19 +11,21 @@ struct FeatureFormExampleView: View {
         return Map(item: portalItem)
     }
     
-    @State private var map = makeMap()
-
-    @State private var identifyScreenPoint: CGPoint?
+    @State private var cancelConfirmationIsPresented = false
     
     @State private var featureForm: FeatureForm? {
-        didSet { showFeatureForm = featureForm != nil }
+        didSet { featureFormIsPresented = featureForm != nil }
     }
     
-    @State private var showFeatureForm = false
+    @State private var featureFormIsPresented = false
     
     @State private var floatingPanelDetent: FloatingPanelDetent = .full
     
-    @State private var cancelConfirmationIsPresented = false
+    @State private var identifyScreenPoint: CGPoint?
+    
+    @State private var map = makeMap()
+    
+    @State private var submissionError: Text?
     
     var body: some View {
         MapViewReader { proxy in
@@ -54,7 +56,7 @@ struct FeatureFormExampleView: View {
                 .floatingPanel(
                     selectedDetent: $floatingPanelDetent,
                     horizontalAlignment: .leading,
-                    isPresented: $showFeatureForm
+                    isPresented: $featureFormIsPresented
                 ) {
                     if let featureForm {
                         FeatureFormView(featureForm: featureForm)
@@ -70,9 +72,20 @@ struct FeatureFormExampleView: View {
                 } message: {
                     Text("Updates to this feature will be lost.")
                 }
+                .alert(
+                    "The form wasn't submitted",
+                    isPresented: Binding(
+                        get: { submissionError != nil },
+                        set: { _ in submissionError = nil }
+                    )
+                ) { } message: {
+                    if let submissionError {
+                        submissionError
+                    }
+                }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        if showFeatureForm {
+                        if featureFormIsPresented {
                             Button("Cancel", role: .cancel) {
                                 cancelConfirmationIsPresented = true
                             }
@@ -80,7 +93,7 @@ struct FeatureFormExampleView: View {
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        if showFeatureForm {
+                        if featureFormIsPresented {
                             Button("Submit") {
                                 Task {
                                     await submitChanges()
@@ -96,14 +109,21 @@ struct FeatureFormExampleView: View {
     func submitChanges() async {
         guard let featureForm,
               let table = featureForm.feature.table as? ServiceFeatureTable,
-              table.isEditable,
               let database = table.serviceGeodatabase else {
             print("A precondition to submit the changes wasn't met.")
             return
         }
         
+        guard table.isEditable else {
+            submissionError = Text("The feature table isn't editable.")
+            return
+        }
+        
         // Don't submit if there are validation errors.
-        guard featureForm.validationErrors.isEmpty else { return }
+        guard featureForm.validationErrors.isEmpty else {
+            submissionError = Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true).")
+            return
+        }
         
         // Update the service feature table
         try? await table.update(featureForm.feature)

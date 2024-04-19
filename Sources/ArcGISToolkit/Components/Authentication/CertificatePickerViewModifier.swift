@@ -287,7 +287,7 @@ private extension View {
                 Spacer()
             }
             .interactiveDismissDisabled()
-            .mediumPresentationDetents()
+            .presentationDetents([.medium])
             .padding()
         }
     }
@@ -378,7 +378,7 @@ private extension View {
                 Spacer()
             }
             .interactiveDismissDisabled()
-            .mediumPresentationDetents()
+            .presentationDetents([.medium])
             .padding()
         }
     }

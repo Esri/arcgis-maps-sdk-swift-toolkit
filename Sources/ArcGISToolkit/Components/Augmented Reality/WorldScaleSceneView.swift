@@ -170,7 +170,7 @@ public struct WorldScaleSceneView: View {
         .onCameraTrackingStateChanged { trackingState in
             onCameraTrackingStateChangedAction?(trackingState)
         }
-        .onSingleTapGesture { tapPoint in
+        .onTapGesture { tapPoint in
             handleSingleTap(tapPoint)
         }
     }
@@ -190,7 +190,7 @@ public struct WorldScaleSceneView: View {
         .onCameraTrackingStateChanged { trackingState in
             onCameraTrackingStateChangedAction?(trackingState)
         }
-        .onSingleTapGesture { tapPoint in
+        .onTapGesture { tapPoint in
             handleSingleTap(tapPoint)
         }
     }

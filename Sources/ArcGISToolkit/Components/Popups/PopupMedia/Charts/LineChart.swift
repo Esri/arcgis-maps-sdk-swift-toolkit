@@ -1,23 +1,21 @@
-// Copyright 2022 Esri.
-
+// Copyright 2022 Esri
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-#if canImport(Charts)
 import Charts
-#endif
+import SwiftUI
 
 /// A view displaying details for line chart popup media.
-@available(iOS 16, macCatalyst 16, *)
 struct LineChart: View {
     /// The chart data to display.
     let chartData: [ChartData]
@@ -37,30 +35,26 @@ struct LineChart: View {
     }
     
     var body: some View {
-        Group {
-#if canImport(Charts)
-            Chart(chartData) {
-                LineMark(
-                    x: .value(String.field, $0.label),
-                    y: .value(String.value, $0.value)
-                )
-                PointMark(
-                    x: .value(String.field, $0.label),
-                    y: .value(String.value, $0.value)
-                )
-            }
-            .chartXAxis {
-                AxisMarks { _ in
-                    if showXAxisLabels {
-                        AxisValueLabel(
-                            collisionResolution: .greedy,
-                            orientation: .verticalReversed
-                        )
-                    }
-                    AxisGridLine()
+        Chart(chartData) {
+            LineMark(
+                x: .value(String.field, $0.label),
+                y: .value(String.value, $0.value)
+            )
+            PointMark(
+                x: .value(String.field, $0.label),
+                y: .value(String.value, $0.value)
+            )
+        }
+        .chartXAxis {
+            AxisMarks { _ in
+                if showXAxisLabels {
+                    AxisValueLabel(
+                        collisionResolution: .greedy,
+                        orientation: .verticalReversed
+                    )
                 }
+                AxisGridLine()
             }
-#endif
         }
     }
 }

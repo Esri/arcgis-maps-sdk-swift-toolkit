@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
 import ArcGISToolkit
+import SwiftUI
 
 struct SearchExampleView: View {
     /// Provides search behavior customization.
@@ -24,10 +24,8 @@ struct SearchExampleView: View {
         maximumSuggestions: 16
     )
     
-    /// The data model containing the `Map` displayed in the `MapView`.
-    @StateObject private var dataModel = MapDataModel(
-        map: Map(basemapStyle: .arcGISImagery)
-    )
+    /// The `Map` displayed in the `MapView`.
+    @State private var map = Map(basemapStyle: .arcGISImagery)
     
     /// The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
     @State private var searchResultsOverlay = GraphicsOverlay()
@@ -57,7 +55,7 @@ struct SearchExampleView: View {
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(
-                map: dataModel.map,
+                map: map,
                 viewpoint: searchResultViewpoint,
                 graphicsOverlays: [searchResultsOverlay]
             )

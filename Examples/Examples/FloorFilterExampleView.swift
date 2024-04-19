@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-import ArcGISToolkit
 import ArcGIS
+import ArcGISToolkit
+import SwiftUI
 
 struct FloorFilterExampleView: View {
     /// Determines the arrangement of the inner `FloorFilter` UI components.
