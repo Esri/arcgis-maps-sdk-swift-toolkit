@@ -87,47 +87,6 @@ struct SiteAndFacilitySelector: View {
             }
         }
         
-        /// The selected site as reflected in the state of the navigation stack.
-        ///
-        /// Note that the selection state of the navigation stack can differ from the selection state of the
-        /// view model. See `userBackedOutOfSelectedSite` for further explanation.
-        var selectedSite: Binding<FloorSite?> {
-            .init(
-                get: {
-                    userBackedOutOfSelectedSite ? nil : viewModel.selection?.site
-                },
-                set: { newSite in
-                    guard let newSite = newSite else { return }
-                    userBackedOutOfSelectedSite = false
-                    viewModel.setSite(newSite, zoomTo: true)
-                }
-            )
-        }
-        
-        /// Make the navigation destination for an item in the site list.
-        func makeNavigationDestination(site: FloorSite) -> some View {
-            FacilitiesList(
-                usesAllSitesStyling: false,
-                facilities: site.facilities,
-                isHidden: isHidden
-            )
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        userBackedOutOfSelectedSite = true
-                    } label: {
-                        Image(systemName: "chevron.left")
-                    }
-                }
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    CloseButton { isHidden.wrappedValue.toggle() }
-                }
-            }
-        }
-        
         /// A view with a filter-via-name field, a list of site names and an "All sites" button.
         var body: some View {
             VStack {
@@ -354,6 +313,50 @@ struct SiteAndFacilitySelector: View {
         }
     }
 }
+
+extension SiteAndFacilitySelector.SitesList {
+    /// The selected site as reflected in the state of the navigation stack.
+    ///
+    /// Note that the selection state of the navigation stack can differ from the selection state of the
+    /// view model. See `userBackedOutOfSelectedSite` for further explanation.
+    var selectedSite: Binding<FloorSite?> {
+        .init(
+            get: {
+                userBackedOutOfSelectedSite ? nil : viewModel.selection?.site
+            },
+            set: { newSite in
+                guard let newSite = newSite else { return }
+                userBackedOutOfSelectedSite = false
+                viewModel.setSite(newSite, zoomTo: true)
+            }
+        )
+    }
+    
+    /// Make the navigation destination for an item in the site list.
+    func makeNavigationDestination(site: FloorSite) -> some View {
+        SiteAndFacilitySelector.FacilitiesList(
+            usesAllSitesStyling: false,
+            facilities: site.facilities,
+            isHidden: isHidden
+        )
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    userBackedOutOfSelectedSite = true
+                } label: {
+                    Image(systemName: "chevron.left")
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                CloseButton { isHidden.wrappedValue.toggle() }
+            }
+        }
+    }
+}
+
 
 /// Displays text "No matches found".
 private struct NoMatchesView: View {
