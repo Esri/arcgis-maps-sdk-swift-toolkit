@@ -18,10 +18,9 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor
 final class FloorFilterViewModelTests: XCTestCase {
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-    func testAutoSelectAlways() async throws {
+    @MainActor func testAutoSelectAlways() async throws {
         let floorManager = try await floorManager(
             forWebMapWithIdentifier: .testMap
         )
@@ -52,7 +51,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-    func testAutoSelectAlwaysNotClearing() async throws {
+    @MainActor func testAutoSelectAlwaysNotClearing() async throws {
         let floorManager = try await floorManager(
             forWebMapWithIdentifier: .testMap
         )
@@ -79,7 +78,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-    func testAutoSelectNever() async throws {
+    @MainActor func testAutoSelectNever() async throws {
         let floorManager = try await floorManager(
             forWebMapWithIdentifier: .testMap
         )
@@ -104,7 +103,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Tests that a `FloorFilterViewModel` successfully initializes.
-    func testInitWithFloorManagerAndViewpoint() async throws {
+    @MainActor func testInitWithFloorManagerAndViewpoint() async throws {
         let floorManager = try await floorManager(
             forWebMapWithIdentifier: .testMap
         )
@@ -118,7 +117,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Confirms that the proper level is visible and all others are hidden.
-    func testLevelVisibility() async throws {
+    @MainActor func testLevelVisibility() async throws {
         let floorManager = try await floorManager(
             forWebMapWithIdentifier: .testMap
         )
@@ -139,7 +138,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Confirms that the selected site/facility/level properties are correctly updated.
-    func testSelectedProperties() async throws {
+    @MainActor func testSelectedProperties() async throws {
         let floorManager = try await floorManager(
             forWebMapWithIdentifier: .testMap
         )
@@ -174,7 +173,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Confirms that the selection property indicates the correct facility (and therefore level) value.
-    func testSelectionOfFacility() async throws {
+    @MainActor func testSelectionOfFacility() async throws {
         let floorManager = try await floorManager(
             forWebMapWithIdentifier: .testMap
         )
@@ -191,7 +190,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Confirms that the selection property indicates the correct level value.
-    func testSelectionOfLevel() async throws {
+    @MainActor func testSelectionOfLevel() async throws {
         let floorManager = try await floorManager(
             forWebMapWithIdentifier: .testMap
         )
@@ -207,7 +206,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Confirms that the selection property indicates the correct site value.
-    func testSelectionOfSite() async throws {
+    @MainActor func testSelectionOfSite() async throws {
         let floorManager = try await floorManager(
             forWebMapWithIdentifier: .testMap
         )
@@ -223,7 +222,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Confirms that the  viewpoint is correctly updated.
-    func testViewpointUpdates() async throws {
+    @MainActor func testViewpointUpdates() async throws {
         var _viewpoint: Viewpoint? = .researchAnnexLattice
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let floorManager = try await floorManager(
