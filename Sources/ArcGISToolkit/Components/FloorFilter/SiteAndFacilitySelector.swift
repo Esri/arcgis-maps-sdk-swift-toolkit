@@ -154,41 +154,40 @@ struct SiteAndFacilitySelector: View {
         /// If `AutomaticSelectionMode` mode is in use, items will automatically be
         /// selected/deselected.
         var sitesList: some View {
-            Group {
-                if #available(iOS 17.0, *) {
-                    List(matchingSites) { site in
-                        Button(site.name) {
-                            viewModel.setSite(site)
-                        }
+            let list = {
+                List(matchingSites) { site in
+                    Button(site.name) {
+                        viewModel.setSite(site)
                     }
-                    .navigationDestination(item: selectedSite) { site in
-                        makeFacilitiesList(site: site)
-                    }
-                } else {
-                    List(matchingSites, selection: selectedSite) { site in
-                        Button(site.name) {
-                            viewModel.setSite(site)
-                        }
-                    }
-                    .navigationDestination(
-                        isPresented: Binding {
-                            selectedSite.wrappedValue != nil
-                        } set: { isPresented in
-                            if !isPresented {
-                                viewModel.clearSelection()
-                            }
-                        },
-                        destination: {
-                            if let selectedSite = viewModel.selection?.site {
-                                makeFacilitiesList(site: selectedSite)
-                            }
-                        }
-                    )
+                }
+                .listStyle(.plain)
+                .onChange(of: viewModel.selection) { _ in
+                    userBackedOutOfSelectedSite = false
                 }
             }
-            .listStyle(.plain)
-            .onChange(of: viewModel.selection) { _ in
-                userBackedOutOfSelectedSite = false
+            return Group {
+                if #available(iOS 17.0, *) {
+                    list()
+                        .navigationDestination(item: selectedSite) { site in
+                            makeFacilitiesList(site: site)
+                        }
+                } else {
+                    list()
+                        .navigationDestination(
+                            isPresented: Binding {
+                                selectedSite.wrappedValue != nil
+                            } set: { isPresented in
+                                if !isPresented {
+                                    viewModel.clearSelection()
+                                }
+                            },
+                            destination: {
+                                if let selectedSite = viewModel.selection?.site {
+                                    makeFacilitiesList(site: selectedSite)
+                                }
+                            }
+                        )
+                }
             }
         }
     }
