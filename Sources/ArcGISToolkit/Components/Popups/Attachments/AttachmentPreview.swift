@@ -34,7 +34,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ The new name the user has provided for the attachment.
 ***REMOVED***@State private var newAttachmentName = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ The new name the user has provided for the attachment.
+***REMOVED******REMOVED***/ The attachment with the new name the user has provided.
 ***REMOVED***@State private var editedAttachment: FeatureAttachment?
 
 ***REMOVED***let onRename: ((FeatureAttachment, String) async throws -> Void)?
