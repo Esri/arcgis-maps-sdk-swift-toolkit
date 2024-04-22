@@ -30,7 +30,7 @@ extension AttachmentFormElement : AttachmentsFeatureElement {
     public var featureAttachments: [FeatureAttachment] {
         get async throws {
             try await fetchAttachments()
-            return attachments.map { FeatureAttachment(featureFormAttachment: $0) }
+            return attachments.map { $0 as! FeatureAttachment }
         }
     }
 }

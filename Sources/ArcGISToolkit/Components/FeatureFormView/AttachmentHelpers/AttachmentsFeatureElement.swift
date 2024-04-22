@@ -43,87 +43,87 @@ public protocol AttachmentsFeatureElement {
 }
 
 /// Represents an element of type attachments that is displayed in a pop-up or feature form.
-public final class AttachmentsFeatureElementxx {
-    // MARK: Nested Types
-    
-    /// Indicates how to display the attachments. If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
-    public enum DisplayType {
-        /// Show attachments as links.
-        case list
-        /// Attachments expand to the width of the pop-up.
-        case preview
-        /// Allows applications to choose the most suitable default experience for their application.
-        case auto
-    }
-    
-    //    public let displayType: DisplayType
-    public let attachmentsPopupElement: AttachmentsPopupElement?
-    public let attachmentFormElement: AttachmentFormElement?
-    
-    // MARK: Inits
-    
-    /// Creates a new attachments pop-up element with the given ``DisplayType-swift.enum``.
-    /// - Parameter displayType: Indicates how to display the attachments.
-    public init(attachmentsPopupElement: AttachmentsPopupElement) {
-        self.attachmentsPopupElement = attachmentsPopupElement
-        self.attachmentFormElement = nil
-    }
-    
-    public init(attachmentFormElement: AttachmentFormElement) {
-        self.attachmentsPopupElement = nil
-        self.attachmentFormElement = attachmentFormElement
-    }
-    
-    // MARK: Properties
-    
-    /// A string value describing the element in detail. Can be an empty string.
-    public var description: String {
-        if let attachmentsPopupElement {
-            return attachmentsPopupElement.description
-        } else if let attachmentFormElement {
-            return attachmentFormElement.description
-        }
-        return ""
-    }
-    
-    /// Indicates how to display the attachments.
-    /// If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
-    public var displayType: DisplayType {
-        if let attachmentsPopupElement {
-            return .preview//DisplayType(kind: attachmentsPopupElement.displayType)
-        }
-        return .preview
-    }
-    
-    /// A string value indicating what the element represents. Can be an empty string.
-    public var title: String {
-        if let attachmentsPopupElement {
-            return attachmentsPopupElement.title
-        } else if let attachmentFormElement {
-            return attachmentFormElement.label
-        }
-        return ""
-    }
-    
-    
-    /// The list of attachments.
-    ///
-    /// This property will be empty if ``PopupElement/isEvaluated`` is `false`.
-    var attachments: [FeatureAttachment] {
-        get async throws {
-            if let attachmentsPopupElement {
-                let attachments = try await attachmentsPopupElement.attachments
-                return attachments.map { FeatureAttachment(popupAttachment: $0) }
-            } else if let attachmentFormElement {
-                try await attachmentFormElement.fetchAttachments()
-                let attachments = attachmentFormElement.attachments
-//                let attachments = try await attachmentFormElement.attachments
-                return attachments.map { FeatureAttachment(featureFormAttachment: $0) }
-            }
-            return []
-        }
-    }
-}
+//public final class AttachmentsFeatureElementxx {
+//    // MARK: Nested Types
+//    
+//    /// Indicates how to display the attachments. If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
+//    public enum DisplayType {
+//        /// Show attachments as links.
+//        case list
+//        /// Attachments expand to the width of the pop-up.
+//        case preview
+//        /// Allows applications to choose the most suitable default experience for their application.
+//        case auto
+//    }
+//    
+//    //    public let displayType: DisplayType
+//    public let attachmentsPopupElement: AttachmentsPopupElement?
+//    public let attachmentFormElement: AttachmentFormElement?
+//    
+//    // MARK: Inits
+//    
+//    /// Creates a new attachments pop-up element with the given ``DisplayType-swift.enum``.
+//    /// - Parameter displayType: Indicates how to display the attachments.
+//    public init(attachmentsPopupElement: AttachmentsPopupElement) {
+//        self.attachmentsPopupElement = attachmentsPopupElement
+//        self.attachmentFormElement = nil
+//    }
+//    
+//    public init(attachmentFormElement: AttachmentFormElement) {
+//        self.attachmentsPopupElement = nil
+//        self.attachmentFormElement = attachmentFormElement
+//    }
+//    
+//    // MARK: Properties
+//    
+//    /// A string value describing the element in detail. Can be an empty string.
+//    public var description: String {
+//        if let attachmentsPopupElement {
+//            return attachmentsPopupElement.description
+//        } else if let attachmentFormElement {
+//            return attachmentFormElement.description
+//        }
+//        return ""
+//    }
+//    
+//    /// Indicates how to display the attachments.
+//    /// If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the pop-up. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
+//    public var displayType: DisplayType {
+//        if let attachmentsPopupElement {
+//            return .preview//DisplayType(kind: attachmentsPopupElement.displayType)
+//        }
+//        return .preview
+//    }
+//    
+//    /// A string value indicating what the element represents. Can be an empty string.
+//    public var title: String {
+//        if let attachmentsPopupElement {
+//            return attachmentsPopupElement.title
+//        } else if let attachmentFormElement {
+//            return attachmentFormElement.label
+//        }
+//        return ""
+//    }
+//    
+//    
+//    /// The list of attachments.
+//    ///
+//    /// This property will be empty if ``PopupElement/isEvaluated`` is `false`.
+//    var attachments: [FeatureAttachment] {
+//        get async throws {
+//            if let attachmentsPopupElement {
+//                let attachments = try await attachmentsPopupElement.attachments
+//                return attachments.map { FeatureAttachment(popupAttachment: $0) }
+//            } else if let attachmentFormElement {
+//                try await attachmentFormElement.fetchAttachments()
+//                let attachments = attachmentFormElement.attachments
+////                let attachments = try await attachmentFormElement.attachments
+//                return attachments.map { FeatureAttachment(featureFormAttachment: $0) }
+//            }
+//            return []
+//        }
+//    }
+//}
 
 extension AttachmentsFeatureElementDisplayType {
     init(kind: AttachmentsPopupElement.DisplayType) {

@@ -48,7 +48,7 @@ import SwiftUI
         self.attachment = attachment
         self.displayScale = displayScale
         
-        switch attachment.kind {
+        switch attachment.featureAttachmentKind {
         case .image:
             defaultSystemName = "photo"
         case .video:
@@ -74,18 +74,16 @@ import SwiftUI
             
 //            if attachment is FormAttachment {  // To be done after that class inherits from a protocol
             var url = attachment.fileURL!
-            if let formAttachment = attachment.formAttachment {
+            if let formAttachment = attachment as? FormAttachment {
 //                self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
 //                self.loadStatus = formAttachment.loadStatus
   
                 // WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
                 var tmpURL = attachment.fileURL
-                if let formAttachment = attachment.formAttachment {
-                    tmpURL = tmpURL?.deletingLastPathComponent()
-                    tmpURL = tmpURL?.appending(path: attachment.name)
-                    
-                    _ = FileManager.default.secureCopyItem(at: attachment.fileURL!, to: tmpURL!)
-                }
+                tmpURL = tmpURL?.deletingLastPathComponent()
+                tmpURL = tmpURL?.appending(path: attachment.name)
+                
+                _ = FileManager.default.secureCopyItem(at: attachment.fileURL!, to: tmpURL!)
                 url = tmpURL!
             }
             let request = QLThumbnailGenerator.Request(

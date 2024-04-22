@@ -166,7 +166,7 @@ struct AttachmentPreview: View {
 
                     // WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
                     var tmpURL =  attachmentModel.attachment.fileURL
-                    if let formAttachment = attachmentModel.attachment.formAttachment {
+                    if let formAttachment = attachmentModel.attachment as? FormAttachment {
                         tmpURL = tmpURL?.deletingLastPathComponent()
                         tmpURL = tmpURL?.appending(path: formAttachment.name)
                         
