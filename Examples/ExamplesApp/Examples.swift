@@ -23,14 +23,13 @@ struct Examples: View {
 ***REMOVED***]
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationView {
+***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***List(lists) { (list) in
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(list.name, destination: list)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationTitle("Toolkit Examples")
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED***
-***REMOVED******REMOVED***.navigationViewStyle(.stack)
 ***REMOVED***
 ***REMOVED***
 
