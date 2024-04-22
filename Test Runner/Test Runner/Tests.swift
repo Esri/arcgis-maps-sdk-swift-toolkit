@@ -16,7 +16,7 @@ import SwiftUI
 
 struct Tests: View {
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 NavigationLink("Basemap Gallery Tests", destination: BasemapGalleryTestView())
                 NavigationLink("Bookmarks Tests", destination: BookmarksTestViews())
@@ -24,6 +24,5 @@ struct Tests: View {
                 NavigationLink("Floor Filter Tests", destination: FloorFilterTestView())
             }
         }
-        .navigationViewStyle(.stack)
     }
 }
