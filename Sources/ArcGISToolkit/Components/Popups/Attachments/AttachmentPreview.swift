@@ -166,7 +166,7 @@ struct AttachmentPreview: View {
 
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var tmpURL =  attachmentModel.attachment.fileURL
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let formAttachment = attachmentModel.attachment.formAttachment {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let formAttachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.deletingLastPathComponent()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.appending(path: formAttachment.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***

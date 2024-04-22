@@ -15,22 +15,8 @@
 ***REMOVED***
 import Foundation
 
-extension AttachmentFormElement : AttachmentsFeatureElement {
-***REMOVED***public var title: String {
-***REMOVED******REMOVED***get {
-***REMOVED******REMOVED******REMOVED***label
-***REMOVED***
-***REMOVED******REMOVED***set { ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***public var attachmentDisplayType: AttachmentsFeatureElementDisplayType {
-***REMOVED******REMOVED***AttachmentsFeatureElementDisplayType.preview
-***REMOVED***
-***REMOVED***
-***REMOVED***public var featureAttachments: [FeatureAttachment] {
-***REMOVED******REMOVED***get async throws {
-***REMOVED******REMOVED******REMOVED***try await fetchAttachments()
-***REMOVED******REMOVED******REMOVED***return attachments.map { $0 as! FeatureAttachment ***REMOVED***
-***REMOVED***
+extension PopupAttachment : FeatureAttachment {
+***REMOVED***public var featureAttachmentKind: FeatureAttachmentKind {
+***REMOVED******REMOVED***FeatureAttachmentKind(kind: kind)
 ***REMOVED***
 ***REMOVED***

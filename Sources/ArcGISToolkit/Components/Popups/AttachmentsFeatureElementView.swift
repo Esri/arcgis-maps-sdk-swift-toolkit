@@ -136,14 +136,14 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***func onRename(attachment: FeatureAttachment, newAttachmentName: String) async throws -> Void {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentFormElement,
-***REMOVED******REMOVED***   let attachment = attachment.formAttachment {
+***REMOVED******REMOVED***   let attachment = attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***try await element.renameAttachment(attachment, name: newAttachmentName)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func onDelete(attachment: FeatureAttachment) async throws -> Void {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentFormElement,
-***REMOVED******REMOVED***   let attachment = attachment.formAttachment {
+***REMOVED******REMOVED***   let attachment = attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***try await element.deleteAttachment(attachment)
 ***REMOVED***
 ***REMOVED***

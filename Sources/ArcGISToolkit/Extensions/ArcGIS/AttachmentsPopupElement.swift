@@ -22,7 +22,7 @@ extension AttachmentsPopupElement : AttachmentsFeatureElement {
 ***REMOVED***
 ***REMOVED***public var featureAttachments: [FeatureAttachment] {
 ***REMOVED******REMOVED***get async throws {
-***REMOVED******REMOVED******REMOVED***try await attachments.map { FeatureAttachment(popupAttachment: $0) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***try await attachments.map { $0 as! FeatureAttachment ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

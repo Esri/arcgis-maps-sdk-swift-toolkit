@@ -48,7 +48,7 @@ import QuickLook
 ***REMOVED******REMOVED***self.attachment = attachment
 ***REMOVED******REMOVED***self.displayScale = displayScale
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch attachment.kind {
+***REMOVED******REMOVED***switch attachment.featureAttachmentKind {
 ***REMOVED******REMOVED***case .image:
 ***REMOVED******REMOVED******REMOVED***defaultSystemName = "photo"
 ***REMOVED******REMOVED***case .video:
@@ -74,18 +74,16 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if attachment is FormAttachment {  ***REMOVED*** To be done after that class inherits from a protocol
 ***REMOVED******REMOVED******REMOVED***var url = attachment.fileURL!
-***REMOVED******REMOVED******REMOVED***if let formAttachment = attachment.formAttachment {
+***REMOVED******REMOVED******REMOVED***if let formAttachment = attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = formAttachment.loadStatus
   
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
 ***REMOVED******REMOVED******REMOVED******REMOVED***var tmpURL = attachment.fileURL
-***REMOVED******REMOVED******REMOVED******REMOVED***if let formAttachment = attachment.formAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.deletingLastPathComponent()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.appending(path: attachment.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_ = FileManager.default.secureCopyItem(at: attachment.fileURL!, to: tmpURL!)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.deletingLastPathComponent()
+***REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.appending(path: attachment.name)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***_ = FileManager.default.secureCopyItem(at: attachment.fileURL!, to: tmpURL!)
 ***REMOVED******REMOVED******REMOVED******REMOVED***url = tmpURL!
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let request = QLThumbnailGenerator.Request(
