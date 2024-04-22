@@ -34,7 +34,7 @@ struct AttachmentPreview: View {
     /// The new name the user has provided for the attachment.
     @State private var newAttachmentName = ""
     
-    /// The new name the user has provided for the attachment.
+    /// The attachment with the new name the user has provided.
     @State private var editedAttachment: FeatureAttachment?
 
     let onRename: ((FeatureAttachment, String) async throws -> Void)?
