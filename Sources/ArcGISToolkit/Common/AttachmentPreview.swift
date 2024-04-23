@@ -17,8 +17,11 @@ import SwiftUI
 
 /// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
+    /// The `AttachmentsFeatureElement` to display.
+    var featureElement: AttachmentsFeatureElement
+    
     /// The attachment models displayed in the list.
-    var attachmentModels: [AttachmentModel]
+    @State var attachmentModels: [AttachmentModel] = []
     
     /// The name for the existing attachment being edited.
     @State private var currentAttachmentName = ""
@@ -26,6 +29,8 @@ struct AttachmentPreview: View {
     /// A Boolean value indicating the user has requested that the attachment be deleted.
     @State private var deletionWillStart: Bool = false
     
+    @Environment(\.displayScale) var displayScale
+
     /// The attachment with the new name the user has provided.
     @State private var editedAttachment: FeatureAttachment?
     
@@ -41,13 +46,16 @@ struct AttachmentPreview: View {
     
     @State var shouldEnableEditControls: Bool
     
+    /// A Boolean value indicating the list of attachments needs updating.
+    @State private var needsAttachmentUpdates: Bool = true
+
     init(
-        attachmentModels: [AttachmentModel],
+        featureElement: AttachmentsFeatureElement,
         shouldEnableEditControls: Bool = false,
         onRename: ((FeatureAttachment, String) async throws -> Void)? = nil,
         onDelete: ((FeatureAttachment) async throws -> Void)? = nil
     ) {
-        self.attachmentModels = attachmentModels
+        self.featureElement = featureElement
         self.onRename = onRename
         self.onDelete = onDelete
         self.shouldEnableEditControls = shouldEnableEditControls
@@ -68,6 +76,7 @@ struct AttachmentPreview: View {
                                     Label("Rename", systemImage: "pencil")
                                 }
                                 Button(role: .destructive) {
+                                    editedAttachment = attachmentModel.attachment
                                     deletionWillStart = true
                                 } label: {
                                     Label("Delete", systemImage: "trash")
@@ -84,6 +93,7 @@ struct AttachmentPreview: View {
                 Task {
                     if let editedAttachment {
                         try? await onRename?(editedAttachment, newAttachmentName)
+                        needsAttachmentUpdates = true
                     }
                 }
             }
@@ -91,8 +101,31 @@ struct AttachmentPreview: View {
         .task(id: deletionWillStart) {
             guard deletionWillStart else { return }
             if let editedAttachment {
-                try? await onDelete?(editedAttachment)
+                do {
+                    try await onDelete?(editedAttachment)
+                    print("deleted attachment")
+                } catch {
+                    print("delete error: \(error)")
+                }
+                needsAttachmentUpdates = true
             }
+            deletionWillStart = false
+        }
+        .task(id: needsAttachmentUpdates) {
+            guard needsAttachmentUpdates else { return }
+            do {
+                let attachments = try await featureElement.featureAttachments
+                print("needsAttachmentUpdates count: \(attachments.count)")
+                attachmentModels = attachments
+                    .reversed()
+                    .map {
+                        AttachmentModel(attachment: $0,
+                                        displayScale: displayScale,
+                                        thumbnailSize: .previewSize
+                        )
+                    }
+            } catch { }
+            needsAttachmentUpdates = false
         }
     }
     
@@ -112,14 +145,14 @@ struct AttachmentPreview: View {
                             attachmentModel: attachmentModel,
                             size: attachmentModel.usingDefaultImage ?
                             CGSize(width: 36, height: 36) :
-                                CGSize(width: 120, height: 120)
+                                    .previewSize
                         )
-                        if !attachmentModel.usingDefaultImage {
+                        if attachmentModel.attachment.loadStatus == .loaded {
                             VStack {
                                 Spacer()
                                 ThumbnailViewFooter(
                                     attachmentModel: attachmentModel,
-                                    size: CGSize(width: 120, height: 120)
+                                    size: .previewSize
                                 )
                             }
                         }
@@ -129,7 +162,7 @@ struct AttachmentPreview: View {
                             .background(Material.thin, in: RoundedRectangle(cornerRadius: 8))
                     }
                 }
-                if attachmentModel.usingDefaultImage {
+                if !(attachmentModel.attachment.loadStatus == .loaded) && attachmentModel.usingDefaultImage {
                     Text(attachmentModel.attachment.name)
                         .lineLimit(1)
                         .truncationMode(.middle)
@@ -163,7 +196,7 @@ struct AttachmentPreview: View {
                     url = tmpURL
                 } else if attachmentModel.attachment.loadStatus == .notLoaded {
                     // Load the attachment model with the given size.
-                    attachmentModel.load(thumbnailSize: CGSize(width: 120, height: 120))
+                    attachmentModel.load()
                 }
             }
             .quickLookPreview($url)
@@ -215,5 +248,11 @@ struct ThumbnailViewFooter: View {
             }
             .padding([.leading, .trailing], 6)
         }
+    }
+}
+
+extension CGSize {
+    static var previewSize: CGSize {
+        .init(width: 120, height: 120)
     }
 }

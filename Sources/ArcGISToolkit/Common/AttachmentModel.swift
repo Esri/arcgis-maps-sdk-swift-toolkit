@@ -23,6 +23,21 @@ import SwiftUI
     /// The `FeatureAttachment`.
     let attachment: FeatureAttachment
     
+    /// A Boolean value specifying whether the thumbnails is the default image
+    /// or an image generated from the popup attachment.
+    var usingDefaultImage: Bool {
+        defaultSystemName != nil
+    }
+
+    /// The name of the system SF symbol used instead of `thumbnail`.
+    @Published var defaultSystemName: String?
+    
+    /// The display scale used to generate the thumbnail.
+    private var displayScale: CGFloat
+
+    /// The `LoadStatus` of the popup attachment.
+    @Published var loadStatus: LoadStatus = .notLoaded
+
     /// The thumbnail representing the attachment.
     @Published var thumbnail: UIImage? {
         didSet {
@@ -30,23 +45,15 @@ import SwiftUI
         }
     }
     
-    /// The name of the system SF symbol used instead of `thumbnail`.
-    @Published var defaultSystemName: String?
-    
-    /// The `LoadStatus` of the popup attachment.
-    @Published var loadStatus: LoadStatus = .notLoaded
-    
-    /// A Boolean value specifying whether the thumbnails is the default image
-    /// or an image generated from the popup attachment.
-    var usingDefaultImage: Bool {
-        defaultSystemName != nil
-    }
-    
-    private var displayScale: CGFloat
+    private var thumbnailSize: CGSize
 
-    init(attachment: FeatureAttachment, displayScale: CGFloat) {
+    init(attachment: FeatureAttachment,
+         displayScale: CGFloat,
+         thumbnailSize: CGSize = CGSize(width: 40, height: 40)
+    ) {
         self.attachment = attachment
         self.displayScale = displayScale
+        self.thumbnailSize = thumbnailSize
         
         switch attachment.featureAttachmentKind {
         case .image:
@@ -58,11 +65,17 @@ import SwiftUI
         @unknown default:
             defaultSystemName = "questionmark"
         }
+        
+        loadStatus = attachment.loadStatus
+        if loadStatus == .loaded {
+            internalMarkLoaded()
+        }
     }
     
     /// Loads the popup attachment and generates a thumbnail image.
     /// - Parameter thumbnailSize: The size for the generated thumbnail.
-    func load(thumbnailSize: CGSize = CGSize(width: 40, height: 40)) {
+    func load() {
+        guard attachment.loadStatus != .loaded else { return }
         Task {
             loadStatus = .loading
             try await attachment.load()
@@ -72,37 +85,44 @@ import SwiftUI
                 return
             }
             
-//            if attachment is FormAttachment {  // To be done after that class inherits from a protocol
-            var url = attachment.fileURL!
-            if let formAttachment = attachment as? FormAttachment {
-//                self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
-//                self.loadStatus = formAttachment.loadStatus
-  
-                // WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
-                // Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
-                var tmpURL = attachment.fileURL
-                tmpURL = tmpURL?.deletingLastPathComponent()
-                tmpURL = tmpURL?.appending(path: attachment.name)
-                
-                _ = FileManager.default.secureCopyItem(at: attachment.fileURL!, to: tmpURL!)
-                url = tmpURL!
-            }
-            let request = QLThumbnailGenerator.Request(
-                fileAt: url,
-//                fileAt: attachment.fileURL!,
-                size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
-                scale: displayScale,
-                representationTypes: .thumbnail)
+            internalMarkLoaded()
+        }
+    }
+    
+    /// Performs internal setup for a loaded attachment.
+    /// - Parameter thumbnailSize: The desired thumbnail size.
+    func internalMarkLoaded() {
+        var url = attachment.fileURL!
+//        if let formAttachment = attachment as? FormAttachment {
+        if attachment is FormAttachment {  // To be done after that class inherits from a protocol
+            //                self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
+            //                self.loadStatus = formAttachment.loadStatus
             
-            let generator = QLThumbnailGenerator.shared
-            generator.generateRepresentations(for: request) { [weak self] thumbnail, _, error in
-                guard let self = self else { return }
-                DispatchQueue.main.async {
-                    if let thumbnail = thumbnail {
-                        self.thumbnail = thumbnail.uiImage
-                    }
-                    self.loadStatus = self.attachment.loadStatus
+            // WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
+            // Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
+            var tmpURL = attachment.fileURL
+            tmpURL = tmpURL?.deletingLastPathComponent()
+            tmpURL = tmpURL?.appending(path: attachment.name)
+            
+            _ = FileManager.default.secureCopyItem(at: attachment.fileURL!, to: tmpURL!)
+            url = tmpURL!
+        }
+        let request = QLThumbnailGenerator.Request(
+            fileAt: url,
+            //                fileAt: attachment.fileURL!,
+            size: thumbnailSize,
+            scale: displayScale,
+            representationTypes: .thumbnail)
+        
+        let generator = QLThumbnailGenerator.shared
+        generator.generateRepresentations(for: request) { [weak self] thumbnail, _, error in
+            guard let self = self else { return }
+            print("QLThumbnailGenerator error: \(error); code = \((error as? QLThumbnailError)?.code)")
+            DispatchQueue.main.async {
+                if let thumbnail = thumbnail {
+                    self.thumbnail = thumbnail.uiImage
                 }
+                self.loadStatus = self.attachment.loadStatus
             }
         }
     }
