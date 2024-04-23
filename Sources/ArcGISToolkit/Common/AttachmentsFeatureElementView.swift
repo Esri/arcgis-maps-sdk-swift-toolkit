@@ -13,10 +13,10 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
 import QuickLook
+***REMOVED***
 
-***REMOVED***/ A view displaying an `AttachmentsFeatureElementView`.
+***REMOVED***/ A view displaying an `AttachmentsFeatureElement`.
 struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ The `AttachmentsFeatureElement` to display.
 ***REMOVED***var featureElement: AttachmentsFeatureElement
@@ -40,6 +40,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***case loaded([AttachmentModel])
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The current load state of the attachments.
 ***REMOVED***@State private var attachmentLoadingState: AttachmentLoadingState = .notLoaded
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a new `AttachmentsFeatureElementView`.
@@ -48,9 +49,11 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***self.featureElement = featureElement
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value denoting whether the Disclosure Group is expanded.
 ***REMOVED***@State private var isExpanded: Bool = true
 
 ***REMOVED******REMOVED***/ A boolean which determines whether attachment editing controls are enabled.
+***REMOVED******REMOVED***/ Note that editing controls are only applicable when the display type is Preview.
 ***REMOVED***private var shouldEnableEditControls: Bool = false
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -61,6 +64,9 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***case .loaded(let attachmentModels):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if shouldEnableEditControls {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If editing is enabled, don't show attachments in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** a disclosure group, but also ALWAYS show
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the list of attachments, even if there are none.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentHeader
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED******REMOVED*** else if !attachmentModels.isEmpty {
@@ -76,13 +82,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***guard case .notLoaded = attachmentLoadingState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loading
-***REMOVED******REMOVED******REMOVED***var attachments = (try? await featureElement.featureAttachments) ?? []
-***REMOVED******REMOVED******REMOVED***print("attachment count: \(attachments.count)")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await addDemoAttachments()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***attachments = (try? await featureElement.attachments) ?? []
-***REMOVED******REMOVED******REMOVED******REMOVED***print("attachment count: \(attachments.count)")
+***REMOVED******REMOVED******REMOVED***let attachments = (try? await featureElement.featureAttachments) ?? []
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let attachmentModels = attachments
 ***REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
@@ -134,6 +134,11 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Renames the given attachment.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - attachment: The attachment to rename.
+***REMOVED******REMOVED***/   - newAttachmentName: The new attachment name.
+***REMOVED******REMOVED***/ - Returns: Nothing.
 ***REMOVED***func onRename(attachment: FeatureAttachment, newAttachmentName: String) async throws -> Void {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentFormElement,
 ***REMOVED******REMOVED***   let attachment = attachment as? FormAttachment {
@@ -141,56 +146,14 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Deletes the given attachment.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - attachment: The attachment to delete.
+***REMOVED******REMOVED***/ - Returns: Nothing.
 ***REMOVED***func onDelete(attachment: FeatureAttachment) async throws -> Void {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentFormElement,
 ***REMOVED******REMOVED***   let attachment = attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***try await element.deleteAttachment(attachment)
-***REMOVED***
-***REMOVED***
-
-***REMOVED***private func addDemoAttachments() async throws {
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***let data = UIImage(named: "forest.jpg")!.jpegData(compressionQuality: 1.0)!
-***REMOVED******REMOVED******REMOVED******REMOVED***let data = UIImage(named: "forest.jpg")!.pngData()!
-***REMOVED******REMOVED******REMOVED***print("data: \(data); size: \(data.count)")
-***REMOVED******REMOVED******REMOVED******REMOVED***arcgisFeature.addAttachment(withName: "Attachment.png", contentType: "png", data: data) { [weak self] (attachment:AGSAttachment?, error:Error?) -> Void in
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***var url = URL(filePath: "/Users/mark1113_1/Development/PopupAttachmentTestFiles/forest.jpg")
-***REMOVED******REMOVED******REMOVED******REMOVED***let image = UIImage(contentsOfFile: url.absoluteString)
-***REMOVED******REMOVED******REMOVED******REMOVED***print("image = \(image)")
-***REMOVED******REMOVED******REMOVED******REMOVED***var data = try? Data(contentsOf: url)
-***REMOVED******REMOVED******REMOVED***let attachment = try await (featureElement as? AttachmentFormElement)?.addAttachment(
-***REMOVED******REMOVED******REMOVED******REMOVED***name: "forest",
-***REMOVED******REMOVED******REMOVED******REMOVED***contentType: "image/jpg",
-***REMOVED******REMOVED******REMOVED******REMOVED***data: data
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***print("added one attachment")
-***REMOVED******REMOVED******REMOVED******REMOVED***url = URL(filePath: "/Users/mark1113_1/Development/PopupAttachmentTestFiles/DeadLaptop.mov")
-***REMOVED******REMOVED******REMOVED******REMOVED***data = try? Data(contentsOf: url)
-***REMOVED******REMOVED******REMOVED******REMOVED***try await featureElement.attachmentFormElement?.addAttachment(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: "Dead Laptop",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: "quicktime",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: data
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***print("added two attachment")
-***REMOVED******REMOVED******REMOVED******REMOVED***url = URL(filePath: "/Users/mark1113_1/Development/PopupAttachmentTestFiles/Barefoot Contessa | Emily's English Roasted Potatoes | Recipes.pdf")
-***REMOVED******REMOVED******REMOVED******REMOVED***data = try? Data(contentsOf: url)
-***REMOVED******REMOVED******REMOVED******REMOVED***try await featureElement.attachmentFormElement?.addAttachment(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: "Emily's English Roasted Potatoes",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: "pdf",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: data
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***print("added three attachment")
-***REMOVED******REMOVED******REMOVED******REMOVED***url = URL(filePath: "/Users/mark1113_1/Development/PopupAttachmentTestFiles/sample3.mp3")
-***REMOVED******REMOVED******REMOVED******REMOVED***data = try? Data(contentsOf: url)
-***REMOVED******REMOVED******REMOVED******REMOVED***try await featureElement.attachmentFormElement?.addAttachment(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: "sample3",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: "mp3",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: data
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***print("added four attachment")
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***print("error adding attachment: \(error.localizedDescription)")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

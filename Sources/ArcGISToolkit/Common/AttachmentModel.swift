@@ -79,6 +79,7 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = formAttachment.loadStatus
   
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
 ***REMOVED******REMOVED******REMOVED******REMOVED***var tmpURL = attachment.fileURL
 ***REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.deletingLastPathComponent()
 ***REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.appending(path: attachment.name)

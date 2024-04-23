@@ -17,16 +17,21 @@ import OSLog
 ***REMOVED***
 import UniformTypeIdentifiers
 
-***REMOVED***/ The popup menu shown when the new attachment button is pressed.
+***REMOVED***/ The context menu shown when the new attachment button is pressed.
 struct AttachmentImportMenu: View {
 ***REMOVED***
+***REMOVED******REMOVED***/ Data used to create the attachment.
 ***REMOVED***private struct AttachmentData: Equatable {
 ***REMOVED******REMOVED***var data: Data
 ***REMOVED******REMOVED***var contentType: String
 ***REMOVED******REMOVED***var fileName: String = ""
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The attachment form element displaying the menu.
 ***REMOVED***private let element: AttachmentFormElement
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates an `AttachmentImportMenu`
+***REMOVED******REMOVED***/ - Parameter element: The attachment form element displaying the menu.
 ***REMOVED***init(element: AttachmentFormElement) {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED***
@@ -73,6 +78,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "plus")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
 ***REMOVED***
+#if targetEnvironment(macCatalyst)
+***REMOVED******REMOVED***.menuStyle(.borderlessButton)
+#endif
 ***REMOVED******REMOVED***.task(id: newAttachmentData) {
 ***REMOVED******REMOVED******REMOVED***guard let newAttachmentData else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
@@ -136,6 +144,8 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 
 extension URL {
+***REMOVED******REMOVED***/ The Mime type based on the path extension.
+***REMOVED******REMOVED***/ - Returns: The Mime type string.
 ***REMOVED***public func mimeType() -> String {
 ***REMOVED******REMOVED***if let mimeType = UTType(filenameExtension: self.pathExtension)?.preferredMIMEType {
 ***REMOVED******REMOVED******REMOVED***return mimeType

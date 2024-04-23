@@ -20,26 +20,26 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ The attachment models displayed in the list.
 ***REMOVED***var attachmentModels: [AttachmentModel]
 ***REMOVED***
-***REMOVED***@State var shouldEnableEditControls: Bool
-***REMOVED***
+***REMOVED******REMOVED***/ The name for the existing attachment being edited.
+***REMOVED***@State private var currentAttachmentName = ""
+
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be deleted.
 ***REMOVED***@State private var deletionWillStart: Bool = false
+***REMOVED***
+***REMOVED******REMOVED***/ The attachment with the new name the user has provided.
+***REMOVED***@State private var editedAttachment: FeatureAttachment?
+***REMOVED***
+***REMOVED******REMOVED***/ The new name the user has provided for the attachment.
+***REMOVED***@State private var newAttachmentName = ""
+
+***REMOVED***let onDelete: ((FeatureAttachment) async throws -> Void)?
+***REMOVED***
+***REMOVED***let onRename: ((FeatureAttachment, String) async throws -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
 ***REMOVED***@State private var renameDialogueIsShowing = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The name for the existing attachment being edited.
-***REMOVED***@State private var currentAttachmentName = ""
-***REMOVED***
-***REMOVED******REMOVED***/ The new name the user has provided for the attachment.
-***REMOVED***@State private var newAttachmentName = ""
-***REMOVED***
-***REMOVED******REMOVED***/ The attachment with the new name the user has provided.
-***REMOVED***@State private var editedAttachment: FeatureAttachment?
-
-***REMOVED***let onRename: ((FeatureAttachment, String) async throws -> Void)?
-***REMOVED***
-***REMOVED***let onDelete: ((FeatureAttachment) async throws -> Void)?
+***REMOVED***@State var shouldEnableEditControls: Bool
 ***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
@@ -96,28 +96,6 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***@ViewBuilder var attachmentContextMenu: some View {
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***onRename()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Label("Rename", systemImage: "pencil")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED***onDelete()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Label("Delete", systemImage: "trash")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***private func onRename() {
-***REMOVED******REMOVED******REMOVED***newAttachmentName = formAttachment.name
-***REMOVED******REMOVED******REMOVED***renameDialogueIsShowing = true
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***private func onDelete() {
-***REMOVED******REMOVED******REMOVED***deletionWillStart = true
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ A view representing a single cell in an `AttachmentPreview`.
 ***REMOVED***struct AttachmentCell: View  {
 ***REMOVED******REMOVED******REMOVED***/ The model representing the attachment to display.
@@ -136,6 +114,15 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CGSize(width: 36, height: 36) :
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CGSize(width: 120, height: 120)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !attachmentModel.usingDefaultImage {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ThumbnailViewFooter(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel: attachmentModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: CGSize(width: 120, height: 120)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
@@ -165,6 +152,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the url to trigger `.quickLookPreview`.
 
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var tmpURL =  attachmentModel.attachment.fileURL
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let formAttachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.deletingLastPathComponent()
@@ -178,13 +166,12 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load(thumbnailSize: CGSize(width: 120, height: 120))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-#if !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
-#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED*** Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
 extension FileManager {
 ***REMOVED***func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
 ***REMOVED******REMOVED***do {
@@ -197,6 +184,36 @@ extension FileManager {
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***return true
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ A view displaying details for popup media.
+struct ThumbnailViewFooter: View {
+***REMOVED******REMOVED***/ The popup media to display.
+***REMOVED***let attachmentModel: AttachmentModel
+***REMOVED***
+***REMOVED******REMOVED***/ The size of the media's frame.
+***REMOVED***let size: CGSize
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
+***REMOVED******REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LinearGradient(gradient: gradient, startPoint: .bottom, endPoint: .top)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: size.height * 0.25)
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !attachmentModel.attachment.name.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.attachment.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding([.leading, .trailing], 6)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

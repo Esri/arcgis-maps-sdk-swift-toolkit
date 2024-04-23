@@ -16,7 +16,7 @@ import OSLog
 import PhotosUI
 ***REMOVED***
 
-***REMOVED***/ A wrapper that provides either a legacy photo picker or the iOS 16.0+ PhotosPicker.
+***REMOVED***/ A wrapper that provides access to the PhotosPicker.
 struct AttachmentPhotoPicker: ViewModifier {
 ***REMOVED******REMOVED***/ The new attachment data retrieved from the photos picker.
 ***REMOVED***@Binding var newAttachmentData: Data?
@@ -24,27 +24,18 @@ struct AttachmentPhotoPicker: ViewModifier {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the photos picker is presented.
 ***REMOVED***@Binding var photoPickerIsShowing: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ - WARNING: The iOS 15 picker is not implemented.
 ***REMOVED***func body(content: Content) -> some View {
-***REMOVED******REMOVED***if #available(iOS 16.0, *) {
-***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED***.modifier(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PhotoPickerWrapper(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentData: $newAttachmentData,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***photoPickerIsShowing: $photoPickerIsShowing
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED***.modifier(
+***REMOVED******REMOVED******REMOVED******REMOVED***PhotoPickerWrapper(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentData: $newAttachmentData,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***photoPickerIsShowing: $photoPickerIsShowing
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $photoPickerIsShowing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Not Supported")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
-@available(iOS 16.0, *)
-***REMOVED***/ A wrapper for the iOS 16.0+ PhotosPicker API.
+***REMOVED***/ A wrapper for the PhotosPicker API.
 struct PhotoPickerWrapper: ViewModifier {
 ***REMOVED******REMOVED***/ The item selected in the photos picker.
 ***REMOVED***@State private var item: PhotosPickerItem?

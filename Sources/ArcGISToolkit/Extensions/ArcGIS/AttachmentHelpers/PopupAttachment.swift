@@ -16,6 +16,7 @@
 import Foundation
 
 extension PopupAttachment : FeatureAttachment {
+***REMOVED******REMOVED***/ The type of the attachment.
 ***REMOVED***public var featureAttachmentKind: FeatureAttachmentKind {
 ***REMOVED******REMOVED***FeatureAttachmentKind(kind: kind)
 ***REMOVED***
