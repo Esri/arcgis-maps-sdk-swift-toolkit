@@ -25,7 +25,7 @@ struct HomeView: View {
     
     var body: some View {
         if let portal = portal {
-            NavigationView {
+            NavigationStack {
                 WebMapsView(portal: portal)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
@@ -42,7 +42,6 @@ struct HomeView: View {
                         }
                     }
             }
-            .navigationViewStyle(.stack)
         } else {
             SignInView(portal: $portal)
         }
