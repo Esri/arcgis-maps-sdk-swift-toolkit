@@ -17,8 +17,11 @@
 
 ***REMOVED***/ A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
+***REMOVED******REMOVED***/ The `AttachmentsFeatureElement` to display.
+***REMOVED***var featureElement: AttachmentsFeatureElement
+***REMOVED***
 ***REMOVED******REMOVED***/ The attachment models displayed in the list.
-***REMOVED***var attachmentModels: [AttachmentModel]
+***REMOVED***@State var attachmentModels: [AttachmentModel] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name for the existing attachment being edited.
 ***REMOVED***@State private var currentAttachmentName = ""
@@ -26,6 +29,8 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be deleted.
 ***REMOVED***@State private var deletionWillStart: Bool = false
 ***REMOVED***
+***REMOVED***@Environment(\.displayScale) var displayScale
+
 ***REMOVED******REMOVED***/ The attachment with the new name the user has provided.
 ***REMOVED***@State private var editedAttachment: FeatureAttachment?
 ***REMOVED***
@@ -41,13 +46,16 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***@State var shouldEnableEditControls: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating the list of attachments needs updating.
+***REMOVED***@State private var needsAttachmentUpdates: Bool = true
+
 ***REMOVED***init(
-***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
+***REMOVED******REMOVED***featureElement: AttachmentsFeatureElement,
 ***REMOVED******REMOVED***shouldEnableEditControls: Bool = false,
 ***REMOVED******REMOVED***onRename: ((FeatureAttachment, String) async throws -> Void)? = nil,
 ***REMOVED******REMOVED***onDelete: ((FeatureAttachment) async throws -> Void)? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.attachmentModels = attachmentModels
+***REMOVED******REMOVED***self.featureElement = featureElement
 ***REMOVED******REMOVED***self.onRename = onRename
 ***REMOVED******REMOVED***self.onDelete = onDelete
 ***REMOVED******REMOVED***self.shouldEnableEditControls = shouldEnableEditControls
@@ -68,6 +76,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Rename", systemImage: "pencil")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editedAttachment = attachmentModel.attachment
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***deletionWillStart = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Delete", systemImage: "trash")
@@ -84,6 +93,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let editedAttachment {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await onRename?(editedAttachment, newAttachmentName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***needsAttachmentUpdates = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -91,8 +101,31 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***.task(id: deletionWillStart) {
 ***REMOVED******REMOVED******REMOVED***guard deletionWillStart else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***if let editedAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await onDelete?(editedAttachment)
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await onDelete?(editedAttachment)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("deleted attachment")
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("delete error: \(error)")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***needsAttachmentUpdates = true
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***deletionWillStart = false
+***REMOVED***
+***REMOVED******REMOVED***.task(id: needsAttachmentUpdates) {
+***REMOVED******REMOVED******REMOVED***guard needsAttachmentUpdates else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***let attachments = try await featureElement.featureAttachments
+***REMOVED******REMOVED******REMOVED******REMOVED***print("needsAttachmentUpdates count: \(attachments.count)")
+***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels = attachments
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.map {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(attachment: $0,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayScale: displayScale,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize: .previewSize
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** catch { ***REMOVED***
+***REMOVED******REMOVED******REMOVED***needsAttachmentUpdates = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -112,14 +145,14 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel: attachmentModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: attachmentModel.usingDefaultImage ?
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CGSize(width: 36, height: 36) :
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CGSize(width: 120, height: 120)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.previewSize
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !attachmentModel.usingDefaultImage {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ThumbnailViewFooter(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel: attachmentModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: CGSize(width: 120, height: 120)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: .previewSize
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -129,7 +162,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Material.thin, in: RoundedRectangle(cornerRadius: 8))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.usingDefaultImage {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !(attachmentModel.attachment.loadStatus == .loaded) && attachmentModel.usingDefaultImage {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.attachment.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.middle)
@@ -163,7 +196,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url = tmpURL
 ***REMOVED******REMOVED******REMOVED*** else if attachmentModel.attachment.loadStatus == .notLoaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Load the attachment model with the given size.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load(thumbnailSize: CGSize(width: 120, height: 120))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
@@ -215,5 +248,11 @@ struct ThumbnailViewFooter: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.leading, .trailing], 6)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension CGSize {
+***REMOVED***static var previewSize: CGSize {
+***REMOVED******REMOVED***.init(width: 120, height: 120)
 ***REMOVED***
 ***REMOVED***

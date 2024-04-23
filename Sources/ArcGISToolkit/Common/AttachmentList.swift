@@ -17,12 +17,25 @@
 
 ***REMOVED***/ A view displaying a list of attachments, with a thumbnail, title, and download button.
 struct AttachmentList: View {
-***REMOVED******REMOVED***/ The attachment models displayed in the list.
-***REMOVED***var attachmentModels: [AttachmentModel]
+***REMOVED******REMOVED***/ The `AttachmentsFeatureElement` to display.
+***REMOVED***var featureElement: AttachmentsFeatureElement
 ***REMOVED***
+***REMOVED******REMOVED***/ The attachment models displayed in the list.
+***REMOVED***@State var attachmentModels: [AttachmentModel] = []
+***REMOVED***
+***REMOVED***@Environment(\.displayScale) var displayScale
+
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
 ***REMOVED******REMOVED******REMOVED***AttachmentRow(attachmentModel: attachmentModel)
+***REMOVED***
+***REMOVED******REMOVED***.onAppear() {
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***let attachments = try await featureElement.featureAttachments
+***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels = attachments
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.map { AttachmentModel(attachment: $0, displayScale: displayScale) ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
