@@ -15,14 +15,9 @@
 import ArcGIS
 import Foundation
 
-extension AttachmentsPopupElement : AttachmentsFeatureElement {
-    public var attachmentDisplayType: AttachmentsFeatureElementDisplayType {
-        AttachmentsFeatureElementDisplayType(kind: displayType)
-    }
-    
-    public var featureAttachments: [FeatureAttachment] {
-        get async throws {
-            try await attachments.map { $0 as! FeatureAttachment }
-        }
+extension FormAttachment : FeatureAttachment {
+    /// The type of the attachment.
+    public var featureAttachmentKind: FeatureAttachmentKind {
+        FeatureAttachmentKind(contentType: contentType)
     }
 }

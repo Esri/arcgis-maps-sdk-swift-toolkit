@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
 import QuickLook
+import SwiftUI
 
-/// A view displaying an `AttachmentsFeatureElementView`.
+/// A view displaying an `AttachmentsFeatureElement`.
 struct AttachmentsFeatureElementView: View {
     /// The `AttachmentsFeatureElement` to display.
     var featureElement: AttachmentsFeatureElement
@@ -40,6 +40,7 @@ struct AttachmentsFeatureElementView: View {
         case loaded([AttachmentModel])
     }
     
+    /// The current load state of the attachments.
     @State private var attachmentLoadingState: AttachmentLoadingState = .notLoaded
     
     /// Creates a new `AttachmentsFeatureElementView`.
@@ -48,9 +49,11 @@ struct AttachmentsFeatureElementView: View {
         self.featureElement = featureElement
     }
     
+    /// A Boolean value denoting whether the Disclosure Group is expanded.
     @State private var isExpanded: Bool = true
 
     /// A boolean which determines whether attachment editing controls are enabled.
+    /// Note that editing controls are only applicable when the display type is Preview.
     private var shouldEnableEditControls: Bool = false
     
     var body: some View {
@@ -61,6 +64,9 @@ struct AttachmentsFeatureElementView: View {
                     .padding()
             case .loaded(let attachmentModels):
                 if shouldEnableEditControls {
+                    // If editing is enabled, don't show attachments in
+                    // a disclosure group, but also ALWAYS show
+                    // the list of attachments, even if there are none.
                     attachmentHeader
                     attachmentBody(attachmentModels: attachmentModels)
                 } else if !attachmentModels.isEmpty {
@@ -76,13 +82,7 @@ struct AttachmentsFeatureElementView: View {
         .task {
             guard case .notLoaded = attachmentLoadingState else { return }
             attachmentLoadingState = .loading
-            var attachments = (try? await featureElement.featureAttachments) ?? []
-            print("attachment count: \(attachments.count)")
-            
-//            try? await addDemoAttachments()
-//            
-//            attachments = (try? await featureElement.attachments) ?? []
-//            print("attachment count: \(attachments.count)")
+            let attachments = (try? await featureElement.featureAttachments) ?? []
             
             let attachmentModels = attachments
                 .reversed()
@@ -134,6 +134,11 @@ struct AttachmentsFeatureElementView: View {
         }
     }
     
+    /// Renames the given attachment.
+    /// - Parameters:
+    ///   - attachment: The attachment to rename.
+    ///   - newAttachmentName: The new attachment name.
+    /// - Returns: Nothing.
     func onRename(attachment: FeatureAttachment, newAttachmentName: String) async throws -> Void {
         if let element = featureElement as? AttachmentFormElement,
            let attachment = attachment as? FormAttachment {
@@ -141,56 +146,14 @@ struct AttachmentsFeatureElementView: View {
         }
     }
     
+    /// Deletes the given attachment.
+    /// - Parameters:
+    ///   - attachment: The attachment to delete.
+    /// - Returns: Nothing.
     func onDelete(attachment: FeatureAttachment) async throws -> Void {
         if let element = featureElement as? AttachmentFormElement,
            let attachment = attachment as? FormAttachment {
             try await element.deleteAttachment(attachment)
-        }
-    }
-
-    private func addDemoAttachments() async throws {
-        do {
-            let data = UIImage(named: "forest.jpg")!.jpegData(compressionQuality: 1.0)!
-//            let data = UIImage(named: "forest.jpg")!.pngData()!
-            print("data: \(data); size: \(data.count)")
-//            arcgisFeature.addAttachment(withName: "Attachment.png", contentType: "png", data: data) { [weak self] (attachment:AGSAttachment?, error:Error?) -> Void in
-//            
-//            var url = URL(filePath: "/Users/mark1113_1/Development/PopupAttachmentTestFiles/forest.jpg")
-//            let image = UIImage(contentsOfFile: url.absoluteString)
-//            print("image = \(image)")
-//            var data = try? Data(contentsOf: url)
-            let attachment = try await (featureElement as? AttachmentFormElement)?.addAttachment(
-                name: "forest",
-                contentType: "image/jpg",
-                data: data
-            )
-            print("added one attachment")
-//            url = URL(filePath: "/Users/mark1113_1/Development/PopupAttachmentTestFiles/DeadLaptop.mov")
-//            data = try? Data(contentsOf: url)
-//            try await featureElement.attachmentFormElement?.addAttachment(
-//                name: "Dead Laptop",
-//                contentType: "quicktime",
-//                data: data
-//            )
-//            print("added two attachment")
-//            url = URL(filePath: "/Users/mark1113_1/Development/PopupAttachmentTestFiles/Barefoot Contessa | Emily's English Roasted Potatoes | Recipes.pdf")
-//            data = try? Data(contentsOf: url)
-//            try await featureElement.attachmentFormElement?.addAttachment(
-//                name: "Emily's English Roasted Potatoes",
-//                contentType: "pdf",
-//                data: data
-//            )
-//            print("added three attachment")
-//            url = URL(filePath: "/Users/mark1113_1/Development/PopupAttachmentTestFiles/sample3.mp3")
-//            data = try? Data(contentsOf: url)
-//            try await featureElement.attachmentFormElement?.addAttachment(
-//                name: "sample3",
-//                contentType: "mp3",
-//                data: data
-//            )
-//            print("added four attachment")
-        } catch {
-            print("error adding attachment: \(error.localizedDescription)")
         }
     }
 }
