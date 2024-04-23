@@ -79,6 +79,7 @@ import SwiftUI
 //                self.loadStatus = formAttachment.loadStatus
   
                 // WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
+                // Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
                 var tmpURL = attachment.fileURL
                 tmpURL = tmpURL?.deletingLastPathComponent()
                 tmpURL = tmpURL?.appending(path: attachment.name)

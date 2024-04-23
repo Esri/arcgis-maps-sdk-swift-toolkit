@@ -17,16 +17,21 @@ import OSLog
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// The popup menu shown when the new attachment button is pressed.
+/// The context menu shown when the new attachment button is pressed.
 struct AttachmentImportMenu: View {
     
+    /// Data used to create the attachment.
     private struct AttachmentData: Equatable {
         var data: Data
         var contentType: String
         var fileName: String = ""
     }
+    
+    /// The attachment form element displaying the menu.
     private let element: AttachmentFormElement
     
+    /// Creates an `AttachmentImportMenu`
+    /// - Parameter element: The attachment form element displaying the menu.
     init(element: AttachmentFormElement) {
         self.element = element
     }
@@ -73,6 +78,9 @@ struct AttachmentImportMenu: View {
             Image(systemName: "plus")
                 .font(.title2)
         }
+#if targetEnvironment(macCatalyst)
+        .menuStyle(.borderlessButton)
+#endif
         .task(id: newAttachmentData) {
             guard let newAttachmentData else { return }
             do {
@@ -136,6 +144,8 @@ struct AttachmentImportMenu: View {
 }
 
 extension URL {
+    /// The Mime type based on the path extension.
+    /// - Returns: The Mime type string.
     public func mimeType() -> String {
         if let mimeType = UTType(filenameExtension: self.pathExtension)?.preferredMIMEType {
             return mimeType

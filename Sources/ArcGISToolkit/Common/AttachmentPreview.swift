@@ -12,34 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
     /// The attachment models displayed in the list.
     var attachmentModels: [AttachmentModel]
     
-    @State var shouldEnableEditControls: Bool
-    
+    /// The name for the existing attachment being edited.
+    @State private var currentAttachmentName = ""
+
     /// A Boolean value indicating the user has requested that the attachment be deleted.
     @State private var deletionWillStart: Bool = false
+    
+    /// The attachment with the new name the user has provided.
+    @State private var editedAttachment: FeatureAttachment?
+    
+    /// The new name the user has provided for the attachment.
+    @State private var newAttachmentName = ""
+
+    let onDelete: ((FeatureAttachment) async throws -> Void)?
+    
+    let onRename: ((FeatureAttachment, String) async throws -> Void)?
     
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
     
-    /// The name for the existing attachment being edited.
-    @State private var currentAttachmentName = ""
-    
-    /// The new name the user has provided for the attachment.
-    @State private var newAttachmentName = ""
-    
-    /// The attachment with the new name the user has provided.
-    @State private var editedAttachment: FeatureAttachment?
-
-    let onRename: ((FeatureAttachment, String) async throws -> Void)?
-    
-    let onDelete: ((FeatureAttachment) async throws -> Void)?
+    @State var shouldEnableEditControls: Bool
     
     init(
         attachmentModels: [AttachmentModel],
@@ -96,28 +96,6 @@ struct AttachmentPreview: View {
         }
     }
     
-//    @ViewBuilder var attachmentContextMenu: some View {
-//        Button {
-//            onRename()
-//        } label: {
-//            Label("Rename", systemImage: "pencil")
-//        }
-//        Button(role: .destructive) {
-//            onDelete()
-//        } label: {
-//            Label("Delete", systemImage: "trash")
-//        }
-//    }
-//    
-//    private func onRename() {
-//        newAttachmentName = formAttachment.name
-//        renameDialogueIsShowing = true
-//    }
-//    
-//    private func onDelete() {
-//        deletionWillStart = true
-//    }
-    
     /// A view representing a single cell in an `AttachmentPreview`.
     struct AttachmentCell: View  {
         /// The model representing the attachment to display.
@@ -136,6 +114,15 @@ struct AttachmentPreview: View {
                             CGSize(width: 36, height: 36) :
                                 CGSize(width: 120, height: 120)
                         )
+                        if !attachmentModel.usingDefaultImage {
+                            VStack {
+                                Spacer()
+                                ThumbnailViewFooter(
+                                    attachmentModel: attachmentModel,
+                                    size: CGSize(width: 120, height: 120)
+                                )
+                            }
+                        }
                     } else {
                         ProgressView()
                             .padding(8)
@@ -165,6 +152,7 @@ struct AttachmentPreview: View {
                     // Set the url to trigger `.quickLookPreview`.
 
                     // WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
+                    // Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
                     var tmpURL =  attachmentModel.attachment.fileURL
                     if let formAttachment = attachmentModel.attachment as? FormAttachment {
                         tmpURL = tmpURL?.deletingLastPathComponent()
@@ -178,13 +166,12 @@ struct AttachmentPreview: View {
                     attachmentModel.load(thumbnailSize: CGSize(width: 120, height: 120))
                 }
             }
-#if !targetEnvironment(macCatalyst)
             .quickLookPreview($url)
-#endif
         }
     }
 }
 
+// Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
 extension FileManager {
     func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
         do {
@@ -199,4 +186,34 @@ extension FileManager {
         return true
     }
     
+}
+
+/// A view displaying details for popup media.
+struct ThumbnailViewFooter: View {
+    /// The popup media to display.
+    let attachmentModel: AttachmentModel
+    
+    /// The size of the media's frame.
+    let size: CGSize
+    
+    var body: some View {
+        ZStack {
+            let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
+            Rectangle()
+                .fill(
+                    LinearGradient(gradient: gradient, startPoint: .bottom, endPoint: .top)
+                )
+                .frame(height: size.height * 0.25)
+            HStack {
+                if !attachmentModel.attachment.name.isEmpty {
+                    Text(attachmentModel.attachment.name)
+                        .foregroundColor(.white)
+                        .font(.caption)
+                        .lineLimit(1)
+                }
+                Spacer()
+            }
+            .padding([.leading, .trailing], 6)
+        }
+    }
 }

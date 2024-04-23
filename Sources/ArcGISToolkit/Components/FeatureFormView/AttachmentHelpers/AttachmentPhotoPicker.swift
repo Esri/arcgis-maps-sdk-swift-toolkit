@@ -16,7 +16,7 @@ import OSLog
 import PhotosUI
 import SwiftUI
 
-/// A wrapper that provides either a legacy photo picker or the iOS 16.0+ PhotosPicker.
+/// A wrapper that provides access to the PhotosPicker.
 struct AttachmentPhotoPicker: ViewModifier {
     /// The new attachment data retrieved from the photos picker.
     @Binding var newAttachmentData: Data?
@@ -24,27 +24,18 @@ struct AttachmentPhotoPicker: ViewModifier {
     /// A Boolean value indicating whether the photos picker is presented.
     @Binding var photoPickerIsShowing: Bool
     
-    /// - WARNING: The iOS 15 picker is not implemented.
     func body(content: Content) -> some View {
-        if #available(iOS 16.0, *) {
-            content
-                .modifier(
-                    PhotoPickerWrapper(
-                        newAttachmentData: $newAttachmentData,
-                        photoPickerIsShowing: $photoPickerIsShowing
-                    )
+        content
+            .modifier(
+                PhotoPickerWrapper(
+                    newAttachmentData: $newAttachmentData,
+                    photoPickerIsShowing: $photoPickerIsShowing
                 )
-        } else {
-            content
-                .sheet(isPresented: $photoPickerIsShowing) {
-                    Text("Not Supported")
-                }
-        }
+            )
     }
 }
 
-@available(iOS 16.0, *)
-/// A wrapper for the iOS 16.0+ PhotosPicker API.
+/// A wrapper for the PhotosPicker API.
 struct PhotoPickerWrapper: ViewModifier {
     /// The item selected in the photos picker.
     @State private var item: PhotosPickerItem?
