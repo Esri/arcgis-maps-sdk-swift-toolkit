@@ -91,25 +91,18 @@ import SwiftUI
                 //                fileAt: attachment.fileURL!,
                 size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
                 scale: displayScale,
-                representationTypes: .thumbnail)
+                representationTypes: .all)
             
             let generator = QLThumbnailGenerator.shared
-            generator.generateRepresentations(for: request) { [weak self] thumbnail, _, error in
-                guard let self = self else { return }
+            do {
+                let thumbnail = try await generator.generateBestRepresentation(for: request)
                 DispatchQueue.main.async {
-                    if let thumbnail = thumbnail {
-                        self.thumbnail = thumbnail.uiImage
-                    } else {
-                        // This is a on-off to display a nice thumbnail
-                        // for mp3 files, which do not have a thumbnail generated
-                        // by the `QLThumbnailGenerator`.
-                        if url.pathExtension == "mp3" {
-                            self.systemImageName = "waveform.path"
-                        }
-                    }
-                    self.loadStatus = self.attachment.loadStatus
+                    self.thumbnail = thumbnail.uiImage
                 }
+            } catch {
+                systemImageName = "exclamationmark.circle.fill"
             }
+            self.loadStatus = self.attachment.loadStatus
         }
     }
 }
