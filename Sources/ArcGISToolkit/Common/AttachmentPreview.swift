@@ -110,11 +110,12 @@ struct AttachmentPreview: View {
                     if attachmentModel.loadStatus != .loading {
                         ThumbnailView(
                             attachmentModel: attachmentModel,
-                            size: attachmentModel.usingDefaultImage ?
+                            size: attachmentModel.usingSystemImage ?
                             CGSize(width: 36, height: 36) :
                                 CGSize(width: 120, height: 120)
                         )
-                        if !attachmentModel.usingDefaultImage {
+//                        if !attachmentModel.usingDefaultImage {
+                        if attachmentModel.loadStatus == .loaded {
                             VStack {
                                 Spacer()
                                 ThumbnailViewFooter(
@@ -129,7 +130,7 @@ struct AttachmentPreview: View {
                             .background(Material.thin, in: RoundedRectangle(cornerRadius: 8))
                     }
                 }
-                if attachmentModel.usingDefaultImage {
+                if attachmentModel.attachment.loadStatus != .loaded {
                     Text(attachmentModel.attachment.name)
                         .lineLimit(1)
                         .truncationMode(.middle)

@@ -26,20 +26,20 @@ import SwiftUI
     /// The thumbnail representing the attachment.
     @Published var thumbnail: UIImage? {
         didSet {
-            defaultSystemName = nil
+            systemImageName = nil
         }
     }
     
     /// The name of the system SF symbol used instead of `thumbnail`.
-    @Published var defaultSystemName: String?
+    @Published var systemImageName: String?
     
     /// The `LoadStatus` of the popup attachment.
     @Published var loadStatus: LoadStatus = .notLoaded
     
-    /// A Boolean value specifying whether the thumbnails is the default image
-    /// or an image generated from the popup attachment.
-    var usingDefaultImage: Bool {
-        defaultSystemName != nil
+    /// A Boolean value specifying whether the thumbnails is using a
+    /// system image or an image generated from the featire attachment.
+    var usingSystemImage: Bool {
+        systemImageName != nil
     }
     
     private var displayScale: CGFloat
@@ -50,13 +50,13 @@ import SwiftUI
         
         switch attachment.featureAttachmentKind {
         case .image:
-            defaultSystemName = "photo"
+            systemImageName = "photo"
         case .video:
-            defaultSystemName = "film"
+            systemImageName = "film"
         case .document, .other:
-            defaultSystemName = "doc"
+            systemImageName = "doc"
         @unknown default:
-            defaultSystemName = "questionmark"
+            systemImageName = "questionmark"
         }
     }
     
@@ -67,17 +67,16 @@ import SwiftUI
             loadStatus = .loading
             try await attachment.load()
             if attachment.loadStatus == .failed || attachment.fileURL == nil {
-                defaultSystemName = "exclamationmark.circle.fill"
+                systemImageName = "exclamationmark.circle.fill"
                 self.loadStatus = .failed
                 return
             }
             
-//            if attachment is FormAttachment {  // To be done after that class inherits from a protocol
             var url = attachment.fileURL!
-            if let formAttachment = attachment as? FormAttachment {
-//                self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
-//                self.loadStatus = formAttachment.loadStatus
-  
+            if attachment is FormAttachment {
+                //                self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
+                //                self.loadStatus = formAttachment.loadStatus
+                
                 // WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
                 // Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
                 var tmpURL = attachment.fileURL
@@ -89,7 +88,7 @@ import SwiftUI
             }
             let request = QLThumbnailGenerator.Request(
                 fileAt: url,
-//                fileAt: attachment.fileURL!,
+                //                fileAt: attachment.fileURL!,
                 size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
                 scale: displayScale,
                 representationTypes: .thumbnail)
@@ -100,6 +99,13 @@ import SwiftUI
                 DispatchQueue.main.async {
                     if let thumbnail = thumbnail {
                         self.thumbnail = thumbnail.uiImage
+                    } else {
+                        // This is a on-off to display a nice thumbnail
+                        // for mp3 files, which do not have a thumbnail generated
+                        // by the `QLThumbnailGenerator`.
+                        if url.pathExtension == "mp3" {
+                            self.systemImageName = "waveform.path"
+                        }
                     }
                     self.loadStatus = self.attachment.loadStatus
                 }

@@ -25,8 +25,8 @@ struct ThumbnailView: View  {
     
     var body: some View {
         Group {
-            if attachmentModel.usingDefaultImage,
-               let systemName = attachmentModel.defaultSystemName {
+            if attachmentModel.usingSystemImage,
+               let systemName = attachmentModel.systemImageName {
                 Image(systemName: systemName)
                     .resizable()
                     .renderingMode(.template)
@@ -50,6 +50,6 @@ struct ThumbnailView: View  {
     /// - Returns: A color to be used as the foreground color.
     func foregroundColor(for attachmentModel: AttachmentModel) -> Color {
         attachmentModel.loadStatus == .failed ? .red :
-        (attachmentModel.usingDefaultImage ? .gray : .primary)
+        (attachmentModel.usingSystemImage ? .gray : .primary)
     }
 }
