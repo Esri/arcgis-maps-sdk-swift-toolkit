@@ -23,21 +23,6 @@ import QuickLook
 ***REMOVED******REMOVED***/ The `FeatureAttachment`.
 ***REMOVED***let attachment: FeatureAttachment
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value specifying whether the thumbnails is the default image
-***REMOVED******REMOVED***/ or an image generated from the popup attachment.
-***REMOVED***var usingDefaultImage: Bool {
-***REMOVED******REMOVED***defaultSystemName != nil
-***REMOVED***
-
-***REMOVED******REMOVED***/ The name of the system SF symbol used instead of `thumbnail`.
-***REMOVED***@Published var defaultSystemName: String?
-***REMOVED***
-***REMOVED******REMOVED***/ The display scale used to generate the thumbnail.
-***REMOVED***private var displayScale: CGFloat
-
-***REMOVED******REMOVED***/ The `LoadStatus` of the popup attachment.
-***REMOVED***@Published var loadStatus: LoadStatus = .notLoaded
-
 ***REMOVED******REMOVED***/ The thumbnail representing the attachment.
 ***REMOVED***@Published var thumbnail: UIImage? {
 ***REMOVED******REMOVED***didSet {
@@ -45,15 +30,23 @@ import QuickLook
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private var thumbnailSize: CGSize
+***REMOVED******REMOVED***/ The name of the system SF symbol used instead of `thumbnail`.
+***REMOVED***@Published var defaultSystemName: String?
+***REMOVED***
+***REMOVED******REMOVED***/ The `LoadStatus` of the popup attachment.
+***REMOVED***@Published var loadStatus: LoadStatus = .notLoaded
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value specifying whether the thumbnails is the default image
+***REMOVED******REMOVED***/ or an image generated from the popup attachment.
+***REMOVED***var usingDefaultImage: Bool {
+***REMOVED******REMOVED***defaultSystemName != nil
+***REMOVED***
+***REMOVED***
+***REMOVED***private var displayScale: CGFloat
 
-***REMOVED***init(attachment: FeatureAttachment,
-***REMOVED******REMOVED*** displayScale: CGFloat,
-***REMOVED******REMOVED*** thumbnailSize: CGSize = CGSize(width: 40, height: 40)
-***REMOVED***) {
+***REMOVED***init(attachment: FeatureAttachment, displayScale: CGFloat) {
 ***REMOVED******REMOVED***self.attachment = attachment
 ***REMOVED******REMOVED***self.displayScale = displayScale
-***REMOVED******REMOVED***self.thumbnailSize = thumbnailSize
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch attachment.featureAttachmentKind {
 ***REMOVED******REMOVED***case .image:
@@ -65,17 +58,11 @@ import QuickLook
 ***REMOVED******REMOVED***@unknown default:
 ***REMOVED******REMOVED******REMOVED***defaultSystemName = "questionmark"
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***loadStatus = attachment.loadStatus
-***REMOVED******REMOVED***if loadStatus == .loaded {
-***REMOVED******REMOVED******REMOVED***internalMarkLoaded()
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the popup attachment and generates a thumbnail image.
 ***REMOVED******REMOVED***/ - Parameter thumbnailSize: The size for the generated thumbnail.
-***REMOVED***func load() {
-***REMOVED******REMOVED***guard attachment.loadStatus != .loaded else { return ***REMOVED***
+***REMOVED***func load(thumbnailSize: CGSize = CGSize(width: 40, height: 40)) {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***loadStatus = .loading
 ***REMOVED******REMOVED******REMOVED***try await attachment.load()
@@ -85,44 +72,37 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***internalMarkLoaded()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Performs internal setup for a loaded attachment.
-***REMOVED******REMOVED***/ - Parameter thumbnailSize: The desired thumbnail size.
-***REMOVED***func internalMarkLoaded() {
-***REMOVED******REMOVED***var url = attachment.fileURL!
+***REMOVED******REMOVED******REMOVED******REMOVED***if attachment is FormAttachment {  ***REMOVED*** To be done after that class inherits from a protocol
+***REMOVED******REMOVED******REMOVED***var url = attachment.fileURL!
 ***REMOVED******REMOVED******REMOVED***if let formAttachment = attachment as? FormAttachment {
-***REMOVED******REMOVED***if attachment is FormAttachment {  ***REMOVED*** To be done after that class inherits from a protocol
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = formAttachment.loadStatus
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
-***REMOVED******REMOVED******REMOVED******REMOVED*** Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
-***REMOVED******REMOVED******REMOVED***var tmpURL = attachment.fileURL
-***REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.deletingLastPathComponent()
-***REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.appending(path: attachment.name)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***_ = FileManager.default.secureCopyItem(at: attachment.fileURL!, to: tmpURL!)
-***REMOVED******REMOVED******REMOVED***url = tmpURL!
-***REMOVED***
-***REMOVED******REMOVED***let request = QLThumbnailGenerator.Request(
-***REMOVED******REMOVED******REMOVED***fileAt: url,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
-***REMOVED******REMOVED******REMOVED***size: thumbnailSize,
-***REMOVED******REMOVED******REMOVED***scale: displayScale,
-***REMOVED******REMOVED******REMOVED***representationTypes: .thumbnail)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = formAttachment.loadStatus
+  
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
+***REMOVED******REMOVED******REMOVED******REMOVED***var tmpURL = attachment.fileURL
+***REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.deletingLastPathComponent()
+***REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.appending(path: attachment.name)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***_ = FileManager.default.secureCopyItem(at: attachment.fileURL!, to: tmpURL!)
+***REMOVED******REMOVED******REMOVED******REMOVED***url = tmpURL!
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let generator = QLThumbnailGenerator.shared
-***REMOVED******REMOVED***generator.generateRepresentations(for: request) { [weak self] thumbnail, _, error in
-***REMOVED******REMOVED******REMOVED***guard let self = self else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***print("QLThumbnailGenerator error: \(error); code = \((error as? QLThumbnailError)?.code)")
-***REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnail = thumbnail {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
+***REMOVED******REMOVED******REMOVED***let request = QLThumbnailGenerator.Request(
+***REMOVED******REMOVED******REMOVED******REMOVED***fileAt: url,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
+***REMOVED******REMOVED******REMOVED******REMOVED***size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: displayScale,
+***REMOVED******REMOVED******REMOVED******REMOVED***representationTypes: .thumbnail)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = self.attachment.loadStatus
+***REMOVED******REMOVED******REMOVED***let generator = QLThumbnailGenerator.shared
+***REMOVED******REMOVED******REMOVED***generator.generateRepresentations(for: request) { [weak self] thumbnail, _, error in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnail = thumbnail {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = self.attachment.loadStatus
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

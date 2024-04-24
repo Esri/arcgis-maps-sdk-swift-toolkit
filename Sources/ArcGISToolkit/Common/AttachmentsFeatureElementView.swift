@@ -23,6 +23,8 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***@Environment(\.isPortraitOrientation) var isPortraitOrientation
 ***REMOVED***
+***REMOVED***@Environment(\.displayScale) var displayScale
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value denoting if the view should be shown as regular width.
 ***REMOVED***var isRegularWidth: Bool {
 ***REMOVED******REMOVED***!isPortraitOrientation
@@ -35,7 +37,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***/ Attachments are being loaded.
 ***REMOVED******REMOVED***case loading
 ***REMOVED******REMOVED******REMOVED***/ Attachments have been loaded.
-***REMOVED******REMOVED***case loaded([FeatureAttachment])
+***REMOVED******REMOVED***case loaded([AttachmentModel])
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current load state of the attachments.
@@ -60,16 +62,16 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading:
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED***case .loaded(let attachments):
+***REMOVED******REMOVED******REMOVED***case .loaded(let attachmentModels):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if shouldEnableEditControls {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If editing is enabled, don't show attachments in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** a disclosure group, but also ALWAYS show
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the list of attachments, even if there are none.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentHeader
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(featureElement: featureElement)
-***REMOVED******REMOVED******REMOVED*** else if !attachments.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)
+***REMOVED******REMOVED******REMOVED*** else if !attachmentModels.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(featureElement: featureElement)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentHeader
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
@@ -81,17 +83,21 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***guard case .notLoaded = attachmentLoadingState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loading
 ***REMOVED******REMOVED******REMOVED***let attachments = (try? await featureElement.featureAttachments) ?? []
-***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loaded(attachments)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let attachmentModels = attachments
+***REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
+***REMOVED******REMOVED******REMOVED******REMOVED***.map { AttachmentModel(attachment: $0, displayScale: displayScale) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loaded(attachmentModels)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ViewBuilder private func attachmentBody(featureElement: AttachmentsFeatureElement) -> some View {
+***REMOVED***@ViewBuilder private func attachmentBody(attachmentModels: [AttachmentModel]) -> some View {
 ***REMOVED******REMOVED***switch featureElement.attachmentDisplayType {
 ***REMOVED******REMOVED***case .list:
-***REMOVED******REMOVED******REMOVED***AttachmentList(featureElement: featureElement)
+***REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED***case .preview:
 ***REMOVED******REMOVED******REMOVED***AttachmentPreview(
-***REMOVED******REMOVED******REMOVED******REMOVED***featureElement: featureElement,
+***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
 ***REMOVED******REMOVED******REMOVED******REMOVED***shouldEnableEditControls: shouldEnableEditControls,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
@@ -100,13 +106,13 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***featureElement: featureElement,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldEnableEditControls: shouldEnableEditControls,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(featureElement: featureElement)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@unknown default:
@@ -147,11 +153,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***func onDelete(attachment: FeatureAttachment) async throws -> Void {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentFormElement,
 ***REMOVED******REMOVED***   let attachment = attachment as? FormAttachment {
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await element.deleteAttachment(attachment)
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("onDelete error: \(error)")
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***try await element.deleteAttachment(attachment)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
