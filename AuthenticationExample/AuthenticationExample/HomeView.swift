@@ -25,7 +25,7 @@ struct HomeView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if let portal = portal {
-***REMOVED******REMOVED******REMOVED***NavigationView {
+***REMOVED******REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***WebMapsView(portal: portal)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
@@ -42,7 +42,6 @@ struct HomeView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationViewStyle(.stack)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***SignInView(portal: $portal)
 ***REMOVED***

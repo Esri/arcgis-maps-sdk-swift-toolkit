@@ -243,6 +243,8 @@ extension Job.Status {
 ***REMOVED******REMOVED******REMOVED***return "Failed"
 ***REMOVED******REMOVED***case .canceling:
 ***REMOVED******REMOVED******REMOVED***return "Canceling"
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***return "Unknown"
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
