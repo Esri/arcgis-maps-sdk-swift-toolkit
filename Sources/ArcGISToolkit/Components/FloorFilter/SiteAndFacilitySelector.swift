@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view which allows selection of sites and facilities represented in a `FloorManager`.
 struct SiteAndFacilitySelector: View {
@@ -30,7 +30,7 @@ struct SiteAndFacilitySelector: View {
     private var isHidden: Binding<Bool>
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Group {
                 // If there's more than one site
                 if viewModel.sites.count > 1 {
@@ -53,7 +53,6 @@ struct SiteAndFacilitySelector: View {
                 }
             }
         }
-        .navigationViewStyle(.stack)
     }
     
     /// A view displaying the sites contained in a `FloorManager`.
@@ -67,8 +66,10 @@ struct SiteAndFacilitySelector: View {
         /// A site name filter phrase entered by the user.
         @State private var query: String = ""
         
-        /// Indicates that the user pressed the back button in the navigation view, indicating the
-        /// site should appear "de-selected" even though the viewpoint hasn't changed.
+        /// A Boolean value indicating whether the user pressed the back button in the navigation stack.
+        ///
+        /// This allows for programatic navigation back to the list of sites without clearing the view model's
+        /// selection. Leaving the view model's selection unmodified keeps the level selector visible.
         @State private var userBackedOutOfSelectedSite = false
         
         /// Allows the user to toggle the visibility of the site and facility selector.
@@ -94,7 +95,7 @@ struct SiteAndFacilitySelector: View {
                     NoMatchesView()
                 } else {
                     // Show the filtered set of sites
-                    siteListView
+                    sitesList
                 }
                 allSitesButton
             }
@@ -112,11 +113,13 @@ struct SiteAndFacilitySelector: View {
             )
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
-            .navigationTitle(String(
-                localized: "Sites",
-                bundle: .toolkitModule,
-                comment: "A label in reference to all of the sites in a floor-aware map or scene."
-            ))
+            .navigationTitle(
+                String(
+                    localized: "Sites",
+                    bundle: .toolkitModule,
+                    comment: "A label in reference to all of the sites in a floor-aware map or scene."
+                )
+            )
         }
         
         /// The "All sites" button.
@@ -143,54 +146,48 @@ struct SiteAndFacilitySelector: View {
                 )
             }
             .buttonStyle(.bordered)
-            .padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
+            .padding(.bottom, horizontalSizeClass == .compact ? 5 : 0)
         }
         
         /// A view containing a list of the site names.
         ///
         /// If `AutomaticSelectionMode` mode is in use, items will automatically be
         /// selected/deselected.
-        var siteListView: some View {
-            List(matchingSites) { site in
-                NavigationLink(
-                    site.name,
-                    tag: site,
-                    selection: Binding(
-                        get: {
-                            userBackedOutOfSelectedSite ? nil : viewModel.selection?.site
-                        },
-                        set: { newSite in
-                            guard let newSite = newSite else { return }
-                            userBackedOutOfSelectedSite = false
-                            viewModel.setSite(newSite, zoomTo: true)
-                        }
-                    )
-                ) {
-                    FacilitiesList(
-                        usesAllSitesStyling: false,
-                        facilities: site.facilities,
-                        isHidden: isHidden
-                    )
-                    .navigationBarBackButtonHidden(true)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button {
-                                userBackedOutOfSelectedSite = true
-                            } label: {
-                                Image(systemName: "chevron.left")
-                            }
-                        }
-                    }
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            CloseButton { isHidden.wrappedValue.toggle() }
-                        }
+        var sitesList: some View {
+            let list = {
+                List(matchingSites) { site in
+                    Button(site.name) {
+                        viewModel.setSite(site)
                     }
                 }
+                .listStyle(.plain)
+                .onChange(of: viewModel.selection) { _ in
+                    userBackedOutOfSelectedSite = false
+                }
             }
-            .listStyle(.plain)
-            .onChange(of: viewModel.selection) { _ in
-                userBackedOutOfSelectedSite = false
+            return Group {
+                if #available(iOS 17.0, *) {
+                    list()
+                        .navigationDestination(item: selectedSite) { site in
+                            makeFacilitiesList(site: site)
+                        }
+                } else {
+                    list()
+                        .navigationDestination(
+                            isPresented: Binding {
+                                selectedSite.wrappedValue != nil
+                            } set: { isPresented in
+                                if !isPresented {
+                                    viewModel.clearSelection()
+                                }
+                            },
+                            destination: {
+                                if let selectedSite = viewModel.selection?.site {
+                                    makeFacilitiesList(site: selectedSite)
+                                }
+                            }
+                        )
+                }
             }
         }
     }
@@ -206,7 +203,7 @@ struct SiteAndFacilitySelector: View {
         /// A facility name filter phrase entered by the user.
         @State var query: String = ""
         
-        /// When `true`, the facilites list will be display with all sites styling.
+        /// When `true`, the facilities list will be display with all sites styling.
         let usesAllSitesStyling: Bool
         
         /// `FloorFacility`s to be displayed by this view.
@@ -312,6 +309,49 @@ struct SiteAndFacilitySelector: View {
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+extension SiteAndFacilitySelector.SitesList {
+    /// The selected site as reflected in the state of the navigation stack.
+    ///
+    /// Note that the selection state of the navigation stack can differ from the selection state of the
+    /// view model. See `userBackedOutOfSelectedSite` for further explanation.
+    var selectedSite: Binding<FloorSite?> {
+        .init(
+            get: {
+                userBackedOutOfSelectedSite ? nil : viewModel.selection?.site
+            },
+            set: { newSite in
+                guard let newSite = newSite else { return }
+                userBackedOutOfSelectedSite = false
+                viewModel.setSite(newSite, zoomTo: true)
+            }
+        )
+    }
+    
+    /// Makes the list of facilities for a site from the sites list.
+    func makeFacilitiesList(site: FloorSite) -> some View {
+        SiteAndFacilitySelector.FacilitiesList(
+            usesAllSitesStyling: false,
+            facilities: site.facilities,
+            isHidden: isHidden
+        )
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    userBackedOutOfSelectedSite = true
+                } label: {
+                    Image(systemName: "chevron.left")
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                CloseButton { isHidden.wrappedValue.toggle() }
             }
         }
     }

@@ -23,14 +23,13 @@ struct Examples: View {
     ]
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List(lists) { (list) in
                 NavigationLink(list.name, destination: list)
             }
             .navigationTitle("Toolkit Examples")
             .navigationBarTitleDisplayMode(.inline)
         }
-        .navigationViewStyle(.stack)
     }
 }
 
