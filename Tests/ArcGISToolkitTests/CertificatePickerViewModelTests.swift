@@ -32,7 +32,7 @@ final class CertificatePickerViewModelTests: XCTestCase {
         
         // Have to wait here because the proceed function is delayed to avoid a bug.
         XCTExpectFailure(
-            "fulfillment(of:timeout:enforceOrder:) doesn't work properly with Xcode 15.0 CLI tools. Ref Toolkit #699",
+            "fulfillment(of:timeout:enforceOrder:) doesn't work properly with Xcode 15.0. Ref Toolkit #699",
             options: .nonStrict()
         )
         await fulfillment(
@@ -53,7 +53,7 @@ final class CertificatePickerViewModelTests: XCTestCase {
         model.proceedToUseCertificate(withPassword: "1234")
         
         XCTExpectFailure(
-            "fulfillment(of:timeout:enforceOrder:) doesn't work properly with Xcode 15.0 CLI tools. Ref Toolkit #699",
+            "fulfillment(of:timeout:enforceOrder:) doesn't work properly with Xcode 15.0. Ref Toolkit #699",
             options: .nonStrict()
         )
         await fulfillment(
