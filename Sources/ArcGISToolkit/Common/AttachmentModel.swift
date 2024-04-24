@@ -26,20 +26,20 @@ import QuickLook
 ***REMOVED******REMOVED***/ The thumbnail representing the attachment.
 ***REMOVED***@Published var thumbnail: UIImage? {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***defaultSystemName = nil
+***REMOVED******REMOVED******REMOVED***systemImageName = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name of the system SF symbol used instead of `thumbnail`.
-***REMOVED***@Published var defaultSystemName: String?
+***REMOVED***@Published var systemImageName: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `LoadStatus` of the popup attachment.
 ***REMOVED***@Published var loadStatus: LoadStatus = .notLoaded
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value specifying whether the thumbnails is the default image
-***REMOVED******REMOVED***/ or an image generated from the popup attachment.
-***REMOVED***var usingDefaultImage: Bool {
-***REMOVED******REMOVED***defaultSystemName != nil
+***REMOVED******REMOVED***/ A Boolean value specifying whether the thumbnails is using a
+***REMOVED******REMOVED***/ system image or an image generated from the featire attachment.
+***REMOVED***var usingSystemImage: Bool {
+***REMOVED******REMOVED***systemImageName != nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private var displayScale: CGFloat
@@ -50,13 +50,13 @@ import QuickLook
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch attachment.featureAttachmentKind {
 ***REMOVED******REMOVED***case .image:
-***REMOVED******REMOVED******REMOVED***defaultSystemName = "photo"
+***REMOVED******REMOVED******REMOVED***systemImageName = "photo"
 ***REMOVED******REMOVED***case .video:
-***REMOVED******REMOVED******REMOVED***defaultSystemName = "film"
+***REMOVED******REMOVED******REMOVED***systemImageName = "film"
 ***REMOVED******REMOVED***case .document, .other:
-***REMOVED******REMOVED******REMOVED***defaultSystemName = "doc"
+***REMOVED******REMOVED******REMOVED***systemImageName = "doc"
 ***REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED***defaultSystemName = "questionmark"
+***REMOVED******REMOVED******REMOVED***systemImageName = "questionmark"
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -67,17 +67,16 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED***loadStatus = .loading
 ***REMOVED******REMOVED******REMOVED***try await attachment.load()
 ***REMOVED******REMOVED******REMOVED***if attachment.loadStatus == .failed || attachment.fileURL == nil {
-***REMOVED******REMOVED******REMOVED******REMOVED***defaultSystemName = "exclamationmark.circle.fill"
+***REMOVED******REMOVED******REMOVED******REMOVED***systemImageName = "exclamationmark.circle.fill"
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = .failed
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if attachment is FormAttachment {  ***REMOVED*** To be done after that class inherits from a protocol
 ***REMOVED******REMOVED******REMOVED***var url = attachment.fileURL!
-***REMOVED******REMOVED******REMOVED***if let formAttachment = attachment as? FormAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = formAttachment.loadStatus
-  
+***REMOVED******REMOVED******REMOVED***if attachment is FormAttachment {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = formAttachment.loadStatus
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
 ***REMOVED******REMOVED******REMOVED******REMOVED***var tmpURL = attachment.fileURL
@@ -89,7 +88,7 @@ import QuickLook
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let request = QLThumbnailGenerator.Request(
 ***REMOVED******REMOVED******REMOVED******REMOVED***fileAt: url,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
 ***REMOVED******REMOVED******REMOVED******REMOVED***size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
 ***REMOVED******REMOVED******REMOVED******REMOVED***scale: displayScale,
 ***REMOVED******REMOVED******REMOVED******REMOVED***representationTypes: .thumbnail)
@@ -100,6 +99,13 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnail = thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This is a on-off to display a nice thumbnail
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** for mp3 files, which do not have a thumbnail generated
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** by the `QLThumbnailGenerator`.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if url.pathExtension == "mp3" {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.systemImageName = "waveform.path"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = self.attachment.loadStatus
 ***REMOVED******REMOVED******REMOVED***
