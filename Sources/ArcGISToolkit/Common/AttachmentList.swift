@@ -17,25 +17,12 @@ import SwiftUI
 
 /// A view displaying a list of attachments, with a thumbnail, title, and download button.
 struct AttachmentList: View {
-    /// The `AttachmentsFeatureElement` to display.
-    var featureElement: AttachmentsFeatureElement
-    
     /// The attachment models displayed in the list.
-    @State var attachmentModels: [AttachmentModel] = []
+    var attachmentModels: [AttachmentModel]
     
-    @Environment(\.displayScale) var displayScale
-
     var body: some View {
         ForEach(attachmentModels) { attachmentModel in
             AttachmentRow(attachmentModel: attachmentModel)
-        }
-        .onAppear() {
-            Task {
-                let attachments = try await featureElement.featureAttachments
-                attachmentModels = attachments
-                    .reversed()
-                    .map { AttachmentModel(attachment: $0, displayScale: displayScale) }
-            }
         }
     }
 }

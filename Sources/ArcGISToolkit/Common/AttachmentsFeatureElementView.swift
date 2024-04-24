@@ -23,6 +23,8 @@ struct AttachmentsFeatureElementView: View {
     
     @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
+    @Environment(\.displayScale) var displayScale
+    
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
         !isPortraitOrientation
@@ -35,7 +37,7 @@ struct AttachmentsFeatureElementView: View {
         /// Attachments are being loaded.
         case loading
         /// Attachments have been loaded.
-        case loaded([FeatureAttachment])
+        case loaded([AttachmentModel])
     }
     
     /// The current load state of the attachments.
@@ -60,16 +62,16 @@ struct AttachmentsFeatureElementView: View {
             case .notLoaded, .loading:
                 ProgressView()
                     .padding()
-            case .loaded(let attachments):
+            case .loaded(let attachmentModels):
                 if shouldEnableEditControls {
                     // If editing is enabled, don't show attachments in
                     // a disclosure group, but also ALWAYS show
                     // the list of attachments, even if there are none.
                     attachmentHeader
-                    attachmentBody(featureElement: featureElement)
-                } else if !attachments.isEmpty {
+                    attachmentBody(attachmentModels: attachmentModels)
+                } else if !attachmentModels.isEmpty {
                     DisclosureGroup(isExpanded: $isExpanded) {
-                        attachmentBody(featureElement: featureElement)
+                        attachmentBody(attachmentModels: attachmentModels)
                     } label: {
                         attachmentHeader
                         .catalystPadding(4)
@@ -81,17 +83,21 @@ struct AttachmentsFeatureElementView: View {
             guard case .notLoaded = attachmentLoadingState else { return }
             attachmentLoadingState = .loading
             let attachments = (try? await featureElement.featureAttachments) ?? []
-            attachmentLoadingState = .loaded(attachments)
+            
+            let attachmentModels = attachments
+                .reversed()
+                .map { AttachmentModel(attachment: $0, displayScale: displayScale) }
+            attachmentLoadingState = .loaded(attachmentModels)
         }
     }
     
-    @ViewBuilder private func attachmentBody(featureElement: AttachmentsFeatureElement) -> some View {
+    @ViewBuilder private func attachmentBody(attachmentModels: [AttachmentModel]) -> some View {
         switch featureElement.attachmentDisplayType {
         case .list:
-            AttachmentList(featureElement: featureElement)
+            AttachmentList(attachmentModels: attachmentModels)
         case .preview:
             AttachmentPreview(
-                featureElement: featureElement,
+                attachmentModels: attachmentModels,
                 shouldEnableEditControls: shouldEnableEditControls,
                 onRename: onRename,
                 onDelete: onDelete
@@ -100,13 +106,13 @@ struct AttachmentsFeatureElementView: View {
             Group {
                 if isRegularWidth {
                     AttachmentPreview(
-                        featureElement: featureElement,
+                        attachmentModels: attachmentModels,
                         shouldEnableEditControls: shouldEnableEditControls,
                         onRename: onRename,
                         onDelete: onDelete
                     )
                 } else {
-                    AttachmentList(featureElement: featureElement)
+                    AttachmentList(attachmentModels: attachmentModels)
                 }
             }
         @unknown default:
@@ -147,11 +153,7 @@ struct AttachmentsFeatureElementView: View {
     func onDelete(attachment: FeatureAttachment) async throws -> Void {
         if let element = featureElement as? AttachmentFormElement,
            let attachment = attachment as? FormAttachment {
-            do {
-                try await element.deleteAttachment(attachment)
-            } catch {
-                print("onDelete error: \(error)")
-            }
+            try await element.deleteAttachment(attachment)
         }
     }
 }
