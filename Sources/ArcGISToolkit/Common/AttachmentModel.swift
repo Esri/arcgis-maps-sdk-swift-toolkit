@@ -91,25 +91,18 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
 ***REMOVED******REMOVED******REMOVED******REMOVED***size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
 ***REMOVED******REMOVED******REMOVED******REMOVED***scale: displayScale,
-***REMOVED******REMOVED******REMOVED******REMOVED***representationTypes: .thumbnail)
+***REMOVED******REMOVED******REMOVED******REMOVED***representationTypes: .all)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let generator = QLThumbnailGenerator.shared
-***REMOVED******REMOVED******REMOVED***generator.generateRepresentations(for: request) { [weak self] thumbnail, _, error in
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = try await generator.generateBestRepresentation(for: request)
 ***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnail = thumbnail {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This is a on-off to display a nice thumbnail
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** for mp3 files, which do not have a thumbnail generated
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** by the `QLThumbnailGenerator`.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if url.pathExtension == "mp3" {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.systemImageName = "waveform.path"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = self.attachment.loadStatus
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***systemImageName = "exclamationmark.circle.fill"
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***self.loadStatus = self.attachment.loadStatus
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
