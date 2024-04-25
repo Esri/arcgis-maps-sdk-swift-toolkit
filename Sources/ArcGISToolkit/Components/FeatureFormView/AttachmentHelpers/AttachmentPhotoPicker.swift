@@ -16,27 +16,8 @@ import OSLog
 import PhotosUI
 import SwiftUI
 
-/// A wrapper that provides access to the PhotosPicker.
-struct AttachmentPhotoPicker: ViewModifier {
-    /// The new attachment data retrieved from the photos picker.
-    @Binding var newAttachmentData: Data?
-    
-    /// A Boolean value indicating whether the photos picker is presented.
-    @Binding var photoPickerIsShowing: Bool
-    
-    func body(content: Content) -> some View {
-        content
-            .modifier(
-                PhotoPickerWrapper(
-                    newAttachmentData: $newAttachmentData,
-                    photoPickerIsShowing: $photoPickerIsShowing
-                )
-            )
-    }
-}
-
 /// A wrapper for the PhotosPicker API.
-struct PhotoPickerWrapper: ViewModifier {
+struct AttachmentPhotoPicker: ViewModifier {
     /// The item selected in the photos picker.
     @State private var item: PhotosPickerItem?
     
@@ -44,12 +25,12 @@ struct PhotoPickerWrapper: ViewModifier {
     @Binding var newAttachmentData: Data?
     
     /// A Boolean value indicating whether the photos picker is presented.
-    @Binding var photoPickerIsShowing: Bool
+    @Binding var photoPickerIsPresented: Bool
     
     func body(content: Content) -> some View {
         content
             .photosPicker(
-                isPresented: $photoPickerIsShowing,
+                isPresented: $photoPickerIsPresented,
                 selection: $item,
                 matching: .any(of: [.images, .not(.livePhotos)])
             )
