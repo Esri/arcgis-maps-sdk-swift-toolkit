@@ -42,8 +42,14 @@ import SwiftUI
         systemImageName != nil
     }
     
+    /// The pixel density of the display on the intended device.
     private var displayScale: CGFloat
-
+    
+    /// Creates a view model representing the combination of a `FeatureAttachment` and
+    /// an associated `UIImage` used as a thumbnail.
+    /// - Parameters:
+    ///   - attachment: The `FeatureAttachment`.
+    ///   - displayScale: The pixel density of the display on the intended device.
     init(attachment: FeatureAttachment, displayScale: CGFloat) {
         self.attachment = attachment
         self.displayScale = displayScale

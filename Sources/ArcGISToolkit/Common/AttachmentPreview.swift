@@ -39,7 +39,8 @@ struct AttachmentPreview: View {
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
     
-    @State var shouldEnableEditControls: Bool
+    /// Determines if the attachment editing controls should be enabled.
+    let shouldEnableEditControls: Bool
     
     init(
         attachmentModels: [AttachmentModel],
