@@ -16,7 +16,9 @@
 
 extension AttachmentFormElement : AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ Indicates how to display the attachments.
-***REMOVED******REMOVED***/ If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the view. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
+***REMOVED******REMOVED***/ If `list` is specified, attachments show as links.
+***REMOVED******REMOVED***/ If `preview` is specified, attachments expand to the width of the view.
+***REMOVED******REMOVED***/ Setting the value to `auto` allows applications to choose the most suitable default experience.
 ***REMOVED***public var attachmentDisplayType: AttachmentsFeatureElementDisplayType {
 ***REMOVED******REMOVED******REMOVED*** Currently, Attachment Form Elements only support `Preview`.
 ***REMOVED******REMOVED***AttachmentsFeatureElementDisplayType.preview
@@ -24,7 +26,8 @@ extension AttachmentFormElement : AttachmentsFeatureElement {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The list of attachments.
 ***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ The feature attachments associated with this element. This property will be empty if the element has not yet been evaluated.
+***REMOVED******REMOVED***/ The feature attachments associated with this element.
+***REMOVED******REMOVED***/ This property will be empty if the element has not yet been evaluated.
 ***REMOVED***public var featureAttachments: [FeatureAttachment] {
 ***REMOVED******REMOVED***get async throws {
 ***REMOVED******REMOVED******REMOVED***try await fetchAttachments()

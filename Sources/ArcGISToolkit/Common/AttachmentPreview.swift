@@ -34,14 +34,14 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is deleted.
 ***REMOVED***let onDelete: ((FeatureAttachment) async throws -> Void)?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is renamed.
 ***REMOVED***let onRename: ((FeatureAttachment, String) async throws -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
 ***REMOVED***@State private var renameDialogueIsShowing = false
 ***REMOVED***
-***REMOVED******REMOVED***/ Determines if the attachment editing controls should be enabled.
+***REMOVED******REMOVED***/ A Boolean value which determines if the attachment editing controls should be disabled.
 ***REMOVED***let editControlsDisabled: Bool
 ***REMOVED***
 ***REMOVED***init(
@@ -106,7 +106,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***@ObservedObject var attachmentModel: AttachmentModel
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The url of the the attachment, used to display the attachment via `QuickLook`.
-***REMOVED******REMOVED***@State var url: URL?
+***REMOVED******REMOVED***@State private var url: URL?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
@@ -175,7 +175,6 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***
 
-
 extension FileManager {
 ***REMOVED******REMOVED***/ - Note: This can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
 ***REMOVED***func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
@@ -189,7 +188,6 @@ extension FileManager {
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***return true
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 

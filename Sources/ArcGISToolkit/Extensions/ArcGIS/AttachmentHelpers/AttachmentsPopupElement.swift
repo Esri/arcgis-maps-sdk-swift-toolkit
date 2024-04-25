@@ -16,7 +16,6 @@
 
 extension AttachmentsPopupElement : AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ Indicates how to display the attachments.
-***REMOVED******REMOVED***/ If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the view. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
 ***REMOVED***public var attachmentDisplayType: AttachmentsFeatureElementDisplayType {
 ***REMOVED******REMOVED***AttachmentsFeatureElementDisplayType(kind: displayType)
 ***REMOVED***

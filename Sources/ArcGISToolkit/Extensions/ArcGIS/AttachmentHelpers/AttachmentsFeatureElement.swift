@@ -15,7 +15,7 @@
 ***REMOVED***
 import Foundation
 
-***REMOVED***/ Indicates how to display the attachments. If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the view. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
+***REMOVED***/ Indicates how to display the attachments.
 public enum AttachmentsFeatureElementDisplayType {
 ***REMOVED******REMOVED***/ Show attachments as links.
 ***REMOVED***case list
@@ -28,7 +28,6 @@ public enum AttachmentsFeatureElementDisplayType {
 ***REMOVED***/ Common properties for elements which display feature attachments.
 public protocol AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ Indicates how to display the attachments.
-***REMOVED******REMOVED***/ If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the view. Setting the value to `auto` allows applications to choose the most suitable default experience.
 ***REMOVED***var attachmentDisplayType: AttachmentsFeatureElementDisplayType { get ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A string value describing the element in detail. Can be an empty string.
