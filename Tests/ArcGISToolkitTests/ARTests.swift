@@ -17,7 +17,7 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor final class ARTests: XCTestCase {
+final class ARTests: XCTestCase {
 ***REMOVED***func testFlyoverLocationInitWithDefaults() throws {
 ***REMOVED******REMOVED***let view = FlyoverSceneView(
 ***REMOVED******REMOVED******REMOVED***initialLocation: .init(
