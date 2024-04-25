@@ -16,7 +16,9 @@ import ArcGIS
 
 extension AttachmentFormElement : AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
-    /// If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the view. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
+    /// If `list` is specified, attachments show as links.
+    /// If `preview` is specified, attachments expand to the width of the view.
+    /// Setting the value to `auto` allows applications to choose the most suitable default experience.
     public var attachmentDisplayType: AttachmentsFeatureElementDisplayType {
         // Currently, Attachment Form Elements only support `Preview`.
         AttachmentsFeatureElementDisplayType.preview
@@ -24,7 +26,8 @@ extension AttachmentFormElement : AttachmentsFeatureElement {
     
     /// The list of attachments.
     ///
-    /// The feature attachments associated with this element. This property will be empty if the element has not yet been evaluated.
+    /// The feature attachments associated with this element.
+    /// This property will be empty if the element has not yet been evaluated.
     public var featureAttachments: [FeatureAttachment] {
         get async throws {
             try await fetchAttachments()

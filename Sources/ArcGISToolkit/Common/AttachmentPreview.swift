@@ -34,14 +34,14 @@ struct AttachmentPreview: View {
     
     /// The action to perform when the attachment is deleted.
     let onDelete: ((FeatureAttachment) async throws -> Void)?
-
+    
     /// The action to perform when the attachment is renamed.
     let onRename: ((FeatureAttachment, String) async throws -> Void)?
     
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
     
-    /// Determines if the attachment editing controls should be enabled.
+    /// A Boolean value which determines if the attachment editing controls should be disabled.
     let editControlsDisabled: Bool
     
     init(
@@ -106,7 +106,7 @@ struct AttachmentPreview: View {
         @ObservedObject var attachmentModel: AttachmentModel
         
         /// The url of the the attachment, used to display the attachment via `QuickLook`.
-        @State var url: URL?
+        @State private var url: URL?
         
         var body: some View {
             VStack(alignment: .center) {
@@ -175,7 +175,6 @@ struct AttachmentPreview: View {
     }
 }
 
-
 extension FileManager {
     /// - Note: This can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
     func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
@@ -190,7 +189,6 @@ extension FileManager {
         }
         return true
     }
-    
 }
 
 /// A view displaying details for popup media.
