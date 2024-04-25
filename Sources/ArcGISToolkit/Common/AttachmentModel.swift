@@ -33,11 +33,11 @@ import SwiftUI
     /// The name of the system SF symbol used instead of `thumbnail`.
     @Published var systemImageName: String?
     
-    /// The `LoadStatus` of the popup attachment.
+    /// The `LoadStatus` of the feature attachment.
     @Published var loadStatus: LoadStatus = .notLoaded
     
     /// A Boolean value specifying whether the thumbnails is using a
-    /// system image or an image generated from the featire attachment.
+    /// system image or an image generated from the feature attachment.
     var usingSystemImage: Bool {
         systemImageName != nil
     }
@@ -60,7 +60,7 @@ import SwiftUI
         }
     }
     
-    /// Loads the popup attachment and generates a thumbnail image.
+    /// Loads the attachment and generates a thumbnail image.
     /// - Parameter thumbnailSize: The size for the generated thumbnail.
     func load(thumbnailSize: CGSize = CGSize(width: 40, height: 40)) {
         Task {
@@ -74,8 +74,11 @@ import SwiftUI
             
             var url = attachment.fileURL!
             if attachment is FormAttachment {
-                //                self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
-                //                self.loadStatus = formAttachment.loadStatus
+//                self.thumbnail = try? await attachment.makeThumbnail(
+//                    width: Int(thumbnailSize.width),
+//                    height: Int(thumbnailSize.width)
+//                )
+//                self.loadStatus = attachment.loadStatus
                 
                 // WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
                 // Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
@@ -88,17 +91,14 @@ import SwiftUI
             }
             let request = QLThumbnailGenerator.Request(
                 fileAt: url,
-                //                fileAt: attachment.fileURL!,
-                size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
+//                fileAt: attachment.fileURL!,
+                size: thumbnailSize,
                 scale: displayScale,
                 representationTypes: .all)
             
-            let generator = QLThumbnailGenerator.shared
             do {
-                let thumbnail = try await generator.generateBestRepresentation(for: request)
-                DispatchQueue.main.async {
-                    self.thumbnail = thumbnail.uiImage
-                }
+                let thumbnail = try await QLThumbnailGenerator.shared.generateBestRepresentation(for: request)
+                self.thumbnail = thumbnail.uiImage
             } catch {
                 systemImageName = "exclamationmark.circle.fill"
             }

@@ -19,7 +19,7 @@ import SwiftUI
 /// A view displaying an `AttachmentsFeatureElement`.
 struct AttachmentsFeatureElementView: View {
     /// The `AttachmentsFeatureElement` to display.
-    var featureElement: AttachmentsFeatureElement
+    let featureElement: AttachmentsFeatureElement
     
     @Environment(\.isPortraitOrientation) var isPortraitOrientation
     
@@ -50,9 +50,9 @@ struct AttachmentsFeatureElementView: View {
     }
     
     /// A Boolean value denoting whether the Disclosure Group is expanded.
-    @State private var isExpanded: Bool = true
-
-    /// A boolean which determines whether attachment editing controls are enabled.
+    @State private var isExpanded = true
+    
+    /// A Boolean which determines whether attachment editing controls are enabled.
     /// Note that editing controls are only applicable when the display type is Preview.
     private var shouldEnableEditControls: Bool = false
     
@@ -74,7 +74,7 @@ struct AttachmentsFeatureElementView: View {
                         attachmentBody(attachmentModels: attachmentModels)
                     } label: {
                         attachmentHeader
-                        .catalystPadding(4)
+                            .catalystPadding(4)
                     }
                 }
             }
