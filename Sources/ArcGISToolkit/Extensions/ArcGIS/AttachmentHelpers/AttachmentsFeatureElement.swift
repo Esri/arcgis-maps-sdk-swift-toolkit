@@ -15,7 +15,7 @@
 import ArcGIS
 import Foundation
 
-/// Indicates how to display the attachments. If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the view. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
+/// Indicates how to display the attachments.
 public enum AttachmentsFeatureElementDisplayType {
     /// Show attachments as links.
     case list
@@ -28,7 +28,6 @@ public enum AttachmentsFeatureElementDisplayType {
 /// Common properties for elements which display feature attachments.
 public protocol AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
-    /// If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the view. Setting the value to `auto` allows applications to choose the most suitable default experience.
     var attachmentDisplayType: AttachmentsFeatureElementDisplayType { get }
     
     /// A string value describing the element in detail. Can be an empty string.
