@@ -13,10 +13,9 @@
 // limitations under the License.
 
 import ArcGIS
-import Foundation
 import UIKit
 
-/// The type of attachments in a FeatureAttachment.
+/// The type of an attachment in a FeatureAttachment.
 public enum FeatureAttachmentKind {
     /// An image.
     case image
@@ -28,8 +27,8 @@ public enum FeatureAttachmentKind {
     case other
 }
 
-public protocol FeatureAttachment: Loadable {    
-    /// The underlying ``Attachment``.
+public protocol FeatureAttachment: Loadable {
+    /// The underlying `Attachment`.
     var attachment: Attachment? { get }
     
     /// The MIME content type of the attachment.
@@ -37,7 +36,7 @@ public protocol FeatureAttachment: Loadable {
     
     /// The type of the attachment.
     var featureAttachmentKind: FeatureAttachmentKind { get }
-
+    
     /// The local temporary filepath where we store the attachment once it is loaded.
     var fileURL: URL? { get }
     
@@ -57,13 +56,13 @@ public protocol FeatureAttachment: Loadable {
     //
     /// Creates asynchronously the full image for displaying the attachment in full screen or some UI larger than a thumbnail.
     ///
-    /// This is only supported if the ``kind-swift.property`` is ``Kind-swift.enum/image``.
+    /// This is only supported if ``FeatureAttachment/featureAttachmentKind`` is ``FeatureAttachmentKind/image``.
     /// - Returns: A task that represents the asynchronous operation. The task result contains the full image as an `UIImage`.
     func makeFullImage() async throws -> UIImage
     
     /// Creates asynchronously a thumbnail image with the specified width and height.
     ///
-    /// This is only supported if the ``kind-swift.property`` is ``Kind-swift.enum/image``.
+    /// This is only supported if ``FeatureAttachment/featureAttachmentKind`` is ``FeatureAttachmentKind/image``.
     /// - Parameters:
     ///   - width: Width of the thumbnail.
     ///   - height: Height of the thumbnail.
@@ -72,7 +71,7 @@ public protocol FeatureAttachment: Loadable {
 }
 
 extension FeatureAttachmentKind {
-    /// Caretes a feature attachment kind from a popup attachment kind.
+    /// Creates a feature attachment kind from a popup attachment kind.
     /// - Parameter kind: The popup attachment kind.
     init(kind: PopupAttachment.Kind) {
         switch kind {

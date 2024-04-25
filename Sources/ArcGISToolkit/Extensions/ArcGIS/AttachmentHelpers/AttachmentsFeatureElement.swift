@@ -21,14 +21,14 @@ public enum AttachmentsFeatureElementDisplayType {
     case list
     /// Attachments expand to the width of the view.
     case preview
-    /// Allows applications to choose the most suitable default experience for their application.
+    /// Allows applications to choose the most suitable default experience.
     case auto
 }
 
 /// Common properties for elements which display feature attachments.
 public protocol AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
-    /// If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the view. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
+    /// If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the view. Setting the value to `auto` allows applications to choose the most suitable default experience.
     var attachmentDisplayType: AttachmentsFeatureElementDisplayType { get }
     
     /// A string value describing the element in detail. Can be an empty string.
@@ -38,7 +38,7 @@ public protocol AttachmentsFeatureElement {
     ///
     /// The feature attachments associated with this element. This property will be empty if the element has not yet been evaluated.
     var featureAttachments: [FeatureAttachment] { get async throws }
-
+    
     /// A descriptive label that appears with the element. Can be an empty string.
     var title: String { get set }
 }

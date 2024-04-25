@@ -17,12 +17,12 @@ import SwiftUI
 
 /// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
-    /// The attachment models displayed in the list.
+    /// The models for the attachments displayed in the list.
     var attachmentModels: [AttachmentModel]
     
     /// The name for the existing attachment being edited.
     @State private var currentAttachmentName = ""
-
+    
     /// A Boolean value indicating the user has requested that the attachment be deleted.
     @State private var deletionWillStart: Bool = false
     
@@ -31,9 +31,10 @@ struct AttachmentPreview: View {
     
     /// The new name the user has provided for the attachment.
     @State private var newAttachmentName = ""
-
-    let onDelete: ((FeatureAttachment) async throws -> Void)?
     
+    /// The action to perform when the attachment is deleted.
+    
+    /// The action to perform when the attachment is renamed.
     let onRename: ((FeatureAttachment, String) async throws -> Void)?
     
     /// A Boolean value indicating the user has requested that the attachment be renamed.
@@ -115,7 +116,6 @@ struct AttachmentPreview: View {
                             CGSize(width: 36, height: 36) :
                                 CGSize(width: 120, height: 120)
                         )
-//                        if !attachmentModel.usingDefaultImage {
                         if attachmentModel.loadStatus == .loaded {
                             VStack {
                                 Spacer()
@@ -173,9 +173,9 @@ struct AttachmentPreview: View {
     }
 }
 
-// Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
+
 extension FileManager {
-    func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
+    /// - Note: This can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
         do {
             if FileManager.default.fileExists(atPath: dstURL.path) {
                 try FileManager.default.removeItem(at: dstURL)
