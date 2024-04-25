@@ -16,9 +16,6 @@
 
 extension AttachmentFormElement : AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ Indicates how to display the attachments.
-***REMOVED******REMOVED***/ If `list` is specified, attachments show as links.
-***REMOVED******REMOVED***/ If `preview` is specified, attachments expand to the width of the view.
-***REMOVED******REMOVED***/ Setting the value to `auto` allows applications to choose the most suitable default experience.
 ***REMOVED***public var attachmentDisplayType: AttachmentsFeatureElementDisplayType {
 ***REMOVED******REMOVED******REMOVED*** Currently, Attachment Form Elements only support `Preview`.
 ***REMOVED******REMOVED***AttachmentsFeatureElementDisplayType.preview
