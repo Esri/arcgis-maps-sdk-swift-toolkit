@@ -37,6 +37,5 @@ extension AttachmentFormElement : AttachmentsFeatureElement {
         get {
             label
         }
-        set { }
     }
 }

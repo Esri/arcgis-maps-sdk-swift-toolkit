@@ -102,6 +102,7 @@ struct AttachmentImportMenu: View {
                     data: newAttachmentData.data
                 )
             } catch {
+                // TODO: Figure out error handling
                 print("Error adding attachment: \(error)")
             }
             self.newAttachmentData = nil

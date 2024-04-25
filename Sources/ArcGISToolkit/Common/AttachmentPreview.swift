@@ -33,7 +33,8 @@ struct AttachmentPreview: View {
     @State private var newAttachmentName = ""
     
     /// The action to perform when the attachment is deleted.
-    
+    let onDelete: ((FeatureAttachment) async throws -> Void)?
+
     /// The action to perform when the attachment is renamed.
     let onRename: ((FeatureAttachment, String) async throws -> Void)?
     
@@ -41,18 +42,18 @@ struct AttachmentPreview: View {
     @State private var renameDialogueIsShowing = false
     
     /// Determines if the attachment editing controls should be enabled.
-    let shouldEnableEditControls: Bool
+    let editControlsDisabled: Bool
     
     init(
         attachmentModels: [AttachmentModel],
-        shouldEnableEditControls: Bool = false,
+        editControlsDisabled: Bool = true,
         onRename: ((FeatureAttachment, String) async throws -> Void)? = nil,
         onDelete: ((FeatureAttachment) async throws -> Void)? = nil
     ) {
         self.attachmentModels = attachmentModels
         self.onRename = onRename
         self.onDelete = onDelete
-        self.shouldEnableEditControls = shouldEnableEditControls
+        self.editControlsDisabled = editControlsDisabled
     }
     
     var body: some View {
@@ -61,7 +62,7 @@ struct AttachmentPreview: View {
                 ForEach(attachmentModels) { attachmentModel in
                     AttachmentCell(attachmentModel: attachmentModel)
                         .contextMenu {
-                            if shouldEnableEditControls {
+                            if !editControlsDisabled {
                                 Button {
                                     editedAttachment = attachmentModel.attachment
                                     newAttachmentName = attachmentModel.attachment.name
@@ -95,6 +96,7 @@ struct AttachmentPreview: View {
             if let editedAttachment {
                 try? await onDelete?(editedAttachment)
             }
+            deletionWillStart = false
         }
     }
     
@@ -176,6 +178,7 @@ struct AttachmentPreview: View {
 
 extension FileManager {
     /// - Note: This can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
+    func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
         do {
             if FileManager.default.fileExists(atPath: dstURL.path) {
                 try FileManager.default.removeItem(at: dstURL)

@@ -40,7 +40,7 @@ public protocol AttachmentsFeatureElement {
     var featureAttachments: [FeatureAttachment] { get async throws }
     
     /// A descriptive label that appears with the element. Can be an empty string.
-    var title: String { get set }
+    var title: String { get }
 }
 
 extension AttachmentsFeatureElementDisplayType {

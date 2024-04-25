@@ -54,7 +54,7 @@ struct AttachmentsFeatureElementView: View {
     
     /// A Boolean which determines whether attachment editing controls are enabled.
     /// Note that editing controls are only applicable when the display type is Preview.
-    private var shouldEnableEditControls: Bool = false
+    private var editControlsDisabled: Bool = true
     
     var body: some View {
         Group {
@@ -63,7 +63,7 @@ struct AttachmentsFeatureElementView: View {
                 ProgressView()
                     .padding()
             case .loaded(let attachmentModels):
-                if shouldEnableEditControls {
+                if !editControlsDisabled {
                     // If editing is enabled, don't show attachments in
                     // a disclosure group, but also ALWAYS show
                     // the list of attachments, even if there are none.
@@ -84,9 +84,15 @@ struct AttachmentsFeatureElementView: View {
             attachmentLoadingState = .loading
             let attachments = (try? await featureElement.featureAttachments) ?? []
             
-            let attachmentModels = attachments
-                .reversed()
+            var attachmentModels = attachments
                 .map { AttachmentModel(attachment: $0, displayScale: displayScale) }
+            
+            if editControlsDisabled {
+                // Reverse attachment models array if we're not editing.
+                // This allows attachments in a non-editing context to
+                // display in the same order as the online Map Viewer.
+                attachmentModels = attachmentModels.reversed()
+            }
             attachmentLoadingState = .loaded(attachmentModels)
         }
     }
@@ -98,7 +104,7 @@ struct AttachmentsFeatureElementView: View {
         case .preview:
             AttachmentPreview(
                 attachmentModels: attachmentModels,
-                shouldEnableEditControls: shouldEnableEditControls,
+                editControlsDisabled: editControlsDisabled,
                 onRename: onRename,
                 onDelete: onDelete
             )
@@ -107,7 +113,7 @@ struct AttachmentsFeatureElementView: View {
                 if isRegularWidth {
                     AttachmentPreview(
                         attachmentModels: attachmentModels,
-                        shouldEnableEditControls: shouldEnableEditControls,
+                        editControlsDisabled: editControlsDisabled,
                         onRename: onRename,
                         onDelete: onDelete
                     )
@@ -127,7 +133,7 @@ struct AttachmentsFeatureElementView: View {
                 description: featureElement.description
             )
             Spacer()
-            if shouldEnableEditControls,
+            if !editControlsDisabled,
                let element = featureElement as? AttachmentFormElement {
                 AttachmentImportMenu(element: element)
             }
@@ -173,9 +179,9 @@ extension AttachmentsFeatureElementView {
     /// Controls if the attachment editing controls should be enabled.
     /// - Parameter newShouldShowEditControls: The new value.
     /// - Returns: The `AttachmentsFeatureElementView`.
-    public func shouldEnableEditControls(_ newShouldEnableEditControls: Bool) -> Self {
+    public func editControlsDisabled(_ newEditControlsDisabled: Bool) -> Self {
         var copy = self
-        copy.shouldEnableEditControls = newShouldEnableEditControls
+        copy.editControlsDisabled = newEditControlsDisabled
         return copy
     }
 }
