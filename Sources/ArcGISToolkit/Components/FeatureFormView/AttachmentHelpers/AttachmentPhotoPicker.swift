@@ -16,27 +16,8 @@ import OSLog
 import PhotosUI
 ***REMOVED***
 
-***REMOVED***/ A wrapper that provides access to the PhotosPicker.
-struct AttachmentPhotoPicker: ViewModifier {
-***REMOVED******REMOVED***/ The new attachment data retrieved from the photos picker.
-***REMOVED***@Binding var newAttachmentData: Data?
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the photos picker is presented.
-***REMOVED***@Binding var photoPickerIsShowing: Bool
-***REMOVED***
-***REMOVED***func body(content: Content) -> some View {
-***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.modifier(
-***REMOVED******REMOVED******REMOVED******REMOVED***PhotoPickerWrapper(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentData: $newAttachmentData,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***photoPickerIsShowing: $photoPickerIsShowing
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-
 ***REMOVED***/ A wrapper for the PhotosPicker API.
-struct PhotoPickerWrapper: ViewModifier {
+struct AttachmentPhotoPicker: ViewModifier {
 ***REMOVED******REMOVED***/ The item selected in the photos picker.
 ***REMOVED***@State private var item: PhotosPickerItem?
 ***REMOVED***
@@ -44,12 +25,12 @@ struct PhotoPickerWrapper: ViewModifier {
 ***REMOVED***@Binding var newAttachmentData: Data?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the photos picker is presented.
-***REMOVED***@Binding var photoPickerIsShowing: Bool
+***REMOVED***@Binding var photoPickerIsPresented: Bool
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.photosPicker(
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $photoPickerIsShowing,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $photoPickerIsPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***selection: $item,
 ***REMOVED******REMOVED******REMOVED******REMOVED***matching: .any(of: [.images, .not(.livePhotos)])
 ***REMOVED******REMOVED******REMOVED***)
