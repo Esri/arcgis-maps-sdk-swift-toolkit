@@ -43,7 +43,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***@State private var fileImporterIsShowing = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment photo picker is presented.
-***REMOVED***@State private var photosPickerIsShowing = false
+***REMOVED***@State private var photoPickerIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The new image attachment data retrieved from the photos picker.
 ***REMOVED***@State private var newAttachmentData: AttachmentData?
@@ -63,7 +63,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***photosPickerIsShowing = true
+***REMOVED******REMOVED******REMOVED******REMOVED***photoPickerIsPresented = true
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label("Add photo from library", systemImage: "photo")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
@@ -138,7 +138,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***.modifier(
 ***REMOVED******REMOVED******REMOVED***AttachmentPhotoPicker(
 ***REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentData: $newImageData,
-***REMOVED******REMOVED******REMOVED******REMOVED***photoPickerIsShowing: $photosPickerIsShowing
+***REMOVED******REMOVED******REMOVED******REMOVED***photoPickerIsPresented: $photoPickerIsPresented
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
