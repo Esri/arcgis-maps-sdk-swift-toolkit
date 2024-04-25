@@ -13,7 +13,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Foundation
 
 extension PopupAttachment : FeatureAttachment {
 ***REMOVED******REMOVED***/ The type of the attachment.

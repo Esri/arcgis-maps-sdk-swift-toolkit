@@ -13,10 +13,9 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Foundation
 import UIKit
 
-***REMOVED***/ The type of attachments in a FeatureAttachment.
+***REMOVED***/ The type of an attachment in a FeatureAttachment.
 public enum FeatureAttachmentKind {
 ***REMOVED******REMOVED***/ An image.
 ***REMOVED***case image
@@ -28,8 +27,8 @@ public enum FeatureAttachmentKind {
 ***REMOVED***case other
 ***REMOVED***
 
-public protocol FeatureAttachment: Loadable {***REMOVED***
-***REMOVED******REMOVED***/ The underlying ``Attachment``.
+public protocol FeatureAttachment: Loadable {
+***REMOVED******REMOVED***/ The underlying `Attachment`.
 ***REMOVED***var attachment: Attachment? { get ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The MIME content type of the attachment.
@@ -37,7 +36,7 @@ public protocol FeatureAttachment: Loadable {***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The type of the attachment.
 ***REMOVED***var featureAttachmentKind: FeatureAttachmentKind { get ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The local temporary filepath where we store the attachment once it is loaded.
 ***REMOVED***var fileURL: URL? { get ***REMOVED***
 ***REMOVED***
@@ -57,13 +56,13 @@ public protocol FeatureAttachment: Loadable {***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***/ Creates asynchronously the full image for displaying the attachment in full screen or some UI larger than a thumbnail.
 ***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ This is only supported if the ``kind-swift.property`` is ``Kind-swift.enum/image``.
+***REMOVED******REMOVED***/ This is only supported if ``FeatureAttachment/featureAttachmentKind`` is ``FeatureAttachmentKind/image``.
 ***REMOVED******REMOVED***/ - Returns: A task that represents the asynchronous operation. The task result contains the full image as an `UIImage`.
 ***REMOVED***func makeFullImage() async throws -> UIImage
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates asynchronously a thumbnail image with the specified width and height.
 ***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ This is only supported if the ``kind-swift.property`` is ``Kind-swift.enum/image``.
+***REMOVED******REMOVED***/ This is only supported if ``FeatureAttachment/featureAttachmentKind`` is ``FeatureAttachmentKind/image``.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - width: Width of the thumbnail.
 ***REMOVED******REMOVED***/   - height: Height of the thumbnail.
@@ -72,7 +71,7 @@ public protocol FeatureAttachment: Loadable {***REMOVED***
 ***REMOVED***
 
 extension FeatureAttachmentKind {
-***REMOVED******REMOVED***/ Caretes a feature attachment kind from a popup attachment kind.
+***REMOVED******REMOVED***/ Creates a feature attachment kind from a popup attachment kind.
 ***REMOVED******REMOVED***/ - Parameter kind: The popup attachment kind.
 ***REMOVED***init(kind: PopupAttachment.Kind) {
 ***REMOVED******REMOVED***switch kind {

@@ -13,7 +13,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Foundation
 
 extension AttachmentFormElement : AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ Indicates how to display the attachments.

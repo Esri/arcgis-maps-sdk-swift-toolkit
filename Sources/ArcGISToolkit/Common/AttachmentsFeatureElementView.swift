@@ -19,7 +19,7 @@ import QuickLook
 ***REMOVED***/ A view displaying an `AttachmentsFeatureElement`.
 struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ The `AttachmentsFeatureElement` to display.
-***REMOVED***var featureElement: AttachmentsFeatureElement
+***REMOVED***let featureElement: AttachmentsFeatureElement
 ***REMOVED***
 ***REMOVED***@Environment(\.isPortraitOrientation) var isPortraitOrientation
 ***REMOVED***
@@ -50,9 +50,9 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value denoting whether the Disclosure Group is expanded.
-***REMOVED***@State private var isExpanded: Bool = true
-
-***REMOVED******REMOVED***/ A boolean which determines whether attachment editing controls are enabled.
+***REMOVED***@State private var isExpanded = true
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean which determines whether attachment editing controls are enabled.
 ***REMOVED******REMOVED***/ Note that editing controls are only applicable when the display type is Preview.
 ***REMOVED***private var shouldEnableEditControls: Bool = false
 ***REMOVED***
@@ -74,7 +74,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentBody(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentHeader
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.catalystPadding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***

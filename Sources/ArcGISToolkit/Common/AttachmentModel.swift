@@ -33,11 +33,11 @@ import QuickLook
 ***REMOVED******REMOVED***/ The name of the system SF symbol used instead of `thumbnail`.
 ***REMOVED***@Published var systemImageName: String?
 ***REMOVED***
-***REMOVED******REMOVED***/ The `LoadStatus` of the popup attachment.
+***REMOVED******REMOVED***/ The `LoadStatus` of the feature attachment.
 ***REMOVED***@Published var loadStatus: LoadStatus = .notLoaded
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the thumbnails is using a
-***REMOVED******REMOVED***/ system image or an image generated from the featire attachment.
+***REMOVED******REMOVED***/ system image or an image generated from the feature attachment.
 ***REMOVED***var usingSystemImage: Bool {
 ***REMOVED******REMOVED***systemImageName != nil
 ***REMOVED***
@@ -60,7 +60,7 @@ import QuickLook
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Loads the popup attachment and generates a thumbnail image.
+***REMOVED******REMOVED***/ Loads the attachment and generates a thumbnail image.
 ***REMOVED******REMOVED***/ - Parameter thumbnailSize: The size for the generated thumbnail.
 ***REMOVED***func load(thumbnailSize: CGSize = CGSize(width: 40, height: 40)) {
 ***REMOVED******REMOVED***Task {
@@ -74,8 +74,11 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***var url = attachment.fileURL!
 ***REMOVED******REMOVED******REMOVED***if attachment is FormAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = try? await formAttachment.makeThumbnail(width: Int(thumbnailSize.width), height: Int(thumbnailSize.width))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = formAttachment.loadStatus
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = try? await attachment.makeThumbnail(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: Int(thumbnailSize.width),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: Int(thumbnailSize.width)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = attachment.loadStatus
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
@@ -88,17 +91,14 @@ import QuickLook
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let request = QLThumbnailGenerator.Request(
 ***REMOVED******REMOVED******REMOVED******REMOVED***fileAt: url,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
-***REMOVED******REMOVED******REMOVED******REMOVED***size: CGSize(width: thumbnailSize.width, height: thumbnailSize.height),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
+***REMOVED******REMOVED******REMOVED******REMOVED***size: thumbnailSize,
 ***REMOVED******REMOVED******REMOVED******REMOVED***scale: displayScale,
 ***REMOVED******REMOVED******REMOVED******REMOVED***representationTypes: .all)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let generator = QLThumbnailGenerator.shared
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = try await generator.generateBestRepresentation(for: request)
-***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = try await QLThumbnailGenerator.shared.generateBestRepresentation(for: request)
+***REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***systemImageName = "exclamationmark.circle.fill"
 ***REMOVED******REMOVED***
