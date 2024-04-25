@@ -43,7 +43,7 @@ struct AttachmentImportMenu: View {
     @State private var fileImporterIsShowing = false
     
     /// A Boolean value indicating whether the attachment photo picker is presented.
-    @State private var photosPickerIsShowing = false
+    @State private var photoPickerIsPresented = false
     
     /// The new image attachment data retrieved from the photos picker.
     @State private var newAttachmentData: AttachmentData?
@@ -63,7 +63,7 @@ struct AttachmentImportMenu: View {
                     .labelStyle(.titleAndIcon)
             }
             Button {
-                photosPickerIsShowing = true
+                photoPickerIsPresented = true
             } label: {
                 Label("Add photo from library", systemImage: "photo")
                     .labelStyle(.titleAndIcon)
@@ -138,7 +138,7 @@ struct AttachmentImportMenu: View {
         .modifier(
             AttachmentPhotoPicker(
                 newAttachmentData: $newImageData,
-                photoPickerIsShowing: $photosPickerIsShowing
+                photoPickerIsPresented: $photoPickerIsPresented
             )
         )
     }
