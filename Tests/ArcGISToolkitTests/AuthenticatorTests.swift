@@ -17,7 +17,8 @@ import XCTest
 import ArcGIS
 import Combine
 
-@MainActor final class AuthenticatorTests: XCTestCase {
+final class AuthenticatorTests: XCTestCase {
+    @MainActor
     func testInit() {
         let config = OAuthUserConfiguration(
             portalURL: URL(string:"www.arcgis.com")!,
