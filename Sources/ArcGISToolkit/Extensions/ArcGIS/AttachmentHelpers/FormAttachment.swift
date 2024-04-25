@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import ArcGIS
-import Foundation
 
 extension FormAttachment : FeatureAttachment {
     /// The type of the attachment.
