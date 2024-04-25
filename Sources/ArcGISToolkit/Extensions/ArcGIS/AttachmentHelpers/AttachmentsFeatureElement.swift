@@ -40,7 +40,7 @@ public protocol AttachmentsFeatureElement {
 ***REMOVED***var featureAttachments: [FeatureAttachment] { get async throws ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A descriptive label that appears with the element. Can be an empty string.
-***REMOVED***var title: String { get set ***REMOVED***
+***REMOVED***var title: String { get ***REMOVED***
 ***REMOVED***
 
 extension AttachmentsFeatureElementDisplayType {

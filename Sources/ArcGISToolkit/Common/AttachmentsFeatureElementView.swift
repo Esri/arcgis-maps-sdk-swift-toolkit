@@ -54,7 +54,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean which determines whether attachment editing controls are enabled.
 ***REMOVED******REMOVED***/ Note that editing controls are only applicable when the display type is Preview.
-***REMOVED***private var shouldEnableEditControls: Bool = false
+***REMOVED***private var editControlsDisabled: Bool = true
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
@@ -63,7 +63,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***case .loaded(let attachmentModels):
-***REMOVED******REMOVED******REMOVED******REMOVED***if shouldEnableEditControls {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !editControlsDisabled {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If editing is enabled, don't show attachments in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** a disclosure group, but also ALWAYS show
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the list of attachments, even if there are none.
@@ -84,9 +84,15 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loading
 ***REMOVED******REMOVED******REMOVED***let attachments = (try? await featureElement.featureAttachments) ?? []
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let attachmentModels = attachments
-***REMOVED******REMOVED******REMOVED******REMOVED***.reversed()
+***REMOVED******REMOVED******REMOVED***var attachmentModels = attachments
 ***REMOVED******REMOVED******REMOVED******REMOVED***.map { AttachmentModel(attachment: $0, displayScale: displayScale) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if editControlsDisabled {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reverse attachment models array if we're not editing.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This allows attachments in a non-editing context to
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** display in the same order as the online Map Viewer.
+***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels = attachmentModels.reversed()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loaded(attachmentModels)
 ***REMOVED***
 ***REMOVED***
@@ -98,7 +104,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***case .preview:
 ***REMOVED******REMOVED******REMOVED***AttachmentPreview(
 ***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
-***REMOVED******REMOVED******REMOVED******REMOVED***shouldEnableEditControls: shouldEnableEditControls,
+***REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: editControlsDisabled,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
 ***REMOVED******REMOVED******REMOVED***)
@@ -107,7 +113,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldEnableEditControls: shouldEnableEditControls,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: editControlsDisabled,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -127,7 +133,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***description: featureElement.description
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if shouldEnableEditControls,
+***REMOVED******REMOVED******REMOVED***if !editControlsDisabled,
 ***REMOVED******REMOVED******REMOVED***   let element = featureElement as? AttachmentFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportMenu(element: element)
 ***REMOVED******REMOVED***
@@ -173,9 +179,9 @@ extension AttachmentsFeatureElementView {
 ***REMOVED******REMOVED***/ Controls if the attachment editing controls should be enabled.
 ***REMOVED******REMOVED***/ - Parameter newShouldShowEditControls: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `AttachmentsFeatureElementView`.
-***REMOVED***public func shouldEnableEditControls(_ newShouldEnableEditControls: Bool) -> Self {
+***REMOVED***public func editControlsDisabled(_ newEditControlsDisabled: Bool) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.shouldEnableEditControls = newShouldEnableEditControls
+***REMOVED******REMOVED***copy.editControlsDisabled = newEditControlsDisabled
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***

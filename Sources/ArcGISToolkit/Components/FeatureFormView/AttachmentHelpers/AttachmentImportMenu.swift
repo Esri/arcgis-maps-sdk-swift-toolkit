@@ -102,6 +102,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: newAttachmentData.data
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: Figure out error handling
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("Error adding attachment: \(error)")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.newAttachmentData = nil

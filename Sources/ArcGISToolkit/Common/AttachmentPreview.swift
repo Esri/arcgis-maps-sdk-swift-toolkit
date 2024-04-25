@@ -33,7 +33,8 @@ struct AttachmentPreview: View {
 ***REMOVED***@State private var newAttachmentName = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is deleted.
-***REMOVED***
+***REMOVED***let onDelete: ((FeatureAttachment) async throws -> Void)?
+
 ***REMOVED******REMOVED***/ The action to perform when the attachment is renamed.
 ***REMOVED***let onRename: ((FeatureAttachment, String) async throws -> Void)?
 ***REMOVED***
@@ -41,18 +42,18 @@ struct AttachmentPreview: View {
 ***REMOVED***@State private var renameDialogueIsShowing = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines if the attachment editing controls should be enabled.
-***REMOVED***let shouldEnableEditControls: Bool
+***REMOVED***let editControlsDisabled: Bool
 ***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
-***REMOVED******REMOVED***shouldEnableEditControls: Bool = false,
+***REMOVED******REMOVED***editControlsDisabled: Bool = true,
 ***REMOVED******REMOVED***onRename: ((FeatureAttachment, String) async throws -> Void)? = nil,
 ***REMOVED******REMOVED***onDelete: ((FeatureAttachment) async throws -> Void)? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.attachmentModels = attachmentModels
 ***REMOVED******REMOVED***self.onRename = onRename
 ***REMOVED******REMOVED***self.onDelete = onDelete
-***REMOVED******REMOVED***self.shouldEnableEditControls = shouldEnableEditControls
+***REMOVED******REMOVED***self.editControlsDisabled = editControlsDisabled
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -61,7 +62,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentCell(attachmentModel: attachmentModel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contextMenu {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if shouldEnableEditControls {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !editControlsDisabled {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editedAttachment = attachmentModel.attachment
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = attachmentModel.attachment.name
@@ -95,6 +96,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***if let editedAttachment {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await onDelete?(editedAttachment)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***deletionWillStart = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -176,6 +178,7 @@ struct AttachmentPreview: View {
 
 extension FileManager {
 ***REMOVED******REMOVED***/ - Note: This can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
+***REMOVED***func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***if FileManager.default.fileExists(atPath: dstURL.path) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try FileManager.default.removeItem(at: dstURL)

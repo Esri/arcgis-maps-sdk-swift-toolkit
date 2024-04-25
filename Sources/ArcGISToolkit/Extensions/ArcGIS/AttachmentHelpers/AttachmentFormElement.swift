@@ -37,6 +37,5 @@ extension AttachmentFormElement : AttachmentsFeatureElement {
 ***REMOVED******REMOVED***get {
 ***REMOVED******REMOVED******REMOVED***label
 ***REMOVED***
-***REMOVED******REMOVED***set { ***REMOVED***
 ***REMOVED***
 ***REMOVED***
