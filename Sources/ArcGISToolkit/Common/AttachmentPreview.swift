@@ -39,7 +39,8 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
 ***REMOVED***@State private var renameDialogueIsShowing = false
 ***REMOVED***
-***REMOVED***@State var shouldEnableEditControls: Bool
+***REMOVED******REMOVED***/ Determines if the attachment editing controls should be enabled.
+***REMOVED***let shouldEnableEditControls: Bool
 ***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***attachmentModels: [AttachmentModel],

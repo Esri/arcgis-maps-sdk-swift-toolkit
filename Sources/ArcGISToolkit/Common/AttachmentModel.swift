@@ -42,8 +42,14 @@ import QuickLook
 ***REMOVED******REMOVED***systemImageName != nil
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The pixel density of the display on the intended device.
 ***REMOVED***private var displayScale: CGFloat
-
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a view model representing the combination of a `FeatureAttachment` and
+***REMOVED******REMOVED***/ an associated `UIImage` used as a thumbnail.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - attachment: The `FeatureAttachment`.
+***REMOVED******REMOVED***/   - displayScale: The pixel density of the display on the intended device.
 ***REMOVED***init(attachment: FeatureAttachment, displayScale: CGFloat) {
 ***REMOVED******REMOVED***self.attachment = attachment
 ***REMOVED******REMOVED***self.displayScale = displayScale
