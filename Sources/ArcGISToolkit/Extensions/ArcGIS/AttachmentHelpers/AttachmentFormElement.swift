@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import ArcGIS
-import Foundation
 
 extension AttachmentFormElement : AttachmentsFeatureElement {
     /// Indicates how to display the attachments.

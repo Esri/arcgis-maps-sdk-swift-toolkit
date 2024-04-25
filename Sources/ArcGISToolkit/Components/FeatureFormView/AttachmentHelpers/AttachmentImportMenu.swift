@@ -50,7 +50,7 @@ struct AttachmentImportMenu: View {
     
     /// The new image attachment data retrieved from the photos picker.
     @State private var newImageData: Data?
-
+    
     /// The new attachment retrieved from the device's camera.
     @State private var capturedImage: UIImage?
     
@@ -88,7 +88,7 @@ struct AttachmentImportMenu: View {
                 if !newAttachmentData.fileName.isEmpty {
                     fileName = newAttachmentData.fileName
                 } else {
-                    // This is probably not good and shoudl be re-thought.
+                    // This is probably not good and should be re-thought.
                     // Look at how the `AGSPopupAttachmentsViewController` handles this
                     // https://devtopia.esri.com/runtime/cocoa/blob/b788189d3d2eb43b7da8f9cc9af18ed2f3aa6925/api/iOS/Popup/ViewController/AGSPopupAttachmentsViewController.m#L755
                     // and

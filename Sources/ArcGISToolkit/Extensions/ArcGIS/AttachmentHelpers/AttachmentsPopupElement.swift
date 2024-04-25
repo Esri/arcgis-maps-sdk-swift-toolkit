@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import ArcGIS
-import Foundation
 
 extension AttachmentsPopupElement : AttachmentsFeatureElement {
     /// Indicates how to display the attachments.

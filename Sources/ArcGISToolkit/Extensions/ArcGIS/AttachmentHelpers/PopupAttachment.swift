@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import ArcGIS
-import Foundation
 
 extension PopupAttachment : FeatureAttachment {
     /// The type of the attachment.
