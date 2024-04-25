@@ -116,7 +116,7 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***switch element {
 ***REMOVED******REMOVED***case let attachmentElement as AttachmentFormElement:
 ***REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentElement)
-***REMOVED******REMOVED******REMOVED***.shouldEnableEditControls(true)
+***REMOVED******REMOVED******REMOVED******REMOVED***.shouldEnableEditControls(true)
 ***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED***case let element as GroupFormElement:

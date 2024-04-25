@@ -21,14 +21,14 @@ public enum AttachmentsFeatureElementDisplayType {
 ***REMOVED***case list
 ***REMOVED******REMOVED***/ Attachments expand to the width of the view.
 ***REMOVED***case preview
-***REMOVED******REMOVED***/ Allows applications to choose the most suitable default experience for their application.
+***REMOVED******REMOVED***/ Allows applications to choose the most suitable default experience.
 ***REMOVED***case auto
 ***REMOVED***
 
 ***REMOVED***/ Common properties for elements which display feature attachments.
 public protocol AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ Indicates how to display the attachments.
-***REMOVED******REMOVED***/ If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the view. Setting the value to `auto` allows applications to choose the most suitable default experience for their application.
+***REMOVED******REMOVED***/ If `list` is specified, attachments show as links. If `preview` is specified, attachments expand to the width of the view. Setting the value to `auto` allows applications to choose the most suitable default experience.
 ***REMOVED***var attachmentDisplayType: AttachmentsFeatureElementDisplayType { get ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A string value describing the element in detail. Can be an empty string.
@@ -38,7 +38,7 @@ public protocol AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ The feature attachments associated with this element. This property will be empty if the element has not yet been evaluated.
 ***REMOVED***var featureAttachments: [FeatureAttachment] { get async throws ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A descriptive label that appears with the element. Can be an empty string.
 ***REMOVED***var title: String { get set ***REMOVED***
 ***REMOVED***

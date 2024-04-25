@@ -17,12 +17,12 @@
 
 ***REMOVED***/ A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
-***REMOVED******REMOVED***/ The attachment models displayed in the list.
+***REMOVED******REMOVED***/ The models for the attachments displayed in the list.
 ***REMOVED***var attachmentModels: [AttachmentModel]
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name for the existing attachment being edited.
 ***REMOVED***@State private var currentAttachmentName = ""
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be deleted.
 ***REMOVED***@State private var deletionWillStart: Bool = false
 ***REMOVED***
@@ -31,9 +31,10 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The new name the user has provided for the attachment.
 ***REMOVED***@State private var newAttachmentName = ""
-
-***REMOVED***let onDelete: ((FeatureAttachment) async throws -> Void)?
 ***REMOVED***
+***REMOVED******REMOVED***/ The action to perform when the attachment is deleted.
+***REMOVED***
+***REMOVED******REMOVED***/ The action to perform when the attachment is renamed.
 ***REMOVED***let onRename: ((FeatureAttachment, String) async throws -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
@@ -115,7 +116,6 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CGSize(width: 36, height: 36) :
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CGSize(width: 120, height: 120)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !attachmentModel.usingDefaultImage {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
@@ -173,9 +173,9 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED*** Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
+
 extension FileManager {
-***REMOVED***func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
+***REMOVED******REMOVED***/ - Note: This can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***if FileManager.default.fileExists(atPath: dstURL.path) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try FileManager.default.removeItem(at: dstURL)

@@ -50,7 +50,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The new image attachment data retrieved from the photos picker.
 ***REMOVED***@State private var newImageData: Data?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The new attachment retrieved from the device's camera.
 ***REMOVED***@State private var capturedImage: UIImage?
 ***REMOVED***
@@ -88,7 +88,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !newAttachmentData.fileName.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = newAttachmentData.fileName
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This is probably not good and shoudl be re-thought.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This is probably not good and should be re-thought.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Look at how the `AGSPopupAttachmentsViewController` handles this
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** https:***REMOVED***devtopia.esri.com/runtime/cocoa/blob/b788189d3d2eb43b7da8f9cc9af18ed2f3aa6925/api/iOS/Popup/ViewController/AGSPopupAttachmentsViewController.m#L755
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and
