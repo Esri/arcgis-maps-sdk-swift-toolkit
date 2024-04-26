@@ -49,7 +49,10 @@ final class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED***researchAnnexButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select the facility named "Lattice".
-***REMOVED******REMOVED***XCTAssertTrue(latticeText.exists, "The Lattice text wasn't found.")
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***latticeText.waitForExistence(timeout: 10),
+***REMOVED******REMOVED******REMOVED***"The Lattice text wasn't found."
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***latticeText.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select the level labeled "8".
