@@ -17,7 +17,7 @@ import XCTest
 
 @testable ***REMOVED***Toolkit
 
-@MainActor final class UtilityNetworkTraceViewModelTests: XCTestCase {
+final class UtilityNetworkTraceViewModelTests: XCTestCase {
 ***REMOVED***override func setUp() async throws {
 ***REMOVED******REMOVED***ArcGISEnvironment.apiKey = .default
 ***REMOVED******REMOVED***
@@ -35,6 +35,7 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test `UtilityNetworkTraceViewModel` on a map that does not contain a utility network.
+***REMOVED***@MainActor
 ***REMOVED***func testCase_1_1() async throws {
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: try await makeMap(),
@@ -53,6 +54,7 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test `UtilityNetworkTraceViewModel` on a map that contains a utility network.
+***REMOVED***@MainActor
 ***REMOVED***func testCase_1_4() async throws {
 ***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
 ***REMOVED******REMOVED***
@@ -74,6 +76,7 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test initializing a `UtilityNetworkTraceViewModel` with starting points.
+***REMOVED***@MainActor
 ***REMOVED***func testCase_2_1() async throws {
 ***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
 ***REMOVED******REMOVED***
@@ -117,6 +120,7 @@ import XCTest
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test modifying the terminal configuration of a utility element that supports terminal
 ***REMOVED******REMOVED***/ configuration.
+***REMOVED***@MainActor
 ***REMOVED***func testCase_2_2() async throws {
 ***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
 ***REMOVED******REMOVED***
@@ -169,6 +173,7 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test modifying the fractional starting point along an edge based utility element.
+***REMOVED***@MainActor
 ***REMOVED***func testCase_2_3() async throws {
 ***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
 ***REMOVED******REMOVED***
@@ -211,6 +216,7 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** Test an upstream trace and validate a function result.
+***REMOVED***@MainActor
 ***REMOVED***func testCase_3_1() async throws {
 ***REMOVED******REMOVED***let map = try await makeMapWithPortalItem()
 ***REMOVED******REMOVED***

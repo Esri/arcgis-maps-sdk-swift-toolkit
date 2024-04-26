@@ -15,7 +15,8 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor final class ValueContinuationTests: XCTestCase {
+final class ValueContinuationTests: XCTestCase {
+***REMOVED***@MainActor
 ***REMOVED***func testValueContinuation() async {
 ***REMOVED******REMOVED******REMOVED*** Tests setting value before awaiting.
 ***REMOVED******REMOVED***let valueContinuation = ValueContinuation<String>()
