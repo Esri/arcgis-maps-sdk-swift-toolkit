@@ -114,6 +114,9 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeElement(_ element: FormElement) -> some View {
 ***REMOVED******REMOVED***switch element {
+***REMOVED******REMOVED***case let attachmentElement as AttachmentFormElement:
+***REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentElement)
+***REMOVED******REMOVED******REMOVED******REMOVED***.editControlsDisabled(false)
 ***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED***case let element as GroupFormElement:
