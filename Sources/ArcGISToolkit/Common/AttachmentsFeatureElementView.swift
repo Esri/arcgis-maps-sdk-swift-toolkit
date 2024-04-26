@@ -135,9 +135,20 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if !editControlsDisabled,
 ***REMOVED******REMOVED******REMOVED***   let element = featureElement as? AttachmentFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportMenu(element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportMenu(element: element, onAdd: onAdd)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a model for the new attachment for display.
+***REMOVED******REMOVED***/ - Parameter attachment: The added attachment.
+***REMOVED***@MainActor
+***REMOVED***func onAdd(attachment: FeatureAttachment) -> Void {
+***REMOVED******REMOVED***guard case .loaded(var models) = attachmentLoadingState else { return ***REMOVED***
+***REMOVED******REMOVED***let newModel = AttachmentModel(attachment: attachment, displayScale: displayScale)
+***REMOVED******REMOVED***newModel.load()
+***REMOVED******REMOVED***models.insert(newModel, at: 0)
+***REMOVED******REMOVED***attachmentLoadingState = .loaded(models)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Renames the given attachment.
