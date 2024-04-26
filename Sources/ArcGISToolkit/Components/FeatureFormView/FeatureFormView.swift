@@ -114,6 +114,9 @@ extension FeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeElement(_ element: FormElement) -> some View {
         switch element {
+        case let attachmentElement as AttachmentFormElement:
+            AttachmentsFeatureElementView(featureElement: attachmentElement)
+                .editControlsDisabled(false)
         case let element as FieldFormElement:
             makeFieldElement(element)
         case let element as GroupFormElement:
