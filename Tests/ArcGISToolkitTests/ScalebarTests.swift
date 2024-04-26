@@ -18,7 +18,6 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor
 class ScalebarTests: XCTestCase {
     struct ScalebarTestCase {
         let x: Double
@@ -66,6 +65,7 @@ class ScalebarTests: XCTestCase {
         ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, maxWidth: 175, units: .metric, scale: 80_000_000, unitsPerPoint: 21166.666666643807,  displayLength: 143, labels: ["0", "1,250", "2,500 km"])
     ]}
     
+    @MainActor
     func testAllCases() {
         for test in testCases {
             let viewpoint = Viewpoint(

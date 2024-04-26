@@ -17,7 +17,7 @@ import XCTest
 
 @testable import ArcGISToolkit
 
-@MainActor final class UtilityNetworkTraceViewModelTests: XCTestCase {
+final class UtilityNetworkTraceViewModelTests: XCTestCase {
     override func setUp() async throws {
         ArcGISEnvironment.apiKey = .default
         
@@ -35,6 +35,7 @@ import XCTest
     }
     
     /// Test `UtilityNetworkTraceViewModel` on a map that does not contain a utility network.
+    @MainActor
     func testCase_1_1() async throws {
         let viewModel = UtilityNetworkTraceViewModel(
             map: try await makeMap(),
@@ -53,6 +54,7 @@ import XCTest
     }
     
     /// Test `UtilityNetworkTraceViewModel` on a map that contains a utility network.
+    @MainActor
     func testCase_1_4() async throws {
         let map = try await makeMapWithPortalItem()
         
@@ -74,6 +76,7 @@ import XCTest
     }
     
     /// Test initializing a `UtilityNetworkTraceViewModel` with starting points.
+    @MainActor
     func testCase_2_1() async throws {
         let map = try await makeMapWithPortalItem()
         
@@ -117,6 +120,7 @@ import XCTest
     
     /// Test modifying the terminal configuration of a utility element that supports terminal
     /// configuration.
+    @MainActor
     func testCase_2_2() async throws {
         let map = try await makeMapWithPortalItem()
         
@@ -169,6 +173,7 @@ import XCTest
     }
     
     /// Test modifying the fractional starting point along an edge based utility element.
+    @MainActor
     func testCase_2_3() async throws {
         let map = try await makeMapWithPortalItem()
         
@@ -211,6 +216,7 @@ import XCTest
     }
     
     // Test an upstream trace and validate a function result.
+    @MainActor
     func testCase_3_1() async throws {
         let map = try await makeMapWithPortalItem()
         
