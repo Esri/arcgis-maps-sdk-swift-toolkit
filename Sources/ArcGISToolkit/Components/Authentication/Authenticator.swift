@@ -25,7 +25,7 @@ import CryptoTokenKit
 /// 
 /// The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is
 /// asked to handle an authentication challenge. This will handle many different types of
-/// authentication, for example:
+/// authentication, for example:
 ///
 ///   - ArcGIS authentication (token and OAuth)
 ///   - Integrated Windows Authentication (IWA)
