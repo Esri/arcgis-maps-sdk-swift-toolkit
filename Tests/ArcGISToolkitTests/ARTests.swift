@@ -17,7 +17,7 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor final class ARTests: XCTestCase {
+final class ARTests: XCTestCase {
     func testFlyoverLocationInitWithDefaults() throws {
         let view = FlyoverSceneView(
             initialLocation: .init(

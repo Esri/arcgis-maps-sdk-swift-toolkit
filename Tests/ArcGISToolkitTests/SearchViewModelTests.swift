@@ -16,8 +16,8 @@ import XCTest
 import ArcGIS
 @testable import ArcGISToolkit
 
-@MainActor
 class SearchViewModelTests: XCTestCase {
+    @MainActor
     func testAcceptSuggestion() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         model.currentQuery = "Magers & Quinn Booksellers"
@@ -38,6 +38,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(result.first, model.selectedResult)
     }
     
+    @MainActor
     func testCommitSearch() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -88,6 +89,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertNil(model.selectedResult)
     }
     
+    @MainActor
     func testCurrentQuery() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -124,6 +126,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertNil(model.selectedResult)
     }
     
+    @MainActor
     func testIsEligibleForRequery() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -184,6 +187,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertTrue(model.isEligibleForRequery)
     }
     
+    @MainActor
     func testQueryArea() async throws {
         let source = LocatorSearchSource()
         source.maximumResults = .max
@@ -237,6 +241,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(result.count, 1)
     }
     
+    @MainActor
     func testQueryCenter() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -294,6 +299,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertLessThan(geodeticDistance.distance.value,  100)
     }
     
+    @MainActor
     func testRepeatSearch() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -337,6 +343,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(result.count, 1)
     }
     
+    @MainActor
     func testSearchResultMode() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         XCTAssertEqual(model.resultMode, .automatic)
@@ -383,6 +390,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(result.count, 1)
     }
     
+    @MainActor
     func testUpdateSuggestions() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         

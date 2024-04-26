@@ -16,7 +16,8 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor final class TokenChallengeContinuationTests: XCTestCase {
+final class TokenChallengeContinuationTests: XCTestCase {
+    @MainActor
     func testInit() {
         let challenge = TokenChallengeContinuation(host: "host.com") { _ in
             fatalError()
@@ -26,6 +27,7 @@ import XCTest
         XCTAssertNotNil(challenge.tokenCredentialProvider)
     }
     
+    @MainActor
     func testResumeWithLogin() async {
         struct MockError: Error {}
         
@@ -38,6 +40,7 @@ import XCTest
         XCTAssertTrue(result.error is MockError)
     }
     
+    @MainActor
     func testCancel() async {
         let challenge = TokenChallengeContinuation(host: "host.com") { _ in
             fatalError()
