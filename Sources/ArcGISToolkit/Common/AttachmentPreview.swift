@@ -71,6 +71,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Rename", systemImage: "pencil")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editedAttachment = attachmentModel.attachment
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***deletionWillStart = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Delete", systemImage: "trash")
@@ -92,10 +93,8 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: deletionWillStart) {
-***REMOVED******REMOVED******REMOVED***guard deletionWillStart else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***if let editedAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await onDelete?(editedAttachment)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***guard deletionWillStart, let editedAttachment else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***try? await onDelete?(editedAttachment)
 ***REMOVED******REMOVED******REMOVED***deletionWillStart = false
 ***REMOVED***
 ***REMOVED***
