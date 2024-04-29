@@ -32,8 +32,10 @@ struct AttachmentImportMenu: View {
     
     /// Creates an `AttachmentImportMenu`
     /// - Parameter element: The attachment form element displaying the menu.
-    init(element: AttachmentFormElement) {
+    /// - Parameter onAdd: The action to perform when an attachment is added.
+    init(element: AttachmentFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
         self.element = element
+        self.onAdd = onAdd
     }
     
     /// A Boolean value indicating whether the attachment camera controller is presented.
@@ -53,6 +55,9 @@ struct AttachmentImportMenu: View {
     
     /// The new attachment retrieved from the device's camera.
     @State private var capturedImage: UIImage?
+    
+    /// The action to perform when an attachment is added.
+    let onAdd: ((FeatureAttachment) async throws -> Void)?
     
     var body: some View {
         Menu {
@@ -95,12 +100,13 @@ struct AttachmentImportMenu: View {
                     // https://devtopia.esri.com/runtime/cocoa/blob/b788189d3d2eb43b7da8f9cc9af18ed2f3aa6925/api/iOS/Popup/ViewController/AGSPopupAttachmentsViewController.m#L725
                     fileName = "Attachment \(element.attachments.count + 1).\(newAttachmentData.contentType.split(separator: "/").last!)"
                 }
-                _ = try await element.addAttachment(
+                let newAttachment = try await element.addAttachment(
                     // Can this be better? What does legacy do?
                     name: fileName,
                     contentType: newAttachmentData.contentType,
                     data: newAttachmentData.data
                 )
+                try await onAdd?(newAttachment)
             } catch {
                 // TODO: Figure out error handling
                 print("Error adding attachment: \(error)")

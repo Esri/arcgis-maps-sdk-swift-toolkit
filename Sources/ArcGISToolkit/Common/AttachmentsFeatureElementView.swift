@@ -135,9 +135,20 @@ struct AttachmentsFeatureElementView: View {
             Spacer()
             if !editControlsDisabled,
                let element = featureElement as? AttachmentFormElement {
-                AttachmentImportMenu(element: element)
+                AttachmentImportMenu(element: element, onAdd: onAdd)
             }
         }
+    }
+    
+    /// Creates a model for the new attachment for display.
+    /// - Parameter attachment: The added attachment.
+    @MainActor
+    func onAdd(attachment: FeatureAttachment) -> Void {
+        guard case .loaded(var models) = attachmentLoadingState else { return }
+        let newModel = AttachmentModel(attachment: attachment, displayScale: displayScale)
+        newModel.load()
+        models.insert(newModel, at: 0)
+        attachmentLoadingState = .loaded(models)
     }
     
     /// Renames the given attachment.
