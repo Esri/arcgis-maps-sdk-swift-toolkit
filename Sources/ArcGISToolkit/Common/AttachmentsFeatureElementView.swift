@@ -30,26 +30,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***!isPortraitOrientation
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var thumbnailSize: CGSize {
-***REMOVED******REMOVED******REMOVED*** Set thumbnail size
-***REMOVED******REMOVED***let thumbnailSize: CGSize
-***REMOVED******REMOVED***switch featureElement.attachmentDisplayType {
-***REMOVED******REMOVED***case .list:
-***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 40, height: 40)
-***REMOVED******REMOVED***case .preview:
-***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
-***REMOVED******REMOVED***case .auto:
-***REMOVED******REMOVED******REMOVED***if isRegularWidth {
-***REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 40, height: 40)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***@unknown default:
-***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
-***REMOVED***
-***REMOVED******REMOVED***return thumbnailSize
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The states of loading attachments.
 ***REMOVED***private enum AttachmentLoadingState {
 ***REMOVED******REMOVED******REMOVED***/ Attachments have not been loaded.
@@ -222,5 +202,27 @@ extension AttachmentsFeatureElementView {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.editControlsDisabled = newEditControlsDisabled
 ***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The size of thumbnail images, based on the attachment display type
+***REMOVED******REMOVED***/ and the current size class of the view.
+***REMOVED***var thumbnailSize: CGSize {
+***REMOVED******REMOVED******REMOVED*** Set thumbnail size
+***REMOVED******REMOVED***let thumbnailSize: CGSize
+***REMOVED******REMOVED***switch featureElement.attachmentDisplayType {
+***REMOVED******REMOVED***case .list:
+***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 40, height: 40)
+***REMOVED******REMOVED***case .preview:
+***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
+***REMOVED******REMOVED***case .auto:
+***REMOVED******REMOVED******REMOVED***if isRegularWidth {
+***REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 40, height: 40)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
+***REMOVED***
+***REMOVED******REMOVED***return thumbnailSize
 ***REMOVED***
 ***REMOVED***
