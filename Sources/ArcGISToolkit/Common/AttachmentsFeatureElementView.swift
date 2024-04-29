@@ -85,7 +85,13 @@ struct AttachmentsFeatureElementView: View {
             let attachments = (try? await featureElement.featureAttachments) ?? []
             
             var attachmentModels = attachments
-                .map { AttachmentModel(attachment: $0, displayScale: displayScale) }
+                .map {
+                    AttachmentModel(
+                        attachment: $0,
+                        displayScale: displayScale,
+                        thumbnailSize: thumbnailSize
+                    )
+                }
             
             if editControlsDisabled {
                 // Reverse attachment models array if we're not editing.
@@ -145,7 +151,11 @@ struct AttachmentsFeatureElementView: View {
     @MainActor
     func onAdd(attachment: FeatureAttachment) -> Void {
         guard case .loaded(var models) = attachmentLoadingState else { return }
-        let newModel = AttachmentModel(attachment: attachment, displayScale: displayScale)
+        let newModel = AttachmentModel(
+            attachment: attachment,
+            displayScale: displayScale,
+            thumbnailSize: thumbnailSize
+        )
         newModel.load()
         models.insert(newModel, at: 0)
         attachmentLoadingState = .loaded(models)
@@ -192,5 +202,27 @@ extension AttachmentsFeatureElementView {
         var copy = self
         copy.editControlsDisabled = newEditControlsDisabled
         return copy
+    }
+    
+    /// The size of thumbnail images, based on the attachment display type
+    /// and the current size class of the view.
+    var thumbnailSize: CGSize {
+        // Set thumbnail size
+        let thumbnailSize: CGSize
+        switch featureElement.attachmentDisplayType {
+        case .list:
+            thumbnailSize = CGSize(width: 40, height: 40)
+        case .preview:
+            thumbnailSize = CGSize(width: 120, height: 120)
+        case .auto:
+            if isRegularWidth {
+                thumbnailSize = CGSize(width: 120, height: 120)
+            } else {
+                thumbnailSize = CGSize(width: 40, height: 40)
+            }
+        @unknown default:
+            thumbnailSize = CGSize(width: 120, height: 120)
+        }
+        return thumbnailSize
     }
 }
