@@ -116,14 +116,14 @@ struct AttachmentPreview: View {
                             attachmentModel: attachmentModel,
                             size: attachmentModel.usingSystemImage ?
                             CGSize(width: 36, height: 36) :
-                                CGSize(width: 120, height: 120)
+                                attachmentModel.thumbnailSize
                         )
                         if attachmentModel.loadStatus == .loaded {
                             VStack {
                                 Spacer()
                                 ThumbnailViewFooter(
                                     attachmentModel: attachmentModel,
-                                    size: CGSize(width: 120, height: 120)
+                                    size: attachmentModel.thumbnailSize
                                 )
                             }
                         }
@@ -167,7 +167,7 @@ struct AttachmentPreview: View {
                     url = tmpURL
                 } else if attachmentModel.attachment.loadStatus == .notLoaded {
                     // Load the attachment model with the given size.
-                    attachmentModel.load(thumbnailSize: CGSize(width: 120, height: 120))
+                    attachmentModel.load()
                 }
             }
             .quickLookPreview($url)
