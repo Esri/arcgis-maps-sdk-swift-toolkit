@@ -30,6 +30,26 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***!isPortraitOrientation
 ***REMOVED***
 ***REMOVED***
+***REMOVED***var thumbnailSize: CGSize {
+***REMOVED******REMOVED******REMOVED*** Set thumbnail size
+***REMOVED******REMOVED***let thumbnailSize: CGSize
+***REMOVED******REMOVED***switch featureElement.attachmentDisplayType {
+***REMOVED******REMOVED***case .list:
+***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 40, height: 40)
+***REMOVED******REMOVED***case .preview:
+***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
+***REMOVED******REMOVED***case .auto:
+***REMOVED******REMOVED******REMOVED***if isRegularWidth {
+***REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 40, height: 40)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
+***REMOVED***
+***REMOVED******REMOVED***return thumbnailSize
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The states of loading attachments.
 ***REMOVED***private enum AttachmentLoadingState {
 ***REMOVED******REMOVED******REMOVED***/ Attachments have not been loaded.
@@ -85,7 +105,13 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***let attachments = (try? await featureElement.featureAttachments) ?? []
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***var attachmentModels = attachments
-***REMOVED******REMOVED******REMOVED******REMOVED***.map { AttachmentModel(attachment: $0, displayScale: displayScale) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.map {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachment: $0,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayScale: displayScale,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailSize: thumbnailSize
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if editControlsDisabled {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reverse attachment models array if we're not editing.
@@ -145,7 +171,11 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***@MainActor
 ***REMOVED***func onAdd(attachment: FeatureAttachment) -> Void {
 ***REMOVED******REMOVED***guard case .loaded(var models) = attachmentLoadingState else { return ***REMOVED***
-***REMOVED******REMOVED***let newModel = AttachmentModel(attachment: attachment, displayScale: displayScale)
+***REMOVED******REMOVED***let newModel = AttachmentModel(
+***REMOVED******REMOVED******REMOVED***attachment: attachment,
+***REMOVED******REMOVED******REMOVED***displayScale: displayScale,
+***REMOVED******REMOVED******REMOVED***thumbnailSize: thumbnailSize
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***newModel.load()
 ***REMOVED******REMOVED***models.insert(newModel, at: 0)
 ***REMOVED******REMOVED***attachmentLoadingState = .loaded(models)

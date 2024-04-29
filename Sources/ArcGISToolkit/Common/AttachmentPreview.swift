@@ -116,14 +116,14 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel: attachmentModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: attachmentModel.usingSystemImage ?
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CGSize(width: 36, height: 36) :
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CGSize(width: 120, height: 120)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.thumbnailSize
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ThumbnailViewFooter(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel: attachmentModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: CGSize(width: 120, height: 120)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: attachmentModel.thumbnailSize
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -167,7 +167,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url = tmpURL
 ***REMOVED******REMOVED******REMOVED*** else if attachmentModel.attachment.loadStatus == .notLoaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Load the attachment model with the given size.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load(thumbnailSize: CGSize(width: 120, height: 120))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
