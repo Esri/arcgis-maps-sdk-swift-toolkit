@@ -71,6 +71,7 @@ struct AttachmentPreview: View {
                                     Label("Rename", systemImage: "pencil")
                                 }
                                 Button(role: .destructive) {
+                                    editedAttachment = attachmentModel.attachment
                                     deletionWillStart = true
                                 } label: {
                                     Label("Delete", systemImage: "trash")
@@ -92,10 +93,8 @@ struct AttachmentPreview: View {
             }
         }
         .task(id: deletionWillStart) {
-            guard deletionWillStart else { return }
-            if let editedAttachment {
-                try? await onDelete?(editedAttachment)
-            }
+            guard deletionWillStart, let editedAttachment else { return }
+            try? await onDelete?(editedAttachment)
             deletionWillStart = false
         }
     }
