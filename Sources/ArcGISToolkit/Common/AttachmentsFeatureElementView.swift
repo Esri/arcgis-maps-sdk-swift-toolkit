@@ -30,26 +30,6 @@ struct AttachmentsFeatureElementView: View {
         !isPortraitOrientation
     }
     
-    var thumbnailSize: CGSize {
-        // Set thumbnail size
-        let thumbnailSize: CGSize
-        switch featureElement.attachmentDisplayType {
-        case .list:
-            thumbnailSize = CGSize(width: 40, height: 40)
-        case .preview:
-            thumbnailSize = CGSize(width: 120, height: 120)
-        case .auto:
-            if isRegularWidth {
-                thumbnailSize = CGSize(width: 120, height: 120)
-            } else {
-                thumbnailSize = CGSize(width: 40, height: 40)
-            }
-        @unknown default:
-            thumbnailSize = CGSize(width: 120, height: 120)
-        }
-        return thumbnailSize
-    }
-    
     /// The states of loading attachments.
     private enum AttachmentLoadingState {
         /// Attachments have not been loaded.
@@ -222,5 +202,27 @@ extension AttachmentsFeatureElementView {
         var copy = self
         copy.editControlsDisabled = newEditControlsDisabled
         return copy
+    }
+    
+    /// The size of thumbnail images, based on the attachment display type
+    /// and the current size class of the view.
+    var thumbnailSize: CGSize {
+        // Set thumbnail size
+        let thumbnailSize: CGSize
+        switch featureElement.attachmentDisplayType {
+        case .list:
+            thumbnailSize = CGSize(width: 40, height: 40)
+        case .preview:
+            thumbnailSize = CGSize(width: 120, height: 120)
+        case .auto:
+            if isRegularWidth {
+                thumbnailSize = CGSize(width: 120, height: 120)
+            } else {
+                thumbnailSize = CGSize(width: 40, height: 40)
+            }
+        @unknown default:
+            thumbnailSize = CGSize(width: 120, height: 120)
+        }
+        return thumbnailSize
     }
 }
