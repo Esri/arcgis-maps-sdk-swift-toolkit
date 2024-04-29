@@ -43,16 +43,17 @@ import QuickLook
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The pixel density of the display on the intended device.
-***REMOVED***private var displayScale: CGFloat
+***REMOVED***private let displayScale: CGFloat
 ***REMOVED***
-***REMOVED******REMOVED***/ The desired size of the thumbnail images.
-***REMOVED***var thumbnailSize: CGSize
-
+***REMOVED******REMOVED***/ The desired size of the thumbnail image.
+***REMOVED***let thumbnailSize: CGSize
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view model representing the combination of a `FeatureAttachment` and
 ***REMOVED******REMOVED***/ an associated `UIImage` used as a thumbnail.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - attachment: The `FeatureAttachment`.
 ***REMOVED******REMOVED***/   - displayScale: The pixel density of the display on the intended device.
+***REMOVED******REMOVED***/   - thumbnailSize: The desired size of the thumbnail image.
 ***REMOVED***init(
 ***REMOVED******REMOVED***attachment: FeatureAttachment,
 ***REMOVED******REMOVED***displayScale: CGFloat,
@@ -61,7 +62,7 @@ import QuickLook
 ***REMOVED******REMOVED***self.attachment = attachment
 ***REMOVED******REMOVED***self.displayScale = displayScale
 ***REMOVED******REMOVED***self.thumbnailSize = thumbnailSize
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch attachment.featureAttachmentKind {
 ***REMOVED******REMOVED***case .image:
 ***REMOVED******REMOVED******REMOVED***systemImageName = "photo"
