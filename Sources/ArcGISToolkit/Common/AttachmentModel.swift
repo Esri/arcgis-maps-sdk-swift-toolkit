@@ -43,16 +43,17 @@ import SwiftUI
     }
     
     /// The pixel density of the display on the intended device.
-    private var displayScale: CGFloat
+    private let displayScale: CGFloat
     
-    /// The desired size of the thumbnail images.
-    var thumbnailSize: CGSize
-
+    /// The desired size of the thumbnail image.
+    let thumbnailSize: CGSize
+    
     /// Creates a view model representing the combination of a `FeatureAttachment` and
     /// an associated `UIImage` used as a thumbnail.
     /// - Parameters:
     ///   - attachment: The `FeatureAttachment`.
     ///   - displayScale: The pixel density of the display on the intended device.
+    ///   - thumbnailSize: The desired size of the thumbnail image.
     init(
         attachment: FeatureAttachment,
         displayScale: CGFloat,
@@ -61,7 +62,7 @@ import SwiftUI
         self.attachment = attachment
         self.displayScale = displayScale
         self.thumbnailSize = thumbnailSize
-
+        
         switch attachment.featureAttachmentKind {
         case .image:
             systemImageName = "photo"
