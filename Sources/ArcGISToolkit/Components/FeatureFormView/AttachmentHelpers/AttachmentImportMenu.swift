@@ -82,6 +82,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "plus")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(5)
 ***REMOVED***
 #if targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***.menuStyle(.borderlessButton)
