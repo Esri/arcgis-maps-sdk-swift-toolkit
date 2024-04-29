@@ -32,8 +32,10 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `AttachmentImportMenu`
 ***REMOVED******REMOVED***/ - Parameter element: The attachment form element displaying the menu.
-***REMOVED***init(element: AttachmentFormElement) {
+***REMOVED******REMOVED***/ - Parameter onAdd: The action to perform when an attachment is added.
+***REMOVED***init(element: AttachmentFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
 ***REMOVED******REMOVED***self.element = element
+***REMOVED******REMOVED***self.onAdd = onAdd
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment camera controller is presented.
@@ -53,6 +55,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The new attachment retrieved from the device's camera.
 ***REMOVED***@State private var capturedImage: UIImage?
+***REMOVED***
+***REMOVED******REMOVED***/ The action to perform when an attachment is added.
+***REMOVED***let onAdd: ((FeatureAttachment) async throws -> Void)?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Menu {
@@ -95,12 +100,13 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** https:***REMOVED***devtopia.esri.com/runtime/cocoa/blob/b788189d3d2eb43b7da8f9cc9af18ed2f3aa6925/api/iOS/Popup/ViewController/AGSPopupAttachmentsViewController.m#L725
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(element.attachments.count + 1).\(newAttachmentData.contentType.split(separator: "/").last!)"
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***_ = try await element.addAttachment(
+***REMOVED******REMOVED******REMOVED******REMOVED***let newAttachment = try await element.addAttachment(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Can this be better? What does legacy do?
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: fileName,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: newAttachmentData.contentType,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: newAttachmentData.data
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***try await onAdd?(newAttachment)
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: Figure out error handling
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("Error adding attachment: \(error)")
