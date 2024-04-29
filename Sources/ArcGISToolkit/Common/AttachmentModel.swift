@@ -45,15 +45,23 @@ import SwiftUI
     /// The pixel density of the display on the intended device.
     private var displayScale: CGFloat
     
+    /// The desired size of the thumbnail images.
+    var thumbnailSize: CGSize
+
     /// Creates a view model representing the combination of a `FeatureAttachment` and
     /// an associated `UIImage` used as a thumbnail.
     /// - Parameters:
     ///   - attachment: The `FeatureAttachment`.
     ///   - displayScale: The pixel density of the display on the intended device.
-    init(attachment: FeatureAttachment, displayScale: CGFloat) {
+    init(
+        attachment: FeatureAttachment,
+        displayScale: CGFloat,
+        thumbnailSize: CGSize
+    ) {
         self.attachment = attachment
         self.displayScale = displayScale
-        
+        self.thumbnailSize = thumbnailSize
+
         switch attachment.featureAttachmentKind {
         case .image:
             systemImageName = "photo"
@@ -68,7 +76,7 @@ import SwiftUI
     
     /// Loads the attachment and generates a thumbnail image.
     /// - Parameter thumbnailSize: The size for the generated thumbnail.
-    func load(thumbnailSize: CGSize = CGSize(width: 40, height: 40)) {
+    func load() {
         Task {
             loadStatus = .loading
             try await attachment.load()
