@@ -43,16 +43,25 @@ import QuickLook
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The pixel density of the display on the intended device.
-***REMOVED***private var displayScale: CGFloat
+***REMOVED***private let displayScale: CGFloat
+***REMOVED***
+***REMOVED******REMOVED***/ The desired size of the thumbnail image.
+***REMOVED***let thumbnailSize: CGSize
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a view model representing the combination of a `FeatureAttachment` and
 ***REMOVED******REMOVED***/ an associated `UIImage` used as a thumbnail.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - attachment: The `FeatureAttachment`.
 ***REMOVED******REMOVED***/   - displayScale: The pixel density of the display on the intended device.
-***REMOVED***init(attachment: FeatureAttachment, displayScale: CGFloat) {
+***REMOVED******REMOVED***/   - thumbnailSize: The desired size of the thumbnail image.
+***REMOVED***init(
+***REMOVED******REMOVED***attachment: FeatureAttachment,
+***REMOVED******REMOVED***displayScale: CGFloat,
+***REMOVED******REMOVED***thumbnailSize: CGSize
+***REMOVED***) {
 ***REMOVED******REMOVED***self.attachment = attachment
 ***REMOVED******REMOVED***self.displayScale = displayScale
+***REMOVED******REMOVED***self.thumbnailSize = thumbnailSize
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch attachment.featureAttachmentKind {
 ***REMOVED******REMOVED***case .image:
@@ -68,7 +77,7 @@ import QuickLook
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the attachment and generates a thumbnail image.
 ***REMOVED******REMOVED***/ - Parameter thumbnailSize: The size for the generated thumbnail.
-***REMOVED***func load(thumbnailSize: CGSize = CGSize(width: 40, height: 40)) {
+***REMOVED***func load() {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***loadStatus = .loading
 ***REMOVED******REMOVED******REMOVED***try await attachment.load()
