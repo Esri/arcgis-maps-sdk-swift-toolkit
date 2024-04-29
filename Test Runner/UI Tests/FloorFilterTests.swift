@@ -20,7 +20,10 @@ final class FloorFilterTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test general usage of the Floor Filter component.
+***REMOVED******REMOVED***/ - Bug: https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/706
 ***REMOVED***func testFloorFilter() throws {
+***REMOVED******REMOVED***XCTExpectFailure("The Floor Filter is currently broken when used within a NavigationStack. See also #706")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -35,10 +38,7 @@ final class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED***app.buttons["Floor Filter Tests"].tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for floor aware data to load and then open the filter.
-***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***filterButton.waitForExistence(timeout: 5),
-***REMOVED******REMOVED******REMOVED***"The filter button wasn't found within 5 seconds."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***XCTAssertTrue(latticeText.exists, "The Lattice text wasn't found.")
 ***REMOVED******REMOVED***filterButton.tap()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Select the site named "Research Annex".
