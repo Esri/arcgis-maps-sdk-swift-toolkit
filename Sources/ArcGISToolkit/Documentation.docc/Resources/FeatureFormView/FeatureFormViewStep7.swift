@@ -144,7 +144,7 @@ struct FeatureFormExampleView: View {
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***submissionError = Text("The changes could not be applied to the database or table.\n\n\(error.localizedDescription)")
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clear the feature form
 ***REMOVED******REMOVED***self.featureForm = nil
 ***REMOVED***
