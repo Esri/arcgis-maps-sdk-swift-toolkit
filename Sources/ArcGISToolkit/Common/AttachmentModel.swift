@@ -84,13 +84,12 @@ import QuickLook
 ***REMOVED***func load() {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***loadStatus = .loading
-***REMOVED******REMOVED******REMOVED***defer { sync() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***try await attachment.load()
-***REMOVED******REMOVED******REMOVED***if attachment.loadStatus == .failed || attachment.fileURL == nil {
+***REMOVED******REMOVED******REMOVED***sync()
+***REMOVED******REMOVED******REMOVED***if loadStatus == .failed || attachment.fileURL == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED***systemImageName = "exclamationmark.circle.fill"
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***var url = attachment.fileURL!
 ***REMOVED******REMOVED******REMOVED***if attachment is FormAttachment {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = try? await attachment.makeThumbnail(
