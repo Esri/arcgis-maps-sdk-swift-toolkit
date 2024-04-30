@@ -82,6 +82,7 @@ struct AttachmentImportMenu: View {
         } label: {
             Image(systemName: "plus")
                 .font(.title2)
+                .padding(5)
         }
 #if targetEnvironment(macCatalyst)
         .menuStyle(.borderlessButton)
