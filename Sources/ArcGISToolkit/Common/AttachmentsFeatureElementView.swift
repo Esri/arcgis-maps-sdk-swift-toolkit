@@ -161,14 +161,18 @@ struct AttachmentsFeatureElementView: View {
         attachmentLoadingState = .loaded(models)
     }
     
-    /// Renames the given attachment.
+    /// Renames the attachment associated with the given model.
     /// - Parameters:
-    ///   - attachment: The attachment to rename.
+    ///   - attachmentModel: The model for the attachment to rename.
     ///   - newAttachmentName: The new attachment name.
-    func onRename(attachment: FeatureAttachment, newAttachmentName: String) async throws -> Void {
+    @MainActor
+    func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
         if let element = featureElement as? AttachmentFormElement,
-           let attachment = attachment as? FormAttachment {
+           let attachment = attachmentModel.attachment as? FormAttachment {
             try await element.renameAttachment(attachment, name: newAttachmentName)
+            guard case .loaded(let models) = attachmentLoadingState else { return }
+            let model = models.first { $0 == attachmentModel }
+            model?.load()
         }
     }
     
