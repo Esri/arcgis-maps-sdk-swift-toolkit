@@ -23,8 +23,8 @@ struct AttachmentPreview: View {
     /// The name for the existing attachment being edited.
     @State private var currentAttachmentName = ""
     
-    /// A Boolean value indicating the user has requested that the attachment be deleted.
-    @State private var deletionWillStart: Bool = false
+    /// The model for an attachment the user has requested be deleted.
+    @State private var deletedAttachmentModel: AttachmentModel?
     
     /// The attachment with the new name the user has provided.
     @State private var editedAttachment: FeatureAttachment?
@@ -33,7 +33,7 @@ struct AttachmentPreview: View {
     @State private var newAttachmentName = ""
     
     /// The action to perform when the attachment is deleted.
-    let onDelete: ((FeatureAttachment) async throws -> Void)?
+    let onDelete: ((AttachmentModel) async throws -> Void)?
     
     /// The action to perform when the attachment is renamed.
     let onRename: ((FeatureAttachment, String) async throws -> Void)?
@@ -48,7 +48,7 @@ struct AttachmentPreview: View {
         attachmentModels: [AttachmentModel],
         editControlsDisabled: Bool = true,
         onRename: ((FeatureAttachment, String) async throws -> Void)? = nil,
-        onDelete: ((FeatureAttachment) async throws -> Void)? = nil
+        onDelete: ((AttachmentModel) async throws -> Void)? = nil
     ) {
         self.attachmentModels = attachmentModels
         self.onRename = onRename
@@ -71,7 +71,7 @@ struct AttachmentPreview: View {
                                     Label("Rename", systemImage: "pencil")
                                 }
                                 Button(role: .destructive) {
-                                    deletionWillStart = true
+                                    deletedAttachmentModel = attachmentModel
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
@@ -91,12 +91,10 @@ struct AttachmentPreview: View {
                 }
             }
         }
-        .task(id: deletionWillStart) {
-            guard deletionWillStart else { return }
-            if let editedAttachment {
-                try? await onDelete?(editedAttachment)
-            }
-            deletionWillStart = false
+        .task(id: deletedAttachmentModel) {
+            guard let deletedAttachmentModel else { return }
+            try? await onDelete?(deletedAttachmentModel)
+            self.deletedAttachmentModel = nil
         }
     }
     
