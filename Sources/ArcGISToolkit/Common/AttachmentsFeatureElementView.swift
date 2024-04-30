@@ -25,6 +25,13 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***@Environment(\.displayScale) var displayScale
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the input is editable.
+***REMOVED***@State private var isEditable = false
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the feature Element
+***REMOVED******REMOVED***/ is an `AttachmentFormElement`.
+***REMOVED***private var isShowingAttachmentFormElement = false
+
 ***REMOVED******REMOVED***/ A Boolean value denoting if the view should be shown as regular width.
 ***REMOVED***var isRegularWidth: Bool {
 ***REMOVED******REMOVED***!isPortraitOrientation
@@ -47,24 +54,23 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ - Parameter featureElement: The `AttachmentsFeatureElement`.
 ***REMOVED***init(featureElement: AttachmentsFeatureElement) {
 ***REMOVED******REMOVED***self.featureElement = featureElement
+***REMOVED******REMOVED***isShowingAttachmentFormElement = featureElement is AttachmentFormElement
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value denoting whether the Disclosure Group is expanded.
 ***REMOVED***@State private var isExpanded = true
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean which determines whether attachment editing controls are enabled.
-***REMOVED******REMOVED***/ Note that editing controls are only applicable when the display type is Preview.
-***REMOVED***private var editControlsDisabled: Bool = true
-***REMOVED***
 ***REMOVED***var body: some View {
+***REMOVED******REMOVED***Toggle(isOn: $isEditable) {***REMOVED***
+***REMOVED******REMOVED******REMOVED***.toggleStyle(.switch)
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***switch attachmentLoadingState {
 ***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading:
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***case .loaded(let attachmentModels):
-***REMOVED******REMOVED******REMOVED******REMOVED***if !editControlsDisabled {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If editing is enabled, don't show attachments in
+***REMOVED******REMOVED******REMOVED******REMOVED***if isShowingAttachmentFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If showing a form element, don't show attachments in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** a disclosure group, but also ALWAYS show
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the list of attachments, even if there are none.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentHeader
@@ -78,6 +84,9 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
+***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***guard case .notLoaded = attachmentLoadingState else { return ***REMOVED***
@@ -93,7 +102,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if editControlsDisabled {
+***REMOVED******REMOVED******REMOVED***if isShowingAttachmentFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reverse attachment models array if we're not editing.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This allows attachments in a non-editing context to
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** display in the same order as the online Map Viewer.
@@ -110,7 +119,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***case .preview:
 ***REMOVED******REMOVED******REMOVED***AttachmentPreview(
 ***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
-***REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: editControlsDisabled,
+***REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: !isEditable,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
 ***REMOVED******REMOVED******REMOVED***)
@@ -119,7 +128,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: editControlsDisabled,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: !isEditable,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -139,7 +148,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***description: featureElement.description
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if !editControlsDisabled,
+***REMOVED******REMOVED******REMOVED***if isEditable,
 ***REMOVED******REMOVED******REMOVED***   let element = featureElement as? AttachmentFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportMenu(element: element, onAdd: onAdd)
 ***REMOVED******REMOVED***
@@ -199,15 +208,6 @@ private extension AttachmentsFeatureElement {
 ***REMOVED***
 
 extension AttachmentsFeatureElementView {
-***REMOVED******REMOVED***/ Controls if the attachment editing controls should be enabled.
-***REMOVED******REMOVED***/ - Parameter newShouldShowEditControls: The new value.
-***REMOVED******REMOVED***/ - Returns: The `AttachmentsFeatureElementView`.
-***REMOVED***public func editControlsDisabled(_ newEditControlsDisabled: Bool) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.editControlsDisabled = newEditControlsDisabled
-***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The size of thumbnail images, based on the attachment display type
 ***REMOVED******REMOVED***/ and the current size class of the view.
 ***REMOVED***var thumbnailSize: CGSize {
@@ -228,5 +228,28 @@ extension AttachmentsFeatureElementView {
 ***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
 ***REMOVED***
 ***REMOVED******REMOVED***return thumbnailSize
+***REMOVED***
+***REMOVED***
+
+extension View {
+***REMOVED******REMOVED***/ Applies the given transform if the given condition evaluates to `true`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - condition: The condition to evaluate.
+***REMOVED******REMOVED***/   - transform: The transform to apply to the source `View`.
+***REMOVED******REMOVED***/ - Returns: Either the original `View` or the modified `View` if the condition is `true`.
+***REMOVED***@ViewBuilder func onAttachmentIsEditableChange(
+***REMOVED******REMOVED***of element: AttachmentsFeatureElement,
+***REMOVED******REMOVED***action: @escaping (_ newIsEditable: Bool) -> Void
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***if let attachmentFormElement = element as? AttachmentFormElement {
+***REMOVED******REMOVED******REMOVED***self
+***REMOVED******REMOVED******REMOVED******REMOVED***.task(id: ObjectIdentifier(attachmentFormElement)) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await isEditable in attachmentFormElement.$isEditable {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(isEditable)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***self
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
