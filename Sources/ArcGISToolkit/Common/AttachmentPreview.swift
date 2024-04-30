@@ -26,8 +26,8 @@ struct AttachmentPreview: View {
     /// The model for an attachment the user has requested be deleted.
     @State private var deletedAttachmentModel: AttachmentModel?
     
-    /// The attachment with the new name the user has provided.
-    @State private var editedAttachment: FeatureAttachment?
+    /// The model for an attachment with the user has requested be renamed.
+    @State private var renamedAttachmentModel: AttachmentModel?
     
     /// The new name the user has provided for the attachment.
     @State private var newAttachmentName = ""
@@ -36,7 +36,7 @@ struct AttachmentPreview: View {
     let onDelete: ((AttachmentModel) async throws -> Void)?
     
     /// The action to perform when the attachment is renamed.
-    let onRename: ((FeatureAttachment, String) async throws -> Void)?
+    let onRename: ((AttachmentModel, String) async throws -> Void)?
     
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
@@ -47,7 +47,7 @@ struct AttachmentPreview: View {
     init(
         attachmentModels: [AttachmentModel],
         editControlsDisabled: Bool = true,
-        onRename: ((FeatureAttachment, String) async throws -> Void)? = nil,
+        onRename: ((AttachmentModel, String) async throws -> Void)? = nil,
         onDelete: ((AttachmentModel) async throws -> Void)? = nil
     ) {
         self.attachmentModels = attachmentModels
@@ -64,7 +64,7 @@ struct AttachmentPreview: View {
                         .contextMenu {
                             if !editControlsDisabled {
                                 Button {
-                                    editedAttachment = attachmentModel.attachment
+                                    renamedAttachmentModel = attachmentModel
                                     newAttachmentName = attachmentModel.attachment.name
                                     renameDialogueIsShowing = true
                                 } label: {
@@ -85,8 +85,8 @@ struct AttachmentPreview: View {
             Button("Cancel", role: .cancel) { }
             Button("Ok") {
                 Task {
-                    if let editedAttachment {
-                        try? await onRename?(editedAttachment, newAttachmentName)
+                    if let renamedAttachmentModel {
+                        try? await onRename?(renamedAttachmentModel, newAttachmentName)
                     }
                 }
             }
