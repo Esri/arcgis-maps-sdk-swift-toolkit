@@ -61,8 +61,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***@State private var isExpanded = true
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Toggle(isOn: $isEditable) {***REMOVED***
-***REMOVED******REMOVED******REMOVED***.toggleStyle(.switch)
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***switch attachmentLoadingState {
 ***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading:
