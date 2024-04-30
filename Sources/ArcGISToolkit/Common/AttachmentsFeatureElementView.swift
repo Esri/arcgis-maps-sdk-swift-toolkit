@@ -161,14 +161,18 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***attachmentLoadingState = .loaded(models)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Renames the given attachment.
+***REMOVED******REMOVED***/ Renames the attachment associated with the given model.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - attachment: The attachment to rename.
+***REMOVED******REMOVED***/   - attachmentModel: The model for the attachment to rename.
 ***REMOVED******REMOVED***/   - newAttachmentName: The new attachment name.
-***REMOVED***func onRename(attachment: FeatureAttachment, newAttachmentName: String) async throws -> Void {
+***REMOVED***@MainActor
+***REMOVED***func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentFormElement,
-***REMOVED******REMOVED***   let attachment = attachment as? FormAttachment {
+***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***try await element.renameAttachment(attachment, name: newAttachmentName)
+***REMOVED******REMOVED******REMOVED***guard case .loaded(let models) = attachmentLoadingState else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***let model = models.first { $0 == attachmentModel ***REMOVED***
+***REMOVED******REMOVED******REMOVED***model?.load()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
