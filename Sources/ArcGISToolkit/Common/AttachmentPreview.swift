@@ -132,7 +132,7 @@ struct AttachmentPreview: View {
                     }
                 }
                 if attachmentModel.attachment.loadStatus != .loaded {
-                    Text(attachmentModel.attachment.name)
+                    Text(attachmentModel.name)
                         .lineLimit(1)
                         .truncationMode(.middle)
                         .padding([.leading, .trailing], 4)
@@ -192,7 +192,7 @@ extension FileManager {
 /// A view displaying details for popup media.
 struct ThumbnailViewFooter: View {
     /// The popup media to display.
-    let attachmentModel: AttachmentModel
+    @ObservedObject var attachmentModel: AttachmentModel
     
     /// The size of the media's frame.
     let size: CGSize
@@ -206,8 +206,8 @@ struct ThumbnailViewFooter: View {
                 )
                 .frame(height: size.height * 0.25)
             HStack {
-                if !attachmentModel.attachment.name.isEmpty {
-                    Text(attachmentModel.attachment.name)
+                if !attachmentModel.name.isEmpty {
+                    Text(attachmentModel.name)
                         .foregroundColor(.white)
                         .font(.caption)
                         .lineLimit(1)
