@@ -134,10 +134,15 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Apply the changes.
-***REMOVED******REMOVED***let results = try? await database.applyEdits()
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***if let serviceInfo = database.serviceInfo,
+***REMOVED******REMOVED******REMOVED***   serviceInfo.canUseServiceGeodatabaseApplyEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED***_ = try await database.applyEdits()
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***_ = try await table.applyEdits()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
-***REMOVED******REMOVED******REMOVED***print("An error occurred while submitting the changes.")
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***submissionError = Text("The changes could not be applied to the database or table.\n\n\(error.localizedDescription)")
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clear the feature form
