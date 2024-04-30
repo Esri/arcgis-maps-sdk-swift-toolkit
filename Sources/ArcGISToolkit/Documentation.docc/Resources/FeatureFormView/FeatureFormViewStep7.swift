@@ -134,12 +134,17 @@ struct FeatureFormExampleView: View {
         }
         
         // Apply the changes.
-        let results = try? await database.applyEdits()
-        
-        if results?.first?.editResults.first?.didCompleteWithErrors ?? false {
-            print("An error occurred while submitting the changes.")
+        do {
+            if let serviceInfo = database.serviceInfo,
+               serviceInfo.canUseServiceGeodatabaseApplyEdits {
+                _ = try await database.applyEdits()
+            } else {
+                _ = try await table.applyEdits()
+            }
+        } catch {
+            submissionError = Text("The changes could not be applied to the database or table.\n\n\(error.localizedDescription)")
         }
-        
+
         // Clear the feature form
         self.featureForm = nil
     }
