@@ -172,13 +172,17 @@ struct AttachmentsFeatureElementView: View {
         }
     }
     
-    /// Deletes the given attachment.
+    /// Deletes the attachment associated with the given model.
     /// - Parameters:
-    ///   - attachment: The attachment to delete.
-    func onDelete(attachment: FeatureAttachment) async throws -> Void {
+    ///   - attachmentModel: The model for the attachment to delete.
+    @MainActor
+    func onDelete(attachmentModel: AttachmentModel) async throws -> Void {
         if let element = featureElement as? AttachmentFormElement,
-           let attachment = attachment as? FormAttachment {
+           let attachment = attachmentModel.attachment as? FormAttachment {
             try await element.deleteAttachment(attachment)
+            guard case .loaded(var models) = attachmentLoadingState else { return }
+            models.removeAll { $0 == attachmentModel }
+            attachmentLoadingState = .loaded(models)
         }
     }
 }
