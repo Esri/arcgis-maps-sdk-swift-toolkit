@@ -230,11 +230,11 @@ extension AttachmentsFeatureElementView {
 }
 
 extension View {
-    /// Applies the given transform if the given condition evaluates to `true`.
+    /// Modifier for watching ``AttachmentFormElement.isEditableChanged`` events.
     /// - Parameters:
-    ///   - condition: The condition to evaluate.
-    ///   - transform: The transform to apply to the source `View`.
-    /// - Returns: Either the original `View` or the modified `View` if the condition is `true`.
+    ///   - element: The attachment form element to watch for changes on.
+    ///   - action: The action which watches for changes.
+    /// - Returns: The modified view.
     @ViewBuilder func onAttachmentIsEditableChange(
         of element: AttachmentsFeatureElement,
         action: @escaping (_ newIsEditable: Bool) -> Void
