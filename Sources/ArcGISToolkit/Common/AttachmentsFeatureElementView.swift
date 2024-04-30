@@ -61,8 +61,6 @@ struct AttachmentsFeatureElementView: View {
     @State private var isExpanded = true
     
     var body: some View {
-        Toggle(isOn: $isEditable) {}
-            .toggleStyle(.switch)
         Group {
             switch attachmentLoadingState {
             case .notLoaded, .loading:
