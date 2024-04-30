@@ -25,6 +25,13 @@ struct AttachmentsFeatureElementView: View {
     
     @Environment(\.displayScale) var displayScale
     
+    /// A Boolean value indicating whether the input is editable.
+    @State private var isEditable = false
+    
+    /// A Boolean value indicating whether the feature Element
+    /// is an `AttachmentFormElement`.
+    private var isShowingAttachmentFormElement = false
+
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
         !isPortraitOrientation
@@ -47,24 +54,23 @@ struct AttachmentsFeatureElementView: View {
     /// - Parameter featureElement: The `AttachmentsFeatureElement`.
     init(featureElement: AttachmentsFeatureElement) {
         self.featureElement = featureElement
+        isShowingAttachmentFormElement = featureElement is AttachmentFormElement
     }
     
     /// A Boolean value denoting whether the Disclosure Group is expanded.
     @State private var isExpanded = true
     
-    /// A Boolean which determines whether attachment editing controls are enabled.
-    /// Note that editing controls are only applicable when the display type is Preview.
-    private var editControlsDisabled: Bool = true
-    
     var body: some View {
+        Toggle(isOn: $isEditable) {}
+            .toggleStyle(.switch)
         Group {
             switch attachmentLoadingState {
             case .notLoaded, .loading:
                 ProgressView()
                     .padding()
             case .loaded(let attachmentModels):
-                if !editControlsDisabled {
-                    // If editing is enabled, don't show attachments in
+                if isShowingAttachmentFormElement {
+                    // If showing a form element, don't show attachments in
                     // a disclosure group, but also ALWAYS show
                     // the list of attachments, even if there are none.
                     attachmentHeader
@@ -78,6 +84,9 @@ struct AttachmentsFeatureElementView: View {
                     }
                 }
             }
+        }
+        .onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
+            isEditable = newIsEditable
         }
         .task {
             guard case .notLoaded = attachmentLoadingState else { return }
@@ -93,7 +102,7 @@ struct AttachmentsFeatureElementView: View {
                     )
                 }
             
-            if editControlsDisabled {
+            if isShowingAttachmentFormElement {
                 // Reverse attachment models array if we're not editing.
                 // This allows attachments in a non-editing context to
                 // display in the same order as the online Map Viewer.
@@ -110,7 +119,7 @@ struct AttachmentsFeatureElementView: View {
         case .preview:
             AttachmentPreview(
                 attachmentModels: attachmentModels,
-                editControlsDisabled: editControlsDisabled,
+                editControlsDisabled: !isEditable,
                 onRename: onRename,
                 onDelete: onDelete
             )
@@ -119,7 +128,7 @@ struct AttachmentsFeatureElementView: View {
                 if isRegularWidth {
                     AttachmentPreview(
                         attachmentModels: attachmentModels,
-                        editControlsDisabled: editControlsDisabled,
+                        editControlsDisabled: !isEditable,
                         onRename: onRename,
                         onDelete: onDelete
                     )
@@ -139,7 +148,7 @@ struct AttachmentsFeatureElementView: View {
                 description: featureElement.description
             )
             Spacer()
-            if !editControlsDisabled,
+            if isEditable,
                let element = featureElement as? AttachmentFormElement {
                 AttachmentImportMenu(element: element, onAdd: onAdd)
             }
@@ -199,15 +208,6 @@ private extension AttachmentsFeatureElement {
 }
 
 extension AttachmentsFeatureElementView {
-    /// Controls if the attachment editing controls should be enabled.
-    /// - Parameter newShouldShowEditControls: The new value.
-    /// - Returns: The `AttachmentsFeatureElementView`.
-    public func editControlsDisabled(_ newEditControlsDisabled: Bool) -> Self {
-        var copy = self
-        copy.editControlsDisabled = newEditControlsDisabled
-        return copy
-    }
-    
     /// The size of thumbnail images, based on the attachment display type
     /// and the current size class of the view.
     var thumbnailSize: CGSize {
@@ -228,5 +228,28 @@ extension AttachmentsFeatureElementView {
             thumbnailSize = CGSize(width: 120, height: 120)
         }
         return thumbnailSize
+    }
+}
+
+extension View {
+    /// Applies the given transform if the given condition evaluates to `true`.
+    /// - Parameters:
+    ///   - condition: The condition to evaluate.
+    ///   - transform: The transform to apply to the source `View`.
+    /// - Returns: Either the original `View` or the modified `View` if the condition is `true`.
+    @ViewBuilder func onAttachmentIsEditableChange(
+        of element: AttachmentsFeatureElement,
+        action: @escaping (_ newIsEditable: Bool) -> Void
+    ) -> some View {
+        if let attachmentFormElement = element as? AttachmentFormElement {
+            self
+                .task(id: ObjectIdentifier(attachmentFormElement)) {
+                    for await isEditable in attachmentFormElement.$isEditable {
+                        action(isEditable)
+                    }
+                }
+        } else {
+            self
+        }
     }
 }
