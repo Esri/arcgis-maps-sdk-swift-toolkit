@@ -132,7 +132,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.loadStatus != .loaded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.attachment.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.middle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .trailing], 4)
@@ -192,7 +192,7 @@ extension FileManager {
 ***REMOVED***/ A view displaying details for popup media.
 struct ThumbnailViewFooter: View {
 ***REMOVED******REMOVED***/ The popup media to display.
-***REMOVED***let attachmentModel: AttachmentModel
+***REMOVED***@ObservedObject var attachmentModel: AttachmentModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The size of the media's frame.
 ***REMOVED***let size: CGSize
@@ -206,8 +206,8 @@ struct ThumbnailViewFooter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: size.height * 0.25)
 ***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !attachmentModel.attachment.name.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.attachment.name)
+***REMOVED******REMOVED******REMOVED******REMOVED***if !attachmentModel.name.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)

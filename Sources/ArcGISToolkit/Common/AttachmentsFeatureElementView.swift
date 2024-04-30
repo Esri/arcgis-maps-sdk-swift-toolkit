@@ -170,9 +170,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentFormElement,
 ***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***try await element.renameAttachment(attachment, name: newAttachmentName)
-***REMOVED******REMOVED******REMOVED***guard case .loaded(let models) = attachmentLoadingState else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***let model = models.first { $0 == attachmentModel ***REMOVED***
-***REMOVED******REMOVED******REMOVED***model?.load()
+***REMOVED******REMOVED******REMOVED***attachmentModel.sync()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
