@@ -172,13 +172,17 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Deletes the given attachment.
+***REMOVED******REMOVED***/ Deletes the attachment associated with the given model.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - attachment: The attachment to delete.
-***REMOVED***func onDelete(attachment: FeatureAttachment) async throws -> Void {
+***REMOVED******REMOVED***/   - attachmentModel: The model for the attachment to delete.
+***REMOVED***@MainActor
+***REMOVED***func onDelete(attachmentModel: AttachmentModel) async throws -> Void {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentFormElement,
-***REMOVED******REMOVED***   let attachment = attachment as? FormAttachment {
+***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***try await element.deleteAttachment(attachment)
+***REMOVED******REMOVED******REMOVED***guard case .loaded(var models) = attachmentLoadingState else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***models.removeAll { $0 == attachmentModel ***REMOVED***
+***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loaded(models)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
