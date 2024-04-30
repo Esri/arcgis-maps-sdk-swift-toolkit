@@ -230,11 +230,11 @@ extension AttachmentsFeatureElementView {
 ***REMOVED***
 
 extension View {
-***REMOVED******REMOVED***/ Applies the given transform if the given condition evaluates to `true`.
+***REMOVED******REMOVED***/ Modifier for watching ``AttachmentFormElement.isEditableChanged`` events.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - condition: The condition to evaluate.
-***REMOVED******REMOVED***/   - transform: The transform to apply to the source `View`.
-***REMOVED******REMOVED***/ - Returns: Either the original `View` or the modified `View` if the condition is `true`.
+***REMOVED******REMOVED***/   - element: The attachment form element to watch for changes on.
+***REMOVED******REMOVED***/   - action: The action which watches for changes.
+***REMOVED******REMOVED***/ - Returns: The modified view.
 ***REMOVED***@ViewBuilder func onAttachmentIsEditableChange(
 ***REMOVED******REMOVED***of element: AttachmentsFeatureElement,
 ***REMOVED******REMOVED***action: @escaping (_ newIsEditable: Bool) -> Void
