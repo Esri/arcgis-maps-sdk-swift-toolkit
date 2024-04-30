@@ -23,8 +23,8 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ The name for the existing attachment being edited.
 ***REMOVED***@State private var currentAttachmentName = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be deleted.
-***REMOVED***@State private var deletionWillStart: Bool = false
+***REMOVED******REMOVED***/ The model for an attachment the user has requested be deleted.
+***REMOVED***@State private var deletedAttachmentModel: AttachmentModel?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The attachment with the new name the user has provided.
 ***REMOVED***@State private var editedAttachment: FeatureAttachment?
@@ -33,7 +33,7 @@ struct AttachmentPreview: View {
 ***REMOVED***@State private var newAttachmentName = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is deleted.
-***REMOVED***let onDelete: ((FeatureAttachment) async throws -> Void)?
+***REMOVED***let onDelete: ((AttachmentModel) async throws -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is renamed.
 ***REMOVED***let onRename: ((FeatureAttachment, String) async throws -> Void)?
@@ -48,7 +48,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
 ***REMOVED******REMOVED***editControlsDisabled: Bool = true,
 ***REMOVED******REMOVED***onRename: ((FeatureAttachment, String) async throws -> Void)? = nil,
-***REMOVED******REMOVED***onDelete: ((FeatureAttachment) async throws -> Void)? = nil
+***REMOVED******REMOVED***onDelete: ((AttachmentModel) async throws -> Void)? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.attachmentModels = attachmentModels
 ***REMOVED******REMOVED***self.onRename = onRename
@@ -71,8 +71,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Rename", systemImage: "pencil")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editedAttachment = attachmentModel.attachment
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***deletionWillStart = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***deletedAttachmentModel = attachmentModel
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Delete", systemImage: "trash")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -92,10 +91,10 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.task(id: deletionWillStart) {
-***REMOVED******REMOVED******REMOVED***guard deletionWillStart, let editedAttachment else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***try? await onDelete?(editedAttachment)
-***REMOVED******REMOVED******REMOVED***deletionWillStart = false
+***REMOVED******REMOVED***.task(id: deletedAttachmentModel) {
+***REMOVED******REMOVED******REMOVED***guard let deletedAttachmentModel else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***try? await onDelete?(deletedAttachmentModel)
+***REMOVED******REMOVED******REMOVED***self.deletedAttachmentModel = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
