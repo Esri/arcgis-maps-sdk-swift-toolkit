@@ -84,13 +84,12 @@ import SwiftUI
     func load() {
         Task {
             loadStatus = .loading
-            defer { sync() }
             try await attachment.load()
-            if attachment.loadStatus == .failed || attachment.fileURL == nil {
+            sync()
+            if loadStatus == .failed || attachment.fileURL == nil {
                 systemImageName = "exclamationmark.circle.fill"
                 return
             }
-            
             var url = attachment.fileURL!
             if attachment is FormAttachment {
 //                self.thumbnail = try? await attachment.makeThumbnail(
