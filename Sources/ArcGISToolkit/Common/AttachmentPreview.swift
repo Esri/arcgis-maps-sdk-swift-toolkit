@@ -26,6 +26,9 @@ struct AttachmentPreview: View {
     /// The model for an attachment the user has requested be deleted.
     @State private var deletedAttachmentModel: AttachmentModel?
     
+    /// The new name the user has provided for the attachment.
+    @State private var newAttachmentName = ""
+    
     /// The model for an attachment the user has requested be renamed.
     @State private var renamedAttachmentModel: AttachmentModel?
     
@@ -63,6 +66,11 @@ struct AttachmentPreview: View {
                                 Button {
                                     renamedAttachmentModel = attachmentModel
                                     renameDialogueIsShowing = true
+                                    if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
+                                        newAttachmentName = String(attachmentModel.name[..<separatorIndex])
+                                    } else {
+                                        newAttachmentName = attachmentModel.name
+                                    }
                                 } label: {
                                     Label("Rename", systemImage: "pencil")
                                 }
@@ -77,8 +85,20 @@ struct AttachmentPreview: View {
             }
         }
         .alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
-            if let onRename, let renamedAttachmentModel {
-                AttachmentRenameAlert(attachmentModel: renamedAttachmentModel, onRename: onRename)
+            TextField("New name", text: $newAttachmentName)
+            Button("Cancel", role: .cancel) { }
+            Button("Ok") {
+                Task {
+                    if let renamedAttachmentModel {
+                        let currentName = renamedAttachmentModel.name
+                        if let separatorIndex = currentName.lastIndex(of: ".") {
+                            let fileExtension = String(currentName[currentName.index(after: separatorIndex)...])
+                            try? await onRename?(renamedAttachmentModel, [newAttachmentName, fileExtension].joined(separator: "."))
+                        } else {
+                            try? await onRename?(renamedAttachmentModel, newAttachmentName)
+                        }
+                    }
+                }
             }
         }
         .task(id: deletedAttachmentModel) {
