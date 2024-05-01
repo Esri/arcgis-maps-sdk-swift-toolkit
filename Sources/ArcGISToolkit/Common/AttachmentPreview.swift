@@ -26,11 +26,8 @@ struct AttachmentPreview: View {
     /// The model for an attachment the user has requested be deleted.
     @State private var deletedAttachmentModel: AttachmentModel?
     
-    /// The model for an attachment with the user has requested be renamed.
+    /// The model for an attachment the user has requested be renamed.
     @State private var renamedAttachmentModel: AttachmentModel?
-    
-    /// The new name the user has provided for the attachment.
-    @State private var newAttachmentName = ""
     
     /// The action to perform when the attachment is deleted.
     let onDelete: ((AttachmentModel) async throws -> Void)?
@@ -65,7 +62,6 @@ struct AttachmentPreview: View {
                             if !editControlsDisabled {
                                 Button {
                                     renamedAttachmentModel = attachmentModel
-                                    newAttachmentName = attachmentModel.attachment.name
                                     renameDialogueIsShowing = true
                                 } label: {
                                     Label("Rename", systemImage: "pencil")
@@ -81,14 +77,8 @@ struct AttachmentPreview: View {
             }
         }
         .alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
-            TextField("New name", text: $newAttachmentName)
-            Button("Cancel", role: .cancel) { }
-            Button("Ok") {
-                Task {
-                    if let renamedAttachmentModel {
-                        try? await onRename?(renamedAttachmentModel, newAttachmentName)
-                    }
-                }
+            if let onRename, let renamedAttachmentModel {
+                AttachmentRenameAlert(onRename: onRename, attachmentModel: renamedAttachmentModel)
             }
         }
         .task(id: deletedAttachmentModel) {
