@@ -28,10 +28,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the input is editable.
 ***REMOVED***@State private var isEditable = false
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the feature Element
-***REMOVED******REMOVED***/ is an `AttachmentFormElement`.
-***REMOVED***private var isShowingAttachmentFormElement = false
-
 ***REMOVED******REMOVED***/ A Boolean value denoting if the view should be shown as regular width.
 ***REMOVED***var isRegularWidth: Bool {
 ***REMOVED******REMOVED***!isPortraitOrientation
@@ -54,7 +50,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ - Parameter featureElement: The `AttachmentsFeatureElement`.
 ***REMOVED***init(featureElement: AttachmentsFeatureElement) {
 ***REMOVED******REMOVED***self.featureElement = featureElement
-***REMOVED******REMOVED***isShowingAttachmentFormElement = featureElement is AttachmentFormElement
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value denoting whether the Disclosure Group is expanded.
@@ -100,8 +95,9 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if isShowingAttachmentFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reverse attachment models array if we're not editing.
+***REMOVED******REMOVED******REMOVED***if !isShowingAttachmentFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reverse attachment models array if we're not displaying
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** via an AttachmentFormElement.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This allows attachments in a non-editing context to
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** display in the same order as the online Map Viewer.
 ***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels = attachmentModels.reversed()
@@ -226,6 +222,12 @@ extension AttachmentsFeatureElementView {
 ***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 120, height: 120)
 ***REMOVED***
 ***REMOVED******REMOVED***return thumbnailSize
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the feature Element
+***REMOVED******REMOVED***/ is an `AttachmentFormElement`.
+***REMOVED***var isShowingAttachmentFormElement: Bool {
+***REMOVED******REMOVED***featureElement is AttachmentFormElement
 ***REMOVED***
 ***REMOVED***
 
