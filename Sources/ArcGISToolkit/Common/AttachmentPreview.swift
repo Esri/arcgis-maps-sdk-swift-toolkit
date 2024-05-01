@@ -78,7 +78,7 @@ struct AttachmentPreview: View {
         }
         .alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
             if let onRename, let renamedAttachmentModel {
-                AttachmentRenameAlert(onRename: onRename, attachmentModel: renamedAttachmentModel)
+                AttachmentRenameAlert(attachmentModel: renamedAttachmentModel, onRename: onRename)
             }
         }
         .task(id: deletedAttachmentModel) {
