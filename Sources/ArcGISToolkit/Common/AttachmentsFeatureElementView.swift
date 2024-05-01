@@ -28,10 +28,6 @@ struct AttachmentsFeatureElementView: View {
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
     
-    /// A Boolean value indicating whether the feature Element
-    /// is an `AttachmentFormElement`.
-    private var isShowingAttachmentFormElement = false
-
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
         !isPortraitOrientation
@@ -54,7 +50,6 @@ struct AttachmentsFeatureElementView: View {
     /// - Parameter featureElement: The `AttachmentsFeatureElement`.
     init(featureElement: AttachmentsFeatureElement) {
         self.featureElement = featureElement
-        isShowingAttachmentFormElement = featureElement is AttachmentFormElement
     }
     
     /// A Boolean value denoting whether the Disclosure Group is expanded.
@@ -100,8 +95,9 @@ struct AttachmentsFeatureElementView: View {
                     )
                 }
             
-            if isShowingAttachmentFormElement {
-                // Reverse attachment models array if we're not editing.
+            if !isShowingAttachmentFormElement {
+                // Reverse attachment models array if we're not displaying
+                // via an AttachmentFormElement.
                 // This allows attachments in a non-editing context to
                 // display in the same order as the online Map Viewer.
                 attachmentModels = attachmentModels.reversed()
@@ -226,6 +222,12 @@ extension AttachmentsFeatureElementView {
             thumbnailSize = CGSize(width: 120, height: 120)
         }
         return thumbnailSize
+    }
+    
+    /// A Boolean value indicating whether the feature Element
+    /// is an `AttachmentFormElement`.
+    var isShowingAttachmentFormElement: Bool {
+        featureElement is AttachmentFormElement
     }
 }
 
