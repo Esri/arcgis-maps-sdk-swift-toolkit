@@ -78,7 +78,7 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
 ***REMOVED******REMOVED******REMOVED***if let onRename, let renamedAttachmentModel {
-***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentRenameAlert(onRename: onRename, attachmentModel: renamedAttachmentModel)
+***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentRenameAlert(attachmentModel: renamedAttachmentModel, onRename: onRename)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: deletedAttachmentModel) {
