@@ -26,6 +26,9 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ The model for an attachment the user has requested be deleted.
 ***REMOVED***@State private var deletedAttachmentModel: AttachmentModel?
 ***REMOVED***
+***REMOVED******REMOVED***/ The new name the user has provided for the attachment.
+***REMOVED***@State private var newAttachmentName = ""
+***REMOVED***
 ***REMOVED******REMOVED***/ The model for an attachment the user has requested be renamed.
 ***REMOVED***@State private var renamedAttachmentModel: AttachmentModel?
 ***REMOVED***
@@ -63,6 +66,11 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***renamedAttachmentModel = attachmentModel
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***renameDialogueIsShowing = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = String(attachmentModel.name[..<separatorIndex])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = attachmentModel.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Rename", systemImage: "pencil")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -77,8 +85,20 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
-***REMOVED******REMOVED******REMOVED***if let onRename, let renamedAttachmentModel {
-***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentRenameAlert(attachmentModel: renamedAttachmentModel, onRename: onRename)
+***REMOVED******REMOVED******REMOVED***TextField("New name", text: $newAttachmentName)
+***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) { ***REMOVED***
+***REMOVED******REMOVED******REMOVED***Button("Ok") {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let renamedAttachmentModel {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let currentName = renamedAttachmentModel.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let separatorIndex = currentName.lastIndex(of: ".") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let fileExtension = String(currentName[currentName.index(after: separatorIndex)...])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await onRename?(renamedAttachmentModel, [newAttachmentName, fileExtension].joined(separator: "."))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await onRename?(renamedAttachmentModel, newAttachmentName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: deletedAttachmentModel) {
