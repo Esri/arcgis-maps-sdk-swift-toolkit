@@ -87,7 +87,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***.alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
 ***REMOVED******REMOVED******REMOVED***TextField("New name", text: $newAttachmentName)
 ***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) { ***REMOVED***
-***REMOVED******REMOVED******REMOVED***Button("Ok") {
+***REMOVED******REMOVED******REMOVED***Button("OK") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let renamedAttachmentModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let currentName = renamedAttachmentModel.name
