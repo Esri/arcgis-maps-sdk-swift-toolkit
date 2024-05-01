@@ -87,7 +87,7 @@ struct AttachmentPreview: View {
         .alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
             TextField("New name", text: $newAttachmentName)
             Button("Cancel", role: .cancel) { }
-            Button("Ok") {
+            Button("OK") {
                 Task {
                     if let renamedAttachmentModel {
                         let currentName = renamedAttachmentModel.name
