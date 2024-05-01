@@ -25,6 +25,12 @@ struct AttachmentsFeatureElementView: View {
     
     @Environment(\.displayScale) var displayScale
     
+    /// The view model for a form.
+    ///
+    /// - Note: This property is only present when
+    /// `featureElement` is an `AttachmentsFormElement`.
+    @EnvironmentObject var formViewModel: FormViewModel
+    
     /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
         !isPortraitOrientation
@@ -171,6 +177,7 @@ struct AttachmentsFeatureElementView: View {
            let attachment = attachmentModel.attachment as? FormAttachment {
             try await element.renameAttachment(attachment, name: newAttachmentName)
             attachmentModel.sync()
+            formViewModel.evaluateExpressions()
         }
     }
     
