@@ -39,10 +39,12 @@ struct AttachmentRenameAlert: View {
                     } else {
                         try? await onRename(attachmentModel, newName)
                     }
+                    fileExtension = nil
+                    newName.removeAll()
                 }
             }
         }
-        .task {
+        .task(id: attachmentModel) {
             let currentName = attachmentModel.name
             if let separatorIndex = currentName.lastIndex(of: ".") {
                 newName = String(currentName[..<separatorIndex])
