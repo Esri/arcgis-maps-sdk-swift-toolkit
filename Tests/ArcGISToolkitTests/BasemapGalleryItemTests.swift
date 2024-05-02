@@ -25,7 +25,6 @@ import Combine
 // as the 'loadBasemapError' and 'spatialReferenceStatus' properties than
 // the 'BasemapGallery' design specifies. Tests not present in the
 // test design have been added to accommodate those differences.
-@MainActor
 final class BasemapGalleryItemTests: XCTestCase {
     override func setUp() async throws {
         ArcGISEnvironment.apiKey = .default
