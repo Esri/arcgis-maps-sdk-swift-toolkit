@@ -64,20 +64,44 @@ struct AttachmentImportMenu: View {
             Button {
                 cameraIsShowing = true
             } label: {
-                Label("Take photo", systemImage: "camera")
-                    .labelStyle(.titleAndIcon)
+                Label {
+                    Text(
+                        "Take photo",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to capture a new photo."
+                    )
+                } icon: {
+                    Image(systemName: "camera")
+                }
+                .labelStyle(.titleAndIcon)
             }
             Button {
                 photoPickerIsPresented = true
             } label: {
-                Label("Add photo from library", systemImage: "photo")
-                    .labelStyle(.titleAndIcon)
+                Label {
+                    Text(
+                        "Add photo from library",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to choose a photo from the user's photo library."
+                    )
+                } icon: {
+                    Image(systemName: "photo")
+                }
+                .labelStyle(.titleAndIcon)
             }
             Button {
                 fileImporterIsShowing = true
             } label: {
-                Label("Add photo from files", systemImage: "folder")
-                    .labelStyle(.titleAndIcon)
+                Label {
+                    Text(
+                        "Add photo from files",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to choose a photo from the user's files."
+                    )
+                } icon: {
+                    Image(systemName: "folder")
+                }
+                .labelStyle(.titleAndIcon)
             }
         } label: {
             Image(systemName: "plus")
