@@ -194,22 +194,6 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***
 
-extension FileManager {
-***REMOVED******REMOVED***/ - Note: This can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
-***REMOVED***func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***if FileManager.default.fileExists(atPath: dstURL.path) {
-***REMOVED******REMOVED******REMOVED******REMOVED***try FileManager.default.removeItem(at: dstURL)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***try FileManager.default.copyItem(at: srcURL, to: dstURL)
-***REMOVED*** catch (let error) {
-***REMOVED******REMOVED******REMOVED***print("Cannot copy item at \(srcURL) to \(dstURL): \(error)")
-***REMOVED******REMOVED******REMOVED***return false
-***REMOVED***
-***REMOVED******REMOVED***return true
-***REMOVED***
-***REMOVED***
-
 ***REMOVED***/ A view displaying details for popup media.
 struct ThumbnailViewFooter: View {
 ***REMOVED******REMOVED***/ The popup media to display.
