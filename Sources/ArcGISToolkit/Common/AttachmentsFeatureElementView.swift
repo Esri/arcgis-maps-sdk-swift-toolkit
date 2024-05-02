@@ -25,6 +25,12 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***@Environment(\.displayScale) var displayScale
 ***REMOVED***
+***REMOVED******REMOVED***/ The view model for a form.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ - Note: This property is only present when
+***REMOVED******REMOVED***/ `featureElement` is an `AttachmentsFormElement`.
+***REMOVED***@EnvironmentObject var formViewModel: FormViewModel
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the input is editable.
 ***REMOVED***@State private var isEditable = false
 ***REMOVED***
@@ -164,14 +170,17 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***attachmentLoadingState = .loaded(models)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Renames the given attachment.
+***REMOVED******REMOVED***/ Renames the attachment associated with the given model.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - attachment: The attachment to rename.
+***REMOVED******REMOVED***/   - attachmentModel: The model for the attachment to rename.
 ***REMOVED******REMOVED***/   - newAttachmentName: The new attachment name.
-***REMOVED***func onRename(attachment: FeatureAttachment, newAttachmentName: String) async throws -> Void {
+***REMOVED***@MainActor
+***REMOVED***func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentFormElement,
-***REMOVED******REMOVED***   let attachment = attachment as? FormAttachment {
+***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***try await element.renameAttachment(attachment, name: newAttachmentName)
+***REMOVED******REMOVED******REMOVED***attachmentModel.sync()
+***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

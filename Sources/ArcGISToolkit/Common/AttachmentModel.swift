@@ -36,6 +36,9 @@ import QuickLook
 ***REMOVED******REMOVED***/ The `LoadStatus` of the feature attachment.
 ***REMOVED***@Published var loadStatus: LoadStatus = .notLoaded
 ***REMOVED***
+***REMOVED******REMOVED***/ The name of the attachment.
+***REMOVED***@Published var name: String
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the thumbnails is using a
 ***REMOVED******REMOVED***/ system image or an image generated from the feature attachment.
 ***REMOVED***var usingSystemImage: Bool {
@@ -61,6 +64,7 @@ import QuickLook
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.attachment = attachment
 ***REMOVED******REMOVED***self.displayScale = displayScale
+***REMOVED******REMOVED***self.name = attachment.name
 ***REMOVED******REMOVED***self.thumbnailSize = thumbnailSize
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch attachment.featureAttachmentKind {
@@ -81,19 +85,17 @@ import QuickLook
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***loadStatus = .loading
 ***REMOVED******REMOVED******REMOVED***try await attachment.load()
-***REMOVED******REMOVED******REMOVED***if attachment.loadStatus == .failed || attachment.fileURL == nil {
+***REMOVED******REMOVED******REMOVED***sync()
+***REMOVED******REMOVED******REMOVED***if loadStatus == .failed || attachment.fileURL == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED***systemImageName = "exclamationmark.circle.fill"
-***REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = .failed
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***var url = attachment.fileURL!
 ***REMOVED******REMOVED******REMOVED***if attachment is FormAttachment {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = try? await attachment.makeThumbnail(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: Int(thumbnailSize.width),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: Int(thumbnailSize.width)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = attachment.loadStatus
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
@@ -117,8 +119,14 @@ import QuickLook
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***systemImageName = "exclamationmark.circle.fill"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***self.loadStatus = self.attachment.loadStatus
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Synchronizes published properties with attachment metadata.
+***REMOVED***func sync() {
+***REMOVED******REMOVED***name = attachment.name
+***REMOVED******REMOVED***loadStatus = attachment.loadStatus
 ***REMOVED***
 ***REMOVED***
 

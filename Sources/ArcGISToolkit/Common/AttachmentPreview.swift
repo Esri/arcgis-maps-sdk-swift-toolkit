@@ -26,17 +26,17 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ The model for an attachment the user has requested be deleted.
 ***REMOVED***@State private var deletedAttachmentModel: AttachmentModel?
 ***REMOVED***
-***REMOVED******REMOVED***/ The attachment with the new name the user has provided.
-***REMOVED***@State private var editedAttachment: FeatureAttachment?
-***REMOVED***
 ***REMOVED******REMOVED***/ The new name the user has provided for the attachment.
 ***REMOVED***@State private var newAttachmentName = ""
+***REMOVED***
+***REMOVED******REMOVED***/ The model for an attachment the user has requested be renamed.
+***REMOVED***@State private var renamedAttachmentModel: AttachmentModel?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is deleted.
 ***REMOVED***let onDelete: ((AttachmentModel) async throws -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is renamed.
-***REMOVED***let onRename: ((FeatureAttachment, String) async throws -> Void)?
+***REMOVED***let onRename: ((AttachmentModel, String) async throws -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
 ***REMOVED***@State private var renameDialogueIsShowing = false
@@ -47,7 +47,7 @@ struct AttachmentPreview: View {
 ***REMOVED***init(
 ***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
 ***REMOVED******REMOVED***editControlsDisabled: Bool = true,
-***REMOVED******REMOVED***onRename: ((FeatureAttachment, String) async throws -> Void)? = nil,
+***REMOVED******REMOVED***onRename: ((AttachmentModel, String) async throws -> Void)? = nil,
 ***REMOVED******REMOVED***onDelete: ((AttachmentModel) async throws -> Void)? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.attachmentModels = attachmentModels
@@ -64,9 +64,13 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contextMenu {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !editControlsDisabled {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editedAttachment = attachmentModel.attachment
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = attachmentModel.attachment.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***renamedAttachmentModel = attachmentModel
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***renameDialogueIsShowing = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = String(attachmentModel.name[..<separatorIndex])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = attachmentModel.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Rename", systemImage: "pencil")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -83,10 +87,16 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***.alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
 ***REMOVED******REMOVED******REMOVED***TextField("New name", text: $newAttachmentName)
 ***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) { ***REMOVED***
-***REMOVED******REMOVED******REMOVED***Button("Ok") {
+***REMOVED******REMOVED******REMOVED***Button("OK") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let editedAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await onRename?(editedAttachment, newAttachmentName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let renamedAttachmentModel {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let currentName = renamedAttachmentModel.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let separatorIndex = currentName.lastIndex(of: ".") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let fileExtension = String(currentName[currentName.index(after: separatorIndex)...])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await onRename?(renamedAttachmentModel, [newAttachmentName, fileExtension].joined(separator: "."))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await onRename?(renamedAttachmentModel, newAttachmentName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -132,7 +142,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.loadStatus != .loaded {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.attachment.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.middle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading, .trailing], 4)
@@ -192,7 +202,7 @@ extension FileManager {
 ***REMOVED***/ A view displaying details for popup media.
 struct ThumbnailViewFooter: View {
 ***REMOVED******REMOVED***/ The popup media to display.
-***REMOVED***let attachmentModel: AttachmentModel
+***REMOVED***@ObservedObject var attachmentModel: AttachmentModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The size of the media's frame.
 ***REMOVED***let size: CGSize
@@ -206,8 +216,8 @@ struct ThumbnailViewFooter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: size.height * 0.25)
 ***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !attachmentModel.attachment.name.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.attachment.name)
+***REMOVED******REMOVED******REMOVED******REMOVED***if !attachmentModel.name.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
