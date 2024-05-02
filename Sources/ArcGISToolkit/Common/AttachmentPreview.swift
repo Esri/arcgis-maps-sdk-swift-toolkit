@@ -92,7 +92,14 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
+***REMOVED******REMOVED***.alert(
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Rename attachment",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label in reference to the action of renaming a file, shown in a file rename interface."
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***isPresented: $renameDialogueIsShowing
+***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***TextField(text: $newAttachmentName) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"New name",
