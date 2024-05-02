@@ -90,29 +90,12 @@ import SwiftUI
                 systemImageName = "exclamationmark.circle.fill"
                 return
             }
-            var url = attachment.fileURL!
-            if attachment is FormAttachment {
-//                self.thumbnail = try? await attachment.makeThumbnail(
-//                    width: Int(thumbnailSize.width),
-//                    height: Int(thumbnailSize.width)
-//                )
-                
-                // WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
-                // Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
-                var tmpURL = attachment.fileURL
-                tmpURL = tmpURL?.deletingLastPathComponent()
-                tmpURL = tmpURL?.appending(path: attachment.name)
-                
-                _ = FileManager.default.secureCopyItem(at: attachment.fileURL!, to: tmpURL!)
-                url = tmpURL!
-            }
             let request = QLThumbnailGenerator.Request(
-                fileAt: url,
-//                fileAt: attachment.fileURL!,
+                fileAt: attachment.fileURL!,
                 size: thumbnailSize,
                 scale: displayScale,
-                representationTypes: .all)
-            
+                representationTypes: .all
+            )
             do {
                 let thumbnail = try await QLThumbnailGenerator.shared.generateBestRepresentation(for: request)
                 self.thumbnail = thumbnail.uiImage
@@ -121,7 +104,6 @@ import SwiftUI
             }
         }
     }
-    
     
     /// Synchronizes published properties with attachment metadata.
     func sync() {
