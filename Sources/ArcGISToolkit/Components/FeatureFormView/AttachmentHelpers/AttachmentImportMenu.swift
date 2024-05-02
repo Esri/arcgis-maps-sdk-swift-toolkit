@@ -70,8 +70,16 @@ struct AttachmentImportMenu: View {
             Button {
                 photoPickerIsPresented = true
             } label: {
-                Label("Add photo from library", systemImage: "photo")
-                    .labelStyle(.titleAndIcon)
+                Label {
+                    Text(
+                        "Add photo from library",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to choose a photo from the photo library."
+                    )
+                } icon: {
+                    Image(systemName: "photo")
+                }
+                .labelStyle(.titleAndIcon)
             }
             Button {
                 fileImporterIsShowing = true
