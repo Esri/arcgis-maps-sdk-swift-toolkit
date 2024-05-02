@@ -168,6 +168,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***newModel.load()
 ***REMOVED******REMOVED***models.insert(newModel, at: 0)
 ***REMOVED******REMOVED***attachmentLoadingState = .loaded(models)
+***REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Renames the attachment associated with the given model.
@@ -195,6 +196,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***guard case .loaded(var models) = attachmentLoadingState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***models.removeAll { $0 == attachmentModel ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loaded(models)
+***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
