@@ -194,22 +194,6 @@ struct AttachmentPreview: View {
     }
 }
 
-extension FileManager {
-    /// - Note: This can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
-    func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
-        do {
-            if FileManager.default.fileExists(atPath: dstURL.path) {
-                try FileManager.default.removeItem(at: dstURL)
-            }
-            try FileManager.default.copyItem(at: srcURL, to: dstURL)
-        } catch (let error) {
-            print("Cannot copy item at \(srcURL) to \(dstURL): \(error)")
-            return false
-        }
-        return true
-    }
-}
-
 /// A view displaying details for popup media.
 struct ThumbnailViewFooter: View {
     /// The popup media to display.
