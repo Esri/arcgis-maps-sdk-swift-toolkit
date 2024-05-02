@@ -36,6 +36,9 @@ import SwiftUI
     /// The `LoadStatus` of the feature attachment.
     @Published var loadStatus: LoadStatus = .notLoaded
     
+    /// The name of the attachment.
+    @Published var name: String
+    
     /// A Boolean value specifying whether the thumbnails is using a
     /// system image or an image generated from the feature attachment.
     var usingSystemImage: Bool {
@@ -61,6 +64,7 @@ import SwiftUI
     ) {
         self.attachment = attachment
         self.displayScale = displayScale
+        self.name = attachment.name
         self.thumbnailSize = thumbnailSize
         
         switch attachment.featureAttachmentKind {
@@ -81,19 +85,17 @@ import SwiftUI
         Task {
             loadStatus = .loading
             try await attachment.load()
-            if attachment.loadStatus == .failed || attachment.fileURL == nil {
+            sync()
+            if loadStatus == .failed || attachment.fileURL == nil {
                 systemImageName = "exclamationmark.circle.fill"
-                self.loadStatus = .failed
                 return
             }
-            
             var url = attachment.fileURL!
             if attachment is FormAttachment {
 //                self.thumbnail = try? await attachment.makeThumbnail(
 //                    width: Int(thumbnailSize.width),
 //                    height: Int(thumbnailSize.width)
 //                )
-//                self.loadStatus = attachment.loadStatus
                 
                 // WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
                 // Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
@@ -117,8 +119,14 @@ import SwiftUI
             } catch {
                 systemImageName = "exclamationmark.circle.fill"
             }
-            self.loadStatus = self.attachment.loadStatus
         }
+    }
+    
+    
+    /// Synchronizes published properties with attachment metadata.
+    func sync() {
+        name = attachment.name
+        loadStatus = attachment.loadStatus
     }
 }
 
