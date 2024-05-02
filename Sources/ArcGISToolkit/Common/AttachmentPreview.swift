@@ -92,7 +92,14 @@ struct AttachmentPreview: View {
                 }
             }
         }
-        .alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
+        .alert(
+            Text(
+                "Rename attachment",
+                bundle: .toolkitModule,
+                comment: "A label in reference to the action of renaming a file, shown in a file rename interface."
+            ),
+            isPresented: $renameDialogueIsShowing
+        ) {
             TextField(text: $newAttachmentName) {
                 Text(
                     "New name",
