@@ -25,6 +25,12 @@ struct AttachmentsFeatureElementView: View {
     
     @Environment(\.displayScale) var displayScale
     
+    /// The view model for a form.
+    ///
+    /// - Note: This property is only present when
+    /// `featureElement` is an `AttachmentsFormElement`.
+    @EnvironmentObject var formViewModel: FormViewModel
+    
     /// A Boolean value indicating whether the input is editable.
     @State private var isEditable = false
     
@@ -164,14 +170,17 @@ struct AttachmentsFeatureElementView: View {
         attachmentLoadingState = .loaded(models)
     }
     
-    /// Renames the given attachment.
+    /// Renames the attachment associated with the given model.
     /// - Parameters:
-    ///   - attachment: The attachment to rename.
+    ///   - attachmentModel: The model for the attachment to rename.
     ///   - newAttachmentName: The new attachment name.
-    func onRename(attachment: FeatureAttachment, newAttachmentName: String) async throws -> Void {
+    @MainActor
+    func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
         if let element = featureElement as? AttachmentFormElement,
-           let attachment = attachment as? FormAttachment {
+           let attachment = attachmentModel.attachment as? FormAttachment {
             try await element.renameAttachment(attachment, name: newAttachmentName)
+            attachmentModel.sync()
+            formViewModel.evaluateExpressions()
         }
     }
     

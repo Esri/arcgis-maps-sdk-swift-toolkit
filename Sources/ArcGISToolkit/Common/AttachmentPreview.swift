@@ -26,17 +26,17 @@ struct AttachmentPreview: View {
     /// The model for an attachment the user has requested be deleted.
     @State private var deletedAttachmentModel: AttachmentModel?
     
-    /// The attachment with the new name the user has provided.
-    @State private var editedAttachment: FeatureAttachment?
-    
     /// The new name the user has provided for the attachment.
     @State private var newAttachmentName = ""
+    
+    /// The model for an attachment the user has requested be renamed.
+    @State private var renamedAttachmentModel: AttachmentModel?
     
     /// The action to perform when the attachment is deleted.
     let onDelete: ((AttachmentModel) async throws -> Void)?
     
     /// The action to perform when the attachment is renamed.
-    let onRename: ((FeatureAttachment, String) async throws -> Void)?
+    let onRename: ((AttachmentModel, String) async throws -> Void)?
     
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
@@ -47,7 +47,7 @@ struct AttachmentPreview: View {
     init(
         attachmentModels: [AttachmentModel],
         editControlsDisabled: Bool = true,
-        onRename: ((FeatureAttachment, String) async throws -> Void)? = nil,
+        onRename: ((AttachmentModel, String) async throws -> Void)? = nil,
         onDelete: ((AttachmentModel) async throws -> Void)? = nil
     ) {
         self.attachmentModels = attachmentModels
@@ -64,9 +64,13 @@ struct AttachmentPreview: View {
                         .contextMenu {
                             if !editControlsDisabled {
                                 Button {
-                                    editedAttachment = attachmentModel.attachment
-                                    newAttachmentName = attachmentModel.attachment.name
+                                    renamedAttachmentModel = attachmentModel
                                     renameDialogueIsShowing = true
+                                    if let separatorIndex = attachmentModel.name.lastIndex(of: ".") {
+                                        newAttachmentName = String(attachmentModel.name[..<separatorIndex])
+                                    } else {
+                                        newAttachmentName = attachmentModel.name
+                                    }
                                 } label: {
                                     Label("Rename", systemImage: "pencil")
                                 }
@@ -83,10 +87,16 @@ struct AttachmentPreview: View {
         .alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
             TextField("New name", text: $newAttachmentName)
             Button("Cancel", role: .cancel) { }
-            Button("Ok") {
+            Button("OK") {
                 Task {
-                    if let editedAttachment {
-                        try? await onRename?(editedAttachment, newAttachmentName)
+                    if let renamedAttachmentModel {
+                        let currentName = renamedAttachmentModel.name
+                        if let separatorIndex = currentName.lastIndex(of: ".") {
+                            let fileExtension = String(currentName[currentName.index(after: separatorIndex)...])
+                            try? await onRename?(renamedAttachmentModel, [newAttachmentName, fileExtension].joined(separator: "."))
+                        } else {
+                            try? await onRename?(renamedAttachmentModel, newAttachmentName)
+                        }
                     }
                 }
             }
@@ -132,7 +142,7 @@ struct AttachmentPreview: View {
                     }
                 }
                 if attachmentModel.attachment.loadStatus != .loaded {
-                    Text(attachmentModel.attachment.name)
+                    Text(attachmentModel.name)
                         .lineLimit(1)
                         .truncationMode(.middle)
                         .padding([.leading, .trailing], 4)
@@ -192,7 +202,7 @@ extension FileManager {
 /// A view displaying details for popup media.
 struct ThumbnailViewFooter: View {
     /// The popup media to display.
-    let attachmentModel: AttachmentModel
+    @ObservedObject var attachmentModel: AttachmentModel
     
     /// The size of the media's frame.
     let size: CGSize
@@ -206,8 +216,8 @@ struct ThumbnailViewFooter: View {
                 )
                 .frame(height: size.height * 0.25)
             HStack {
-                if !attachmentModel.attachment.name.isEmpty {
-                    Text(attachmentModel.attachment.name)
+                if !attachmentModel.name.isEmpty {
+                    Text(attachmentModel.name)
                         .foregroundColor(.white)
                         .font(.caption)
                         .lineLimit(1)
