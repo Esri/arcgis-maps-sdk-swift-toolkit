@@ -8,6 +8,12 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button to add new utility trace starting points. */
 "Add new" = "Add new";
 
+/* A label for a button to choose a photo from the user's files. */
+"Add photo from files" = "Add photo from files";
+
+/* A label for a button to choose a photo from the user's photo library. */
+"Add photo from library" = "Add photo from library";
+
 /* A section header for advanced options. */
 "Advanced Options" = "Advanced Options";
 
@@ -20,7 +26,7 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button indicating the user accepts a potentially dangerous action. */
 "Allow" = "Allow";
 
-/* A label in reference to attachments in a popup. */
+/* A label in reference to attachments. */
 "Attachments" = "Attachments";
 
 /* A label in reference to the attributes of a geo element. */
@@ -206,6 +212,9 @@ AR experience. */
 /* A label in reference to a specific utility network. */
 "Network" = "Network";
 
+/* A label in reference to the new name of a file, shown in a file rename interface. */
+"New name" = "New name";
+
 /* A label for a button to show new utility network trace configuration options. */
 "New trace" = "New trace";
 
@@ -266,6 +275,12 @@ chosen utility network trace configuration. */
 variable provides additional data. */
 "Popup evaluation failed: %@" = "Popup evaluation failed: %@";
 
+/* A label for a button to rename an attachment. */
+"Rename" = "Rename";
+
+/* A label in reference to the action of renaming a file, shown in a file rename interface. */
+"Rename attachment" = "Rename attachment";
+
 /* A label for button to show when the user has panned the map away
 from the original search location. 'Here' is in reference to the
 current visible extent of the map or scene. */
@@ -297,6 +312,9 @@ match the spatial reference of the map or scene. */
 /* A label in reference to the utility elements chosen as starting points for a utility
 network trace operation. */
 "Starting Points" = "Starting Points";
+
+/* A label for a button to capture a new photo. */
+"Take photo" = "Take photo";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
