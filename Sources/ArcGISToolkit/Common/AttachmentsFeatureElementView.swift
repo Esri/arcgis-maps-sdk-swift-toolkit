@@ -168,6 +168,7 @@ struct AttachmentsFeatureElementView: View {
         newModel.load()
         models.insert(newModel, at: 0)
         attachmentLoadingState = .loaded(models)
+        formViewModel.evaluateExpressions()
     }
     
     /// Renames the attachment associated with the given model.
@@ -195,6 +196,7 @@ struct AttachmentsFeatureElementView: View {
             guard case .loaded(var models) = attachmentLoadingState else { return }
             models.removeAll { $0 == attachmentModel }
             attachmentLoadingState = .loaded(models)
+            formViewModel.evaluateExpressions()
         }
     }
 }
