@@ -74,7 +74,7 @@ struct AttachmentImportMenu: View {
                     Text(
                         "Add photo from library",
                         bundle: .toolkitModule,
-                        comment: "A label for a button to choose a photo from the photo library."
+                        comment: "A label for a button to choose a photo from the user's photo library."
                     )
                 } icon: {
                     Image(systemName: "photo")
@@ -84,8 +84,16 @@ struct AttachmentImportMenu: View {
             Button {
                 fileImporterIsShowing = true
             } label: {
-                Label("Add photo from files", systemImage: "folder")
-                    .labelStyle(.titleAndIcon)
+                Label {
+                    Text(
+                        "Add photo from files",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to choose a photo from the user's files."
+                    )
+                } icon: {
+                    Image(systemName: "folder")
+                }
+                .labelStyle(.titleAndIcon)
             }
         } label: {
             Image(systemName: "plus")
