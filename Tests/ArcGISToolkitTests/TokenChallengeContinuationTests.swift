@@ -16,7 +16,8 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor final class TokenChallengeContinuationTests: XCTestCase {
+final class TokenChallengeContinuationTests: XCTestCase {
+***REMOVED***@MainActor
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let challenge = TokenChallengeContinuation(host: "host.com") { _ in
 ***REMOVED******REMOVED******REMOVED***fatalError()
@@ -26,6 +27,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertNotNil(challenge.tokenCredentialProvider)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testResumeWithLogin() async {
 ***REMOVED******REMOVED***struct MockError: Error {***REMOVED***
 ***REMOVED******REMOVED***
@@ -38,6 +40,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertTrue(result.error is MockError)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testCancel() async {
 ***REMOVED******REMOVED***let challenge = TokenChallengeContinuation(host: "host.com") { _ in
 ***REMOVED******REMOVED******REMOVED***fatalError()

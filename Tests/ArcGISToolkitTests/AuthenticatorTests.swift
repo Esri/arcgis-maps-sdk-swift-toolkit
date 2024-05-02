@@ -17,7 +17,8 @@ import XCTest
 ***REMOVED***
 import Combine
 
-@MainActor final class AuthenticatorTests: XCTestCase {
+final class AuthenticatorTests: XCTestCase {
+***REMOVED***@MainActor
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let config = OAuthUserConfiguration(
 ***REMOVED******REMOVED******REMOVED***portalURL: URL(string:"www.arcgis.com")!,

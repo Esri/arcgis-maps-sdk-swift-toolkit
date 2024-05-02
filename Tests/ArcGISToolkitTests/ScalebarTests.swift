@@ -18,7 +18,6 @@ import Combine
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor
 class ScalebarTests: XCTestCase {
 ***REMOVED***struct ScalebarTestCase {
 ***REMOVED******REMOVED***let x: Double
@@ -66,6 +65,7 @@ class ScalebarTests: XCTestCase {
 ***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, maxWidth: 175, units: .metric, scale: 80_000_000, unitsPerPoint: 21166.666666643807,  displayLength: 143, labels: ["0", "1,250", "2,500 km"])
 ***REMOVED***]***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testAllCases() {
 ***REMOVED******REMOVED***for test in testCases {
 ***REMOVED******REMOVED******REMOVED***let viewpoint = Viewpoint(
