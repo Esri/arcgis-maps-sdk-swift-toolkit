@@ -64,8 +64,16 @@ struct AttachmentImportMenu: View {
             Button {
                 cameraIsShowing = true
             } label: {
-                Label("Take photo", systemImage: "camera")
-                    .labelStyle(.titleAndIcon)
+                Label {
+                    Text(
+                        "Take photo",
+                        bundle: .toolkitModule,
+                        comment: "A label for a button to capture a new photo."
+                    )
+                } icon: {
+                    Image(systemName: "camera")
+                }
+                .labelStyle(.titleAndIcon)
             }
             Button {
                 photoPickerIsPresented = true
