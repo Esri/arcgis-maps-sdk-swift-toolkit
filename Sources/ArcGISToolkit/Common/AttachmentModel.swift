@@ -90,36 +90,18 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED******REMOVED***systemImageName = "exclamationmark.circle.fill"
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***var url = attachment.fileURL!
-***REMOVED******REMOVED******REMOVED***if attachment is FormAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = try? await attachment.makeThumbnail(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: Int(thumbnailSize.width),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: Int(thumbnailSize.width)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
-***REMOVED******REMOVED******REMOVED******REMOVED***var tmpURL = attachment.fileURL
-***REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.deletingLastPathComponent()
-***REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.appending(path: attachment.name)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***_ = FileManager.default.secureCopyItem(at: attachment.fileURL!, to: tmpURL!)
-***REMOVED******REMOVED******REMOVED******REMOVED***url = tmpURL!
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let request = QLThumbnailGenerator.Request(
-***REMOVED******REMOVED******REMOVED******REMOVED***fileAt: url,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
+***REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
 ***REMOVED******REMOVED******REMOVED******REMOVED***size: thumbnailSize,
 ***REMOVED******REMOVED******REMOVED******REMOVED***scale: displayScale,
-***REMOVED******REMOVED******REMOVED******REMOVED***representationTypes: .all)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***representationTypes: .all
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = try await QLThumbnailGenerator.shared.generateBestRepresentation(for: request)
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***systemImageName = "exclamationmark.circle.fill"
 ***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

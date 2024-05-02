@@ -183,17 +183,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the url to trigger `.quickLookPreview`.
-
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var tmpURL =  attachmentModel.attachment.fileURL
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let formAttachment = attachmentModel.attachment as? FormAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.deletingLastPathComponent()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tmpURL = tmpURL?.appending(path: formAttachment.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_ = FileManager.default.secureCopyItem(at: attachmentModel.attachment.fileURL!, to: tmpURL!)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url = tmpURL
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url = attachmentModel.attachment.fileURL
 ***REMOVED******REMOVED******REMOVED*** else if attachmentModel.attachment.loadStatus == .notLoaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Load the attachment model with the given size.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load()
@@ -201,22 +191,6 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension FileManager {
-***REMOVED******REMOVED***/ - Note: This can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
-***REMOVED***func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***if FileManager.default.fileExists(atPath: dstURL.path) {
-***REMOVED******REMOVED******REMOVED******REMOVED***try FileManager.default.removeItem(at: dstURL)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***try FileManager.default.copyItem(at: srcURL, to: dstURL)
-***REMOVED*** catch (let error) {
-***REMOVED******REMOVED******REMOVED***print("Cannot copy item at \(srcURL) to \(dstURL): \(error)")
-***REMOVED******REMOVED******REMOVED***return false
-***REMOVED***
-***REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED***
 
