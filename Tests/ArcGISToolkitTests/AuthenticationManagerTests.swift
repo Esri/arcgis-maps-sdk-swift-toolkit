@@ -16,7 +16,8 @@ import XCTest
 import ArcGIS
 @testable import ArcGISToolkit
 
-@MainActor final class AuthenticationManagerTests: XCTestCase {
+final class AuthenticationManagerTests: XCTestCase {
+    @MainActor
     func testHandleChallengesUsingAuthenticator() {
         addTeardownBlock {
             ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = nil
