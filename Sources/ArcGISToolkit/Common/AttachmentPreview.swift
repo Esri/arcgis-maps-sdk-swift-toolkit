@@ -72,7 +72,15 @@ struct AttachmentPreview: View {
                                         newAttachmentName = attachmentModel.name
                                     }
                                 } label: {
-                                    Label("Rename", systemImage: "pencil")
+                                    Label {
+                                        Text(
+                                            "Rename",
+                                            bundle: .toolkitModule,
+                                            comment: "A label for a button to rename an attachment."
+                                        )
+                                    } icon: {
+                                        Image(systemName: "pencil")
+                                    }
                                 }
                                 Button(role: .destructive) {
                                     deletedAttachmentModel = attachmentModel
