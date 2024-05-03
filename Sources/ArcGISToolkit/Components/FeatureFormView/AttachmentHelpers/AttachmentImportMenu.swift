@@ -123,20 +123,25 @@ struct AttachmentImportMenu: View {
             guard let newImageData else { return }
             newAttachmentData = AttachmentData(data: newImageData, contentType: "image/png")
         }
-        .fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
+        .fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.content]) { result in
             switch result {
             case .success(let url):
-                guard let data = FileManager.default.contents(atPath: url.path) else {
-                    print("File picker data was empty")
-                    return
+                // gain access to the url resource and verify there's data.
+                if url.startAccessingSecurityScopedResource(),
+                   let data = FileManager.default.contents(atPath: url.path) {
+                    newAttachmentData = AttachmentData(
+                        data: data,
+                        contentType: url.mimeType(),
+                        fileName: url.lastPathComponent
+                    )
+                } else {
+                    print("File picker data was empty or could not get access.")
                 }
-                newAttachmentData = AttachmentData(
-                    data: data,
-                    contentType: url.mimeType(),
-                    fileName: url.lastPathComponent
-                )
+                
+                // release access
+                url.stopAccessingSecurityScopedResource()
             case .failure(let error):
-                print("Error importing from file importer: \(error)")
+                print("Error importing from file importer: \(error).")
             }
         }
         .fullScreenCover(isPresented: $cameraIsShowing) {
