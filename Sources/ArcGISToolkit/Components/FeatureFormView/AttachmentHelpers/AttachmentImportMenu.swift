@@ -123,20 +123,25 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***guard let newImageData else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***newAttachmentData = AttachmentData(data: newImageData, contentType: "image/png")
 ***REMOVED***
-***REMOVED******REMOVED***.fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
+***REMOVED******REMOVED***.fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.content]) { result in
 ***REMOVED******REMOVED******REMOVED***switch result {
 ***REMOVED******REMOVED******REMOVED***case .success(let url):
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let data = FileManager.default.contents(atPath: url.path) else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("File picker data was empty")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** gain access to the url resource and verify there's data.
+***REMOVED******REMOVED******REMOVED******REMOVED***if url.startAccessingSecurityScopedResource(),
+***REMOVED******REMOVED******REMOVED******REMOVED***   let data = FileManager.default.contents(atPath: url.path) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentData = AttachmentData(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: data,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: url.mimeType(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName: url.lastPathComponent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("File picker data was empty or could not get access.")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentData = AttachmentData(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: data,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: url.mimeType(),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName: url.lastPathComponent
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** release access
+***REMOVED******REMOVED******REMOVED******REMOVED***url.stopAccessingSecurityScopedResource()
 ***REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED***print("Error importing from file importer: \(error)")
+***REMOVED******REMOVED******REMOVED******REMOVED***print("Error importing from file importer: \(error).")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.fullScreenCover(isPresented: $cameraIsShowing) {
