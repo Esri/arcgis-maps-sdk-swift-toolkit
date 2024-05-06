@@ -1508,6 +1508,19 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(longTextTextInput.exists)
     }
+    
+    func testCase_8_1() {
+        let app = XCUIApplication()
+        let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
+        let formViewTestsButton = app.buttons["Feature Form Tests"]
+        
+        app.launch()
+        
+        // Open the FeatureFormView component test view.
+        formViewTestsButton.tap()
+        
+        selectTestCase(app)
+    }
 }
 
 private extension String {
