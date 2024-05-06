@@ -1307,6 +1307,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 6.1: Test initially expanded and collapsed
 ***REMOVED***func testCase_6_1() {
+***REMOVED******REMOVED***XCTExpectFailure("Attachment form elements remain unapproved but are injected by core, triggering a crash when this form's elements are accessed. Apollo #663")
+***REMOVED******REMOVED***XCTFail("Failing early to pre-empt the expected crash.")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let collapsedGroupFirstElement = app.staticTexts["Single Line Text"]
 ***REMOVED******REMOVED***let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
@@ -1371,6 +1374,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 6.2: Test visibility of empty group
 ***REMOVED***func testCase_6_2() {
+***REMOVED******REMOVED***XCTExpectFailure("Attachment form elements remain unapproved but are injected by core, triggering a crash when this form's elements are accessed. Apollo #663")
+***REMOVED******REMOVED***XCTFail("Failing early to pre-empt the expected crash.")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -1436,6 +1442,9 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 7.1: Test read only elements
 ***REMOVED***func testCase_7_1() {
+***REMOVED******REMOVED***XCTExpectFailure("Attachment form elements remain unapproved but are injected by core, triggering a crash when this form's elements are accessed. Apollo #663")
+***REMOVED******REMOVED***XCTFail("Failing early to pre-empt the expected crash.")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
