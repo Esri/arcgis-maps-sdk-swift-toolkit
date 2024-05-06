@@ -1307,6 +1307,9 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 6.1: Test initially expanded and collapsed
     func testCase_6_1() {
+        XCTExpectFailure("Attachment form elements remain unapproved but are injected by core, triggering a crash when this form's elements are accessed. Apollo #663")
+        XCTFail("Failing early to pre-empt the expected crash.")
+        
         let app = XCUIApplication()
         let collapsedGroupFirstElement = app.staticTexts["Single Line Text"]
         let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
@@ -1371,6 +1374,9 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 6.2: Test visibility of empty group
     func testCase_6_2() {
+        XCTExpectFailure("Attachment form elements remain unapproved but are injected by core, triggering a crash when this form's elements are accessed. Apollo #663")
+        XCTFail("Failing early to pre-empt the expected crash.")
+        
         let app = XCUIApplication()
         let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -1436,6 +1442,9 @@ final class FeatureFormViewTests: XCTestCase {
     
     /// Test case 7.1: Test read only elements
     func testCase_7_1() {
+        XCTExpectFailure("Attachment form elements remain unapproved but are injected by core, triggering a crash when this form's elements are accessed. Apollo #663")
+        XCTFail("Failing early to pre-empt the expected crash.")
+        
         let app = XCUIApplication()
         let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
