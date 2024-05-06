@@ -162,17 +162,7 @@ struct AttachmentPreview: View {
             .onTapGesture {
                 if attachmentModel.attachment.loadStatus == .loaded {
                     // Set the url to trigger `.quickLookPreview`.
-
-                    // WORKAROUND - attachment.fileURL is just a GUID for FormAttachments
-                    // Note: this can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
-                    var tmpURL =  attachmentModel.attachment.fileURL
-                    if let formAttachment = attachmentModel.attachment as? FormAttachment {
-                        tmpURL = tmpURL?.deletingLastPathComponent()
-                        tmpURL = tmpURL?.appending(path: formAttachment.name)
-                        
-                        _ = FileManager.default.secureCopyItem(at: attachmentModel.attachment.fileURL!, to: tmpURL!)
-                    }
-                    url = tmpURL
+                    url = attachmentModel.attachment.fileURL
                 } else if attachmentModel.attachment.loadStatus == .notLoaded {
                     // Load the attachment model with the given size.
                     attachmentModel.load()
