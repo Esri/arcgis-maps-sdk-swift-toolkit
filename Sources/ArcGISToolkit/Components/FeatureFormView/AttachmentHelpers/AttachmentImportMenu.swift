@@ -20,13 +20,6 @@ import UniformTypeIdentifiers
 ***REMOVED***/ The context menu shown when the new attachment button is pressed.
 struct AttachmentImportMenu: View {
 ***REMOVED***
-***REMOVED******REMOVED***/ Data used to create the attachment.
-***REMOVED***private struct AttachmentData: Equatable {
-***REMOVED******REMOVED***var data: Data
-***REMOVED******REMOVED***var contentType: String
-***REMOVED******REMOVED***var fileName: String = ""
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The attachment form element displaying the menu.
 ***REMOVED***private let element: AttachmentFormElement
 ***REMOVED***
@@ -48,7 +41,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***@State private var photoPickerIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The new image attachment data retrieved from the photos picker.
-***REMOVED***@State private var newAttachmentData: AttachmentData?
+***REMOVED***@State private var newAttachmentImportData: AttachmentImportData?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The new image attachment data retrieved from the photos picker.
 ***REMOVED***@State private var newImageData: Data?
@@ -87,41 +80,41 @@ struct AttachmentImportMenu: View {
 #if targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***.menuStyle(.borderlessButton)
 #endif
-***REMOVED******REMOVED***.task(id: newAttachmentData) {
-***REMOVED******REMOVED******REMOVED***guard let newAttachmentData else { return ***REMOVED***
+***REMOVED******REMOVED***.task(id: newAttachmentImportData) {
+***REMOVED******REMOVED******REMOVED***guard let newAttachmentImportData else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***var fileName: String
-***REMOVED******REMOVED******REMOVED******REMOVED***if !newAttachmentData.fileName.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = newAttachmentData.fileName
+***REMOVED******REMOVED******REMOVED******REMOVED***if !newAttachmentImportData.fileName.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = newAttachmentImportData.fileName
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This is probably not good and should be re-thought.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Look at how the `AGSPopupAttachmentsViewController` handles this
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** https:***REMOVED***devtopia.esri.com/runtime/cocoa/blob/b788189d3d2eb43b7da8f9cc9af18ed2f3aa6925/api/iOS/Popup/ViewController/AGSPopupAttachmentsViewController.m#L755
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** and
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** https:***REMOVED***devtopia.esri.com/runtime/cocoa/blob/b788189d3d2eb43b7da8f9cc9af18ed2f3aa6925/api/iOS/Popup/ViewController/AGSPopupAttachmentsViewController.m#L725
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(element.attachments.count + 1).\(newAttachmentData.contentType.split(separator: "/").last!)"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(element.attachments.count + 1).\(newAttachmentImportData.contentType.split(separator: "/").last!)"
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***let newAttachment = try await element.addAttachment(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Can this be better? What does legacy do?
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: fileName,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: newAttachmentData.contentType,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: newAttachmentData.data
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: newAttachmentImportData.contentType,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: newAttachmentImportData.data
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await onAdd?(newAttachment)
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: Figure out error handling
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("Error adding attachment: \(error)")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***self.newAttachmentData = nil
+***REMOVED******REMOVED******REMOVED***self.newAttachmentImportData = nil
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: capturedImage) {
 ***REMOVED******REMOVED******REMOVED***guard let capturedImage, let data = capturedImage.pngData() else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***newAttachmentData = AttachmentData(data: data, contentType: "image/png")
+***REMOVED******REMOVED******REMOVED***newAttachmentImportData = AttachmentImportData(data: data, contentType: "image/png")
 ***REMOVED******REMOVED******REMOVED***self.capturedImage = nil
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: newImageData) {
 ***REMOVED******REMOVED******REMOVED***guard let newImageData else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***newAttachmentData = AttachmentData(data: newImageData, contentType: "image/png")
+***REMOVED******REMOVED******REMOVED***newAttachmentImportData = AttachmentImportData(data: newImageData, contentType: "image/png")
 ***REMOVED***
 ***REMOVED******REMOVED***.fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.content]) { result in
 ***REMOVED******REMOVED******REMOVED***switch result {
@@ -129,7 +122,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** gain access to the url resource and verify there's data.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if url.startAccessingSecurityScopedResource(),
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let data = FileManager.default.contents(atPath: url.path) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentData = AttachmentData(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentImportData = AttachmentImportData(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: data,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: url.mimeType(),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName: url.lastPathComponent
@@ -149,7 +142,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.modifier(
 ***REMOVED******REMOVED******REMOVED***AttachmentPhotoPicker(
-***REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentData: $newImageData,
+***REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentImportData: $newAttachmentImportData,
 ***REMOVED******REMOVED******REMOVED******REMOVED***photoPickerIsPresented: $photoPickerIsPresented
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
