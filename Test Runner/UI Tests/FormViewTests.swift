@@ -1510,9 +1510,18 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     func testCase_8_1() {
+        XCTExpectFailure("Attachment form elements remain unapproved but are injected by core, triggering a crash when this form's elements are accessed. Apollo #663")
+        XCTFail("Failing early to pre-empt the expected crash.")
+        
         let app = XCUIApplication()
-        let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
+        let attachmentElementTitle = app.staticTexts["Attachments"]
+        let attachmentName = app.staticTexts["EsriHQ.jpeg"]
+        let downloadIcon = app.images["Download"]
+        let formTitle = app.staticTexts["Esri Location"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
+        let placeholderImage = app.images["Photo"]
+        let sizeLabel = app.staticTexts["154 kB"]
+        let thumbnailImage = app.images["EsriHQ.jpeg Thumbnail"]
         
         app.launch()
         
@@ -1520,6 +1529,24 @@ final class FeatureFormViewTests: XCTestCase {
         formViewTestsButton.tap()
         
         selectTestCase(app)
+        
+        // Wait and verify that the form is opened.
+        XCTAssertTrue(
+            formTitle.waitForExistence(timeout: 10),
+            "The form failed to open after 10 seconds."
+        )
+        
+        XCTAssertTrue(attachmentElementTitle.exists)
+        XCTAssertTrue(placeholderImage.exists)
+        XCTAssertTrue(attachmentName.exists)
+        XCTAssertTrue(sizeLabel.exists)
+        XCTAssertTrue(downloadIcon.exists)
+        
+        placeholderImage.tap()
+        
+        XCTAssertTrue(thumbnailImage.waitForExistence(timeout: 10))
+        XCTAssertFalse(placeholderImage.exists)
+        XCTAssertFalse(downloadIcon.exists)
     }
 }
 
