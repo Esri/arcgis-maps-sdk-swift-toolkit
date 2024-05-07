@@ -1510,9 +1510,6 @@ final class FeatureFormViewTests: XCTestCase {
     }
     
     func testCase_8_1() {
-        XCTExpectFailure("Attachment form elements remain unapproved but are injected by core, triggering a crash when this form's elements are accessed. Apollo #663")
-        XCTFail("Failing early to pre-empt the expected crash.")
-        
         let app = XCUIApplication()
         let attachmentElementTitle = app.staticTexts["Attachments"]
         let attachmentName = app.staticTexts["EsriHQ.jpeg"]
