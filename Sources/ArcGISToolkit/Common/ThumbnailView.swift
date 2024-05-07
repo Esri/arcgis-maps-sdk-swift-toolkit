@@ -39,6 +39,7 @@ struct ThumbnailView: View  {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.accessibilityIdentifier("\(attachmentModel.name) Thumbnail")
 ***REMOVED******REMOVED***.frame(width: size.width, height: size.height, alignment: .center)
 ***REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 4))
 ***REMOVED******REMOVED***.contentShape(RoundedRectangle(cornerRadius: 4))
