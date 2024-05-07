@@ -1510,9 +1510,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_8_1() {
-***REMOVED******REMOVED***XCTExpectFailure("Attachment form elements remain unapproved but are injected by core, triggering a crash when this form's elements are accessed. Apollo #663")
-***REMOVED******REMOVED***XCTFail("Failing early to pre-empt the expected crash.")
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let attachmentElementTitle = app.staticTexts["Attachments"]
 ***REMOVED******REMOVED***let attachmentName = app.staticTexts["EsriHQ.jpeg"]
