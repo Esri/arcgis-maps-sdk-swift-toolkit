@@ -2,7 +2,7 @@
 
 This is an application that shows how to use toolkit components to simplify development of your iOS apps built with the ArcGIS Maps SDK for Swift.
 
-Documentation for the toolkit components is [here](../Documentation/README.md).
+Documentation for the toolkit components is [here](https://developers.arcgis.com/swift/toolkit-api-reference/documentation/arcgistoolkit/).
 
 ## Instructions
 
