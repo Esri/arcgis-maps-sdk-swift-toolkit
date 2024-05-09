@@ -23,9 +23,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the field is focused.
 ***REMOVED***@FocusState private var isFocused: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ The formatted version of the element's current value.
-***REMOVED***@State private var formattedValue = ""
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the full screen text input is presented.
 ***REMOVED***@State private var fullScreenTextInputIsPresented = false
 ***REMOVED***
@@ -71,9 +68,8 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***formattedValue = newFormattedValue
-***REMOVED******REMOVED******REMOVED******REMOVED***text = formattedValue
+***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { _, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***text = newFormattedValue
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -82,24 +78,32 @@ private extension TextInput {
 ***REMOVED******REMOVED***/ The body of the text input when the element is editable.
 ***REMOVED***var textWriter: some View {
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED***element.label,
-***REMOVED******REMOVED******REMOVED******REMOVED***text: $text,
-***REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.hint).foregroundColor(.secondary),
-***REMOVED******REMOVED******REMOVED******REMOVED***axis: element.isMultiline ? .vertical : .horizontal
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.disabled(element.isMultiline)
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $fullScreenTextInputIsPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(text: $text, element: element)
+***REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED***if element.isMultiline {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(text)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(10)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $fullScreenTextInputIsPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(text: $text, element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 #if targetEnvironment(macCatalyst)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
 #endif
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element.label,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $text,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.hint).foregroundColor(.secondary),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: .horizontal
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input")
-***REMOVED******REMOVED******REMOVED***.background(.clear)
 ***REMOVED******REMOVED******REMOVED***.focused($isFocused)
-***REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .keyboard) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
@@ -174,44 +178,13 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***LegacyTextView(text: $text)
-***REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused, equals: true)
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = true
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***RepresentedUITextView(text: $text)
+***REMOVED******REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused, equals: true)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = true
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-struct LegacyTextView: UIViewRepresentable {
-***REMOVED***@Binding var text: String
-***REMOVED***
-***REMOVED***func makeUIView(context: Context) -> UITextView {
-***REMOVED******REMOVED***let uiTextView = UITextView()
-***REMOVED******REMOVED***uiTextView.delegate = context.coordinator
-***REMOVED******REMOVED***return uiTextView
-***REMOVED***
-***REMOVED***
-***REMOVED***func updateUIView(_ uiView: UITextView, context: Context) {
-***REMOVED******REMOVED***uiView.text = text
-***REMOVED***
-***REMOVED***
-***REMOVED***func makeCoordinator() -> Coordinator {
-***REMOVED******REMOVED***Coordinator(text: $text)
-***REMOVED***
-***REMOVED***
-***REMOVED***class Coordinator: NSObject, UITextViewDelegate {
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var text: Binding<String>
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(text: Binding<String>) {
-***REMOVED******REMOVED******REMOVED***self.text = text
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func textViewDidEndEditing(_ textView: UITextView) {
-***REMOVED******REMOVED******REMOVED***self.text.wrappedValue = textView.text
+***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
