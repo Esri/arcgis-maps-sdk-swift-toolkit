@@ -174,18 +174,44 @@ private extension TextInput {
                 .buttonStyle(.plain)
                 .foregroundColor(.accentColor)
             }
-            TextField(
-                element.label,
-                text: $text,
-                prompt: Text(element.hint).foregroundColor(.secondary),
-                axis: .vertical
-            )
+            LegacyTextView(text: $text)
             .focused($textFieldIsFocused, equals: true)
             .onAppear {
                 textFieldIsFocused = true
             }
             Spacer()
-            InputFooter(element: element)
+//            InputFooter(element: element)
+        }
+    }
+}
+
+struct LegacyTextView: UIViewRepresentable {
+    @Binding var text: String
+    
+    func makeUIView(context: Context) -> UITextView {
+        let uiTextView = UITextView()
+        uiTextView.delegate = context.coordinator
+        return uiTextView
+    }
+    
+    func updateUIView(_ uiView: UITextView, context: Context) {
+        uiView.text = text
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(text: $text)
+    }
+    
+    class Coordinator: NSObject, UITextViewDelegate {
+        
+        var text: Binding<String>
+        
+        init(text: Binding<String>) {
+            self.text = text
+        }
+        
+        func textViewDidEndEditing(_ textView: UITextView) {
+            self.text.wrappedValue = textView.text
         }
     }
 }
