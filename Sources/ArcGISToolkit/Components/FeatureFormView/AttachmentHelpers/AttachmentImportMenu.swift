@@ -43,9 +43,6 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ The new image attachment data retrieved from the photos picker.
 ***REMOVED***@State private var newAttachmentImportData: AttachmentImportData?
 ***REMOVED***
-***REMOVED******REMOVED***/ The new image attachment data retrieved from the photos picker.
-***REMOVED***@State private var newImageData: Data?
-***REMOVED***
 ***REMOVED******REMOVED***/ The new attachment retrieved from the device's camera.
 ***REMOVED***@State private var capturedImage: UIImage?
 ***REMOVED***
@@ -111,10 +108,6 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***guard let capturedImage, let data = capturedImage.pngData() else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***newAttachmentImportData = AttachmentImportData(data: data, contentType: "image/png")
 ***REMOVED******REMOVED******REMOVED***self.capturedImage = nil
-***REMOVED***
-***REMOVED******REMOVED***.task(id: newImageData) {
-***REMOVED******REMOVED******REMOVED***guard let newImageData else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***newAttachmentImportData = AttachmentImportData(data: newImageData, contentType: "image/png")
 ***REMOVED***
 ***REMOVED******REMOVED***.fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.content]) { result in
 ***REMOVED******REMOVED******REMOVED***switch result {
