@@ -1509,6 +1509,43 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(longTextTextInput.exists)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***func testCase_8_1() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let attachmentElementTitle = app.staticTexts["Attachments"]
+***REMOVED******REMOVED***let attachmentName = app.staticTexts["EsriHQ.jpeg"]
+***REMOVED******REMOVED***let downloadIcon = app.images["Download"]
+***REMOVED******REMOVED***let formTitle = app.staticTexts["Esri Location"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED***let placeholderImage = app.images["Photo"]
+***REMOVED******REMOVED***let sizeLabel = app.staticTexts["154 kB"]
+***REMOVED******REMOVED***let thumbnailImage = app.images["EsriHQ.jpeg Thumbnail"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(attachmentElementTitle.exists)
+***REMOVED******REMOVED***XCTAssertTrue(placeholderImage.exists)
+***REMOVED******REMOVED***XCTAssertTrue(attachmentName.exists)
+***REMOVED******REMOVED***XCTAssertTrue(sizeLabel.exists)
+***REMOVED******REMOVED***XCTAssertTrue(downloadIcon.exists)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***placeholderImage.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(thumbnailImage.waitForExistence(timeout: 10))
+***REMOVED******REMOVED***XCTAssertFalse(placeholderImage.exists)
+***REMOVED******REMOVED***XCTAssertFalse(downloadIcon.exists)
+***REMOVED***
+***REMOVED***
 
 private extension String {
 ***REMOVED******REMOVED***/ 257 characters of Lorem ipsum text
