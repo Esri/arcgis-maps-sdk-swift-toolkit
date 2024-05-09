@@ -174,18 +174,44 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED***element.label,
-***REMOVED******REMOVED******REMOVED******REMOVED***text: $text,
-***REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.hint).foregroundColor(.secondary),
-***REMOVED******REMOVED******REMOVED******REMOVED***axis: .vertical
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***LegacyTextView(text: $text)
 ***REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused, equals: true)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED***InputFooter(element: element)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+struct LegacyTextView: UIViewRepresentable {
+***REMOVED***@Binding var text: String
+***REMOVED***
+***REMOVED***func makeUIView(context: Context) -> UITextView {
+***REMOVED******REMOVED***let uiTextView = UITextView()
+***REMOVED******REMOVED***uiTextView.delegate = context.coordinator
+***REMOVED******REMOVED***return uiTextView
+***REMOVED***
+***REMOVED***
+***REMOVED***func updateUIView(_ uiView: UITextView, context: Context) {
+***REMOVED******REMOVED***uiView.text = text
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeCoordinator() -> Coordinator {
+***REMOVED******REMOVED***Coordinator(text: $text)
+***REMOVED***
+***REMOVED***
+***REMOVED***class Coordinator: NSObject, UITextViewDelegate {
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var text: Binding<String>
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***init(text: Binding<String>) {
+***REMOVED******REMOVED******REMOVED***self.text = text
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func textViewDidEndEditing(_ textView: UITextView) {
+***REMOVED******REMOVED******REMOVED***self.text.wrappedValue = textView.text
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
