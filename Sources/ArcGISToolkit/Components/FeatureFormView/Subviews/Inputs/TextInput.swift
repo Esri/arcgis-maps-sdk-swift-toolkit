@@ -81,6 +81,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if element.isMultiline {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(text)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input Preview")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(10)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
@@ -98,10 +99,10 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(element.hint).foregroundColor(.secondary),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: .horizontal
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input")
 ***REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
