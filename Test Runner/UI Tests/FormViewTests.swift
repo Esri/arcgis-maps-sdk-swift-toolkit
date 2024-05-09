@@ -1465,7 +1465,7 @@ final class FeatureFormViewTests: XCTestCase {
         let shortTextTextInput = app.textFields["Short text Text Input"]
         
         let longTextReadOnlyInput = app.staticTexts["Long text Read Only Input"]
-        let longTextTextInput = app.textViews["Long text Text Input"]
+        let longTextTextInputPreview = app.staticTexts["Long text Text Input Preview"]
         
         app.launch()
         
@@ -1506,7 +1506,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         XCTAssertTrue(shortTextTextInput.exists)
         
-        XCTAssertTrue(longTextTextInput.exists)
+        XCTAssertTrue(longTextTextInputPreview.exists)
     }
 }
 

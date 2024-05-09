@@ -81,6 +81,7 @@ private extension TextInput {
             Group {
                 if element.isMultiline {
                     Text(text)
+                        .accessibilityIdentifier("\(element.label) Text Input Preview")
                         .fixedSize(horizontal: false, vertical: true)
                         .lineLimit(10)
                         .truncationMode(.tail)
@@ -98,10 +99,10 @@ private extension TextInput {
                         prompt: Text(element.hint).foregroundColor(.secondary),
                         axis: .horizontal
                     )
+                    .accessibilityIdentifier("\(element.label) Text Input")
                     .keyboardType(keyboardType)
                 }
             }
-            .accessibilityIdentifier("\(element.label) Text Input")
             .focused($isFocused)
             .frame(maxWidth: .infinity, alignment: .leading)
             .toolbar {
