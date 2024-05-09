@@ -39,3 +39,41 @@ extension AttachmentFormElement : AttachmentsFeatureElement {
         }
     }
 }
+
+extension AttachmentFormElement {
+    /// Creates a unique name for a new attachments, without a file extension.
+    /// - Parameter attachmentKind: The kind of attachment to generate a name for.
+    /// - Returns: A unique name for an attachment.
+    func baseName(for attachmentKind: FeatureAttachmentKind) -> String {
+        // get number of photos/videos
+        var count = attachments.filter { $0.featureAttachmentKind == attachmentKind }.count
+        let root: String
+        
+        switch attachmentKind {
+        case .image:
+            root = "Photo"
+        case .video:
+            root = "Video"
+            // Add "Audio" type when available
+            //        case .audio:
+            //            root = "Audio"
+        case .document, .other:
+            root = "Attachment"
+        }
+        
+        var baseName: String
+        repeat {
+            baseName = "\(root)\(count)"
+            count = count + 1
+        } while( attachments.filter {
+            if let name = $0.name.split(separator: ".").first {
+                return name == baseName
+            }
+            return false
+        }
+            .count > 0
+        )
+        
+        return baseName
+    }
+}
