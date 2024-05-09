@@ -23,9 +23,6 @@ struct TextInput: View {
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
-    /// The formatted version of the element's current value.
-    @State private var formattedValue = ""
-    
     /// A Boolean value indicating whether the full screen text input is presented.
     @State private var fullScreenTextInputIsPresented = false
     
@@ -71,9 +68,8 @@ struct TextInput: View {
                     model.focusedElement = element
                 }
             }
-            .onValueChange(of: element) { newValue, newFormattedValue in
-                formattedValue = newFormattedValue
-                text = formattedValue
+            .onValueChange(of: element) { _, newFormattedValue in
+                text = newFormattedValue
             }
     }
 }
@@ -82,24 +78,32 @@ private extension TextInput {
     /// The body of the text input when the element is editable.
     var textWriter: some View {
         HStack(alignment: .bottom) {
-            TextField(
-                element.label,
-                text: $text,
-                prompt: Text(element.hint).foregroundColor(.secondary),
-                axis: element.isMultiline ? .vertical : .horizontal
-            )
-            .disabled(element.isMultiline)
-            .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                FullScreenTextInput(text: $text, element: element)
+            Group {
+                if element.isMultiline {
+                    Text(text)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(10)
+                        .truncationMode(.tail)
+                        .sheet(isPresented: $fullScreenTextInputIsPresented) {
+                            FullScreenTextInput(text: $text, element: element)
+                                .padding()
 #if targetEnvironment(macCatalyst)
-                    .environmentObject(model)
+                                .environmentObject(model)
 #endif
-                    .padding()
+                        }
+                } else {
+                    TextField(
+                        element.label,
+                        text: $text,
+                        prompt: Text(element.hint).foregroundColor(.secondary),
+                        axis: .horizontal
+                    )
+                    .keyboardType(keyboardType)
+                }
             }
             .accessibilityIdentifier("\(element.label) Text Input")
-            .background(.clear)
             .focused($isFocused)
-            .keyboardType(keyboardType)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
@@ -174,44 +178,13 @@ private extension TextInput {
                 .buttonStyle(.plain)
                 .foregroundColor(.accentColor)
             }
-            LegacyTextView(text: $text)
-            .focused($textFieldIsFocused, equals: true)
-            .onAppear {
-                textFieldIsFocused = true
-            }
+            RepresentedUITextView(text: $text)
+                .focused($textFieldIsFocused, equals: true)
+                .onAppear {
+                    textFieldIsFocused = true
+                }
             Spacer()
-//            InputFooter(element: element)
-        }
-    }
-}
-
-struct LegacyTextView: UIViewRepresentable {
-    @Binding var text: String
-    
-    func makeUIView(context: Context) -> UITextView {
-        let uiTextView = UITextView()
-        uiTextView.delegate = context.coordinator
-        return uiTextView
-    }
-    
-    func updateUIView(_ uiView: UITextView, context: Context) {
-        uiView.text = text
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(text: $text)
-    }
-    
-    class Coordinator: NSObject, UITextViewDelegate {
-        
-        var text: Binding<String>
-        
-        init(text: Binding<String>) {
-            self.text = text
-        }
-        
-        func textViewDidEndEditing(_ textView: UITextView) {
-            self.text.wrappedValue = textView.text
+            InputFooter(element: element)
         }
     }
 }
