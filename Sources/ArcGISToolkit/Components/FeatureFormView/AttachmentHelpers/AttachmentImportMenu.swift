@@ -43,9 +43,6 @@ struct AttachmentImportMenu: View {
     /// The new image attachment data retrieved from the photos picker.
     @State private var newAttachmentImportData: AttachmentImportData?
     
-    /// The new image attachment data retrieved from the photos picker.
-    @State private var newImageData: Data?
-    
     /// The new attachment retrieved from the device's camera.
     @State private var capturedImage: UIImage?
     
@@ -111,10 +108,6 @@ struct AttachmentImportMenu: View {
             guard let capturedImage, let data = capturedImage.pngData() else { return }
             newAttachmentImportData = AttachmentImportData(data: data, contentType: "image/png")
             self.capturedImage = nil
-        }
-        .task(id: newImageData) {
-            guard let newImageData else { return }
-            newAttachmentImportData = AttachmentImportData(data: newImageData, contentType: "image/png")
         }
         .fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.content]) { result in
             switch result {
