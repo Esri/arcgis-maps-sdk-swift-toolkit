@@ -39,6 +39,7 @@ struct ThumbnailView: View  {
                     .aspectRatio(contentMode: .fill)
             }
         }
+        .accessibilityIdentifier("\(attachmentModel.name) Thumbnail")
         .frame(width: size.width, height: size.height, alignment: .center)
         .clipShape(RoundedRectangle(cornerRadius: 4))
         .contentShape(RoundedRectangle(cornerRadius: 4))

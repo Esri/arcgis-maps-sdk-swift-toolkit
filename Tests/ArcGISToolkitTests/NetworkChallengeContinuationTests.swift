@@ -16,13 +16,15 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor final class NetworkChallengeContinuationTests: XCTestCase {
+final class NetworkChallengeContinuationTests: XCTestCase {
+    @MainActor
     func testInit() {
         let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
         XCTAssertEqual(challenge.host, "host.com")
         XCTAssertEqual(challenge.kind, .serverTrust)
     }
     
+    @MainActor
     func testResumeAndComplete() async {
         let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
         challenge.resume(with: .continueWithCredential(.serverTrust))
