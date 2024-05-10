@@ -41,7 +41,11 @@ struct RepresentedUITextView: UIViewRepresentable {
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(text: $text, onTextViewDidChange: onTextViewDidChange, onTextViewDidEndEditing: onTextViewDidEndEditing)
+        Coordinator(
+            text: $text,
+            onTextViewDidChange: onTextViewDidChange,
+            onTextViewDidEndEditing: onTextViewDidEndEditing
+        )
     }
     
     class Coordinator: NSObject, UITextViewDelegate {
@@ -56,7 +60,11 @@ struct RepresentedUITextView: UIViewRepresentable {
         /// The action to perform when text editing ends.
         var onTextViewDidEndEditing: ((String) -> Void)?
         
-        init(text: Binding<String>, onTextViewDidChange: ((String) -> Void)? = nil, onTextViewDidEndEditing: ((String) -> Void)? = nil) {
+        init(
+            text: Binding<String>, 
+            onTextViewDidChange: ((String) -> Void)? = nil,
+            onTextViewDidEndEditing: ((String) -> Void)? = nil
+        ) {
             self.text = text
             self.onTextViewDidChange = onTextViewDidChange
             self.onTextViewDidEndEditing = onTextViewDidEndEditing
