@@ -59,7 +59,7 @@ public struct PreplannedListItemView: View {
                 }
             }
             .onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { status in
-                // If the preplanned map area fails to load, it may not be pacakged.
+                // If the preplanned map area fails to load, it may not be packaged.
                 if status == .failed {
                     canDownload = false
                 } else if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
