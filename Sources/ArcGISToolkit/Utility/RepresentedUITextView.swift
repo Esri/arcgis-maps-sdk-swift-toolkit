@@ -21,6 +21,10 @@ import SwiftUI
 struct RepresentedUITextView: UIViewRepresentable {
     @Binding var text: String
     
+    var onTextViewDidChange: ((String) -> Void)? = nil
+    
+    var onTextViewDidEndEditing: ((String) -> Void)? = nil
+    
     func makeUIView(context: Context) -> UITextView {
         let uiTextView = UITextView()
         uiTextView.delegate = context.coordinator
@@ -32,18 +36,32 @@ struct RepresentedUITextView: UIViewRepresentable {
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(text: $text)
+        Coordinator(text: $text, onTextViewDidChange: onTextViewDidChange, onTextViewDidEndEditing: onTextViewDidEndEditing)
     }
     
     class Coordinator: NSObject, UITextViewDelegate {
         var text: Binding<String>
         
-        init(text: Binding<String>) {
+        var onTextViewDidChange: ((String) -> Void)?
+        
+        var onTextViewDidEndEditing: ((String) -> Void)?
+        
+        init(text: Binding<String>, onTextViewDidChange: ((String) -> Void)? = nil, onTextViewDidEndEditing: ((String) -> Void)? = nil) {
             self.text = text
+            self.onTextViewDidChange = onTextViewDidChange
+            self.onTextViewDidEndEditing = onTextViewDidEndEditing
         }
         
         func textViewDidChange(_ textView: UITextView) {
-            text.wrappedValue = textView.text
+            if let onTextViewDidChange {
+                onTextViewDidChange(textView.text)
+            } else {
+                text.wrappedValue = textView.text
+            }
+        }
+        
+        func textViewDidEndEditing(_ textView: UITextView) {
+            onTextViewDidEndEditing?(textView.text)
         }
     }
 }
