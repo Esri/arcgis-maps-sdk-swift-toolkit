@@ -23,7 +23,7 @@ struct LoadableImageView: View {
 ***REMOVED***let loadableImage: LoadableImage
 ***REMOVED***
 ***REMOVED******REMOVED***/ The result of loading the image.
-***REMOVED***@State var result: Result<UIImage, Error>? = nil
+***REMOVED***@State private var result: Result<UIImage, Error>?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {

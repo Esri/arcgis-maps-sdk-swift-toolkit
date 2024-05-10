@@ -59,7 +59,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { status in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the preplanned map area fails to load, it may not be pacakged.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the preplanned map area fails to load, it may not be packaged.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if status == .failed {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***canDownload = false
 ***REMOVED******REMOVED******REMOVED*** else if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {

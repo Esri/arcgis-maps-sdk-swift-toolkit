@@ -18,7 +18,7 @@
 
 struct OfflineMapAreasExampleView: View {
 ***REMOVED******REMOVED***/ The map of the Naperville water network.
-***REMOVED***var map = Map(item: PortalItem.naperville())
+***REMOVED***@State private var map = Map(item: PortalItem.naperville())
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the offline map ares view should be presented.
 ***REMOVED***@State private var isShowingOfflineMapAreasView = false
