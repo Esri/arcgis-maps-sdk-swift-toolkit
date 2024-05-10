@@ -18,7 +18,7 @@ import SwiftUI
 
 /// Data used to create the attachment.
 struct AttachmentImportData: Equatable {
-    var data: Data
-    var contentType: String
+    let data: Data
+    let contentType: String
     var fileName: String = ""
 }
