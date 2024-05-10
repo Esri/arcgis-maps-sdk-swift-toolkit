@@ -41,7 +41,11 @@ struct RepresentedUITextView: UIViewRepresentable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCoordinator() -> Coordinator {
-***REMOVED******REMOVED***Coordinator(text: $text, onTextViewDidChange: onTextViewDidChange, onTextViewDidEndEditing: onTextViewDidEndEditing)
+***REMOVED******REMOVED***Coordinator(
+***REMOVED******REMOVED******REMOVED***text: $text,
+***REMOVED******REMOVED******REMOVED***onTextViewDidChange: onTextViewDidChange,
+***REMOVED******REMOVED******REMOVED***onTextViewDidEndEditing: onTextViewDidEndEditing
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***class Coordinator: NSObject, UITextViewDelegate {
@@ -56,7 +60,11 @@ struct RepresentedUITextView: UIViewRepresentable {
 ***REMOVED******REMOVED******REMOVED***/ The action to perform when text editing ends.
 ***REMOVED******REMOVED***var onTextViewDidEndEditing: ((String) -> Void)?
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(text: Binding<String>, onTextViewDidChange: ((String) -> Void)? = nil, onTextViewDidEndEditing: ((String) -> Void)? = nil) {
+***REMOVED******REMOVED***init(
+***REMOVED******REMOVED******REMOVED***text: Binding<String>, 
+***REMOVED******REMOVED******REMOVED***onTextViewDidChange: ((String) -> Void)? = nil,
+***REMOVED******REMOVED******REMOVED***onTextViewDidEndEditing: ((String) -> Void)? = nil
+***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***self.text = text
 ***REMOVED******REMOVED******REMOVED***self.onTextViewDidChange = onTextViewDidChange
 ***REMOVED******REMOVED******REMOVED***self.onTextViewDidEndEditing = onTextViewDidEndEditing
