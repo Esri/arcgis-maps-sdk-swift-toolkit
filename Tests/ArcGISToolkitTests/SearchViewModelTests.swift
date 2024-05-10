@@ -16,8 +16,8 @@ import XCTest
 ***REMOVED***
 @testable ***REMOVED***Toolkit
 
-@MainActor
 class SearchViewModelTests: XCTestCase {
+***REMOVED***@MainActor
 ***REMOVED***func testAcceptSuggestion() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
@@ -38,6 +38,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(result.first, model.selectedResult)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testCommitSearch() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***
@@ -88,6 +89,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testCurrentQuery() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***
@@ -124,6 +126,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testIsEligibleForRequery() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***
@@ -184,6 +187,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(model.isEligibleForRequery)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testQueryArea() async throws {
 ***REMOVED******REMOVED***let source = LocatorSearchSource()
 ***REMOVED******REMOVED***source.maximumResults = .max
@@ -237,6 +241,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testQueryCenter() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***
@@ -294,6 +299,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance.value,  100)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testRepeatSearch() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***
@@ -337,6 +343,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testSearchResultMode() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***XCTAssertEqual(model.resultMode, .automatic)
@@ -383,6 +390,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testUpdateSuggestions() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***

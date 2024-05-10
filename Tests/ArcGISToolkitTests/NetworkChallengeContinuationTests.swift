@@ -16,13 +16,15 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor final class NetworkChallengeContinuationTests: XCTestCase {
+final class NetworkChallengeContinuationTests: XCTestCase {
+***REMOVED***@MainActor
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
 ***REMOVED******REMOVED***XCTAssertEqual(challenge.host, "host.com")
 ***REMOVED******REMOVED***XCTAssertEqual(challenge.kind, .serverTrust)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testResumeAndComplete() async {
 ***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
 ***REMOVED******REMOVED***challenge.resume(with: .continueWithCredential(.serverTrust))

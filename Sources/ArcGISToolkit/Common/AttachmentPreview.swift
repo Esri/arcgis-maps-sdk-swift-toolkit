@@ -72,7 +72,15 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentName = attachmentModel.name
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Rename", systemImage: "pencil")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Rename",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to rename an attachment."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "pencil")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***deletedAttachmentModel = attachmentModel
@@ -84,8 +92,21 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
-***REMOVED******REMOVED******REMOVED***TextField("New name", text: $newAttachmentName)
+***REMOVED******REMOVED***.alert(
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Rename attachment",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label in reference to the action of renaming a file, shown in a file rename interface."
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***isPresented: $renameDialogueIsShowing
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***TextField(text: $newAttachmentName) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"New name",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label in reference to the new name of a file, shown in a file rename interface."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) { ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button("OK") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
@@ -170,22 +191,6 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension FileManager {
-***REMOVED******REMOVED***/ - Note: This can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
-***REMOVED***func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***if FileManager.default.fileExists(atPath: dstURL.path) {
-***REMOVED******REMOVED******REMOVED******REMOVED***try FileManager.default.removeItem(at: dstURL)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***try FileManager.default.copyItem(at: srcURL, to: dstURL)
-***REMOVED*** catch (let error) {
-***REMOVED******REMOVED******REMOVED***print("Cannot copy item at \(srcURL) to \(dstURL): \(error)")
-***REMOVED******REMOVED******REMOVED***return false
-***REMOVED***
-***REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED***
 

@@ -16,7 +16,8 @@ import XCTest
 ***REMOVED***
 @testable ***REMOVED***Toolkit
 
-@MainActor final class AuthenticationManagerTests: XCTestCase {
+final class AuthenticationManagerTests: XCTestCase {
+***REMOVED***@MainActor
 ***REMOVED***func testHandleChallengesUsingAuthenticator() {
 ***REMOVED******REMOVED***addTeardownBlock {
 ***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = nil

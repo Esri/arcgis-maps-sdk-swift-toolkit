@@ -94,15 +94,14 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED******REMOVED***fileAt: attachment.fileURL!,
 ***REMOVED******REMOVED******REMOVED******REMOVED***size: thumbnailSize,
 ***REMOVED******REMOVED******REMOVED******REMOVED***scale: displayScale,
-***REMOVED******REMOVED******REMOVED******REMOVED***representationTypes: .all)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***representationTypes: .all
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnail = try await QLThumbnailGenerator.shared.generateBestRepresentation(for: request)
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***systemImageName = "exclamationmark.circle.fill"
 ***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -25,7 +25,6 @@ import Combine
 ***REMOVED*** as 'geoModel.actualSpatialReference') than the 'BasemapGallery' design
 ***REMOVED*** specifies. Tests not present in the test design have been added to
 ***REMOVED*** accommodate those differences.
-@MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED***override func setUp() async throws {
 ***REMOVED******REMOVED***ArcGISEnvironment.apiKey = .default
@@ -53,6 +52,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED***]
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test the various constructor methods.
+***REMOVED***@MainActor
 ***REMOVED***func testInit() async throws {
 ***REMOVED******REMOVED******REMOVED*** Note:  this is a good candidate for mocking portal data.
 ***REMOVED******REMOVED******REMOVED*** This would allow the test to check for a specific number of items.
@@ -168,6 +168,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test the `currentItem` property including valid and invalid basemaps.
+***REMOVED***@MainActor
 ***REMOVED***func testCurrentItem() async throws {
 ***REMOVED******REMOVED***let basemap = Basemap(style: .arcGISStreets)
 ***REMOVED******REMOVED***let geoModel = Map(basemap: basemap)
@@ -229,6 +230,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test setting the portal after the model has been created.
+***REMOVED***@MainActor
 ***REMOVED***func testUpdatePortal() async throws {
 ***REMOVED******REMOVED******REMOVED*** Create a model with a default list of items.
 ***REMOVED******REMOVED***let viewModel = BasemapGalleryViewModel(
