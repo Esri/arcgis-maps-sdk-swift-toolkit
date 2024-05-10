@@ -1465,7 +1465,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let shortTextTextInput = app.textFields["Short text Text Input"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let longTextReadOnlyInput = app.staticTexts["Long text Read Only Input"]
-***REMOVED******REMOVED***let longTextTextInput = app.textViews["Long text Text Input"]
+***REMOVED******REMOVED***let longTextTextInputPreview = app.staticTexts["Long text Text Input Preview"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -1506,7 +1506,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(shortTextTextInput.exists)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(longTextTextInput.exists)
+***REMOVED******REMOVED***XCTAssertTrue(longTextTextInputPreview.exists)
 ***REMOVED***
 ***REMOVED***
 
