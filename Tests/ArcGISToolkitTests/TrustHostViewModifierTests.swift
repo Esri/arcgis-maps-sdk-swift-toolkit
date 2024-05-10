@@ -15,7 +15,8 @@
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor final class TrustHostViewModifierTests: XCTestCase {
+final class TrustHostViewModifierTests: XCTestCase {
+    @MainActor
     func testInit() {
         let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
         // Tests the initial state.

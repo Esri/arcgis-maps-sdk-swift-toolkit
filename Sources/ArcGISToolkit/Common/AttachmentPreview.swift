@@ -72,7 +72,15 @@ struct AttachmentPreview: View {
                                         newAttachmentName = attachmentModel.name
                                     }
                                 } label: {
-                                    Label("Rename", systemImage: "pencil")
+                                    Label {
+                                        Text(
+                                            "Rename",
+                                            bundle: .toolkitModule,
+                                            comment: "A label for a button to rename an attachment."
+                                        )
+                                    } icon: {
+                                        Image(systemName: "pencil")
+                                    }
                                 }
                                 Button(role: .destructive) {
                                     deletedAttachmentModel = attachmentModel
@@ -84,8 +92,21 @@ struct AttachmentPreview: View {
                 }
             }
         }
-        .alert("Rename attachment", isPresented: $renameDialogueIsShowing) {
-            TextField("New name", text: $newAttachmentName)
+        .alert(
+            Text(
+                "Rename attachment",
+                bundle: .toolkitModule,
+                comment: "A label in reference to the action of renaming a file, shown in a file rename interface."
+            ),
+            isPresented: $renameDialogueIsShowing
+        ) {
+            TextField(text: $newAttachmentName) {
+                Text(
+                    "New name",
+                    bundle: .toolkitModule,
+                    comment: "A label in reference to the new name of a file, shown in a file rename interface."
+                )
+            }
             Button("Cancel", role: .cancel) { }
             Button("OK") {
                 Task {
@@ -170,22 +191,6 @@ struct AttachmentPreview: View {
             }
             .quickLookPreview($url)
         }
-    }
-}
-
-extension FileManager {
-    /// - Note: This can be deleted when Apollo #635 - "FormAttachment.fileURL is not user-friendly" is fixed.
-    func secureCopyItem(at srcURL: URL, to dstURL: URL) -> Bool {
-        do {
-            if FileManager.default.fileExists(atPath: dstURL.path) {
-                try FileManager.default.removeItem(at: dstURL)
-            }
-            try FileManager.default.copyItem(at: srcURL, to: dstURL)
-        } catch (let error) {
-            print("Cannot copy item at \(srcURL) to \(dstURL): \(error)")
-            return false
-        }
-        return true
     }
 }
 

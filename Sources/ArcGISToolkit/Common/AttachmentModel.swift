@@ -94,8 +94,8 @@ import SwiftUI
                 fileAt: attachment.fileURL!,
                 size: thumbnailSize,
                 scale: displayScale,
-                representationTypes: .all)
-            
+                representationTypes: .all
+            )
             do {
                 let thumbnail = try await QLThumbnailGenerator.shared.generateBestRepresentation(for: request)
                 self.thumbnail = thumbnail.uiImage
@@ -104,7 +104,6 @@ import SwiftUI
             }
         }
     }
-    
     
     /// Synchronizes published properties with attachment metadata.
     func sync() {
