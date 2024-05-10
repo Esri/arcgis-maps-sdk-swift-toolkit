@@ -21,6 +21,10 @@
 struct RepresentedUITextView: UIViewRepresentable {
 ***REMOVED***@Binding var text: String
 ***REMOVED***
+***REMOVED***var onTextViewDidChange: ((String) -> Void)? = nil
+***REMOVED***
+***REMOVED***var onTextViewDidEndEditing: ((String) -> Void)? = nil
+***REMOVED***
 ***REMOVED***func makeUIView(context: Context) -> UITextView {
 ***REMOVED******REMOVED***let uiTextView = UITextView()
 ***REMOVED******REMOVED***uiTextView.delegate = context.coordinator
@@ -32,18 +36,32 @@ struct RepresentedUITextView: UIViewRepresentable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCoordinator() -> Coordinator {
-***REMOVED******REMOVED***Coordinator(text: $text)
+***REMOVED******REMOVED***Coordinator(text: $text, onTextViewDidChange: onTextViewDidChange, onTextViewDidEndEditing: onTextViewDidEndEditing)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***class Coordinator: NSObject, UITextViewDelegate {
 ***REMOVED******REMOVED***var text: Binding<String>
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(text: Binding<String>) {
+***REMOVED******REMOVED***var onTextViewDidChange: ((String) -> Void)?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var onTextViewDidEndEditing: ((String) -> Void)?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***init(text: Binding<String>, onTextViewDidChange: ((String) -> Void)? = nil, onTextViewDidEndEditing: ((String) -> Void)? = nil) {
 ***REMOVED******REMOVED******REMOVED***self.text = text
+***REMOVED******REMOVED******REMOVED***self.onTextViewDidChange = onTextViewDidChange
+***REMOVED******REMOVED******REMOVED***self.onTextViewDidEndEditing = onTextViewDidEndEditing
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func textViewDidChange(_ textView: UITextView) {
-***REMOVED******REMOVED******REMOVED***text.wrappedValue = textView.text
+***REMOVED******REMOVED******REMOVED***if let onTextViewDidChange {
+***REMOVED******REMOVED******REMOVED******REMOVED***onTextViewDidChange(textView.text)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***text.wrappedValue = textView.text
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func textViewDidEndEditing(_ textView: UITextView) {
+***REMOVED******REMOVED******REMOVED***onTextViewDidEndEditing?(textView.text)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

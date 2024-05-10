@@ -45,6 +45,9 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***textWriter
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***text = element.formattedValue
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
@@ -68,9 +71,6 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { _, newFormattedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***text = newFormattedValue
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -86,7 +86,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(10)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $fullScreenTextInputIsPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(text: $text, element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(text: $text, element: element, model: model)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 #if targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
@@ -101,6 +101,9 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { _, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text = newFormattedValue
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.focused($isFocused)
@@ -170,6 +173,9 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED******REMOVED***let element: FieldFormElement
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The view model for the form.
+***REMOVED******REMOVED***let model: FormViewModel
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(element: element)
@@ -179,11 +185,16 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***RepresentedUITextView(text: $text)
-***REMOVED******REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused, equals: true)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = true
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***RepresentedUITextView(text: $text) { text in
+***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
+***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED*** onTextViewDidEndEditing: { text in
+***REMOVED******REMOVED******REMOVED******REMOVED***self.text = text
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused, equals: true)
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = true
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
