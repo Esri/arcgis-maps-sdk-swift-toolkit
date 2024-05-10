@@ -45,6 +45,9 @@ struct TextInput: View {
     
     var body: some View {
         textWriter
+            .onAppear {
+                text = element.formattedValue
+            }
             .onChange(of: isFocused) { isFocused in
                 if isFocused {
                     model.focusedElement = element
@@ -68,9 +71,6 @@ struct TextInput: View {
                     model.focusedElement = element
                 }
             }
-            .onValueChange(of: element) { _, newFormattedValue in
-                text = newFormattedValue
-            }
     }
 }
 
@@ -86,7 +86,7 @@ private extension TextInput {
                         .lineLimit(10)
                         .truncationMode(.tail)
                         .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                            FullScreenTextInput(text: $text, element: element)
+                            FullScreenTextInput(text: $text, element: element, model: model)
                                 .padding()
 #if targetEnvironment(macCatalyst)
                                 .environmentObject(model)
@@ -101,6 +101,9 @@ private extension TextInput {
                     )
                     .accessibilityIdentifier("\(element.label) Text Input")
                     .keyboardType(keyboardType)
+                    .onValueChange(of: element) { _, newFormattedValue in
+                        text = newFormattedValue
+                    }
                 }
             }
             .focused($isFocused)
@@ -170,6 +173,9 @@ private extension TextInput {
         /// The element the input belongs to.
         let element: FieldFormElement
         
+        /// The view model for the form.
+        let model: FormViewModel
+        
         var body: some View {
             HStack {
                 InputHeader(element: element)
@@ -179,11 +185,16 @@ private extension TextInput {
                 .buttonStyle(.plain)
                 .foregroundColor(.accentColor)
             }
-            RepresentedUITextView(text: $text)
-                .focused($textFieldIsFocused, equals: true)
-                .onAppear {
-                    textFieldIsFocused = true
-                }
+            RepresentedUITextView(text: $text) { text in
+                element.convertAndUpdateValue(text)
+                model.evaluateExpressions()
+            } onTextViewDidEndEditing: { text in
+                self.text = text
+            }
+            .focused($textFieldIsFocused, equals: true)
+            .onAppear {
+                textFieldIsFocused = true
+            }
             Spacer()
             InputFooter(element: element)
         }
