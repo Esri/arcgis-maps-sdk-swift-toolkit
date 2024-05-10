@@ -18,9 +18,10 @@
 public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var preplannedMapModel: PreplannedMapModel
-***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the map view.
 ***REMOVED***@ObservedObject var mapViewModel: OfflineMapAreasView.MapViewModel
+***REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map area can be downloaded.
+***REMOVED***@State private var canDownload = true
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack {
@@ -43,22 +44,31 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark.circle.fill")
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .failure:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if preplannedMapModel.packagingStatus == .processing {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !canDownload {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Map is still packaging.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "clock.badge.xmark")
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Map package is available for download.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Map package is available for download.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { status in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the preplanned map area fails to load, it may not be pacakged.
+***REMOVED******REMOVED******REMOVED******REMOVED***if status == .failed {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***canDownload = false
+***REMOVED******REMOVED******REMOVED*** else if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise, check the packaging status to determine if the map area is
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** available to download.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***canDownload = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await preplannedMapModel.preplannedMapArea.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapModel.packagingStatus = preplannedMapModel.preplannedMapArea.packagingStatus
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

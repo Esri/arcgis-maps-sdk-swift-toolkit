@@ -23,13 +23,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The result of the download job.
 ***REMOVED***@Published private(set) var result: Result<MobileMapPackage, Error>?
 ***REMOVED***
-***REMOVED******REMOVED***/ The preplanned map area packaging status.
-***REMOVED***@State var packagingStatus: PreplannedMapArea.PackagingStatus?
-***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***preplannedMapArea: PreplannedMapArea
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.preplannedMapArea = preplannedMapArea
-***REMOVED******REMOVED***self.packagingStatus = preplannedMapArea.packagingStatus
 ***REMOVED***
 ***REMOVED***
