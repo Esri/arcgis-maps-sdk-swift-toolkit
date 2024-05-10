@@ -34,10 +34,12 @@ public struct PreplannedListItemView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(preplannedMapArea.portalItem.title)
                         .font(.headline)
-                    Text(preplannedMapArea.portalItem.description)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .lineLimit(2)
+                    if !preplannedMapArea.portalItem.description.isEmpty {
+                        Text(preplannedMapArea.portalItem.description)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .lineLimit(2)
+                    }
                 }
                 Spacer()
                 switch preplannedMapModel.result {
