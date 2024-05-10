@@ -18,9 +18,10 @@ import ArcGIS
 public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var preplannedMapModel: PreplannedMapModel
-    
     /// The view model for the map view.
     @ObservedObject var mapViewModel: OfflineMapAreasView.MapViewModel
+    /// A Boolean value indicating whether the preplanned map area can be downloaded.
+    @State private var canDownload = true
     
     public var body: some View {
         HStack {
@@ -43,22 +44,31 @@ public struct PreplannedListItemView: View {
                 case .success:
                     Image(systemName: "checkmark.circle.fill")
                 case .failure:
-                    if preplannedMapModel.packagingStatus == .processing {
+                    Image(systemName: "exclamationmark.circle")
+                        .foregroundColor(.red)
+                case .none:
+                    if !canDownload {
                         // Map is still packaging.
                         Image(systemName: "clock.badge.xmark")
                     } else {
-                        Image(systemName: "exclamationmark.circle")
-                            .foregroundColor(.red)
+                        // Map package is available for download.
+                        Image(systemName: "arrow.down.circle")
                     }
-                case .none:
-                    // Map package is available for download.
-                    Image(systemName: "arrow.down.circle")
+                }
+            }
+            .onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { status in
+                // If the preplanned map area fails to load, it may not be pacakged.
+                if status == .failed {
+                    canDownload = false
+                } else if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
+                    // Otherwise, check the packaging status to determine if the map area is
+                    // available to download.
+                    canDownload = true
                 }
             }
             .task {
                 Task {
                     try await preplannedMapModel.preplannedMapArea.load()
-                    preplannedMapModel.packagingStatus = preplannedMapModel.preplannedMapArea.packagingStatus
                 }
             }
         }

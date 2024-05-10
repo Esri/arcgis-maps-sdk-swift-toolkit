@@ -23,13 +23,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// The result of the download job.
     @Published private(set) var result: Result<MobileMapPackage, Error>?
     
-    /// The preplanned map area packaging status.
-    @State var packagingStatus: PreplannedMapArea.PackagingStatus?
-    
     init(
         preplannedMapArea: PreplannedMapArea
     ) {
         self.preplannedMapArea = preplannedMapArea
-        self.packagingStatus = preplannedMapArea.packagingStatus
     }
 }
