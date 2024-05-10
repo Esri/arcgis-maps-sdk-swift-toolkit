@@ -19,10 +19,15 @@
 ***REMOVED***/ A `UITextView` has noticeably better performance over a SwiftUI `TextField` when dealing with
 ***REMOVED***/ large input (e.g. thousands of characters).
 struct RepresentedUITextView: UIViewRepresentable {
+***REMOVED******REMOVED***/ The text view's text.
 ***REMOVED***@Binding var text: String
 ***REMOVED***
+***REMOVED******REMOVED***/ The action to perform when the text view's text changes.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ If this is left nil the bound text is updated instead.
 ***REMOVED***var onTextViewDidChange: ((String) -> Void)? = nil
 ***REMOVED***
+***REMOVED******REMOVED***/ The action to perform when text editing ends.
 ***REMOVED***var onTextViewDidEndEditing: ((String) -> Void)? = nil
 ***REMOVED***
 ***REMOVED***func makeUIView(context: Context) -> UITextView {
@@ -40,10 +45,15 @@ struct RepresentedUITextView: UIViewRepresentable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***class Coordinator: NSObject, UITextViewDelegate {
+***REMOVED******REMOVED******REMOVED***/ The text view's text.
 ***REMOVED******REMOVED***var text: Binding<String>
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The action to perform when the text view's text changes.
+***REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED******REMOVED***/ If this is left nil the bound text is updated instead.
 ***REMOVED******REMOVED***var onTextViewDidChange: ((String) -> Void)?
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The action to perform when text editing ends.
 ***REMOVED******REMOVED***var onTextViewDidEndEditing: ((String) -> Void)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(text: Binding<String>, onTextViewDidChange: ((String) -> Void)? = nil, onTextViewDidEndEditing: ((String) -> Void)? = nil) {
