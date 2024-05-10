@@ -19,10 +19,15 @@ import SwiftUI
 /// A `UITextView` has noticeably better performance over a SwiftUI `TextField` when dealing with
 /// large input (e.g. thousands of characters).
 struct RepresentedUITextView: UIViewRepresentable {
+    /// The text view's text.
     @Binding var text: String
     
+    /// The action to perform when the text view's text changes.
+    ///
+    /// If this is left nil the bound text is updated instead.
     var onTextViewDidChange: ((String) -> Void)? = nil
     
+    /// The action to perform when text editing ends.
     var onTextViewDidEndEditing: ((String) -> Void)? = nil
     
     func makeUIView(context: Context) -> UITextView {
@@ -40,10 +45,15 @@ struct RepresentedUITextView: UIViewRepresentable {
     }
     
     class Coordinator: NSObject, UITextViewDelegate {
+        /// The text view's text.
         var text: Binding<String>
         
+        /// The action to perform when the text view's text changes.
+        ///
+        /// If this is left nil the bound text is updated instead.
         var onTextViewDidChange: ((String) -> Void)?
         
+        /// The action to perform when text editing ends.
         var onTextViewDidEndEditing: ((String) -> Void)?
         
         init(text: Binding<String>, onTextViewDidChange: ((String) -> Void)? = nil, onTextViewDidEndEditing: ((String) -> Void)? = nil) {
