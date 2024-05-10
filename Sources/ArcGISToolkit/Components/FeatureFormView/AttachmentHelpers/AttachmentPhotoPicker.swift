@@ -22,8 +22,8 @@ struct AttachmentPhotoPicker: ViewModifier {
     @State private var item: PhotosPickerItem?
     
     /// The new attachment data retrieved from the photos picker.
-    @Binding var newAttachmentData: Data?
-    
+    @Binding var newAttachmentImportData: AttachmentImportData?
+
     /// A Boolean value indicating whether the photos picker is presented.
     @Binding var photoPickerIsPresented: Bool
     
@@ -32,7 +32,10 @@ struct AttachmentPhotoPicker: ViewModifier {
             .photosPicker(
                 isPresented: $photoPickerIsPresented,
                 selection: $item,
-                matching: .any(of: [.images, .not(.livePhotos)])
+                matching: .any(of: [
+                    .images,
+                    .videos
+                ])
             )
             .task(id: item) {
                 guard let item else { return }
@@ -41,7 +44,18 @@ struct AttachmentPhotoPicker: ViewModifier {
                         print("Photo picker data was empty")
                         return
                     }
-                    newAttachmentData = data
+
+                    var contentTypes = item.supportedContentTypes.enumerated().makeIterator()
+                    var mimeType = contentTypes.next()?.element.preferredMIMEType
+                    while mimeType == nil {
+                        mimeType = contentTypes.next()?.element.preferredMIMEType
+                    }
+                    
+                    newAttachmentImportData = AttachmentImportData(
+                        data: data,
+                        contentType: mimeType ?? "application/octet-stream"
+                    )
+
                 } catch {
                     print("Error importing from photo picker: \(error)")
                 }
