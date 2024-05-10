@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1C40F3322B46118800C00ED5 /* WorldScaleExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C40F3312B46118800C00ED5 /* WorldScaleExampleView.swift */; ***REMOVED***;
+		1CBE20072BED64E10006B55D /* OfflineMapAreasExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CBE20062BED64E10006B55D /* OfflineMapAreasExampleView.swift */; ***REMOVED***;
 		1CC376D42ABA0B3700A83300 /* TableTopExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC376D32ABA0B3700A83300 /* TableTopExampleView.swift */; ***REMOVED***;
 		4D19FCB52881C8F3002601E8 /* PopupExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */; ***REMOVED***;
 		4D995CD72B5B01DB00AD45FE /* FeatureFormExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B615012AD76158009D19B6 /* FeatureFormExampleView.swift */; ***REMOVED***;
@@ -47,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		1C40F3312B46118800C00ED5 /* WorldScaleExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldScaleExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
+		1CBE20062BED64E10006B55D /* OfflineMapAreasExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OfflineMapAreasExampleView.swift; path = Examples/OfflineMapAreasExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		1CC376D32ABA0B3700A83300 /* TableTopExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableTopExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		4D19FCB42881C8F3002601E8 /* PopupExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityNetworkTraceExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
@@ -110,6 +112,7 @@
 		E47ABE372652FE0900FD2FE3 = {
 			isa = PBXGroup;
 			children = (
+				1CBE20062BED64E10006B55D /* OfflineMapAreasExampleView.swift */,
 				E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolkit */,
 				E47ABE562652FE7F00FD2FE3 /* Examples */,
 				E47ABE422652FE0900FD2FE3 /* ExamplesApp */,
@@ -263,6 +266,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1CBE20072BED64E10006B55D /* OfflineMapAreasExampleView.swift in Sources */,
 				4D995CD72B5B01DB00AD45FE /* FeatureFormExampleView.swift in Sources */,
 				1C40F3322B46118800C00ED5 /* WorldScaleExampleView.swift in Sources */,
 				1CC376D42ABA0B3700A83300 /* TableTopExampleView.swift in Sources */,
