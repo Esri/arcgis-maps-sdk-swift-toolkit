@@ -18,7 +18,7 @@ import OSLog
 
 ***REMOVED***/ Data used to create the attachment.
 struct AttachmentImportData: Equatable {
-***REMOVED***var data: Data
-***REMOVED***var contentType: String
+***REMOVED***let data: Data
+***REMOVED***let contentType: String
 ***REMOVED***var fileName: String = ""
 ***REMOVED***
