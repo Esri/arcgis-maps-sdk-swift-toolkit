@@ -18,7 +18,7 @@ import SwiftUI
 
 struct OfflineMapAreasExampleView: View {
     /// The map of the Naperville water network.
-    var map = Map(item: PortalItem.naperville())
+    @State private var map = Map(item: PortalItem.naperville())
     
     /// A Boolean value indicating whether the offline map ares view should be presented.
     @State private var isShowingOfflineMapAreasView = false

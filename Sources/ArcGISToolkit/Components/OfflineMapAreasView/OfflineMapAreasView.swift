@@ -23,7 +23,6 @@ public struct OfflineMapAreasView: View {
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     
-    
     public init(map: Map) {
         self.mapViewModel = MapViewModel(map: map)
     }
@@ -37,9 +36,7 @@ public struct OfflineMapAreasView: View {
                 .textCase(nil)
             }
             .task {
-                Task {
-                    await mapViewModel.makePreplannedOfflineMapModels()
-                }
+                await mapViewModel.makePreplannedOfflineMapModels()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -80,7 +77,6 @@ public extension OfflineMapAreasView {
         
         /// The preplanned offline map information.
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
-        
         
         init(map: Map) {
             self.onlineMap = map
