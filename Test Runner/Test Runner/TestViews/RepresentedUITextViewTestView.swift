@@ -60,6 +60,7 @@ extension RepresentedUITextViewTestView {
             Button("End Editing") {
                 isFocused = false
             }
+            .buttonStyle(.plain)
             RepresentedUITextView(initialText: text) { text in
                 self.text = text
             } onTextViewDidEndEditing: { text in
