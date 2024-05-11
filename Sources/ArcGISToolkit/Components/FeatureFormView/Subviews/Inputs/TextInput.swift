@@ -185,7 +185,7 @@ private extension TextInput {
                 .buttonStyle(.plain)
                 .foregroundColor(.accentColor)
             }
-            RepresentedUITextView(text: $text) { text in
+            RepresentedUITextView(initialText: text) { text in
                 element.convertAndUpdateValue(text)
                 model.evaluateExpressions()
             } onTextViewDidEndEditing: { text in
