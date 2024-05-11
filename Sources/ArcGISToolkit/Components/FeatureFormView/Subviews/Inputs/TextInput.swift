@@ -185,7 +185,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***RepresentedUITextView(text: $text) { text in
+***REMOVED******REMOVED******REMOVED***RepresentedUITextView(initialText: text) { text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
 ***REMOVED******REMOVED*** onTextViewDidEndEditing: { text in
