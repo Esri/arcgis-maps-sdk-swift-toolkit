@@ -28,6 +28,7 @@
 		8A1562F52B86896300000DD6 /* UI Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F42B86896300000DD6 /* UI Tests.xctestplan */; ***REMOVED***;
 		8A1562F72B86896C00000DD6 /* Unit Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F62B86896C00000DD6 /* Unit Tests.xctestplan */; ***REMOVED***;
 		8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */; ***REMOVED***;
+		8AEE70482BEEC0B400C9949C /* RepresentedUITextViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */; ***REMOVED***;
 		8AEE704A2BEEC18000C9949C /* RepresentedUITextViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */; ***REMOVED***;
 /* End PBXBuildFile section */
 
@@ -66,6 +67,7 @@
 		8A1562F42B86896300000DD6 /* UI Tests.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "UI Tests.xctestplan"; sourceTree = "<group>"; ***REMOVED***;
 		8A1562F62B86896C00000DD6 /* Unit Tests.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Unit Tests.xctestplan"; sourceTree = "<group>"; ***REMOVED***;
 		8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormTestView.swift; sourceTree = "<group>"; ***REMOVED***;
+		8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentedUITextViewTests.swift; sourceTree = "<group>"; ***REMOVED***;
 		8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentedUITextViewTestView.swift; sourceTree = "<group>"; ***REMOVED***;
 /* End PBXFileReference section */
 
@@ -144,6 +146,7 @@
 				7552A76B2A573DFB0023DA5A /* BookmarksTests.swift */,
 				75B2366E2A5CCADC00AEFACE /* FloorFilterTests.swift */,
 				75022F952A7AC9A0000ED7B7 /* FormViewTests.swift */,
+				8AEE70472BEEC0B400C9949C /* RepresentedUITextViewTests.swift */,
 			);
 			path = "UI Tests";
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 				75022F962A7AC9A0000ED7B7 /* FormViewTests.swift in Sources */,
 				75B2366F2A5CCADC00AEFACE /* FloorFilterTests.swift in Sources */,
 				75B2366B2A5CB8CE00AEFACE /* BasemapGalleryTests.swift in Sources */,
+				8AEE70482BEEC0B400C9949C /* RepresentedUITextViewTests.swift in Sources */,
 				7552A76C2A573DFB0023DA5A /* BookmarksTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
