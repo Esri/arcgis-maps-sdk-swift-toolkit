@@ -18,5 +18,42 @@ import XCTest
 
 final class RepresentedUITextViewTests: XCTestCase {
 ***REMOVED***func testInit() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let boundValue = app.staticTexts["Bound Value"]
+***REMOVED******REMOVED***let textView = app.textViews["Text View"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***app.buttons["RepresentedUITextView Tests"].tap()
+***REMOVED******REMOVED***app.buttons["TestInit"].tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(boundValue.label, "World!")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***textView.tap()
+***REMOVED******REMOVED***textView.typeText("Hello, ")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(boundValue.label, "Hello, World!")
+***REMOVED***
+***REMOVED***
+***REMOVED***func testInitWithActions() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let boundValue = app.staticTexts["Bound Value"]
+***REMOVED******REMOVED***let endValue = app.staticTexts["End Value"]
+***REMOVED******REMOVED***let textView = app.textViews["Text View"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***app.buttons["RepresentedUITextView Tests"].tap()
+***REMOVED******REMOVED***app.buttons["TestInitWithActions"].tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(boundValue.label, "World!")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***textView.tap()
+***REMOVED******REMOVED***textView.typeText("Hello, ")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(boundValue.label, "Hello, World!")
+***REMOVED******REMOVED***XCTAssertEqual(endValue.label, "")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.buttons["End Editing"].tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(endValue.label, "Hello, World!")
 ***REMOVED***
 ***REMOVED***

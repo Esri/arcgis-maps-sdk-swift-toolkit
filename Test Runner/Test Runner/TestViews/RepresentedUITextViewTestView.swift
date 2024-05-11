@@ -26,7 +26,7 @@ struct RepresentedUITextViewTestView: View {
 
 extension RepresentedUITextViewTestView {
 ***REMOVED***struct TestInit: View {
-***REMOVED******REMOVED***@State private var text = "Hello, World!"
+***REMOVED******REMOVED***@State private var text = "World!"
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***HStack(alignment: .center) {
@@ -35,11 +35,12 @@ extension RepresentedUITextViewTestView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Bound Value")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***RepresentedUITextView(text: $text)
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Text View")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct TestInitWithActions: View {
-***REMOVED******REMOVED***@State private var text = "Hello, World!"
+***REMOVED******REMOVED***@State private var text = "World!"
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@State private var endValue = ""
 ***REMOVED******REMOVED***
@@ -64,6 +65,7 @@ extension RepresentedUITextViewTestView {
 ***REMOVED******REMOVED*** onTextViewDidEndEditing: { text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***endValue = text
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("Text View")
 ***REMOVED******REMOVED******REMOVED***.focused($isFocused)
 ***REMOVED***
 ***REMOVED***
