@@ -60,6 +60,7 @@ extension RepresentedUITextViewTestView {
 ***REMOVED******REMOVED******REMOVED***Button("End Editing") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isFocused = false
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***RepresentedUITextView(initialText: text) { text in
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.text = text
 ***REMOVED******REMOVED*** onTextViewDidEndEditing: { text in
