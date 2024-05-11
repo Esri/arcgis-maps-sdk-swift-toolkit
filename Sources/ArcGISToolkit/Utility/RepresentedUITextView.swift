@@ -20,15 +20,16 @@
 ***REMOVED***/ large input (e.g. thousands of characters).
 struct RepresentedUITextView: UIViewRepresentable {
 ***REMOVED******REMOVED***/ The text view's text.
-***REMOVED***@Binding var text: String
+***REMOVED***private var boundText: Binding<String>?
+***REMOVED***
+***REMOVED******REMOVED***/ The text initially provided to the view.
+***REMOVED***private let initialText: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the text view's text changes.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ If this is left nil the bound text is updated instead.
-***REMOVED***var onTextViewDidChange: ((String) -> Void)? = nil
+***REMOVED***private var onTextViewDidChange: ((String) -> Void)? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when text editing ends.
-***REMOVED***var onTextViewDidEndEditing: ((String) -> Void)? = nil
+***REMOVED***private var onTextViewDidEndEditing: ((String) -> Void)? = nil
 ***REMOVED***
 ***REMOVED***func makeUIView(context: Context) -> UITextView {
 ***REMOVED******REMOVED***let uiTextView = UITextView()
@@ -37,49 +38,88 @@ struct RepresentedUITextView: UIViewRepresentable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func updateUIView(_ uiTextView: UITextView, context: Context) {
-***REMOVED******REMOVED***uiTextView.text = text
+***REMOVED******REMOVED***if let boundText {
+***REMOVED******REMOVED******REMOVED***uiTextView.text = boundText.wrappedValue
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***uiTextView.text = initialText
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeCoordinator() -> Coordinator {
-***REMOVED******REMOVED***Coordinator(
-***REMOVED******REMOVED******REMOVED***text: $text,
-***REMOVED******REMOVED******REMOVED***onTextViewDidChange: onTextViewDidChange,
-***REMOVED******REMOVED******REMOVED***onTextViewDidEndEditing: onTextViewDidEndEditing
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***if let boundText {
+***REMOVED******REMOVED******REMOVED***Coordinator(
+***REMOVED******REMOVED******REMOVED******REMOVED***text: boundText,
+***REMOVED******REMOVED******REMOVED******REMOVED***onTextViewDidChange: nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***onTextViewDidEndEditing: nil
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Coordinator(
+***REMOVED******REMOVED******REMOVED******REMOVED***text: nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***onTextViewDidChange: onTextViewDidChange,
+***REMOVED******REMOVED******REMOVED******REMOVED***onTextViewDidEndEditing: onTextViewDidEndEditing
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***class Coordinator: NSObject, UITextViewDelegate {
 ***REMOVED******REMOVED******REMOVED***/ The text view's text.
-***REMOVED******REMOVED***var text: Binding<String>
+***REMOVED******REMOVED***var boundText: Binding<String>?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The action to perform when the text view's text changes.
-***REMOVED******REMOVED******REMOVED***/
-***REMOVED******REMOVED******REMOVED***/ If this is left nil the bound text is updated instead.
 ***REMOVED******REMOVED***var onTextViewDidChange: ((String) -> Void)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The action to perform when text editing ends.
 ***REMOVED******REMOVED***var onTextViewDidEndEditing: ((String) -> Void)?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(
-***REMOVED******REMOVED******REMOVED***text: Binding<String>, 
+***REMOVED******REMOVED******REMOVED***text: Binding<String>?,
 ***REMOVED******REMOVED******REMOVED***onTextViewDidChange: ((String) -> Void)? = nil,
 ***REMOVED******REMOVED******REMOVED***onTextViewDidEndEditing: ((String) -> Void)? = nil
 ***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***self.text = text
+***REMOVED******REMOVED******REMOVED***self.boundText = text
 ***REMOVED******REMOVED******REMOVED***self.onTextViewDidChange = onTextViewDidChange
 ***REMOVED******REMOVED******REMOVED***self.onTextViewDidEndEditing = onTextViewDidEndEditing
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func textViewDidChange(_ textView: UITextView) {
-***REMOVED******REMOVED******REMOVED***if let onTextViewDidChange {
-***REMOVED******REMOVED******REMOVED******REMOVED***onTextViewDidChange(textView.text)
+***REMOVED******REMOVED******REMOVED***if let boundText {
+***REMOVED******REMOVED******REMOVED******REMOVED***boundText.wrappedValue = textView.text
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***text.wrappedValue = textView.text
+***REMOVED******REMOVED******REMOVED******REMOVED***onTextViewDidChange?(textView.text)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func textViewDidEndEditing(_ textView: UITextView) {
 ***REMOVED******REMOVED******REMOVED***onTextViewDidEndEditing?(textView.text)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension RepresentedUITextView {
+***REMOVED******REMOVED***/ Creates a `UITextView` bound to the provided text.
+***REMOVED******REMOVED***/ - Parameter text: The text to bind to.
+***REMOVED***init(text: Binding<String>) {
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***boundText: text,
+***REMOVED******REMOVED******REMOVED***initialText: text.wrappedValue,
+***REMOVED******REMOVED******REMOVED***onTextViewDidChange: nil,
+***REMOVED******REMOVED******REMOVED***onTextViewDidEndEditing: nil
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a `UITextView` initialized with the provided text.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Monitor changes to the text with the `onTextViewDidChange` and `onTextViewDidEndEditing` properties.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - initialText: The view's initial text.
+***REMOVED******REMOVED***/   - onTextViewDidChange: The action to perform when the text did change.
+***REMOVED******REMOVED***/   - onTextViewDidEndEditing: The action to perform when editing did end.
+***REMOVED***init(initialText: String, onTextViewDidChange: ((String) -> Void)?, onTextViewDidEndEditing: ((String) -> Void)? = nil) {
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***boundText: nil,
+***REMOVED******REMOVED******REMOVED***initialText: initialText,
+***REMOVED******REMOVED******REMOVED***onTextViewDidChange: onTextViewDidChange,
+***REMOVED******REMOVED******REMOVED***onTextViewDidEndEditing: onTextViewDidEndEditing
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
