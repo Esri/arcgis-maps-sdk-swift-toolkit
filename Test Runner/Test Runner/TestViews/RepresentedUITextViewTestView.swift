@@ -26,7 +26,7 @@ struct RepresentedUITextViewTestView: View {
 
 extension RepresentedUITextViewTestView {
     struct TestInit: View {
-        @State private var text = "Hello, World!"
+        @State private var text = "World!"
         
         var body: some View {
             HStack(alignment: .center) {
@@ -35,11 +35,12 @@ extension RepresentedUITextViewTestView {
                     .accessibilityIdentifier("Bound Value")
             }
             RepresentedUITextView(text: $text)
+                .accessibilityIdentifier("Text View")
         }
     }
     
     struct TestInitWithActions: View {
-        @State private var text = "Hello, World!"
+        @State private var text = "World!"
         
         @State private var endValue = ""
         
@@ -64,6 +65,7 @@ extension RepresentedUITextViewTestView {
             } onTextViewDidEndEditing: { text in
                 endValue = text
             }
+            .accessibilityIdentifier("Text View")
             .focused($isFocused)
         }
     }

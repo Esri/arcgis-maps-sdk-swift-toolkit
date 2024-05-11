@@ -18,5 +18,42 @@ import XCTest
 
 final class RepresentedUITextViewTests: XCTestCase {
     func testInit() {
+        let app = XCUIApplication()
+        let boundValue = app.staticTexts["Bound Value"]
+        let textView = app.textViews["Text View"]
+        
+        app.launch()
+        app.buttons["RepresentedUITextView Tests"].tap()
+        app.buttons["TestInit"].tap()
+        
+        XCTAssertEqual(boundValue.label, "World!")
+        
+        textView.tap()
+        textView.typeText("Hello, ")
+        
+        XCTAssertEqual(boundValue.label, "Hello, World!")
+    }
+    
+    func testInitWithActions() {
+        let app = XCUIApplication()
+        let boundValue = app.staticTexts["Bound Value"]
+        let endValue = app.staticTexts["End Value"]
+        let textView = app.textViews["Text View"]
+        
+        app.launch()
+        app.buttons["RepresentedUITextView Tests"].tap()
+        app.buttons["TestInitWithActions"].tap()
+        
+        XCTAssertEqual(boundValue.label, "World!")
+        
+        textView.tap()
+        textView.typeText("Hello, ")
+        
+        XCTAssertEqual(boundValue.label, "Hello, World!")
+        XCTAssertEqual(endValue.label, "")
+        
+        app.buttons["End Editing"].tap()
+        
+        XCTAssertEqual(endValue.label, "Hello, World!")
     }
 }
