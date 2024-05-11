@@ -28,6 +28,7 @@
 		8A1562F52B86896300000DD6 /* UI Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F42B86896300000DD6 /* UI Tests.xctestplan */; ***REMOVED***;
 		8A1562F72B86896C00000DD6 /* Unit Tests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 8A1562F62B86896C00000DD6 /* Unit Tests.xctestplan */; ***REMOVED***;
 		8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */; ***REMOVED***;
+		8AEE704A2BEEC18000C9949C /* RepresentedUITextViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */; ***REMOVED***;
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		8A1562F42B86896300000DD6 /* UI Tests.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "UI Tests.xctestplan"; sourceTree = "<group>"; ***REMOVED***;
 		8A1562F62B86896C00000DD6 /* Unit Tests.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Unit Tests.xctestplan"; sourceTree = "<group>"; ***REMOVED***;
 		8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFormTestView.swift; sourceTree = "<group>"; ***REMOVED***;
+		8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentedUITextViewTestView.swift; sourceTree = "<group>"; ***REMOVED***;
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				8A9F898E2B5B4F0A0027215E /* FeatureFormTestView.swift */,
+				8AEE70492BEEC18000C9949C /* RepresentedUITextViewTestView.swift */,
 				75B236682A5CB49B00AEFACE /* BasemapGalleryTestView.swift */,
 				7584B7532B1A798B00772AB7 /* BookmarksTestViews */,
 				75B2366C2A5CC78C00AEFACE /* FloorFilterTestView.swift */,
@@ -292,6 +295,7 @@
 				75384C112B2D1BD800D97E6C /* BookmarksTestCase5View.swift in Sources */,
 				7552A7622A573D810023DA5A /* BookmarksTestCase1View.swift in Sources */,
 				7584B7592B1A817A00772AB7 /* BookmarksTestCase3View.swift in Sources */,
+				8AEE704A2BEEC18000C9949C /* RepresentedUITextViewTestView.swift in Sources */,
 				7584B7572B1A7AF100772AB7 /* BookmarksTestCase2View.swift in Sources */,
 				8A9F898F2B5B4F0A0027215E /* FeatureFormTestView.swift in Sources */,
 				8A1138132BC7407D007E0BFB /* BookmarksTestCase6View.swift in Sources */,
