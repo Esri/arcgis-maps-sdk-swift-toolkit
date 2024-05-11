@@ -20,15 +20,16 @@ import SwiftUI
 /// large input (e.g. thousands of characters).
 struct RepresentedUITextView: UIViewRepresentable {
     /// The text view's text.
-    @Binding var text: String
+    private var boundText: Binding<String>?
+    
+    /// The text initially provided to the view.
+    private let initialText: String
     
     /// The action to perform when the text view's text changes.
-    ///
-    /// If this is left nil the bound text is updated instead.
-    var onTextViewDidChange: ((String) -> Void)? = nil
+    private var onTextViewDidChange: ((String) -> Void)? = nil
     
     /// The action to perform when text editing ends.
-    var onTextViewDidEndEditing: ((String) -> Void)? = nil
+    private var onTextViewDidEndEditing: ((String) -> Void)? = nil
     
     func makeUIView(context: Context) -> UITextView {
         let uiTextView = UITextView()
@@ -37,49 +38,88 @@ struct RepresentedUITextView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiTextView: UITextView, context: Context) {
-        uiTextView.text = text
+        if let boundText {
+            uiTextView.text = boundText.wrappedValue
+        } else {
+            uiTextView.text = initialText
+        }
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(
-            text: $text,
-            onTextViewDidChange: onTextViewDidChange,
-            onTextViewDidEndEditing: onTextViewDidEndEditing
-        )
+        if let boundText {
+            Coordinator(
+                text: boundText,
+                onTextViewDidChange: nil,
+                onTextViewDidEndEditing: nil
+            )
+        } else {
+            Coordinator(
+                text: nil,
+                onTextViewDidChange: onTextViewDidChange,
+                onTextViewDidEndEditing: onTextViewDidEndEditing
+            )
+        }
     }
     
     class Coordinator: NSObject, UITextViewDelegate {
         /// The text view's text.
-        var text: Binding<String>
+        var boundText: Binding<String>?
         
         /// The action to perform when the text view's text changes.
-        ///
-        /// If this is left nil the bound text is updated instead.
         var onTextViewDidChange: ((String) -> Void)?
         
         /// The action to perform when text editing ends.
         var onTextViewDidEndEditing: ((String) -> Void)?
         
         init(
-            text: Binding<String>, 
+            text: Binding<String>?,
             onTextViewDidChange: ((String) -> Void)? = nil,
             onTextViewDidEndEditing: ((String) -> Void)? = nil
         ) {
-            self.text = text
+            self.boundText = text
             self.onTextViewDidChange = onTextViewDidChange
             self.onTextViewDidEndEditing = onTextViewDidEndEditing
         }
         
         func textViewDidChange(_ textView: UITextView) {
-            if let onTextViewDidChange {
-                onTextViewDidChange(textView.text)
+            if let boundText {
+                boundText.wrappedValue = textView.text
             } else {
-                text.wrappedValue = textView.text
+                onTextViewDidChange?(textView.text)
             }
         }
         
         func textViewDidEndEditing(_ textView: UITextView) {
             onTextViewDidEndEditing?(textView.text)
         }
+    }
+}
+
+extension RepresentedUITextView {
+    /// Creates a `UITextView` bound to the provided text.
+    /// - Parameter text: The text to bind to.
+    init(text: Binding<String>) {
+        self.init(
+            boundText: text,
+            initialText: text.wrappedValue,
+            onTextViewDidChange: nil,
+            onTextViewDidEndEditing: nil
+        )
+    }
+    
+    /// Creates a `UITextView` initialized with the provided text.
+    ///
+    /// Monitor changes to the text with the `onTextViewDidChange` and `onTextViewDidEndEditing` properties.
+    /// - Parameters:
+    ///   - initialText: The view's initial text.
+    ///   - onTextViewDidChange: The action to perform when the text did change.
+    ///   - onTextViewDidEndEditing: The action to perform when editing did end.
+    init(initialText: String, onTextViewDidChange: ((String) -> Void)?, onTextViewDidEndEditing: ((String) -> Void)? = nil) {
+        self.init(
+            boundText: nil,
+            initialText: initialText,
+            onTextViewDidChange: onTextViewDidChange,
+            onTextViewDidEndEditing: onTextViewDidEndEditing
+        )
     }
 }
