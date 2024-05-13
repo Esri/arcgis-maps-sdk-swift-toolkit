@@ -17,6 +17,6 @@
 extension FormAttachment : FeatureAttachment {
 ***REMOVED******REMOVED***/ The type of the attachment.
 ***REMOVED***public var featureAttachmentKind: FeatureAttachmentKind {
-***REMOVED******REMOVED***FeatureAttachmentKind(contentType: contentType)
+***REMOVED******REMOVED***FeatureAttachmentKind(kind: kind)
 ***REMOVED***
 ***REMOVED***

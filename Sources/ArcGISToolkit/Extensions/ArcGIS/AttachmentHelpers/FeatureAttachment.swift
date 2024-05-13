@@ -17,14 +17,16 @@ import UIKit
 
 ***REMOVED***/ The type of an attachment in a FeatureAttachment.
 public enum FeatureAttachmentKind {
+***REMOVED******REMOVED***/ An attachment of another type.
+***REMOVED***case other
 ***REMOVED******REMOVED***/ An image.
 ***REMOVED***case image
 ***REMOVED******REMOVED***/ A video.
 ***REMOVED***case video
 ***REMOVED******REMOVED***/ A document.
 ***REMOVED***case document
-***REMOVED******REMOVED***/ An attachment of another type.
-***REMOVED***case other
+***REMOVED******REMOVED***/ An audio file.
+***REMOVED***case audio
 ***REMOVED***
 
 public protocol FeatureAttachment: Loadable {
@@ -86,15 +88,20 @@ extension FeatureAttachmentKind {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a feature attachment kind from a MIME type.
-***REMOVED******REMOVED***/ - Parameter contentType: The content type to convert.
-***REMOVED***init(contentType: String) {
-***REMOVED******REMOVED***if contentType.contains("image") {
+***REMOVED******REMOVED***/ Creates a feature attachment kind from a popup attachment kind.
+***REMOVED******REMOVED***/ - Parameter kind: The popup attachment kind.
+***REMOVED***init(kind: FormAttachment.Kind) {
+***REMOVED******REMOVED***switch kind {
+***REMOVED******REMOVED***case .other:
+***REMOVED******REMOVED******REMOVED***self = .other
+***REMOVED******REMOVED***case .image:
 ***REMOVED******REMOVED******REMOVED***self = .image
-***REMOVED*** else if contentType.contains("video") {
+***REMOVED******REMOVED***case .video:
 ***REMOVED******REMOVED******REMOVED***self = .video
-***REMOVED*** else {
+***REMOVED******REMOVED***case .document:
 ***REMOVED******REMOVED******REMOVED***self = .document
+***REMOVED******REMOVED***case .audio:
+***REMOVED******REMOVED******REMOVED***self = .audio
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
