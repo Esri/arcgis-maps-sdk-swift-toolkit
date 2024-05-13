@@ -53,14 +53,14 @@ public struct OfflineMapAreasView: View {
         case .success(let models):
             List(models) { preplannedMapModel in
                 PreplannedListItemView(
-                    preplannedMapModel: preplannedMapModel,
-                    mapViewModel: mapViewModel
+                    preplannedMapModel: preplannedMapModel
                 )
             }
         case .failure(let error):
             Text(error.localizedDescription)
         case .none:
-            ProgressView().frame(maxWidth: .infinity)
+            ProgressView()
+                .frame(maxWidth: .infinity)
         }
     }
 }
