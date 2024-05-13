@@ -56,9 +56,9 @@ struct AttachmentImportMenu: View {
             } label: {
                 Label {
                     Text(
-                        "Take photo",
+                        "Take Photo or Video",
                         bundle: .toolkitModule,
-                        comment: "A label for a button to capture a new photo."
+                        comment: "A label for a button to capture a new photo or video."
                     )
                 } icon: {
                     Image(systemName: "camera")
@@ -70,9 +70,9 @@ struct AttachmentImportMenu: View {
             } label: {
                 Label {
                     Text(
-                        "Add photo from library",
+                        "Choose From Library",
                         bundle: .toolkitModule,
-                        comment: "A label for a button to choose a photo from the user's photo library."
+                        comment: "A label for a button to choose a photo or video from the user's photo library."
                     )
                 } icon: {
                     Image(systemName: "photo")
@@ -84,9 +84,9 @@ struct AttachmentImportMenu: View {
             } label: {
                 Label {
                     Text(
-                        "Add photo from files",
+                        "Choose From Files",
                         bundle: .toolkitModule,
-                        comment: "A label for a button to choose a photo from the user's files."
+                        comment: "A label for a button to choose an file from the user's files."
                     )
                 } icon: {
                     Image(systemName: "folder")
