@@ -225,7 +225,7 @@ private extension FieldFormElement {
 ***REMOVED***
 
 private extension View {
-***REMOVED******REMOVED***/ Wraps  `onValueChange(of:action:)` with an additional boolean property that when false will
+***REMOVED******REMOVED***/ Wraps `onValueChange(of:action:)` with an additional boolean property that when false will
 ***REMOVED******REMOVED***/ not monitor value changes.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The form element to watch for changes on.
