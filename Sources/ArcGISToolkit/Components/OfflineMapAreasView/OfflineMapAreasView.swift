@@ -18,13 +18,13 @@
 @MainActor
 public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
-***REMOVED***@State private var mapViewModel: MapViewModel
+***REMOVED***@StateObject private var mapViewModel: MapViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
 ***REMOVED***
 ***REMOVED***public init(map: Map) {
-***REMOVED******REMOVED***self.mapViewModel = MapViewModel(map: map)
+***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
