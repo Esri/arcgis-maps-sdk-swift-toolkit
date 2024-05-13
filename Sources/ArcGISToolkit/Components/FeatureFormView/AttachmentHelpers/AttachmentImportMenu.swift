@@ -56,9 +56,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Take photo",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Take Photo or Video",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to capture a new photo."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to capture a new photo or video."
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** icon: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "camera")
@@ -70,9 +70,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Add photo from library",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Choose From Library",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose a photo from the user's photo library."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose a photo or video from the user's photo library."
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** icon: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "photo")
@@ -84,9 +84,9 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Add photo from files",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Choose From Files",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose a photo from the user's files."
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose an file from the user's files."
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** icon: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "folder")
