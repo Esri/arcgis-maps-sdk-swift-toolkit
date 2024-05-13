@@ -16,6 +16,7 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
+@MainActor
 struct OfflineMapAreasExampleView: View {
 ***REMOVED******REMOVED***/ The map of the Naperville water network.
 ***REMOVED***@State private var map = Map(item: PortalItem.naperville())
