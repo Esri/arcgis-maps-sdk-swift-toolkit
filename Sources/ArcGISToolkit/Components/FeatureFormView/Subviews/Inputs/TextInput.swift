@@ -45,9 +45,6 @@ struct TextInput: View {
     
     var body: some View {
         textWriter
-            .onAppear {
-                text = element.formattedValue
-            }
             .onChange(of: isFocused) { isFocused in
                 if isFocused {
                     model.focusedElement = element
@@ -70,6 +67,9 @@ struct TextInput: View {
                     fullScreenTextInputIsPresented = true
                     model.focusedElement = element
                 }
+            }
+            .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
+                text = newFormattedValue
             }
     }
 }
@@ -101,9 +101,6 @@ private extension TextInput {
                     )
                     .accessibilityIdentifier("\(element.label) Text Input")
                     .keyboardType(keyboardType)
-                    .onValueChange(of: element) { _, newFormattedValue in
-                        text = newFormattedValue
-                    }
                 }
             }
             .focused($isFocused)
@@ -223,6 +220,42 @@ private extension FieldFormElement {
             } else {
                 updateValue(value)
             }
+        }
+    }
+}
+
+private extension View {
+    /// Wraps  `onValueChange(of:action:)` with an additional boolean property that when false will
+    /// not monitor value changes.
+    /// - Parameters:
+    ///   - element: The form element to watch for changes on.
+    ///   - when: The boolean value which disables monitoring. When `true` changes will be monitored.
+    ///   - action: The action which watches for changes.
+    /// - Returns: The modified view.
+    func onValueChange(of element: FieldFormElement, when: Bool, action: @escaping (_ newValue: Any?, _ newFormattedValue: String) -> Void) -> some View {
+        modifier(
+            ConditionalChangeOfModifier(element: element, condition: when) { newValue, newFormattedValue in
+                action(newValue, newFormattedValue)
+            }
+        )
+    }
+}
+
+private struct ConditionalChangeOfModifier: ViewModifier {
+    let element: FieldFormElement
+    
+    let condition: Bool
+    
+    let action: (_ newValue: Any?, _ newFormattedValue: String) -> Void
+    
+    func body(content: Content) -> some View {
+        if condition {
+            content
+                .onValueChange(of: element) { newValue, newFormattedValue in
+                    action(newValue, newFormattedValue)
+                }
+        } else {
+            content
         }
     }
 }
