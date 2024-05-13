@@ -17,14 +17,16 @@ import UIKit
 
 /// The type of an attachment in a FeatureAttachment.
 public enum FeatureAttachmentKind {
+    /// An attachment of another type.
+    case other
     /// An image.
     case image
     /// A video.
     case video
     /// A document.
     case document
-    /// An attachment of another type.
-    case other
+    /// An audio file.
+    case audio
 }
 
 public protocol FeatureAttachment: Loadable {
@@ -86,15 +88,20 @@ extension FeatureAttachmentKind {
         }
     }
     
-    /// Creates a feature attachment kind from a MIME type.
-    /// - Parameter contentType: The content type to convert.
-    init(contentType: String) {
-        if contentType.contains("image") {
+    /// Creates a feature attachment kind from a popup attachment kind.
+    /// - Parameter kind: The popup attachment kind.
+    init(kind: FormAttachment.Kind) {
+        switch kind {
+        case .other:
+            self = .other
+        case .image:
             self = .image
-        } else if contentType.contains("video") {
+        case .video:
             self = .video
-        } else {
+        case .document:
             self = .document
+        case .audio:
+            self = .audio
         }
     }
 }

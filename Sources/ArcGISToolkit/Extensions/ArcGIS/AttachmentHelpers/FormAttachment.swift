@@ -17,6 +17,6 @@ import ArcGIS
 extension FormAttachment : FeatureAttachment {
     /// The type of the attachment.
     public var featureAttachmentKind: FeatureAttachmentKind {
-        FeatureAttachmentKind(contentType: contentType)
+        FeatureAttachmentKind(kind: kind)
     }
 }

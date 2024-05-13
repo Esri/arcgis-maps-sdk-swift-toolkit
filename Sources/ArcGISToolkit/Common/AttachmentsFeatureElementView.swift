@@ -68,7 +68,7 @@ struct AttachmentsFeatureElementView: View {
                 ProgressView()
                     .padding()
             case .loaded(let attachmentModels):
-                if isShowingAttachmentFormElement {
+                if isShowingAttachmentsFormElement {
                     // If showing a form element, don't show attachments in
                     // a disclosure group, but also ALWAYS show
                     // the list of attachments, even if there are none.
@@ -101,9 +101,9 @@ struct AttachmentsFeatureElementView: View {
                     )
                 }
             
-            if !isShowingAttachmentFormElement {
+            if !isShowingAttachmentsFormElement {
                 // Reverse attachment models array if we're not displaying
-                // via an AttachmentFormElement.
+                // via an AttachmentsFormElement.
                 // This allows attachments in a non-editing context to
                 // display in the same order as the online Map Viewer.
                 attachmentModels = attachmentModels.reversed()
@@ -113,7 +113,7 @@ struct AttachmentsFeatureElementView: View {
     }
     
     @ViewBuilder private func attachmentBody(attachmentModels: [AttachmentModel]) -> some View {
-        switch featureElement.attachmentDisplayType {
+        switch featureElement.attachmentsDisplayType {
         case .list:
             AttachmentList(attachmentModels: attachmentModels)
         case .preview:
@@ -149,7 +149,7 @@ struct AttachmentsFeatureElementView: View {
             )
             Spacer()
             if isEditable,
-               let element = featureElement as? AttachmentFormElement {
+               let element = featureElement as? AttachmentsFormElement {
                 AttachmentImportMenu(element: element, onAdd: onAdd)
             }
         }
@@ -177,7 +177,7 @@ struct AttachmentsFeatureElementView: View {
     ///   - newAttachmentName: The new attachment name.
     @MainActor
     func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
-        if let element = featureElement as? AttachmentFormElement,
+        if let element = featureElement as? AttachmentsFormElement,
            let attachment = attachmentModel.attachment as? FormAttachment {
             try await element.renameAttachment(attachment, name: newAttachmentName)
             attachmentModel.sync()
@@ -190,7 +190,7 @@ struct AttachmentsFeatureElementView: View {
     ///   - attachmentModel: The model for the attachment to delete.
     @MainActor
     func onDelete(attachmentModel: AttachmentModel) async throws -> Void {
-        if let element = featureElement as? AttachmentFormElement,
+        if let element = featureElement as? AttachmentsFormElement,
            let attachment = attachmentModel.attachment as? FormAttachment {
             try await element.deleteAttachment(attachment)
             guard case .loaded(var models) = attachmentLoadingState else { return }
@@ -218,7 +218,7 @@ extension AttachmentsFeatureElementView {
     var thumbnailSize: CGSize {
         // Set thumbnail size
         let thumbnailSize: CGSize
-        switch featureElement.attachmentDisplayType {
+        switch featureElement.attachmentsDisplayType {
         case .list:
             thumbnailSize = CGSize(width: 40, height: 40)
         case .preview:
@@ -236,14 +236,14 @@ extension AttachmentsFeatureElementView {
     }
     
     /// A Boolean value indicating whether the feature Element
-    /// is an `AttachmentFormElement`.
-    var isShowingAttachmentFormElement: Bool {
-        featureElement is AttachmentFormElement
+    /// is an `AttachmentsFormElement`.
+    var isShowingAttachmentsFormElement: Bool {
+        featureElement is AttachmentsFormElement
     }
 }
 
 extension View {
-    /// Modifier for watching ``AttachmentFormElement.isEditableChanged`` events.
+    /// Modifier for watching ``AttachmentsFormElement.isEditableChanged`` events.
     /// - Parameters:
     ///   - element: The attachment form element to watch for changes on.
     ///   - action: The action which watches for changes.
@@ -252,10 +252,10 @@ extension View {
         of element: AttachmentsFeatureElement,
         action: @escaping (_ newIsEditable: Bool) -> Void
     ) -> some View {
-        if let attachmentFormElement = element as? AttachmentFormElement {
+        if let attachmentsFormElement = element as? AttachmentsFormElement {
             self
-                .task(id: ObjectIdentifier(attachmentFormElement)) {
-                    for await isEditable in attachmentFormElement.$isEditable {
+                .task(id: ObjectIdentifier(attachmentsFormElement)) {
+                    for await isEditable in attachmentsFormElement.$isEditable {
                         action(isEditable)
                     }
                 }
