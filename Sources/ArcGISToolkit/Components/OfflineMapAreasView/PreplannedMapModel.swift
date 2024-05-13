@@ -18,7 +18,7 @@ import ArcGIS
 /// An object that encapsulates state about a preplanned map.
 public class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
-    @Published var preplannedMapArea: PreplannedMapArea
+    let preplannedMapArea: PreplannedMapArea
     
     /// The result of the download job.
     @Published private(set) var result: Result<MobileMapPackage, Error>?
