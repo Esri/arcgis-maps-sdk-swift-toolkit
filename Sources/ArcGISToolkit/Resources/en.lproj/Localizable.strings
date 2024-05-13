@@ -8,11 +8,11 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button to add new utility trace starting points. */
 "Add new" = "Add new";
 
-/* A label for a button to choose a photo from the user's files. */
-"Add photo from files" = "Add photo from files";
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "Choose From Files";
 
-/* A label for a button to choose a photo from the user's photo library. */
-"Add photo from library" = "Add photo from library";
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "Choose From Library";
 
 /* A section header for advanced options. */
 "Advanced Options" = "Advanced Options";
@@ -313,8 +313,8 @@ match the spatial reference of the map or scene. */
 network trace operation. */
 "Starting Points" = "Starting Points";
 
-/* A label for a button to capture a new photo. */
-"Take photo" = "Take photo";
+/* A label for a button to capture a new photo or video. */
+"Take Photo or Video" = "Take Photo or Video";
 
 /* An instruction to the user to tap on a horizontal surface to
 place an ArcGIS Scene. */
