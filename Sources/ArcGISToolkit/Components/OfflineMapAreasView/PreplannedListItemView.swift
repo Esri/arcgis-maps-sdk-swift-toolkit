@@ -18,8 +18,6 @@ import ArcGIS
 public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var preplannedMapModel: PreplannedMapModel
-    /// The view model for the map view.
-    @ObservedObject var mapViewModel: OfflineMapAreasView.MapViewModel
     /// A Boolean value indicating whether the preplanned map area can be downloaded.
     @State private var canDownload = true
     
@@ -59,8 +57,8 @@ public struct PreplannedListItemView: View {
                 }
             }
             .onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { status in
-                // If the preplanned map area fails to load, it may not be packaged.
                 if status == .failed {
+                    // If the preplanned map area fails to load, it may not be packaged.
                     canDownload = false
                 } else if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
                     // Otherwise, check the packaging status to determine if the map area is
