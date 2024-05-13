@@ -19,7 +19,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var preplannedMapModel: PreplannedMapModel
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map area can be downloaded.
-***REMOVED***@State private var canDownload = true
+***REMOVED***@State private var canDownload: Bool?
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack {
@@ -47,20 +47,26 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !canDownload {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Map is still packaging.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "clock.badge.xmark")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let canDownload {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !canDownload {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Map is still packaging.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "clock.badge.xmark")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Map package is available for download.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Map package is available for download.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { status in
-***REMOVED******REMOVED******REMOVED******REMOVED***if status == .failed {
+***REMOVED******REMOVED******REMOVED******REMOVED***let packagingStatus = preplannedMapModel.preplannedMapArea.packagingStatus
+***REMOVED******REMOVED******REMOVED******REMOVED***if status == .failed || packagingStatus == .processing {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the preplanned map area fails to load, it may not be packaged.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***canDownload = false
-***REMOVED******REMOVED******REMOVED*** else if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
+***REMOVED******REMOVED******REMOVED*** else if packagingStatus == .complete || packagingStatus == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise, check the packaging status to determine if the map area is
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** available to download.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***canDownload = true
