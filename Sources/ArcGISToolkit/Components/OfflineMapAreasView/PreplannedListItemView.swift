@@ -19,7 +19,7 @@ public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var preplannedMapModel: PreplannedMapModel
     /// A Boolean value indicating whether the preplanned map area can be downloaded.
-    @State private var canDownload = true
+    @State private var canDownload: Bool?
     
     public var body: some View {
         HStack {
@@ -47,20 +47,26 @@ public struct PreplannedListItemView: View {
                     Image(systemName: "exclamationmark.circle")
                         .foregroundColor(.red)
                 case .none:
-                    if !canDownload {
-                        // Map is still packaging.
-                        Image(systemName: "clock.badge.xmark")
+                    if let canDownload {
+                        if !canDownload {
+                            // Map is still packaging.
+                            Image(systemName: "clock.badge.xmark")
+                        } else {
+                            // Map package is available for download.
+                            Image(systemName: "arrow.down.circle")
+                        }
                     } else {
-                        // Map package is available for download.
-                        Image(systemName: "arrow.down.circle")
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
                     }
                 }
             }
             .onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { status in
-                if status == .failed {
+                let packagingStatus = preplannedMapModel.preplannedMapArea.packagingStatus
+                if status == .failed || packagingStatus == .processing {
                     // If the preplanned map area fails to load, it may not be packaged.
                     canDownload = false
-                } else if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
+                } else if packagingStatus == .complete || packagingStatus == nil {
                     // Otherwise, check the packaging status to determine if the map area is
                     // available to download.
                     canDownload = true
