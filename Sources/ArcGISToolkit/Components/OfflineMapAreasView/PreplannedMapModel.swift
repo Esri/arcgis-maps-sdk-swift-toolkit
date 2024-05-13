@@ -18,7 +18,7 @@
 ***REMOVED***/ An object that encapsulates state about a preplanned map.
 public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The preplanned map area.
-***REMOVED***@Published var preplannedMapArea: PreplannedMapArea
+***REMOVED***let preplannedMapArea: PreplannedMapArea
 ***REMOVED***
 ***REMOVED******REMOVED***/ The result of the download job.
 ***REMOVED***@Published private(set) var result: Result<MobileMapPackage, Error>?
