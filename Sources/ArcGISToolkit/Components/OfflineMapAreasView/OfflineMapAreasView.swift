@@ -18,13 +18,13 @@ import ArcGIS
 @MainActor
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
-    @State private var mapViewModel: MapViewModel
+    @StateObject private var mapViewModel: MapViewModel
     
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     
     public init(map: Map) {
-        self.mapViewModel = MapViewModel(map: map)
+        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
     }
     
     public var body: some View {
