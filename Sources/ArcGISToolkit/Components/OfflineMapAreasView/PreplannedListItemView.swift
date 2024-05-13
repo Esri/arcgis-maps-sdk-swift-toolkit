@@ -18,8 +18,6 @@
 public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var preplannedMapModel: PreplannedMapModel
-***REMOVED******REMOVED***/ The view model for the map view.
-***REMOVED***@ObservedObject var mapViewModel: OfflineMapAreasView.MapViewModel
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map area can be downloaded.
 ***REMOVED***@State private var canDownload = true
 ***REMOVED***
@@ -59,8 +57,8 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { status in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the preplanned map area fails to load, it may not be packaged.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if status == .failed {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the preplanned map area fails to load, it may not be packaged.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***canDownload = false
 ***REMOVED******REMOVED******REMOVED*** else if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise, check the packaging status to determine if the map area is

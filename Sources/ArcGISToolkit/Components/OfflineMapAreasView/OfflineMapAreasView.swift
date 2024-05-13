@@ -53,14 +53,14 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***case .success(let models):
 ***REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
 ***REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapModel: preplannedMapModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel: mapViewModel
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapModel: preplannedMapModel
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
 ***REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED***ProgressView().frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
