@@ -45,9 +45,6 @@ struct TextInput: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***textWriter
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***text = element.formattedValue
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: isFocused) { isFocused in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isFocused {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
@@ -70,6 +67,9 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fullScreenTextInputIsPresented = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***text = newFormattedValue
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -101,9 +101,6 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityIdentifier("\(element.label) Text Input")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(keyboardType)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { _, newFormattedValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text = newFormattedValue
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.focused($isFocused)
@@ -223,6 +220,42 @@ private extension FieldFormElement {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension View {
+***REMOVED******REMOVED***/ Wraps  `onValueChange(of:action:)` with an additional boolean property that when false will
+***REMOVED******REMOVED***/ not monitor value changes.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - element: The form element to watch for changes on.
+***REMOVED******REMOVED***/   - when: The boolean value which disables monitoring. When `true` changes will be monitored.
+***REMOVED******REMOVED***/   - action: The action which watches for changes.
+***REMOVED******REMOVED***/ - Returns: The modified view.
+***REMOVED***func onValueChange(of element: FieldFormElement, when: Bool, action: @escaping (_ newValue: Any?, _ newFormattedValue: String) -> Void) -> some View {
+***REMOVED******REMOVED***modifier(
+***REMOVED******REMOVED******REMOVED***ConditionalChangeOfModifier(element: element, condition: when) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***action(newValue, newFormattedValue)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+private struct ConditionalChangeOfModifier: ViewModifier {
+***REMOVED***let element: FieldFormElement
+***REMOVED***
+***REMOVED***let condition: Bool
+***REMOVED***
+***REMOVED***let action: (_ newValue: Any?, _ newFormattedValue: String) -> Void
+***REMOVED***
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***if condition {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(newValue, newFormattedValue)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***content
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
