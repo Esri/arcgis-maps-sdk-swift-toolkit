@@ -225,7 +225,7 @@ private extension FieldFormElement {
 }
 
 private extension View {
-    /// Wraps  `onValueChange(of:action:)` with an additional boolean property that when false will
+    /// Wraps `onValueChange(of:action:)` with an additional boolean property that when false will
     /// not monitor value changes.
     /// - Parameters:
     ///   - element: The form element to watch for changes on.
