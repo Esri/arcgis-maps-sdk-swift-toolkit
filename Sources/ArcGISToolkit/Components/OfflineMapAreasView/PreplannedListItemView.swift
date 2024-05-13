@@ -69,8 +69,10 @@ public struct PreplannedListItemView: View {
                 }
             }
             .task {
-                Task {
+                do {
                     try await preplannedMapModel.preplannedMapArea.load()
+                } catch {
+                    print(error)
                 }
             }
         }
