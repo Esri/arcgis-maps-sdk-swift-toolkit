@@ -30,12 +30,14 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***Form {
-***REMOVED******REMOVED******REMOVED******REMOVED***if mapViewModel.hasPreplannedMapAreas {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(header: Text("Preplanned Map Areas").bold()) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section(header: Text("Preplanned Map Areas").bold()) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapViewModel.hasPreplannedMapAreas {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreas
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
-***REMOVED***   ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
@@ -64,6 +66,17 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var emptyPreplannedMapAreasView: some View {
+***REMOVED******REMOVED***VStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "icloud.and.arrow.down")
+***REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
+***REMOVED******REMOVED******REMOVED***Text("No offline map areas")
+***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
+***REMOVED******REMOVED******REMOVED***Text("You don't have any offline map areas yet.")
+***REMOVED***
+***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
 
