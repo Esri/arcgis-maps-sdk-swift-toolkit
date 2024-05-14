@@ -49,8 +49,8 @@ struct AttachmentImportMenu: View {
     /// The action to perform when an attachment is added.
     let onAdd: ((FeatureAttachment) async throws -> Void)?
     
-    fileprivate func takePhotoOrVideoButton() -> Button<some View> {
-        return Button {
+    private func takePhotoOrVideoButton() -> Button<some View> {
+       Button {
             cameraIsShowing = true
         } label: {
             Label {
@@ -66,8 +66,8 @@ struct AttachmentImportMenu: View {
         }
     }
     
-    fileprivate func chooseFromLibraryButton() -> Button<some View> {
-        return Button {
+    private func chooseFromLibraryButton() -> Button<some View> {
+       Button {
             photoPickerIsPresented = true
         } label: {
             Label {
@@ -83,8 +83,8 @@ struct AttachmentImportMenu: View {
         }
     }
     
-    fileprivate func chooseFromFilesButton() -> Button<some View> {
-        return Button {
+    private func chooseFromFilesButton() -> Button<some View> {
+       Button {
             fileImporterIsShowing = true
         } label: {
             Label {
