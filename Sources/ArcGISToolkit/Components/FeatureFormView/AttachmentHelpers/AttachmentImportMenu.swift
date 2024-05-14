@@ -49,8 +49,8 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ The action to perform when an attachment is added.
 ***REMOVED***let onAdd: ((FeatureAttachment) async throws -> Void)?
 ***REMOVED***
-***REMOVED***fileprivate func takePhotoOrVideoButton() -> Button<some View> {
-***REMOVED******REMOVED***return Button {
+***REMOVED***private func takePhotoOrVideoButton() -> Button<some View> {
+***REMOVED***   Button {
 ***REMOVED******REMOVED******REMOVED***cameraIsShowing = true
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Label {
@@ -66,8 +66,8 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***fileprivate func chooseFromLibraryButton() -> Button<some View> {
-***REMOVED******REMOVED***return Button {
+***REMOVED***private func chooseFromLibraryButton() -> Button<some View> {
+***REMOVED***   Button {
 ***REMOVED******REMOVED******REMOVED***photoPickerIsPresented = true
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Label {
@@ -83,8 +83,8 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***fileprivate func chooseFromFilesButton() -> Button<some View> {
-***REMOVED******REMOVED***return Button {
+***REMOVED***private func chooseFromFilesButton() -> Button<some View> {
+***REMOVED***   Button {
 ***REMOVED******REMOVED******REMOVED***fileImporterIsShowing = true
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Label {
