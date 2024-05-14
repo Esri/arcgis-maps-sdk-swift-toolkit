@@ -128,6 +128,9 @@ public struct PreplannedListItemView: View {
                     }
                 }
             }
+            .onTapGesture {
+                mapViewModel.selectedMap = OfflineMapAreasView.MapViewModel.SelectedMap.preplannedMap(preplannedMapModel)
+            }
         }
     }
 }

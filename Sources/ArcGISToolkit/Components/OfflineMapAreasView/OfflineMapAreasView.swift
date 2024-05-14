@@ -112,8 +112,16 @@ public extension OfflineMapAreasView {
         /// The online map.
         private let onlineMap: Map
         
+        /// The offline map of the downloaded preplanned map area.
+        private var offlineMap: Map?
+        
+        /// The map used in the map view.
+        var currentMap: Map { offlineMap ?? onlineMap }
+        
         /// The offline map task.
         private let offlineMapTask: OfflineMapTask
+        
+        private let documentsDirectory: URL = FileManager.default.documentsDirectory
         
         /// The preplanned offline map information.
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
@@ -121,10 +129,33 @@ public extension OfflineMapAreasView {
         /// A Boolean value indicating whether the map has preplanned map areas.
         @Published private(set) var hasPreplannedMapAreas = false
         
+        /// The currently selected map.
+        @Published var selectedMap: SelectedMap = .onlineWebMap {
+            didSet {
+                selectedMapDidChange(from: oldValue)
+            }
+        }
+        
         init(map: Map) {
             self.onlineMap = map
             
+            // Sets the min scale to avoid requesting a huge download.
+            onlineMap.minScale = 1e4
+            
             offlineMapTask = OfflineMapTask(onlineMap: onlineMap)
+        }
+        
+        deinit {
+            // Removes the mmpks from the documents directory.
+            if let files = try? FileManager.default.contentsOfDirectory(
+                at: documentsDirectory,
+                includingPropertiesForKeys: nil,
+                options: .skipsHiddenFiles
+            ) {
+                for url in files where url.pathExtension == "mmpk" {
+                    try? FileManager.default.removeItem(at: url)
+                }
+            }
         }
         
         /// Gets the preplanned map areas from the offline map task and creates the
@@ -135,6 +166,8 @@ public extension OfflineMapAreasView {
                     .sorted(using: KeyPathComparator(\.portalItem.title))
                     .compactMap {
                         PreplannedMapModel(
+                            offlineMapTask: offlineMapTask,
+                            temporaryDirectory: documentsDirectory,
                             preplannedMapArea: $0
                         )
                     }
@@ -143,6 +176,51 @@ public extension OfflineMapAreasView {
                 hasPreplannedMapAreas = !models.isEmpty
             }
         }
+        
+        /// Handles a selection of a map.
+        /// If the selected map is an offline map and it has not yet been taken offline, then
+        /// it will start downloading. Otherwise the selected map will be used as the displayed map.
+        func selectedMapDidChange(from oldValue: SelectedMap) {
+            switch selectedMap {
+            case .onlineWebMap:
+                offlineMap = nil
+            case .preplannedMap(let info):
+                if info.canDownload {
+                    // If we have not yet downloaded or started downloading, then kick off a
+                    // download and reset selection to previous selection since we have to download
+                    // the offline map.
+                    selectedMap = oldValue
+                    Task {
+                        await info.downloadPreplannedMapArea()
+                    }
+                } else if case .success(let mmpk) = info.result {
+                    // If we have already downloaded, then open the map in the mmpk.
+                    offlineMap = mmpk.maps.first
+                } else {
+                    // If we have a failure, then keep the online map selected.
+                    selectedMap = oldValue
+                }
+            }
+        }
+    }
+}
+
+public extension OfflineMapAreasView.MapViewModel {
+    /// A type that specifies the currently selected map.
+    enum SelectedMap: Hashable {
+        /// The online version of the map.
+        case onlineWebMap
+        /// One of the preplanned offline maps.
+        case preplannedMap(PreplannedMapModel)
+    }
+}
+
+private extension FileManager {
+    /// The path to the documents folder.
+    var documentsDirectory: URL {
+        URL(
+            fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        )
     }
 }
 
