@@ -108,11 +108,7 @@ struct AttachmentImportMenu: View {
                 if !newAttachmentImportData.fileName.isEmpty {
                     fileName = newAttachmentImportData.fileName
                 } else {
-                    // This is probably not good and should be re-thought.
-                    // Look at how the `AGSPopupAttachmentsViewController` handles this
-                    // https://devtopia.esri.com/runtime/cocoa/blob/b788189d3d2eb43b7da8f9cc9af18ed2f3aa6925/api/iOS/Popup/ViewController/AGSPopupAttachmentsViewController.m#L755
-                    // and
-                    // https://devtopia.esri.com/runtime/cocoa/blob/b788189d3d2eb43b7da8f9cc9af18ed2f3aa6925/api/iOS/Popup/ViewController/AGSPopupAttachmentsViewController.m#L725
+                    // TODO: Refactor naming scheme. Ref Apollo #682
                     fileName = "Attachment \(element.attachments.count + 1).\(newAttachmentImportData.contentType.split(separator: "/").last!)"
                 }
                 let newAttachment = try await element.addAttachment(
