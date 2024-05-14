@@ -30,12 +30,14 @@ public struct OfflineMapAreasView: View {
     public var body: some View {
         NavigationStack {
             Form {
-                if mapViewModel.hasPreplannedMapAreas {
-                    Section(header: Text("Preplanned Map Areas").bold()) {
+                Section(header: Text("Preplanned Map Areas").bold()) {
+                    if mapViewModel.hasPreplannedMapAreas {
                         preplannedMapAreas
+                    } else {
+                        emptyPreplannedMapAreasView
                     }
-                    .textCase(nil)
-               }
+                }
+                .textCase(nil)
             }
             .task {
                 await mapViewModel.makePreplannedOfflineMapModels()
@@ -64,6 +66,17 @@ public struct OfflineMapAreasView: View {
             ProgressView()
                 .frame(maxWidth: .infinity)
         }
+    }
+    
+    @ViewBuilder private var emptyPreplannedMapAreasView: some View {
+        VStack(alignment: .center) {
+            Image(systemName: "icloud.and.arrow.down")
+                .imageScale(.large)
+            Text("No offline map areas")
+                .bold()
+            Text("You don't have any offline map areas yet.")
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
