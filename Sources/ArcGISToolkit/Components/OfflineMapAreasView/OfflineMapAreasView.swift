@@ -15,7 +15,6 @@
 ***REMOVED***
 ***REMOVED***
 
-@MainActor
 public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***@StateObject private var mapViewModel: MapViewModel
@@ -94,7 +93,7 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the map has preplanned map areas.
-***REMOVED******REMOVED***@Published var hasPreplannedMapAreas: Bool = false
+***REMOVED******REMOVED***@Published private(set) var hasPreplannedMapAreas = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(map: Map) {
 ***REMOVED******REMOVED******REMOVED***self.onlineMap = map
