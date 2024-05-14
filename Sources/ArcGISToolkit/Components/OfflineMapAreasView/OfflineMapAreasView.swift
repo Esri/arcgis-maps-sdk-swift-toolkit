@@ -15,7 +15,6 @@
 import SwiftUI
 import ArcGIS
 
-@MainActor
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: MapViewModel
@@ -94,7 +93,7 @@ public extension OfflineMapAreasView {
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
         
         /// A Boolean value indicating whether the map has preplanned map areas.
-        @Published var hasPreplannedMapAreas: Bool = false
+        @Published private(set) var hasPreplannedMapAreas = false
         
         init(map: Map) {
             self.onlineMap = map
