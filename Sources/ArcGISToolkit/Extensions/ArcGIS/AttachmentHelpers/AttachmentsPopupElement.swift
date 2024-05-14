@@ -16,7 +16,7 @@ import ArcGIS
 
 extension AttachmentsPopupElement : AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
-    public var attachmentDisplayType: AttachmentsFeatureElementDisplayType {
+    public var attachmentsDisplayType: AttachmentsFeatureElementDisplayType {
         AttachmentsFeatureElementDisplayType(kind: displayType)
     }
     
