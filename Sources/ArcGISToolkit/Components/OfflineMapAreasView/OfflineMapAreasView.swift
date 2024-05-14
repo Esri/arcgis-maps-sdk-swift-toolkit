@@ -30,10 +30,12 @@ public struct OfflineMapAreasView: View {
     public var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Preplanned Map Areas").bold()) {
-                    preplannedMapAreas
-                }
-                .textCase(nil)
+                if mapViewModel.hasPreplannedMapAreas {
+                    Section(header: Text("Preplanned Map Areas").bold()) {
+                        preplannedMapAreas
+                    }
+                    .textCase(nil)
+               }
             }
             .task {
                 await mapViewModel.makePreplannedOfflineMapModels()
@@ -78,6 +80,9 @@ public extension OfflineMapAreasView {
         /// The preplanned offline map information.
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
         
+        /// A Boolean value indicating whether the map has preplanned map areas.
+        @Published var hasPreplannedMapAreas: Bool = false
+        
         init(map: Map) {
             self.onlineMap = map
             
@@ -95,6 +100,9 @@ public extension OfflineMapAreasView {
                             preplannedMapArea: $0
                         )
                     }
+            }
+            if let models = try? preplannedMapModels?.get() {
+                hasPreplannedMapAreas = !models.isEmpty
             }
         }
     }
