@@ -112,8 +112,16 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ The online map.
 ***REMOVED******REMOVED***private let onlineMap: Map
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The offline map of the downloaded preplanned map area.
+***REMOVED******REMOVED***private var offlineMap: Map?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The map used in the map view.
+***REMOVED******REMOVED***var currentMap: Map { offlineMap ?? onlineMap ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The offline map task.
 ***REMOVED******REMOVED***private let offlineMapTask: OfflineMapTask
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***private let documentsDirectory: URL = FileManager.default.documentsDirectory
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The preplanned offline map information.
 ***REMOVED******REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
@@ -121,10 +129,33 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the map has preplanned map areas.
 ***REMOVED******REMOVED***@Published private(set) var hasPreplannedMapAreas = false
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The currently selected map.
+***REMOVED******REMOVED***@Published var selectedMap: SelectedMap = .onlineWebMap {
+***REMOVED******REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedMapDidChange(from: oldValue)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(map: Map) {
 ***REMOVED******REMOVED******REMOVED***self.onlineMap = map
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Sets the min scale to avoid requesting a huge download.
+***REMOVED******REMOVED******REMOVED***onlineMap.minScale = 1e4
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***offlineMapTask = OfflineMapTask(onlineMap: onlineMap)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***deinit {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Removes the mmpks from the documents directory.
+***REMOVED******REMOVED******REMOVED***if let files = try? FileManager.default.contentsOfDirectory(
+***REMOVED******REMOVED******REMOVED******REMOVED***at: documentsDirectory,
+***REMOVED******REMOVED******REMOVED******REMOVED***includingPropertiesForKeys: nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***options: .skipsHiddenFiles
+***REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***for url in files where url.pathExtension == "mmpk" {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: url)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Gets the preplanned map areas from the offline map task and creates the
@@ -135,6 +166,8 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sorted(using: KeyPathComparator(\.portalItem.title))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.compactMap {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***temporaryDirectory: documentsDirectory,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: $0
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -143,6 +176,51 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***hasPreplannedMapAreas = !models.isEmpty
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Handles a selection of a map.
+***REMOVED******REMOVED******REMOVED***/ If the selected map is an offline map and it has not yet been taken offline, then
+***REMOVED******REMOVED******REMOVED***/ it will start downloading. Otherwise the selected map will be used as the displayed map.
+***REMOVED******REMOVED***func selectedMapDidChange(from oldValue: SelectedMap) {
+***REMOVED******REMOVED******REMOVED***switch selectedMap {
+***REMOVED******REMOVED******REMOVED***case .onlineWebMap:
+***REMOVED******REMOVED******REMOVED******REMOVED***offlineMap = nil
+***REMOVED******REMOVED******REMOVED***case .preplannedMap(let info):
+***REMOVED******REMOVED******REMOVED******REMOVED***if info.canDownload {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have not yet downloaded or started downloading, then kick off a
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** download and reset selection to previous selection since we have to download
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the offline map.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = oldValue
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await info.downloadPreplannedMapArea()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** else if case .success(let mmpk) = info.result {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have already downloaded, then open the map in the mmpk.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMap = mmpk.maps.first
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have a failure, then keep the online map selected.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = oldValue
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+public extension OfflineMapAreasView.MapViewModel {
+***REMOVED******REMOVED***/ A type that specifies the currently selected map.
+***REMOVED***enum SelectedMap: Hashable {
+***REMOVED******REMOVED******REMOVED***/ The online version of the map.
+***REMOVED******REMOVED***case onlineWebMap
+***REMOVED******REMOVED******REMOVED***/ One of the preplanned offline maps.
+***REMOVED******REMOVED***case preplannedMap(PreplannedMapModel)
+***REMOVED***
+***REMOVED***
+
+private extension FileManager {
+***REMOVED******REMOVED***/ The path to the documents folder.
+***REMOVED***var documentsDirectory: URL {
+***REMOVED******REMOVED***URL(
+***REMOVED******REMOVED******REMOVED***fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
