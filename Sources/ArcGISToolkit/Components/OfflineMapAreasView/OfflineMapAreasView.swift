@@ -30,10 +30,12 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***Form {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section(header: Text("Preplanned Map Areas").bold()) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreas
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***if mapViewModel.hasPreplannedMapAreas {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(header: Text("Preplanned Map Areas").bold()) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreas
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
+***REMOVED***   ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
@@ -78,6 +80,9 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ The preplanned offline map information.
 ***REMOVED******REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the map has preplanned map areas.
+***REMOVED******REMOVED***@Published var hasPreplannedMapAreas: Bool = false
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(map: Map) {
 ***REMOVED******REMOVED******REMOVED***self.onlineMap = map
 ***REMOVED******REMOVED******REMOVED***
@@ -95,6 +100,9 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: $0
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if let models = try? preplannedMapModels?.get() {
+***REMOVED******REMOVED******REMOVED******REMOVED***hasPreplannedMapAreas = !models.isEmpty
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
