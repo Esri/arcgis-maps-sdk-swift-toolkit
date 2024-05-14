@@ -21,12 +21,12 @@ import UniformTypeIdentifiers
 struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The attachment form element displaying the menu.
-***REMOVED***private let element: AttachmentFormElement
+***REMOVED***private let element: AttachmentsFormElement
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `AttachmentImportMenu`
 ***REMOVED******REMOVED***/ - Parameter element: The attachment form element displaying the menu.
 ***REMOVED******REMOVED***/ - Parameter onAdd: The action to perform when an attachment is added.
-***REMOVED***init(element: AttachmentFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
+***REMOVED***init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.onAdd = onAdd
 ***REMOVED***
@@ -49,50 +49,67 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ The action to perform when an attachment is added.
 ***REMOVED***let onAdd: ((FeatureAttachment) async throws -> Void)?
 ***REMOVED***
+***REMOVED***private func takePhotoOrVideoButton() -> Button<some View> {
+***REMOVED***   Button {
+***REMOVED******REMOVED******REMOVED***cameraIsShowing = true
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Take Photo or Video",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to capture a new photo or video."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "camera")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func chooseFromLibraryButton() -> Button<some View> {
+***REMOVED***   Button {
+***REMOVED******REMOVED******REMOVED***photoPickerIsPresented = true
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Choose From Library",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose a photo or video from the user's photo library."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "photo")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func chooseFromFilesButton() -> Button<some View> {
+***REMOVED***   Button {
+***REMOVED******REMOVED******REMOVED***fileImporterIsShowing = true
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Choose From Files",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose an file from the user's files."
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "folder")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Menu {
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***cameraIsShowing = true
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Take Photo or Video",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to capture a new photo or video."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "camera")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
+***REMOVED******REMOVED******REMOVED***if element.input is AnyAttachmentsFormInput {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show photo/video and library picker if
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** we're allowing all input types.
+***REMOVED******REMOVED******REMOVED******REMOVED***takePhotoOrVideoButton()
+***REMOVED******REMOVED******REMOVED******REMOVED***chooseFromLibraryButton()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***photoPickerIsPresented = true
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Choose From Library",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose a photo or video from the user's photo library."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "photo")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***fileImporterIsShowing = true
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Choose From Files",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose an file from the user's files."
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "folder")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Always show file picker, no matter the input type.
+***REMOVED******REMOVED******REMOVED***chooseFromFilesButton()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "plus")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
@@ -129,7 +146,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***newAttachmentImportData = AttachmentImportData(data: data, contentType: "image/png")
 ***REMOVED******REMOVED******REMOVED***self.capturedImage = nil
 ***REMOVED***
-***REMOVED******REMOVED***.fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.content]) { result in
+***REMOVED******REMOVED***.fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
 ***REMOVED******REMOVED******REMOVED***switch result {
 ***REMOVED******REMOVED******REMOVED***case .success(let url):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** gain access to the url resource and verify there's data.

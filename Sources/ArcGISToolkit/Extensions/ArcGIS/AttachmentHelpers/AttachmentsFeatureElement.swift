@@ -28,7 +28,7 @@ public enum AttachmentsFeatureElementDisplayType {
 ***REMOVED***/ Common properties for elements which display feature attachments.
 public protocol AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ Indicates how to display the attachments.
-***REMOVED***var attachmentDisplayType: AttachmentsFeatureElementDisplayType { get ***REMOVED***
+***REMOVED***var attachmentsDisplayType: AttachmentsFeatureElementDisplayType { get ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A string value describing the element in detail. Can be an empty string.
 ***REMOVED***var description: String { get ***REMOVED***

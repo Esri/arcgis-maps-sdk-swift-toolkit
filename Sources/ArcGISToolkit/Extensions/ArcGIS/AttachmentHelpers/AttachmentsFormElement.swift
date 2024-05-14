@@ -14,9 +14,9 @@
 
 ***REMOVED***
 
-extension AttachmentFormElement : AttachmentsFeatureElement {
+extension AttachmentsFormElement : AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ Indicates how to display the attachments.
-***REMOVED***public var attachmentDisplayType: AttachmentsFeatureElementDisplayType {
+***REMOVED***public var attachmentsDisplayType: AttachmentsFeatureElementDisplayType {
 ***REMOVED******REMOVED******REMOVED*** Currently, Attachment Form Elements only support `Preview`.
 ***REMOVED******REMOVED***AttachmentsFeatureElementDisplayType.preview
 ***REMOVED***

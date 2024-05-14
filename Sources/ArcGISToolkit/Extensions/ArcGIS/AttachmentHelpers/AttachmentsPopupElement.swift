@@ -16,7 +16,7 @@
 
 extension AttachmentsPopupElement : AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ Indicates how to display the attachments.
-***REMOVED***public var attachmentDisplayType: AttachmentsFeatureElementDisplayType {
+***REMOVED***public var attachmentsDisplayType: AttachmentsFeatureElementDisplayType {
 ***REMOVED******REMOVED***AttachmentsFeatureElementDisplayType(kind: displayType)
 ***REMOVED***
 ***REMOVED***

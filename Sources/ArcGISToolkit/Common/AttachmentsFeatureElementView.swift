@@ -68,7 +68,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***case .loaded(let attachmentModels):
-***REMOVED******REMOVED******REMOVED******REMOVED***if isShowingAttachmentFormElement {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isShowingAttachmentsFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If showing a form element, don't show attachments in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** a disclosure group, but also ALWAYS show
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the list of attachments, even if there are none.
@@ -101,9 +101,9 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if !isShowingAttachmentFormElement {
+***REMOVED******REMOVED******REMOVED***if !isShowingAttachmentsFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reverse attachment models array if we're not displaying
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** via an AttachmentFormElement.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** via an AttachmentsFormElement.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This allows attachments in a non-editing context to
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** display in the same order as the online Map Viewer.
 ***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels = attachmentModels.reversed()
@@ -113,7 +113,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private func attachmentBody(attachmentModels: [AttachmentModel]) -> some View {
-***REMOVED******REMOVED***switch featureElement.attachmentDisplayType {
+***REMOVED******REMOVED***switch featureElement.attachmentsDisplayType {
 ***REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED***case .preview:
@@ -149,7 +149,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if isEditable,
-***REMOVED******REMOVED******REMOVED***   let element = featureElement as? AttachmentFormElement {
+***REMOVED******REMOVED******REMOVED***   let element = featureElement as? AttachmentsFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportMenu(element: element, onAdd: onAdd)
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -177,7 +177,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/   - newAttachmentName: The new attachment name.
 ***REMOVED***@MainActor
 ***REMOVED***func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
-***REMOVED******REMOVED***if let element = featureElement as? AttachmentFormElement,
+***REMOVED******REMOVED***if let element = featureElement as? AttachmentsFormElement,
 ***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***try await element.renameAttachment(attachment, name: newAttachmentName)
 ***REMOVED******REMOVED******REMOVED***attachmentModel.sync()
@@ -190,7 +190,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/   - attachmentModel: The model for the attachment to delete.
 ***REMOVED***@MainActor
 ***REMOVED***func onDelete(attachmentModel: AttachmentModel) async throws -> Void {
-***REMOVED******REMOVED***if let element = featureElement as? AttachmentFormElement,
+***REMOVED******REMOVED***if let element = featureElement as? AttachmentsFormElement,
 ***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***try await element.deleteAttachment(attachment)
 ***REMOVED******REMOVED******REMOVED***guard case .loaded(var models) = attachmentLoadingState else { return ***REMOVED***
@@ -218,7 +218,7 @@ extension AttachmentsFeatureElementView {
 ***REMOVED***var thumbnailSize: CGSize {
 ***REMOVED******REMOVED******REMOVED*** Set thumbnail size
 ***REMOVED******REMOVED***let thumbnailSize: CGSize
-***REMOVED******REMOVED***switch featureElement.attachmentDisplayType {
+***REMOVED******REMOVED***switch featureElement.attachmentsDisplayType {
 ***REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED***thumbnailSize = CGSize(width: 40, height: 40)
 ***REMOVED******REMOVED***case .preview:
@@ -236,14 +236,14 @@ extension AttachmentsFeatureElementView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the feature Element
-***REMOVED******REMOVED***/ is an `AttachmentFormElement`.
-***REMOVED***var isShowingAttachmentFormElement: Bool {
-***REMOVED******REMOVED***featureElement is AttachmentFormElement
+***REMOVED******REMOVED***/ is an `AttachmentsFormElement`.
+***REMOVED***var isShowingAttachmentsFormElement: Bool {
+***REMOVED******REMOVED***featureElement is AttachmentsFormElement
 ***REMOVED***
 ***REMOVED***
 
 extension View {
-***REMOVED******REMOVED***/ Modifier for watching ``AttachmentFormElement.isEditableChanged`` events.
+***REMOVED******REMOVED***/ Modifier for watching ``AttachmentsFormElement.isEditableChanged`` events.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The attachment form element to watch for changes on.
 ***REMOVED******REMOVED***/   - action: The action which watches for changes.
@@ -252,10 +252,10 @@ extension View {
 ***REMOVED******REMOVED***of element: AttachmentsFeatureElement,
 ***REMOVED******REMOVED***action: @escaping (_ newIsEditable: Bool) -> Void
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***if let attachmentFormElement = element as? AttachmentFormElement {
+***REMOVED******REMOVED***if let attachmentsFormElement = element as? AttachmentsFormElement {
 ***REMOVED******REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED******REMOVED***.task(id: ObjectIdentifier(attachmentFormElement)) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await isEditable in attachmentFormElement.$isEditable {
+***REMOVED******REMOVED******REMOVED******REMOVED***.task(id: ObjectIdentifier(attachmentsFormElement)) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await isEditable in attachmentsFormElement.$isEditable {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(isEditable)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
