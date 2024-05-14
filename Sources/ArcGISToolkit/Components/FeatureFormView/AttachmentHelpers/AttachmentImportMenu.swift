@@ -21,12 +21,12 @@ import UniformTypeIdentifiers
 struct AttachmentImportMenu: View {
     
     /// The attachment form element displaying the menu.
-    private let element: AttachmentFormElement
+    private let element: AttachmentsFormElement
     
     /// Creates an `AttachmentImportMenu`
     /// - Parameter element: The attachment form element displaying the menu.
     /// - Parameter onAdd: The action to perform when an attachment is added.
-    init(element: AttachmentFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
+    init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
         self.element = element
         self.onAdd = onAdd
     }
@@ -49,50 +49,67 @@ struct AttachmentImportMenu: View {
     /// The action to perform when an attachment is added.
     let onAdd: ((FeatureAttachment) async throws -> Void)?
     
+    private func takePhotoOrVideoButton() -> Button<some View> {
+       Button {
+            cameraIsShowing = true
+        } label: {
+            Label {
+                Text(
+                    "Take Photo or Video",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to capture a new photo or video."
+                )
+            } icon: {
+                Image(systemName: "camera")
+            }
+            .labelStyle(.titleAndIcon)
+        }
+    }
+    
+    private func chooseFromLibraryButton() -> Button<some View> {
+       Button {
+            photoPickerIsPresented = true
+        } label: {
+            Label {
+                Text(
+                    "Choose From Library",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to choose a photo or video from the user's photo library."
+                )
+            } icon: {
+                Image(systemName: "photo")
+            }
+            .labelStyle(.titleAndIcon)
+        }
+    }
+    
+    private func chooseFromFilesButton() -> Button<some View> {
+       Button {
+            fileImporterIsShowing = true
+        } label: {
+            Label {
+                Text(
+                    "Choose From Files",
+                    bundle: .toolkitModule,
+                    comment: "A label for a button to choose an file from the user's files."
+                )
+            } icon: {
+                Image(systemName: "folder")
+            }
+            .labelStyle(.titleAndIcon)
+        }
+    }
+    
     var body: some View {
         Menu {
-            Button {
-                cameraIsShowing = true
-            } label: {
-                Label {
-                    Text(
-                        "Take Photo or Video",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to capture a new photo or video."
-                    )
-                } icon: {
-                    Image(systemName: "camera")
-                }
-                .labelStyle(.titleAndIcon)
+            if element.input is AnyAttachmentsFormInput {
+                // Show photo/video and library picker if
+                // we're allowing all input types.
+                takePhotoOrVideoButton()
+                chooseFromLibraryButton()
             }
-            Button {
-                photoPickerIsPresented = true
-            } label: {
-                Label {
-                    Text(
-                        "Choose From Library",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to choose a photo or video from the user's photo library."
-                    )
-                } icon: {
-                    Image(systemName: "photo")
-                }
-                .labelStyle(.titleAndIcon)
-            }
-            Button {
-                fileImporterIsShowing = true
-            } label: {
-                Label {
-                    Text(
-                        "Choose From Files",
-                        bundle: .toolkitModule,
-                        comment: "A label for a button to choose an file from the user's files."
-                    )
-                } icon: {
-                    Image(systemName: "folder")
-                }
-                .labelStyle(.titleAndIcon)
-            }
+            // Always show file picker, no matter the input type.
+            chooseFromFilesButton()
         } label: {
             Image(systemName: "plus")
                 .font(.title2)
@@ -129,7 +146,7 @@ struct AttachmentImportMenu: View {
             newAttachmentImportData = AttachmentImportData(data: data, contentType: "image/png")
             self.capturedImage = nil
         }
-        .fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.content]) { result in
+        .fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
             switch result {
             case .success(let url):
                 // gain access to the url resource and verify there's data.

@@ -28,7 +28,7 @@ public enum AttachmentsFeatureElementDisplayType {
 /// Common properties for elements which display feature attachments.
 public protocol AttachmentsFeatureElement {
     /// Indicates how to display the attachments.
-    var attachmentDisplayType: AttachmentsFeatureElementDisplayType { get }
+    var attachmentsDisplayType: AttachmentsFeatureElementDisplayType { get }
     
     /// A string value describing the element in detail. Can be an empty string.
     var description: String { get }
