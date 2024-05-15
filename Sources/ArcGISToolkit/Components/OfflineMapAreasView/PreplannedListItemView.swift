@@ -59,7 +59,12 @@ public struct PreplannedListItemView: View {
                     if let canDownload {
                         if !canDownload {
                             // Map is still packaging.
-                            Image(systemName: "clock.badge.xmark")
+                            VStack {
+                                Image(systemName: "clock.badge.xmark")
+                                Text("packaging")
+                                    .font(.footnote)
+                            }
+                            .foregroundColor(.secondary)
                         } else {
                             // Map package is available for download.
                             Image(systemName: "arrow.down.circle")
