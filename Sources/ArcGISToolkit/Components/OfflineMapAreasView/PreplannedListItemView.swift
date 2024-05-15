@@ -16,6 +16,7 @@
 ***REMOVED***
 
 public struct PreplannedListItemView: View {
+***REMOVED***@ObservedObject var mapViewModel: OfflineMapAreasView.MapViewModel
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var preplannedMapModel: PreplannedMapModel
 ***REMOVED***
