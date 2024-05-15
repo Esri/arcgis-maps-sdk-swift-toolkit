@@ -241,26 +241,3 @@ extension AttachmentsFeatureElementView {
         featureElement is AttachmentsFormElement
     }
 }
-
-extension View {
-    /// Modifier for watching ``AttachmentsFormElement.isEditableChanged`` events.
-    /// - Parameters:
-    ///   - element: The attachment form element to watch for changes on.
-    ///   - action: The action which watches for changes.
-    /// - Returns: The modified view.
-    @ViewBuilder func onAttachmentIsEditableChange(
-        of element: AttachmentsFeatureElement,
-        action: @escaping (_ newIsEditable: Bool) -> Void
-    ) -> some View {
-        if let attachmentsFormElement = element as? AttachmentsFormElement {
-            self
-                .task(id: ObjectIdentifier(attachmentsFormElement)) {
-                    for await isEditable in attachmentsFormElement.$isEditable {
-                        action(isEditable)
-                    }
-                }
-        } else {
-            self
-        }
-    }
-}
