@@ -75,11 +75,11 @@ public struct OfflineMapAreasView: View {
     
     @ViewBuilder private var emptyPreplannedMapAreasView: some View {
         VStack(alignment: .center) {
-            Image(systemName: "icloud.and.arrow.down")
-                .imageScale(.large)
             Text("No offline map areas")
                 .bold()
             Text("You don't have any offline map areas yet.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity)
     }
