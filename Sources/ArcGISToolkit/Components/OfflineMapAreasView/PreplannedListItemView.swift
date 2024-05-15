@@ -20,6 +20,8 @@ public struct PreplannedListItemView: View {
 ***REMOVED***@ObservedObject var preplannedMapModel: PreplannedMapModel
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map area can be downloaded.
 ***REMOVED***@State private var canDownload: Bool?
+***REMOVED******REMOVED***/ The error for the preplanned map.
+***REMOVED***@State var error: Error?
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack {
@@ -38,14 +40,21 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(2)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let error {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch preplannedMapModel.result {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let canDownload {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !canDownload {
@@ -76,7 +85,9 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await preplannedMapModel.preplannedMapArea.load()
 ***REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
