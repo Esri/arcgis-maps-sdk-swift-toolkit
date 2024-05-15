@@ -68,6 +68,7 @@ public struct PreplannedListItemView: View {
                         } else {
                             // Map package is available for download.
                             Image(systemName: "arrow.down.circle")
+                                .foregroundColor(.accentColor)
                         }
                     } else {
                         ProgressView()
