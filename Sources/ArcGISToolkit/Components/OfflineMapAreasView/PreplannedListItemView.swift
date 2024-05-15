@@ -20,6 +20,8 @@ public struct PreplannedListItemView: View {
     @ObservedObject var preplannedMapModel: PreplannedMapModel
     /// A Boolean value indicating whether the preplanned map area can be downloaded.
     @State private var canDownload: Bool?
+    /// The error for the preplanned map.
+    @State var error: Error?
     
     public var body: some View {
         HStack {
@@ -38,14 +40,21 @@ public struct PreplannedListItemView: View {
                             .foregroundColor(.secondary)
                             .lineLimit(2)
                     }
+                    if let error {
+                        Text(error.localizedDescription)
+                            .foregroundColor(.red)
+                    }
                 }
                 Spacer()
                 switch preplannedMapModel.result {
                 case .success:
                     Image(systemName: "checkmark.circle.fill")
-                case .failure:
+                case .failure(let error):
                     Image(systemName: "exclamationmark.circle")
                         .foregroundColor(.red)
+                        .task {
+                            self.error = error
+                        }
                 case .none:
                     if let canDownload {
                         if !canDownload {
@@ -76,7 +85,9 @@ public struct PreplannedListItemView: View {
                 do {
                     try await preplannedMapModel.preplannedMapArea.load()
                 } catch {
-                    print(error)
+                    if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
+                        self.error = error
+                    }
                 }
             }
         }
