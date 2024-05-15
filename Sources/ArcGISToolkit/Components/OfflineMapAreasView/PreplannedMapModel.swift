@@ -20,6 +20,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
     let preplannedMapArea: PreplannedMapArea
     
+    /// The view model for the map.
+    private var mapViewModel: OfflineMapAreasView.MapViewModel
+    
     /// The task to use to take the area offline.
     let offlineMapTask: OfflineMapTask
     
@@ -42,7 +45,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     init?(
         offlineMapTask: OfflineMapTask,
         temporaryDirectory: URL,
-        preplannedMapArea: PreplannedMapArea
+        preplannedMapArea: PreplannedMapArea,
+        mapViewModel: OfflineMapAreasView.MapViewModel
     ) {
         self.offlineMapTask = offlineMapTask
         self.preplannedMapArea = preplannedMapArea
@@ -54,6 +58,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         } else {
             return nil
         }
+        
+        self.mapViewModel = mapViewModel
     }
 }
 
@@ -82,7 +88,7 @@ extension PreplannedMapModel {
             downloadDirectory: mmpkDirectory
         )
         
-       // jobManager.jobs.append(job)
+        mapViewModel.jobManager.jobs.append(job)
         
         self.job = job
         
