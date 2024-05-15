@@ -78,6 +78,7 @@ public struct OfflineMapAreasView: View {
             if mapViewModel.hasPreplannedMapAreas {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(
+                        mapViewModel: mapViewModel,
                         preplannedMapModel: preplannedMapModel
                     )
                 }
