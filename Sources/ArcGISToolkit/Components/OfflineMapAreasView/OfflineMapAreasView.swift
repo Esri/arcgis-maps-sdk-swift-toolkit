@@ -30,11 +30,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section(header: Text("Preplanned Map Areas").bold()) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if mapViewModel.hasPreplannedMapAreas {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreas
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreas
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
 ***REMOVED******REMOVED***
@@ -54,13 +50,23 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***@ViewBuilder private var preplannedMapAreas: some View {
 ***REMOVED******REMOVED***switch mapViewModel.preplannedMapModels {
 ***REMOVED******REMOVED***case .success(let models):
-***REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapModel: preplannedMapModel
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***if mapViewModel.hasPreplannedMapAreas {
+***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapModel: preplannedMapModel
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***case .none:
 ***REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
