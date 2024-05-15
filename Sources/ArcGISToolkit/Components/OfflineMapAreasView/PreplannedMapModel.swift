@@ -20,6 +20,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The preplanned map area.
 ***REMOVED***let preplannedMapArea: PreplannedMapArea
 ***REMOVED***
+***REMOVED******REMOVED***/ The view model for the map.
+***REMOVED***private var mapViewModel: OfflineMapAreasView.MapViewModel
+***REMOVED***
 ***REMOVED******REMOVED***/ The task to use to take the area offline.
 ***REMOVED***let offlineMapTask: OfflineMapTask
 ***REMOVED***
@@ -42,7 +45,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***init?(
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
 ***REMOVED******REMOVED***temporaryDirectory: URL,
-***REMOVED******REMOVED***preplannedMapArea: PreplannedMapArea
+***REMOVED******REMOVED***preplannedMapArea: PreplannedMapArea,
+***REMOVED******REMOVED***mapViewModel: OfflineMapAreasView.MapViewModel
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.offlineMapTask = offlineMapTask
 ***REMOVED******REMOVED***self.preplannedMapArea = preplannedMapArea
@@ -54,6 +58,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***self.mapViewModel = mapViewModel
 ***REMOVED***
 ***REMOVED***
 
@@ -82,7 +88,7 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED******REMOVED***downloadDirectory: mmpkDirectory
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED***   ***REMOVED*** jobManager.jobs.append(job)
+***REMOVED******REMOVED***mapViewModel.jobManager.jobs.append(job)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.job = job
 ***REMOVED******REMOVED***

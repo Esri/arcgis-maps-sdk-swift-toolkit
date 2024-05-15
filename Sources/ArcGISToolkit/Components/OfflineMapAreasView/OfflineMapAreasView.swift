@@ -19,6 +19,8 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***@StateObject private var mapViewModel: MapViewModel
 ***REMOVED***
+***REMOVED***@ObservedObject var jobManager = JobManager.shared
+***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
 ***REMOVED***
@@ -27,6 +29,9 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***public init(map: Map) {
 ***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Ask the job manager to schedule background status checks for every 30 seconds.
+***REMOVED******REMOVED***jobManager.preferredBackgroundStatusCheckSchedule = .regularInterval(interval: 30)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -136,6 +141,8 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***var jobManager = JobManager.shared
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(map: Map) {
 ***REMOVED******REMOVED******REMOVED***self.onlineMap = map
 ***REMOVED******REMOVED******REMOVED***
@@ -168,7 +175,8 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***temporaryDirectory: documentsDirectory,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: $0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: $0,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel: self
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
