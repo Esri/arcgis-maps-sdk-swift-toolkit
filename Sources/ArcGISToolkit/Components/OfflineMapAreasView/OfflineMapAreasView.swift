@@ -30,11 +30,7 @@ public struct OfflineMapAreasView: View {
         NavigationStack {
             Form {
                 Section(header: Text("Preplanned Map Areas").bold()) {
-                    if mapViewModel.hasPreplannedMapAreas {
-                        preplannedMapAreas
-                    } else {
-                        emptyPreplannedMapAreasView
-                    }
+                    preplannedMapAreas
                 }
                 .textCase(nil)
             }
@@ -54,13 +50,23 @@ public struct OfflineMapAreasView: View {
     @ViewBuilder private var preplannedMapAreas: some View {
         switch mapViewModel.preplannedMapModels {
         case .success(let models):
-            List(models) { preplannedMapModel in
-                PreplannedListItemView(
-                    preplannedMapModel: preplannedMapModel
-                )
+            if mapViewModel.hasPreplannedMapAreas {
+                List(models) { preplannedMapModel in
+                    PreplannedListItemView(
+                        preplannedMapModel: preplannedMapModel
+                    )
+                }
+            } else {
+                emptyPreplannedMapAreasView
             }
         case .failure(let error):
-            Text(error.localizedDescription)
+            VStack(alignment: .center) {
+                Image(systemName: "exclamationmark.circle")
+                    .imageScale(.large)
+                    .foregroundColor(.red)
+                Text(error.localizedDescription)
+            }
+            .frame(maxWidth: .infinity)
         case .none:
             ProgressView()
                 .frame(maxWidth: .infinity)
