@@ -20,7 +20,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
     let preplannedMapArea: PreplannedMapArea
     
-    /// The result of the download job.
+    /// The result of the download job. When the result is `.success` the mobile map package is returned.
+    /// If the result is `.failure` then the error is returned. The result will be `nil` when the preplanned
+    /// map area is still packaging or loading.
     @Published private(set) var result: Result<MobileMapPackage, Error>?
     
     init(
