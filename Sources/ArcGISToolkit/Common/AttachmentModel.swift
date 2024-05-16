@@ -68,6 +68,8 @@ import SwiftUI
         self.thumbnailSize = thumbnailSize
         
         switch attachment.featureAttachmentKind {
+        case .audio:
+            systemImageName = "waveform"
         case .image:
             systemImageName = "photo"
         case .video:
