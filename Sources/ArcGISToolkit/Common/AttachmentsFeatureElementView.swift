@@ -84,6 +84,9 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.onAttachmentsChange(of: featureElement) { _ in
+***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
+***REMOVED***
 ***REMOVED******REMOVED***.onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
 ***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED***
@@ -168,7 +171,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***newModel.load()
 ***REMOVED******REMOVED***models.insert(newModel, at: 0)
 ***REMOVED******REMOVED***attachmentModelsState = .initialized(models)
-***REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Renames the attachment associated with the given model.
@@ -181,7 +183,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***try await element.renameAttachment(attachment, name: newAttachmentName)
 ***REMOVED******REMOVED******REMOVED***attachmentModel.sync()
-***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -196,7 +197,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***guard case .initialized(var models) = attachmentModelsState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***models.removeAll { $0 == attachmentModel ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initialized(models)
-***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
