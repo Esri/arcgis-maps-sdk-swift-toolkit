@@ -39,18 +39,18 @@ struct AttachmentsFeatureElementView: View {
         !isPortraitOrientation
     }
     
-    /// The states of loading attachments.
-    private enum AttachmentLoadingState {
-        /// Attachments have not been loaded.
-        case notLoaded
-        /// Attachments are being loaded.
-        case loading
-        /// Attachments have been loaded.
-        case loaded([AttachmentModel])
+    /// The state of the attachment models.
+    private enum AttachmentModelsState {
+        /// Attachment models have not been initialized.
+        case notInitialized
+        /// Attachments are being fetched and wrapped with models.
+        case initializing
+        /// Attachments have been fetched and wrapped with models.
+        case initialized([AttachmentModel])
     }
     
-    /// The current load state of the attachments.
-    @State private var attachmentLoadingState: AttachmentLoadingState = .notLoaded
+    /// The current state of the attachment models.
+    @State private var attachmentModelsState = AttachmentModelsState.notInitialized
     
     /// Creates a new `AttachmentsFeatureElementView`.
     /// - Parameter featureElement: The `AttachmentsFeatureElement`.
@@ -63,11 +63,11 @@ struct AttachmentsFeatureElementView: View {
     
     var body: some View {
         Group {
-            switch attachmentLoadingState {
-            case .notLoaded, .loading:
+            switch attachmentModelsState {
+            case .notInitialized, .initializing:
                 ProgressView()
                     .padding()
-            case .loaded(let attachmentModels):
+            case .initialized(let attachmentModels):
                 if isShowingAttachmentsFormElement {
                     // If showing a form element, don't show attachments in
                     // a disclosure group, but also ALWAYS show
@@ -88,8 +88,8 @@ struct AttachmentsFeatureElementView: View {
             isEditable = newIsEditable
         }
         .task {
-            guard case .notLoaded = attachmentLoadingState else { return }
-            attachmentLoadingState = .loading
+            guard case .notInitialized = attachmentModelsState else { return }
+            attachmentModelsState = .initializing
             let attachments = (try? await featureElement.featureAttachments) ?? []
             
             var attachmentModels = attachments
@@ -108,7 +108,7 @@ struct AttachmentsFeatureElementView: View {
                 // display in the same order as the online Map Viewer.
                 attachmentModels = attachmentModels.reversed()
             }
-            attachmentLoadingState = .loaded(attachmentModels)
+            attachmentModelsState = .initialized(attachmentModels)
         }
     }
     
@@ -159,7 +159,7 @@ struct AttachmentsFeatureElementView: View {
     /// - Parameter attachment: The added attachment.
     @MainActor
     func onAdd(attachment: FeatureAttachment) -> Void {
-        guard case .loaded(var models) = attachmentLoadingState else { return }
+        guard case .initialized(var models) = attachmentModelsState else { return }
         let newModel = AttachmentModel(
             attachment: attachment,
             displayScale: displayScale,
@@ -167,7 +167,7 @@ struct AttachmentsFeatureElementView: View {
         )
         newModel.load()
         models.insert(newModel, at: 0)
-        attachmentLoadingState = .loaded(models)
+        attachmentModelsState = .initialized(models)
         formViewModel.evaluateExpressions()
     }
     
@@ -193,9 +193,9 @@ struct AttachmentsFeatureElementView: View {
         if let element = featureElement as? AttachmentsFormElement,
            let attachment = attachmentModel.attachment as? FormAttachment {
             try await element.deleteAttachment(attachment)
-            guard case .loaded(var models) = attachmentLoadingState else { return }
+            guard case .initialized(var models) = attachmentModelsState else { return }
             models.removeAll { $0 == attachmentModel }
-            attachmentLoadingState = .loaded(models)
+            attachmentModelsState = .initialized(models)
             formViewModel.evaluateExpressions()
         }
     }
