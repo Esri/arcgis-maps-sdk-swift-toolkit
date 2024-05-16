@@ -39,8 +39,12 @@ public struct PreplannedListItemView: View {
                     if !preplannedMapArea.portalItem.description.isEmpty {
                         Text(preplannedMapArea.portalItem.description)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color(uiColor: .secondaryLabel))
                             .lineLimit(2)
+                    } else {
+                        Text("The area has no description.")
+                            .font(.caption)
+                            .foregroundStyle(Color(uiColor: .tertiaryLabel))
                     }
                     if let error {
                         Text(error.localizedDescription)
@@ -70,7 +74,7 @@ public struct PreplannedListItemView: View {
                         } else {
                             // Map package is available for download.
                             Image(systemName: "arrow.down.circle")
-                                .foregroundColor(.accentColor)
+                                .foregroundStyle(Color.accentColor)
                         }
                     } else {
                         ProgressView()
