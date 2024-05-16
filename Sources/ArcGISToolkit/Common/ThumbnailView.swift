@@ -25,9 +25,8 @@ struct ThumbnailView: View  {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if attachmentModel.usingSystemImage,
-***REMOVED******REMOVED******REMOVED***   let systemName = attachmentModel.systemImageName {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: systemName)
+***REMOVED******REMOVED******REMOVED***if attachmentModel.usingSystemImage {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: attachmentModel.systemImageName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.template)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)

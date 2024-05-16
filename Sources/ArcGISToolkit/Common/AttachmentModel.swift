@@ -24,14 +24,10 @@ import QuickLook
 ***REMOVED***let attachment: FeatureAttachment
 ***REMOVED***
 ***REMOVED******REMOVED***/ The thumbnail representing the attachment.
-***REMOVED***@Published var thumbnail: UIImage? {
-***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***systemImageName = nil
-***REMOVED***
-***REMOVED***
+***REMOVED***@Published var thumbnail: UIImage?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name of the system SF symbol used instead of `thumbnail`.
-***REMOVED***@Published var systemImageName: String?
+***REMOVED***@Published var systemImageName: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `LoadStatus` of the feature attachment.
 ***REMOVED***@Published var loadStatus: LoadStatus = .notLoaded
@@ -42,7 +38,7 @@ import QuickLook
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the thumbnails is using a
 ***REMOVED******REMOVED***/ system image or an image generated from the feature attachment.
 ***REMOVED***var usingSystemImage: Bool {
-***REMOVED******REMOVED***systemImageName != nil
+***REMOVED******REMOVED***loadStatus != .loaded || thumbnail == nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The pixel density of the display on the intended device.
