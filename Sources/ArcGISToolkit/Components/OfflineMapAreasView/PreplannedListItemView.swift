@@ -95,8 +95,12 @@ public struct PreplannedListItemView: View {
             }
             .task {
                 do {
+                    // Load preplanned map area to load packaging status.
                     try await preplannedMapModel.preplannedMapArea.load()
                 } catch {
+                    // Present the error if the map area has been packaged. Otherwise,
+                    // ignore the error when the map area is still packaging since the map
+                    // area cannot load while packaging.
                     if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
                         self.error = error
                     }
