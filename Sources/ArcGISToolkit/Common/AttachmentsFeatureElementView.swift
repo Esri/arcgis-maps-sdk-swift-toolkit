@@ -50,7 +50,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current state of the attachment models.
-***REMOVED***@State private var attachmentModelsState = AttachmentModelsState.notInitialized
+***REMOVED***@State private var attachmentModelsState: AttachmentModelsState = .notInitialized
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a new `AttachmentsFeatureElementView`.
 ***REMOVED******REMOVED***/ - Parameter featureElement: The `AttachmentsFeatureElement`.
