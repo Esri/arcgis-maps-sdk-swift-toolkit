@@ -18,8 +18,10 @@ import ArcGIS
 public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var preplannedMapModel: PreplannedMapModel
+    
     /// A Boolean value indicating whether the preplanned map area can be downloaded.
     @State private var canDownload: Bool?
+    
     /// The error for the preplanned map.
     @State var error: Error?
     
@@ -37,12 +39,12 @@ public struct PreplannedListItemView: View {
                     if !preplannedMapArea.portalItem.description.isEmpty {
                         Text(preplannedMapArea.portalItem.description)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                             .lineLimit(2)
                     }
                     if let error {
                         Text(error.localizedDescription)
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                     }
                 }
                 Spacer()
@@ -51,8 +53,8 @@ public struct PreplannedListItemView: View {
                     Image(systemName: "checkmark.circle.fill")
                 case .failure(let error):
                     Image(systemName: "exclamationmark.circle")
-                        .foregroundColor(.red)
-                        .task {
+                        .foregroundStyle(.red)
+                        .onAppear {
                             self.error = error
                         }
                 case .none:
@@ -64,7 +66,7 @@ public struct PreplannedListItemView: View {
                                 Text("packaging")
                                     .font(.footnote)
                             }
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                         } else {
                             // Map package is available for download.
                             Image(systemName: "arrow.down.circle")

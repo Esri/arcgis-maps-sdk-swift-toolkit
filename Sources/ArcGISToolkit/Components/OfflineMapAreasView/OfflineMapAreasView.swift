@@ -83,7 +83,7 @@ public struct OfflineMapAreasView: View {
             VStack(alignment: .center) {
                 Image(systemName: "exclamationmark.circle")
                     .imageScale(.large)
-                    .foregroundColor(.red)
+                    .foregroundStyle(.red)
                 Text(error.localizedDescription)
             }
             .frame(maxWidth: .infinity)
@@ -99,7 +99,7 @@ public struct OfflineMapAreasView: View {
                 .bold()
             Text("You don't have any offline map areas yet.")
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
     }
@@ -130,7 +130,7 @@ public extension OfflineMapAreasView {
         /// Gets the preplanned map areas from the offline map task and creates the
         /// offline map models.
         func makePreplannedOfflineMapModels() async {
-            self.preplannedMapModels = await Result {
+            preplannedMapModels = await Result {
                 try await offlineMapTask.preplannedMapAreas
                     .sorted(using: KeyPathComparator(\.portalItem.title))
                     .compactMap {
@@ -139,7 +139,7 @@ public extension OfflineMapAreasView {
                         )
                     }
             }
-            if let models = try? preplannedMapModels?.get() {
+            if let models = try? preplannedMapModels!.get() {
                 hasPreplannedMapAreas = !models.isEmpty
             }
         }
