@@ -33,7 +33,7 @@ struct LoadableImageView: View {
             case .failure:
                 Image(systemName: "exclamationmark.circle")
                     .aspectRatio(contentMode: .fit)
-                    .foregroundColor(.red)
+                    .foregroundStyle(.red)
             case .success(let image):
                 Image(uiImage: image)
                     .resizable()
