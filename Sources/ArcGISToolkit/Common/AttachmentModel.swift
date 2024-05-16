@@ -24,14 +24,10 @@ import SwiftUI
     let attachment: FeatureAttachment
     
     /// The thumbnail representing the attachment.
-    @Published var thumbnail: UIImage? {
-        didSet {
-            systemImageName = nil
-        }
-    }
+    @Published var thumbnail: UIImage?
     
     /// The name of the system SF symbol used instead of `thumbnail`.
-    @Published var systemImageName: String?
+    @Published var systemImageName: String
     
     /// The `LoadStatus` of the feature attachment.
     @Published var loadStatus: LoadStatus = .notLoaded
@@ -42,7 +38,7 @@ import SwiftUI
     /// A Boolean value specifying whether the thumbnails is using a
     /// system image or an image generated from the feature attachment.
     var usingSystemImage: Bool {
-        systemImageName != nil
+        loadStatus != .loaded || thumbnail == nil
     }
     
     /// The pixel density of the display on the intended device.

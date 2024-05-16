@@ -25,9 +25,8 @@ struct ThumbnailView: View  {
     
     var body: some View {
         Group {
-            if attachmentModel.usingSystemImage,
-               let systemName = attachmentModel.systemImageName {
-                Image(systemName: systemName)
+            if attachmentModel.usingSystemImage {
+                Image(systemName: attachmentModel.systemImageName)
                     .resizable()
                     .renderingMode(.template)
                     .aspectRatio(contentMode: .fit)
