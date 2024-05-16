@@ -16,25 +16,6 @@
 ***REMOVED***
 
 extension View {
-***REMOVED******REMOVED***/ Modifier for watching `AttachmentsFormElement.attachments`.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - element: The form element to watch for changes on.
-***REMOVED******REMOVED***/   - action: The action which watches for changes.
-***REMOVED******REMOVED***/ - Returns: The modified view.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ Changes will not be monitored if the provided element is not an `AttachmentsFormElement`.
-***REMOVED***@ViewBuilder func onAttachmentsChange(
-***REMOVED******REMOVED***of element: AttachmentsFeatureElement,
-***REMOVED******REMOVED***action: @escaping ((_ newAttachments: [FormAttachment]) -> Void)
-***REMOVED***) -> some View {
-***REMOVED******REMOVED***if let attachmentsFormElement = element as? AttachmentsFormElement {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAttachmentsChange(of: attachmentsFormElement, action: action)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Modifier for watching `AttachmentsFormElement.isEditable`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The attachment form element to watch for changes on.
