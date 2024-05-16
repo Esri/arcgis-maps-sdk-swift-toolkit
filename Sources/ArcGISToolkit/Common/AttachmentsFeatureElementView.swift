@@ -50,7 +50,7 @@ struct AttachmentsFeatureElementView: View {
     }
     
     /// The current state of the attachment models.
-    @State private var attachmentModelsState = AttachmentModelsState.notInitialized
+    @State private var attachmentModelsState: AttachmentModelsState = .notInitialized
     
     /// Creates a new `AttachmentsFeatureElementView`.
     /// - Parameter featureElement: The `AttachmentsFeatureElement`.
