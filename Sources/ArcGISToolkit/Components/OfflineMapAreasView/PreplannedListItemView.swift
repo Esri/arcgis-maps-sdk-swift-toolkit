@@ -19,7 +19,10 @@ public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var preplannedMapModel: PreplannedMapModel
     
-    /// A Boolean value indicating whether the preplanned map area can be downloaded.
+    /// A Boolean value indicating whether the preplanned map area can be downloaded. This is `true`
+    /// when the preplanned map area is loaded and the packaging status is `.complete`, and `false`
+    /// when the packaging status is `.processing`. If the preplanned map area has not yet loaded then
+    /// this is `nil`,
     @State private var canDownload: Bool?
     
     /// The error for the preplanned map.
@@ -77,20 +80,37 @@ public struct PreplannedListItemView: View {
                                 .foregroundStyle(Color.accentColor)
                         }
                     } else {
-                        ProgressView()
-                            .frame(maxWidth: .infinity)
+                        // Map is still loading.
+                        VStack(alignment: .trailing) {
+                            ProgressView()
+                                .frame(maxWidth: 20)
+                                .controlSize(.mini)
+                        }
                     }
                 }
             }
             .onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { status in
                 let packagingStatus = preplannedMapModel.preplannedMapArea.packagingStatus
-                if status == .failed || packagingStatus == .processing {
-                    // If the preplanned map area fails to load, it may not be packaged.
+                
+                switch status {
+                case .loaded:
+                    // Allow downloading the map area when packaging is complete.
+                    withAnimation(.easeIn) {
+                        canDownload = (packagingStatus == .complete || packagingStatus == nil) ? true : false
+                    }
+                case .loading:
+                    // Disable downloading the map area when packaging. Otherwise,
+                    // do not set `canDownload` since the map area is still loading.
+                    if packagingStatus == .processing {
+                        // Disable downloding map area when still packaging.
+                        canDownload = false
+                    }
+                case .notLoaded:
+                    // Do not set `canDownload` until map has loaded.
+                    return
+                case .failed:
+                    // Disable downloading when the map fails to load.
                     canDownload = false
-                } else if packagingStatus == .complete || packagingStatus == nil {
-                    // Otherwise, check the packaging status to determine if the map area is
-                    // available to download.
-                    canDownload = true
                 }
             }
             .task {
