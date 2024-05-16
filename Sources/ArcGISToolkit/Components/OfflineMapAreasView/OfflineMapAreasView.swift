@@ -145,3 +145,14 @@ public extension OfflineMapAreasView {
         }
     }
 }
+
+#Preview {
+    OfflineMapAreasView(
+        map: Map(
+            item: PortalItem(
+                portal: .arcGISOnline(connection: .anonymous),
+                id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+            )
+        )
+    )
+}
