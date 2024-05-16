@@ -54,6 +54,8 @@ public struct PreplannedListItemView: View {
                         Text(error.localizedDescription)
                             .font(.footnote)
                             .foregroundStyle(.red)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.8)
                     }
                 }
                 Spacer()
