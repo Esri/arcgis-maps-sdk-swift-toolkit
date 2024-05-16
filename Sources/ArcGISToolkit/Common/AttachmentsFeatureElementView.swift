@@ -84,6 +84,9 @@ struct AttachmentsFeatureElementView: View {
                 }
             }
         }
+        .onAttachmentsChange(of: featureElement) { _ in
+            formViewModel.evaluateExpressions()
+        }
         .onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
             isEditable = newIsEditable
         }
@@ -168,7 +171,6 @@ struct AttachmentsFeatureElementView: View {
         newModel.load()
         models.insert(newModel, at: 0)
         attachmentModelsState = .initialized(models)
-        formViewModel.evaluateExpressions()
     }
     
     /// Renames the attachment associated with the given model.
@@ -181,7 +183,6 @@ struct AttachmentsFeatureElementView: View {
            let attachment = attachmentModel.attachment as? FormAttachment {
             try await element.renameAttachment(attachment, name: newAttachmentName)
             attachmentModel.sync()
-            formViewModel.evaluateExpressions()
         }
     }
     
@@ -196,7 +197,6 @@ struct AttachmentsFeatureElementView: View {
             guard case .initialized(var models) = attachmentModelsState else { return }
             models.removeAll { $0 == attachmentModel }
             attachmentModelsState = .initialized(models)
-            formViewModel.evaluateExpressions()
         }
     }
 }
