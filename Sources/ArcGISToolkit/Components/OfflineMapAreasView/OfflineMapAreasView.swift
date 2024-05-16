@@ -83,7 +83,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.imageScale(.large)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.red)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
@@ -99,7 +99,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.bold()
 ***REMOVED******REMOVED******REMOVED***Text("You don't have any offline map areas yet.")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
@@ -130,7 +130,7 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ Gets the preplanned map areas from the offline map task and creates the
 ***REMOVED******REMOVED******REMOVED***/ offline map models.
 ***REMOVED******REMOVED***func makePreplannedOfflineMapModels() async {
-***REMOVED******REMOVED******REMOVED***self.preplannedMapModels = await Result {
+***REMOVED******REMOVED******REMOVED***preplannedMapModels = await Result {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await offlineMapTask.preplannedMapAreas
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sorted(using: KeyPathComparator(\.portalItem.title))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.compactMap {
@@ -139,7 +139,7 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let models = try? preplannedMapModels?.get() {
+***REMOVED******REMOVED******REMOVED***if let models = try? preplannedMapModels!.get() {
 ***REMOVED******REMOVED******REMOVED******REMOVED***hasPreplannedMapAreas = !models.isEmpty
 ***REMOVED******REMOVED***
 ***REMOVED***
