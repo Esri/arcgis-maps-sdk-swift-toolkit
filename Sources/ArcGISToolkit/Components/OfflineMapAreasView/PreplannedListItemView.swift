@@ -52,40 +52,48 @@ public struct PreplannedListItemView: View {
                     }
                     if let error {
                         Text(error.localizedDescription)
+                            .font(.footnote)
                             .foregroundStyle(.red)
                     }
                 }
                 Spacer()
-                switch preplannedMapModel.result {
-                case .success:
-                    Image(systemName: "checkmark.circle.fill")
-                case .failure(let error):
-                    Image(systemName: "exclamationmark.circle")
-                        .foregroundStyle(.red)
-                        .onAppear {
-                            self.error = error
-                        }
-                case .none:
-                    if let canDownload {
-                        if !canDownload {
-                            // Map is still packaging.
-                            VStack {
-                                Image(systemName: "clock.badge.xmark")
-                                Text("packaging")
-                                    .font(.footnote)
+                
+                if let job = preplannedMapModel.job,
+                   job.status == .started {
+                    ProgressView(job.progress)
+                        .progressViewStyle(.gauge)
+                } else {
+                    switch preplannedMapModel.result {
+                    case .success:
+                        Image(systemName: "checkmark.circle.fill")
+                    case .failure(let error):
+                        Image(systemName: "exclamationmark.circle")
+                            .foregroundStyle(.red)
+                            .onAppear {
+                                self.error = error
                             }
-                            .foregroundStyle(.secondary)
+                    case .none:
+                        if let canDownload {
+                            if !canDownload {
+                                // Map is still packaging.
+                                VStack {
+                                    Image(systemName: "clock.badge.xmark")
+                                    Text("packaging")
+                                        .font(.footnote)
+                                }
+                                .foregroundStyle(.secondary)
+                            } else {
+                                // Map package is available for download.
+                                Image(systemName: "arrow.down.circle")
+                                    .foregroundStyle(Color.accentColor)
+                            }
                         } else {
-                            // Map package is available for download.
-                            Image(systemName: "arrow.down.circle")
-                                .foregroundStyle(Color.accentColor)
-                        }
-                    } else {
-                        // Map is still loading.
-                        VStack(alignment: .trailing) {
-                            ProgressView()
-                                .frame(maxWidth: 20)
-                                .controlSize(.mini)
+                            // Map is still loading.
+                            VStack(alignment: .trailing) {
+                                ProgressView()
+                                    .frame(maxWidth: 20)
+                                    .controlSize(.mini)
+                            }
                         }
                     }
                 }
