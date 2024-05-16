@@ -241,26 +241,3 @@ extension AttachmentsFeatureElementView {
 ***REMOVED******REMOVED***featureElement is AttachmentsFormElement
 ***REMOVED***
 ***REMOVED***
-
-extension View {
-***REMOVED******REMOVED***/ Modifier for watching `AttachmentsFormElement.isEditable`.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - element: The attachment form element to watch for changes on.
-***REMOVED******REMOVED***/   - action: The action which watches for changes.
-***REMOVED******REMOVED***/ - Returns: The modified view.
-***REMOVED***@ViewBuilder func onAttachmentIsEditableChange(
-***REMOVED******REMOVED***of element: AttachmentsFeatureElement,
-***REMOVED******REMOVED***action: @escaping (_ newIsEditable: Bool) -> Void
-***REMOVED***) -> some View {
-***REMOVED******REMOVED***if let attachmentsFormElement = element as? AttachmentsFormElement {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED******REMOVED******REMOVED******REMOVED***.task(id: ObjectIdentifier(attachmentsFormElement)) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for await isEditable in attachmentsFormElement.$isEditable {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(isEditable)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***self
-***REMOVED***
-***REMOVED***
-***REMOVED***
