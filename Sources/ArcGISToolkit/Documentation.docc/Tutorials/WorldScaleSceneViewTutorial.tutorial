@@ -41,6 +41,22 @@
                 will not start until authorized.
                 @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep4)
             }
+            
+            @Step {
+                Start the location datasource and get the initial location.
+                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep5)
+            }
+            
+            @Step {
+                To display a ring around the initial location, create a graphic using the 
+                initial location and add it to the graphics overlay.
+                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep6)
+            }
+            
+            @Step {
+                Stop the location datasource after the initial location is retrieved.
+                @Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep7)
+            }
         }
     }
 }
