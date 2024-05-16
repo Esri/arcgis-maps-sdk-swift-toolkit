@@ -145,3 +145,14 @@ public extension OfflineMapAreasView {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+#Preview {
+***REMOVED***OfflineMapAreasView(
+***REMOVED******REMOVED***map: Map(
+***REMOVED******REMOVED******REMOVED***item: PortalItem(
+***REMOVED******REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
+***REMOVED******REMOVED******REMOVED******REMOVED***id: PortalItem.ID("acc027394bc84c2fb04d1ed317aac674")!
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***)
+***REMOVED***
