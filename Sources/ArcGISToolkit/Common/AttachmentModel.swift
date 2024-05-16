@@ -68,6 +68,8 @@ import QuickLook
 ***REMOVED******REMOVED***self.thumbnailSize = thumbnailSize
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch attachment.featureAttachmentKind {
+***REMOVED******REMOVED***case .audio:
+***REMOVED******REMOVED******REMOVED***systemImageName = "waveform"
 ***REMOVED******REMOVED***case .image:
 ***REMOVED******REMOVED******REMOVED***systemImageName = "photo"
 ***REMOVED******REMOVED***case .video:
