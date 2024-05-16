@@ -29,7 +29,17 @@ public struct OfflineMapAreasView: View {
     public var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Preplanned Map Areas").bold()) {
+                Section(header: HStack {
+                    Text("Preplanned Map Areas").bold()
+                    Spacer()
+                    Button {
+                        // Reload the preplanned map areas.
+                    } label: {
+                        Image(systemName: "arrow.clockwise")
+                    }
+                    .controlSize(.mini)
+                }.frame(maxWidth: .infinity)
+                ) {
                     preplannedMapAreas
                 }
                 .textCase(nil)
