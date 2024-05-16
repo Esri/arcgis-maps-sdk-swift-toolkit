@@ -16,25 +16,6 @@ import ArcGIS
 import SwiftUI
 
 extension View {
-    /// Modifier for watching `AttachmentsFormElement.attachments`.
-    /// - Parameters:
-    ///   - element: The form element to watch for changes on.
-    ///   - action: The action which watches for changes.
-    /// - Returns: The modified view.
-    ///
-    /// Changes will not be monitored if the provided element is not an `AttachmentsFormElement`.
-    @ViewBuilder func onAttachmentsChange(
-        of element: AttachmentsFeatureElement,
-        action: @escaping ((_ newAttachments: [FormAttachment]) -> Void)
-    ) -> some View {
-        if let attachmentsFormElement = element as? AttachmentsFormElement {
-            self
-                .onAttachmentsChange(of: attachmentsFormElement, action: action)
-        } else {
-            self
-        }
-    }
-    
     /// Modifier for watching `AttachmentsFormElement.isEditable`.
     /// - Parameters:
     ///   - element: The attachment form element to watch for changes on.
