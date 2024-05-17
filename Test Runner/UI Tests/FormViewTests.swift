@@ -288,7 +288,6 @@ final class FeatureFormViewTests: XCTestCase {
     
     func testCase_1_4() {
         let app = XCUIApplication()
-        let clearButton = app.buttons["numbers Clear Button"]
         let footer = app.staticTexts["numbers Footer"]
         let formTitle = app.staticTexts["Domain"]
         let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -326,8 +325,8 @@ final class FeatureFormViewTests: XCTestCase {
             "Enter value from 2.0 to 5.0"
         )
         
-        clearButton.tap()
-        
+        // Highlight/select the current value and replace it
+        textField.doubleTap()
         textField.typeText("3")
         
         expectation(
@@ -336,8 +335,8 @@ final class FeatureFormViewTests: XCTestCase {
         )
         waitForExpectations(timeout: 10, handler: nil)
         
-        clearButton.tap()
-        
+        // Highlight/select the current value and replace it
+        textField.doubleTap()
         textField.typeText("6")
         
         XCTAssertEqual(
