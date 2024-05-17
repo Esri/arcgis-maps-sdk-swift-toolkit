@@ -288,7 +288,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***func testCase_1_4() {
 ***REMOVED******REMOVED***let app = XCUIApplication()
-***REMOVED******REMOVED***let clearButton = app.buttons["numbers Clear Button"]
 ***REMOVED******REMOVED***let footer = app.staticTexts["numbers Footer"]
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Domain"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -326,8 +325,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***"Enter value from 2.0 to 5.0"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***clearButton.tap()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Highlight/select the current value and replace it
+***REMOVED******REMOVED***textField.doubleTap()
 ***REMOVED******REMOVED***textField.typeText("3")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***expectation(
@@ -336,8 +335,8 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***waitForExpectations(timeout: 10, handler: nil)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***clearButton.tap()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Highlight/select the current value and replace it
+***REMOVED******REMOVED***textField.doubleTap()
 ***REMOVED******REMOVED***textField.typeText("6")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
