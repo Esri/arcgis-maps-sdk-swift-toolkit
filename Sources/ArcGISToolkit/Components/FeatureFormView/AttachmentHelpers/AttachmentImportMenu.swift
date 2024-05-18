@@ -25,10 +25,8 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `AttachmentImportMenu`
 ***REMOVED******REMOVED***/ - Parameter element: The attachment form element displaying the menu.
-***REMOVED******REMOVED***/ - Parameter onAdd: The action to perform when an attachment is added.
-***REMOVED***init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
+***REMOVED***init(element: AttachmentsFormElement) {
 ***REMOVED******REMOVED***self.element = element
-***REMOVED******REMOVED***self.onAdd = onAdd
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment camera controller is presented.
@@ -45,9 +43,6 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The new attachment retrieved from the device's camera.
 ***REMOVED***@State private var capturedImage: UIImage?
-***REMOVED***
-***REMOVED******REMOVED***/ The action to perform when an attachment is added.
-***REMOVED***let onAdd: ((FeatureAttachment) async throws -> Void)?
 ***REMOVED***
 ***REMOVED***private func takePhotoOrVideoButton() -> Button<some View> {
 ***REMOVED***   Button {
@@ -128,13 +123,12 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: Refactor naming scheme. Ref Apollo #682
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(element.attachments.count + 1).\(newAttachmentImportData.contentType.split(separator: "/").last!)"
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let newAttachment = try await element.addAttachment(
+***REMOVED******REMOVED******REMOVED******REMOVED***_ = try await element.addAttachment(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Can this be better? What does legacy do?
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: fileName,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: newAttachmentImportData.contentType,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: newAttachmentImportData.data
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***try await onAdd?(newAttachment)
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: Figure out error handling
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("Error adding attachment: \(error)")
