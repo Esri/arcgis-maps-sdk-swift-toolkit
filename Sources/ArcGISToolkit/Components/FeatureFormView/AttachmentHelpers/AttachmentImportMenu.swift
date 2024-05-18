@@ -25,10 +25,8 @@ struct AttachmentImportMenu: View {
     
     /// Creates an `AttachmentImportMenu`
     /// - Parameter element: The attachment form element displaying the menu.
-    /// - Parameter onAdd: The action to perform when an attachment is added.
-    init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
+    init(element: AttachmentsFormElement) {
         self.element = element
-        self.onAdd = onAdd
     }
     
     /// A Boolean value indicating whether the attachment camera controller is presented.
@@ -45,9 +43,6 @@ struct AttachmentImportMenu: View {
     
     /// The new attachment retrieved from the device's camera.
     @State private var capturedImage: UIImage?
-    
-    /// The action to perform when an attachment is added.
-    let onAdd: ((FeatureAttachment) async throws -> Void)?
     
     private func takePhotoOrVideoButton() -> Button<some View> {
        Button {
@@ -128,13 +123,12 @@ struct AttachmentImportMenu: View {
                     // TODO: Refactor naming scheme. Ref Apollo #682
                     fileName = "Attachment \(element.attachments.count + 1).\(newAttachmentImportData.contentType.split(separator: "/").last!)"
                 }
-                let newAttachment = try await element.addAttachment(
+                _ = try await element.addAttachment(
                     // Can this be better? What does legacy do?
                     name: fileName,
                     contentType: newAttachmentImportData.contentType,
                     data: newAttachmentImportData.data
                 )
-                try await onAdd?(newAttachment)
             } catch {
                 // TODO: Figure out error handling
                 print("Error adding attachment: \(error)")
