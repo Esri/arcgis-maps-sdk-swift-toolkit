@@ -84,8 +84,20 @@ struct AttachmentsFeatureElementView: View {
                 }
             }
         }
-        .onAttachmentsChange(of: featureElement) { _ in
-            formViewModel.evaluateExpressions()
+        .task {
+            if let attachmentsFormElement = featureElement as? AttachmentsFormElement {
+                for await (change, attachment) in attachmentsFormElement.attachmentChanged {
+                    switch change {
+                    case .addition:
+                        onAttachmentAdded(attachment)
+                    case .deletion:
+                        onAttachmentDeleted(attachment)
+                    case .rename:
+                        onAttachmentRenamed(attachment)
+                    }
+                    formViewModel.evaluateExpressions()
+                }
+            }
         }
         .onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
             isEditable = newIsEditable
@@ -121,19 +133,17 @@ struct AttachmentsFeatureElementView: View {
             AttachmentList(attachmentModels: attachmentModels)
         case .preview:
             AttachmentPreview(
+                element: featureElement,
                 attachmentModels: attachmentModels,
-                editControlsDisabled: !isEditable,
-                onRename: onRename,
-                onDelete: onDelete
+                editControlsDisabled: !isEditable
             )
         case .auto:
             Group {
                 if isRegularWidth {
                     AttachmentPreview(
+                        element: featureElement,
                         attachmentModels: attachmentModels,
-                        editControlsDisabled: !isEditable,
-                        onRename: onRename,
-                        onDelete: onDelete
+                        editControlsDisabled: !isEditable
                     )
                 } else {
                     AttachmentList(attachmentModels: attachmentModels)
@@ -153,15 +163,14 @@ struct AttachmentsFeatureElementView: View {
             Spacer()
             if isEditable,
                let element = featureElement as? AttachmentsFormElement {
-                AttachmentImportMenu(element: element, onAdd: onAdd)
+                AttachmentImportMenu(element: element)
             }
         }
     }
     
     /// Creates a model for the new attachment for display.
-    /// - Parameter attachment: The added attachment.
-    @MainActor
-    func onAdd(attachment: FeatureAttachment) -> Void {
+    /// - Parameter attachment: The added form attachment.
+    private func onAttachmentAdded(_ attachment: FormAttachment) -> Void {
         guard case .initialized(var models) = attachmentModelsState else { return }
         let newModel = AttachmentModel(
             attachment: attachment,
@@ -173,30 +182,20 @@ struct AttachmentsFeatureElementView: View {
         attachmentModelsState = .initialized(models)
     }
     
-    /// Renames the attachment associated with the given model.
-    /// - Parameters:
-    ///   - attachmentModel: The model for the attachment to rename.
-    ///   - newAttachmentName: The new attachment name.
-    @MainActor
-    func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
-        if let element = featureElement as? AttachmentsFormElement,
-           let attachment = attachmentModel.attachment as? FormAttachment {
-            try await element.renameAttachment(attachment, name: newAttachmentName)
-            attachmentModel.sync()
-        }
+    /// Deletes the attachment model for the given attachment.
+    /// - Parameter attachment: The deleted form attachment.
+    private func onAttachmentDeleted(_ attachment: FormAttachment) -> Void {
+        guard case .initialized(var models) = attachmentModelsState else { return }
+        models.removeAll { $0.attachment as? FormAttachment === attachment }
+        attachmentModelsState = .initialized(models)
     }
     
-    /// Deletes the attachment associated with the given model.
-    /// - Parameters:
-    ///   - attachmentModel: The model for the attachment to delete.
-    @MainActor
-    func onDelete(attachmentModel: AttachmentModel) async throws -> Void {
-        if let element = featureElement as? AttachmentsFormElement,
-           let attachment = attachmentModel.attachment as? FormAttachment {
-            try await element.deleteAttachment(attachment)
-            guard case .initialized(var models) = attachmentModelsState else { return }
-            models.removeAll { $0 == attachmentModel }
-            attachmentModelsState = .initialized(models)
+    /// Synchronizes the model for the renamed attachment.
+    /// - Parameter attachment: The renamed form attachment.
+    private func onAttachmentRenamed(_ attachment: FormAttachment) -> Void {
+        guard case .initialized(let models) = attachmentModelsState else { return }
+        if let model = models.first(where: { $0.attachment as? FormAttachment === attachment }) {
+            model.sync()
         }
     }
 }
@@ -239,5 +238,28 @@ extension AttachmentsFeatureElementView {
     /// is an `AttachmentsFormElement`.
     var isShowingAttachmentsFormElement: Bool {
         featureElement is AttachmentsFormElement
+    }
+}
+
+extension View {
+    /// Modifier for watching `AttachmentsFormElement.isEditable`.
+    /// - Parameters:
+    ///   - element: The attachment form element to watch for changes on.
+    ///   - action: The action which watches for changes.
+    /// - Returns: The modified view.
+    @ViewBuilder func onAttachmentIsEditableChange(
+        of element: AttachmentsFeatureElement,
+        action: @escaping (_ newIsEditable: Bool) -> Void
+    ) -> some View {
+        if let attachmentsFormElement = element as? AttachmentsFormElement {
+            self
+                .task(id: ObjectIdentifier(attachmentsFormElement)) {
+                    for await isEditable in attachmentsFormElement.$isEditable {
+                        action(isEditable)
+                    }
+                }
+        } else {
+            self
+        }
     }
 }
