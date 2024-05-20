@@ -40,11 +40,8 @@ struct AttachmentImportMenu: View {
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
     
-    /// The new image attachment data retrieved from the photos picker.
+    /// The new image or video attachment data retrieved from the photos picker.
     @State private var newAttachmentImportData: AttachmentImportData?
-    
-    /// The new attachment retrieved from the device's camera.
-    @State private var capturedImage: UIImage?
     
     /// The action to perform when an attachment is added.
     let onAdd: ((FeatureAttachment) async throws -> Void)?
@@ -141,11 +138,6 @@ struct AttachmentImportMenu: View {
             }
             self.newAttachmentImportData = nil
         }
-        .task(id: capturedImage) {
-            guard let capturedImage, let data = capturedImage.pngData() else { return }
-            newAttachmentImportData = AttachmentImportData(data: data, contentType: "image/png")
-            self.capturedImage = nil
-        }
         .fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
             switch result {
             case .success(let url):
@@ -168,7 +160,7 @@ struct AttachmentImportMenu: View {
             }
         }
         .fullScreenCover(isPresented: $cameraIsShowing) {
-            AttachmentCameraController(capturedImage: $capturedImage)
+            AttachmentCameraController(capturedMedia: $newAttachmentImportData)
         }
         .modifier(
             AttachmentPhotoPicker(
