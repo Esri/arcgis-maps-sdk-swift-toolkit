@@ -60,41 +60,50 @@ public struct PreplannedListItemView: View {
                 }
                 Spacer()
                 
-                if let job = preplannedMapModel.job,
-                   job.status == .started {
-                    ProgressView(job.progress)
-                        .progressViewStyle(.gauge)
+                if let portalItemID = preplannedMapModel.preplannedMapArea.portalItem.id,
+                   let mobileMapPackage = mapViewModel.mobileMapPackages.first(where: { $0.fileURL.lastPathComponent == portalItemID.rawValue.appending(".mmpk") }) {
+                    // Map is downloaded.
+                    Image(systemName: "checkmark.circle")
+                        .foregroundStyle(.secondary)
                 } else {
-                    switch preplannedMapModel.result {
-                    case .success:
-                        Image(systemName: "checkmark.circle.fill")
-                    case .failure(let error):
-                        Image(systemName: "exclamationmark.circle")
-                            .foregroundStyle(.red)
-                            .onAppear {
-                                self.error = error
-                            }
-                    case .none:
-                        if let canDownload {
-                            if !canDownload {
-                                // Map is still packaging.
-                                VStack {
-                                    Image(systemName: "clock.badge.xmark")
-                                    Text("packaging")
-                                        .font(.footnote)
-                                }
+                    
+                    if let job = preplannedMapModel.job,
+                       job.status == .started {
+                        ProgressView(job.progress)
+                            .progressViewStyle(.gauge)
+                    } else {
+                        switch preplannedMapModel.result {
+                        case .success:
+                            Image(systemName: "checkmark.circle")
                                 .foregroundStyle(.secondary)
+                        case .failure(let error):
+                            Image(systemName: "exclamationmark.circle")
+                                .foregroundStyle(.red)
+                                .onAppear {
+                                    self.error = error
+                                }
+                        case .none:
+                            if let canDownload {
+                                if !canDownload {
+                                    // Map is still packaging.
+                                    VStack {
+                                        Image(systemName: "clock.badge.xmark")
+                                        Text("packaging")
+                                            .font(.footnote)
+                                    }
+                                    .foregroundStyle(.secondary)
+                                } else {
+                                    // Map package is available for download.
+                                    Image(systemName: "arrow.down.circle")
+                                        .foregroundStyle(Color.accentColor)
+                                }
                             } else {
-                                // Map package is available for download.
-                                Image(systemName: "arrow.down.circle")
-                                    .foregroundStyle(Color.accentColor)
-                            }
-                        } else {
-                            // Map is still loading.
-                            VStack(alignment: .trailing) {
-                                ProgressView()
-                                    .frame(maxWidth: 20)
-                                    .controlSize(.mini)
+                                // Map is still loading.
+                                VStack(alignment: .trailing) {
+                                    ProgressView()
+                                        .frame(maxWidth: 20)
+                                        .controlSize(.mini)
+                                }
                             }
                         }
                     }
@@ -105,7 +114,7 @@ public struct PreplannedListItemView: View {
                 
                 switch status {
                 case .loaded:
-                    // Allow downloading the map area when packaging is complete, 
+                    // Allow downloading the map area when packaging is complete,
                     // or when the packaging status is `nil` for compatibility with
                     // legacy webmaps that have incomplete metadata.
                     withAnimation(.easeIn) {
