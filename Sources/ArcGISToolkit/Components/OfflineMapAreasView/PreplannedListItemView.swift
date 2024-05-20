@@ -94,7 +94,9 @@ public struct PreplannedListItemView: View {
                 
                 switch status {
                 case .loaded:
-                    // Allow downloading the map area when packaging is complete.
+                    // Allow downloading the map area when packaging is complete, 
+                    // or when the packaging status is `nil` for compatibility with
+                    // legacy webmaps that have incomplete metadata.
                     withAnimation(.easeIn) {
                         canDownload = (packagingStatus == .complete || packagingStatus == nil) ? true : false
                     }
