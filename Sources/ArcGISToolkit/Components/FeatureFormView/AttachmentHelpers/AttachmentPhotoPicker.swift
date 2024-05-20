@@ -23,7 +23,7 @@ struct AttachmentPhotoPicker: ViewModifier {
     
     /// The new attachment data retrieved from the photos picker.
     @Binding var newAttachmentImportData: AttachmentImportData?
-
+    
     /// A Boolean value indicating whether the photos picker is presented.
     @Binding var photoPickerIsPresented: Bool
     
