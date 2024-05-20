@@ -61,6 +61,7 @@ public struct OfflineMapAreasView: View {
             }
             .task {
                 await mapViewModel.makePreplannedOfflineMapModels()
+                mapViewModel.loadMobileMapPackages()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -127,7 +128,11 @@ public extension OfflineMapAreasView {
         /// The offline map task.
         private let offlineMapTask: OfflineMapTask
         
+        /// The url for the documents directory.
         private let documentsDirectory: URL = FileManager.default.documentsDirectory
+        
+        /// The mobile map packages created from mmpk files in the documents directory.
+        @Published var mobileMapPackages = [MobileMapPackage]()
         
         /// The preplanned offline map information.
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
@@ -208,6 +213,20 @@ public extension OfflineMapAreasView {
                 } else {
                     // If we have a failure, then keep the online map selected.
                     selectedMap = oldValue
+                }
+            }
+        }
+        
+        func loadMobileMapPackages() {
+            // Create mobile map packages with saved mmpk files.
+            if let files = try? FileManager.default.contentsOfDirectory(
+                at: documentsDirectory,
+                includingPropertiesForKeys: nil,
+                options: .skipsHiddenFiles
+            ) {
+                for fileURL in files where fileURL.pathExtension == "mmpk" {
+                    let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
+                    self.mobileMapPackages.append(mobileMapPackage)
                 }
             }
         }
