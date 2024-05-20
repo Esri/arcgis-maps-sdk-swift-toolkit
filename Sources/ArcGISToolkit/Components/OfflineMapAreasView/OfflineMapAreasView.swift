@@ -61,6 +61,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
+***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.loadMobileMapPackages()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
@@ -127,7 +128,11 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ The offline map task.
 ***REMOVED******REMOVED***private let offlineMapTask: OfflineMapTask
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The url for the documents directory.
 ***REMOVED******REMOVED***private let documentsDirectory: URL = FileManager.default.documentsDirectory
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The mobile map packages created from mmpk files in the documents directory.
+***REMOVED******REMOVED***@Published var mobileMapPackages = [MobileMapPackage]()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The preplanned offline map information.
 ***REMOVED******REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
@@ -208,6 +213,20 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have a failure, then keep the online map selected.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = oldValue
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func loadMobileMapPackages() {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Create mobile map packages with saved mmpk files.
+***REMOVED******REMOVED******REMOVED***if let files = try? FileManager.default.contentsOfDirectory(
+***REMOVED******REMOVED******REMOVED******REMOVED***at: documentsDirectory,
+***REMOVED******REMOVED******REMOVED******REMOVED***includingPropertiesForKeys: nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***options: .skipsHiddenFiles
+***REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***for fileURL in files where fileURL.pathExtension == "mmpk" {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.mobileMapPackages.append(mobileMapPackage)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
