@@ -102,7 +102,7 @@ public struct PreplannedListItemView: View {
                     // Disable downloading the map area when packaging. Otherwise,
                     // do not set `canDownload` since the map area is still loading.
                     if packagingStatus == .processing {
-                        // Disable downloding map area when still packaging.
+                        // Disable downloading map area when still packaging.
                         canDownload = false
                     }
                 case .notLoaded:
