@@ -27,10 +27,8 @@ struct OfflineMapAreasExampleView: View {
 ***REMOVED******REMOVED***MapView(map: map)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .bottomBar) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Offline Maps") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingOfflineMapAreasView = true
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "icloud.slash")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
