@@ -40,11 +40,8 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment photo picker is presented.
 ***REMOVED***@State private var photoPickerIsPresented = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The new image attachment data retrieved from the photos picker.
+***REMOVED******REMOVED***/ The new image or video attachment data retrieved from the photos picker.
 ***REMOVED***@State private var newAttachmentImportData: AttachmentImportData?
-***REMOVED***
-***REMOVED******REMOVED***/ The new attachment retrieved from the device's camera.
-***REMOVED***@State private var capturedImage: UIImage?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when an attachment is added.
 ***REMOVED***let onAdd: ((FeatureAttachment) async throws -> Void)?
@@ -141,11 +138,6 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***self.newAttachmentImportData = nil
 ***REMOVED***
-***REMOVED******REMOVED***.task(id: capturedImage) {
-***REMOVED******REMOVED******REMOVED***guard let capturedImage, let data = capturedImage.pngData() else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***newAttachmentImportData = AttachmentImportData(data: data, contentType: "image/png")
-***REMOVED******REMOVED******REMOVED***self.capturedImage = nil
-***REMOVED***
 ***REMOVED******REMOVED***.fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
 ***REMOVED******REMOVED******REMOVED***switch result {
 ***REMOVED******REMOVED******REMOVED***case .success(let url):
@@ -168,7 +160,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.fullScreenCover(isPresented: $cameraIsShowing) {
-***REMOVED******REMOVED******REMOVED***AttachmentCameraController(capturedImage: $capturedImage)
+***REMOVED******REMOVED******REMOVED***AttachmentCameraController(capturedMedia: $newAttachmentImportData)
 ***REMOVED***
 ***REMOVED******REMOVED***.modifier(
 ***REMOVED******REMOVED******REMOVED***AttachmentPhotoPicker(

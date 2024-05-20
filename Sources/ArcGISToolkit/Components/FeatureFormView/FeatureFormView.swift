@@ -55,6 +55,10 @@
 ***REMOVED***/ [FeatureFormExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `FeatureFormView` see the <doc:FeatureFormViewTutorial>.
 ***REMOVED***/
+***REMOVED***/ - Note: In order to capture video and photos as form attachments, your application will need
+***REMOVED***/ `NSCameraUsageDescription` and, `NSMicrophoneUsageDescription` entries in the
+***REMOVED***/ `Info.plist` file.
+***REMOVED***/
 ***REMOVED***/ - Since: 200.4
 public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The view model for the form.

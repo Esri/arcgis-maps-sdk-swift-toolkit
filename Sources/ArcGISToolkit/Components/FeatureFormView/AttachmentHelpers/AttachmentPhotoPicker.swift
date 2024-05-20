@@ -23,7 +23,7 @@ struct AttachmentPhotoPicker: ViewModifier {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The new attachment data retrieved from the photos picker.
 ***REMOVED***@Binding var newAttachmentImportData: AttachmentImportData?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the photos picker is presented.
 ***REMOVED***@Binding var photoPickerIsPresented: Bool
 ***REMOVED***
