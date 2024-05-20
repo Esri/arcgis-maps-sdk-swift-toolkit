@@ -94,7 +94,9 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch status {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .loaded:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Allow downloading the map area when packaging is complete.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Allow downloading the map area when packaging is complete, 
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** or when the packaging status is `nil` for compatibility with
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** legacy webmaps that have incomplete metadata.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.easeIn) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***canDownload = (packagingStatus == .complete || packagingStatus == nil) ? true : false
 ***REMOVED******REMOVED******REMOVED******REMOVED***
