@@ -17,30 +17,12 @@
 
 public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
-***REMOVED***@ObservedObject var preplannedMapModel: PreplannedMapModel
-***REMOVED***
-***REMOVED******REMOVED***/ The packaging status for the preplanned map area.
-***REMOVED***@State private var areaStatus: AreaStatus = .notLoaded
-***REMOVED***
-***REMOVED******REMOVED***/ The error for the preplanned map.
-***REMOVED***@State var error: Error?
-***REMOVED***
-***REMOVED******REMOVED***/ The packaging status of the preplanned map area.
-***REMOVED***private enum AreaStatus {
-***REMOVED******REMOVED******REMOVED***/ The map area has not yet loaded.
-***REMOVED******REMOVED***case notLoaded
-***REMOVED******REMOVED******REMOVED***/ The map area is still packaging.
-***REMOVED******REMOVED***case packaging
-***REMOVED******REMOVED******REMOVED***/ The map area packaging is complete.
-***REMOVED******REMOVED***case complete
-***REMOVED******REMOVED******REMOVED***/ The map area packaging failed.
-***REMOVED******REMOVED***case failed
-***REMOVED***
+***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
-***REMOVED******REMOVED******REMOVED***let preplannedMapArea = preplannedMapModel.preplannedMapArea
-***REMOVED******REMOVED******REMOVED***if let thumbnail = preplannedMapModel.preplannedMapArea.portalItem.thumbnail {
+***REMOVED******REMOVED******REMOVED***let preplannedMapArea = model.preplannedMapArea
+***REMOVED******REMOVED******REMOVED***if let thumbnail = model.preplannedMapArea.portalItem.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
@@ -70,89 +52,41 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***statusView
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { loadStatus in
-***REMOVED******REMOVED******REMOVED***let packagingStatus = preplannedMapModel.preplannedMapArea.packagingStatus
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch loadStatus {
-***REMOVED******REMOVED******REMOVED***case .loaded:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Allow downloading the map area when packaging is complete,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** or when the packaging status is `nil` for compatibility with
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** legacy webmaps that have incomplete metadata.
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.easeIn) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaStatus = (packagingStatus == .complete || packagingStatus == nil) ? .complete : .packaging
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .loading:
-***REMOVED******REMOVED******REMOVED******REMOVED***if packagingStatus == .processing {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Disable downloading map area when still packaging.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaStatus = .packaging
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***areaStatus = .notLoaded
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .notLoaded:
-***REMOVED******REMOVED******REMOVED******REMOVED***areaStatus = .notLoaded
-***REMOVED******REMOVED******REMOVED***case .failed:
-***REMOVED******REMOVED******REMOVED******REMOVED***areaStatus = .failed
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Load preplanned map area to load packaging status.
-***REMOVED******REMOVED******REMOVED******REMOVED***try await preplannedMapModel.preplannedMapArea.load()
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Present the error if the map area has been packaged. Otherwise,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** ignore the error when the map area is still packaging since the map
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** area cannot load while packaging.
-***REMOVED******REMOVED******REMOVED******REMOVED***if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***var downloadButtonEnabled: Bool {
-***REMOVED******REMOVED***return switch preplannedMapModel.result {
-***REMOVED******REMOVED***case .success:
+***REMOVED***private var downloadButtonEnabled: Bool {
+***REMOVED******REMOVED***switch model.status {
+***REMOVED******REMOVED***case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
+***REMOVED******REMOVED******REMOVED******REMOVED***.downloading, .downloaded:
 ***REMOVED******REMOVED******REMOVED***false
-***REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED***case .packaged, .downloadFailure:
 ***REMOVED******REMOVED******REMOVED***true
-***REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED***switch areaStatus {
-***REMOVED******REMOVED******REMOVED***case .notLoaded, .packaging, .failed:
-***REMOVED******REMOVED******REMOVED******REMOVED***false
-***REMOVED******REMOVED******REMOVED***case .complete:
-***REMOVED******REMOVED******REMOVED******REMOVED***true
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ViewBuilder var statusView: some View {
+***REMOVED***@ViewBuilder private var statusView: some View {
 ***REMOVED******REMOVED***HStack(spacing: 4) {
-***REMOVED******REMOVED******REMOVED***switch preplannedMapModel.result {
-***REMOVED******REMOVED******REMOVED***case .success:
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloaded")
-***REMOVED******REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED***switch model.status {
+***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading:
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading")
+***REMOVED******REMOVED******REMOVED***case .loadFailure:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Download Failed")
-***REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED***switch areaStatus {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .notLoaded:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Preplanned map area is still loading.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading")
-***REMOVED******REMOVED******REMOVED******REMOVED***case .packaging:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Preplanned map area is still packaging.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "clock.badge.xmark")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Packaging")
-***REMOVED******REMOVED******REMOVED******REMOVED***case .complete:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Package ready for download")
-***REMOVED******REMOVED******REMOVED******REMOVED***case .failed:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if preplannedMapModel.preplannedMapArea.loadStatus == .failed {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading failed")
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Packaging failed")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading failed")
+***REMOVED******REMOVED******REMOVED***case .packaging:
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "clock.badge.xmark")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Packaging")
+***REMOVED******REMOVED******REMOVED***case .packaged:
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Package ready for download")
+***REMOVED******REMOVED******REMOVED***case .packageFailure:
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Packaging failed")
+***REMOVED******REMOVED******REMOVED***case .downloading:
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloading")
+***REMOVED******REMOVED******REMOVED***case .downloaded:
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Downloaded")
+***REMOVED******REMOVED******REMOVED***case .downloadFailure:
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Download failed")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
