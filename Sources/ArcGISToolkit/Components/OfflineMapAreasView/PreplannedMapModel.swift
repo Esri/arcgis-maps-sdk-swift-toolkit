@@ -41,11 +41,17 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         do {
             // Load preplanned map area to obtain packaging status.
             status = .loading
-            try await preplannedMapArea.load()
+            try await preplannedMapArea.retryLoad()
             // Note: Packaging status is `nil` for compatibility with
             // legacy webmaps that have incomplete metadata.
+            // If the area loads, then you know for certain the status is complete.
             updateStatus(for: preplannedMapArea.packagingStatus ?? .complete)
+        } catch is IllegalStateError {
+            // Load will throw an illegal state error if not complete,
+            // this case is not a normal load failure.
+            updateStatus(for: preplannedMapArea.packagingStatus ?? .failed)
         } catch {
+            // Normal load failure.
             status = .loadFailure(error)
         }
     }
@@ -84,6 +90,6 @@ extension PreplannedMapModel {
         /// Preplanned map area is downloaded.
         case downloaded
         /// Preplanned map area failed to download.
-        case downloadFailure
+        case downloadFailure(Error)
     }
 }
