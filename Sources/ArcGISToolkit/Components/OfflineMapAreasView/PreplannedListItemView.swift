@@ -19,14 +19,23 @@ public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var preplannedMapModel: PreplannedMapModel
     
-    /// A Boolean value indicating whether the preplanned map area can be downloaded. This is `true`
-    /// when the preplanned map area is loaded and the packaging status is `.complete`, and `false`
-    /// when the packaging status is `.processing`. If the preplanned map area has not yet loaded then
-    /// this is `nil`,
-    @State private var canDownload: Bool?
+    /// The packaging status for the preplanned map area.
+    @State private var packagingStatus: PackagingStatus = .notLoaded
     
     /// The error for the preplanned map.
     @State var error: Error?
+    
+    /// The packaging status of the preplanned map area.
+    enum PackagingStatus {
+        /// The map area has not yet loaded.
+        case notLoaded
+        /// The map area is still packaging.
+        case packaging
+        /// The map area packaging is complete.
+        case complete
+        /// The map area packaging failed.
+        case failed
+    }
     
     public var body: some View {
         HStack {
@@ -35,6 +44,7 @@ public struct PreplannedListItemView: View {
                 if let thumbnail = preplannedMapModel.preplannedMapArea.portalItem.thumbnail {
                     LoadableImageView(loadableImage: thumbnail)
                         .frame(width: 64, height: 44)
+                        .clipShape(.rect(cornerRadius: 2))
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text(preplannedMapArea.portalItem.title)
@@ -65,54 +75,59 @@ public struct PreplannedListItemView: View {
                             self.error = error
                         }
                 case .none:
-                    if let canDownload {
-                        if !canDownload {
-                            // Map is still packaging.
-                            VStack {
-                                Image(systemName: "clock.badge.xmark")
-                                Text("packaging")
-                                    .font(.footnote)
-                            }
-                            .foregroundStyle(.secondary)
-                        } else {
-                            // Map package is available for download.
-                            Image(systemName: "arrow.down.circle")
-                                .foregroundStyle(Color.accentColor)
-                        }
-                    } else {
-                        // Map is still loading.
+                    switch packagingStatus {
+                    case .notLoaded:
+                        // Preplanned map area is still loading.
                         VStack(alignment: .trailing) {
                             ProgressView()
                                 .frame(maxWidth: 20)
                                 .controlSize(.mini)
                         }
+                    case .packaging:
+                        // Preplanned map area is still packaging.
+                        VStack {
+                            Image(systemName: "clock.badge.xmark")
+                            Text("packaging")
+                                .font(.footnote)
+                        }
+                        .foregroundStyle(.secondary)
+                    case .complete:
+                        // Preplanned map area is available for download.
+                        Button {
+                            
+                        } label: {
+                            Image(systemName: "arrow.down.circle")
+                        }
+                    case .failed:
+                        // An error occured when packaging the preplanned map area.
+                        Image(systemName: "exclamationmark.circle")
+                            .foregroundStyle(.red)
                     }
                 }
             }
-            .onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { status in
-                let packagingStatus = preplannedMapModel.preplannedMapArea.packagingStatus
+            .onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { loadStatus in
+                let status = preplannedMapModel.preplannedMapArea.packagingStatus
                 
-                switch status {
+                switch loadStatus {
                 case .loaded:
-                    // Allow downloading the map area when packaging is complete, 
+                    // Allow downloading the map area when packaging is complete,
                     // or when the packaging status is `nil` for compatibility with
                     // legacy webmaps that have incomplete metadata.
                     withAnimation(.easeIn) {
-                        canDownload = (packagingStatus == .complete || packagingStatus == nil) ? true : false
+                        packagingStatus = (status == .complete || status == nil) ? .complete : .packaging
                     }
                 case .loading:
-                    // Disable downloading the map area when packaging. Otherwise,
-                    // do not set `canDownload` since the map area is still loading.
-                    if packagingStatus == .processing {
+                    if status == .processing {
                         // Disable downloading map area when still packaging.
-                        canDownload = false
+                        packagingStatus = .packaging
+                    } else {
+                        packagingStatus = .notLoaded
                     }
                 case .notLoaded:
-                    // Do not set `canDownload` until map has loaded.
-                    return
+                    packagingStatus = .notLoaded
                 case .failed:
                     // Disable downloading when the map fails to load.
-                    canDownload = false
+                    packagingStatus = .failed
                 }
             }
             .task {
