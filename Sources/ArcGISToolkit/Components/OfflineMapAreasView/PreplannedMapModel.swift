@@ -19,17 +19,12 @@ import ArcGIS
 @MainActor
 class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
-    let preplannedMapArea: PreplannedMapArea
-    
-    /// The result of the download job. When the result is `.success` the mobile map package is returned.
-    /// If the result is `.failure` then the error is returned. The result will be `nil` when the preplanned
-    /// map area is still packaging or loading.
-    @Published private(set) var result: Result<MobileMapPackage, Error>?
+    let preplannedMapArea: any PreplannedMapAreaProtocol
     
     /// The combined status of the preplanned map area.
     @Published private(set) var status: Status = .notLoaded
     
-    init(preplannedMapArea: PreplannedMapArea) {
+    init(preplannedMapArea: PreplannedMapAreaProtocol) {
         self.preplannedMapArea = preplannedMapArea
         
         // Kick off a load of the map area.
@@ -102,5 +97,30 @@ extension PreplannedMapModel {
         case downloaded
         /// Preplanned map area failed to download.
         case downloadFailure(Error)
+    }
+}
+
+/// A type that acts as a preplanned map area.
+protocol PreplannedMapAreaProtocol {
+    func retryLoad() async throws
+    
+    var packagingStatus: PreplannedMapArea.PackagingStatus? { get }
+    var title: String { get }
+    var description: String { get }
+    var thumbnail: LoadableImage? { get }
+}
+
+/// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
+extension PreplannedMapArea: PreplannedMapAreaProtocol {
+    var title: String {
+        portalItem.title
+    }
+    
+    var thumbnail: LoadableImage? {
+        portalItem.thumbnail
+    }
+    
+    var description: String {
+        portalItem.description
     }
 }
