@@ -54,7 +54,7 @@ public struct PreplannedListItemView: View {
         } label: {
             Image(systemName: "arrow.down.circle")
         }
-        .disabled(!downloadButtonEnabled)
+        .disabled(!model.canDownload)
     }
     
     @ViewBuilder private var descriptionView: some View {
@@ -97,15 +97,5 @@ public struct PreplannedListItemView: View {
         }
         .font(.caption2)
         .foregroundStyle(.tertiary)
-    }
-    
-    private var downloadButtonEnabled: Bool {
-        switch model.status {
-        case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
-                .downloading, .downloaded:
-            false
-        case .packaged, .downloadFailure:
-            true
-        }
     }
 }

@@ -68,6 +68,17 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             status = .packaged
         }
     }
+    
+    /// A Boolean value indicating if download can be called.
+    var canDownload: Bool {
+        switch status {
+        case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
+                .downloading, .downloaded:
+            false
+        case .packaged, .downloadFailure:
+            true
+        }
+    }
 }
 
 extension PreplannedMapModel {
