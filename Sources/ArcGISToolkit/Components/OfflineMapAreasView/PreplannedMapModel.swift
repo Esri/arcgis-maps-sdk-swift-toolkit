@@ -16,7 +16,8 @@ import SwiftUI
 import ArcGIS
 
 /// An object that encapsulates state about a preplanned map.
-public class PreplannedMapModel: ObservableObject, Identifiable {
+@MainActor
+class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
     let preplannedMapArea: PreplannedMapArea
     
@@ -25,9 +26,50 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// map area is still packaging or loading.
     @Published private(set) var result: Result<MobileMapPackage, Error>?
     
-    init(
-        preplannedMapArea: PreplannedMapArea
-    ) {
+    /// The combined status of the preplanned map area.
+    @Published private(set) var status: PreplannedMapAreaStatus = .notLoaded
+    
+    init(preplannedMapArea: PreplannedMapArea) {
         self.preplannedMapArea = preplannedMapArea
+        
+        // Kick off a load of the map area.
+        Task.detached { await self.load() }
     }
+    
+    private func load() async {
+        do {
+            // Load preplanned map area to obtain packaging status.
+            status = .loading
+            try await preplannedMapArea.load()
+            // Note: Packaging status is `nil` for compatibility with
+            // legacy webmaps that have incomplete metadata.
+            updateAreaStatus(for: preplannedMapArea.packagingStatus ?? .complete)
+        } catch {
+            status = .loadFailure(error)
+        }
+    }
+    
+    private func updateAreaStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
+        // Update area status for a given packaging status.
+        switch packagingStatus {
+        case .processing:
+            status = .packaging
+        case .failed:
+            status = .packageFailure
+        case .complete:
+            status = .packaged
+        }
+    }
+}
+
+enum PreplannedMapAreaStatus {
+    case notLoaded
+    case loading
+    case loadFailure(Error)
+    case packaging
+    case packaged
+    case packageFailure
+    case downloading
+    case downloaded
+    case downloadFailure
 }
