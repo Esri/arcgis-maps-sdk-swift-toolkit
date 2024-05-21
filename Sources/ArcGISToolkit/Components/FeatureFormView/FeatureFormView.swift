@@ -55,6 +55,10 @@ import SwiftUI
 /// [FeatureFormExampleView.swift](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
 /// in the project. To learn more about using the `FeatureFormView` see the <doc:FeatureFormViewTutorial>.
 ///
+/// - Note: In order to capture video and photos as form attachments, your application will need
+/// `NSCameraUsageDescription` and, `NSMicrophoneUsageDescription` entries in the
+/// `Info.plist` file.
+///
 /// - Since: 200.4
 public struct FeatureFormView: View {
     /// The view model for the form.
