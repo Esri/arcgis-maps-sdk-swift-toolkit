@@ -118,12 +118,16 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***.task(id: newAttachmentImportData) {
 ***REMOVED******REMOVED******REMOVED***guard let newAttachmentImportData else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***var fileName: String
-***REMOVED******REMOVED******REMOVED******REMOVED***if !newAttachmentImportData.fileName.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = newAttachmentImportData.fileName
+***REMOVED******REMOVED******REMOVED******REMOVED***let fileName: String
+***REMOVED******REMOVED******REMOVED******REMOVED***if let presetFileName = newAttachmentImportData.fileName {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = presetFileName
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: Refactor naming scheme. Ref Apollo #682
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(element.attachments.count + 1).\(newAttachmentImportData.contentType.split(separator: "/").last!)"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let attachmentNumber = element.attachments.count + 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let fileExtension = newAttachmentImportData.fileExtension {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(attachmentNumber).\(fileExtension)"
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(attachmentNumber)"
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***let newAttachment = try await element.addAttachment(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Can this be better? What does legacy do?
