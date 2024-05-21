@@ -21,4 +21,5 @@ struct AttachmentImportData: Equatable {
 ***REMOVED***let data: Data
 ***REMOVED***let contentType: String
 ***REMOVED***var fileName: String = ""
+***REMOVED***var fileExtension: String? = nil
 ***REMOVED***
