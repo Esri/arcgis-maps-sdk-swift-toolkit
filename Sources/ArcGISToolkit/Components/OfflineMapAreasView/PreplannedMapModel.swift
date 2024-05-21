@@ -27,7 +27,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     @Published private(set) var result: Result<MobileMapPackage, Error>?
     
     /// The combined status of the preplanned map area.
-    @Published private(set) var status: PreplannedMapAreaStatus = .notLoaded
+    @Published private(set) var status: Status = .notLoaded
     
     init(preplannedMapArea: PreplannedMapArea) {
         self.preplannedMapArea = preplannedMapArea
@@ -36,6 +36,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
         Task.detached { await self.load() }
     }
     
+    /// Loads the preplanned map area and updates the status.
     private func load() async {
         do {
             // Load preplanned map area to obtain packaging status.
@@ -43,13 +44,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             try await preplannedMapArea.load()
             // Note: Packaging status is `nil` for compatibility with
             // legacy webmaps that have incomplete metadata.
-            updateAreaStatus(for: preplannedMapArea.packagingStatus ?? .complete)
+            updateStatus(for: preplannedMapArea.packagingStatus ?? .complete)
         } catch {
             status = .loadFailure(error)
         }
     }
     
-    private func updateAreaStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
+    /// Updates the status for a given packaging status.
+    private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
         // Update area status for a given packaging status.
         switch packagingStatus {
         case .processing:
@@ -62,14 +64,26 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     }
 }
 
-enum PreplannedMapAreaStatus {
-    case notLoaded
-    case loading
-    case loadFailure(Error)
-    case packaging
-    case packaged
-    case packageFailure
-    case downloading
-    case downloaded
-    case downloadFailure
+extension PreplannedMapModel {
+    /// The status of the preplanned map area model.
+    enum Status {
+        /// Preplanned map area not loaded.
+        case notLoaded
+        /// Preplanned map area is loading.
+        case loading
+        /// Preplanned map area failed to load.
+        case loadFailure(Error)
+        /// Preplanned map area is packaging.
+        case packaging
+        /// Preplanned map area is packaged and ready for download.
+        case packaged
+        /// Preplanned map area packaging failed.
+        case packageFailure
+        /// Preplanned map area is being downloaded.
+        case downloading
+        /// Preplanned map area is downloaded.
+        case downloaded
+        /// Preplanned map area failed to download.
+        case downloadFailure
+    }
 }

@@ -21,46 +21,52 @@ public struct PreplannedListItemView: View {
     
     public var body: some View {
         HStack(alignment: .center, spacing: 10) {
-            let preplannedMapArea = model.preplannedMapArea
-            if let thumbnail = model.preplannedMapArea.portalItem.thumbnail {
-                LoadableImageView(loadableImage: thumbnail)
-                    .frame(width: 64, height: 44)
-                    .clipShape(.rect(cornerRadius: 2))
-            }
+            thumbnailView
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text(preplannedMapArea.portalItem.title)
-                        .font(.body)
+                    titleView
                     Spacer()
-                    Button {
-                        
-                    } label: {
-                        Image(systemName: "arrow.down.circle")
-                    }
-                    .disabled(!downloadButtonEnabled)
+                    downloadButton
                 }
-                if !preplannedMapArea.portalItem.description.isEmpty {
-                    Text(preplannedMapArea.portalItem.description)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
-                } else {
-                    Text("This area has no description.")
-                        .font(.footnote)
-                        .foregroundStyle(.tertiary)
-                }
+                descriptionView
                 statusView
             }
         }
     }
     
-    private var downloadButtonEnabled: Bool {
-        switch model.status {
-        case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
-                .downloading, .downloaded:
-            false
-        case .packaged, .downloadFailure:
-            true
+    @ViewBuilder private var thumbnailView: some View {
+        if let thumbnail = model.preplannedMapArea.portalItem.thumbnail {
+            LoadableImageView(loadableImage: thumbnail)
+                .frame(width: 64, height: 44)
+                .clipShape(.rect(cornerRadius: 2))
+        }
+    }
+    
+    @ViewBuilder private var titleView: some View {
+        Text(model.preplannedMapArea.portalItem.title)
+            .font(.body)
+    }
+    
+    
+    @ViewBuilder private var downloadButton: some View {
+        Button {
+            
+        } label: {
+            Image(systemName: "arrow.down.circle")
+        }
+        .disabled(!downloadButtonEnabled)
+    }
+    
+    @ViewBuilder private var descriptionView: some View {
+        if !model.preplannedMapArea.portalItem.description.isEmpty {
+            Text(model.preplannedMapArea.portalItem.description)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+        } else {
+            Text("This area has no description.")
+                .font(.footnote)
+                .foregroundStyle(.tertiary)
         }
     }
     
@@ -91,5 +97,15 @@ public struct PreplannedListItemView: View {
         }
         .font(.caption2)
         .foregroundStyle(.tertiary)
+    }
+    
+    private var downloadButtonEnabled: Bool {
+        switch model.status {
+        case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
+                .downloading, .downloaded:
+            false
+        case .packaged, .downloadFailure:
+            true
+        }
     }
 }
