@@ -41,11 +41,17 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Load preplanned map area to obtain packaging status.
 ***REMOVED******REMOVED******REMOVED***status = .loading
-***REMOVED******REMOVED******REMOVED***try await preplannedMapArea.load()
+***REMOVED******REMOVED******REMOVED***try await preplannedMapArea.retryLoad()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Note: Packaging status is `nil` for compatibility with
 ***REMOVED******REMOVED******REMOVED******REMOVED*** legacy webmaps that have incomplete metadata.
+***REMOVED******REMOVED******REMOVED******REMOVED*** If the area loads, then you know for certain the status is complete.
 ***REMOVED******REMOVED******REMOVED***updateStatus(for: preplannedMapArea.packagingStatus ?? .complete)
+***REMOVED*** catch is IllegalStateError {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Load will throw an illegal state error if not complete,
+***REMOVED******REMOVED******REMOVED******REMOVED*** this case is not a normal load failure.
+***REMOVED******REMOVED******REMOVED***updateStatus(for: preplannedMapArea.packagingStatus ?? .failed)
 ***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Normal load failure.
 ***REMOVED******REMOVED******REMOVED***status = .loadFailure(error)
 ***REMOVED***
 ***REMOVED***
@@ -84,6 +90,6 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED******REMOVED***/ Preplanned map area is downloaded.
 ***REMOVED******REMOVED***case downloaded
 ***REMOVED******REMOVED******REMOVED***/ Preplanned map area failed to download.
-***REMOVED******REMOVED***case downloadFailure
+***REMOVED******REMOVED***case downloadFailure(Error)
 ***REMOVED***
 ***REMOVED***
