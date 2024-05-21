@@ -69,6 +69,17 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if download can be called.
+***REMOVED***var canDownload: Bool {
+***REMOVED******REMOVED***switch status {
+***REMOVED******REMOVED***case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
+***REMOVED******REMOVED******REMOVED******REMOVED***.downloading, .downloaded:
+***REMOVED******REMOVED******REMOVED***false
+***REMOVED******REMOVED***case .packaged, .downloadFailure:
+***REMOVED******REMOVED******REMOVED***true
+***REMOVED***
+***REMOVED***
+***REMOVED***
 
 extension PreplannedMapModel {
 ***REMOVED******REMOVED***/ The status of the preplanned map area model.

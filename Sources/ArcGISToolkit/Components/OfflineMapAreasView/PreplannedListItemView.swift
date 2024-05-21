@@ -54,7 +54,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED***
-***REMOVED******REMOVED***.disabled(!downloadButtonEnabled)
+***REMOVED******REMOVED***.disabled(!model.canDownload)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var descriptionView: some View {
@@ -97,15 +97,5 @@ public struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
-***REMOVED***
-***REMOVED***
-***REMOVED***private var downloadButtonEnabled: Bool {
-***REMOVED******REMOVED***switch model.status {
-***REMOVED******REMOVED***case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
-***REMOVED******REMOVED******REMOVED******REMOVED***.downloading, .downloaded:
-***REMOVED******REMOVED******REMOVED***false
-***REMOVED******REMOVED***case .packaged, .downloadFailure:
-***REMOVED******REMOVED******REMOVED***true
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
