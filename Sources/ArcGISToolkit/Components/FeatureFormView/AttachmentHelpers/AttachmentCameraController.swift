@@ -18,8 +18,8 @@
 struct AttachmentCameraController: UIViewControllerRepresentable {
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
-***REMOVED******REMOVED***/ The new attachment retrieved from the device's camera.
-***REMOVED***@Binding var capturedImage: UIImage?
+***REMOVED******REMOVED***/ The newly captured attachment data.
+***REMOVED***@Binding var capturedMedia: AttachmentImportData?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The image picker controller represented within the view.
 ***REMOVED***private let controller = UIImagePickerController()
@@ -31,9 +31,9 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeUIViewController(context: Context) -> some UIViewController {
-***REMOVED******REMOVED***controller.sourceType = .camera
 ***REMOVED******REMOVED***controller.allowsEditing = true
-***REMOVED******REMOVED***controller.cameraCaptureMode = .photo
+***REMOVED******REMOVED***controller.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
+***REMOVED******REMOVED***controller.sourceType = .camera
 ***REMOVED******REMOVED***controller.delegate = context.coordinator
 ***REMOVED******REMOVED***return controller
 ***REMOVED***
@@ -58,7 +58,13 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
 ***REMOVED******REMOVED***didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
 ***REMOVED***) {
 ***REMOVED******REMOVED***if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-***REMOVED******REMOVED******REMOVED***parent.capturedImage = image
+***REMOVED******REMOVED******REMOVED***if let pngData = image.pngData() {
+***REMOVED******REMOVED******REMOVED******REMOVED***parent.capturedMedia = AttachmentImportData(data: pngData, contentType: "image/png")
+***REMOVED******REMOVED***
+***REMOVED*** else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
+***REMOVED******REMOVED******REMOVED***if let videoData = try? Data(contentsOf: videoURL) {
+***REMOVED******REMOVED******REMOVED******REMOVED***parent.capturedMedia = AttachmentImportData(data: videoData, contentType: "video/quicktime", fileName: videoURL.lastPathComponent)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***parent.endCapture()
 ***REMOVED***
