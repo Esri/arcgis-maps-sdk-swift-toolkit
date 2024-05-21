@@ -19,17 +19,12 @@
 @MainActor
 class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The preplanned map area.
-***REMOVED***let preplannedMapArea: PreplannedMapArea
-***REMOVED***
-***REMOVED******REMOVED***/ The result of the download job. When the result is `.success` the mobile map package is returned.
-***REMOVED******REMOVED***/ If the result is `.failure` then the error is returned. The result will be `nil` when the preplanned
-***REMOVED******REMOVED***/ map area is still packaging or loading.
-***REMOVED***@Published private(set) var result: Result<MobileMapPackage, Error>?
+***REMOVED***let preplannedMapArea: any PreplannedMapAreaProtocol
 ***REMOVED***
 ***REMOVED******REMOVED***/ The combined status of the preplanned map area.
 ***REMOVED***@Published private(set) var status: Status = .notLoaded
 ***REMOVED***
-***REMOVED***init(preplannedMapArea: PreplannedMapArea) {
+***REMOVED***init(preplannedMapArea: PreplannedMapAreaProtocol) {
 ***REMOVED******REMOVED***self.preplannedMapArea = preplannedMapArea
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Kick off a load of the map area.
@@ -102,5 +97,30 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***case downloaded
 ***REMOVED******REMOVED******REMOVED***/ Preplanned map area failed to download.
 ***REMOVED******REMOVED***case downloadFailure(Error)
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ A type that acts as a preplanned map area.
+protocol PreplannedMapAreaProtocol {
+***REMOVED***func retryLoad() async throws
+***REMOVED***
+***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? { get ***REMOVED***
+***REMOVED***var title: String { get ***REMOVED***
+***REMOVED***var description: String { get ***REMOVED***
+***REMOVED***var thumbnail: LoadableImage? { get ***REMOVED***
+***REMOVED***
+
+***REMOVED***/ Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
+extension PreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED***var title: String {
+***REMOVED******REMOVED***portalItem.title
+***REMOVED***
+***REMOVED***
+***REMOVED***var thumbnail: LoadableImage? {
+***REMOVED******REMOVED***portalItem.thumbnail
+***REMOVED***
+***REMOVED***
+***REMOVED***var description: String {
+***REMOVED******REMOVED***portalItem.description
 ***REMOVED***
 ***REMOVED***
