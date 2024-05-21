@@ -35,7 +35,7 @@ public struct PreplannedListItemView: View {
     }
     
     @ViewBuilder private var thumbnailView: some View {
-        if let thumbnail = model.preplannedMapArea.portalItem.thumbnail {
+        if let thumbnail = model.preplannedMapArea.thumbnail {
             LoadableImageView(loadableImage: thumbnail)
                 .frame(width: 64, height: 44)
                 .clipShape(.rect(cornerRadius: 2))
@@ -43,7 +43,7 @@ public struct PreplannedListItemView: View {
     }
     
     @ViewBuilder private var titleView: some View {
-        Text(model.preplannedMapArea.portalItem.title)
+        Text(model.preplannedMapArea.title)
             .font(.body)
     }
     
@@ -58,8 +58,8 @@ public struct PreplannedListItemView: View {
     }
     
     @ViewBuilder private var descriptionView: some View {
-        if !model.preplannedMapArea.portalItem.description.isEmpty {
-            Text(model.preplannedMapArea.portalItem.description)
+        if !model.preplannedMapArea.description.isEmpty {
+            Text(model.preplannedMapArea.description)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
@@ -98,4 +98,17 @@ public struct PreplannedListItemView: View {
         .font(.caption2)
         .foregroundStyle(.tertiary)
     }
+}
+
+#Preview {
+    PreplannedListItemView(model: PreplannedMapModel(preplannedMapArea: MockPreplanneddMapArea()))
+}
+
+private struct MockPreplanneddMapArea: PreplannedMapAreaProtocol {
+    var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
+    var title: String = "Mock Preaplanned Map Area"
+    var description: String = "This is the description text"
+    var thumbnail: ArcGIS.LoadableImage? = nil
+    
+    func retryLoad() async throws { }
 }
