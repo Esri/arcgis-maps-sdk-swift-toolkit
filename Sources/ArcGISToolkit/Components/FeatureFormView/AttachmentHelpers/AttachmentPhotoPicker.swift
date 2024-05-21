@@ -53,7 +53,8 @@ struct AttachmentPhotoPicker: ViewModifier {
                     
                     newAttachmentImportData = AttachmentImportData(
                         data: data,
-                        contentType: mimeType ?? "application/octet-stream"
+                        contentType: mimeType ?? "application/octet-stream",
+                        fileExtension: item.supportedContentTypes.first?.preferredFilenameExtension ?? ""
                     )
 
                 } catch {
