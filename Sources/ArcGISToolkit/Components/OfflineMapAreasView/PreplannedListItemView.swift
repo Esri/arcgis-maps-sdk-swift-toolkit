@@ -19,14 +19,23 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var preplannedMapModel: PreplannedMapModel
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map area can be downloaded. This is `true`
-***REMOVED******REMOVED***/ when the preplanned map area is loaded and the packaging status is `.complete`, and `false`
-***REMOVED******REMOVED***/ when the packaging status is `.processing`. If the preplanned map area has not yet loaded then
-***REMOVED******REMOVED***/ this is `nil`,
-***REMOVED***@State private var canDownload: Bool?
+***REMOVED******REMOVED***/ The packaging status for the preplanned map area.
+***REMOVED***@State private var packagingStatus: PackagingStatus = .notLoaded
 ***REMOVED***
 ***REMOVED******REMOVED***/ The error for the preplanned map.
 ***REMOVED***@State var error: Error?
+***REMOVED***
+***REMOVED******REMOVED***/ The packaging status of the preplanned map area.
+***REMOVED***enum PackagingStatus {
+***REMOVED******REMOVED******REMOVED***/ The map area has not yet loaded.
+***REMOVED******REMOVED***case notLoaded
+***REMOVED******REMOVED******REMOVED***/ The map area is still packaging.
+***REMOVED******REMOVED***case packaging
+***REMOVED******REMOVED******REMOVED***/ The map area packaging is complete.
+***REMOVED******REMOVED***case complete
+***REMOVED******REMOVED******REMOVED***/ The map area packaging failed.
+***REMOVED******REMOVED***case failed
+***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack {
@@ -35,6 +44,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnail = preplannedMapModel.preplannedMapArea.portalItem.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 2) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(preplannedMapArea.portalItem.title)
@@ -65,54 +75,59 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let canDownload {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !canDownload {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Map is still packaging.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "clock.badge.xmark")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("packaging")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Map package is available for download.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(Color.accentColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Map is still loading.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch packagingStatus {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .notLoaded:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Preplanned map area is still loading.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .trailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: 20)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.controlSize(.mini)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .packaging:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Preplanned map area is still packaging.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "clock.badge.xmark")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("packaging")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .complete:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Preplanned map area is available for download.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .failed:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** An error occured when packaging the preplanned map area.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.red)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { status in
-***REMOVED******REMOVED******REMOVED******REMOVED***let packagingStatus = preplannedMapModel.preplannedMapArea.packagingStatus
+***REMOVED******REMOVED******REMOVED***.onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { loadStatus in
+***REMOVED******REMOVED******REMOVED******REMOVED***let status = preplannedMapModel.preplannedMapArea.packagingStatus
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***switch status {
+***REMOVED******REMOVED******REMOVED******REMOVED***switch loadStatus {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .loaded:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Allow downloading the map area when packaging is complete, 
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Allow downloading the map area when packaging is complete,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** or when the packaging status is `nil` for compatibility with
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** legacy webmaps that have incomplete metadata.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.easeIn) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***canDownload = (packagingStatus == .complete || packagingStatus == nil) ? true : false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***packagingStatus = (status == .complete || status == nil) ? .complete : .packaging
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .loading:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Disable downloading the map area when packaging. Otherwise,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** do not set `canDownload` since the map area is still loading.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if packagingStatus == .processing {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if status == .processing {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Disable downloading map area when still packaging.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***canDownload = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***packagingStatus = .packaging
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***packagingStatus = .notLoaded
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .notLoaded:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Do not set `canDownload` until map has loaded.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***packagingStatus = .notLoaded
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .failed:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Disable downloading when the map fails to load.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***canDownload = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***packagingStatus = .failed
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
