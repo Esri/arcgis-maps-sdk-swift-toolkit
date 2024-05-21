@@ -20,6 +20,6 @@ import SwiftUI
 struct AttachmentImportData: Equatable {
     let data: Data
     let contentType: String
-    var fileName: String = ""
+    var fileName: String? = nil
     var fileExtension: String? = nil
 }
