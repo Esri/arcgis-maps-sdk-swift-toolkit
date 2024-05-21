@@ -21,46 +21,52 @@ public struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
-***REMOVED******REMOVED******REMOVED***let preplannedMapArea = model.preplannedMapArea
-***REMOVED******REMOVED******REMOVED***if let thumbnail = model.preplannedMapArea.portalItem.thumbnail {
-***REMOVED******REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***thumbnailView
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(preplannedMapArea.portalItem.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***titleView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!downloadButtonEnabled)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***downloadButton
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if !preplannedMapArea.portalItem.description.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(preplannedMapArea.portalItem.description)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(2)
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("This area has no description.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***descriptionView
 ***REMOVED******REMOVED******REMOVED******REMOVED***statusView
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private var downloadButtonEnabled: Bool {
-***REMOVED******REMOVED***switch model.status {
-***REMOVED******REMOVED***case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
-***REMOVED******REMOVED******REMOVED******REMOVED***.downloading, .downloaded:
-***REMOVED******REMOVED******REMOVED***false
-***REMOVED******REMOVED***case .packaged, .downloadFailure:
-***REMOVED******REMOVED******REMOVED***true
+***REMOVED***@ViewBuilder private var thumbnailView: some View {
+***REMOVED******REMOVED***if let thumbnail = model.preplannedMapArea.portalItem.thumbnail {
+***REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var titleView: some View {
+***REMOVED******REMOVED***Text(model.preplannedMapArea.portalItem.title)
+***REMOVED******REMOVED******REMOVED***.font(.body)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var downloadButton: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
+***REMOVED***
+***REMOVED******REMOVED***.disabled(!downloadButtonEnabled)
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder private var descriptionView: some View {
+***REMOVED******REMOVED***if !model.preplannedMapArea.portalItem.description.isEmpty {
+***REMOVED******REMOVED******REMOVED***Text(model.preplannedMapArea.portalItem.description)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(2)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Text("This area has no description.")
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -91,5 +97,15 @@ public struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
+***REMOVED***
+***REMOVED***
+***REMOVED***private var downloadButtonEnabled: Bool {
+***REMOVED******REMOVED***switch model.status {
+***REMOVED******REMOVED***case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
+***REMOVED******REMOVED******REMOVED******REMOVED***.downloading, .downloaded:
+***REMOVED******REMOVED******REMOVED***false
+***REMOVED******REMOVED***case .packaged, .downloadFailure:
+***REMOVED******REMOVED******REMOVED***true
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

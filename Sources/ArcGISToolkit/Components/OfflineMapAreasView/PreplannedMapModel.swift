@@ -27,7 +27,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***@Published private(set) var result: Result<MobileMapPackage, Error>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The combined status of the preplanned map area.
-***REMOVED***@Published private(set) var status: PreplannedMapAreaStatus = .notLoaded
+***REMOVED***@Published private(set) var status: Status = .notLoaded
 ***REMOVED***
 ***REMOVED***init(preplannedMapArea: PreplannedMapArea) {
 ***REMOVED******REMOVED***self.preplannedMapArea = preplannedMapArea
@@ -36,6 +36,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***Task.detached { await self.load() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
 ***REMOVED***private func load() async {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Load preplanned map area to obtain packaging status.
@@ -43,13 +44,14 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***try await preplannedMapArea.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Note: Packaging status is `nil` for compatibility with
 ***REMOVED******REMOVED******REMOVED******REMOVED*** legacy webmaps that have incomplete metadata.
-***REMOVED******REMOVED******REMOVED***updateAreaStatus(for: preplannedMapArea.packagingStatus ?? .complete)
+***REMOVED******REMOVED******REMOVED***updateStatus(for: preplannedMapArea.packagingStatus ?? .complete)
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***status = .loadFailure(error)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func updateAreaStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
+***REMOVED******REMOVED***/ Updates the status for a given packaging status.
+***REMOVED***private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
 ***REMOVED******REMOVED******REMOVED*** Update area status for a given packaging status.
 ***REMOVED******REMOVED***switch packagingStatus {
 ***REMOVED******REMOVED***case .processing:
@@ -62,14 +64,26 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 
-enum PreplannedMapAreaStatus {
-***REMOVED***case notLoaded
-***REMOVED***case loading
-***REMOVED***case loadFailure(Error)
-***REMOVED***case packaging
-***REMOVED***case packaged
-***REMOVED***case packageFailure
-***REMOVED***case downloading
-***REMOVED***case downloaded
-***REMOVED***case downloadFailure
+extension PreplannedMapModel {
+***REMOVED******REMOVED***/ The status of the preplanned map area model.
+***REMOVED***enum Status {
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area not loaded.
+***REMOVED******REMOVED***case notLoaded
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area is loading.
+***REMOVED******REMOVED***case loading
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area failed to load.
+***REMOVED******REMOVED***case loadFailure(Error)
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area is packaging.
+***REMOVED******REMOVED***case packaging
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area is packaged and ready for download.
+***REMOVED******REMOVED***case packaged
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area packaging failed.
+***REMOVED******REMOVED***case packageFailure
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area is being downloaded.
+***REMOVED******REMOVED***case downloading
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area is downloaded.
+***REMOVED******REMOVED***case downloaded
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area failed to download.
+***REMOVED******REMOVED***case downloadFailure
+***REMOVED***
 ***REMOVED***
