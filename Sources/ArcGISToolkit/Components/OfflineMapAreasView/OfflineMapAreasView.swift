@@ -72,9 +72,7 @@ public struct OfflineMapAreasView: View {
         case .success(let models):
             if mapViewModel.hasPreplannedMapAreas {
                 List(models) { preplannedMapModel in
-                    PreplannedListItemView(
-                        preplannedMapModel: preplannedMapModel
-                    )
+                    PreplannedListItemView(model: preplannedMapModel)
                 }
             } else {
                 emptyPreplannedMapAreasView
