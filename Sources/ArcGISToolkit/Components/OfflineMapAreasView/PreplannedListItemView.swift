@@ -20,13 +20,13 @@ public struct PreplannedListItemView: View {
     @ObservedObject var preplannedMapModel: PreplannedMapModel
     
     /// The packaging status for the preplanned map area.
-    @State private var packagingStatus: PackagingStatus = .notLoaded
+    @State private var areaStatus: AreaStatus = .notLoaded
     
     /// The error for the preplanned map.
     @State var error: Error?
     
     /// The packaging status of the preplanned map area.
-    enum PackagingStatus {
+    private enum AreaStatus {
         /// The map area has not yet loaded.
         case notLoaded
         /// The map area is still packaging.
@@ -38,111 +38,124 @@ public struct PreplannedListItemView: View {
     }
     
     public var body: some View {
-        HStack {
-            HStack {
-                let preplannedMapArea = preplannedMapModel.preplannedMapArea
-                if let thumbnail = preplannedMapModel.preplannedMapArea.portalItem.thumbnail {
-                    LoadableImageView(loadableImage: thumbnail)
-                        .frame(width: 64, height: 44)
-                        .clipShape(.rect(cornerRadius: 2))
-                }
-                VStack(alignment: .leading, spacing: 2) {
+        HStack(alignment: .center, spacing: 10) {
+            let preplannedMapArea = preplannedMapModel.preplannedMapArea
+            if let thumbnail = preplannedMapModel.preplannedMapArea.portalItem.thumbnail {
+                LoadableImageView(loadableImage: thumbnail)
+                    .frame(width: 64, height: 44)
+                    .clipShape(.rect(cornerRadius: 2))
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
                     Text(preplannedMapArea.portalItem.title)
-                        .font(.headline)
-                    if !preplannedMapArea.portalItem.description.isEmpty {
-                        Text(preplannedMapArea.portalItem.description)
-                            .font(.caption)
-                            .foregroundStyle(Color(uiColor: .secondaryLabel))
-                            .lineLimit(2)
-                    } else {
-                        Text("The area has no description.")
-                            .font(.caption)
-                            .foregroundStyle(Color(uiColor: .tertiaryLabel))
+                        .font(.body)
+                    Spacer()
+                    Button {
+                        
+                    } label: {
+                        Image(systemName: "arrow.down.circle")
                     }
-                    if let error {
-                        Text(error.localizedDescription)
-                            .foregroundStyle(.red)
-                    }
+                    .disabled(!downloadButtonEnabled)
                 }
-                Spacer()
-                switch preplannedMapModel.result {
-                case .success:
-                    Image(systemName: "checkmark.circle.fill")
-                case .failure(let error):
-                    Image(systemName: "exclamationmark.circle")
-                        .foregroundStyle(.red)
-                        .onAppear {
-                            self.error = error
-                        }
-                case .none:
-                    switch packagingStatus {
-                    case .notLoaded:
-                        // Preplanned map area is still loading.
-                        VStack(alignment: .trailing) {
-                            ProgressView()
-                                .frame(maxWidth: 20)
-                                .controlSize(.mini)
-                        }
-                    case .packaging:
-                        // Preplanned map area is still packaging.
-                        VStack {
-                            Image(systemName: "clock.badge.xmark")
-                            Text("packaging")
-                                .font(.footnote)
-                        }
+                if !preplannedMapArea.portalItem.description.isEmpty {
+                    Text(preplannedMapArea.portalItem.description)
+                        .font(.footnote)
                         .foregroundStyle(.secondary)
-                    case .complete:
-                        // Preplanned map area is available for download.
-                        Button {
-                            
-                        } label: {
-                            Image(systemName: "arrow.down.circle")
-                        }
-                    case .failed:
-                        // An error occured when packaging the preplanned map area.
-                        Image(systemName: "exclamationmark.circle")
-                            .foregroundStyle(.red)
-                    }
+                        .lineLimit(2)
+                } else {
+                    Text("This area has no description.")
+                        .font(.footnote)
+                        .foregroundStyle(.tertiary)
+                }
+                statusView
+            }
+        }
+        .onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { loadStatus in
+            let packagingStatus = preplannedMapModel.preplannedMapArea.packagingStatus
+            
+            switch loadStatus {
+            case .loaded:
+                // Allow downloading the map area when packaging is complete,
+                // or when the packaging status is `nil` for compatibility with
+                // legacy webmaps that have incomplete metadata.
+                withAnimation(.easeIn) {
+                    areaStatus = (packagingStatus == .complete || packagingStatus == nil) ? .complete : .packaging
+                }
+            case .loading:
+                if packagingStatus == .processing {
+                    // Disable downloading map area when still packaging.
+                    areaStatus = .packaging
+                } else {
+                    areaStatus = .notLoaded
+                }
+            case .notLoaded:
+                areaStatus = .notLoaded
+            case .failed:
+                areaStatus = packagingStatus == .processing ? .packaging : .failed
+            }
+        }
+        .task {
+            do {
+                // Load preplanned map area to load packaging status.
+                try await preplannedMapModel.preplannedMapArea.load()
+            } catch {
+                // Present the error if the map area has been packaged. Otherwise,
+                // ignore the error when the map area is still packaging since the map
+                // area cannot load while packaging.
+                if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
+                    self.error = error
                 }
             }
-            .onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { loadStatus in
-                let status = preplannedMapModel.preplannedMapArea.packagingStatus
-                
-                switch loadStatus {
-                case .loaded:
-                    // Allow downloading the map area when packaging is complete,
-                    // or when the packaging status is `nil` for compatibility with
-                    // legacy webmaps that have incomplete metadata.
-                    withAnimation(.easeIn) {
-                        packagingStatus = (status == .complete || status == nil) ? .complete : .packaging
-                    }
-                case .loading:
-                    if status == .processing {
-                        // Disable downloading map area when still packaging.
-                        packagingStatus = .packaging
-                    } else {
-                        packagingStatus = .notLoaded
-                    }
+        }
+    }
+    
+    var downloadButtonEnabled: Bool {
+        return switch preplannedMapModel.result {
+        case .success:
+            false
+        case .failure:
+            true
+        case .none:
+            switch areaStatus {
+            case .notLoaded, .packaging, .failed:
+                false
+            case .complete:
+                true
+            }
+        }
+    }
+    
+    @ViewBuilder var statusView: some View {
+        HStack(spacing: 4) {
+            switch preplannedMapModel.result {
+            case .success:
+                Image(systemName: "checkmark.circle.fill")
+                Text("Downloaded")
+            case .failure:
+                Image(systemName: "exclamationmark.circle")
+                Text("Download Failed")
+            case .none:
+                switch areaStatus {
                 case .notLoaded:
-                    packagingStatus = .notLoaded
+                    // Preplanned map area is still loading.
+                    Text("Loading")
+                case .packaging:
+                    // Preplanned map area is still packaging.
+                    Image(systemName: "clock.badge.xmark")
+                    Text("Packaging")
+                case .complete:
+                    Text("Package ready for download")
                 case .failed:
-                    // Disable downloading when the map fails to load.
-                    packagingStatus = .failed
-                }
-            }
-            .task {
-                do {
-                    // Load preplanned map area to load packaging status.
-                    try await preplannedMapModel.preplannedMapArea.load()
-                } catch {
-                    // Present the error if the map area has been packaged. Otherwise,
-                    // ignore the error when the map area is still packaging since the map
-                    // area cannot load while packaging.
-                    if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
-                        self.error = error
+                    Image(systemName: "exclamationmark.circle")
+                    if preplannedMapModel.preplannedMapArea.loadStatus == .failed {
+                        Text("Loading failed")
+                    } else {
+                        Text("Packaging failed")
                     }
                 }
             }
         }
+        .font(.caption2)
+        .foregroundStyle(.tertiary)
     }
 }
