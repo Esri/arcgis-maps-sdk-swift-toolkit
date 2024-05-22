@@ -35,7 +35,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var thumbnailView: some View {
-***REMOVED******REMOVED***if let thumbnail = model.preplannedMapArea.portalItem.thumbnail {
+***REMOVED******REMOVED***if let thumbnail = model.preplannedMapArea.thumbnail {
 ***REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
@@ -43,7 +43,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var titleView: some View {
-***REMOVED******REMOVED***Text(model.preplannedMapArea.portalItem.title)
+***REMOVED******REMOVED***Text(model.preplannedMapArea.title)
 ***REMOVED******REMOVED******REMOVED***.font(.body)
 ***REMOVED***
 ***REMOVED***
@@ -57,8 +57,8 @@ public struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var descriptionView: some View {
-***REMOVED******REMOVED***if !model.preplannedMapArea.portalItem.description.isEmpty {
-***REMOVED******REMOVED******REMOVED***Text(model.preplannedMapArea.portalItem.description)
+***REMOVED******REMOVED***if !model.preplannedMapArea.description.isEmpty {
+***REMOVED******REMOVED******REMOVED***Text(model.preplannedMapArea.description)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(2)
@@ -97,4 +97,20 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***.font(.caption2)
 ***REMOVED******REMOVED***.foregroundStyle(.tertiary)
 ***REMOVED***
+***REMOVED***
+
+#Preview {
+***REMOVED***PreplannedListItemView(
+***REMOVED******REMOVED***model: PreplannedMapModel(preplannedMapArea: MockPreplanneddMapArea())
+***REMOVED***)
+***REMOVED***.padding()
+***REMOVED***
+
+private struct MockPreplanneddMapArea: PreplannedMapAreaProtocol {
+***REMOVED***var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
+***REMOVED***var title: String = "Mock Preaplanned Map Area"
+***REMOVED***var description: String = "This is the description text"
+***REMOVED***var thumbnail: ArcGIS.LoadableImage? = nil
+***REMOVED***
+***REMOVED***func retryLoad() async throws { ***REMOVED***
 ***REMOVED***
