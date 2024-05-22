@@ -101,14 +101,14 @@ public struct PreplannedListItemView: View {
 
 #Preview {
     PreplannedListItemView(
-        model: PreplannedMapModel(preplannedMapArea: MockPreplanneddMapArea())
+        model: PreplannedMapModel(preplannedMapArea: MockPreplannedMapArea())
     )
     .padding()
 }
 
-private struct MockPreplanneddMapArea: PreplannedMapAreaProtocol {
+private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
     var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
-    var title: String = "Mock Preaplanned Map Area"
+    var title: String = "Mock Preplanned Map Area"
     var description: String = "This is the description text"
     var thumbnail: ArcGIS.LoadableImage? = nil
     
