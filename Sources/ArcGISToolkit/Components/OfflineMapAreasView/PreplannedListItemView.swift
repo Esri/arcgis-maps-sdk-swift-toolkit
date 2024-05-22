@@ -47,7 +47,6 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***.font(.body)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
 ***REMOVED***@ViewBuilder private var downloadButton: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***

@@ -61,6 +61,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***status = .packageFailure
 ***REMOVED******REMOVED***case .complete:
 ***REMOVED******REMOVED******REMOVED***status = .packaged
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***fatalError("Unknown packaging status")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
