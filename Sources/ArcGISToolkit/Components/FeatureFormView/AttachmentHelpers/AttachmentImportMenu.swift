@@ -118,12 +118,16 @@ struct AttachmentImportMenu: View {
         .task(id: newAttachmentImportData) {
             guard let newAttachmentImportData else { return }
             do {
-                var fileName: String
-                if !newAttachmentImportData.fileName.isEmpty {
-                    fileName = newAttachmentImportData.fileName
+                let fileName: String
+                if let presetFileName = newAttachmentImportData.fileName {
+                    fileName = presetFileName
                 } else {
-                    // TODO: Refactor naming scheme. Ref Apollo #682
-                    fileName = "Attachment \(element.attachments.count + 1).\(newAttachmentImportData.contentType.split(separator: "/").last!)"
+                    let attachmentNumber = element.attachments.count + 1
+                    if let fileExtension = newAttachmentImportData.fileExtension {
+                        fileName = "Attachment \(attachmentNumber).\(fileExtension)"
+                    } else {
+                        fileName = "Attachment \(attachmentNumber)"
+                    }
                 }
                 let newAttachment = try await element.addAttachment(
                     // Can this be better? What does legacy do?
