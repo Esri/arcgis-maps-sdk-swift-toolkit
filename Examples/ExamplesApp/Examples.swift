@@ -51,6 +51,7 @@ extension ExampleList {
             AnyExample("Compass", content: CompassExampleView()),
             AnyExample("Feature Form", content: FeatureFormExampleView()),
             AnyExample("Floor Filter", content: FloorFilterExampleView()),
+            AnyExample("Offline Map Areas", content: OfflineMapAreasExampleView()),
             AnyExample("Overview Map", content: OverviewMapExampleView()),
             AnyExample("Popup", content: PopupExampleView()),
             AnyExample("Scalebar", content: ScalebarExampleView()),
