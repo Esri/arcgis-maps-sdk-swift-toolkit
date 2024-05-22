@@ -72,6 +72,8 @@ import SwiftUI
             systemImageName = "photo"
         case .video:
             systemImageName = "film"
+        case .audio:
+            systemImageName = "waveform"
         case .document, .other:
             systemImageName = "doc"
         @unknown default:
