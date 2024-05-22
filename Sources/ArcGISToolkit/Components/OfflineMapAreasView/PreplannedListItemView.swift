@@ -91,7 +91,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***case .notLoaded:
 ***REMOVED******REMOVED******REMOVED******REMOVED***areaStatus = .notLoaded
 ***REMOVED******REMOVED******REMOVED***case .failed:
-***REMOVED******REMOVED******REMOVED******REMOVED***areaStatus = .failed
+***REMOVED******REMOVED******REMOVED******REMOVED***areaStatus = packagingStatus == .processing ? .packaging : .failed
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
