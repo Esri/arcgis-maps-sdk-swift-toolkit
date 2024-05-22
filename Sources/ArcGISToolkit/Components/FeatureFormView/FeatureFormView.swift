@@ -91,6 +91,9 @@ public struct FeatureFormView: View {
                         ForEach(model.visibleElements, id: \.self) { element in
                             makeElement(element)
                         }
+                        if let attachmentElement = model.featureForm.defaultAttachmentElement {
+                            makeElement(attachmentElement)
+                        }
                     }
                 }
             }
