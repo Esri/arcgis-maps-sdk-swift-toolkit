@@ -16,9 +16,10 @@
 ***REMOVED***
 
 ***REMOVED***/ An object that encapsulates state about a preplanned map.
-public class PreplannedMapModel: ObservableObject, Identifiable {
+@MainActor
+class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The preplanned map area.
-***REMOVED***let preplannedMapArea: PreplannedMapArea
+***REMOVED***let preplannedMapArea: any PreplannedMapAreaProtocol
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***private var mapViewModel: OfflineMapAreasView.MapViewModel
@@ -37,6 +38,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***job != nil
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The combined status of the preplanned map area.
+***REMOVED***@Published private(set) var status: Status = .notLoaded
+
 ***REMOVED******REMOVED***/ The result of the download job. When the result is `.success` the mobile map package is returned.
 ***REMOVED******REMOVED***/ If the result is `.failure` then the error is returned. The result will be `nil` when the preplanned
 ***REMOVED******REMOVED***/ map area is still packaging or loading.
@@ -60,6 +64,60 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.mapViewModel = mapViewModel
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***init(preplannedMapArea: PreplannedMapAreaProtocol) {
+***REMOVED******REMOVED***self.preplannedMapArea = preplannedMapArea
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Kick off a load of the map area.
+***REMOVED******REMOVED***Task.detached { await self.load() ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
+***REMOVED***private func load() async {
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Load preplanned map area to obtain packaging status.
+***REMOVED******REMOVED******REMOVED***status = .loading
+***REMOVED******REMOVED******REMOVED***try await preplannedMapArea.retryLoad()
+***REMOVED******REMOVED******REMOVED******REMOVED*** Note: Packaging status is `nil` for compatibility with
+***REMOVED******REMOVED******REMOVED******REMOVED*** legacy webmaps that have incomplete metadata.
+***REMOVED******REMOVED******REMOVED******REMOVED*** If the area loads, then you know for certain the status is complete.
+***REMOVED******REMOVED******REMOVED***updateStatus(for: preplannedMapArea.packagingStatus ?? .complete)
+***REMOVED*** catch MappingError.packagingNotComplete {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Load will throw an `MappingError.packagingNotComplete` error if not complete,
+***REMOVED******REMOVED******REMOVED******REMOVED*** this case is not a normal load failure.
+***REMOVED******REMOVED******REMOVED***updateStatus(for: preplannedMapArea.packagingStatus ?? .failed)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Normal load failure.
+***REMOVED******REMOVED******REMOVED***status = .loadFailure(error)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Updates the status for a given packaging status.
+***REMOVED***private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
+***REMOVED******REMOVED******REMOVED*** Update area status for a given packaging status.
+***REMOVED******REMOVED***switch packagingStatus {
+***REMOVED******REMOVED***case .processing:
+***REMOVED******REMOVED******REMOVED***status = .packaging
+***REMOVED******REMOVED***case .failed:
+***REMOVED******REMOVED******REMOVED***status = .packageFailure
+***REMOVED******REMOVED***case .complete:
+***REMOVED******REMOVED******REMOVED***status = .packaged
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***fatalError("Unknown packaging status")
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if download can be called.
+***REMOVED***var canDownload: Bool {
+***REMOVED******REMOVED***switch status {
+***REMOVED******REMOVED***case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
+***REMOVED******REMOVED******REMOVED******REMOVED***.downloading, .downloaded:
+***REMOVED******REMOVED******REMOVED***false
+***REMOVED******REMOVED***case .packaged, .downloadFailure:
+***REMOVED******REMOVED******REMOVED***true
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -137,5 +195,50 @@ extension PreplannedMapModel: Hashable {
 ***REMOVED***
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(ObjectIdentifier(self))
+***REMOVED******REMOVED***/ The status of the preplanned map area model.
+***REMOVED***enum Status {
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area not loaded.
+***REMOVED******REMOVED***case notLoaded
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area is loading.
+***REMOVED******REMOVED***case loading
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area failed to load.
+***REMOVED******REMOVED***case loadFailure(Error)
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area is packaging.
+***REMOVED******REMOVED***case packaging
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area is packaged and ready for download.
+***REMOVED******REMOVED***case packaged
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area packaging failed.
+***REMOVED******REMOVED***case packageFailure
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area is being downloaded.
+***REMOVED******REMOVED***case downloading
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area is downloaded.
+***REMOVED******REMOVED***case downloaded
+***REMOVED******REMOVED******REMOVED***/ Preplanned map area failed to download.
+***REMOVED******REMOVED***case downloadFailure(Error)
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ A type that acts as a preplanned map area.
+protocol PreplannedMapAreaProtocol {
+***REMOVED***func retryLoad() async throws
+***REMOVED***
+***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? { get ***REMOVED***
+***REMOVED***var title: String { get ***REMOVED***
+***REMOVED***var description: String { get ***REMOVED***
+***REMOVED***var thumbnail: LoadableImage? { get ***REMOVED***
+***REMOVED***
+
+***REMOVED***/ Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
+extension PreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED***var title: String {
+***REMOVED******REMOVED***portalItem.title
+***REMOVED***
+***REMOVED***
+***REMOVED***var thumbnail: LoadableImage? {
+***REMOVED******REMOVED***portalItem.thumbnail
+***REMOVED***
+***REMOVED***
+***REMOVED***var description: String {
+***REMOVED******REMOVED***portalItem.description
 ***REMOVED***
 ***REMOVED***
