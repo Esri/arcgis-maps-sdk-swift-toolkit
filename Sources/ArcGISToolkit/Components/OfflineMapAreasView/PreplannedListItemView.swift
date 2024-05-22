@@ -91,7 +91,7 @@ public struct PreplannedListItemView: View {
             case .notLoaded:
                 areaStatus = .notLoaded
             case .failed:
-                areaStatus = .failed
+                areaStatus = packagingStatus == .processing ? .packaging : .failed
             }
         }
         .task {
