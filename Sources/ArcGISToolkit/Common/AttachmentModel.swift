@@ -72,6 +72,8 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED***systemImageName = "photo"
 ***REMOVED******REMOVED***case .video:
 ***REMOVED******REMOVED******REMOVED***systemImageName = "film"
+***REMOVED******REMOVED***case .audio:
+***REMOVED******REMOVED******REMOVED***systemImageName = "waveform"
 ***REMOVED******REMOVED***case .document, .other:
 ***REMOVED******REMOVED******REMOVED***systemImageName = "doc"
 ***REMOVED******REMOVED***@unknown default:
