@@ -61,6 +61,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             status = .packageFailure
         case .complete:
             status = .packaged
+        @unknown default:
+            fatalError("Unknown packaging status")
         }
     }
     
