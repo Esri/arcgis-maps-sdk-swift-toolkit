@@ -47,7 +47,6 @@ public struct PreplannedListItemView: View {
             .font(.body)
     }
     
-    
     @ViewBuilder private var downloadButton: some View {
         Button {
             
