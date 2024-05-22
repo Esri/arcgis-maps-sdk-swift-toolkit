@@ -41,8 +41,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             // legacy webmaps that have incomplete metadata.
             // If the area loads, then you know for certain the status is complete.
             updateStatus(for: preplannedMapArea.packagingStatus ?? .complete)
-        } catch is IllegalStateError {
-            // Load will throw an illegal state error if not complete,
+        } catch MappingError.packagingNotComplete {
+            // Load will throw an `MappingError.packagingNotComplete` error if not complete,
             // this case is not a normal load failure.
             updateStatus(for: preplannedMapArea.packagingStatus ?? .failed)
         } catch {
