@@ -101,7 +101,10 @@ public struct PreplannedListItemView: View {
 }
 
 #Preview {
-    PreplannedListItemView(model: PreplannedMapModel(preplannedMapArea: MockPreplanneddMapArea()))
+    PreplannedListItemView(
+        model: PreplannedMapModel(preplannedMapArea: MockPreplanneddMapArea())
+    )
+    .padding()
 }
 
 private struct MockPreplanneddMapArea: PreplannedMapAreaProtocol {
