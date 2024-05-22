@@ -16,9 +16,10 @@ import SwiftUI
 import ArcGIS
 
 /// An object that encapsulates state about a preplanned map.
-public class PreplannedMapModel: ObservableObject, Identifiable {
+@MainActor
+class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
-    let preplannedMapArea: PreplannedMapArea
+    let preplannedMapArea: any PreplannedMapAreaProtocol
     
     /// The view model for the map.
     private var mapViewModel: OfflineMapAreasView.MapViewModel
@@ -37,6 +38,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         job != nil
     }
     
+    /// The combined status of the preplanned map area.
+    @Published private(set) var status: Status = .notLoaded
+
     /// The result of the download job. When the result is `.success` the mobile map package is returned.
     /// If the result is `.failure` then the error is returned. The result will be `nil` when the preplanned
     /// map area is still packaging or loading.
@@ -60,6 +64,60 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
         
         self.mapViewModel = mapViewModel
+    
+    }
+    
+    init(preplannedMapArea: PreplannedMapAreaProtocol) {
+        self.preplannedMapArea = preplannedMapArea
+        
+        // Kick off a load of the map area.
+        Task.detached { await self.load() }
+    }
+    
+    /// Loads the preplanned map area and updates the status.
+    private func load() async {
+        do {
+            // Load preplanned map area to obtain packaging status.
+            status = .loading
+            try await preplannedMapArea.retryLoad()
+            // Note: Packaging status is `nil` for compatibility with
+            // legacy webmaps that have incomplete metadata.
+            // If the area loads, then you know for certain the status is complete.
+            updateStatus(for: preplannedMapArea.packagingStatus ?? .complete)
+        } catch MappingError.packagingNotComplete {
+            // Load will throw an `MappingError.packagingNotComplete` error if not complete,
+            // this case is not a normal load failure.
+            updateStatus(for: preplannedMapArea.packagingStatus ?? .failed)
+        } catch {
+            // Normal load failure.
+            status = .loadFailure(error)
+        }
+    }
+    
+    /// Updates the status for a given packaging status.
+    private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
+        // Update area status for a given packaging status.
+        switch packagingStatus {
+        case .processing:
+            status = .packaging
+        case .failed:
+            status = .packageFailure
+        case .complete:
+            status = .packaged
+        @unknown default:
+            fatalError("Unknown packaging status")
+        }
+    }
+    
+    /// A Boolean value indicating if download can be called.
+    var canDownload: Bool {
+        switch status {
+        case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
+                .downloading, .downloaded:
+            false
+        case .packaged, .downloadFailure:
+            true
+        }
     }
 }
 
@@ -137,5 +195,50 @@ extension PreplannedMapModel: Hashable {
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(ObjectIdentifier(self))
+    /// The status of the preplanned map area model.
+    enum Status {
+        /// Preplanned map area not loaded.
+        case notLoaded
+        /// Preplanned map area is loading.
+        case loading
+        /// Preplanned map area failed to load.
+        case loadFailure(Error)
+        /// Preplanned map area is packaging.
+        case packaging
+        /// Preplanned map area is packaged and ready for download.
+        case packaged
+        /// Preplanned map area packaging failed.
+        case packageFailure
+        /// Preplanned map area is being downloaded.
+        case downloading
+        /// Preplanned map area is downloaded.
+        case downloaded
+        /// Preplanned map area failed to download.
+        case downloadFailure(Error)
+    }
+}
+
+/// A type that acts as a preplanned map area.
+protocol PreplannedMapAreaProtocol {
+    func retryLoad() async throws
+    
+    var packagingStatus: PreplannedMapArea.PackagingStatus? { get }
+    var title: String { get }
+    var description: String { get }
+    var thumbnail: LoadableImage? { get }
+}
+
+/// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
+extension PreplannedMapArea: PreplannedMapAreaProtocol {
+    var title: String {
+        portalItem.title
+    }
+    
+    var thumbnail: LoadableImage? {
+        portalItem.thumbnail
+    }
+    
+    var description: String {
+        portalItem.description
     }
 }
