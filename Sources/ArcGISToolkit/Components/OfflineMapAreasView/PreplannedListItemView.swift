@@ -16,127 +16,13 @@ import SwiftUI
 import ArcGIS
 
 public struct PreplannedListItemView: View {
+    /// The view model for the map view.
     @ObservedObject var mapViewModel: OfflineMapAreasView.MapViewModel
+    
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
-    public var body: some View {
-        // HStack {
-        //     HStack {
-        //         let preplannedMapArea = preplannedMapModel.preplannedMapArea
-        //         if let thumbnail = preplannedMapModel.preplannedMapArea.portalItem.thumbnail {
-        //             LoadableImageView(loadableImage: thumbnail)
-        //                 .frame(width: 64, height: 44)
-        //         }
-        //         VStack(alignment: .leading, spacing: 2) {
-        //             Text(preplannedMapArea.portalItem.title)
-        //                 .font(.headline)
-        //             if !preplannedMapArea.portalItem.description.isEmpty {
-        //                 Text(preplannedMapArea.portalItem.description)
-        //                     .font(.caption)
-        //                     .foregroundStyle(Color(uiColor: .secondaryLabel))
-        //                     .lineLimit(2)
-        //             } else {
-        //                 Text("The area has no description.")
-        //                     .font(.caption)
-        //                     .foregroundStyle(Color(uiColor: .tertiaryLabel))
-        //             }
-        //             if let error {
-        //                 Text(error.localizedDescription)
-        //                     .font(.footnote)
-        //                     .foregroundStyle(.red)
-        //                     .lineLimit(2)
-        //                     .minimumScaleFactor(0.8)
-        //             }
-        //         }
-        //         Spacer()
-                
-        //         if let portalItemID = preplannedMapModel.preplannedMapArea.portalItem.id,
-        //            let mobileMapPackage = mapViewModel.mobileMapPackages.first(where: { $0.fileURL.lastPathComponent == portalItemID.rawValue.appending(".mmpk") }) {
-        //             // Map is downloaded.
-        //             Image(systemName: "checkmark.circle")
-        //                 .foregroundStyle(.secondary)
-        //         } else {
-                    
-        //             if let job = preplannedMapModel.job,
-        //                job.status == .started {
-        //                 ProgressView(job.progress)
-        //                     .progressViewStyle(.gauge)
-        //             } else {
-        //                 switch preplannedMapModel.result {
-        //                 case .success:
-        //                     Image(systemName: "checkmark.circle")
-        //                         .foregroundStyle(.secondary)
-        //                 case .failure(let error):
-        //                     Image(systemName: "exclamationmark.circle")
-        //                         .foregroundStyle(.red)
-        //                         .onAppear {
-        //                             self.error = error
-        //                         }
-        //                 case .none:
-        //                     if let canDownload {
-        //                         if !canDownload {
-        //                             // Map is still packaging.
-        //                             VStack {
-        //                                 Image(systemName: "clock.badge.xmark")
-        //                                 Text("packaging")
-        //                                     .font(.footnote)
-        //                             }
-        //                             .foregroundStyle(.secondary)
-        //                         } else {
-        //                             // Map package is available for download.
-        //                             Image(systemName: "arrow.down.circle")
-        //                                 .foregroundStyle(Color.accentColor)
-        //                         }
-        //                     } else {
-        //                         // Map is still loading.
-        //                         VStack(alignment: .trailing) {
-        //                             ProgressView()
-        //                                 .frame(maxWidth: 20)
-        //                                 .controlSize(.mini)
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     .onReceive(preplannedMapModel.preplannedMapArea.$loadStatus) { status in
-        //         let packagingStatus = preplannedMapModel.preplannedMapArea.packagingStatus
-                
-        //         switch status {
-        //         case .loaded:
-        //             // Allow downloading the map area when packaging is complete,
-        //             // or when the packaging status is `nil` for compatibility with
-        //             // legacy webmaps that have incomplete metadata.
-        //             withAnimation(.easeIn) {
-        //                 canDownload = (packagingStatus == .complete || packagingStatus == nil) ? true : false
-        //             }
-        //         case .loading:
-        //             // Disable downloading the map area when packaging. Otherwise,
-        //             // do not set `canDownload` since the map area is still loading.
-        //             if packagingStatus == .processing {
-        //                 // Disable downloading map area when still packaging.
-        //                 canDownload = false
-        //             }
-        //         case .notLoaded:
-        //             // Do not set `canDownload` until map has loaded.
-        //             return
-        //         case .failed:
-        //             // Disable downloading when the map fails to load.
-        //             canDownload = false
-        //         }
-        //     }
-        //     .task {
-        //         do {
-        //             // Load preplanned map area to load packaging status.
-        //             try await preplannedMapModel.preplannedMapArea.load()
-        //         } catch {
-        //             // Present the error if the map area has been packaged. Otherwise,
-        //             // ignore the error when the map area is still packaging since the map
-        //             // area cannot load while packaging.
-        //             if preplannedMapModel.preplannedMapArea.packagingStatus == .complete {
-        //                 self.error = error
-        //             }
+    public var body: some View {      
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
             VStack(alignment: .leading, spacing: 4) {
@@ -148,8 +34,16 @@ public struct PreplannedListItemView: View {
                 descriptionView
                 statusView
             }
-            .onTapGesture {
-                mapViewModel.selectedMap = OfflineMapAreasView.MapViewModel.SelectedMap.preplannedMap(preplannedMapModel)
+        }
+        .onReceive(model.$result) { result in
+            model.updateDownloadStatus(for: result)
+        }
+        .onChange(of: model.job?.status) { status in
+            // Send notification using job status.
+            if status == .succeeded {
+                model.notifyJobCompleted(.succeeded)
+            } else if status == .failed {
+                model.notifyJobCompleted(.failed)
             }
         }
     }
@@ -168,12 +62,23 @@ public struct PreplannedListItemView: View {
     }
     
     @ViewBuilder private var downloadButton: some View {
-        Button {
-            
-        } label: {
-            Image(systemName: "arrow.down.circle")
+        switch model.status {
+        case .downloaded:
+            Image(systemName: "checkmark.circle")
+                .foregroundStyle(.secondary)
+        case .downloading:
+            if let job = model.job {
+                ProgressView(job.progress)
+                    .progressViewStyle(.gauge)
+            }
+        default:
+            Button {
+                mapViewModel.selectedMap = OfflineMapAreasView.MapViewModel.SelectedMap.preplannedMap(model)
+            } label: {
+                Image(systemName: "arrow.down.circle")
+            }
+            .disabled(!model.canDownload)
         }
-        .disabled(!model.canDownload)
     }
     
     @ViewBuilder private var descriptionView: some View {
@@ -221,12 +126,18 @@ public struct PreplannedListItemView: View {
 
 #Preview {
     PreplannedListItemView(
-        model: PreplannedMapModel(preplannedMapArea: MockPreplannedMapArea())
+        mapViewModel: OfflineMapAreasView.MapViewModel(map: Map()),
+        model: PreplannedMapModel(
+            preplannedMapArea: MockPreplannedMapArea(),
+            mapViewModel: OfflineMapAreasView.MapViewModel(map: Map())
+        )!
     )
     .padding()
 }
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
+    var mapArea: ArcGIS.PreplannedMapArea? = nil
+    var id: ArcGIS.Item.ID?
     var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
     var title: String = "Mock Preplanned Map Area"
     var description: String = "This is the description text"
