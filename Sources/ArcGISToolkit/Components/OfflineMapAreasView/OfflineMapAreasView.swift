@@ -46,6 +46,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reload the preplanned map areas.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.loadPreplannedMobileMapPackages()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
@@ -61,11 +62,18 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
-***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.loadMobileMapPackages()
+***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.loadPreplannedMobileMapPackages()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") { dismiss() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let error {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationTitle("Offline Maps")
@@ -80,7 +88,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel: mapViewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapModel: preplannedMapModel
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: preplannedMapModel
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
@@ -119,6 +127,8 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ The online map.
 ***REMOVED******REMOVED***private let onlineMap: Map
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***private var portalItemID: String?
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The offline map of the downloaded preplanned map area.
 ***REMOVED******REMOVED***private var offlineMap: Map?
 ***REMOVED******REMOVED***
@@ -126,10 +136,10 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***var currentMap: Map { offlineMap ?? onlineMap ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The offline map task.
-***REMOVED******REMOVED***private let offlineMapTask: OfflineMapTask
+***REMOVED******REMOVED***let offlineMapTask: OfflineMapTask
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The url for the documents directory.
-***REMOVED******REMOVED***private let documentsDirectory: URL = FileManager.default.documentsDirectory
+***REMOVED******REMOVED******REMOVED***/ The url for the preplanned map areas directory.
+***REMOVED******REMOVED***let preplannedDirectory: URL = FileManager.default.preplannedDirectory
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The mobile map packages created from mmpk files in the documents directory.
 ***REMOVED******REMOVED***@Published var mobileMapPackages = [MobileMapPackage]()
@@ -150,25 +160,22 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***var jobManager = JobManager.shared
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(map: Map) {
-***REMOVED******REMOVED******REMOVED***self.onlineMap = map
+***REMOVED******REMOVED******REMOVED***Task.detached {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create directory for offline map areas.
+***REMOVED******REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: FileManager.default.offlineMapAreasDirectory, withIntermediateDirectories: true)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create directory for preplanned map areas.
+***REMOVED******REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: FileManager.default.preplannedDirectory, withIntermediateDirectories: true)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***onlineMap = map
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***portalItemID = onlineMap.item?.id?.description
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Sets the min scale to avoid requesting a huge download.
 ***REMOVED******REMOVED******REMOVED***onlineMap.minScale = 1e4
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***offlineMapTask = OfflineMapTask(onlineMap: onlineMap)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***deinit {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Removes the mmpks from the documents directory.
-***REMOVED******REMOVED******REMOVED***if let files = try? FileManager.default.contentsOfDirectory(
-***REMOVED******REMOVED******REMOVED******REMOVED***at: documentsDirectory,
-***REMOVED******REMOVED******REMOVED******REMOVED***includingPropertiesForKeys: nil,
-***REMOVED******REMOVED******REMOVED******REMOVED***options: .skipsHiddenFiles
-***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***for url in files where url.pathExtension == "mmpk" {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: url)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Gets the preplanned map areas from the offline map task and creates the
@@ -179,8 +186,6 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sorted(using: KeyPathComparator(\.portalItem.title))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.compactMap {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: offlineMapTask,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***temporaryDirectory: documentsDirectory,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: $0,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel: self
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -217,10 +222,10 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***func loadMobileMapPackages() {
+***REMOVED******REMOVED***func loadPreplannedMobileMapPackages() {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Create mobile map packages with saved mmpk files.
 ***REMOVED******REMOVED******REMOVED***if let files = try? FileManager.default.contentsOfDirectory(
-***REMOVED******REMOVED******REMOVED******REMOVED***at: documentsDirectory,
+***REMOVED******REMOVED******REMOVED******REMOVED***at: preplannedDirectory,
 ***REMOVED******REMOVED******REMOVED******REMOVED***includingPropertiesForKeys: nil,
 ***REMOVED******REMOVED******REMOVED******REMOVED***options: .skipsHiddenFiles
 ***REMOVED******REMOVED******REMOVED***) {
@@ -249,6 +254,16 @@ private extension FileManager {
 ***REMOVED******REMOVED***URL(
 ***REMOVED******REMOVED******REMOVED***fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
 ***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The path to the offline map areas directory.
+***REMOVED***var offlineMapAreasDirectory: URL {
+***REMOVED******REMOVED***documentsDirectory.appending(path: "OfflineMapAreas", directoryHint: .isDirectory)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The path to the preplanned map areas directory.
+***REMOVED***var preplannedDirectory: URL {
+***REMOVED******REMOVED***offlineMapAreasDirectory.appending(path: "Preplanned", directoryHint: .isDirectory)
 ***REMOVED***
 ***REMOVED***
 
