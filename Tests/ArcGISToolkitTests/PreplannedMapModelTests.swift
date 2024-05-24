@@ -27,6 +27,17 @@ class PreplannedMapModelTests: XCTestCase {
     private static var sleepNanoseconds: UInt64 { 100_000 }
     
     @MainActor
+    func testInit() {
+        class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+            func retryLoad() async throws { }
+        }
+        
+        let mockArea = MockPreplannedMapArea()
+        let model = PreplannedMapModel(preplannedMapArea: mockArea)
+        XCTAssertIdentical(model.preplannedMapArea as? MockPreplannedMapArea, mockArea)
+    }
+    
+    @MainActor
     func testInitialStatus() {
         class MockPreplannedMapArea: PreplannedMapAreaProtocol {
             func retryLoad() async throws { }
