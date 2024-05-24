@@ -46,6 +46,7 @@ public struct OfflineMapAreasView: View {
                         }
                         Task {
                             // Reload the preplanned map areas.
+                            mapViewModel.loadPreplannedMobileMapPackages()
                             await mapViewModel.makePreplannedOfflineMapModels()
                         }
                     } label: {
@@ -61,11 +62,18 @@ public struct OfflineMapAreasView: View {
             }
             .task {
                 await mapViewModel.makePreplannedOfflineMapModels()
-                mapViewModel.loadMobileMapPackages()
+                mapViewModel.loadPreplannedMobileMapPackages()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
+                }
+            }
+            .onAppear {
+                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
+                    if let error {
+                        print(error.localizedDescription)
+                    }
                 }
             }
             .navigationTitle("Offline Maps")
@@ -80,7 +88,7 @@ public struct OfflineMapAreasView: View {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(
                         mapViewModel: mapViewModel,
-                        preplannedMapModel: preplannedMapModel
+                        model: preplannedMapModel
                     )
                 }
             } else {
@@ -119,6 +127,8 @@ public extension OfflineMapAreasView {
         /// The online map.
         private let onlineMap: Map
         
+        private var portalItemID: String?
+        
         /// The offline map of the downloaded preplanned map area.
         private var offlineMap: Map?
         
@@ -126,10 +136,10 @@ public extension OfflineMapAreasView {
         var currentMap: Map { offlineMap ?? onlineMap }
         
         /// The offline map task.
-        private let offlineMapTask: OfflineMapTask
+        let offlineMapTask: OfflineMapTask
         
-        /// The url for the documents directory.
-        private let documentsDirectory: URL = FileManager.default.documentsDirectory
+        /// The url for the preplanned map areas directory.
+        let preplannedDirectory: URL = FileManager.default.preplannedDirectory
         
         /// The mobile map packages created from mmpk files in the documents directory.
         @Published var mobileMapPackages = [MobileMapPackage]()
@@ -150,25 +160,22 @@ public extension OfflineMapAreasView {
         var jobManager = JobManager.shared
         
         init(map: Map) {
-            self.onlineMap = map
+            Task.detached {
+                // Create directory for offline map areas.
+                try FileManager.default.createDirectory(at: FileManager.default.offlineMapAreasDirectory, withIntermediateDirectories: true)
+                
+                // Create directory for preplanned map areas.
+                try FileManager.default.createDirectory(at: FileManager.default.preplannedDirectory, withIntermediateDirectories: true)
+            }
+            
+            onlineMap = map
+            
+            portalItemID = onlineMap.item?.id?.description
             
             // Sets the min scale to avoid requesting a huge download.
             onlineMap.minScale = 1e4
             
             offlineMapTask = OfflineMapTask(onlineMap: onlineMap)
-        }
-        
-        deinit {
-            // Removes the mmpks from the documents directory.
-            if let files = try? FileManager.default.contentsOfDirectory(
-                at: documentsDirectory,
-                includingPropertiesForKeys: nil,
-                options: .skipsHiddenFiles
-            ) {
-                for url in files where url.pathExtension == "mmpk" {
-                    try? FileManager.default.removeItem(at: url)
-                }
-            }
         }
         
         /// Gets the preplanned map areas from the offline map task and creates the
@@ -179,8 +186,6 @@ public extension OfflineMapAreasView {
                     .sorted(using: KeyPathComparator(\.portalItem.title))
                     .compactMap {
                         PreplannedMapModel(
-                            offlineMapTask: offlineMapTask,
-                            temporaryDirectory: documentsDirectory,
                             preplannedMapArea: $0,
                             mapViewModel: self
                         )
@@ -217,10 +222,10 @@ public extension OfflineMapAreasView {
             }
         }
         
-        func loadMobileMapPackages() {
+        func loadPreplannedMobileMapPackages() {
             // Create mobile map packages with saved mmpk files.
             if let files = try? FileManager.default.contentsOfDirectory(
-                at: documentsDirectory,
+                at: preplannedDirectory,
                 includingPropertiesForKeys: nil,
                 options: .skipsHiddenFiles
             ) {
@@ -249,6 +254,16 @@ private extension FileManager {
         URL(
             fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         )
+    }
+    
+    /// The path to the offline map areas directory.
+    var offlineMapAreasDirectory: URL {
+        documentsDirectory.appending(path: "OfflineMapAreas", directoryHint: .isDirectory)
+    }
+    
+    /// The path to the preplanned map areas directory.
+    var preplannedDirectory: URL {
+        offlineMapAreasDirectory.appending(path: "Preplanned", directoryHint: .isDirectory)
     }
 }
 
