@@ -27,6 +27,17 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***private static var sleepNanoseconds: UInt64 { 100_000 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
+***REMOVED***func testInit() {
+***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED******REMOVED***func retryLoad() async throws { ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
+***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***XCTAssertIdentical(model.preplannedMapArea as? MockPreplannedMapArea, mockArea)
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testInitialStatus() {
 ***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws { ***REMOVED***
