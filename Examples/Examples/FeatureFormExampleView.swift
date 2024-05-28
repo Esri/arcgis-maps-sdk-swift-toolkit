@@ -202,24 +202,7 @@ class Model: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The current feature form, derived from ``Model/state-swift.property``.
-***REMOVED***var featureForm: FeatureForm? {
-***REMOVED******REMOVED***switch state {
-***REMOVED******REMOVED***case .idle:
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED******REMOVED***case
-***REMOVED******REMOVED******REMOVED***let .editing(form), let .validating(form),
-***REMOVED******REMOVED******REMOVED***let .finishingEdits(form), let .applyingEdits(form),
-***REMOVED******REMOVED******REMOVED***let .cancellationPending(form), let .generalError(form, _):
-***REMOVED******REMOVED******REMOVED***return form
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether external form controls like "Cancel" and "Submit" should be disabled.
-***REMOVED***var formControlsAreDisabled: Bool {
-***REMOVED******REMOVED***guard case .editing = state else { return true ***REMOVED***
-***REMOVED******REMOVED***return false
-***REMOVED***
+***REMOVED******REMOVED*** MARK: Properties
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether general form workflow errors are presented.
 ***REMOVED***var alertIsPresented: Binding<Bool> {
@@ -241,6 +224,25 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***return true
 ***REMOVED*** set: { _ in
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The current feature form, derived from ``Model/state-swift.property``.
+***REMOVED***var featureForm: FeatureForm? {
+***REMOVED******REMOVED***switch state {
+***REMOVED******REMOVED***case .idle:
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***case
+***REMOVED******REMOVED******REMOVED***let .editing(form), let .validating(form),
+***REMOVED******REMOVED******REMOVED***let .finishingEdits(form), let .applyingEdits(form),
+***REMOVED******REMOVED******REMOVED***let .cancellationPending(form), let .generalError(form, _):
+***REMOVED******REMOVED******REMOVED***return form
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether external form controls like "Cancel" and "Submit" should be disabled.
+***REMOVED***var formControlsAreDisabled: Bool {
+***REMOVED******REMOVED***guard case .editing = state else { return true ***REMOVED***
+***REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the form is displayed.
@@ -268,6 +270,8 @@ class Model: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED*** MARK: Methods
+***REMOVED***
 ***REMOVED******REMOVED***/ Reverts any local edits that haven't yet been saved to service geodatabase.
 ***REMOVED***func discardEdits() {
 ***REMOVED******REMOVED***guard case let .cancellationPending(featureForm) = state else {
@@ -283,36 +287,7 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***await validateChanges(featureForm)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Checks the feature form for the presence of any validation errors.
-***REMOVED***private func validateChanges(_ featureForm: FeatureForm) async {
-***REMOVED******REMOVED***state = .validating(featureForm)
-***REMOVED******REMOVED***guard featureForm.validationErrors.isEmpty else {
-***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***await finishEdits(featureForm)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Commits feature edits to the local geodatabase.
-***REMOVED***private func finishEdits(_ featureForm: FeatureForm) async {
-***REMOVED******REMOVED***state = .finishingEdits(featureForm)
-***REMOVED******REMOVED***guard let table = featureForm.feature.table as? ServiceFeatureTable else {
-***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Error resolving feature table."))
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***guard table.isEditable else {
-***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("The feature table isn't editable."))
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***state = .finishingEdits(featureForm)
-***REMOVED******REMOVED******REMOVED***try await table.update(featureForm.feature)
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("The feature update failed."))
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***await applyEdits(featureForm, table)
-***REMOVED***
+***REMOVED******REMOVED*** MARK: Private methods
 ***REMOVED***
 ***REMOVED******REMOVED***/ Applies edits to the remote service.
 ***REMOVED***private func applyEdits(_ featureForm: FeatureForm, _ table: ServiceFeatureTable) async {
@@ -360,6 +335,37 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***return errors
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Commits feature edits to the local geodatabase.
+***REMOVED***private func finishEdits(_ featureForm: FeatureForm) async {
+***REMOVED******REMOVED***state = .finishingEdits(featureForm)
+***REMOVED******REMOVED***guard let table = featureForm.feature.table as? ServiceFeatureTable else {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Error resolving feature table."))
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***guard table.isEditable else {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("The feature table isn't editable."))
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***state = .finishingEdits(featureForm)
+***REMOVED******REMOVED******REMOVED***try await table.update(featureForm.feature)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("The feature update failed."))
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***await applyEdits(featureForm, table)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Checks the feature form for the presence of any validation errors.
+***REMOVED***private func validateChanges(_ featureForm: FeatureForm) async {
+***REMOVED******REMOVED***state = .validating(featureForm)
+***REMOVED******REMOVED***guard featureForm.validationErrors.isEmpty else {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***await finishEdits(featureForm)
 ***REMOVED***
 ***REMOVED***
 
