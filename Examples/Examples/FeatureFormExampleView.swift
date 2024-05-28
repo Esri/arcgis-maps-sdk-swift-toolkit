@@ -112,13 +112,6 @@ struct FeatureFormExampleView: View {
                         EmptyView()
                     }
                 }
-                .sheet(isPresented: model.applyEditsErrorsArePresented) {
-                    if case let .applyEditError(featureForm, errors) = model.state {
-                        ErrorTable(errors: errors) {
-                            model.state = .editing(featureForm)
-                        }
-                    }
-                }
                 .toolbar {
                     if model.formIsPresented.wrappedValue {
                         ToolbarItem(placement: .navigationBarLeading) {
@@ -192,8 +185,6 @@ class Model: ObservableObject {
         case cancellationPending(FeatureForm)
         /// There was an error in a workflow step.
         case generalError(FeatureForm, Text)
-        /// There was an error applying edits to the remote service.
-        case applyEditError(FeatureForm, [Error])
     }
     
     /// The current feature form workflow state.
@@ -219,7 +210,7 @@ class Model: ObservableObject {
         case
             let .editing(form), let .validating(form),
             let .finishingEdits(form), let .applyingEdits(form),
-            let .cancellationPending(form), let .generalError(form, _), let .applyEditError(form, _):
+            let .cancellationPending(form), let .generalError(form, _):
             return form
         }
     }
@@ -228,19 +219,6 @@ class Model: ObservableObject {
     var formControlsAreDisabled: Bool {
         guard case .editing = state else { return true }
         return false
-    }
-    
-    /// A Boolean value indicating whether any errors from applying edits are presented.
-    var applyEditsErrorsArePresented: Binding<Bool> {
-        Binding {
-            guard case .applyEditError = self.state else { return false }
-            return true
-        } set: { newApplyEditsErrorsArePresented in
-            if !newApplyEditsErrorsArePresented {
-                guard case let .applyEditError(featureForm, array) = self.state else { return }
-                self.state = .editing(featureForm)
-            }
-        }
     }
     
     /// A Boolean value indicating whether general form workflow errors are presented.
@@ -365,7 +343,7 @@ class Model: ObservableObject {
         if resultErrors.isEmpty {
             state = .idle
         } else {
-            state = .applyEditError(featureForm, resultErrors)
+            state = .generalError(featureForm, Text("Changes were not applied."))
         }
     }
     
@@ -389,67 +367,5 @@ private extension FeatureForm {
     /// The layer to which the feature belongs.
     var featureLayer: FeatureLayer? {
         feature.table?.layer as? FeatureLayer
-    }
-}
-
-/// A table to presented formatted errors.
-struct ErrorTable: View {
-    /// Wrapper for generic errors to enable identification.
-    struct IdentifiableError: Identifiable {
-        let id = UUID()
-        let error: Error
-    }
-    
-    /// Creates a table to presented formatted errors.
-    /// - Parameters:
-    ///   - errors: The errors to present.
-    ///   - dismiss: The closure to perform when the table is dismissed.
-    init(errors: [Error], dismiss: @escaping () -> Void) {
-        self.errors = errors.compactMap { IdentifiableError(error: $0) }
-        self.dismiss = dismiss
-    }
-    
-    /// The errors to present.
-    let errors: [IdentifiableError]
-    
-    /// The closure to perform when the table is dismissed.
-    let dismiss: () -> Void
-    
-    var body: some View {
-        NavigationStack {
-            Table(of: IdentifiableError.self) {
-                TableColumn("Error") { error in
-                    Text(String(describing: type(of: error.error)))
-                }
-                TableColumn("Code") { error in
-                    if let serviceError = error.error as? ArcGIS.ServiceError {
-                        Text(serviceError.code.description)
-                    } else {
-                        Text("-")
-                    }
-                }
-                TableColumn("Details") { error in
-                    if let serviceError = error.error as? ArcGIS.ServiceError {
-                        Text(serviceError.details)
-                            .lineLimit(nil)
-                    } else {
-                        Text(error.error.localizedDescription)
-                            .lineLimit(nil)
-                    }
-                }
-            } rows: {
-                ForEach(errors) { identifiableError in
-                    TableRow(identifiableError)
-                }
-            }
-            .navigationTitle("Errors")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-            }
-        }
     }
 }
