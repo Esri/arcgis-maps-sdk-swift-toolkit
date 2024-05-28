@@ -202,24 +202,7 @@ class Model: ObservableObject {
         }
     }
     
-    /// The current feature form, derived from ``Model/state-swift.property``.
-    var featureForm: FeatureForm? {
-        switch state {
-        case .idle:
-            return nil
-        case
-            let .editing(form), let .validating(form),
-            let .finishingEdits(form), let .applyingEdits(form),
-            let .cancellationPending(form), let .generalError(form, _):
-            return form
-        }
-    }
-    
-    /// A Boolean value indicating whether external form controls like "Cancel" and "Submit" should be disabled.
-    var formControlsAreDisabled: Bool {
-        guard case .editing = state else { return true }
-        return false
-    }
+    // MARK: Properties
     
     /// A Boolean value indicating whether general form workflow errors are presented.
     var alertIsPresented: Binding<Bool> {
@@ -241,6 +224,25 @@ class Model: ObservableObject {
             return true
         } set: { _ in
         }
+    }
+    
+    /// The current feature form, derived from ``Model/state-swift.property``.
+    var featureForm: FeatureForm? {
+        switch state {
+        case .idle:
+            return nil
+        case
+            let .editing(form), let .validating(form),
+            let .finishingEdits(form), let .applyingEdits(form),
+            let .cancellationPending(form), let .generalError(form, _):
+            return form
+        }
+    }
+    
+    /// A Boolean value indicating whether external form controls like "Cancel" and "Submit" should be disabled.
+    var formControlsAreDisabled: Bool {
+        guard case .editing = state else { return true }
+        return false
     }
     
     /// A Boolean value indicating whether or not the form is displayed.
@@ -268,6 +270,8 @@ class Model: ObservableObject {
         }
     }
     
+    // MARK: Methods
+    
     /// Reverts any local edits that haven't yet been saved to service geodatabase.
     func discardEdits() {
         guard case let .cancellationPending(featureForm) = state else {
@@ -283,36 +287,7 @@ class Model: ObservableObject {
         await validateChanges(featureForm)
     }
     
-    /// Checks the feature form for the presence of any validation errors.
-    private func validateChanges(_ featureForm: FeatureForm) async {
-        state = .validating(featureForm)
-        guard featureForm.validationErrors.isEmpty else {
-            state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
-            return
-        }
-        await finishEdits(featureForm)
-    }
-    
-    /// Commits feature edits to the local geodatabase.
-    private func finishEdits(_ featureForm: FeatureForm) async {
-        state = .finishingEdits(featureForm)
-        guard let table = featureForm.feature.table as? ServiceFeatureTable else {
-            state = .generalError(featureForm, Text("Error resolving feature table."))
-            return
-        }
-        guard table.isEditable else {
-            state = .generalError(featureForm, Text("The feature table isn't editable."))
-            return
-        }
-        do {
-            state = .finishingEdits(featureForm)
-            try await table.update(featureForm.feature)
-        } catch {
-            state = .generalError(featureForm, Text("The feature update failed."))
-            return
-        }
-        await applyEdits(featureForm, table)
-    }
+    // MARK: Private methods
     
     /// Applies edits to the remote service.
     private func applyEdits(_ featureForm: FeatureForm, _ table: ServiceFeatureTable) async {
@@ -360,6 +335,37 @@ class Model: ObservableObject {
             }
         }
         return errors
+    }
+    
+    /// Commits feature edits to the local geodatabase.
+    private func finishEdits(_ featureForm: FeatureForm) async {
+        state = .finishingEdits(featureForm)
+        guard let table = featureForm.feature.table as? ServiceFeatureTable else {
+            state = .generalError(featureForm, Text("Error resolving feature table."))
+            return
+        }
+        guard table.isEditable else {
+            state = .generalError(featureForm, Text("The feature table isn't editable."))
+            return
+        }
+        do {
+            state = .finishingEdits(featureForm)
+            try await table.update(featureForm.feature)
+        } catch {
+            state = .generalError(featureForm, Text("The feature update failed."))
+            return
+        }
+        await applyEdits(featureForm, table)
+    }
+    
+    /// Checks the feature form for the presence of any validation errors.
+    private func validateChanges(_ featureForm: FeatureForm) async {
+        state = .validating(featureForm)
+        guard featureForm.validationErrors.isEmpty else {
+            state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
+            return
+        }
+        await finishEdits(featureForm)
     }
 }
 
