@@ -112,13 +112,6 @@ struct FeatureFormExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: model.applyEditsErrorsArePresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if case let .applyEditError(featureForm, errors) = model.state {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ErrorTable(errors: errors) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.state = .editing(featureForm)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if model.formIsPresented.wrappedValue {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarLeading) {
@@ -192,8 +185,6 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***case cancellationPending(FeatureForm)
 ***REMOVED******REMOVED******REMOVED***/ There was an error in a workflow step.
 ***REMOVED******REMOVED***case generalError(FeatureForm, Text)
-***REMOVED******REMOVED******REMOVED***/ There was an error applying edits to the remote service.
-***REMOVED******REMOVED***case applyEditError(FeatureForm, [Error])
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current feature form workflow state.
@@ -219,7 +210,7 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***case
 ***REMOVED******REMOVED******REMOVED***let .editing(form), let .validating(form),
 ***REMOVED******REMOVED******REMOVED***let .finishingEdits(form), let .applyingEdits(form),
-***REMOVED******REMOVED******REMOVED***let .cancellationPending(form), let .generalError(form, _), let .applyEditError(form, _):
+***REMOVED******REMOVED******REMOVED***let .cancellationPending(form), let .generalError(form, _):
 ***REMOVED******REMOVED******REMOVED***return form
 ***REMOVED***
 ***REMOVED***
@@ -228,19 +219,6 @@ class Model: ObservableObject {
 ***REMOVED***var formControlsAreDisabled: Bool {
 ***REMOVED******REMOVED***guard case .editing = state else { return true ***REMOVED***
 ***REMOVED******REMOVED***return false
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether any errors from applying edits are presented.
-***REMOVED***var applyEditsErrorsArePresented: Binding<Bool> {
-***REMOVED******REMOVED***Binding {
-***REMOVED******REMOVED******REMOVED***guard case .applyEditError = self.state else { return false ***REMOVED***
-***REMOVED******REMOVED******REMOVED***return true
-***REMOVED*** set: { newApplyEditsErrorsArePresented in
-***REMOVED******REMOVED******REMOVED***if !newApplyEditsErrorsArePresented {
-***REMOVED******REMOVED******REMOVED******REMOVED***guard case let .applyEditError(featureForm, array) = self.state else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***self.state = .editing(featureForm)
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether general form workflow errors are presented.
@@ -365,7 +343,7 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***if resultErrors.isEmpty {
 ***REMOVED******REMOVED******REMOVED***state = .idle
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***state = .applyEditError(featureForm, resultErrors)
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Changes were not applied."))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -389,67 +367,5 @@ private extension FeatureForm {
 ***REMOVED******REMOVED***/ The layer to which the feature belongs.
 ***REMOVED***var featureLayer: FeatureLayer? {
 ***REMOVED******REMOVED***feature.table?.layer as? FeatureLayer
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A table to presented formatted errors.
-struct ErrorTable: View {
-***REMOVED******REMOVED***/ Wrapper for generic errors to enable identification.
-***REMOVED***struct IdentifiableError: Identifiable {
-***REMOVED******REMOVED***let id = UUID()
-***REMOVED******REMOVED***let error: Error
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Creates a table to presented formatted errors.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - errors: The errors to present.
-***REMOVED******REMOVED***/   - dismiss: The closure to perform when the table is dismissed.
-***REMOVED***init(errors: [Error], dismiss: @escaping () -> Void) {
-***REMOVED******REMOVED***self.errors = errors.compactMap { IdentifiableError(error: $0) ***REMOVED***
-***REMOVED******REMOVED***self.dismiss = dismiss
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The errors to present.
-***REMOVED***let errors: [IdentifiableError]
-***REMOVED***
-***REMOVED******REMOVED***/ The closure to perform when the table is dismissed.
-***REMOVED***let dismiss: () -> Void
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationStack {
-***REMOVED******REMOVED******REMOVED***Table(of: IdentifiableError.self) {
-***REMOVED******REMOVED******REMOVED******REMOVED***TableColumn("Error") { error in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(String(describing: type(of: error.error)))
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***TableColumn("Code") { error in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let serviceError = error.error as? ArcGIS.ServiceError {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(serviceError.code.description)
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("-")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***TableColumn("Details") { error in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let serviceError = error.error as? ArcGIS.ServiceError {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(serviceError.details)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(nil)
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(error.error.localizedDescription)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(nil)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** rows: {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(errors) { identifiableError in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TableRow(identifiableError)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationTitle("Errors")
-***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .topBarTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
