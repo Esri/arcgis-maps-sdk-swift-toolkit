@@ -56,19 +56,21 @@ public extension OfflineMapAreasView {
         /// The job manager.
         var jobManager = JobManager.shared
         
-        init?(map: Map) {
-            guard let portalItemID = map.item?.id?.description else { return nil }
-            
+        init(map: Map) {
             onlineMap = map
-            
-            FileManager.default.createDirectories(for: portalItemID)
-            
-            preplannedDirectory = FileManager.default.preplannedDirectory(poratlItemID: portalItemID)
             
             // Sets the min scale to avoid requesting a huge download.
             onlineMap.minScale = 1e4
             
             offlineMapTask = OfflineMapTask(onlineMap: onlineMap)
+            
+            if let portalItemID = map.item?.id?.description {
+                FileManager.default.createDirectories(for: portalItemID)
+                
+                preplannedDirectory = FileManager.default.preplannedDirectory(poratlItemID: portalItemID)
+            } else {
+                preplannedDirectory = FileManager.default.documentsDirectory
+            }
         }
         
         /// Gets the preplanned map areas from the offline map task and creates the
@@ -144,7 +146,7 @@ public extension OfflineMapAreasView.MapViewModel {
 
 private extension FileManager {
     /// The path to the documents folder.
-    private var documentsDirectory: URL {
+    var documentsDirectory: URL {
         URL(
             fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         )
