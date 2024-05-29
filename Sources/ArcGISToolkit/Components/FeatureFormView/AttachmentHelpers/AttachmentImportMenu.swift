@@ -128,12 +128,8 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(5)
 ***REMOVED***
 ***REMOVED******REMOVED***.disabled(importState.importInProgress)
-***REMOVED******REMOVED***.alert("Error importing attachment", isPresented: errorIsPresented) { ***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED***"The selected attachment could not be imported.",
-***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED***comment: "There was an issue importing the selected attachment."
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***.alert(importFailureAlertTitle, isPresented: errorIsPresented) { ***REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED***Text(importFailureAlertMessage)
 ***REMOVED***
 #if targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***.menuStyle(.borderlessButton)
@@ -212,5 +208,31 @@ extension URL {
 ***REMOVED******REMOVED***else {
 ***REMOVED******REMOVED******REMOVED***return "application/octet-stream"
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension AttachmentImportMenu {
+***REMOVED******REMOVED***/ A title for an alert that the selected file was not able to be imported as an attachment.
+***REMOVED***var importFailureAlertTitle: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Error importing attachment",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED***A title for an alert that the selected file was not able to be
+***REMOVED******REMOVED******REMOVED***imported as an attachment.
+***REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A message for an alert that the selected file was not able to be imported as an attachment.
+***REMOVED***var importFailureAlertMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "The selected attachment could not be imported.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED***A message for an alert that the selected file was not able to be
+***REMOVED******REMOVED******REMOVED***imported as an attachment.
+***REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
