@@ -19,6 +19,7 @@ enum AttachmentImportState: Equatable {
 ***REMOVED***case finalizing(AttachmentImportData)
 ***REMOVED***case errored(AttachmentImportError)
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if a new attachment is being imported.
 ***REMOVED***var importInProgress: Bool {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .importing, .finalizing(_):
@@ -28,6 +29,7 @@ enum AttachmentImportState: Equatable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if an error was encountered when importing the last attachment.
 ***REMOVED***var isErrored: Bool {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .errored(_):
