@@ -170,21 +170,20 @@ private extension URL {
 class Model: ObservableObject {
     /// Feature form workflow states.
     enum State {
-        /// No feature is being edited.
-        case idle
-        /// A feature form is in use.
-        case editing(FeatureForm)
-        /// The form is being checked for validation errors.
-        case validating(FeatureForm)
-        /// Edits are being committed to the local geodatabase.
-        case finishingEdits(FeatureForm)
         /// Edits are being applied to the remote service.
         case applyingEdits(FeatureForm)
-        
         /// The user has triggered potential cancellation.
         case cancellationPending(FeatureForm)
+        /// A feature form is in use.
+        case editing(FeatureForm)
+        /// Edits are being committed to the local geodatabase.
+        case finishingEdits(FeatureForm)
         /// There was an error in a workflow step.
         case generalError(FeatureForm, Text)
+        /// No feature is being edited.
+        case idle
+        /// The form is being checked for validation errors.
+        case validating(FeatureForm)
     }
     
     /// The current feature form workflow state.
