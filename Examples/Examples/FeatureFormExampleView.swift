@@ -170,21 +170,20 @@ private extension URL {
 class Model: ObservableObject {
 ***REMOVED******REMOVED***/ Feature form workflow states.
 ***REMOVED***enum State {
-***REMOVED******REMOVED******REMOVED***/ No feature is being edited.
-***REMOVED******REMOVED***case idle
-***REMOVED******REMOVED******REMOVED***/ A feature form is in use.
-***REMOVED******REMOVED***case editing(FeatureForm)
-***REMOVED******REMOVED******REMOVED***/ The form is being checked for validation errors.
-***REMOVED******REMOVED***case validating(FeatureForm)
-***REMOVED******REMOVED******REMOVED***/ Edits are being committed to the local geodatabase.
-***REMOVED******REMOVED***case finishingEdits(FeatureForm)
 ***REMOVED******REMOVED******REMOVED***/ Edits are being applied to the remote service.
 ***REMOVED******REMOVED***case applyingEdits(FeatureForm)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The user has triggered potential cancellation.
 ***REMOVED******REMOVED***case cancellationPending(FeatureForm)
+***REMOVED******REMOVED******REMOVED***/ A feature form is in use.
+***REMOVED******REMOVED***case editing(FeatureForm)
+***REMOVED******REMOVED******REMOVED***/ Edits are being committed to the local geodatabase.
+***REMOVED******REMOVED***case finishingEdits(FeatureForm)
 ***REMOVED******REMOVED******REMOVED***/ There was an error in a workflow step.
 ***REMOVED******REMOVED***case generalError(FeatureForm, Text)
+***REMOVED******REMOVED******REMOVED***/ No feature is being edited.
+***REMOVED******REMOVED***case idle
+***REMOVED******REMOVED******REMOVED***/ The form is being checked for validation errors.
+***REMOVED******REMOVED***case validating(FeatureForm)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current feature form workflow state.
