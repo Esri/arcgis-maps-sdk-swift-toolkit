@@ -112,13 +112,6 @@ struct FeatureFormExampleView: View {
                         EmptyView()
                     }
                 }
-                .sheet(isPresented: model.applyEditsErrorsArePresented) {
-                    if case let .applyEditError(featureForm, errors) = model.state {
-                        ErrorTable(errors: errors) {
-                            model.state = .editing(featureForm)
-                        }
-                    }
-                }
                 .toolbar {
                     if model.formIsPresented.wrappedValue {
                         ToolbarItem(placement: .navigationBarLeading) {
@@ -192,8 +185,6 @@ class Model: ObservableObject {
         case cancellationPending(FeatureForm)
         /// There was an error in a workflow step.
         case generalError(FeatureForm, Text)
-        /// There was an error applying edits to the remote service.
-        case applyEditError(FeatureForm, [Error])
     }
     
     /// The current feature form workflow state.
@@ -211,37 +202,7 @@ class Model: ObservableObject {
         }
     }
     
-    /// The current feature form, derived from ``Model/state-swift.property``.
-    var featureForm: FeatureForm? {
-        switch state {
-        case .idle:
-            return nil
-        case
-            let .editing(form), let .validating(form),
-            let .finishingEdits(form), let .applyingEdits(form),
-            let .cancellationPending(form), let .generalError(form, _), let .applyEditError(form, _):
-            return form
-        }
-    }
-    
-    /// A Boolean value indicating whether external form controls like "Cancel" and "Submit" should be disabled.
-    var formControlsAreDisabled: Bool {
-        guard case .editing = state else { return true }
-        return false
-    }
-    
-    /// A Boolean value indicating whether any errors from applying edits are presented.
-    var applyEditsErrorsArePresented: Binding<Bool> {
-        Binding {
-            guard case .applyEditError = self.state else { return false }
-            return true
-        } set: { newApplyEditsErrorsArePresented in
-            if !newApplyEditsErrorsArePresented {
-                guard case let .applyEditError(featureForm, array) = self.state else { return }
-                self.state = .editing(featureForm)
-            }
-        }
-    }
+    // MARK: Properties
     
     /// A Boolean value indicating whether general form workflow errors are presented.
     var alertIsPresented: Binding<Bool> {
@@ -263,6 +224,25 @@ class Model: ObservableObject {
             return true
         } set: { _ in
         }
+    }
+    
+    /// The current feature form, derived from ``Model/state-swift.property``.
+    var featureForm: FeatureForm? {
+        switch state {
+        case .idle:
+            return nil
+        case
+            let .editing(form), let .validating(form),
+            let .finishingEdits(form), let .applyingEdits(form),
+            let .cancellationPending(form), let .generalError(form, _):
+            return form
+        }
+    }
+    
+    /// A Boolean value indicating whether external form controls like "Cancel" and "Submit" should be disabled.
+    var formControlsAreDisabled: Bool {
+        guard case .editing = state else { return true }
+        return false
     }
     
     /// A Boolean value indicating whether or not the form is displayed.
@@ -290,6 +270,8 @@ class Model: ObservableObject {
         }
     }
     
+    // MARK: Methods
+    
     /// Reverts any local edits that haven't yet been saved to service geodatabase.
     func discardEdits() {
         guard case let .cancellationPending(featureForm) = state else {
@@ -305,36 +287,7 @@ class Model: ObservableObject {
         await validateChanges(featureForm)
     }
     
-    /// Checks the feature form for the presence of any validation errors.
-    private func validateChanges(_ featureForm: FeatureForm) async {
-        state = .validating(featureForm)
-        guard featureForm.validationErrors.isEmpty else {
-            state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
-            return
-        }
-        await finishEdits(featureForm)
-    }
-    
-    /// Commits feature edits to the local geodatabase.
-    private func finishEdits(_ featureForm: FeatureForm) async {
-        state = .finishingEdits(featureForm)
-        guard let table = featureForm.feature.table as? ServiceFeatureTable else {
-            state = .generalError(featureForm, Text("Error resolving feature table."))
-            return
-        }
-        guard table.isEditable else {
-            state = .generalError(featureForm, Text("The feature table isn't editable."))
-            return
-        }
-        do {
-            state = .finishingEdits(featureForm)
-            try await table.update(featureForm.feature)
-        } catch {
-            state = .generalError(featureForm, Text("The feature update failed."))
-            return
-        }
-        await applyEdits(featureForm, table)
-    }
+    // MARK: Private methods
     
     /// Applies edits to the remote service.
     private func applyEdits(_ featureForm: FeatureForm, _ table: ServiceFeatureTable) async {
@@ -365,7 +318,7 @@ class Model: ObservableObject {
         if resultErrors.isEmpty {
             state = .idle
         } else {
-            state = .applyEditError(featureForm, resultErrors)
+            state = .generalError(featureForm, Text("Changes were not applied."))
         }
     }
     
@@ -383,73 +336,42 @@ class Model: ObservableObject {
         }
         return errors
     }
+    
+    /// Commits feature edits to the local geodatabase.
+    private func finishEdits(_ featureForm: FeatureForm) async {
+        state = .finishingEdits(featureForm)
+        guard let table = featureForm.feature.table as? ServiceFeatureTable else {
+            state = .generalError(featureForm, Text("Error resolving feature table."))
+            return
+        }
+        guard table.isEditable else {
+            state = .generalError(featureForm, Text("The feature table isn't editable."))
+            return
+        }
+        do {
+            state = .finishingEdits(featureForm)
+            try await table.update(featureForm.feature)
+        } catch {
+            state = .generalError(featureForm, Text("The feature update failed."))
+            return
+        }
+        await applyEdits(featureForm, table)
+    }
+    
+    /// Checks the feature form for the presence of any validation errors.
+    private func validateChanges(_ featureForm: FeatureForm) async {
+        state = .validating(featureForm)
+        guard featureForm.validationErrors.isEmpty else {
+            state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
+            return
+        }
+        await finishEdits(featureForm)
+    }
 }
 
 private extension FeatureForm {
     /// The layer to which the feature belongs.
     var featureLayer: FeatureLayer? {
         feature.table?.layer as? FeatureLayer
-    }
-}
-
-/// A table to presented formatted errors.
-struct ErrorTable: View {
-    /// Wrapper for generic errors to enable identification.
-    struct IdentifiableError: Identifiable {
-        let id = UUID()
-        let error: Error
-    }
-    
-    /// Creates a table to presented formatted errors.
-    /// - Parameters:
-    ///   - errors: The errors to present.
-    ///   - dismiss: The closure to perform when the table is dismissed.
-    init(errors: [Error], dismiss: @escaping () -> Void) {
-        self.errors = errors.compactMap { IdentifiableError(error: $0) }
-        self.dismiss = dismiss
-    }
-    
-    /// The errors to present.
-    let errors: [IdentifiableError]
-    
-    /// The closure to perform when the table is dismissed.
-    let dismiss: () -> Void
-    
-    var body: some View {
-        NavigationStack {
-            Table(of: IdentifiableError.self) {
-                TableColumn("Error") { error in
-                    Text(String(describing: type(of: error.error)))
-                }
-                TableColumn("Code") { error in
-                    if let serviceError = error.error as? ArcGIS.ServiceError {
-                        Text(serviceError.code.description)
-                    } else {
-                        Text("-")
-                    }
-                }
-                TableColumn("Details") { error in
-                    if let serviceError = error.error as? ArcGIS.ServiceError {
-                        Text(serviceError.details)
-                            .lineLimit(nil)
-                    } else {
-                        Text(error.error.localizedDescription)
-                            .lineLimit(nil)
-                    }
-                }
-            } rows: {
-                ForEach(errors) { identifiableError in
-                    TableRow(identifiableError)
-                }
-            }
-            .navigationTitle("Errors")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-            }
-        }
     }
 }
