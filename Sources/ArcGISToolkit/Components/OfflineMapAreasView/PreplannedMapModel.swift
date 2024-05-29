@@ -26,10 +26,10 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// The task to use to take the area offline.
     private let offlineMapTask: OfflineMapTask
     
-    /// The directory where the mmpk will be stored.
-    private let mmpkDirectory: URL
+    /// The download directory for the preplanned map area mobile map package.
+    private let downloadDirectory: URL
     
-    /// The mobile map package for the map.
+    /// The mobile map package for the preplanned map area.
     private(set) var mobileMapPackage: MobileMapPackage?
     
     /// The currently running download job.
@@ -64,7 +64,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         self.mobileMapPackage = mobileMapPackage
         
         if let itemID = preplannedMapArea.id {
-            self.mmpkDirectory = mapViewModel.preplannedDirectory
+            downloadDirectory = mapViewModel.preplannedDirectory
                 .appendingPathComponent(itemID.rawValue)
                 .appendingPathExtension("mmpk")
         } else {
@@ -183,7 +183,7 @@ extension PreplannedMapModel {
         // Creates the download preplanned offline map job.
         let job = offlineMapTask.makeDownloadPreplannedOfflineMapJob(
             parameters: parameters,
-            downloadDirectory: mmpkDirectory
+            downloadDirectory: downloadDirectory
         )
         
         mapViewModel.jobManager.jobs.append(job)

@@ -28,7 +28,7 @@ public struct OfflineMapAreasView: View {
     @State private var rotationAngle: CGFloat = 0.0
     
     public init(map: Map) {
-        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: map)!)
+        _mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
         
         // Ask the job manager to schedule background status checks for every 30 seconds.
         jobManager.preferredBackgroundStatusCheckSchedule = .regularInterval(interval: 30)
