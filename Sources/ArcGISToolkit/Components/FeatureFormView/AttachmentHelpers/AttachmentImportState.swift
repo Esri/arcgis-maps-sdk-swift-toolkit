@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// The states of importing a new attachment.
+/// The state of importing a new attachment.
 enum AttachmentImportState: Equatable {
     case none
     case importing
