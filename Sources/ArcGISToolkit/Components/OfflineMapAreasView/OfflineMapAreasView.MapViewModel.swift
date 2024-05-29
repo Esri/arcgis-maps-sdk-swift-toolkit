@@ -56,19 +56,21 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ The job manager.
 ***REMOVED******REMOVED***var jobManager = JobManager.shared
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***init?(map: Map) {
-***REMOVED******REMOVED******REMOVED***guard let portalItemID = map.item?.id?.description else { return nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***init(map: Map) {
 ***REMOVED******REMOVED******REMOVED***onlineMap = map
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***FileManager.default.createDirectories(for: portalItemID)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***preplannedDirectory = FileManager.default.preplannedDirectory(poratlItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Sets the min scale to avoid requesting a huge download.
 ***REMOVED******REMOVED******REMOVED***onlineMap.minScale = 1e4
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***offlineMapTask = OfflineMapTask(onlineMap: onlineMap)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if let portalItemID = map.item?.id?.description {
+***REMOVED******REMOVED******REMOVED******REMOVED***FileManager.default.createDirectories(for: portalItemID)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***preplannedDirectory = FileManager.default.preplannedDirectory(poratlItemID: portalItemID)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***preplannedDirectory = FileManager.default.documentsDirectory
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Gets the preplanned map areas from the offline map task and creates the
@@ -144,7 +146,7 @@ public extension OfflineMapAreasView.MapViewModel {
 
 private extension FileManager {
 ***REMOVED******REMOVED***/ The path to the documents folder.
-***REMOVED***private var documentsDirectory: URL {
+***REMOVED***var documentsDirectory: URL {
 ***REMOVED******REMOVED***URL(
 ***REMOVED******REMOVED******REMOVED***fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
 ***REMOVED******REMOVED***)
