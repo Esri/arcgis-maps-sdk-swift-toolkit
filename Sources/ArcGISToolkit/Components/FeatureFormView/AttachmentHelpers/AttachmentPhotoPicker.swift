@@ -21,8 +21,8 @@ struct AttachmentPhotoPicker: ViewModifier {
     /// The item selected in the photos picker.
     @State private var item: PhotosPickerItem?
     
-    /// The new attachment data retrieved from the photos picker.
-    @Binding var newAttachmentImportData: AttachmentImportData?
+    /// The current import state.
+    @Binding var importState: AttachmentImportState
     
     /// A Boolean value indicating whether the photos picker is presented.
     @Binding var photoPickerIsPresented: Bool
@@ -39,26 +39,26 @@ struct AttachmentPhotoPicker: ViewModifier {
             )
             .task(id: item) {
                 guard let item else { return }
+                importState = .importing
                 do {
                     guard let data = try await item.loadTransferable(type: Data.self) else {
-                        print("Photo picker data was empty")
+                        importState = .errored(.dataInaccessible)
                         return
                     }
-
+                    
                     var contentTypes = item.supportedContentTypes.enumerated().makeIterator()
                     var mimeType = contentTypes.next()?.element.preferredMIMEType
                     while mimeType == nil {
                         mimeType = contentTypes.next()?.element.preferredMIMEType
                     }
                     
-                    newAttachmentImportData = AttachmentImportData(
+                    importState = .finalizing(AttachmentImportData(
                         data: data,
                         contentType: mimeType ?? "application/octet-stream",
                         fileExtension: item.supportedContentTypes.first?.preferredFilenameExtension ?? ""
-                    )
-
+                    ))
                 } catch {
-                    print("Error importing from photo picker: \(error)")
+                    importState = .errored(.system(error.localizedDescription))
                 }
             }
     }
