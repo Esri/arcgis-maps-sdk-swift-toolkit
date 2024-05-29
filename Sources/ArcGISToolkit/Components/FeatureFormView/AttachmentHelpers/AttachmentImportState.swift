@@ -12,7 +12,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***/ The states of importing a new attachment.
+***REMOVED***/ The state of importing a new attachment.
 enum AttachmentImportState: Equatable {
 ***REMOVED***case none
 ***REMOVED***case importing
