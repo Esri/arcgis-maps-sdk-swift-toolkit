@@ -37,14 +37,25 @@ struct AttachmentImportMenu: View {
     /// A Boolean value indicating whether the attachment file importer is presented.
     @State private var fileImporterIsShowing = false
     
+    /// The current import state.
+    @State private var importState: AttachmentImportState = .none
+    
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
     
-    /// The new image or video attachment data retrieved from the photos picker.
-    @State private var newAttachmentImportData: AttachmentImportData?
-    
     /// The action to perform when an attachment is added.
     let onAdd: ((FeatureAttachment) async throws -> Void)?
+    
+    /// A Boolean value indicating if the error alert is presented.
+    var errorIsPresented: Binding<Bool> {
+        Binding {
+            importState.isErrored
+        } set: { newIsPresented in
+            if !newIsPresented {
+                importState = .none
+            }
+        }
+    }
     
     private func takePhotoOrVideoButton() -> Button<some View> {
        Button {
@@ -98,6 +109,10 @@ struct AttachmentImportMenu: View {
     }
     
     var body: some View {
+        if importState.importInProgress {
+            ProgressView()
+                .progressViewStyle(.circular)
+        }
         Menu {
             if element.input is AnyAttachmentsFormInput {
                 // Show photo/video and library picker if
@@ -112,11 +127,20 @@ struct AttachmentImportMenu: View {
                 .font(.title2)
                 .padding(5)
         }
+        .disabled(importState.importInProgress)
+        .alert("Error importing attachment", isPresented: errorIsPresented) { } message: {
+            Text(
+                "The selected attachment could not be imported.",
+                bundle: .toolkitModule,
+                comment: "There was an issue importing the selected attachment."
+            )
+        }
 #if targetEnvironment(macCatalyst)
         .menuStyle(.borderlessButton)
 #endif
-        .task(id: newAttachmentImportData) {
-            guard let newAttachmentImportData else { return }
+        .task(id: importState) {
+            guard case let .finalizing(newAttachmentImportData) = importState else { return }
+            defer { importState = .none }
             do {
                 let fileName: String
                 if let presetFileName = newAttachmentImportData.fileName {
@@ -137,38 +161,41 @@ struct AttachmentImportMenu: View {
                 )
                 try await onAdd?(newAttachment)
             } catch {
-                // TODO: Figure out error handling
-                print("Error adding attachment: \(error)")
+                importState = .errored(.system(error.localizedDescription))
             }
-            self.newAttachmentImportData = nil
         }
         .fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
+            importState = .importing
             switch result {
             case .success(let url):
                 // gain access to the url resource and verify there's data.
                 if url.startAccessingSecurityScopedResource(),
                    let data = FileManager.default.contents(atPath: url.path) {
-                    newAttachmentImportData = AttachmentImportData(
-                        data: data,
-                        contentType: url.mimeType(),
-                        fileName: url.lastPathComponent
+                    importState = .finalizing(
+                        AttachmentImportData(
+                            data: data,
+                            contentType: url.mimeType(),
+                            fileName: url.lastPathComponent
+                        )
                     )
                 } else {
-                    print("File picker data was empty or could not get access.")
+                    importState = .errored(.dataInaccessible)
                 }
                 
                 // release access
                 url.stopAccessingSecurityScopedResource()
             case .failure(let error):
-                print("Error importing from file importer: \(error).")
+                importState = .errored(.system(error.localizedDescription))
             }
         }
         .fullScreenCover(isPresented: $cameraIsShowing) {
-            AttachmentCameraController(capturedMedia: $newAttachmentImportData)
+            AttachmentCameraController(
+                importState: $importState
+            )
         }
         .modifier(
             AttachmentPhotoPicker(
-                newAttachmentImportData: $newAttachmentImportData,
+                importState: $importState,
                 photoPickerIsPresented: $photoPickerIsPresented
             )
         )
