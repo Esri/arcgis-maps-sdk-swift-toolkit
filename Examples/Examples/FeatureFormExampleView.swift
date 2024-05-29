@@ -318,6 +318,7 @@ class Model: ObservableObject {
         if resultErrors.isEmpty {
             state = .idle
         } else {
+            // Additionally, you could display the errors to the user using `resultErrors`.
             state = .generalError(featureForm, Text("Changes were not applied."))
         }
     }
