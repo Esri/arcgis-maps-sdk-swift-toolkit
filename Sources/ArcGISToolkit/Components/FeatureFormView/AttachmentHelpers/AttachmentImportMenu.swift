@@ -128,12 +128,8 @@ struct AttachmentImportMenu: View {
                 .padding(5)
         }
         .disabled(importState.importInProgress)
-        .alert("Error importing attachment", isPresented: errorIsPresented) { } message: {
-            Text(
-                "The selected attachment could not be imported.",
-                bundle: .toolkitModule,
-                comment: "There was an issue importing the selected attachment."
-            )
+        .alert(importFailureAlertTitle, isPresented: errorIsPresented) { } message: {
+            Text(importFailureAlertMessage)
         }
 #if targetEnvironment(macCatalyst)
         .menuStyle(.borderlessButton)
@@ -212,5 +208,31 @@ extension URL {
         else {
             return "application/octet-stream"
         }
+    }
+}
+
+private extension AttachmentImportMenu {
+    /// A title for an alert that the selected file was not able to be imported as an attachment.
+    var importFailureAlertTitle: String {
+        .init(
+            localized: "Error importing attachment",
+            bundle: .toolkitModule,
+            comment: """
+            A title for an alert that the selected file was not able to be
+            imported as an attachment.
+            """
+        )
+    }
+    
+    /// A message for an alert that the selected file was not able to be imported as an attachment.
+    var importFailureAlertMessage: String {
+        .init(
+            localized: "The selected attachment could not be imported.",
+            bundle: .toolkitModule,
+            comment: """
+            A message for an alert that the selected file was not able to be
+            imported as an attachment.
+            """
+        )
     }
 }
