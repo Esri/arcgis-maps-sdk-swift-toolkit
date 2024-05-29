@@ -19,6 +19,7 @@ enum AttachmentImportState: Equatable {
     case finalizing(AttachmentImportData)
     case errored(AttachmentImportError)
     
+    /// A Boolean value indicating if a new attachment is being imported.
     var importInProgress: Bool {
         switch self {
         case .importing, .finalizing(_):
@@ -28,6 +29,7 @@ enum AttachmentImportState: Equatable {
         }
     }
     
+    /// A Boolean value indicating if an error was encountered when importing the last attachment.
     var isErrored: Bool {
         switch self {
         case .errored(_):
