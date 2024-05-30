@@ -12,14 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
-import OSLog
-import SwiftUI
-
-/// Data used to create the attachment.
-struct AttachmentImportData: Equatable {
-    let data: Data
-    let contentType: String
-    var fileName: String? = nil
-    var fileExtension: String? = nil
+/// The possible errors when importing an attachment.
+enum AttachmentImportError: Error, Equatable {
+    case dataInaccessible
+    case system(String)
 }

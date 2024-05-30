@@ -24,10 +24,14 @@ import SwiftUI
     let attachment: FeatureAttachment
     
     /// The thumbnail representing the attachment.
-    @Published var thumbnail: UIImage?
+    @Published var thumbnail: UIImage? {
+        didSet {
+            systemImageName = nil
+        }
+    }
     
     /// The name of the system SF symbol used instead of `thumbnail`.
-    @Published var systemImageName: String
+    @Published var systemImageName: String?
     
     /// The `LoadStatus` of the feature attachment.
     @Published var loadStatus: LoadStatus = .notLoaded
@@ -38,7 +42,7 @@ import SwiftUI
     /// A Boolean value specifying whether the thumbnails is using a
     /// system image or an image generated from the feature attachment.
     var usingSystemImage: Bool {
-        loadStatus != .loaded || thumbnail == nil
+        systemImageName != nil
     }
     
     /// The pixel density of the display on the intended device.
@@ -64,12 +68,12 @@ import SwiftUI
         self.thumbnailSize = thumbnailSize
         
         switch attachment.featureAttachmentKind {
-        case .audio:
-            systemImageName = "waveform"
         case .image:
             systemImageName = "photo"
         case .video:
             systemImageName = "film"
+        case .audio:
+            systemImageName = "waveform"
         case .document, .other:
             systemImageName = "doc"
         @unknown default:

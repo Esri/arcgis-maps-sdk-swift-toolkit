@@ -11,22 +11,48 @@ struct FeatureFormExampleView: View {
         return Map(item: portalItem)
     }
     
-    @State private var featureForm: FeatureForm?
-    
-    @State private var featureFormIsPresented = false
-    
-    @State private var identifyScreenPoint: CGPoint?
-    
     @State private var map = makeMap()
     
-    @State private var submissionError: Text?
+    @StateObject private var model = Model()
     
     var body: some View {
-        MapViewReader { proxy in
-            MapView(map: map)
-                .onSingleTapGesture { screenPoint, _ in
-                    identifyScreenPoint = screenPoint
-                }
+        NavigationStack {
+            MapViewReader { mapViewProxy in
+                MapView(map: map)
+            }
         }
+    }
+}
+
+@MainActor
+class Model: ObservableObject {
+    enum State {
+        case applyingEdits(FeatureForm)
+        case cancellationPending(FeatureForm)
+        case editing(FeatureForm)
+        case finishingEdits(FeatureForm)
+        case generalError(FeatureForm, Text)
+        case idle
+        case validating(FeatureForm)
+    }
+    
+    @Published var state: State = .idle {
+        willSet {
+            switch newValue {
+            case let .editing(featureForm):
+                featureForm.featureLayer?.selectFeature(featureForm.feature)
+            case .idle:
+                guard let featureForm else { return }
+                featureForm.featureLayer?.unselectFeature(featureForm.feature)
+            default:
+                break
+            }
+        }
+    }
+}
+
+private extension FeatureForm {
+    var featureLayer: FeatureLayer? {
+        feature.table?.layer as? FeatureLayer
     }
 }

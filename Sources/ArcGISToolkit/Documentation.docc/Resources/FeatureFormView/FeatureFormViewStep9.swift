@@ -120,6 +120,48 @@ class Model: ObservableObject {
         guard case let .editing(featureForm) = state else { return }
         await validateChanges(featureForm)
     }
+    
+    private func checkFeatureEditResults(_ featureForm: FeatureForm, _ featureEditResults: [FeatureEditResult]) -> [Error] {
+        var errors = [Error]()
+        featureEditResults.forEach { featureEditResult in
+            if let editResultError = featureEditResult.error { errors.append(editResultError) }
+            featureEditResult.attachmentResults.forEach { attachmentResult in
+                if let error = attachmentResult.error {
+                    errors.append(error)
+                }
+            }
+        }
+        return errors
+    }
+    
+    private func finishEdits(_ featureForm: FeatureForm) async {
+        state = .finishingEdits(featureForm)
+        guard let table = featureForm.feature.table as? ServiceFeatureTable else {
+            state = .generalError(featureForm, Text("Error resolving feature table."))
+            return
+        }
+        guard table.isEditable else {
+            state = .generalError(featureForm, Text("The feature table isn't editable."))
+            return
+        }
+        do {
+            state = .finishingEdits(featureForm)
+            try await table.update(featureForm.feature)
+        } catch {
+            state = .generalError(featureForm, Text("The feature update failed."))
+            return
+        }
+        await applyEdits(featureForm, table)
+    }
+    
+    private func validateChanges(_ featureForm: FeatureForm) async {
+        state = .validating(featureForm)
+        guard featureForm.validationErrors.isEmpty else {
+            state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
+            return
+        }
+        await finishEdits(featureForm)
+    }
 }
 
 private extension FeatureForm {

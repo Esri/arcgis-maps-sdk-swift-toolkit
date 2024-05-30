@@ -18,8 +18,8 @@ import SwiftUI
 struct AttachmentCameraController: UIViewControllerRepresentable {
     @Environment(\.dismiss) private var dismiss
     
-    /// The new attachment retrieved from the device's camera.
-    @Binding var capturedImage: UIImage?
+    /// The current import state.
+    @Binding var importState: AttachmentImportState
     
     /// The image picker controller represented within the view.
     private let controller = UIImagePickerController()
@@ -31,9 +31,9 @@ struct AttachmentCameraController: UIViewControllerRepresentable {
     }
     
     func makeUIViewController(context: Context) -> some UIViewController {
-        controller.sourceType = .camera
         controller.allowsEditing = true
-        controller.cameraCaptureMode = .photo
+        controller.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
+        controller.sourceType = .camera
         controller.delegate = context.coordinator
         return controller
     }
@@ -57,8 +57,15 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
         _ picker: UIImagePickerController,
         didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
     ) {
+        parent.importState = .importing
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            parent.capturedImage = image
+            if let pngData = image.pngData() {
+                parent.importState = .finalizing(AttachmentImportData(data: pngData, contentType: "image/png"))
+            }
+        } else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
+            if let videoData = try? Data(contentsOf: videoURL) {
+                parent.importState = .finalizing(AttachmentImportData(data: videoData, contentType: "video/quicktime", fileName: videoURL.lastPathComponent))
+            }
         }
         parent.endCapture()
     }

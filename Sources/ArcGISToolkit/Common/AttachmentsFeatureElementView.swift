@@ -84,21 +84,6 @@ struct AttachmentsFeatureElementView: View {
                 }
             }
         }
-        .task {
-            if let attachmentsFormElement = featureElement as? AttachmentsFormElement {
-                for await (change, attachment) in attachmentsFormElement.attachmentChanged {
-                    switch change {
-                    case .addition:
-                        onAttachmentAdded(attachment)
-                    case .deletion:
-                        onAttachmentDeleted(attachment)
-                    case .rename:
-                        onAttachmentRenamed(attachment)
-                    }
-                    formViewModel.evaluateExpressions()
-                }
-            }
-        }
         .onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
             isEditable = newIsEditable
         }
