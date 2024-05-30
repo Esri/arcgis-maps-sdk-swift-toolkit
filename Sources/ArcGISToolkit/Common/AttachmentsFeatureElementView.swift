@@ -179,7 +179,7 @@ struct AttachmentsFeatureElementView: View {
     func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
         if let element = featureElement as? AttachmentsFormElement,
            let attachment = attachmentModel.attachment as? FormAttachment {
-            try await element.renameAttachment(attachment, name: newAttachmentName)
+            attachment.name = newAttachmentName
             attachmentModel.sync()
             formViewModel.evaluateExpressions()
         }
