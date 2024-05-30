@@ -12,4 +12,12 @@ struct FeatureFormExampleView: View {
     }
     
     @State private var map = makeMap()
+    
+    var body: some View {
+        NavigationStack {
+            MapViewReader { mapViewProxy in
+                MapView(map: map)
+            }
+        }
+    }
 }
