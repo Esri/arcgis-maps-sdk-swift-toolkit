@@ -120,16 +120,35 @@ public extension OfflineMapAreasView {
         /// Loads locally stored mobile map packages for the map's preplanned map areas.
         func loadPreplannedMobileMapPackages() {
             // Create mobile map packages with saved mmpk files.
-            if let files = try? FileManager.default.contentsOfDirectory(
-                at: preplannedDirectory,
-                includingPropertiesForKeys: nil,
-                options: .skipsHiddenFiles
-            ) {
-                for fileURL in files where fileURL.pathExtension == "mmpk" {
-                    let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
-                    self.mobileMapPackages.append(mobileMapPackage)
+            let mmpkFiles = searchFiles(in: preplannedDirectory, with: "mmpk")
+            
+            for fileURL in mmpkFiles {
+                let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
+                self.mobileMapPackages.append(mobileMapPackage)
+            }
+        }
+        
+        /// Searches for files with a specified file extension in a given directory and its subdirectories.
+        /// - Parameters:
+        ///   - directory: The directory to search.
+        ///   - fileExtension: The file extension to search for.
+        /// - Returns: An array of file paths.
+        func searchFiles(in directory: URL, with fileExtension: String) -> [URL] {
+            var files = [URL]()
+            let keys: [URLResourceKey] = [.isDirectoryKey]
+            
+            guard let enumerator = FileManager.default.enumerator(
+                at: directory,
+                includingPropertiesForKeys: keys,
+                options: [.skipsHiddenFiles]
+            ) else { return [] }
+            
+            for case let fileURL as URL in enumerator {
+                if fileURL.pathExtension == fileExtension {
+                    files.append(fileURL)
                 }
             }
+            return files
         }
     }
 }
