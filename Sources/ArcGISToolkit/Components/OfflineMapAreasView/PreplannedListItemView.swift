@@ -100,10 +100,14 @@ public struct PreplannedListItemView: View {
 }
 
 #Preview {
-    PreplannedListItemView(
-        model: PreplannedMapModel(preplannedMapArea: MockPreplannedMapArea())
+    let model = PreplannedMapModel(preplannedMapArea: MockPreplannedMapArea())
+    return PreplannedListItemView(
+        model: model
     )
     .padding()
+    .task {
+        await model.load()
+    }
 }
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
