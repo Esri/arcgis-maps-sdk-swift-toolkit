@@ -23,10 +23,12 @@ struct AttachmentImportMenu: View {
     /// The attachment form element displaying the menu.
     private let element: AttachmentsFormElement
     
-    /// Creates an `AttachmentImportMenu`
+    /// Creates an `AttachmentImportMenu`        /// Creates an `AttachmentImportMenu`
     /// - Parameter element: The attachment form element displaying the menu.
-    init(element: AttachmentsFormElement) {
+    /// - Parameter onAdd: The action to perform when an attachment is added.
+    init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
         self.element = element
+        self.onAdd = onAdd
     }
     
     /// A Boolean value indicating whether the attachment camera controller is presented.
