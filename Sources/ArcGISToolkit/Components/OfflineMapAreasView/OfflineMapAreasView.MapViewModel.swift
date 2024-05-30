@@ -120,16 +120,35 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ Loads locally stored mobile map packages for the map's preplanned map areas.
 ***REMOVED******REMOVED***func loadPreplannedMobileMapPackages() {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Create mobile map packages with saved mmpk files.
-***REMOVED******REMOVED******REMOVED***if let files = try? FileManager.default.contentsOfDirectory(
-***REMOVED******REMOVED******REMOVED******REMOVED***at: preplannedDirectory,
-***REMOVED******REMOVED******REMOVED******REMOVED***includingPropertiesForKeys: nil,
-***REMOVED******REMOVED******REMOVED******REMOVED***options: .skipsHiddenFiles
-***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***for fileURL in files where fileURL.pathExtension == "mmpk" {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.mobileMapPackages.append(mobileMapPackage)
+***REMOVED******REMOVED******REMOVED***let mmpkFiles = searchFiles(in: preplannedDirectory, with: "mmpk")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***for fileURL in mmpkFiles {
+***REMOVED******REMOVED******REMOVED******REMOVED***let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
+***REMOVED******REMOVED******REMOVED******REMOVED***self.mobileMapPackages.append(mobileMapPackage)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Searches for files with a specified file extension in a given directory and its subdirectories.
+***REMOVED******REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED******REMOVED***/   - directory: The directory to search.
+***REMOVED******REMOVED******REMOVED***/   - fileExtension: The file extension to search for.
+***REMOVED******REMOVED******REMOVED***/ - Returns: An array of file paths.
+***REMOVED******REMOVED***func searchFiles(in directory: URL, with fileExtension: String) -> [URL] {
+***REMOVED******REMOVED******REMOVED***var files = [URL]()
+***REMOVED******REMOVED******REMOVED***let keys: [URLResourceKey] = [.isDirectoryKey]
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let enumerator = FileManager.default.enumerator(
+***REMOVED******REMOVED******REMOVED******REMOVED***at: directory,
+***REMOVED******REMOVED******REMOVED******REMOVED***includingPropertiesForKeys: keys,
+***REMOVED******REMOVED******REMOVED******REMOVED***options: [.skipsHiddenFiles]
+***REMOVED******REMOVED******REMOVED***) else { return [] ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***for case let fileURL as URL in enumerator {
+***REMOVED******REMOVED******REMOVED******REMOVED***if fileURL.pathExtension == fileExtension {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***files.append(fileURL)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return files
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
