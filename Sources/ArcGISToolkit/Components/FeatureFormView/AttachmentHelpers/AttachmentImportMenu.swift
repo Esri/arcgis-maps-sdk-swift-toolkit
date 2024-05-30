@@ -23,7 +23,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ The attachment form element displaying the menu.
 ***REMOVED***private let element: AttachmentsFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates an `AttachmentImportMenu`***REMOVED******REMOVED******REMOVED***/ Creates an `AttachmentImportMenu`
+***REMOVED******REMOVED***/ Creates an `AttachmentImportMenu`
 ***REMOVED******REMOVED***/ - Parameter element: The attachment form element displaying the menu.
 ***REMOVED******REMOVED***/ - Parameter onAdd: The action to perform when an attachment is added.
 ***REMOVED***init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
@@ -149,12 +149,13 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(attachmentNumber)"
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***_ = try await element.addAttachment(
+***REMOVED******REMOVED******REMOVED******REMOVED***let newAttachment = element.addAttachment(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Can this be better? What does legacy do?
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: fileName,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: newAttachmentImportData.contentType,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: newAttachmentImportData.data
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***try await onAdd?(newAttachment)
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.system(error.localizedDescription))
 ***REMOVED******REMOVED***
