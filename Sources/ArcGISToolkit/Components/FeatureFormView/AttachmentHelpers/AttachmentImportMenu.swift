@@ -23,10 +23,12 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ The attachment form element displaying the menu.
 ***REMOVED***private let element: AttachmentsFormElement
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates an `AttachmentImportMenu`
+***REMOVED******REMOVED***/ Creates an `AttachmentImportMenu`***REMOVED******REMOVED******REMOVED***/ Creates an `AttachmentImportMenu`
 ***REMOVED******REMOVED***/ - Parameter element: The attachment form element displaying the menu.
-***REMOVED***init(element: AttachmentsFormElement) {
+***REMOVED******REMOVED***/ - Parameter onAdd: The action to perform when an attachment is added.
+***REMOVED***init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
 ***REMOVED******REMOVED***self.element = element
+***REMOVED******REMOVED***self.onAdd = onAdd
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment camera controller is presented.
