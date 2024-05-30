@@ -26,13 +26,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     init(preplannedMapArea: PreplannedMapAreaProtocol) {
         self.preplannedMapArea = preplannedMapArea
-        
-        // Kick off a load of the map area.
-        Task.detached { await self.load() }
     }
     
     /// Loads the preplanned map area and updates the status.
-    private func load() async {
+    func load() async {
         do {
             // Load preplanned map area to obtain packaging status.
             status = .loading
