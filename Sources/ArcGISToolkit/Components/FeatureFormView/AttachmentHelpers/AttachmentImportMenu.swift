@@ -23,7 +23,7 @@ struct AttachmentImportMenu: View {
     /// The attachment form element displaying the menu.
     private let element: AttachmentsFormElement
     
-    /// Creates an `AttachmentImportMenu`        /// Creates an `AttachmentImportMenu`
+    /// Creates an `AttachmentImportMenu`
     /// - Parameter element: The attachment form element displaying the menu.
     /// - Parameter onAdd: The action to perform when an attachment is added.
     init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
@@ -149,12 +149,13 @@ struct AttachmentImportMenu: View {
                         fileName = "Attachment \(attachmentNumber)"
                     }
                 }
-                _ = try await element.addAttachment(
+                let newAttachment = element.addAttachment(
                     // Can this be better? What does legacy do?
                     name: fileName,
                     contentType: newAttachmentImportData.contentType,
                     data: newAttachmentImportData.data
                 )
+                try await onAdd?(newAttachment)
             } catch {
                 importState = .errored(.system(error.localizedDescription))
             }
