@@ -11,13 +11,28 @@ struct FeatureFormExampleView: View {
         return Map(item: portalItem)
     }
     
-    @State private var featureForm: FeatureForm?
-    
-    @State private var featureFormIsPresented = false
-    
-    @State private var identifyScreenPoint: CGPoint?
-    
     @State private var map = makeMap()
     
-    @State private var submissionError: Text?
+    @StateObject private var model = Model()
+    
+    var body: some View {
+        NavigationStack {
+            MapViewReader { mapViewProxy in
+                MapView(map: map)
+            }
+        }
+    }
+}
+
+@MainActor
+class Model: ObservableObject {
+    enum State {
+        case applyingEdits(FeatureForm)
+        case cancellationPending(FeatureForm)
+        case editing(FeatureForm)
+        case finishingEdits(FeatureForm)
+        case generalError(FeatureForm, Text)
+        case idle
+        case validating(FeatureForm)
+    }
 }
