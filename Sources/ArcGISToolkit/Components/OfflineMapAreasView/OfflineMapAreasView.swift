@@ -139,6 +139,14 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if let models = try? preplannedMapModels!.get() {
 ***REMOVED******REMOVED******REMOVED******REMOVED***hasPreplannedMapAreas = !models.isEmpty
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Kick off loading the map areas.
+***REMOVED******REMOVED******REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for model in models {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

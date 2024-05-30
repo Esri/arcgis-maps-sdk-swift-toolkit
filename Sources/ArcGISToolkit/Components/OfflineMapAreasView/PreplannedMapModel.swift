@@ -26,13 +26,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***init(preplannedMapArea: PreplannedMapAreaProtocol) {
 ***REMOVED******REMOVED***self.preplannedMapArea = preplannedMapArea
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Kick off a load of the map area.
-***REMOVED******REMOVED***Task.detached { await self.load() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
-***REMOVED***private func load() async {
+***REMOVED***func load() async {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Load preplanned map area to obtain packaging status.
 ***REMOVED******REMOVED******REMOVED***status = .loading
