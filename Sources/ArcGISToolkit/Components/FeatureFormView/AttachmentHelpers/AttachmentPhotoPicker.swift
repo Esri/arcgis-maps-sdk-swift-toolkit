@@ -21,9 +21,9 @@ struct AttachmentPhotoPicker: ViewModifier {
 ***REMOVED******REMOVED***/ The item selected in the photos picker.
 ***REMOVED***@State private var item: PhotosPickerItem?
 ***REMOVED***
-***REMOVED******REMOVED***/ The new attachment data retrieved from the photos picker.
-***REMOVED***@Binding var newAttachmentImportData: AttachmentImportData?
-
+***REMOVED******REMOVED***/ The current import state.
+***REMOVED***@Binding var importState: AttachmentImportState
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the photos picker is presented.
 ***REMOVED***@Binding var photoPickerIsPresented: Bool
 ***REMOVED***
@@ -39,25 +39,26 @@ struct AttachmentPhotoPicker: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.task(id: item) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let item else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***importState = .importing
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let data = try await item.loadTransferable(type: Data.self) else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Photo picker data was empty")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.dataInaccessible)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var contentTypes = item.supportedContentTypes.enumerated().makeIterator()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var mimeType = contentTypes.next()?.element.preferredMIMEType
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***while mimeType == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mimeType = contentTypes.next()?.element.preferredMIMEType
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentImportData = AttachmentImportData(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***importState = .finalizing(AttachmentImportData(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: data,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: mimeType ?? "application/octet-stream"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: mimeType ?? "application/octet-stream",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileExtension: item.supportedContentTypes.first?.preferredFilenameExtension ?? ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***))
 ***REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Error importing from photo picker: \(error)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.system(error.localizedDescription))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

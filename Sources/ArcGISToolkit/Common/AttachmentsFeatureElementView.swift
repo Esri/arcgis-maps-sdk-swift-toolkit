@@ -84,21 +84,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***if let attachmentsFormElement = featureElement as? AttachmentsFormElement {
-***REMOVED******REMOVED******REMOVED******REMOVED***for await (change, attachment) in attachmentsFormElement.attachmentChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch change {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .addition:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onAttachmentAdded(attachment)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .deletion:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onAttachmentDeleted(attachment)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .rename:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onAttachmentRenamed(attachment)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***.onAttachmentIsEditableChange(of: featureElement) { newIsEditable in
 ***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED***

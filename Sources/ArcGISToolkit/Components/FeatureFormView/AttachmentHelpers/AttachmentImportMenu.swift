@@ -35,14 +35,25 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment file importer is presented.
 ***REMOVED***@State private var fileImporterIsShowing = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The current import state.
+***REMOVED***@State private var importState: AttachmentImportState = .none
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment photo picker is presented.
 ***REMOVED***@State private var photoPickerIsPresented = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The new image attachment data retrieved from the photos picker.
-***REMOVED***@State private var newAttachmentImportData: AttachmentImportData?
+***REMOVED******REMOVED***/ The action to perform when an attachment is added.
+***REMOVED***let onAdd: ((FeatureAttachment) async throws -> Void)?
 ***REMOVED***
-***REMOVED******REMOVED***/ The new attachment retrieved from the device's camera.
-***REMOVED***@State private var capturedImage: UIImage?
+***REMOVED******REMOVED***/ A Boolean value indicating if the error alert is presented.
+***REMOVED***var errorIsPresented: Binding<Bool> {
+***REMOVED******REMOVED***Binding {
+***REMOVED******REMOVED******REMOVED***importState.isErrored
+***REMOVED*** set: { newIsPresented in
+***REMOVED******REMOVED******REMOVED***if !newIsPresented {
+***REMOVED******REMOVED******REMOVED******REMOVED***importState = .none
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***private func takePhotoOrVideoButton() -> Button<some View> {
 ***REMOVED***   Button {
@@ -96,6 +107,10 @@ struct AttachmentImportMenu: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
+***REMOVED******REMOVED***if importState.importInProgress {
+***REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
+***REMOVED***
 ***REMOVED******REMOVED***Menu {
 ***REMOVED******REMOVED******REMOVED***if element.input is AnyAttachmentsFormInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show photo/video and library picker if
@@ -110,18 +125,27 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(5)
 ***REMOVED***
+***REMOVED******REMOVED***.disabled(importState.importInProgress)
+***REMOVED******REMOVED***.alert(importFailureAlertTitle, isPresented: errorIsPresented) { ***REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED***Text(importFailureAlertMessage)
+***REMOVED***
 #if targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***.menuStyle(.borderlessButton)
 #endif
-***REMOVED******REMOVED***.task(id: newAttachmentImportData) {
-***REMOVED******REMOVED******REMOVED***guard let newAttachmentImportData else { return ***REMOVED***
+***REMOVED******REMOVED***.task(id: importState) {
+***REMOVED******REMOVED******REMOVED***guard case let .finalizing(newAttachmentImportData) = importState else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***defer { importState = .none ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***var fileName: String
-***REMOVED******REMOVED******REMOVED******REMOVED***if !newAttachmentImportData.fileName.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = newAttachmentImportData.fileName
+***REMOVED******REMOVED******REMOVED******REMOVED***let fileName: String
+***REMOVED******REMOVED******REMOVED******REMOVED***if let presetFileName = newAttachmentImportData.fileName {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = presetFileName
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: Refactor naming scheme. Ref Apollo #682
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(element.attachments.count + 1).\(newAttachmentImportData.contentType.split(separator: "/").last!)"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let attachmentNumber = element.attachments.count + 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let fileExtension = newAttachmentImportData.fileExtension {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(attachmentNumber).\(fileExtension)"
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(attachmentNumber)"
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***_ = try await element.addAttachment(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Can this be better? What does legacy do?
@@ -130,43 +154,41 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: newAttachmentImportData.data
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: Figure out error handling
-***REMOVED******REMOVED******REMOVED******REMOVED***print("Error adding attachment: \(error)")
+***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.system(error.localizedDescription))
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***self.newAttachmentImportData = nil
-***REMOVED***
-***REMOVED******REMOVED***.task(id: capturedImage) {
-***REMOVED******REMOVED******REMOVED***guard let capturedImage, let data = capturedImage.pngData() else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***newAttachmentImportData = AttachmentImportData(data: data, contentType: "image/png")
-***REMOVED******REMOVED******REMOVED***self.capturedImage = nil
 ***REMOVED***
 ***REMOVED******REMOVED***.fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
+***REMOVED******REMOVED******REMOVED***importState = .importing
 ***REMOVED******REMOVED******REMOVED***switch result {
 ***REMOVED******REMOVED******REMOVED***case .success(let url):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** gain access to the url resource and verify there's data.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if url.startAccessingSecurityScopedResource(),
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let data = FileManager.default.contents(atPath: url.path) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentImportData = AttachmentImportData(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: data,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: url.mimeType(),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName: url.lastPathComponent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***importState = .finalizing(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentImportData(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: data,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: url.mimeType(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName: url.lastPathComponent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("File picker data was empty or could not get access.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.dataInaccessible)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** release access
 ***REMOVED******REMOVED******REMOVED******REMOVED***url.stopAccessingSecurityScopedResource()
 ***REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED***print("Error importing from file importer: \(error).")
+***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.system(error.localizedDescription))
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.fullScreenCover(isPresented: $cameraIsShowing) {
-***REMOVED******REMOVED******REMOVED***AttachmentCameraController(capturedImage: $capturedImage)
+***REMOVED******REMOVED******REMOVED***AttachmentCameraController(
+***REMOVED******REMOVED******REMOVED******REMOVED***importState: $importState
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***.modifier(
 ***REMOVED******REMOVED******REMOVED***AttachmentPhotoPicker(
-***REMOVED******REMOVED******REMOVED******REMOVED***newAttachmentImportData: $newAttachmentImportData,
+***REMOVED******REMOVED******REMOVED******REMOVED***importState: $importState,
 ***REMOVED******REMOVED******REMOVED******REMOVED***photoPickerIsPresented: $photoPickerIsPresented
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -183,5 +205,31 @@ extension URL {
 ***REMOVED******REMOVED***else {
 ***REMOVED******REMOVED******REMOVED***return "application/octet-stream"
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension AttachmentImportMenu {
+***REMOVED******REMOVED***/ A title for an alert that the selected file was not able to be imported as an attachment.
+***REMOVED***var importFailureAlertTitle: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Error importing attachment",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED***A title for an alert that the selected file was not able to be
+***REMOVED******REMOVED******REMOVED***imported as an attachment.
+***REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A message for an alert that the selected file was not able to be imported as an attachment.
+***REMOVED***var importFailureAlertMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "The selected attachment could not be imported.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED***A message for an alert that the selected file was not able to be
+***REMOVED******REMOVED******REMOVED***imported as an attachment.
+***REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

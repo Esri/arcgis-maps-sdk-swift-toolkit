@@ -68,7 +68,7 @@ struct TextInput: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.focusedElement = element
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { _, newFormattedValue in
+***REMOVED******REMOVED******REMOVED***.onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***text = newFormattedValue
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -86,7 +86,7 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(10)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.tail)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $fullScreenTextInputIsPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(text: $text, element: element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FullScreenTextInput(text: $text, element: element, model: model)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 #if targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environmentObject(model)
@@ -170,6 +170,9 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED***/ The element the input belongs to.
 ***REMOVED******REMOVED***let element: FieldFormElement
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The view model for the form.
+***REMOVED******REMOVED***let model: FormViewModel
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***InputHeader(element: element)
@@ -179,11 +182,16 @@ private extension TextInput {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***RepresentedUITextView(text: $text)
-***REMOVED******REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused, equals: true)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = true
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***RepresentedUITextView(initialText: text) { text in
+***REMOVED******REMOVED******REMOVED******REMOVED***element.convertAndUpdateValue(text)
+***REMOVED******REMOVED******REMOVED******REMOVED***model.evaluateExpressions()
+***REMOVED******REMOVED*** onTextViewDidEndEditing: { text in
+***REMOVED******REMOVED******REMOVED******REMOVED***self.text = text
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.focused($textFieldIsFocused, equals: true)
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***textFieldIsFocused = true
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***InputFooter(element: element)
 ***REMOVED***
@@ -212,6 +220,42 @@ private extension FieldFormElement {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateValue(value)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension View {
+***REMOVED******REMOVED***/ Wraps `onValueChange(of:action:)` with an additional boolean property that when false will
+***REMOVED******REMOVED***/ not monitor value changes.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - element: The form element to watch for changes on.
+***REMOVED******REMOVED***/   - when: The boolean value which disables monitoring. When `true` changes will be monitored.
+***REMOVED******REMOVED***/   - action: The action which watches for changes.
+***REMOVED******REMOVED***/ - Returns: The modified view.
+***REMOVED***func onValueChange(of element: FieldFormElement, when: Bool, action: @escaping (_ newValue: Any?, _ newFormattedValue: String) -> Void) -> some View {
+***REMOVED******REMOVED***modifier(
+***REMOVED******REMOVED******REMOVED***ConditionalChangeOfModifier(element: element, condition: when) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***action(newValue, newFormattedValue)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+private struct ConditionalChangeOfModifier: ViewModifier {
+***REMOVED***let element: FieldFormElement
+***REMOVED***
+***REMOVED***let condition: Bool
+***REMOVED***
+***REMOVED***let action: (_ newValue: Any?, _ newFormattedValue: String) -> Void
+***REMOVED***
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***if condition {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED***.onValueChange(of: element) { newValue, newFormattedValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action(newValue, newFormattedValue)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***content
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

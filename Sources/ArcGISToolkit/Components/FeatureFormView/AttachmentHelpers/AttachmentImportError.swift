@@ -12,14 +12,8 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***
-import OSLog
-***REMOVED***
-
-***REMOVED***/ Data used to create the attachment.
-struct AttachmentImportData: Equatable {
-***REMOVED***let data: Data
-***REMOVED***let contentType: String
-***REMOVED***var fileName: String? = nil
-***REMOVED***var fileExtension: String? = nil
+***REMOVED***/ The possible errors when importing an attachment.
+enum AttachmentImportError: Error, Equatable {
+***REMOVED***case dataInaccessible
+***REMOVED***case system(String)
 ***REMOVED***

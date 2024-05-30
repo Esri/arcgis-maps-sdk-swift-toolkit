@@ -41,6 +41,22 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED***will not start until authorized.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep4)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Start the location datasource and get the initial location.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep5)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***To display a ring around the initial location, create a graphic using the 
+***REMOVED******REMOVED******REMOVED******REMOVED***initial location and add it to the graphics overlay.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep6)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***@Step {
+***REMOVED******REMOVED******REMOVED******REMOVED***Stop the location datasource after the initial location is retrieved.
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep7)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

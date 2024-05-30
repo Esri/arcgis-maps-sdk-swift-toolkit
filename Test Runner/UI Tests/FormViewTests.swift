@@ -327,7 +327,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Highlight/select the current value and replace it
 ***REMOVED******REMOVED***textField.doubleTap()
-***REMOVED******REMOVED***textField.typeText("2.1")
+***REMOVED******REMOVED***textField.typeText("3")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***expectation(
 ***REMOVED******REMOVED******REMOVED***for: NSPredicate(format: "label == \"Range domain 2-5\""),
@@ -337,7 +337,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Highlight/select the current value and replace it
 ***REMOVED******REMOVED***textField.doubleTap()
-***REMOVED******REMOVED***textField.typeText("5.1")
+***REMOVED******REMOVED***textField.typeText("6")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***footer.label,

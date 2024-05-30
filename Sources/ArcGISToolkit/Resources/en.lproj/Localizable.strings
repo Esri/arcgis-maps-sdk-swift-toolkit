@@ -8,12 +8,6 @@ content on a remote host. The variable is the host that prompted the challenge. 
 /* A button to add new utility trace starting points. */
 "Add new" = "Add new";
 
-/* A label for a button to choose an file from the user's files. */
-"Choose From Files" = "Choose From Files";
-
-/* A label for a button to choose a photo or video from the user's photo library. */
-"Choose From Library" = "Choose From Library";
-
 /* A section header for advanced options. */
 "Advanced Options" = "Advanced Options";
 
@@ -59,6 +53,12 @@ for the AR experience. */
 
 /* A label indicating that the remote host's certificate is not trusted. */
 "Certificate Trust Warning" = "Certificate Trust Warning";
+
+/* A label for a button to choose an file from the user's files. */
+"Choose From Files" = "Choose From Files";
+
+/* A label for a button to choose a photo or video from the user's photo library. */
+"Choose From Library" = "Choose From Library";
 
 /* The label of a button that clears a form's input. */
 "Clear" = "Clear";
@@ -131,6 +131,10 @@ The first and second parameter hold the minimum and maximum values respectively.
 
 /* A label in reference to an error that occurred during a utility network trace. */
 "Error" = "Error";
+
+/* A title for an alert that the selected file was not able to be
+imported as an attachment. */
+"Error importing attachment" = "Error importing attachment";
 
 /* A message indicating that some error occurred while importing a chosen
 network certificate. */
@@ -352,6 +356,10 @@ match the spatial reference of the map. */
 
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "The password was invalid.";
+
+/* A message for an alert that the selected file was not able to be
+imported as an attachment. */
+"The selected attachment could not be imported." = "The selected attachment could not be imported.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "The URL could not be reached or did not contain image data.";

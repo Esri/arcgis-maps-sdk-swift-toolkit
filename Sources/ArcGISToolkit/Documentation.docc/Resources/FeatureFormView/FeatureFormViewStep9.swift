@@ -121,6 +121,39 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***await validateChanges(featureForm)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***private func checkFeatureEditResults(_ featureForm: FeatureForm, _ featureEditResults: [FeatureEditResult]) -> [Error] {
+***REMOVED******REMOVED***var errors = [Error]()
+***REMOVED******REMOVED***featureEditResults.forEach { featureEditResult in
+***REMOVED******REMOVED******REMOVED***if let editResultError = featureEditResult.error { errors.append(editResultError) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***featureEditResult.attachmentResults.forEach { attachmentResult in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let error = attachmentResult.error {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***errors.append(error)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***return errors
+***REMOVED***
+***REMOVED***
+***REMOVED***private func finishEdits(_ featureForm: FeatureForm) async {
+***REMOVED******REMOVED***state = .finishingEdits(featureForm)
+***REMOVED******REMOVED***guard let table = featureForm.feature.table as? ServiceFeatureTable else {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Error resolving feature table."))
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***guard table.isEditable else {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("The feature table isn't editable."))
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***state = .finishingEdits(featureForm)
+***REMOVED******REMOVED******REMOVED***try await table.update(featureForm.feature)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("The feature update failed."))
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***await applyEdits(featureForm, table)
+***REMOVED***
+***REMOVED***
 ***REMOVED***private func validateChanges(_ featureForm: FeatureForm) async {
 ***REMOVED******REMOVED***state = .validating(featureForm)
 ***REMOVED******REMOVED***guard featureForm.validationErrors.isEmpty else {
