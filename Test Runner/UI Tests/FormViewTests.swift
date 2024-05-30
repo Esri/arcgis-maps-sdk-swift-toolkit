@@ -327,7 +327,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Highlight/select the current value and replace it
         textField.doubleTap()
-        textField.typeText("2.1")
+        textField.typeText("3")
         
         expectation(
             for: NSPredicate(format: "label == \"Range domain 2-5\""),
@@ -337,7 +337,7 @@ final class FeatureFormViewTests: XCTestCase {
         
         // Highlight/select the current value and replace it
         textField.doubleTap()
-        textField.typeText("5.1")
+        textField.typeText("6")
         
         XCTAssertEqual(
             footer.label,

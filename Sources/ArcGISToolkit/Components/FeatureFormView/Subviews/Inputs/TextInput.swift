@@ -68,7 +68,7 @@ struct TextInput: View {
                     model.focusedElement = element
                 }
             }
-            .onValueChange(of: element) { _, newFormattedValue in
+            .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
                 text = newFormattedValue
             }
     }
@@ -86,7 +86,7 @@ private extension TextInput {
                         .lineLimit(10)
                         .truncationMode(.tail)
                         .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                            FullScreenTextInput(text: $text, element: element)
+                            FullScreenTextInput(text: $text, element: element, model: model)
                                 .padding()
 #if targetEnvironment(macCatalyst)
                                 .environmentObject(model)
@@ -170,6 +170,9 @@ private extension TextInput {
         /// The element the input belongs to.
         let element: FieldFormElement
         
+        /// The view model for the form.
+        let model: FormViewModel
+        
         var body: some View {
             HStack {
                 InputHeader(element: element)
@@ -179,11 +182,16 @@ private extension TextInput {
                 .buttonStyle(.plain)
                 .foregroundColor(.accentColor)
             }
-            RepresentedUITextView(text: $text)
-                .focused($textFieldIsFocused, equals: true)
-                .onAppear {
-                    textFieldIsFocused = true
-                }
+            RepresentedUITextView(initialText: text) { text in
+                element.convertAndUpdateValue(text)
+                model.evaluateExpressions()
+            } onTextViewDidEndEditing: { text in
+                self.text = text
+            }
+            .focused($textFieldIsFocused, equals: true)
+            .onAppear {
+                textFieldIsFocused = true
+            }
             Spacer()
             InputFooter(element: element)
         }
@@ -212,6 +220,42 @@ private extension FieldFormElement {
             } else {
                 updateValue(value)
             }
+        }
+    }
+}
+
+private extension View {
+    /// Wraps `onValueChange(of:action:)` with an additional boolean property that when false will
+    /// not monitor value changes.
+    /// - Parameters:
+    ///   - element: The form element to watch for changes on.
+    ///   - when: The boolean value which disables monitoring. When `true` changes will be monitored.
+    ///   - action: The action which watches for changes.
+    /// - Returns: The modified view.
+    func onValueChange(of element: FieldFormElement, when: Bool, action: @escaping (_ newValue: Any?, _ newFormattedValue: String) -> Void) -> some View {
+        modifier(
+            ConditionalChangeOfModifier(element: element, condition: when) { newValue, newFormattedValue in
+                action(newValue, newFormattedValue)
+            }
+        )
+    }
+}
+
+private struct ConditionalChangeOfModifier: ViewModifier {
+    let element: FieldFormElement
+    
+    let condition: Bool
+    
+    let action: (_ newValue: Any?, _ newFormattedValue: String) -> Void
+    
+    func body(content: Content) -> some View {
+        if condition {
+            content
+                .onValueChange(of: element) { newValue, newFormattedValue in
+                    action(newValue, newFormattedValue)
+                }
+        } else {
+            content
         }
     }
 }

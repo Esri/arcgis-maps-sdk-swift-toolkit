@@ -20,6 +20,9 @@ struct WorldScaleExampleView: View {
         return scene
     }()
     
+    /// The location datasource that is used to access the device location.
+    @State private var locationDataSource = SystemLocationDataSource()
+    
     var body: some View {
         WorldScaleSceneView(
             clippingDistance: 400
@@ -31,6 +34,11 @@ struct WorldScaleExampleView: View {
             if locationManager.authorizationStatus == .notDetermined {
                 locationManager.requestWhenInUseAuthorization()
             }
+            
+            try? await locationDataSource.start()
+            
+            // Retrieve initial location.
+            guard let initialLocation = await locationDataSource.locations.first(where: { _ in true }) else { return }
         }
     }
 }
