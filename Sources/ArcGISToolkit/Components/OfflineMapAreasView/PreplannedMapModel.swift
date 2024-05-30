@@ -26,8 +26,11 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// The task to use to take the area offline.
     private let offlineMapTask: OfflineMapTask
     
-    /// The download directory for the preplanned map area mobile map package.
-    private let downloadDirectory: URL
+    /// The download directory for the preplanned map areas.
+    private let preplannedDirectory: URL
+    
+    /// The ID of the preplanned map area.
+    private let preplannedMapAreaID: String
     
     /// The mobile map package for the preplanned map area.
     private(set) var mobileMapPackage: MobileMapPackage?
@@ -59,14 +62,13 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         mapViewModel: OfflineMapAreasView.MapViewModel,
         mobileMapPackage: MobileMapPackage? = nil
     ) {
-        self.offlineMapTask = mapViewModel.offlineMapTask
+        offlineMapTask = mapViewModel.offlineMapTask
         self.preplannedMapArea = preplannedMapArea
         self.mobileMapPackage = mobileMapPackage
+        preplannedDirectory = mapViewModel.preplannedDirectory
         
         if let itemID = preplannedMapArea.id {
-            downloadDirectory = mapViewModel.preplannedDirectory
-                .appendingPathComponent(itemID.rawValue)
-                .appendingPathExtension("mmpk")
+            preplannedMapAreaID = itemID.rawValue
         } else {
             return nil
         }
@@ -169,6 +171,20 @@ extension PreplannedMapModel {
     func downloadPreplannedMapArea() async {
         precondition(canDownload)
         
+        let downloadDirectory = preplannedDirectory
+            .appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
+        
+        let packageDirectory = downloadDirectory
+            .appending(component: "package", directoryHint: .isDirectory)
+        
+        try? FileManager.default.createDirectory(atPath: downloadDirectory.relativePath, withIntermediateDirectories: true)
+        
+        try? FileManager.default.createDirectory(atPath: packageDirectory.relativePath, withIntermediateDirectories: true)
+        
+        let mmpkDirectory = packageDirectory
+            .appendingPathComponent(preplannedMapAreaID)
+            .appendingPathExtension("mmpk")
+
         let parameters: DownloadPreplannedOfflineMapParameters
         
         do {
@@ -183,7 +199,7 @@ extension PreplannedMapModel {
         // Creates the download preplanned offline map job.
         let job = offlineMapTask.makeDownloadPreplannedOfflineMapJob(
             parameters: parameters,
-            downloadDirectory: downloadDirectory
+            downloadDirectory: mmpkDirectory
         )
         
         mapViewModel.jobManager.jobs.append(job)
