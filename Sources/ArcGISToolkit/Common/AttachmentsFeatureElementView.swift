@@ -179,7 +179,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentsFormElement,
 ***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
-***REMOVED******REMOVED******REMOVED***try await element.renameAttachment(attachment, name: newAttachmentName)
+***REMOVED******REMOVED******REMOVED***attachment.name = newAttachmentName
 ***REMOVED******REMOVED******REMOVED***attachmentModel.sync()
 ***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
