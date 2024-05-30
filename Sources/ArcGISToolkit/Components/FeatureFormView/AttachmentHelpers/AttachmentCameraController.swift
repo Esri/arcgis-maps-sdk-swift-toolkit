@@ -18,8 +18,8 @@
 struct AttachmentCameraController: UIViewControllerRepresentable {
 ***REMOVED***@Environment(\.dismiss) private var dismiss
 ***REMOVED***
-***REMOVED******REMOVED***/ The newly captured attachment data.
-***REMOVED***@Binding var capturedMedia: AttachmentImportData?
+***REMOVED******REMOVED***/ The current import state.
+***REMOVED***@Binding var importState: AttachmentImportState
 ***REMOVED***
 ***REMOVED******REMOVED***/ The image picker controller represented within the view.
 ***REMOVED***private let controller = UIImagePickerController()
@@ -57,13 +57,14 @@ final class CameraControllerCoordinator: NSObject, UIImagePickerControllerDelega
 ***REMOVED******REMOVED***_ picker: UIImagePickerController,
 ***REMOVED******REMOVED***didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
 ***REMOVED***) {
+***REMOVED******REMOVED***parent.importState = .importing
 ***REMOVED******REMOVED***if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
 ***REMOVED******REMOVED******REMOVED***if let pngData = image.pngData() {
-***REMOVED******REMOVED******REMOVED******REMOVED***parent.capturedMedia = AttachmentImportData(data: pngData, contentType: "image/png")
+***REMOVED******REMOVED******REMOVED******REMOVED***parent.importState = .finalizing(AttachmentImportData(data: pngData, contentType: "image/png"))
 ***REMOVED******REMOVED***
 ***REMOVED*** else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
 ***REMOVED******REMOVED******REMOVED***if let videoData = try? Data(contentsOf: videoURL) {
-***REMOVED******REMOVED******REMOVED******REMOVED***parent.capturedMedia = AttachmentImportData(data: videoData, contentType: "video/quicktime", fileName: videoURL.lastPathComponent)
+***REMOVED******REMOVED******REMOVED******REMOVED***parent.importState = .finalizing(AttachmentImportData(data: videoData, contentType: "video/quicktime", fileName: videoURL.lastPathComponent))
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***parent.endCapture()
