@@ -24,7 +24,7 @@ private extension PreplannedMapAreaProtocol {
 }
 
 class PreplannedMapModelTests: XCTestCase {
-    private static var sleepNanoseconds: UInt64 { 100_000 }
+    private static var sleepNanoseconds: UInt64 { 1_000_000 }
     
     @MainActor
     func testInit() {
