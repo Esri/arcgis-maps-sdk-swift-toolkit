@@ -13,7 +13,8 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-***REMOVED***
+import Combine
+import Foundation
 
 public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***/ The model class for the offline map areas view.
