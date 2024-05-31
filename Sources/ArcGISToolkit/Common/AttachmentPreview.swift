@@ -33,10 +33,10 @@ struct AttachmentPreview: View {
     @State private var renamedAttachmentModel: AttachmentModel?
     
     /// The action to perform when the attachment is deleted.
-    let onDelete: ((AttachmentModel) async throws -> Void)?
+    let onDelete: ((AttachmentModel) -> Void)?
     
     /// The action to perform when the attachment is renamed.
-    let onRename: ((AttachmentModel, String) async throws -> Void)?
+    let onRename: ((AttachmentModel, String) -> Void)?
     
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
@@ -47,8 +47,8 @@ struct AttachmentPreview: View {
     init(
         attachmentModels: [AttachmentModel],
         editControlsDisabled: Bool = true,
-        onRename: ((AttachmentModel, String) async throws -> Void)? = nil,
-        onDelete: ((AttachmentModel) async throws -> Void)? = nil
+        onRename: ((AttachmentModel, String) -> Void)? = nil,
+        onDelete: ((AttachmentModel) -> Void)? = nil
     ) {
         self.attachmentModels = attachmentModels
         self.onRename = onRename
@@ -114,9 +114,9 @@ struct AttachmentPreview: View {
                         let currentName = renamedAttachmentModel.name
                         if let separatorIndex = currentName.lastIndex(of: ".") {
                             let fileExtension = String(currentName[currentName.index(after: separatorIndex)...])
-                            try? await onRename?(renamedAttachmentModel, [newAttachmentName, fileExtension].joined(separator: "."))
+                            onRename?(renamedAttachmentModel, [newAttachmentName, fileExtension].joined(separator: "."))
                         } else {
-                            try? await onRename?(renamedAttachmentModel, newAttachmentName)
+                            onRename?(renamedAttachmentModel, newAttachmentName)
                         }
                     }
                 }
@@ -124,7 +124,7 @@ struct AttachmentPreview: View {
         }
         .task(id: deletedAttachmentModel) {
             guard let deletedAttachmentModel else { return }
-            try? await onDelete?(deletedAttachmentModel)
+            onDelete?(deletedAttachmentModel)
             self.deletedAttachmentModel = nil
         }
     }
