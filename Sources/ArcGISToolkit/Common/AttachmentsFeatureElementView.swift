@@ -167,8 +167,8 @@ struct AttachmentsFeatureElementView: View {
         )
         newModel.load()
         models.insert(newModel, at: 0)
-        formViewModel.evaluateExpressions()
         attachmentModelsState = .initialized(models)
+        formViewModel.evaluateExpressions()
     }
     
     /// Renames the attachment associated with the given model.
@@ -177,8 +177,7 @@ struct AttachmentsFeatureElementView: View {
     ///   - newAttachmentName: The new attachment name.
     @MainActor
     func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
-        if let element = featureElement as? AttachmentsFormElement,
-           let attachment = attachmentModel.attachment as? FormAttachment {
+        if let attachment = attachmentModel.attachment as? FormAttachment {
             attachment.name = newAttachmentName
             attachmentModel.sync()
             formViewModel.evaluateExpressions()
@@ -192,11 +191,12 @@ struct AttachmentsFeatureElementView: View {
     func onDelete(attachmentModel: AttachmentModel) async throws -> Void {
         if let element = featureElement as? AttachmentsFormElement,
            let attachment = attachmentModel.attachment as? FormAttachment {
-            try await element.deleteAttachment(attachment)
-            guard case .loaded(var models) = attachmentLoadingState else { return }
+            element.deleteAttachment(attachment)
+            guard case .initialized(var models) = attachmentModelsState else { return }
             models.removeAll { $0 == attachmentModel }
-            attachmentLoadingState = .loaded(models)
+            attachmentModelsState = .initialized(models)
             formViewModel.evaluateExpressions()
+        }
     }
 }
 
