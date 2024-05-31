@@ -33,10 +33,10 @@ struct AttachmentPreview: View {
 ***REMOVED***@State private var renamedAttachmentModel: AttachmentModel?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is deleted.
-***REMOVED***let onDelete: ((AttachmentModel) async throws -> Void)?
+***REMOVED***let onDelete: ((AttachmentModel) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is renamed.
-***REMOVED***let onRename: ((AttachmentModel, String) async throws -> Void)?
+***REMOVED***let onRename: ((AttachmentModel, String) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
 ***REMOVED***@State private var renameDialogueIsShowing = false
@@ -47,8 +47,8 @@ struct AttachmentPreview: View {
 ***REMOVED***init(
 ***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
 ***REMOVED******REMOVED***editControlsDisabled: Bool = true,
-***REMOVED******REMOVED***onRename: ((AttachmentModel, String) async throws -> Void)? = nil,
-***REMOVED******REMOVED***onDelete: ((AttachmentModel) async throws -> Void)? = nil
+***REMOVED******REMOVED***onRename: ((AttachmentModel, String) -> Void)? = nil,
+***REMOVED******REMOVED***onDelete: ((AttachmentModel) -> Void)? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.attachmentModels = attachmentModels
 ***REMOVED******REMOVED***self.onRename = onRename
@@ -114,9 +114,9 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let currentName = renamedAttachmentModel.name
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let separatorIndex = currentName.lastIndex(of: ".") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let fileExtension = String(currentName[currentName.index(after: separatorIndex)...])
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await onRename?(renamedAttachmentModel, [newAttachmentName, fileExtension].joined(separator: "."))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRename?(renamedAttachmentModel, [newAttachmentName, fileExtension].joined(separator: "."))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await onRename?(renamedAttachmentModel, newAttachmentName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRename?(renamedAttachmentModel, newAttachmentName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -124,7 +124,7 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: deletedAttachmentModel) {
 ***REMOVED******REMOVED******REMOVED***guard let deletedAttachmentModel else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***try? await onDelete?(deletedAttachmentModel)
+***REMOVED******REMOVED******REMOVED***onDelete?(deletedAttachmentModel)
 ***REMOVED******REMOVED******REMOVED***self.deletedAttachmentModel = nil
 ***REMOVED***
 ***REMOVED***
