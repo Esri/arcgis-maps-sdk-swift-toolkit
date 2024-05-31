@@ -119,14 +119,18 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***case .preview:
 ***REMOVED******REMOVED******REMOVED***AttachmentPreview(
 ***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
-***REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: !isEditable
+***REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: !isEditable,
+***REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
+***REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .auto:
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: !isEditable
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: !isEditable,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onRename: onRename,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onDelete: onDelete
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
@@ -152,8 +156,8 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a model for the new attachment for display.
-***REMOVED******REMOVED***/ - Parameter attachment: The added form attachment.
-***REMOVED***private func onAttachmentAdded(_ attachment: FormAttachment) -> Void {
+***REMOVED******REMOVED***/ - Parameter attachment: The added attachment.
+***REMOVED***private func onAdd(attachment: FeatureAttachment) -> Void {
 ***REMOVED******REMOVED***guard case .initialized(var models) = attachmentModelsState else { return ***REMOVED***
 ***REMOVED******REMOVED***let newModel = AttachmentModel(
 ***REMOVED******REMOVED******REMOVED***attachment: attachment,
@@ -167,7 +171,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Deletes the attachment model for the given attachment.
 ***REMOVED******REMOVED***/ - Parameter attachment: The deleted form attachment.
-***REMOVED***private func onAttachmentDeleted(_ attachment: FormAttachment) -> Void {
+***REMOVED***private func onDelete(attachmentModel: AttachmentModel) -> Void {
 ***REMOVED******REMOVED***guard case .initialized(var models) = attachmentModelsState else { return ***REMOVED***
 ***REMOVED******REMOVED***models.removeAll { $0.attachment as? FormAttachment === attachment ***REMOVED***
 ***REMOVED******REMOVED***attachmentModelsState = .initialized(models)
@@ -175,7 +179,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Synchronizes the model for the renamed attachment.
 ***REMOVED******REMOVED***/ - Parameter attachment: The renamed form attachment.
-***REMOVED***private func onAttachmentRenamed(_ attachment: FormAttachment) -> Void {
+***REMOVED***private func onRename(_ attachment: FormAttachment) -> Void {
 ***REMOVED******REMOVED***guard case .initialized(let models) = attachmentModelsState else { return ***REMOVED***
 ***REMOVED******REMOVED***if let model = models.first(where: { $0.attachment as? FormAttachment === attachment ***REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***model.sync()
