@@ -167,8 +167,8 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***newModel.load()
 ***REMOVED******REMOVED***models.insert(newModel, at: 0)
-***REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED******REMOVED***attachmentModelsState = .initialized(models)
+***REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Renames the attachment associated with the given model.
@@ -177,8 +177,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/   - newAttachmentName: The new attachment name.
 ***REMOVED***@MainActor
 ***REMOVED***func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
-***REMOVED******REMOVED***if let element = featureElement as? AttachmentsFormElement,
-***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
+***REMOVED******REMOVED***if let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***attachment.name = newAttachmentName
 ***REMOVED******REMOVED******REMOVED***attachmentModel.sync()
 ***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
@@ -192,11 +191,12 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***func onDelete(attachmentModel: AttachmentModel) async throws -> Void {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentsFormElement,
 ***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
-***REMOVED******REMOVED******REMOVED***try await element.deleteAttachment(attachment)
-***REMOVED******REMOVED******REMOVED***guard case .loaded(var models) = attachmentLoadingState else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***element.deleteAttachment(attachment)
+***REMOVED******REMOVED******REMOVED***guard case .initialized(var models) = attachmentModelsState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***models.removeAll { $0 == attachmentModel ***REMOVED***
-***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loaded(models)
+***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initialized(models)
 ***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
