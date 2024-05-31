@@ -62,11 +62,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***cameraIsShowing = true
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Take Photo or Video",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to capture a new photo or video."
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(cameraButtonLabel)
 ***REMOVED******REMOVED*** icon: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "camera")
 ***REMOVED******REMOVED***
@@ -79,11 +75,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***photoPickerIsPresented = true
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Choose From Library",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose a photo or video from the user's photo library."
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(libraryButtonLabel)
 ***REMOVED******REMOVED*** icon: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "photo")
 ***REMOVED******REMOVED***
@@ -96,11 +88,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED******REMOVED***fileImporterIsShowing = true
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Choose From Files",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose an file from the user's files."
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(filesButtonLabel)
 ***REMOVED******REMOVED*** icon: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "folder")
 ***REMOVED******REMOVED***
@@ -212,15 +200,21 @@ extension URL {
 ***REMOVED***
 
 private extension AttachmentImportMenu {
-***REMOVED******REMOVED***/ A title for an alert that the selected file was not able to be imported as an attachment.
-***REMOVED***var importFailureAlertTitle: String {
+***REMOVED******REMOVED***/ A label for a button to capture a new photo or video.
+***REMOVED***var cameraButtonLabel: String {
 ***REMOVED******REMOVED***.init(
-***REMOVED******REMOVED******REMOVED***localized: "Error importing attachment",
+***REMOVED******REMOVED******REMOVED***localized: "Take Photo or Video",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED***A title for an alert that the selected file was not able to be
-***REMOVED******REMOVED******REMOVED***imported as an attachment.
-***REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to capture a new photo or video."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A label for a button to choose an file from the user's files.
+***REMOVED***var filesButtonLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Choose From Files",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose an file from the user's files."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -233,6 +227,27 @@ private extension AttachmentImportMenu {
 ***REMOVED******REMOVED******REMOVED***A message for an alert that the selected file was not able to be
 ***REMOVED******REMOVED******REMOVED***imported as an attachment.
 ***REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A title for an alert that the selected file was not able to be imported as an attachment.
+***REMOVED***var importFailureAlertTitle: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Error importing attachment",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED***A title for an alert that the selected file was not able to be
+***REMOVED******REMOVED******REMOVED***imported as an attachment.
+***REMOVED******REMOVED******REMOVED***"""
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A label for a button to choose a photo or video from the user's photo library.
+***REMOVED***var libraryButtonLabel: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "Choose From Library",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose a photo or video from the user's photo library."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
