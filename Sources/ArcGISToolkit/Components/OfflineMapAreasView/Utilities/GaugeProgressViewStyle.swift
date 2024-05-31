@@ -18,6 +18,7 @@ extension ProgressViewStyle where Self == GaugeProgressViewStyle {
     /// A progress view that visually indicates its progress with a gauge.
     static var gauge: Self { .init() }
 }
+
 /// A circular gauge progress view style.
 struct GaugeProgressViewStyle: ProgressViewStyle {
     private var strokeStyle: StrokeStyle { .init(lineWidth: 3, lineCap: .round) }
