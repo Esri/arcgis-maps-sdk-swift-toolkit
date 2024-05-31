@@ -191,7 +191,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***func onDelete(attachmentModel: AttachmentModel) async throws -> Void {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentsFormElement,
 ***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
-***REMOVED******REMOVED******REMOVED***element.delete(attachment)
+***REMOVED******REMOVED******REMOVED***element.deleteAttachment(attachment)
 ***REMOVED******REMOVED******REMOVED***guard case .initialized(var models) = attachmentModelsState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***models.removeAll { $0 == attachmentModel ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initialized(models)
