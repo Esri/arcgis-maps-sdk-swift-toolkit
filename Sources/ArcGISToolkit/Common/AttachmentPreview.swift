@@ -34,7 +34,7 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is deleted.
 ***REMOVED***let onDelete: ((AttachmentModel) async throws -> Void)?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the attachment is renamed.
 ***REMOVED***let onRename: ((AttachmentModel, String) async throws -> Void)?
 ***REMOVED***
