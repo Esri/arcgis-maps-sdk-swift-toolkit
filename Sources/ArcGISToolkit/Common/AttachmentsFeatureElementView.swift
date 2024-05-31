@@ -176,7 +176,7 @@ struct AttachmentsFeatureElementView: View {
     ///   - attachmentModel: The model for the attachment to rename.
     ///   - newAttachmentName: The new attachment name.
     @MainActor
-    func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
+    func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
         if let attachment = attachmentModel.attachment as? FormAttachment {
             attachment.name = newAttachmentName
             attachmentModel.sync()
@@ -188,7 +188,7 @@ struct AttachmentsFeatureElementView: View {
     /// - Parameters:
     ///   - attachmentModel: The model for the attachment to delete.
     @MainActor
-    func onDelete(attachmentModel: AttachmentModel) async throws -> Void {
+    func onDelete(attachmentModel: AttachmentModel) -> Void {
         if let element = featureElement as? AttachmentsFormElement,
            let attachment = attachmentModel.attachment as? FormAttachment {
             element.deleteAttachment(attachment)

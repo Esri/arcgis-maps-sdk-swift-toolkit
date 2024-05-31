@@ -26,7 +26,7 @@ struct AttachmentImportMenu: View {
     /// Creates an `AttachmentImportMenu`
     /// - Parameter element: The attachment form element displaying the menu.
     /// - Parameter onAdd: The action to perform when an attachment is added.
-    init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
+    init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) -> Void)? = nil) {
         self.element = element
         self.onAdd = onAdd
     }
@@ -44,7 +44,7 @@ struct AttachmentImportMenu: View {
     @State private var photoPickerIsPresented = false
     
     /// The action to perform when an attachment is added.
-    let onAdd: ((FeatureAttachment) async throws -> Void)?
+    let onAdd: ((FeatureAttachment) -> Void)?
     
     /// A Boolean value indicating if the error alert is presented.
     var errorIsPresented: Binding<Bool> {
@@ -125,28 +125,24 @@ struct AttachmentImportMenu: View {
         .task(id: importState) {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
             defer { importState = .none }
-            do {
-                let fileName: String
-                if let presetFileName = newAttachmentImportData.fileName {
-                    fileName = presetFileName
+            let fileName: String
+            if let presetFileName = newAttachmentImportData.fileName {
+                fileName = presetFileName
+            } else {
+                let attachmentNumber = element.attachments.count + 1
+                if let fileExtension = newAttachmentImportData.fileExtension {
+                    fileName = "Attachment \(attachmentNumber).\(fileExtension)"
                 } else {
-                    let attachmentNumber = element.attachments.count + 1
-                    if let fileExtension = newAttachmentImportData.fileExtension {
-                        fileName = "Attachment \(attachmentNumber).\(fileExtension)"
-                    } else {
-                        fileName = "Attachment \(attachmentNumber)"
-                    }
+                    fileName = "Attachment \(attachmentNumber)"
                 }
-                let newAttachment = element.addAttachment(
-                    // Can this be better? What does legacy do?
-                    name: fileName,
-                    contentType: newAttachmentImportData.contentType,
-                    data: newAttachmentImportData.data
-                )
-                try await onAdd?(newAttachment)
-            } catch {
-                importState = .errored(.system(error.localizedDescription))
             }
+            let newAttachment = element.addAttachment(
+                // Can this be better? What does legacy do?
+                name: fileName,
+                contentType: newAttachmentImportData.contentType,
+                data: newAttachmentImportData.data
+            )
+            onAdd?(newAttachment)
         }
         .fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
             importState = .importing
