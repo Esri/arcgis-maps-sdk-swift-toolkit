@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import Combine
+import Foundation
 
 public extension OfflineMapAreasView {
     /// The model class for the offline map areas view.
