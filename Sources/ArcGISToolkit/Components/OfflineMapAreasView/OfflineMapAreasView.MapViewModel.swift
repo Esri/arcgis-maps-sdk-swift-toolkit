@@ -68,7 +68,7 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***if let portalItemID = map.item?.id?.description {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FileManager.default.createDirectories(for: portalItemID)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***preplannedDirectory = FileManager.default.preplannedDirectory(poratlItemID: portalItemID)
+***REMOVED******REMOVED******REMOVED******REMOVED***preplannedDirectory = FileManager.default.preplannedDirectory(portalItemID: portalItemID)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***preplannedDirectory = FileManager.default.documentsDirectory
 ***REMOVED******REMOVED***
@@ -178,25 +178,25 @@ private extension FileManager {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the web map directory.
-***REMOVED***private func webMapDirectory(poratlItemID: String) -> URL {
-***REMOVED******REMOVED***offlineMapAreasDirectory.appending(path: poratlItemID, directoryHint: .isDirectory)
+***REMOVED***private func webMapDirectory(portalItemID: String) -> URL {
+***REMOVED******REMOVED***offlineMapAreasDirectory.appending(path: portalItemID, directoryHint: .isDirectory)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory.
-***REMOVED***func preplannedDirectory(poratlItemID: String) -> URL {
-***REMOVED******REMOVED***webMapDirectory(poratlItemID: poratlItemID).appending(path: "Preplanned", directoryHint: .isDirectory)
+***REMOVED***func preplannedDirectory(portalItemID: String) -> URL {
+***REMOVED******REMOVED***webMapDirectory(portalItemID: portalItemID).appending(path: "Preplanned", directoryHint: .isDirectory)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func createDirectories(for poratlItemID: String) {
+***REMOVED***func createDirectories(for portalItemID: String) {
 ***REMOVED******REMOVED***Task.detached {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Create directory for offline map areas.
 ***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: FileManager.default.offlineMapAreasDirectory, withIntermediateDirectories: true)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Create directory for the webmap.
-***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: FileManager.default.webMapDirectory(poratlItemID: poratlItemID), withIntermediateDirectories: true)
+***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: FileManager.default.webMapDirectory(portalItemID: portalItemID), withIntermediateDirectories: true)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Create directory for preplanned map areas.
-***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: FileManager.default.preplannedDirectory(poratlItemID: poratlItemID), withIntermediateDirectories: true)
+***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: FileManager.default.preplannedDirectory(portalItemID: portalItemID), withIntermediateDirectories: true)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
