@@ -62,11 +62,7 @@ struct AttachmentImportMenu: View {
             cameraIsShowing = true
         } label: {
             Label {
-                Text(
-                    "Take Photo or Video",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to capture a new photo or video."
-                )
+                Text(cameraButtonLabel)
             } icon: {
                 Image(systemName: "camera")
             }
@@ -79,11 +75,7 @@ struct AttachmentImportMenu: View {
             photoPickerIsPresented = true
         } label: {
             Label {
-                Text(
-                    "Choose From Library",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to choose a photo or video from the user's photo library."
-                )
+                Text(libraryButtonLabel)
             } icon: {
                 Image(systemName: "photo")
             }
@@ -96,11 +88,7 @@ struct AttachmentImportMenu: View {
             fileImporterIsShowing = true
         } label: {
             Label {
-                Text(
-                    "Choose From Files",
-                    bundle: .toolkitModule,
-                    comment: "A label for a button to choose an file from the user's files."
-                )
+                Text(filesButtonLabel)
             } icon: {
                 Image(systemName: "folder")
             }
@@ -212,15 +200,21 @@ extension URL {
 }
 
 private extension AttachmentImportMenu {
-    /// A title for an alert that the selected file was not able to be imported as an attachment.
-    var importFailureAlertTitle: String {
+    /// A label for a button to capture a new photo or video.
+    var cameraButtonLabel: String {
         .init(
-            localized: "Error importing attachment",
+            localized: "Take Photo or Video",
             bundle: .toolkitModule,
-            comment: """
-            A title for an alert that the selected file was not able to be
-            imported as an attachment.
-            """
+            comment: "A label for a button to capture a new photo or video."
+        )
+    }
+    
+    /// A label for a button to choose an file from the user's files.
+    var filesButtonLabel: String {
+        .init(
+            localized: "Choose From Files",
+            bundle: .toolkitModule,
+            comment: "A label for a button to choose an file from the user's files."
         )
     }
     
@@ -233,6 +227,27 @@ private extension AttachmentImportMenu {
             A message for an alert that the selected file was not able to be
             imported as an attachment.
             """
+        )
+    }
+    
+    /// A title for an alert that the selected file was not able to be imported as an attachment.
+    var importFailureAlertTitle: String {
+        .init(
+            localized: "Error importing attachment",
+            bundle: .toolkitModule,
+            comment: """
+            A title for an alert that the selected file was not able to be
+            imported as an attachment.
+            """
+        )
+    }
+    
+    /// A label for a button to choose a photo or video from the user's photo library.
+    var libraryButtonLabel: String {
+        .init(
+            localized: "Choose From Library",
+            bundle: .toolkitModule,
+            comment: "A label for a button to choose a photo or video from the user's photo library."
         )
     }
 }
