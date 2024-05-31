@@ -22,7 +22,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
-***REMOVED***public var body: some View {***REMOVED***  
+***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
 ***REMOVED******REMOVED******REMOVED***thumbnailView
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 4) {

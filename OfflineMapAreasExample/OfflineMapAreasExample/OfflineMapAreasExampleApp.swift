@@ -12,14 +12,12 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-
 ***REMOVED***
 ***REMOVED***Toolkit
 ***REMOVED***
 
 ***REMOVED***
 struct OfflineMapAreasExampleApp: App {
-***REMOVED***
 ***REMOVED***init() {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Allow the `ArcGISURLSession` to handle it's background task events.
