@@ -17,9 +17,6 @@ import SwiftUI
 
 /// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
-    /// The attachment feature element displaying the attachments.
-    private let element: AttachmentsFeatureElement
-    
     /// The models for the attachments displayed in the list.
     var attachmentModels: [AttachmentModel]
     
@@ -35,6 +32,12 @@ struct AttachmentPreview: View {
     /// The model for an attachment the user has requested be renamed.
     @State private var renamedAttachmentModel: AttachmentModel?
     
+    /// The action to perform when the attachment is deleted.
+    let onDelete: ((AttachmentModel) async throws -> Void)?
+
+    /// The action to perform when the attachment is renamed.
+    let onRename: ((AttachmentModel, String) async throws -> Void)?
+    
     /// A Boolean value indicating the user has requested that the attachment be renamed.
     @State private var renameDialogueIsShowing = false
     
@@ -42,12 +45,14 @@ struct AttachmentPreview: View {
     let editControlsDisabled: Bool
     
     init(
-        element: AttachmentsFeatureElement,
         attachmentModels: [AttachmentModel],
-        editControlsDisabled: Bool = true
+        editControlsDisabled: Bool = true,
+        onRename: ((AttachmentModel, String) async throws -> Void)? = nil,
+        onDelete: ((AttachmentModel) async throws -> Void)? = nil
     ) {
-        self.element = element
         self.attachmentModels = attachmentModels
+        self.onRename = onRename
+        self.onDelete = onDelete
         self.editControlsDisabled = editControlsDisabled
     }
     
@@ -105,21 +110,13 @@ struct AttachmentPreview: View {
             Button("Cancel", role: .cancel) { }
             Button("OK") {
                 Task {
-                    if let renamedAttachmentModel,
-                       let element = element as? AttachmentsFormElement,
-                       let attachment = renamedAttachmentModel.attachment as? FormAttachment {
+                    if let renamedAttachmentModel {
                         let currentName = renamedAttachmentModel.name
                         if let separatorIndex = currentName.lastIndex(of: ".") {
                             let fileExtension = String(currentName[currentName.index(after: separatorIndex)...])
-                            try? await element.renameAttachment(
-                                attachment,
-                                name: [newAttachmentName, fileExtension].joined(separator: ".")
-                            )
+                            try? await onRename?(renamedAttachmentModel, [newAttachmentName, fileExtension].joined(separator: "."))
                         } else {
-                            try? await element.renameAttachment(
-                                attachment,
-                                name: newAttachmentName
-                            )
+                            try? await onRename?(renamedAttachmentModel, newAttachmentName)
                         }
                     }
                 }
@@ -127,9 +124,8 @@ struct AttachmentPreview: View {
         }
         .task(id: deletedAttachmentModel) {
             guard let deletedAttachmentModel else { return }
-            if let element = element as? AttachmentsFormElement, let attachment = deletedAttachmentModel.attachment as? FormAttachment {
-                try? await element.deleteAttachment(attachment)
-            }
+            try? await onDelete?(deletedAttachmentModel)
+            self.deletedAttachmentModel = nil
         }
     }
     
