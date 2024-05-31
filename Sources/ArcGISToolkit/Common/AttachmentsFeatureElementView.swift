@@ -150,14 +150,15 @@ struct AttachmentsFeatureElementView: View {
             Spacer()
             if isEditable,
                let element = featureElement as? AttachmentsFormElement {
-                AttachmentImportMenu(element: element)
+                AttachmentImportMenu(element: element, onAdd: onAdd)
             }
         }
     }
     
     /// Creates a model for the new attachment for display.
     /// - Parameter attachment: The added attachment.
-    private func onAdd(attachment: FeatureAttachment) -> Void {
+    @MainActor
+    func onAdd(attachment: FeatureAttachment) -> Void {
         guard case .initialized(var models) = attachmentModelsState else { return }
         let newModel = AttachmentModel(
             attachment: attachment,
@@ -166,24 +167,36 @@ struct AttachmentsFeatureElementView: View {
         )
         newModel.load()
         models.insert(newModel, at: 0)
+        formViewModel.evaluateExpressions()
         attachmentModelsState = .initialized(models)
     }
     
-    /// Deletes the attachment model for the given attachment.
-    /// - Parameter attachment: The deleted form attachment.
-    private func onDelete(attachmentModel: AttachmentModel) -> Void {
-        guard case .initialized(var models) = attachmentModelsState else { return }
-        models.removeAll { $0.attachment as? FormAttachment === attachment }
-        attachmentModelsState = .initialized(models)
-    }
-    
-    /// Synchronizes the model for the renamed attachment.
-    /// - Parameter attachment: The renamed form attachment.
-    private func onRename(_ attachment: FormAttachment) -> Void {
-        guard case .initialized(let models) = attachmentModelsState else { return }
-        if let model = models.first(where: { $0.attachment as? FormAttachment === attachment }) {
-            model.sync()
+    /// Renames the attachment associated with the given model.
+    /// - Parameters:
+    ///   - attachmentModel: The model for the attachment to rename.
+    ///   - newAttachmentName: The new attachment name.
+    @MainActor
+    func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
+        if let element = featureElement as? AttachmentsFormElement,
+           let attachment = attachmentModel.attachment as? FormAttachment {
+            attachment.name = newAttachmentName
+            attachmentModel.sync()
+            formViewModel.evaluateExpressions()
         }
+    }
+    
+    /// Deletes the attachment associated with the given model.
+    /// - Parameters:
+    ///   - attachmentModel: The model for the attachment to delete.
+    @MainActor
+    func onDelete(attachmentModel: AttachmentModel) async throws -> Void {
+        if let element = featureElement as? AttachmentsFormElement,
+           let attachment = attachmentModel.attachment as? FormAttachment {
+            try await element.deleteAttachment(attachment)
+            guard case .loaded(var models) = attachmentLoadingState else { return }
+            models.removeAll { $0 == attachmentModel }
+            attachmentLoadingState = .loaded(models)
+            formViewModel.evaluateExpressions()
     }
 }
 
