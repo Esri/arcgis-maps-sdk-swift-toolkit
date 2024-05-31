@@ -68,7 +68,7 @@ public extension OfflineMapAreasView {
             if let portalItemID = map.item?.id?.description {
                 FileManager.default.createDirectories(for: portalItemID)
                 
-                preplannedDirectory = FileManager.default.preplannedDirectory(poratlItemID: portalItemID)
+                preplannedDirectory = FileManager.default.preplannedDirectory(portalItemID: portalItemID)
             } else {
                 preplannedDirectory = FileManager.default.documentsDirectory
             }
@@ -178,25 +178,25 @@ private extension FileManager {
     }
     
     /// The path to the web map directory.
-    private func webMapDirectory(poratlItemID: String) -> URL {
-        offlineMapAreasDirectory.appending(path: poratlItemID, directoryHint: .isDirectory)
+    private func webMapDirectory(portalItemID: String) -> URL {
+        offlineMapAreasDirectory.appending(path: portalItemID, directoryHint: .isDirectory)
     }
     
     /// The path to the preplanned map areas directory.
-    func preplannedDirectory(poratlItemID: String) -> URL {
-        webMapDirectory(poratlItemID: poratlItemID).appending(path: "Preplanned", directoryHint: .isDirectory)
+    func preplannedDirectory(portalItemID: String) -> URL {
+        webMapDirectory(portalItemID: portalItemID).appending(path: "Preplanned", directoryHint: .isDirectory)
     }
     
-    func createDirectories(for poratlItemID: String) {
+    func createDirectories(for portalItemID: String) {
         Task.detached {
             // Create directory for offline map areas.
             try FileManager.default.createDirectory(at: FileManager.default.offlineMapAreasDirectory, withIntermediateDirectories: true)
             
             // Create directory for the webmap.
-            try FileManager.default.createDirectory(at: FileManager.default.webMapDirectory(poratlItemID: poratlItemID), withIntermediateDirectories: true)
+            try FileManager.default.createDirectory(at: FileManager.default.webMapDirectory(portalItemID: portalItemID), withIntermediateDirectories: true)
             
             // Create directory for preplanned map areas.
-            try FileManager.default.createDirectory(at: FileManager.default.preplannedDirectory(poratlItemID: poratlItemID), withIntermediateDirectories: true)
+            try FileManager.default.createDirectory(at: FileManager.default.preplannedDirectory(portalItemID: portalItemID), withIntermediateDirectories: true)
         }
     }
 }
