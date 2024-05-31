@@ -119,14 +119,18 @@ struct AttachmentsFeatureElementView: View {
         case .preview:
             AttachmentPreview(
                 attachmentModels: attachmentModels,
-                editControlsDisabled: !isEditable
+                editControlsDisabled: !isEditable,
+                onRename: onRename,
+                onDelete: onDelete
             )
         case .auto:
             Group {
                 if isRegularWidth {
                     AttachmentPreview(
                         attachmentModels: attachmentModels,
-                        editControlsDisabled: !isEditable
+                        editControlsDisabled: !isEditable,
+                        onRename: onRename,
+                        onDelete: onDelete
                     )
                 } else {
                     AttachmentList(attachmentModels: attachmentModels)
@@ -152,8 +156,8 @@ struct AttachmentsFeatureElementView: View {
     }
     
     /// Creates a model for the new attachment for display.
-    /// - Parameter attachment: The added form attachment.
-    private func onAttachmentAdded(_ attachment: FormAttachment) -> Void {
+    /// - Parameter attachment: The added attachment.
+    private func onAdd(attachment: FeatureAttachment) -> Void {
         guard case .initialized(var models) = attachmentModelsState else { return }
         let newModel = AttachmentModel(
             attachment: attachment,
@@ -167,7 +171,7 @@ struct AttachmentsFeatureElementView: View {
     
     /// Deletes the attachment model for the given attachment.
     /// - Parameter attachment: The deleted form attachment.
-    private func onAttachmentDeleted(_ attachment: FormAttachment) -> Void {
+    private func onDelete(attachmentModel: AttachmentModel) -> Void {
         guard case .initialized(var models) = attachmentModelsState else { return }
         models.removeAll { $0.attachment as? FormAttachment === attachment }
         attachmentModelsState = .initialized(models)
@@ -175,7 +179,7 @@ struct AttachmentsFeatureElementView: View {
     
     /// Synchronizes the model for the renamed attachment.
     /// - Parameter attachment: The renamed form attachment.
-    private func onAttachmentRenamed(_ attachment: FormAttachment) -> Void {
+    private func onRename(_ attachment: FormAttachment) -> Void {
         guard case .initialized(let models) = attachmentModelsState else { return }
         if let model = models.first(where: { $0.attachment as? FormAttachment === attachment }) {
             model.sync()
