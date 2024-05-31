@@ -118,7 +118,6 @@ struct AttachmentsFeatureElementView: View {
             AttachmentList(attachmentModels: attachmentModels)
         case .preview:
             AttachmentPreview(
-                element: featureElement,
                 attachmentModels: attachmentModels,
                 editControlsDisabled: !isEditable
             )
@@ -126,7 +125,6 @@ struct AttachmentsFeatureElementView: View {
             Group {
                 if isRegularWidth {
                     AttachmentPreview(
-                        element: featureElement,
                         attachmentModels: attachmentModels,
                         editControlsDisabled: !isEditable
                     )
