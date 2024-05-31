@@ -118,7 +118,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: attachmentModels)
 ***REMOVED******REMOVED***case .preview:
 ***REMOVED******REMOVED******REMOVED***AttachmentPreview(
-***REMOVED******REMOVED******REMOVED******REMOVED***element: featureElement,
 ***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
 ***REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: !isEditable
 ***REMOVED******REMOVED******REMOVED***)
@@ -126,7 +125,6 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***element: featureElement,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels: attachmentModels,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***editControlsDisabled: !isEditable
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)

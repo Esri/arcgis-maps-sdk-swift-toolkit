@@ -17,9 +17,6 @@
 
 ***REMOVED***/ A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
-***REMOVED******REMOVED***/ The attachment feature element displaying the attachments.
-***REMOVED***private let element: AttachmentsFeatureElement
-***REMOVED***
 ***REMOVED******REMOVED***/ The models for the attachments displayed in the list.
 ***REMOVED***var attachmentModels: [AttachmentModel]
 ***REMOVED***
@@ -35,6 +32,12 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED***/ The model for an attachment the user has requested be renamed.
 ***REMOVED***@State private var renamedAttachmentModel: AttachmentModel?
 ***REMOVED***
+***REMOVED******REMOVED***/ The action to perform when the attachment is deleted.
+***REMOVED***let onDelete: ((AttachmentModel) async throws -> Void)?
+
+***REMOVED******REMOVED***/ The action to perform when the attachment is renamed.
+***REMOVED***let onRename: ((AttachmentModel, String) async throws -> Void)?
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating the user has requested that the attachment be renamed.
 ***REMOVED***@State private var renameDialogueIsShowing = false
 ***REMOVED***
@@ -42,12 +45,14 @@ struct AttachmentPreview: View {
 ***REMOVED***let editControlsDisabled: Bool
 ***REMOVED***
 ***REMOVED***init(
-***REMOVED******REMOVED***element: AttachmentsFeatureElement,
 ***REMOVED******REMOVED***attachmentModels: [AttachmentModel],
-***REMOVED******REMOVED***editControlsDisabled: Bool = true
+***REMOVED******REMOVED***editControlsDisabled: Bool = true,
+***REMOVED******REMOVED***onRename: ((AttachmentModel, String) async throws -> Void)? = nil,
+***REMOVED******REMOVED***onDelete: ((AttachmentModel) async throws -> Void)? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.attachmentModels = attachmentModels
+***REMOVED******REMOVED***self.onRename = onRename
+***REMOVED******REMOVED***self.onDelete = onDelete
 ***REMOVED******REMOVED***self.editControlsDisabled = editControlsDisabled
 ***REMOVED***
 ***REMOVED***
@@ -105,21 +110,13 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) { ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button("OK") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let renamedAttachmentModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let element = element as? AttachmentsFormElement,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let attachment = renamedAttachmentModel.attachment as? FormAttachment {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let renamedAttachmentModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let currentName = renamedAttachmentModel.name
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let separatorIndex = currentName.lastIndex(of: ".") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let fileExtension = String(currentName[currentName.index(after: separatorIndex)...])
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await element.renameAttachment(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachment,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: [newAttachmentName, fileExtension].joined(separator: ".")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await onRename?(renamedAttachmentModel, [newAttachmentName, fileExtension].joined(separator: "."))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await element.renameAttachment(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachment,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: newAttachmentName
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await onRename?(renamedAttachmentModel, newAttachmentName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -127,9 +124,8 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: deletedAttachmentModel) {
 ***REMOVED******REMOVED******REMOVED***guard let deletedAttachmentModel else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***if let element = element as? AttachmentsFormElement, let attachment = deletedAttachmentModel.attachment as? FormAttachment {
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await element.deleteAttachment(attachment)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***try? await onDelete?(deletedAttachmentModel)
+***REMOVED******REMOVED******REMOVED***self.deletedAttachmentModel = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
