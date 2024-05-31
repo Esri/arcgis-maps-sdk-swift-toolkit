@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
 @main
 struct OfflineMapAreasExampleApp: App {
-    
     init() {
         Task {
             // Allow the `ArcGISURLSession` to handle it's background task events.

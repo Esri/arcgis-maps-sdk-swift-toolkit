@@ -22,7 +22,7 @@ public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
-    public var body: some View {      
+    public var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
             VStack(alignment: .leading, spacing: 4) {
