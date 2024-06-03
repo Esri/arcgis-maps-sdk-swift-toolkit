@@ -41,8 +41,11 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ The mobile map packages created from mmpk files in the documents directory.
 ***REMOVED******REMOVED***@Published var mobileMapPackages = [MobileMapPackage]()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The preplanned offline map information.
+***REMOVED******REMOVED******REMOVED***/ The preplanned map information.
 ***REMOVED******REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The offline preplanned map information.
+***REMOVED******REMOVED***@Published private(set) var offlinePreplannedModels = [PreplannedMapModel]()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the map has preplanned map areas.
 ***REMOVED******REMOVED***@Published private(set) var hasPreplannedMapAreas = false
@@ -129,6 +132,56 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***func loadOfflinePreplannedMapModels() {
+***REMOVED******REMOVED******REMOVED***offlinePreplannedModels.removeAll()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let jsonFiles = searchFiles(in: preplannedDirectory, with: "json")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***for fileURL in jsonFiles {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let (offlinePreplannedMapArea, mobileMapPackage) = parseJSONFile(for: fileURL),
+***REMOVED******REMOVED******REMOVED******REMOVED***   let offlinePreplannedMapArea,
+***REMOVED******REMOVED******REMOVED******REMOVED***   let mobileMapPackage {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let model = PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: offlinePreplannedMapArea,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel: self,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mobileMapPackage: mobileMapPackage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedModels.append(model)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func parseJSONFile(for fileURL: URL) -> (OfflinePreplannedMapArea?, MobileMapPackage?)? {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***let contentString = try String(contentsOf: fileURL)
+***REMOVED******REMOVED******REMOVED******REMOVED***let jsonData = Data(contentString.utf8)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let json = try JSONSerialization.jsonObject(with: jsonData) as? [String: String] {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let title = json["title"],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let description = json["description"],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let id = json["id"],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let itemID = Item.ID(id),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let path = json["mmpkURL"] else { return nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let fileURL = URL(filePath: path)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OfflinePreplannedMapArea(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***packagingStatus: .complete,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: description,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: itemID
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mobileMapPackage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Searches for files with a specified file extension in a given directory and its subdirectories.
 ***REMOVED******REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED******REMOVED***/   - directory: The directory to search.
@@ -150,6 +203,19 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return files
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func addOfflinePreplannedModel(
+***REMOVED******REMOVED******REMOVED***for preplannedMap: PreplannedMapAreaProtocol,
+***REMOVED******REMOVED******REMOVED***mobileMapPackage: MobileMapPackage?
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***if let model = PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: preplannedMap,
+***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel: self,
+***REMOVED******REMOVED******REMOVED******REMOVED***mobileMapPackage: mobileMapPackage
+***REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedModels.append(model)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

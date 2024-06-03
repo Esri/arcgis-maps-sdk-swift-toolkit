@@ -184,7 +184,9 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***let mmpkDirectory = packageDirectory
 ***REMOVED******REMOVED******REMOVED***.appendingPathComponent(preplannedMapAreaID)
 ***REMOVED******REMOVED******REMOVED***.appendingPathExtension("mmpk")
-
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***writeJSONFile(to: downloadDirectory, mmpkDirectory: mmpkDirectory)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters: DownloadPreplannedOfflineMapParameters
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
@@ -215,6 +217,39 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Awaits the output of the job and assigns the result.
 ***REMOVED******REMOVED***result = await job.result.map { $0.mobileMapPackage ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor 
+***REMOVED***private func writeJSONFile(to directory: URL, mmpkDirectory: URL) {
+***REMOVED******REMOVED***try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let fileURL = directory
+***REMOVED******REMOVED******REMOVED***.appending(path: "metadata", directoryHint: .notDirectory)
+***REMOVED******REMOVED******REMOVED***.appendingPathExtension("json")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***FileManager.default.createFile(atPath: fileURL.relativePath, contents: nil)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let imageURL = preplannedMapArea.thumbnail?.url?.absoluteString,
+***REMOVED******REMOVED******REMOVED***  let id = preplannedMapArea.id?.rawValue else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let jsonObject: [String: Any] = [
+***REMOVED******REMOVED******REMOVED***"title" : preplannedMapArea.title,
+***REMOVED******REMOVED******REMOVED***"description" : preplannedMapArea.description,
+***REMOVED******REMOVED******REMOVED***"imageURL" : imageURL,
+***REMOVED******REMOVED******REMOVED***"id" : id,
+***REMOVED******REMOVED******REMOVED***"mmpkURL" : mmpkDirectory.relativePath
+***REMOVED******REMOVED***]
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: .sortedKeys)
+***REMOVED******REMOVED******REMOVED***try jsonData.write(to: fileURL, options: .atomic)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***print(error)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***mapViewModel.addOfflinePreplannedModel(
+***REMOVED******REMOVED******REMOVED***for: preplannedMapArea,
+***REMOVED******REMOVED******REMOVED***mobileMapPackage: mobileMapPackage
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates the parameters for a download preplanned offline map job.
@@ -300,4 +335,35 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***var id: ArcGIS.Item.ID? {
 ***REMOVED******REMOVED***portalItem.id
 ***REMOVED***
+***REMOVED***
+
+struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED***func retryLoad() async throws {***REMOVED***
+***REMOVED***
+***REMOVED***init(
+***REMOVED******REMOVED***mapArea: ArcGIS.PreplannedMapArea? = nil,
+***REMOVED******REMOVED***packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = nil,
+***REMOVED******REMOVED***title: String,
+***REMOVED******REMOVED***description: String,
+***REMOVED******REMOVED***thumbnail: ArcGIS.LoadableImage? = nil,
+***REMOVED******REMOVED***id: ArcGIS.Item.ID? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***self.mapArea = mapArea
+***REMOVED******REMOVED***self.packagingStatus = packagingStatus
+***REMOVED******REMOVED***self.title = title
+***REMOVED******REMOVED***self.description = description
+***REMOVED******REMOVED***self.thumbnail = thumbnail
+***REMOVED******REMOVED***self.id = id
+***REMOVED***
+***REMOVED***var mapArea: ArcGIS.PreplannedMapArea?
+***REMOVED***
+***REMOVED***var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus?
+***REMOVED***
+***REMOVED***var title: String
+***REMOVED***
+***REMOVED***var description: String
+***REMOVED***
+***REMOVED***var thumbnail: ArcGIS.LoadableImage?
+***REMOVED***
+***REMOVED***var id: ArcGIS.Item.ID?
 ***REMOVED***
