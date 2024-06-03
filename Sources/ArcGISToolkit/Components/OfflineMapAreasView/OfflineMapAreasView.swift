@@ -94,7 +94,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***if error.localizedDescription == "The Internet connection appears to be offline." && !mapViewModel.offlinePreplannedModels.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***List(mapViewModel.offlinePreplannedModels) { model in
+***REMOVED******REMOVED******REMOVED******REMOVED***List(mapViewModel.offlinePreplannedModels.sorted(by: < ), id: \.preplannedMapArea.title) { model in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel: mapViewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: model
@@ -142,4 +142,10 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***)
+***REMOVED***
+
+extension PreplannedMapModel: Comparable {
+***REMOVED***public static func < (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
+***REMOVED******REMOVED***return lhs.preplannedMapArea.title < rhs.preplannedMapArea.title
+***REMOVED***
 ***REMOVED***
