@@ -46,8 +46,7 @@ public struct OfflineMapAreasView: View {
                         }
                         Task {
                             // Reload the preplanned map areas.
-                            mapViewModel.loadPreplannedMobileMapPackages()
-                            await mapViewModel.makePreplannedOfflineMapModels()
+                            await loadMapViewModel()
                         }
                     } label: {
                         Image(systemName: "arrow.clockwise")
@@ -61,8 +60,7 @@ public struct OfflineMapAreasView: View {
                 .textCase(nil)
             }
             .task {
-                await mapViewModel.makePreplannedOfflineMapModels()
-                mapViewModel.loadPreplannedMobileMapPackages()
+                await loadMapViewModel()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -95,13 +93,22 @@ public struct OfflineMapAreasView: View {
                 emptyPreplannedMapAreasView
             }
         case .failure(let error):
-            VStack(alignment: .center) {
-                Image(systemName: "exclamationmark.circle")
-                    .imageScale(.large)
-                    .foregroundStyle(.red)
-                Text(error.localizedDescription)
+            if error.localizedDescription == "The Internet connection appears to be offline." && !mapViewModel.offlinePreplannedModels.isEmpty {
+                List(mapViewModel.offlinePreplannedModels) { model in
+                    PreplannedListItemView(
+                        mapViewModel: mapViewModel,
+                        model: model
+                    )
+                }
+            } else {
+                VStack(alignment: .center) {
+                    Image(systemName: "exclamationmark.circle")
+                        .imageScale(.large)
+                        .foregroundStyle(.red)
+                    Text(error.localizedDescription)
+                }
+                .frame(maxWidth: .infinity)
             }
-            .frame(maxWidth: .infinity)
         case .none:
             ProgressView()
                 .frame(maxWidth: .infinity)
@@ -117,6 +124,12 @@ public struct OfflineMapAreasView: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
+    }
+    
+    private func loadMapViewModel() async {
+        mapViewModel.loadPreplannedMobileMapPackages()
+        mapViewModel.loadOfflinePreplannedMapModels()
+        await mapViewModel.makePreplannedOfflineMapModels()
     }
 }
 

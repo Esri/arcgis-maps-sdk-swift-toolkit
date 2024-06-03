@@ -41,8 +41,11 @@ public extension OfflineMapAreasView {
         /// The mobile map packages created from mmpk files in the documents directory.
         @Published var mobileMapPackages = [MobileMapPackage]()
         
-        /// The preplanned offline map information.
+        /// The preplanned map information.
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
+        
+        /// The offline preplanned map information.
+        @Published private(set) var offlinePreplannedModels = [PreplannedMapModel]()
         
         /// A Boolean value indicating whether the map has preplanned map areas.
         @Published private(set) var hasPreplannedMapAreas = false
@@ -129,6 +132,56 @@ public extension OfflineMapAreasView {
             }
         }
         
+        func loadOfflinePreplannedMapModels() {
+            offlinePreplannedModels.removeAll()
+            
+            let jsonFiles = searchFiles(in: preplannedDirectory, with: "json")
+            
+            for fileURL in jsonFiles {
+                if let (offlinePreplannedMapArea, mobileMapPackage) = parseJSONFile(for: fileURL),
+                   let offlinePreplannedMapArea,
+                   let mobileMapPackage {
+                    if let model = PreplannedMapModel(
+                        preplannedMapArea: offlinePreplannedMapArea,
+                        mapViewModel: self,
+                        mobileMapPackage: mobileMapPackage
+                    ) {
+                        offlinePreplannedModels.append(model)
+                    }
+                }
+            }
+        }
+        
+        func parseJSONFile(for fileURL: URL) -> (OfflinePreplannedMapArea?, MobileMapPackage?)? {
+            do {
+                let contentString = try String(contentsOf: fileURL)
+                let jsonData = Data(contentString.utf8)
+                
+                if let json = try JSONSerialization.jsonObject(with: jsonData) as? [String: String] {
+                    guard let title = json["title"],
+                          let description = json["description"],
+                          let id = json["id"],
+                          let itemID = Item.ID(id),
+                          let path = json["mmpkURL"] else { return nil }
+                    let fileURL = URL(filePath: path)
+                    let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
+                    return (
+                        OfflinePreplannedMapArea(
+                            packagingStatus: .complete,
+                            title: title,
+                            description: description,
+                            id: itemID
+                        ),
+                        mobileMapPackage
+                    )
+                } else {
+                    return nil
+                }
+            } catch {
+                return nil
+            }
+        }
+        
         /// Searches for files with a specified file extension in a given directory and its subdirectories.
         /// - Parameters:
         ///   - directory: The directory to search.
@@ -150,6 +203,19 @@ public extension OfflineMapAreasView {
                 }
             }
             return files
+        }
+        
+        func addOfflinePreplannedModel(
+            for preplannedMap: PreplannedMapAreaProtocol,
+            mobileMapPackage: MobileMapPackage?
+        ) {
+            if let model = PreplannedMapModel(
+                preplannedMapArea: preplannedMap,
+                mapViewModel: self,
+                mobileMapPackage: mobileMapPackage
+            ) {
+                offlinePreplannedModels.append(model)
+            }
         }
     }
 }

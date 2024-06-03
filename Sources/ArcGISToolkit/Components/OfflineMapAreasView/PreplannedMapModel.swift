@@ -184,7 +184,9 @@ extension PreplannedMapModel {
         let mmpkDirectory = packageDirectory
             .appendingPathComponent(preplannedMapAreaID)
             .appendingPathExtension("mmpk")
-
+        
+        writeJSONFile(to: downloadDirectory, mmpkDirectory: mmpkDirectory)
+        
         let parameters: DownloadPreplannedOfflineMapParameters
         
         do {
@@ -215,6 +217,39 @@ extension PreplannedMapModel {
         
         // Awaits the output of the job and assigns the result.
         result = await job.result.map { $0.mobileMapPackage }
+    }
+    
+    @MainActor 
+    private func writeJSONFile(to directory: URL, mmpkDirectory: URL) {
+        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
+        
+        let fileURL = directory
+            .appending(path: "metadata", directoryHint: .notDirectory)
+            .appendingPathExtension("json")
+        
+        FileManager.default.createFile(atPath: fileURL.relativePath, contents: nil)
+        
+        guard let imageURL = preplannedMapArea.thumbnail?.url?.absoluteString,
+              let id = preplannedMapArea.id?.rawValue else { return }
+        
+        let jsonObject: [String: Any] = [
+            "title" : preplannedMapArea.title,
+            "description" : preplannedMapArea.description,
+            "imageURL" : imageURL,
+            "id" : id,
+            "mmpkURL" : mmpkDirectory.relativePath
+        ]
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: .sortedKeys)
+            try jsonData.write(to: fileURL, options: .atomic)
+        } catch {
+            print(error)
+        }
+        
+        mapViewModel.addOfflinePreplannedModel(
+            for: preplannedMapArea,
+            mobileMapPackage: mobileMapPackage
+        )
     }
     
     /// Creates the parameters for a download preplanned offline map job.
@@ -300,4 +335,35 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
     var id: ArcGIS.Item.ID? {
         portalItem.id
     }
+}
+
+struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
+    func retryLoad() async throws {}
+    
+    init(
+        mapArea: ArcGIS.PreplannedMapArea? = nil,
+        packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = nil,
+        title: String,
+        description: String,
+        thumbnail: ArcGIS.LoadableImage? = nil,
+        id: ArcGIS.Item.ID? = nil
+    ) {
+        self.mapArea = mapArea
+        self.packagingStatus = packagingStatus
+        self.title = title
+        self.description = description
+        self.thumbnail = thumbnail
+        self.id = id
+    }
+    var mapArea: ArcGIS.PreplannedMapArea?
+    
+    var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus?
+    
+    var title: String
+    
+    var description: String
+    
+    var thumbnail: ArcGIS.LoadableImage?
+    
+    var id: ArcGIS.Item.ID?
 }
