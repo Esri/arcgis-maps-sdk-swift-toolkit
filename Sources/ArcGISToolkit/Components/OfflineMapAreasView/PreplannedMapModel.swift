@@ -229,13 +229,25 @@ extension PreplannedMapModel {
         
         FileManager.default.createFile(atPath: fileURL.relativePath, contents: nil)
         
-        guard let imageURL = preplannedMapArea.thumbnail?.url?.absoluteString,
-              let id = preplannedMapArea.id?.rawValue else { return }
+        // Save preplanned map area thumbnail image in `thumbnail.png` file.
+        if let thumbnail = preplannedMapArea.thumbnail?.image {
+            let thumbnailURL = directory
+                .appending(path: "thumbnail", directoryHint: .notDirectory)
+                .appendingPathExtension("png")
+            
+            FileManager.default.createFile(atPath: thumbnailURL.relativePath, contents: nil)
+            
+            if let thumbnailData = thumbnail.pngData() {
+                try? thumbnailData.write(to: thumbnailURL, options: .atomic)
+            }
+        }
+        
+        // Save preplanned map area metadata in `metadata.json` file.
+        guard let id = preplannedMapArea.id?.rawValue else { return }
         
         let jsonObject: [String: Any] = [
             "title" : preplannedMapArea.title,
             "description" : preplannedMapArea.description,
-            "imageURL" : imageURL,
             "id" : id,
             "mmpkURL" : mmpkDirectory.relativePath
         ]
@@ -311,6 +323,7 @@ protocol PreplannedMapAreaProtocol {
     var title: String { get }
     var description: String { get }
     var thumbnail: LoadableImage? { get }
+    var thumbnailImage: UIImage? { get }
     var id: ArcGIS.Item.ID? { get }
 }
 
@@ -327,6 +340,8 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
     var thumbnail: LoadableImage? {
         portalItem.thumbnail
     }
+    
+    var thumbnailImage: UIImage? { nil }
     
     var description: String {
         portalItem.description
@@ -346,6 +361,7 @@ struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
         title: String,
         description: String,
         thumbnail: ArcGIS.LoadableImage? = nil,
+        thumbnailImage: UIImage? = nil,
         id: ArcGIS.Item.ID? = nil
     ) {
         self.mapArea = mapArea
@@ -353,6 +369,7 @@ struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
         self.title = title
         self.description = description
         self.thumbnail = thumbnail
+        self.thumbnailImage = thumbnailImage
         self.id = id
     }
     var mapArea: ArcGIS.PreplannedMapArea?
@@ -364,6 +381,8 @@ struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     var description: String
     
     var thumbnail: ArcGIS.LoadableImage?
+    
+    var thumbnailImage: UIImage?
     
     var id: ArcGIS.Item.ID?
 }

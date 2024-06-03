@@ -53,6 +53,11 @@ public struct PreplannedListItemView: View {
             LoadableImageView(loadableImage: thumbnail)
                 .frame(width: 64, height: 44)
                 .clipShape(.rect(cornerRadius: 2))
+        } else if let thumbnailImage = model.preplannedMapArea.thumbnailImage {
+            Image(uiImage: thumbnailImage)
+                .resizable()
+                .frame(width: 64, height: 44)
+                .clipShape(.rect(cornerRadius: 2))
         }
     }
     
@@ -142,6 +147,7 @@ private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
     var title: String = "Mock Preplanned Map Area"
     var description: String = "This is the description text"
     var thumbnail: ArcGIS.LoadableImage? = nil
+    var thumbnailImage: UIImage?
     
     func retryLoad() async throws { }
 }

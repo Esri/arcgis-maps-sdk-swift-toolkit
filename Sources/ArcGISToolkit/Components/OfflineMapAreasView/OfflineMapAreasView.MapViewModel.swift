@@ -15,6 +15,7 @@
 import ArcGIS
 import Combine
 import Foundation
+import UIKit
 
 public extension OfflineMapAreasView {
     /// The model class for the offline map areas view.
@@ -157,19 +158,28 @@ public extension OfflineMapAreasView {
                 let contentString = try String(contentsOf: fileURL)
                 let jsonData = Data(contentString.utf8)
                 
-                if let json = try JSONSerialization.jsonObject(with: jsonData) as? [String: String] {
-                    guard let title = json["title"],
-                          let description = json["description"],
-                          let id = json["id"],
+                let thumbnailURL = fileURL
+                    .deletingPathExtension()
+                    .deletingLastPathComponent()
+                    .appending(path: "thumbnail")
+                    .appendingPathExtension("png")
+
+                let thumbnailImage = UIImage(contentsOfFile: thumbnailURL.relativePath)
+                
+                if let json = try JSONSerialization.jsonObject(with: jsonData) as? [String: Any] {
+                    guard let title = json["title"] as? String,
+                          let description = json["description"] as? String,
+                          let id = json["id"] as? String,
                           let itemID = Item.ID(id),
-                          let path = json["mmpkURL"] else { return nil }
+                          let path = json["mmpkURL"] as? String else { return nil }
                     let fileURL = URL(filePath: path)
                     let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
                     return (
                         OfflinePreplannedMapArea(
                             packagingStatus: .complete,
                             title: title,
-                            description: description,
+                            description: description, 
+                            thumbnailImage: thumbnailImage,
                             id: itemID
                         ),
                         mobileMapPackage
