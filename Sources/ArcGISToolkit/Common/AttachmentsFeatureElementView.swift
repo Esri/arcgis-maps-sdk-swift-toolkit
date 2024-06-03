@@ -39,18 +39,18 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***!isPortraitOrientation
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The states of loading attachments.
-***REMOVED***private enum AttachmentLoadingState {
-***REMOVED******REMOVED******REMOVED***/ Attachments have not been loaded.
-***REMOVED******REMOVED***case notLoaded
-***REMOVED******REMOVED******REMOVED***/ Attachments are being loaded.
-***REMOVED******REMOVED***case loading
-***REMOVED******REMOVED******REMOVED***/ Attachments have been loaded.
-***REMOVED******REMOVED***case loaded([AttachmentModel])
+***REMOVED******REMOVED***/ The state of the attachment models.
+***REMOVED***private enum AttachmentModelsState {
+***REMOVED******REMOVED******REMOVED***/ Attachment models have not been initialized.
+***REMOVED******REMOVED***case notInitialized
+***REMOVED******REMOVED******REMOVED***/ Attachments are being fetched and wrapped with models.
+***REMOVED******REMOVED***case initializing
+***REMOVED******REMOVED******REMOVED***/ Attachments have been fetched and wrapped with models.
+***REMOVED******REMOVED***case initialized([AttachmentModel])
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The current load state of the attachments.
-***REMOVED***@State private var attachmentLoadingState: AttachmentLoadingState = .notLoaded
+***REMOVED******REMOVED***/ The current state of the attachment models.
+***REMOVED***@State private var attachmentModelsState: AttachmentModelsState = .notInitialized
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a new `AttachmentsFeatureElementView`.
 ***REMOVED******REMOVED***/ - Parameter featureElement: The `AttachmentsFeatureElement`.
@@ -63,11 +63,11 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***switch attachmentLoadingState {
-***REMOVED******REMOVED******REMOVED***case .notLoaded, .loading:
+***REMOVED******REMOVED******REMOVED***switch attachmentModelsState {
+***REMOVED******REMOVED******REMOVED***case .notInitialized, .initializing:
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED***case .loaded(let attachmentModels):
+***REMOVED******REMOVED******REMOVED***case .initialized(let attachmentModels):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isShowingAttachmentsFormElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If showing a form element, don't show attachments in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** a disclosure group, but also ALWAYS show
@@ -88,8 +88,8 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED***isEditable = newIsEditable
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***guard case .notLoaded = attachmentLoadingState else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loading
+***REMOVED******REMOVED******REMOVED***guard case .notInitialized = attachmentModelsState else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initializing
 ***REMOVED******REMOVED******REMOVED***let attachments = (try? await featureElement.featureAttachments) ?? []
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***var attachmentModels = attachments
@@ -108,7 +108,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** display in the same order as the online Map Viewer.
 ***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModels = attachmentModels.reversed()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loaded(attachmentModels)
+***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initialized(attachmentModels)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -159,7 +159,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ - Parameter attachment: The added attachment.
 ***REMOVED***@MainActor
 ***REMOVED***func onAdd(attachment: FeatureAttachment) -> Void {
-***REMOVED******REMOVED***guard case .loaded(var models) = attachmentLoadingState else { return ***REMOVED***
+***REMOVED******REMOVED***guard case .initialized(var models) = attachmentModelsState else { return ***REMOVED***
 ***REMOVED******REMOVED***let newModel = AttachmentModel(
 ***REMOVED******REMOVED******REMOVED***attachment: attachment,
 ***REMOVED******REMOVED******REMOVED***displayScale: displayScale,
@@ -167,7 +167,7 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***newModel.load()
 ***REMOVED******REMOVED***models.insert(newModel, at: 0)
-***REMOVED******REMOVED***attachmentLoadingState = .loaded(models)
+***REMOVED******REMOVED***attachmentModelsState = .initialized(models)
 ***REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
@@ -176,9 +176,8 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/   - attachmentModel: The model for the attachment to rename.
 ***REMOVED******REMOVED***/   - newAttachmentName: The new attachment name.
 ***REMOVED***@MainActor
-***REMOVED***func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) async throws -> Void {
-***REMOVED******REMOVED***if let element = featureElement as? AttachmentsFormElement,
-***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
+***REMOVED***func onRename(attachmentModel: AttachmentModel, newAttachmentName: String) -> Void {
+***REMOVED******REMOVED***if let attachment = attachmentModel.attachment as? FormAttachment {
 ***REMOVED******REMOVED******REMOVED***attachment.name = newAttachmentName
 ***REMOVED******REMOVED******REMOVED***attachmentModel.sync()
 ***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
@@ -189,13 +188,13 @@ struct AttachmentsFeatureElementView: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - attachmentModel: The model for the attachment to delete.
 ***REMOVED***@MainActor
-***REMOVED***func onDelete(attachmentModel: AttachmentModel) async throws -> Void {
+***REMOVED***func onDelete(attachmentModel: AttachmentModel) -> Void {
 ***REMOVED******REMOVED***if let element = featureElement as? AttachmentsFormElement,
 ***REMOVED******REMOVED***   let attachment = attachmentModel.attachment as? FormAttachment {
-***REMOVED******REMOVED******REMOVED***try await element.deleteAttachment(attachment)
-***REMOVED******REMOVED******REMOVED***guard case .loaded(var models) = attachmentLoadingState else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***element.deleteAttachment(attachment)
+***REMOVED******REMOVED******REMOVED***guard case .initialized(var models) = attachmentModelsState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***models.removeAll { $0 == attachmentModel ***REMOVED***
-***REMOVED******REMOVED******REMOVED***attachmentLoadingState = .loaded(models)
+***REMOVED******REMOVED******REMOVED***attachmentModelsState = .initialized(models)
 ***REMOVED******REMOVED******REMOVED***formViewModel.evaluateExpressions()
 ***REMOVED***
 ***REMOVED***
@@ -243,7 +242,7 @@ extension AttachmentsFeatureElementView {
 ***REMOVED***
 
 extension View {
-***REMOVED******REMOVED***/ Modifier for watching ``AttachmentsFormElement.isEditableChanged`` events.
+***REMOVED******REMOVED***/ Modifier for watching `AttachmentsFormElement.isEditable`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - element: The attachment form element to watch for changes on.
 ***REMOVED******REMOVED***/   - action: The action which watches for changes.

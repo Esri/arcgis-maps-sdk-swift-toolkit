@@ -26,7 +26,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ Creates an `AttachmentImportMenu`
 ***REMOVED******REMOVED***/ - Parameter element: The attachment form element displaying the menu.
 ***REMOVED******REMOVED***/ - Parameter onAdd: The action to perform when an attachment is added.
-***REMOVED***init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) async throws -> Void)? = nil) {
+***REMOVED***init(element: AttachmentsFormElement, onAdd: ((FeatureAttachment) -> Void)? = nil) {
 ***REMOVED******REMOVED***self.element = element
 ***REMOVED******REMOVED***self.onAdd = onAdd
 ***REMOVED***
@@ -44,7 +44,7 @@ struct AttachmentImportMenu: View {
 ***REMOVED***@State private var photoPickerIsPresented = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when an attachment is added.
-***REMOVED***let onAdd: ((FeatureAttachment) async throws -> Void)?
+***REMOVED***let onAdd: ((FeatureAttachment) -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the error alert is presented.
 ***REMOVED***var errorIsPresented: Binding<Bool> {
@@ -125,28 +125,24 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***.task(id: importState) {
 ***REMOVED******REMOVED******REMOVED***guard case let .finalizing(newAttachmentImportData) = importState else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***defer { importState = .none ***REMOVED***
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let fileName: String
-***REMOVED******REMOVED******REMOVED******REMOVED***if let presetFileName = newAttachmentImportData.fileName {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = presetFileName
+***REMOVED******REMOVED******REMOVED***let fileName: String
+***REMOVED******REMOVED******REMOVED***if let presetFileName = newAttachmentImportData.fileName {
+***REMOVED******REMOVED******REMOVED******REMOVED***fileName = presetFileName
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***let attachmentNumber = element.attachments.count + 1
+***REMOVED******REMOVED******REMOVED******REMOVED***if let fileExtension = newAttachmentImportData.fileExtension {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(attachmentNumber).\(fileExtension)"
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let attachmentNumber = element.attachments.count + 1
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let fileExtension = newAttachmentImportData.fileExtension {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(attachmentNumber).\(fileExtension)"
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(attachmentNumber)"
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(attachmentNumber)"
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let newAttachment = try await element.addAttachment(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Can this be better? What does legacy do?
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: fileName,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentType: newAttachmentImportData.contentType,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: newAttachmentImportData.data
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***try await onAdd?(newAttachment)
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.system(error.localizedDescription))
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let newAttachment = element.addAttachment(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Can this be better? What does legacy do?
+***REMOVED******REMOVED******REMOVED******REMOVED***name: fileName,
+***REMOVED******REMOVED******REMOVED******REMOVED***contentType: newAttachmentImportData.contentType,
+***REMOVED******REMOVED******REMOVED******REMOVED***data: newAttachmentImportData.data
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***onAdd?(newAttachment)
 ***REMOVED***
 ***REMOVED******REMOVED***.fileImporter(isPresented: $fileImporterIsShowing, allowedContentTypes: [.item]) { result in
 ***REMOVED******REMOVED******REMOVED***importState = .importing
