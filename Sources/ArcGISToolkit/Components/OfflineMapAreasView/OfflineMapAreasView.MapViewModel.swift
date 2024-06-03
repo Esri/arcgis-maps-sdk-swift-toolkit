@@ -133,6 +133,7 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Loads the offline preplanned map models using metadata json files.
 ***REMOVED******REMOVED***func loadOfflinePreplannedMapModels() {
 ***REMOVED******REMOVED******REMOVED***offlinePreplannedModels.removeAll()
 ***REMOVED******REMOVED******REMOVED***
@@ -153,6 +154,10 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Parses the json from a metadata file for the preplanned map area.
+***REMOVED******REMOVED******REMOVED***/ - Parameter fileURL: The file URL of the metadata json file.
+***REMOVED******REMOVED******REMOVED***/ - Returns: An `OfflinePreplannedMapArea` instantiated using the metadata json
+***REMOVED******REMOVED******REMOVED***/ and the mobile map package for the preplanned map area.
 ***REMOVED******REMOVED***func parseJSONFile(for fileURL: URL) -> (OfflinePreplannedMapArea?, MobileMapPackage?)? {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let contentString = try String(contentsOf: fileURL)
