@@ -219,7 +219,11 @@ extension PreplannedMapModel {
         result = await job.result.map { $0.mobileMapPackage }
     }
     
-    @MainActor 
+    /// Writes preplanned map area metadata and thumbnail image data to local files in the specified directories.
+    /// - Parameters:
+    ///   - directory: The directory for the preplanned map area.
+    ///   - mmpkDirectory: The directory for the mobile map package.
+    @MainActor
     private func writeJSONFile(to directory: URL, mmpkDirectory: URL) {
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
         
