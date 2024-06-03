@@ -94,7 +94,7 @@ public struct OfflineMapAreasView: View {
             }
         case .failure(let error):
             if error.localizedDescription == "The Internet connection appears to be offline." && !mapViewModel.offlinePreplannedModels.isEmpty {
-                List(mapViewModel.offlinePreplannedModels) { model in
+                List(mapViewModel.offlinePreplannedModels.sorted(by: < ), id: \.preplannedMapArea.title) { model in
                     PreplannedListItemView(
                         mapViewModel: mapViewModel,
                         model: model
@@ -142,4 +142,10 @@ public struct OfflineMapAreasView: View {
             )
         )
     )
+}
+
+extension PreplannedMapModel: Comparable {
+    public static func < (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
+        return lhs.preplannedMapArea.title < rhs.preplannedMapArea.title
+    }
 }
