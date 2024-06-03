@@ -53,6 +53,11 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
+***REMOVED*** else if let thumbnailImage = model.preplannedMapArea.thumbnailImage {
+***REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnailImage)
+***REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 64, height: 44)
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(.rect(cornerRadius: 2))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -142,6 +147,7 @@ private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***var title: String = "Mock Preplanned Map Area"
 ***REMOVED***var description: String = "This is the description text"
 ***REMOVED***var thumbnail: ArcGIS.LoadableImage? = nil
+***REMOVED***var thumbnailImage: UIImage?
 ***REMOVED***
 ***REMOVED***func retryLoad() async throws { ***REMOVED***
 ***REMOVED***

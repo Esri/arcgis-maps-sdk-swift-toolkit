@@ -229,13 +229,25 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***FileManager.default.createFile(atPath: fileURL.relativePath, contents: nil)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let imageURL = preplannedMapArea.thumbnail?.url?.absoluteString,
-***REMOVED******REMOVED******REMOVED***  let id = preplannedMapArea.id?.rawValue else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Save preplanned map area thumbnail image in `thumbnail.png` file.
+***REMOVED******REMOVED***if let thumbnail = preplannedMapArea.thumbnail?.image {
+***REMOVED******REMOVED******REMOVED***let thumbnailURL = directory
+***REMOVED******REMOVED******REMOVED******REMOVED***.appending(path: "thumbnail", directoryHint: .notDirectory)
+***REMOVED******REMOVED******REMOVED******REMOVED***.appendingPathExtension("png")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***FileManager.default.createFile(atPath: thumbnailURL.relativePath, contents: nil)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if let thumbnailData = thumbnail.pngData() {
+***REMOVED******REMOVED******REMOVED******REMOVED***try? thumbnailData.write(to: thumbnailURL, options: .atomic)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Save preplanned map area metadata in `metadata.json` file.
+***REMOVED******REMOVED***guard let id = preplannedMapArea.id?.rawValue else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let jsonObject: [String: Any] = [
 ***REMOVED******REMOVED******REMOVED***"title" : preplannedMapArea.title,
 ***REMOVED******REMOVED******REMOVED***"description" : preplannedMapArea.description,
-***REMOVED******REMOVED******REMOVED***"imageURL" : imageURL,
 ***REMOVED******REMOVED******REMOVED***"id" : id,
 ***REMOVED******REMOVED******REMOVED***"mmpkURL" : mmpkDirectory.relativePath
 ***REMOVED******REMOVED***]
@@ -311,6 +323,7 @@ protocol PreplannedMapAreaProtocol {
 ***REMOVED***var title: String { get ***REMOVED***
 ***REMOVED***var description: String { get ***REMOVED***
 ***REMOVED***var thumbnail: LoadableImage? { get ***REMOVED***
+***REMOVED***var thumbnailImage: UIImage? { get ***REMOVED***
 ***REMOVED***var id: ArcGIS.Item.ID? { get ***REMOVED***
 ***REMOVED***
 
@@ -327,6 +340,8 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***var thumbnail: LoadableImage? {
 ***REMOVED******REMOVED***portalItem.thumbnail
 ***REMOVED***
+***REMOVED***
+***REMOVED***var thumbnailImage: UIImage? { nil ***REMOVED***
 ***REMOVED***
 ***REMOVED***var description: String {
 ***REMOVED******REMOVED***portalItem.description
@@ -346,6 +361,7 @@ struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED***title: String,
 ***REMOVED******REMOVED***description: String,
 ***REMOVED******REMOVED***thumbnail: ArcGIS.LoadableImage? = nil,
+***REMOVED******REMOVED***thumbnailImage: UIImage? = nil,
 ***REMOVED******REMOVED***id: ArcGIS.Item.ID? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.mapArea = mapArea
@@ -353,6 +369,7 @@ struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED***self.title = title
 ***REMOVED******REMOVED***self.description = description
 ***REMOVED******REMOVED***self.thumbnail = thumbnail
+***REMOVED******REMOVED***self.thumbnailImage = thumbnailImage
 ***REMOVED******REMOVED***self.id = id
 ***REMOVED***
 ***REMOVED***var mapArea: ArcGIS.PreplannedMapArea?
@@ -364,6 +381,8 @@ struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***var description: String
 ***REMOVED***
 ***REMOVED***var thumbnail: ArcGIS.LoadableImage?
+***REMOVED***
+***REMOVED***var thumbnailImage: UIImage?
 ***REMOVED***
 ***REMOVED***var id: ArcGIS.Item.ID?
 ***REMOVED***

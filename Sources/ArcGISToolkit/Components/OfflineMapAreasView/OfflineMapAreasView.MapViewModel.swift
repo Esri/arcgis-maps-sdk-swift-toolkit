@@ -15,6 +15,7 @@
 ***REMOVED***
 import Combine
 import Foundation
+import UIKit
 
 public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***/ The model class for the offline map areas view.
@@ -157,19 +158,28 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let contentString = try String(contentsOf: fileURL)
 ***REMOVED******REMOVED******REMOVED******REMOVED***let jsonData = Data(contentString.utf8)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if let json = try JSONSerialization.jsonObject(with: jsonData) as? [String: String] {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let title = json["title"],
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let description = json["description"],
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let id = json["id"],
+***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnailURL = fileURL
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.deletingPathExtension()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.deletingLastPathComponent()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.appending(path: "thumbnail")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.appendingPathExtension("png")
+
+***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnailImage = UIImage(contentsOfFile: thumbnailURL.relativePath)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let json = try JSONSerialization.jsonObject(with: jsonData) as? [String: Any] {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let title = json["title"] as? String,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let description = json["description"] as? String,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let id = json["id"] as? String,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let itemID = Item.ID(id),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let path = json["mmpkURL"] else { return nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let path = json["mmpkURL"] as? String else { return nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let fileURL = URL(filePath: path)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OfflinePreplannedMapArea(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***packagingStatus: .complete,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: description,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: description, 
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailImage: thumbnailImage,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: itemID
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mobileMapPackage
