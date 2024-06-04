@@ -83,7 +83,8 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.compactMap {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: $0,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel: self
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlineMapTask: self.offlineMapTask,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedDirectory: self.preplannedDirectory
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -122,10 +123,18 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***func loadPreplannedMobileMapPackages() {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Create mobile map packages with saved mmpk files.
 ***REMOVED******REMOVED******REMOVED***let mmpkFiles = searchFiles(in: preplannedDirectory, with: "mmpk")
+***REMOVED******REMOVED******REMOVED***self.mobileMapPackages.removeAll()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***for fileURL in mmpkFiles {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.mobileMapPackages.append(mobileMapPackage)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Pass mobile map packages to preplanned map models.
+***REMOVED******REMOVED******REMOVED***if let models = try? preplannedMapModels?.get() {
+***REMOVED******REMOVED******REMOVED******REMOVED***models.forEach { model in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.setMobileMapPackages(mobileMapPackages)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
