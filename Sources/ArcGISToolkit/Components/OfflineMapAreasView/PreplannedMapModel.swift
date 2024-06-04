@@ -276,7 +276,7 @@ protocol PreplannedMapAreaProtocol {
 ***REMOVED***var title: String { get ***REMOVED***
 ***REMOVED***var description: String { get ***REMOVED***
 ***REMOVED***var thumbnail: LoadableImage? { get ***REMOVED***
-***REMOVED***var id: ArcGIS.Item.ID? { get ***REMOVED***
+***REMOVED***var id: PortalItem.ID? { get ***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -297,7 +297,7 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED***portalItem.description
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var id: ArcGIS.Item.ID? {
+***REMOVED***var id: PortalItem.ID? {
 ***REMOVED******REMOVED***portalItem.id
 ***REMOVED***
 ***REMOVED***
