@@ -70,10 +70,10 @@ public struct OfflineMapAreasView: View {
                 }
             }
             .onAppear {
-                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
-                    if let error {
-                        print(error.localizedDescription)
-                    }
+                UNUserNotificationCenter.current().requestAuthorization(
+                    options: [.alert, .sound]
+                ) { authorized,_ in
+                    mapViewModel.canShowNotifications = authorized
                 }
             }
             .navigationTitle("Offline Maps")
