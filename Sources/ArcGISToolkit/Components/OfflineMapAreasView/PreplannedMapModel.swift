@@ -16,6 +16,7 @@ import SwiftUI
 import ArcGIS
 
 /// An object that encapsulates state about a preplanned map.
+@MainActor
 public class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
     let preplannedMapArea: any PreplannedMapAreaProtocol
@@ -83,7 +84,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     /// Loads the preplanned map area and updates the status.
-    @MainActor
     private func load() async {
         do {
             // Load preplanned map area to obtain packaging status.
@@ -104,7 +104,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     /// Updates the status for a given packaging status.
-    @MainActor
     private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
         // Update area status for a given packaging status.
         switch packagingStatus {
@@ -120,7 +119,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     /// Updates the status to downloaded if the mobile map pacakge exists.
-    @MainActor
     private func updateDownloadStatus() {
         self.mobileMapPackage = mapViewModel.mobileMapPackages.first(where: { $0.fileURL.lastPathComponent == preplannedMapArea.id?.rawValue.appending(".mmpk") })
         
@@ -130,7 +128,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     /// Updates the status based on the download result of the mobile map package.
-    @MainActor
     func updateDownloadStatus(for downloadResult: Optional<Result<MobileMapPackage, any Error>>) {
         switch downloadResult {
         case .success:
@@ -166,7 +163,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 extension PreplannedMapModel {
     /// Downloads the preplanned map area.
     /// - Precondition: `canDownload`
-    @MainActor
     func downloadPreplannedMapArea() async {
         precondition(canDownload)
         
@@ -217,7 +213,6 @@ extension PreplannedMapModel {
         }
     }
     
-    @MainActor
     /// Runs the download task to download the preplanned offline map.
     /// - Parameters:
     ///   - parameters: The parameters used to download the offline map.
@@ -273,7 +268,7 @@ extension PreplannedMapModel {
 }
 
 extension PreplannedMapModel: Hashable {
-    public static func == (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
+    nonisolated public static func == (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
         lhs === rhs
     }
     
