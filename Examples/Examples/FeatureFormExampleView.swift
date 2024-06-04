@@ -359,15 +359,6 @@ private extension FeatureForm {
 private extension Array where Element == FeatureEditResult {
     /// Examines all feature edit results (and their inner attachment results) for any errors.
     var errors: [Error] {
-        var errors = [Error]()
-        forEach { featureEditResult in
-            if let editResultError = featureEditResult.error { errors.append(editResultError) }
-            featureEditResult.attachmentResults.forEach { attachmentResult in
-                if let error = attachmentResult.error {
-                    errors.append(error)
-                }
-            }
-        }
-        return errors
+        compactMap { $0.error } + flatMap { $0.attachmentResults.compactMap { $0.error } }
     }
 }
