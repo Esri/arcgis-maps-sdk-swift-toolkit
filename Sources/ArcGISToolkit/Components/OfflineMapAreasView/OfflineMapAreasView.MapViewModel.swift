@@ -83,7 +83,8 @@ public extension OfflineMapAreasView {
                     .compactMap {
                         PreplannedMapModel(
                             preplannedMapArea: $0,
-                            mapViewModel: self
+                            offlineMapTask: self.offlineMapTask,
+                            preplannedDirectory: self.preplannedDirectory
                         )
                     }
             }
@@ -122,10 +123,18 @@ public extension OfflineMapAreasView {
         func loadPreplannedMobileMapPackages() {
             // Create mobile map packages with saved mmpk files.
             let mmpkFiles = searchFiles(in: preplannedDirectory, with: "mmpk")
+            self.mobileMapPackages.removeAll()
             
             for fileURL in mmpkFiles {
                 let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
                 self.mobileMapPackages.append(mobileMapPackage)
+            }
+            
+            // Pass mobile map packages to preplanned map models.
+            if let models = try? preplannedMapModels?.get() {
+                models.forEach { model in
+                    model.setMobileMapPackages(mobileMapPackages)
+                }
             }
         }
         
