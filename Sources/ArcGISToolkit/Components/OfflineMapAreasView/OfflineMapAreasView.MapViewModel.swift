@@ -174,7 +174,10 @@ private extension FileManager {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the offline map areas directory.
 ***REMOVED***private var offlineMapAreasDirectory: URL {
-***REMOVED******REMOVED***documentsDirectory.appending(path: "OfflineMapAreas", directoryHint: .isDirectory)
+***REMOVED******REMOVED***documentsDirectory.appending(
+***REMOVED******REMOVED******REMOVED***path: OfflineMapAreasView.FolderNames.offlineMapAreas.rawValue,
+***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the web map directory.
@@ -184,7 +187,10 @@ private extension FileManager {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory.
 ***REMOVED***func preplannedDirectory(portalItemID: String) -> URL {
-***REMOVED******REMOVED***webMapDirectory(portalItemID: portalItemID).appending(path: "Preplanned", directoryHint: .isDirectory)
+***REMOVED******REMOVED***webMapDirectory(portalItemID: portalItemID).appending(
+***REMOVED******REMOVED******REMOVED***path: OfflineMapAreasView.FolderNames.preplanned.rawValue,
+***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func createDirectories(for portalItemID: String) {
@@ -198,5 +204,12 @@ private extension FileManager {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Create directory for preplanned map areas.
 ***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: FileManager.default.preplannedDirectory(portalItemID: portalItemID), withIntermediateDirectories: true)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension OfflineMapAreasView {
+***REMOVED***enum FolderNames: String {
+***REMOVED******REMOVED***case preplanned = "Preplanned"
+***REMOVED******REMOVED***case offlineMapAreas = "OfflineMapAreas"
 ***REMOVED***
 ***REMOVED***
