@@ -74,7 +74,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.selectedMap = OfflineMapAreasView.MapViewModel.SelectedMap.preplannedMap(model)
+***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.selectedMap = .preplannedMap(model)
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED***
