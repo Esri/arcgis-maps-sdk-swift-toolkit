@@ -39,7 +39,7 @@ public extension OfflineMapAreasView {
         let preplannedDirectory: URL
         
         /// The mobile map packages created from mmpk files in the documents directory.
-        @Published var mobileMapPackages = [MobileMapPackage]()
+        @Published private(set) var mobileMapPackages = [MobileMapPackage]()
         
         /// The preplanned offline map information.
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
@@ -55,7 +55,7 @@ public extension OfflineMapAreasView {
         }
         
         /// The job manager.
-        var jobManager = JobManager.shared
+        let jobManager = JobManager.shared
         
         init(map: Map) {
             onlineMap = map
@@ -65,7 +65,7 @@ public extension OfflineMapAreasView {
             
             offlineMapTask = OfflineMapTask(onlineMap: onlineMap)
             
-            if let portalItemID = map.item?.id?.description {
+            if let portalItemID = map.item?.id?.rawValue {
                 FileManager.default.createDirectories(for: portalItemID)
                 
                 preplannedDirectory = FileManager.default.preplannedDirectory(portalItemID: portalItemID)
@@ -135,14 +135,13 @@ public extension OfflineMapAreasView {
         ///   - fileExtension: The file extension to search for.
         /// - Returns: An array of file paths.
         func searchFiles(in directory: URL, with fileExtension: String) -> [URL] {
-            var files = [URL]()
-            let keys: [URLResourceKey] = [.isDirectoryKey]
-            
             guard let enumerator = FileManager.default.enumerator(
                 at: directory,
-                includingPropertiesForKeys: keys,
+                includingPropertiesForKeys: [.isDirectoryKey],
                 options: [.skipsHiddenFiles]
             ) else { return [] }
+            
+            var files: [URL] = []
             
             for case let fileURL as URL in enumerator {
                 if fileURL.pathExtension == fileExtension {
@@ -167,9 +166,7 @@ public extension OfflineMapAreasView.MapViewModel {
 private extension FileManager {
     /// The path to the documents folder.
     var documentsDirectory: URL {
-        URL(
-            fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        )
+        URL.documentsDirectory
     }
     
     /// The path to the offline map areas directory.
