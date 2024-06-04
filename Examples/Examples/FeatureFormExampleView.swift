@@ -294,7 +294,7 @@ class Model: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Private methods
 ***REMOVED***
-***REMOVED******REMOVED***/ Apply edits to the service.
+***REMOVED******REMOVED***/ Applies edits to the service.
 ***REMOVED***private func applyEdits(_ featureForm: FeatureForm) async {
 ***REMOVED******REMOVED***state = .applyingEdits(featureForm)
 ***REMOVED******REMOVED***guard let table = featureForm.feature.table as? ServiceFeatureTable else {
