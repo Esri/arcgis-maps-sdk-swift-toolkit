@@ -174,7 +174,10 @@ private extension FileManager {
     
     /// The path to the offline map areas directory.
     private var offlineMapAreasDirectory: URL {
-        documentsDirectory.appending(path: "OfflineMapAreas", directoryHint: .isDirectory)
+        documentsDirectory.appending(
+            path: OfflineMapAreasView.FolderNames.offlineMapAreas.rawValue,
+            directoryHint: .isDirectory
+        )
     }
     
     /// The path to the web map directory.
@@ -184,7 +187,10 @@ private extension FileManager {
     
     /// The path to the preplanned map areas directory.
     func preplannedDirectory(portalItemID: String) -> URL {
-        webMapDirectory(portalItemID: portalItemID).appending(path: "Preplanned", directoryHint: .isDirectory)
+        webMapDirectory(portalItemID: portalItemID).appending(
+            path: OfflineMapAreasView.FolderNames.preplanned.rawValue,
+            directoryHint: .isDirectory
+        )
     }
     
     func createDirectories(for portalItemID: String) {
@@ -198,5 +204,12 @@ private extension FileManager {
             // Create directory for preplanned map areas.
             try FileManager.default.createDirectory(at: FileManager.default.preplannedDirectory(portalItemID: portalItemID), withIntermediateDirectories: true)
         }
+    }
+}
+
+private extension OfflineMapAreasView {
+    enum FolderNames: String {
+        case preplanned = "Preplanned"
+        case offlineMapAreas = "OfflineMapAreas"
     }
 }
