@@ -54,6 +54,9 @@ public extension OfflineMapAreasView {
             }
         }
         
+        /// A Boolean value indicating whether the user has authorized notifications to be shown.
+        @Published var canShowNotifications: Bool = false
+        
         /// The job manager.
         let jobManager = JobManager.shared
         
