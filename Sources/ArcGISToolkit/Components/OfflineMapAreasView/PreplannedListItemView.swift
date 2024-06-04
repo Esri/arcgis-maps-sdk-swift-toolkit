@@ -101,10 +101,12 @@ public struct PreplannedListItemView: View {
 
 #Preview {
 ***REMOVED***let model = PreplannedMapModel(preplannedMapArea: MockPreplannedMapArea())
-***REMOVED***Task.detached { await model.load() ***REMOVED***
 ***REMOVED***return PreplannedListItemView(
 ***REMOVED******REMOVED***model: model
 ***REMOVED***)
+***REMOVED***.task {
+***REMOVED******REMOVED***await model.load()
+***REMOVED***
 ***REMOVED***.padding()
 ***REMOVED***
 
