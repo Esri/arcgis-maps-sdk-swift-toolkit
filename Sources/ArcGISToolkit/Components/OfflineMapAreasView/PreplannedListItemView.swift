@@ -74,7 +74,7 @@ public struct PreplannedListItemView: View {
             }
         default:
             Button {
-                mapViewModel.selectedMap = OfflineMapAreasView.MapViewModel.SelectedMap.preplannedMap(model)
+                mapViewModel.selectedMap = .preplannedMap(model)
             } label: {
                 Image(systemName: "arrow.down.circle")
             }
