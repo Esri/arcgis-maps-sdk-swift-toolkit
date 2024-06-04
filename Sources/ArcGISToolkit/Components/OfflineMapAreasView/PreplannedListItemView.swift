@@ -130,7 +130,8 @@ public struct PreplannedListItemView: View {
         mapViewModel: OfflineMapAreasView.MapViewModel(map: Map()),
         model: PreplannedMapModel(
             preplannedMapArea: MockPreplannedMapArea(),
-            mapViewModel: OfflineMapAreasView.MapViewModel(map: Map())
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            preplannedDirectory: URL.documentsDirectory
         )!
     )
     .padding()
@@ -138,7 +139,7 @@ public struct PreplannedListItemView: View {
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
     var mapArea: ArcGIS.PreplannedMapArea? = nil
-    var id: PortalItem.ID?
+    var id: PortalItem.ID? = PortalItem.ID("012")
     var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
     var title: String = "Mock Preplanned Map Area"
     var description: String = "This is the description text"

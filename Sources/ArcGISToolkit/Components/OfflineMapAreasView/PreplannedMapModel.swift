@@ -21,9 +21,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
     let preplannedMapArea: any PreplannedMapAreaProtocol
     
-    /// The view model for the map.
-    private var mapViewModel: OfflineMapAreasView.MapViewModel
-    
     /// The task to use to take the area offline.
     private let offlineMapTask: OfflineMapTask
     
@@ -47,6 +44,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// map area is still packaging or loading.
     @Published private(set) var result: Result<MobileMapPackage, Error>?
     
+    /// The mobile map packages created from .mmpk files in the documents directory.
+    @Published private(set) var mobileMapPackages = [MobileMapPackage]()
+    
     /// A Boolean value indicating if download can be called.
     var canDownload: Bool {
         switch status {
@@ -60,13 +60,14 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     
     init?(
         preplannedMapArea: PreplannedMapAreaProtocol,
-        mapViewModel: OfflineMapAreasView.MapViewModel,
+        offlineMapTask: OfflineMapTask,
+        preplannedDirectory: URL,
         mobileMapPackage: MobileMapPackage? = nil
     ) {
-        offlineMapTask = mapViewModel.offlineMapTask
+        self.offlineMapTask = offlineMapTask
         self.preplannedMapArea = preplannedMapArea
         self.mobileMapPackage = mobileMapPackage
-        preplannedDirectory = mapViewModel.preplannedDirectory
+        self.preplannedDirectory = preplannedDirectory
         
         if let itemID = preplannedMapArea.id {
             preplannedMapAreaID = itemID.rawValue
@@ -74,12 +75,10 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
             return nil
         }
         
-        self.mapViewModel = mapViewModel
-    
         // Kick off a load of the map area.
         Task.detached {
             await self.load()
-            await self.updateDownloadStatus()
+            await self.updateDownloadStatus(for: mobileMapPackage)
         }
     }
     
@@ -103,6 +102,13 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
+    /// Set the loaded mobile map packages.
+    /// - Parameter mobileMapPackages: The mobile map packages.
+    func setMobileMapPackages(_ mobileMapPackages: [MobileMapPackage]) {
+        self.mobileMapPackages = mobileMapPackages
+        updateDownloadStatus()
+    }
+    
     /// Updates the status for a given packaging status.
     private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
         // Update area status for a given packaging status.
@@ -119,10 +125,17 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     /// Updates the status to downloaded if the mobile map pacakge exists.
-    private func updateDownloadStatus() {
-        self.mobileMapPackage = mapViewModel.mobileMapPackages.first(where: { $0.fileURL.lastPathComponent == preplannedMapArea.id?.rawValue.appending(".mmpk") })
+    /// - Parameter mobileMapPackage: The mobile map package.
+    private func updateDownloadStatus(for mobileMapPackage: MobileMapPackage? = nil) {
+        if let mobileMapPackage {
+            // Set the moblile map package.
+            self.mobileMapPackage = mobileMapPackage
+        } else {
+            // Set the mobile map package if it downloaded.
+            self.mobileMapPackage = mobileMapPackages.first(where: { $0.fileURL.lastPathComponent == preplannedMapArea.id?.rawValue.appending(".mmpk") })
+        }
         
-        if mobileMapPackage != nil {
+        if self.mobileMapPackage != nil {
             status = .downloaded
         }
     }
@@ -135,7 +148,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         case .failure(let error):
             status = .downloadFailure(error)
         case .none:
-            updateDownloadStatus()
+            if let mobileMapPackage = try? downloadResult?.get() {
+                updateDownloadStatus(for: mobileMapPackage)
+            }
         }
     }
     
@@ -227,7 +242,7 @@ extension PreplannedMapModel {
             downloadDirectory: mmpkDirectory
         )
         
-        mapViewModel.jobManager.jobs.append(job)
+        JobManager.shared.jobs.append(job)
         
         self.job = job
         
