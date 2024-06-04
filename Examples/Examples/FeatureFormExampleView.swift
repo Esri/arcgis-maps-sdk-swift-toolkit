@@ -294,7 +294,7 @@ class Model: ObservableObject {
     
     // MARK: Private methods
     
-    /// Applies edits to the service.
+    /// Applies edits to the remote service.
     private func applyEdits(_ featureForm: FeatureForm) async {
         state = .applyingEdits(featureForm)
         guard let table = featureForm.feature.table as? ServiceFeatureTable else {
