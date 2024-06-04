@@ -32,6 +32,9 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***statusView
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***await model.load()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var thumbnailView: some View {
@@ -100,13 +103,9 @@ public struct PreplannedListItemView: View {
 ***REMOVED***
 
 #Preview {
-***REMOVED***let model = PreplannedMapModel(preplannedMapArea: MockPreplannedMapArea())
-***REMOVED***return PreplannedListItemView(
-***REMOVED******REMOVED***model: model
+***REMOVED***PreplannedListItemView(
+***REMOVED******REMOVED***model: PreplannedMapModel(preplannedMapArea: MockPreplannedMapArea())
 ***REMOVED***)
-***REMOVED***.task {
-***REMOVED******REMOVED***await model.load()
-***REMOVED***
 ***REMOVED***.padding()
 ***REMOVED***
 
