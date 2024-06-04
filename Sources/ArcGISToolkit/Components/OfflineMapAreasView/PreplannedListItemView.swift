@@ -39,6 +39,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***model.updateDownloadStatus(for: result)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.job?.status) { status in
+***REMOVED******REMOVED******REMOVED***guard mapViewModel.canShowNotifications else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Send notification using job status.
 ***REMOVED******REMOVED******REMOVED***if status == .succeeded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.notifyJobCompleted(.succeeded)

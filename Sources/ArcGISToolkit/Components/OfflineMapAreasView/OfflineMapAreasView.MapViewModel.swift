@@ -54,6 +54,9 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the user has authorized notifications to be shown.
+***REMOVED******REMOVED***@Published var canShowNotifications: Bool = false
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The job manager.
 ***REMOVED******REMOVED***let jobManager = JobManager.shared
 ***REMOVED******REMOVED***

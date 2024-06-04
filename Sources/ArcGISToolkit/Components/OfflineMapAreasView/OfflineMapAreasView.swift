@@ -70,10 +70,10 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let error {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***UNUserNotificationCenter.current().requestAuthorization(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***options: [.alert, .sound]
+***REMOVED******REMOVED******REMOVED******REMOVED***) { authorized,_ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.canShowNotifications = authorized
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationTitle("Offline Maps")
