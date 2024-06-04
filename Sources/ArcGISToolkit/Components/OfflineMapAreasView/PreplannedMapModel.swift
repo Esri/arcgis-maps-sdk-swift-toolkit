@@ -276,7 +276,7 @@ protocol PreplannedMapAreaProtocol {
     var title: String { get }
     var description: String { get }
     var thumbnail: LoadableImage? { get }
-    var id: ArcGIS.Item.ID? { get }
+    var id: PortalItem.ID? { get }
 }
 
 /// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -297,7 +297,7 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
         portalItem.description
     }
     
-    var id: ArcGIS.Item.ID? {
+    var id: PortalItem.ID? {
         portalItem.id
     }
 }

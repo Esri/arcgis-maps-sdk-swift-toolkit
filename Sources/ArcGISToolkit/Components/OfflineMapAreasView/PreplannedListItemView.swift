@@ -137,7 +137,7 @@ public struct PreplannedListItemView: View {
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
     var mapArea: ArcGIS.PreplannedMapArea? = nil
-    var id: ArcGIS.Item.ID?
+    var id: PortalItem.ID?
     var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
     var title: String = "Mock Preplanned Map Area"
     var description: String = "This is the description text"
