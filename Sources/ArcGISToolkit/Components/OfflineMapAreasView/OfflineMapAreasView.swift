@@ -73,6 +73,9 @@ public struct OfflineMapAreasView: View {
             if mapViewModel.hasPreplannedMapAreas {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(model: preplannedMapModel)
+                        .task {
+                            await preplannedMapModel.load()
+                        }
                 }
             } else {
                 emptyPreplannedMapAreasView
@@ -139,14 +142,6 @@ public extension OfflineMapAreasView {
             }
             if let models = try? preplannedMapModels!.get() {
                 hasPreplannedMapAreas = !models.isEmpty
-                // Kick off loading the map areas.
-                await withTaskGroup(of: Void.self) { group in
-                    for model in models {
-                        group.addTask {
-                            await model.load()
-                        }
-                    }
-                }
             }
         }
     }
