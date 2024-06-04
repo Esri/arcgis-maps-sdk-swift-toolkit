@@ -16,6 +16,7 @@
 ***REMOVED***
 
 ***REMOVED***/ An object that encapsulates state about a preplanned map.
+@MainActor
 public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The preplanned map area.
 ***REMOVED***let preplannedMapArea: any PreplannedMapAreaProtocol
@@ -83,7 +84,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
-***REMOVED***@MainActor
 ***REMOVED***private func load() async {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Load preplanned map area to obtain packaging status.
@@ -104,7 +104,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the status for a given packaging status.
-***REMOVED***@MainActor
 ***REMOVED***private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
 ***REMOVED******REMOVED******REMOVED*** Update area status for a given packaging status.
 ***REMOVED******REMOVED***switch packagingStatus {
@@ -120,7 +119,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the status to downloaded if the mobile map pacakge exists.
-***REMOVED***@MainActor
 ***REMOVED***private func updateDownloadStatus() {
 ***REMOVED******REMOVED***self.mobileMapPackage = mapViewModel.mobileMapPackages.first(where: { $0.fileURL.lastPathComponent == preplannedMapArea.id?.rawValue.appending(".mmpk") ***REMOVED***)
 ***REMOVED******REMOVED***
@@ -130,7 +128,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the status based on the download result of the mobile map package.
-***REMOVED***@MainActor
 ***REMOVED***func updateDownloadStatus(for downloadResult: Optional<Result<MobileMapPackage, any Error>>) {
 ***REMOVED******REMOVED***switch downloadResult {
 ***REMOVED******REMOVED***case .success:
@@ -166,7 +163,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 extension PreplannedMapModel {
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.
 ***REMOVED******REMOVED***/ - Precondition: `canDownload`
-***REMOVED***@MainActor
 ***REMOVED***func downloadPreplannedMapArea() async {
 ***REMOVED******REMOVED***precondition(canDownload)
 ***REMOVED******REMOVED***
@@ -217,7 +213,6 @@ extension PreplannedMapModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor
 ***REMOVED******REMOVED***/ Runs the download task to download the preplanned offline map.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - parameters: The parameters used to download the offline map.
@@ -273,7 +268,7 @@ extension PreplannedMapModel {
 ***REMOVED***
 
 extension PreplannedMapModel: Hashable {
-***REMOVED***public static func == (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
+***REMOVED***nonisolated public static func == (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
 ***REMOVED******REMOVED***lhs === rhs
 ***REMOVED***
 ***REMOVED***
