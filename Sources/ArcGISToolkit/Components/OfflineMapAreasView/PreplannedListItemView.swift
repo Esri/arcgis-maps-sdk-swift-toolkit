@@ -32,6 +32,9 @@ public struct PreplannedListItemView: View {
                 statusView
             }
         }
+        .task {
+            await model.load()
+        }
     }
     
     @ViewBuilder private var thumbnailView: some View {
@@ -100,13 +103,9 @@ public struct PreplannedListItemView: View {
 }
 
 #Preview {
-    let model = PreplannedMapModel(preplannedMapArea: MockPreplannedMapArea())
-    return PreplannedListItemView(
-        model: model
+    PreplannedListItemView(
+        model: PreplannedMapModel(preplannedMapArea: MockPreplannedMapArea())
     )
-    .task {
-        await model.load()
-    }
     .padding()
 }
 
