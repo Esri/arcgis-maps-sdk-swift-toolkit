@@ -63,9 +63,6 @@ public extension OfflineMapAreasView {
         init(map: Map) {
             onlineMap = map
             
-            // Sets the min scale to avoid requesting a huge download.
-            onlineMap.minScale = 1e4
-            
             offlineMapTask = OfflineMapTask(onlineMap: onlineMap)
             
             if let portalItemID = map.item?.id?.rawValue {
