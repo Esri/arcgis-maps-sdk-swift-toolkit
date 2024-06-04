@@ -164,13 +164,22 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 
 extension PreplannedMapModel {
-***REMOVED******REMOVED***/ Downloads the given preplanned map area.
-***REMOVED******REMOVED***/ - Parameter preplannedMapArea: The preplanned map area to be downloaded.
+***REMOVED******REMOVED***/ Downloads the preplanned map area.
 ***REMOVED******REMOVED***/ - Precondition: `canDownload`
 ***REMOVED***@MainActor
 ***REMOVED***func downloadPreplannedMapArea() async {
 ***REMOVED******REMOVED***precondition(canDownload)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let mmpkDirectory = createDownloadDirectories()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let parameters = await createParameters() else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await runDownloadTask(for: parameters, in: mmpkDirectory)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates download directories for the preplanned map area and its mobile map package.
+***REMOVED******REMOVED***/ - Returns: The URL for the mobile map package directory.
+***REMOVED***private func createDownloadDirectories() -> URL {
 ***REMOVED******REMOVED***let downloadDirectory = preplannedDirectory
 ***REMOVED******REMOVED******REMOVED***.appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
 ***REMOVED******REMOVED***
@@ -184,18 +193,39 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***let mmpkDirectory = packageDirectory
 ***REMOVED******REMOVED******REMOVED***.appendingPathComponent(preplannedMapAreaID)
 ***REMOVED******REMOVED******REMOVED***.appendingPathExtension("mmpk")
-
-***REMOVED******REMOVED***let parameters: DownloadPreplannedOfflineMapParameters
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***return mmpkDirectory
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates the parameters to download a preplanned offline map.
+***REMOVED******REMOVED***/ - Returns: The parameters to download a preplanned offline map.
+***REMOVED***private func createParameters() async -> DownloadPreplannedOfflineMapParameters? {
+***REMOVED******REMOVED***guard let preplannedMapArea = preplannedMapArea.mapArea else { return nil ***REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Creates the parameters for the download preplanned offline map job.
-***REMOVED******REMOVED******REMOVED***parameters = try await makeParameters(preplannedMapArea: preplannedMapArea.mapArea!)
+***REMOVED******REMOVED******REMOVED***let parameters = try await offlineMapTask.makeDefaultDownloadPreplannedOfflineMapParameters(
+***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: preplannedMapArea
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Sets the update mode to no updates as the offline map is display-only.
+***REMOVED******REMOVED******REMOVED***parameters.updateMode = .noUpdates
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return parameters
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If creating the parameters fails, set the failure.
 ***REMOVED******REMOVED******REMOVED***self.result = .failure(error)
-***REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED******REMOVED***/ Runs the download task to download the preplanned offline map.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - parameters: The parameters used to download the offline map.
+***REMOVED******REMOVED***/   - mmpkDirectory: The directory used to place the mobile map package result.
+***REMOVED***private func runDownloadTask(
+***REMOVED******REMOVED***for parameters: DownloadPreplannedOfflineMapParameters,
+***REMOVED******REMOVED***in mmpkDirectory: URL
+***REMOVED***) async {
 ***REMOVED******REMOVED******REMOVED*** Creates the download preplanned offline map job.
 ***REMOVED******REMOVED***let job = offlineMapTask.makeDownloadPreplannedOfflineMapJob(
 ***REMOVED******REMOVED******REMOVED***parameters: parameters,
@@ -215,21 +245,6 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Awaits the output of the job and assigns the result.
 ***REMOVED******REMOVED***result = await job.result.map { $0.mobileMapPackage ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Creates the parameters for a download preplanned offline map job.
-***REMOVED******REMOVED***/ - Parameter preplannedMapArea: The preplanned map area to create parameters for.
-***REMOVED******REMOVED***/ - Returns: A `DownloadPreplannedOfflineMapParameters` if there are no errors.
-***REMOVED***func makeParameters(
-***REMOVED******REMOVED***preplannedMapArea: PreplannedMapArea
-***REMOVED***) async throws -> DownloadPreplannedOfflineMapParameters {
-***REMOVED******REMOVED******REMOVED*** Creates the default parameters.
-***REMOVED******REMOVED***let parameters = try await offlineMapTask.makeDefaultDownloadPreplannedOfflineMapParameters(
-***REMOVED******REMOVED******REMOVED***preplannedMapArea: preplannedMapArea
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** Sets the update mode to no updates as the offline map is display-only.
-***REMOVED******REMOVED***parameters.updateMode = .noUpdates
-***REMOVED******REMOVED***return parameters
 ***REMOVED***
 ***REMOVED***
 
