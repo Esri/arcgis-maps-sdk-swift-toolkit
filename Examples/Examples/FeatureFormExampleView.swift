@@ -375,3 +375,19 @@ private extension FeatureForm {
 ***REMOVED******REMOVED***feature.table?.layer as? FeatureLayer
 ***REMOVED***
 ***REMOVED***
+
+private extension Array where Element == FeatureEditResult {
+***REMOVED******REMOVED***/ Examines all feature edit results (and their inner attachment results) for any errors.
+***REMOVED***var errors: [Error] {
+***REMOVED******REMOVED***var errors = [Error]()
+***REMOVED******REMOVED***forEach { featureEditResult in
+***REMOVED******REMOVED******REMOVED***if let editResultError = featureEditResult.error { errors.append(editResultError) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***featureEditResult.attachmentResults.forEach { attachmentResult in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let error = attachmentResult.error {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***errors.append(error)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***return errors
+***REMOVED***
+***REMOVED***
