@@ -75,10 +75,13 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Kick off a load of the map area.
-***REMOVED******REMOVED***Task.detached {
-***REMOVED******REMOVED******REMOVED***await self.load()
-***REMOVED******REMOVED******REMOVED***await self.updateDownloadStatus(for: mobileMapPackage)
+***REMOVED******REMOVED***setDownloadJob()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if self.job == nil {
+***REMOVED******REMOVED******REMOVED***Task.detached {
+***REMOVED******REMOVED******REMOVED******REMOVED***await self.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***await self.setMobileMapPackage()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -102,11 +105,23 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Sets the model download preplanned offline map job if the job is in progress.
+***REMOVED***private func setDownloadJob() {
+***REMOVED******REMOVED***for job in JobManager.shared.jobs {
+***REMOVED******REMOVED******REMOVED***if let preplannedJob = job as? DownloadPreplannedOfflineMapJob {
+***REMOVED******REMOVED******REMOVED******REMOVED***if preplannedJob.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.job = preplannedJob
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***status = .downloading
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Set the loaded mobile map packages.
 ***REMOVED******REMOVED***/ - Parameter mobileMapPackages: The mobile map packages.
 ***REMOVED***func setMobileMapPackages(_ mobileMapPackages: [MobileMapPackage]) {
 ***REMOVED******REMOVED***self.mobileMapPackages = mobileMapPackages
-***REMOVED******REMOVED***updateDownloadStatus()
+***REMOVED******REMOVED***setMobileMapPackage()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the status for a given packaging status.
@@ -124,22 +139,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Updates the status to downloaded if the mobile map pacakge exists.
-***REMOVED******REMOVED***/ - Parameter mobileMapPackage: The mobile map package.
-***REMOVED***private func updateDownloadStatus(for mobileMapPackage: MobileMapPackage? = nil) {
-***REMOVED******REMOVED***if let mobileMapPackage {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Set the moblile map package.
-***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mobileMapPackage
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Set the mobile map package if it downloaded.
-***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mobileMapPackages.first(where: { $0.fileURL.lastPathComponent == preplannedMapArea.id?.rawValue.appending(".mmpk") ***REMOVED***)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if self.mobileMapPackage != nil {
-***REMOVED******REMOVED******REMOVED***status = .downloaded
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Updates the status based on the download result of the mobile map package.
 ***REMOVED***func updateDownloadStatus(for downloadResult: Optional<Result<MobileMapPackage, any Error>>) {
 ***REMOVED******REMOVED***switch downloadResult {
@@ -148,8 +147,20 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
 ***REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED***if let mobileMapPackage = try? downloadResult?.get() {
-***REMOVED******REMOVED******REMOVED******REMOVED***updateDownloadStatus(for: mobileMapPackage)
+***REMOVED******REMOVED******REMOVED***setMobileMapPackage()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the mobile map pacakge if downloaded locally.
+***REMOVED***private func setMobileMapPackage() {
+***REMOVED******REMOVED******REMOVED*** Set the mobile map package if already downloaded or the download job succeeded.
+***REMOVED******REMOVED***if job == nil || job?.status == .succeeded {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set the mobile map package if it downloaded.
+***REMOVED******REMOVED******REMOVED***if let mobileMapPackage = mobileMapPackages.first(where: {
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.fileURL.deletingPathExtension().lastPathComponent == preplannedMapArea.id?.rawValue
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mobileMapPackage
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloaded
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -255,6 +266,11 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Awaits the output of the job and assigns the result.
 ***REMOVED******REMOVED***result = await job.result.map { $0.mobileMapPackage ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if job.status == .succeeded {
+***REMOVED******REMOVED******REMOVED***status = .downloaded
+***REMOVED******REMOVED******REMOVED***self.job = nil
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
