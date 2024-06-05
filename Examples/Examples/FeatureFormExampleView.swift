@@ -356,7 +356,7 @@ private extension FeatureForm {
 ***REMOVED***
 
 private extension Array where Element == FeatureEditResult {
-***REMOVED******REMOVED***/ Examines all feature edit results (and their inner attachment results) for any errors.
+***REMOVED******REMOVED***/  Any errors from the edit results and their inner attachment results.
 ***REMOVED***var errors: [Error] {
 ***REMOVED******REMOVED***compactMap { $0.error ***REMOVED*** + flatMap { $0.attachmentResults.compactMap { $0.error ***REMOVED*** ***REMOVED***
 ***REMOVED***
