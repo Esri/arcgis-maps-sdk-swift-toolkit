@@ -88,7 +88,7 @@ public extension OfflineMapAreasView {
                         )
                     }
             }
-            if let models = try? preplannedMapModels!.get() {
+            if let models = try? preplannedMapModels?.get() {
                 hasPreplannedMapAreas = !models.isEmpty
             }
         }
@@ -200,16 +200,14 @@ private extension FileManager {
     }
     
     func createDirectories(for portalItemID: String) {
-        Task.detached {
-            // Create directory for offline map areas.
-            try FileManager.default.createDirectory(at: FileManager.default.offlineMapAreasDirectory, withIntermediateDirectories: true)
-            
-            // Create directory for the webmap.
-            try FileManager.default.createDirectory(at: FileManager.default.webMapDirectory(portalItemID: portalItemID), withIntermediateDirectories: true)
-            
-            // Create directory for preplanned map areas.
-            try FileManager.default.createDirectory(at: FileManager.default.preplannedDirectory(portalItemID: portalItemID), withIntermediateDirectories: true)
-        }
+        // Create directory for offline map areas.
+        try? FileManager.default.createDirectory(at: FileManager.default.offlineMapAreasDirectory, withIntermediateDirectories: true)
+        
+        // Create directory for the webmap.
+        try? FileManager.default.createDirectory(at: FileManager.default.webMapDirectory(portalItemID: portalItemID), withIntermediateDirectories: true)
+        
+        // Create directory for preplanned map areas.
+        try? FileManager.default.createDirectory(at: FileManager.default.preplannedDirectory(portalItemID: portalItemID), withIntermediateDirectories: true)
     }
 }
 
