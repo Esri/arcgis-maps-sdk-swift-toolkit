@@ -216,7 +216,13 @@ class Model: ObservableObject {
 ***REMOVED***
 ***REMOVED***func submitEdits() async {
 ***REMOVED******REMOVED***guard case let .editing(featureForm) = state else { return ***REMOVED***
-***REMOVED******REMOVED***await validateChanges(featureForm)
+***REMOVED******REMOVED***validateChanges(featureForm)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard case let .validating(featureForm) = state else { return ***REMOVED***
+***REMOVED******REMOVED***await finishEditing(featureForm)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard case let .finishingEdits(featureForm) = state else { return ***REMOVED***
+***REMOVED******REMOVED***await applyEdits(featureForm)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func applyEdits(_ featureForm: FeatureForm, _ table: ServiceFeatureTable) async {
