@@ -127,13 +127,11 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***await applyEdits(featureForm)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func validateChanges(_ featureForm: FeatureForm) async {
+***REMOVED***private func validateChanges(_ featureForm: FeatureForm) {
 ***REMOVED******REMOVED***state = .validating(featureForm)
-***REMOVED******REMOVED***guard featureForm.validationErrors.isEmpty else {
+***REMOVED******REMOVED***if !featureForm.validationErrors.isEmpty {
 ***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
-***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***await finishEdits(featureForm)
 ***REMOVED***
 ***REMOVED***
 
