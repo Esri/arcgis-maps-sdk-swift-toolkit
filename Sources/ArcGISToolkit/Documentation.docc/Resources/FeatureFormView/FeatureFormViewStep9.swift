@@ -136,13 +136,11 @@ class Model: ObservableObject {
         }
     }
     
-    private func validateChanges(_ featureForm: FeatureForm) async {
+    private func validateChanges(_ featureForm: FeatureForm) {
         state = .validating(featureForm)
-        guard featureForm.validationErrors.isEmpty else {
+        if !featureForm.validationErrors.isEmpty {
             state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
-            return
         }
-        await finishEdits(featureForm)
     }
 }
 
