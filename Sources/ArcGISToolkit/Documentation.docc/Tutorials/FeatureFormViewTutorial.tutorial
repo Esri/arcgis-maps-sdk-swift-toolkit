@@ -27,7 +27,7 @@
             }
             
             @Step {
-                Add a `featureLayer` property to the `FeatureForm`.
+                Extend `FeatureForm` with a `featureLayer` property.
                 
                 This small extension will help in multiple places in the upcoming steps.
                 @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep3)
@@ -48,7 +48,7 @@
             }
             
             @Step {
-                Add a `discardEdits` and `submitChanges` method to the model.
+                Add a `discardEdits` and `submitEdits` method to the model.
                 
                 These methods will be used in buttons added later to the view.
                 @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep6)
@@ -62,21 +62,21 @@
             }
             
             @Step {
-                After checking for validation errors, update the table with the edited feature.
+                After checking for validation errors, finish editing the feature form.
                 @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep8)
             }
             
             @Step {
                 When edits are applied to the database, some errors may be returned.
                 
-                Add a method `checkFeatureEditResults` to iterate through feature edit results, checking for the existence of any errors.
+                Extend arrays containing `FeatureEditResult`s with an `errors` property to check for the existence of any errors.
                 @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep9)
             }
             
             @Step {
                 After the table has been updated, apply edits to the database.
                 
-                Use the method `checkFeatureEditResults` from the previous step to check for errors.
+                Use the `errors` property from the previous step to collect any errors.
                 @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep10)
             }
             
@@ -118,7 +118,7 @@
             @Step {
                 Add a second button ("Submit") to the toolbar. 
                 
-                When this button is pressed, set `validationErrorVisibility` to ``FeatureFormView/ValidationErrorVisibility/visible``. This will cause any fields that never received focus but are considered invalid to show errors. This button should also call `submitChanges` on the model.
+                When this button is pressed, set `validationErrorVisibility` to ``FeatureFormView/ValidationErrorVisibility/visible``. This will cause any fields that never received focus but are considered invalid to show errors. This button should also call `submitEdits` on the model.
                 @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep16)
             }
             
