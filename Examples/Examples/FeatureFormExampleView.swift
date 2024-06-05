@@ -325,7 +325,6 @@ class Model: ObservableObject {
         if resultErrors.isEmpty {
             state = .idle
         } else {
-            // Additionally, you could display the errors to the user using `resultErrors`.
             state = .generalError(featureForm, Text("Apply edits failed with ^[\(resultErrors.count) error](inflect: true)."))
         }
     }
