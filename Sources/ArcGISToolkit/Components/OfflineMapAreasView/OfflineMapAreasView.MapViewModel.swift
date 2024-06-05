@@ -20,17 +20,11 @@ public extension OfflineMapAreasView {
     /// The model class for the offline map areas view.
     @MainActor
     class MapViewModel: ObservableObject {
-        /// The online map.
-        private let onlineMap: Map
-        
         /// The portal item ID of the web map.
         private var portalItemID: String?
         
         /// The offline map of the downloaded preplanned map area.
         private var offlineMap: Map?
-        
-        /// The map used in the map view.
-        var currentMap: Map { offlineMap ?? onlineMap }
         
         /// The offline map task.
         let offlineMapTask: OfflineMapTask
@@ -61,9 +55,7 @@ public extension OfflineMapAreasView {
         let jobManager = JobManager.shared
         
         init(map: Map) {
-            onlineMap = map
-            
-            offlineMapTask = OfflineMapTask(onlineMap: onlineMap)
+            offlineMapTask = OfflineMapTask(onlineMap: map)
             
             if let portalItemID = map.item?.id?.rawValue {
                 FileManager.default.createDirectories(for: portalItemID)
