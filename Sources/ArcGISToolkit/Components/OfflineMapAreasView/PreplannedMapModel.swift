@@ -30,6 +30,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
 ***REMOVED***func load() async {
+***REMOVED******REMOVED***if case .packaged = status, case .downloaded = status { return ***REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Load preplanned map area to obtain packaging status.
 ***REMOVED******REMOVED******REMOVED***status = .loading
