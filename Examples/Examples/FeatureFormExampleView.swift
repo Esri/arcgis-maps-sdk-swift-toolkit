@@ -283,7 +283,7 @@ class Model: ObservableObject {
     /// Submit the changes made to the form.
     func submitEdits() async {
         guard case let .editing(featureForm) = state else { return }
-        await validateChanges(featureForm)
+        validateChanges(featureForm)
         
         guard case let .validating(featureForm) = state else { return }
         await finishEditing(featureForm)
@@ -340,7 +340,7 @@ class Model: ObservableObject {
     }
     
     /// Checks the feature form for the presence of any validation errors.
-    private func validateChanges(_ featureForm: FeatureForm) async {
+    private func validateChanges(_ featureForm: FeatureForm) {
         state = .validating(featureForm)
         if !featureForm.validationErrors.isEmpty {
             state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
