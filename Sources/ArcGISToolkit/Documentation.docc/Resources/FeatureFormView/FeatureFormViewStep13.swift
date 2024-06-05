@@ -167,7 +167,7 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***state = .idle
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func submitChanges() async {
+***REMOVED***func submitEdits() async {
 ***REMOVED******REMOVED***guard case let .editing(featureForm) = state else { return ***REMOVED***
 ***REMOVED******REMOVED***await validateChanges(featureForm)
 ***REMOVED***
