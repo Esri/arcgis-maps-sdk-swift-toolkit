@@ -107,6 +107,7 @@ struct AttachmentPreview: View {
                     comment: "A label in reference to the new name of a file, shown in a file rename interface."
                 )
             }
+            .autocorrectionDisabled()
             Button("Cancel", role: .cancel) { }
             Button("OK") {
                 Task {
