@@ -218,19 +218,6 @@ class Model: ObservableObject {
         }
     }
     
-    private func checkFeatureEditResults(_ featureForm: FeatureForm, _ featureEditResults: [FeatureEditResult]) -> [Error] {
-        var errors = [Error]()
-        featureEditResults.forEach { featureEditResult in
-            if let editResultError = featureEditResult.error { errors.append(editResultError) }
-            featureEditResult.attachmentResults.forEach { attachmentResult in
-                if let error = attachmentResult.error {
-                    errors.append(error)
-                }
-            }
-        }
-        return errors
-    }
-    
     private func finishEdits(_ featureForm: FeatureForm) async {
         state = .finishingEdits(featureForm)
         guard let table = featureForm.feature.table as? ServiceFeatureTable else {
@@ -264,5 +251,12 @@ class Model: ObservableObject {
 private extension FeatureForm {
     var featureLayer: FeatureLayer? {
         feature.table?.layer as? FeatureLayer
+    }
+}
+
+private extension Array where Element == FeatureEditResult {
+    ///  Any errors from the edit results and their inner attachment results.
+    var errors: [Error] {
+        compactMap { $0.error } + flatMap { $0.attachmentResults.compactMap { $0.error } }
     }
 }
