@@ -182,19 +182,6 @@ class Model: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func checkFeatureEditResults(_ featureForm: FeatureForm, _ featureEditResults: [FeatureEditResult]) -> [Error] {
-***REMOVED******REMOVED***var errors = [Error]()
-***REMOVED******REMOVED***featureEditResults.forEach { featureEditResult in
-***REMOVED******REMOVED******REMOVED***if let editResultError = featureEditResult.error { errors.append(editResultError) ***REMOVED***
-***REMOVED******REMOVED******REMOVED***featureEditResult.attachmentResults.forEach { attachmentResult in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let error = attachmentResult.error {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***errors.append(error)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***return errors
-***REMOVED***
-***REMOVED***
 ***REMOVED***private func finishEdits(_ featureForm: FeatureForm) async {
 ***REMOVED******REMOVED***state = .finishingEdits(featureForm)
 ***REMOVED******REMOVED***guard let table = featureForm.feature.table as? ServiceFeatureTable else {
@@ -228,5 +215,12 @@ class Model: ObservableObject {
 private extension FeatureForm {
 ***REMOVED***var featureLayer: FeatureLayer? {
 ***REMOVED******REMOVED***feature.table?.layer as? FeatureLayer
+***REMOVED***
+***REMOVED***
+
+private extension Array where Element == FeatureEditResult {
+***REMOVED******REMOVED***/  Any errors from the edit results and their inner attachment results.
+***REMOVED***var errors: [Error] {
+***REMOVED******REMOVED***compactMap { $0.error ***REMOVED*** + flatMap { $0.attachmentResults.compactMap { $0.error ***REMOVED*** ***REMOVED***
 ***REMOVED***
 ***REMOVED***
