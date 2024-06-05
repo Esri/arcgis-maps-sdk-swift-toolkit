@@ -325,7 +325,6 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***if resultErrors.isEmpty {
 ***REMOVED******REMOVED******REMOVED***state = .idle
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Additionally, you could display the errors to the user using `resultErrors`.
 ***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Apply edits failed with ^[\(resultErrors.count) error](inflect: true)."))
 ***REMOVED***
 ***REMOVED***
