@@ -75,10 +75,13 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
             return nil
         }
         
-        // Kick off a load of the map area.
-        Task.detached {
-            await self.load()
-            await self.updateDownloadStatus(for: mobileMapPackage)
+        setDownloadJob()
+        
+        if self.job == nil {
+            Task.detached {
+                await self.load()
+                await self.setMobileMapPackage()
+            }
         }
     }
     
@@ -102,11 +105,23 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
+    /// Sets the model download preplanned offline map job if the job is in progress.
+    private func setDownloadJob() {
+        for job in JobManager.shared.jobs {
+            if let preplannedJob = job as? DownloadPreplannedOfflineMapJob {
+                if preplannedJob.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID {
+                    self.job = preplannedJob
+                    status = .downloading
+                }
+            }
+        }
+    }
+    
     /// Set the loaded mobile map packages.
     /// - Parameter mobileMapPackages: The mobile map packages.
     func setMobileMapPackages(_ mobileMapPackages: [MobileMapPackage]) {
         self.mobileMapPackages = mobileMapPackages
-        updateDownloadStatus()
+        setMobileMapPackage()
     }
     
     /// Updates the status for a given packaging status.
@@ -124,22 +139,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
-    /// Updates the status to downloaded if the mobile map pacakge exists.
-    /// - Parameter mobileMapPackage: The mobile map package.
-    private func updateDownloadStatus(for mobileMapPackage: MobileMapPackage? = nil) {
-        if let mobileMapPackage {
-            // Set the moblile map package.
-            self.mobileMapPackage = mobileMapPackage
-        } else {
-            // Set the mobile map package if it downloaded.
-            self.mobileMapPackage = mobileMapPackages.first(where: { $0.fileURL.lastPathComponent == preplannedMapArea.id?.rawValue.appending(".mmpk") })
-        }
-        
-        if self.mobileMapPackage != nil {
-            status = .downloaded
-        }
-    }
-    
     /// Updates the status based on the download result of the mobile map package.
     func updateDownloadStatus(for downloadResult: Optional<Result<MobileMapPackage, any Error>>) {
         switch downloadResult {
@@ -148,8 +147,20 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         case .failure(let error):
             status = .downloadFailure(error)
         case .none:
-            if let mobileMapPackage = try? downloadResult?.get() {
-                updateDownloadStatus(for: mobileMapPackage)
+            setMobileMapPackage()
+        }
+    }
+    
+    /// Sets the mobile map pacakge if downloaded locally.
+    private func setMobileMapPackage() {
+        // Set the mobile map package if already downloaded or the download job succeeded.
+        if job == nil || job?.status == .succeeded {
+            // Set the mobile map package if it downloaded.
+            if let mobileMapPackage = mobileMapPackages.first(where: {
+                $0.fileURL.deletingPathExtension().lastPathComponent == preplannedMapArea.id?.rawValue
+            }) {
+                self.mobileMapPackage = mobileMapPackage
+                status = .downloaded
             }
         }
     }
@@ -255,6 +266,11 @@ extension PreplannedMapModel {
         
         // Awaits the output of the job and assigns the result.
         result = await job.result.map { $0.mobileMapPackage }
+        
+        if job.status == .succeeded {
+            status = .downloaded
+            self.job = nil
+        }
     }
 }
 
