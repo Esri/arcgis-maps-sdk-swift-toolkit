@@ -329,7 +329,7 @@ class Model: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Commits changes to the features and its attachments to the database.
+***REMOVED******REMOVED***/ Commits feature edits to the local geodatabase.
 ***REMOVED***private func finishEditing(_ featureForm: FeatureForm) async {
 ***REMOVED******REMOVED***state = .finishingEdits(featureForm)
 ***REMOVED******REMOVED***do {
