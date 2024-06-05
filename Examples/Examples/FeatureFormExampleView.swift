@@ -326,7 +326,7 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***state = .idle
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Additionally, you could display the errors to the user using `resultErrors`.
-***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Changes were not applied."))
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Apply edits failed with ^[\(resultErrors.count) error](inflect: true)."))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -336,7 +336,7 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await featureForm.finishEditing()
 ***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text(error.localizedDescription))
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Finish editing failed.\n\n\(error.localizedDescription)"))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
