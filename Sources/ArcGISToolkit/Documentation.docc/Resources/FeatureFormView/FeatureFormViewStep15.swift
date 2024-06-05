@@ -197,7 +197,7 @@ class Model: ObservableObject {
         state = .idle
     }
     
-    func submitChanges() async {
+    func submitEdits() async {
         guard case let .editing(featureForm) = state else { return }
         await validateChanges(featureForm)
     }

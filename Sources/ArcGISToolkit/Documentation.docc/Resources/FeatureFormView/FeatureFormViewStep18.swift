@@ -106,7 +106,7 @@ struct FeatureFormExampleView: View {
                                 Button("Submit") {
                                     validationErrorVisibility = .visible
                                     Task {
-                                        await model.submitChanges()
+                                        await model.submitEdits()
                                     }
                                 }
                                 .disabled(model.formControlsAreDisabled)
@@ -229,7 +229,7 @@ class Model: ObservableObject {
         state = .idle
     }
     
-    func submitChanges() async {
+    func submitEdits() async {
         guard case let .editing(featureForm) = state else { return }
         await validateChanges(featureForm)
     }
