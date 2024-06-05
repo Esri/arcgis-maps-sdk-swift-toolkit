@@ -208,8 +208,12 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***await applyEdits(featureForm)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func applyEdits(_ featureForm: FeatureForm, _ table: ServiceFeatureTable) async {
+***REMOVED***private func applyEdits(_ featureForm: FeatureForm) async {
 ***REMOVED******REMOVED***state = .applyingEdits(featureForm)
+***REMOVED******REMOVED***guard let table = featureForm.feature.table as? ServiceFeatureTable else {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Error resolving feature table."))
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
 ***REMOVED******REMOVED***guard let database = table.serviceGeodatabase else {
 ***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("No geodatabase found."))
 ***REMOVED******REMOVED******REMOVED***return
@@ -222,12 +226,10 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***if let serviceInfo = database.serviceInfo, serviceInfo.canUseServiceGeodatabaseApplyEdits {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let featureTableEditResults = try await database.applyEdits()
-***REMOVED******REMOVED******REMOVED******REMOVED***resultErrors = featureTableEditResults.flatMap { featureTableEditResult in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***checkFeatureEditResults(featureForm, featureTableEditResult.editResults)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***resultErrors = featureTableEditResults.flatMap { $0.editResults.errors ***REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let featureEditResults = try await table.applyEdits()
-***REMOVED******REMOVED******REMOVED******REMOVED***resultErrors = checkFeatureEditResults(featureForm, featureEditResults)
+***REMOVED******REMOVED******REMOVED******REMOVED***resultErrors = featureEditResults.errors
 ***REMOVED******REMOVED***
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("The changes could not be applied to the database or table.\n\n\(error.localizedDescription)"))
@@ -236,7 +238,7 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***if resultErrors.isEmpty {
 ***REMOVED******REMOVED******REMOVED***state = .idle
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Changes were not applied."))
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Apply edits failed with ^[\(resultErrors.count) error](inflect: true)."))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
