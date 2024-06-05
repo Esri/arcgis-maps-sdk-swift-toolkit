@@ -107,6 +107,7 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***comment: "A label in reference to the new name of a file, shown in a file rename interface."
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.autocorrectionDisabled()
 ***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) { ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button("OK") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
