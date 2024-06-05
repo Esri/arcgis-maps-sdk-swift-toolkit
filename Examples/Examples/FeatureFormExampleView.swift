@@ -329,7 +329,7 @@ class Model: ObservableObject {
         }
     }
     
-    /// Commits changes to the features and its attachments to the database.
+    /// Commits feature edits to the local geodatabase.
     private func finishEditing(_ featureForm: FeatureForm) async {
         state = .finishingEdits(featureForm)
         do {
