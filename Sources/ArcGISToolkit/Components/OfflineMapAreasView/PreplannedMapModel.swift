@@ -30,6 +30,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// Loads the preplanned map area and updates the status.
     func load() async {
+        if case .packaged = status, case .downloaded = status { return }
         do {
             // Load preplanned map area to obtain packaging status.
             status = .loading
