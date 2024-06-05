@@ -326,7 +326,7 @@ class Model: ObservableObject {
             state = .idle
         } else {
             // Additionally, you could display the errors to the user using `resultErrors`.
-            state = .generalError(featureForm, Text("Changes were not applied."))
+            state = .generalError(featureForm, Text("Apply edits failed with ^[\(resultErrors.count) error](inflect: true)."))
         }
     }
     
@@ -336,7 +336,7 @@ class Model: ObservableObject {
         do {
             try await featureForm.finishEditing()
         } catch {
-            state = .generalError(featureForm, Text(error.localizedDescription))
+            state = .generalError(featureForm, Text("Finish editing failed.\n\n\(error.localizedDescription)"))
         }
     }
     
