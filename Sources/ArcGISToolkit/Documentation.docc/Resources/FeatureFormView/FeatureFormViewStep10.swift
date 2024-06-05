@@ -127,8 +127,12 @@ class Model: ObservableObject {
         await applyEdits(featureForm)
     }
     
-    private func applyEdits(_ featureForm: FeatureForm, _ table: ServiceFeatureTable) async {
+    private func applyEdits(_ featureForm: FeatureForm) async {
         state = .applyingEdits(featureForm)
+        guard let table = featureForm.feature.table as? ServiceFeatureTable else {
+            state = .generalError(featureForm, Text("Error resolving feature table."))
+            return
+        }
         guard let database = table.serviceGeodatabase else {
             state = .generalError(featureForm, Text("No geodatabase found."))
             return
@@ -141,12 +145,10 @@ class Model: ObservableObject {
         do {
             if let serviceInfo = database.serviceInfo, serviceInfo.canUseServiceGeodatabaseApplyEdits {
                 let featureTableEditResults = try await database.applyEdits()
-                resultErrors = featureTableEditResults.flatMap { featureTableEditResult in
-                    checkFeatureEditResults(featureForm, featureTableEditResult.editResults)
-                }
+                resultErrors = featureTableEditResults.flatMap { $0.editResults.errors }
             } else {
                 let featureEditResults = try await table.applyEdits()
-                resultErrors = checkFeatureEditResults(featureForm, featureEditResults)
+                resultErrors = featureEditResults.errors
             }
         } catch {
             state = .generalError(featureForm, Text("The changes could not be applied to the database or table.\n\n\(error.localizedDescription)"))
@@ -155,7 +157,7 @@ class Model: ObservableObject {
         if resultErrors.isEmpty {
             state = .idle
         } else {
-            state = .generalError(featureForm, Text("Changes were not applied."))
+            state = .generalError(featureForm, Text("Apply edits failed with ^[\(resultErrors.count) error](inflect: true)."))
         }
     }
     
