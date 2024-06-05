@@ -30,8 +30,7 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// Loads the preplanned map area and updates the status.
     func load() async {
-        if case .packaged = status { return }
-        if case .downloaded = status { return }
+        guard status.needsToBeLoaded else { return }
         do {
             // Load preplanned map area to obtain packaging status.
             status = .loading
@@ -98,6 +97,17 @@ extension PreplannedMapModel {
         case downloaded
         /// Preplanned map area failed to download.
         case downloadFailure(Error)
+        
+        /// A Boolean value indicating whether the model is in a state
+        /// where it needs to be loaded or reloaded.
+        var needsToBeLoaded: Bool {
+            switch self {
+            case .loading, .packaging, .packaged, .downloading, .downloaded:
+                false
+            default:
+                true
+            }
+        }
     }
 }
 
