@@ -118,7 +118,13 @@ class Model: ObservableObject {
     
     func submitEdits() async {
         guard case let .editing(featureForm) = state else { return }
-        await validateChanges(featureForm)
+        validateChanges(featureForm)
+        
+        guard case let .validating(featureForm) = state else { return }
+        await finishEditing(featureForm)
+        
+        guard case let .finishingEdits(featureForm) = state else { return }
+        await applyEdits(featureForm)
     }
     
     private func applyEdits(_ featureForm: FeatureForm, _ table: ServiceFeatureTable) async {
