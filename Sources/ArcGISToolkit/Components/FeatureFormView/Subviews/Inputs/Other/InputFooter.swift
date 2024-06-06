@@ -209,7 +209,7 @@ extension InputFooter {
     var isShowingError: Bool {
         element.isEditable || element.hasValueExpression
         && primaryError != nil
-        && (model.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible)
+        && (model.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible || element.hasValueExpression)
     }
     
     /// The allowable number of characters in the input.
