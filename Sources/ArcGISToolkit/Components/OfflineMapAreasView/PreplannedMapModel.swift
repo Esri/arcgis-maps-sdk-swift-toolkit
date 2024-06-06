@@ -76,13 +76,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***setDownloadJob()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if self.job == nil {
-***REMOVED******REMOVED******REMOVED***Task.detached {
-***REMOVED******REMOVED******REMOVED******REMOVED***await self.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***await self.setMobileMapPackage()
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
