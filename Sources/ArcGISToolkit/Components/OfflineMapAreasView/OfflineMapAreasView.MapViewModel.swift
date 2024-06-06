@@ -100,6 +100,7 @@ public extension OfflineMapAreasView {
                     selectedMap = oldValue
                     Task {
                         await info.downloadPreplannedMapArea()
+                        loadPreplannedMobileMapPackages()
                     }
                 } else if case .success(let mmpk) = info.result {
                     // If we have already downloaded, then open the map in the mmpk.
