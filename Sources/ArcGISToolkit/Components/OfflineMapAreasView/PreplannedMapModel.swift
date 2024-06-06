@@ -44,9 +44,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// map area is still packaging or loading.
     @Published private(set) var result: Result<MobileMapPackage, Error>?
     
-    /// The mobile map packages created from .mmpk files in the documents directory.
-    @Published private(set) var mobileMapPackages = [MobileMapPackage]()
-    
     /// A Boolean value indicating if download can be called.
     var canDownload: Bool {
         switch status {
@@ -111,13 +108,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
-    /// Set the loaded mobile map packages.
-    /// - Parameter mobileMapPackages: The mobile map packages.
-    func setMobileMapPackages(_ mobileMapPackages: [MobileMapPackage]) {
-        self.mobileMapPackages = mobileMapPackages
-        setMobileMapPackage()
-    }
-    
     /// Updates the status for a given packaging status.
     private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
         // Update area status for a given packaging status.
@@ -141,21 +131,19 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         case .failure(let error):
             status = .downloadFailure(error)
         case .none:
-            setMobileMapPackage()
+            if let mobileMapPackage = try? downloadResult?.get() {
+                setMobileMapPackage(mobileMapPackage)
+            }
         }
     }
     
     /// Sets the mobile map pacakge if downloaded locally.
-    private func setMobileMapPackage() {
+    func setMobileMapPackage(_ mobileMapPackage: MobileMapPackage) {
         // Set the mobile map package if already downloaded or the download job succeeded.
         if job == nil || job?.status == .succeeded {
             // Set the mobile map package if it downloaded.
-            if let mobileMapPackage = mobileMapPackages.first(where: {
-                $0.fileURL.deletingPathExtension().lastPathComponent == preplannedMapArea.id?.rawValue
-            }) {
-                self.mobileMapPackage = mobileMapPackage
-                status = .downloaded
-            }
+            self.mobileMapPackage = mobileMapPackage
+            status = .downloaded
         }
     }
     
