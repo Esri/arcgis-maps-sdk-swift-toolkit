@@ -51,20 +51,22 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         XCTAssertFalse(model.canDownload)
+        XCTAssertTrue(model.status.needsToBeLoaded)
     }
     
     @MainActor
     func testLoadingStatus() async throws {
         class MockPreplannedMapArea: PreplannedMapAreaProtocol {
             func retryLoad() async throws {
-                // Delay `retryLoad` method to slow down the model's private async
-                // `load` method, so the model status stays at "loading".
+                // In `retryLoad` method, simulate a time-consuming `load` method,
+                // so the model status stays at "loading".
                 try await Task.sleep(nanoseconds: 2 * PreplannedMapModelTests.sleepNanoseconds)
             }
         }
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel(preplannedMapArea: mockArea)
+        Task { await model.load() }
         try await Task.sleep(nanoseconds: PreplannedMapModelTests.sleepNanoseconds)
         guard case .loading = model.status else {
             XCTFail("PreplannedMapModel status is not \".loading\".")
@@ -72,6 +74,7 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         XCTAssertFalse(model.canDownload)
+        XCTAssertFalse(model.status.needsToBeLoaded)
     }
     
     @MainActor
@@ -87,7 +90,7 @@ class PreplannedMapModelTests: XCTestCase {
         // when they have packaged areas but have incomplete metadata.
         // When the preplanned map area finishes loading, if its
         // packaging status is `nil`, we consider it as completed.
-        try await Task.sleep(nanoseconds: Self.sleepNanoseconds)
+        await model.load()
         guard case .packaged = model.status else {
             XCTFail("PreplannedMapModel status is not \".packaged\".")
             return
@@ -95,6 +98,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         // In this case, the areas can be downloaded.
         XCTAssertTrue(model.canDownload)
+        XCTAssertFalse(model.status.needsToBeLoaded)
     }
     
     @MainActor
@@ -109,7 +113,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel(preplannedMapArea: mockArea)
-        try await Task.sleep(nanoseconds: Self.sleepNanoseconds)
+        await model.load()
         
         guard case .loadFailure = model.status else {
             XCTFail("PreplannedMapModel status is not \".loadFailure\".")
@@ -117,6 +121,7 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         XCTAssertFalse(model.canDownload)
+        XCTAssertTrue(model.status.needsToBeLoaded)
     }
     
     @MainActor
@@ -131,7 +136,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel(preplannedMapArea: mockArea)
-        try await Task.sleep(nanoseconds: Self.sleepNanoseconds)
+        await model.load()
         
         guard case .packaging = model.status else {
             XCTFail("PreplannedMapModel status is not \".packaging\".")
@@ -139,6 +144,7 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         XCTAssertFalse(model.canDownload)
+        XCTAssertFalse(model.status.needsToBeLoaded)
     }
     
     @MainActor
@@ -153,7 +159,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel(preplannedMapArea: mockArea)
-        try await Task.sleep(nanoseconds: Self.sleepNanoseconds)
+        await model.load()
         
         guard case .packaged = model.status else {
             XCTFail("PreplannedMapModel status is not \".packaged\".")
@@ -161,6 +167,7 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         XCTAssertTrue(model.canDownload)
+        XCTAssertFalse(model.status.needsToBeLoaded)
     }
     
     @MainActor
@@ -176,7 +183,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel(preplannedMapArea: mockArea)
-        try await Task.sleep(nanoseconds: Self.sleepNanoseconds)
+        await model.load()
         
         guard case .packageFailure = model.status else {
             XCTFail("PreplannedMapModel status is not \".packageFailure\".")
@@ -184,6 +191,7 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         XCTAssertFalse(model.canDownload)
+        XCTAssertTrue(model.status.needsToBeLoaded)
     }
     
     @MainActor
@@ -200,7 +208,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel(preplannedMapArea: mockArea)
-        try await Task.sleep(nanoseconds: Self.sleepNanoseconds)
+        await model.load()
         
         guard case .packageFailure = model.status else {
             XCTFail("PreplannedMapModel status is not \".loadFailure\".")
@@ -208,5 +216,6 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         XCTAssertFalse(model.canDownload)
+        XCTAssertTrue(model.status.needsToBeLoaded)
     }
 }
