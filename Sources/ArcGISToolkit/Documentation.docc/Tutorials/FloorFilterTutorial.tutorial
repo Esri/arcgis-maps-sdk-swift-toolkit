@@ -15,28 +15,28 @@
                 To begin, set up the parent view.
                 Add a map with floor aware data, a property to track the current viewpoint and place
                 a `MapView` into the body using these properties.
-                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep1)
+                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep1.swift)
             }
             
             @Step {
                 Add an alignment property so that the Floor Filter can properly display its internal views.
-                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep2)
+                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep2.swift)
             }
             
             @Step {
                 Add logic to load the map and handle any resulting errors when the view loads.
-                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep3)
+                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep3.swift)
             }
             
             @Step {
                 Track when the user is navigating the map with `.onNavigatingChanged` and also keep
                 track of the latest viewpoint with `onViewpointChanged`.
-                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep4)
+                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep4.swift)
             }
             
             @Step {
                 Overlay the map with the Floor Filter, optionally adding UI to handle any loading errors.
-                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep5)
+                @Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep5.swift)
             }
         }
     }
