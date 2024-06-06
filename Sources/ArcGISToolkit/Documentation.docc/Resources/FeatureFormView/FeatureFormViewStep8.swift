@@ -116,38 +116,31 @@ class Model: ObservableObject {
         state = .idle
     }
     
-    func submitChanges() async {
+    func submitEdits() async {
         guard case let .editing(featureForm) = state else { return }
-        await validateChanges(featureForm)
+        validateChanges(featureForm)
+        
+        guard case let .validating(featureForm) = state else { return }
+        await finishEditing(featureForm)
+        
+        guard case let .finishingEdits(featureForm) = state else { return }
+        await applyEdits(featureForm)
     }
     
-    private func finishEdits(_ featureForm: FeatureForm) async {
+    private func finishEditing(_ featureForm: FeatureForm) async {
         state = .finishingEdits(featureForm)
-        guard let table = featureForm.feature.table as? ServiceFeatureTable else {
-            state = .generalError(featureForm, Text("Error resolving feature table."))
-            return
-        }
-        guard table.isEditable else {
-            state = .generalError(featureForm, Text("The feature table isn't editable."))
-            return
-        }
         do {
-            state = .finishingEdits(featureForm)
-            try await table.update(featureForm.feature)
+            try await featureForm.finishEditing()
         } catch {
-            state = .generalError(featureForm, Text("The feature update failed."))
-            return
+            state = .generalError(featureForm, Text("Finish editing failed.\n\n\(error.localizedDescription)"))
         }
-        await applyEdits(featureForm, table)
     }
     
-    private func validateChanges(_ featureForm: FeatureForm) async {
+    private func validateChanges(_ featureForm: FeatureForm) {
         state = .validating(featureForm)
-        guard featureForm.validationErrors.isEmpty else {
+        if !featureForm.validationErrors.isEmpty {
             state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
-            return
         }
-        await finishEdits(featureForm)
     }
 }
 

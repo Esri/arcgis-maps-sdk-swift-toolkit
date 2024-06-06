@@ -173,13 +173,23 @@ class Model: ObservableObject {
         state = .idle
     }
     
-    func submitChanges() async {
+    func submitEdits() async {
         guard case let .editing(featureForm) = state else { return }
-        await validateChanges(featureForm)
+        validateChanges(featureForm)
+        
+        guard case let .validating(featureForm) = state else { return }
+        await finishEditing(featureForm)
+        
+        guard case let .finishingEdits(featureForm) = state else { return }
+        await applyEdits(featureForm)
     }
     
-    private func applyEdits(_ featureForm: FeatureForm, _ table: ServiceFeatureTable) async {
+    private func applyEdits(_ featureForm: FeatureForm) async {
         state = .applyingEdits(featureForm)
+        guard let table = featureForm.feature.table as? ServiceFeatureTable else {
+            state = .generalError(featureForm, Text("Error resolving feature table."))
+            return
+        }
         guard let database = table.serviceGeodatabase else {
             state = .generalError(featureForm, Text("No geodatabase found."))
             return
@@ -192,12 +202,10 @@ class Model: ObservableObject {
         do {
             if let serviceInfo = database.serviceInfo, serviceInfo.canUseServiceGeodatabaseApplyEdits {
                 let featureTableEditResults = try await database.applyEdits()
-                resultErrors = featureTableEditResults.flatMap { featureTableEditResult in
-                    checkFeatureEditResults(featureForm, featureTableEditResult.editResults)
-                }
+                resultErrors = featureTableEditResults.flatMap { $0.editResults.errors }
             } else {
                 let featureEditResults = try await table.applyEdits()
-                resultErrors = checkFeatureEditResults(featureForm, featureEditResults)
+                resultErrors = featureEditResults.errors
             }
         } catch {
             state = .generalError(featureForm, Text("The changes could not be applied to the database or table.\n\n\(error.localizedDescription)"))
@@ -206,55 +214,36 @@ class Model: ObservableObject {
         if resultErrors.isEmpty {
             state = .idle
         } else {
-            state = .generalError(featureForm, Text("Changes were not applied."))
+            state = .generalError(featureForm, Text("Apply edits failed with ^[\(resultErrors.count) error](inflect: true)."))
         }
     }
     
-    private func checkFeatureEditResults(_ featureForm: FeatureForm, _ featureEditResults: [FeatureEditResult]) -> [Error] {
-        var errors = [Error]()
-        featureEditResults.forEach { featureEditResult in
-            if let editResultError = featureEditResult.error { errors.append(editResultError) }
-            featureEditResult.attachmentResults.forEach { attachmentResult in
-                if let error = attachmentResult.error {
-                    errors.append(error)
-                }
-            }
-        }
-        return errors
-    }
-    
-    private func finishEdits(_ featureForm: FeatureForm) async {
+    private func finishEditing(_ featureForm: FeatureForm) async {
         state = .finishingEdits(featureForm)
-        guard let table = featureForm.feature.table as? ServiceFeatureTable else {
-            state = .generalError(featureForm, Text("Error resolving feature table."))
-            return
-        }
-        guard table.isEditable else {
-            state = .generalError(featureForm, Text("The feature table isn't editable."))
-            return
-        }
         do {
-            state = .finishingEdits(featureForm)
-            try await table.update(featureForm.feature)
+            try await featureForm.finishEditing()
         } catch {
-            state = .generalError(featureForm, Text("The feature update failed."))
-            return
+            state = .generalError(featureForm, Text("Finish editing failed.\n\n\(error.localizedDescription)"))
         }
-        await applyEdits(featureForm, table)
     }
     
-    private func validateChanges(_ featureForm: FeatureForm) async {
+    private func validateChanges(_ featureForm: FeatureForm) {
         state = .validating(featureForm)
-        guard featureForm.validationErrors.isEmpty else {
+        if !featureForm.validationErrors.isEmpty {
             state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
-            return
         }
-        await finishEdits(featureForm)
     }
 }
 
 private extension FeatureForm {
     var featureLayer: FeatureLayer? {
         feature.table?.layer as? FeatureLayer
+    }
+}
+
+private extension Array where Element == FeatureEditResult {
+    ///  Any errors from the edit results and their inner attachment results.
+    var errors: [Error] {
+        compactMap { $0.error } + flatMap { $0.attachmentResults.compactMap { $0.error } }
     }
 }
