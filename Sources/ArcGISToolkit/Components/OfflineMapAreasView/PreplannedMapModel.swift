@@ -22,13 +22,13 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     let preplannedMapArea: any PreplannedMapAreaProtocol
     
     /// The task to use to take the area offline.
-    private let offlineMapTask: OfflineMapTask
+    private let offlineMapTask: OfflineMapTask?
     
     /// The download directory for the preplanned map areas.
-    private let preplannedDirectory: URL
+    private let preplannedDirectory: URL?
     
     /// The ID of the preplanned map area.
-    private let preplannedMapAreaID: String
+    private var preplannedMapAreaID: String?
     
     /// The mobile map package for the preplanned map area.
     private(set) var mobileMapPackage: MobileMapPackage?
@@ -55,10 +55,10 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
-    init?(
+    init(
         preplannedMapArea: PreplannedMapAreaProtocol,
-        offlineMapTask: OfflineMapTask,
-        preplannedDirectory: URL,
+        offlineMapTask: OfflineMapTask? = nil,
+        preplannedDirectory: URL? = nil,
         mobileMapPackage: MobileMapPackage? = nil
     ) {
         self.offlineMapTask = offlineMapTask
@@ -68,8 +68,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         
         if let itemID = preplannedMapArea.id {
             preplannedMapAreaID = itemID.rawValue
-        } else {
-            return nil
         }
         
         setDownloadJob()
@@ -98,6 +96,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// Sets the model download preplanned offline map job if the job is in progress.
     private func setDownloadJob() {
+        guard let preplannedMapAreaID else { return }
+        
         for job in JobManager.shared.jobs {
             if let preplannedJob = job as? DownloadPreplannedOfflineMapJob {
                 if preplannedJob.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID {
@@ -174,16 +174,17 @@ extension PreplannedMapModel {
     func downloadPreplannedMapArea() async {
         precondition(canDownload)
         
-        let mmpkDirectory = createDownloadDirectories()
-        
-        guard let parameters = await createParameters() else { return }
+        guard let mmpkDirectory = createDownloadDirectories(),
+              let parameters = await createParameters() else { return }
         
         await runDownloadTask(for: parameters, in: mmpkDirectory)
     }
     
     /// Creates download directories for the preplanned map area and its mobile map package.
     /// - Returns: The URL for the mobile map package directory.
-    private func createDownloadDirectories() -> URL {
+    private func createDownloadDirectories() -> URL? {
+        guard let preplannedDirectory,
+              let preplannedMapAreaID else { return nil }
         let downloadDirectory = preplannedDirectory
             .appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
         
@@ -204,7 +205,8 @@ extension PreplannedMapModel {
     /// Creates the parameters to download a preplanned offline map.
     /// - Returns: The parameters to download a preplanned offline map.
     private func createParameters() async -> DownloadPreplannedOfflineMapParameters? {
-        guard let preplannedMapArea = preplannedMapArea.mapArea else { return nil }
+        guard let preplannedMapArea = preplannedMapArea.mapArea,
+              let offlineMapTask else { return nil }
         do {
             // Creates the parameters for the download preplanned offline map job.
             let parameters = try await offlineMapTask.makeDefaultDownloadPreplannedOfflineMapParameters(
@@ -229,6 +231,8 @@ extension PreplannedMapModel {
         for parameters: DownloadPreplannedOfflineMapParameters,
         in mmpkDirectory: URL
     ) async {
+        guard let offlineMapTask else { return }
+        
         // Creates the download preplanned offline map job.
         let job = offlineMapTask.makeDownloadPreplannedOfflineMapJob(
             parameters: parameters,
