@@ -12,17 +12,17 @@
         @Steps {
             @Step {
                 Create a new view with a `MapViewReader` and `MapView`.
-                @Code(name: "CompassExampleView.swift", file: CompassStep1)
+                @Code(name: "CompassExampleView.swift", file: CompassStep1.swift)
             }
             
             @Step {
                 Add a property to track viewpoint changes with `.onViewpointChanged(kind:)`
-                @Code(name: "CompassExampleView.swift", file: CompassStep2)
+                @Code(name: "CompassExampleView.swift", file: CompassStep2.swift)
             }
             
             @Step {
                 Add an overlay to the `MapView` with `Compass` as the content.
-                @Code(name: "CompassExampleView.swift", file: CompassStep3) {
+                @Code(name: "CompassExampleView.swift", file: CompassStep3.swift) {
                     @Image(
                         source: CompassComplete, 
                         alt: "An image of the compass component overlaid on a map view."
@@ -32,12 +32,12 @@
             
             @Step {
                 Optionally specify a size and padding.
-                @Code(name: "CompassExampleView.swift", file: CompassStep4)
+                @Code(name: "CompassExampleView.swift", file: CompassStep4.swift)
             }
             
             @Step {
                 Optionally prevent the compass from hiding.
-                @Code(name: "CompassExampleView.swift", file: CompassStep5)
+                @Code(name: "CompassExampleView.swift", file: CompassStep5.swift)
             }
         }
     }

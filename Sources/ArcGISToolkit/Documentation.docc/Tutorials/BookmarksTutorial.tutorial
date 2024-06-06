@@ -16,28 +16,28 @@
                 Initialize a map that contains preset bookmarks.
                 Add a `MapView` to the body of the view, passing in the map.
                 Wrap the `MapView` in a `MapViewReader` to obtain a `MapViewProxy`.
-                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep1)
+                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep1.swift)
             }
             
             @Step {
                 Add a button within a toolbar to present the `Bookmarks` component.
                 
                 The property `bookmarksIsPresented` will control when the `Bookmarks` component is shown or hidden.
-                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep2)
+                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep2.swift)
             }
             
             @Step {
                 Host the `Bookmarks` component inside of a popover.
                 
                 Create a new property named `selection` to hold the selected bookmark.
-                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep3)
+                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep3.swift)
             }
             
             @Step {
                 Enable automatic pan and zoom to the selected bookmark.
                 
                 Pass the `MapViewProxy` from Step 1 into the `Bookmarks` initializer.
-                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep4)
+                @Code(name: "BookmarksExampleView.swift", file: BookmarksStep4.swift)
             }
         }
     }
