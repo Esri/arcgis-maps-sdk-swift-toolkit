@@ -17,6 +17,8 @@ import ArcGIS
 @testable import ArcGISToolkit
 
 private extension PreplannedMapAreaProtocol {
+    var mapArea: ArcGIS.PreplannedMapArea? { nil }
+    var id: ArcGIS.Item.ID? { nil }
     var packagingStatus: PreplannedMapArea.PackagingStatus? { nil }
     var title: String { "Mock Preplanned Map Area" }
     var description: String { "This is the description text" }

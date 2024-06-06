@@ -141,14 +141,14 @@ public struct PreplannedListItemView: View {
             preplannedMapArea: MockPreplannedMapArea(),
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             preplannedDirectory: URL.documentsDirectory
-        )!
+        )
     )
     .padding()
 }
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
     var mapArea: ArcGIS.PreplannedMapArea? = nil
-    var id: PortalItem.ID? = PortalItem.ID("012")
+    var id: PortalItem.ID? = nil
     var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
     var title: String = "Mock Preplanned Map Area"
     var description: String = "This is the description text"
