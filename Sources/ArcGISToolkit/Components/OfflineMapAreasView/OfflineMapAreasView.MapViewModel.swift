@@ -82,17 +82,17 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***func loadPreplannedMobileMapPackages() {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Create mobile map packages with saved mmpk files.
 ***REMOVED******REMOVED******REMOVED***let mmpkFiles = searchFiles(in: preplannedDirectory, with: "mmpk")
-***REMOVED******REMOVED******REMOVED***self.mobileMapPackages.removeAll()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***for fileURL in mmpkFiles {
-***REMOVED******REMOVED******REMOVED******REMOVED***let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
-***REMOVED******REMOVED******REMOVED******REMOVED***self.mobileMapPackages.append(mobileMapPackage)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***self.mobileMapPackages = mmpkFiles.map(MobileMapPackage.init(fileURL:))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Pass mobile map packages to preplanned map models.
 ***REMOVED******REMOVED******REMOVED***if let models = try? preplannedMapModels?.get() {
 ***REMOVED******REMOVED******REMOVED******REMOVED***models.forEach { model in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.setMobileMapPackages(mobileMapPackages)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let mobileMapPackage = mobileMapPackages.first(where: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.fileURL.deletingPathExtension().lastPathComponent == model.preplannedMapArea.id?.rawValue
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.setMobileMapPackage(mobileMapPackage)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

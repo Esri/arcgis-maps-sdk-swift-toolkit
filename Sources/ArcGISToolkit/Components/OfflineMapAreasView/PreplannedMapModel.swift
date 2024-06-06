@@ -44,9 +44,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ map area is still packaging or loading.
 ***REMOVED***@Published private(set) var result: Result<MobileMapPackage, Error>?
 ***REMOVED***
-***REMOVED******REMOVED***/ The mobile map packages created from .mmpk files in the documents directory.
-***REMOVED***@Published private(set) var mobileMapPackages = [MobileMapPackage]()
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if download can be called.
 ***REMOVED***var canDownload: Bool {
 ***REMOVED******REMOVED***switch status {
@@ -111,13 +108,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Set the loaded mobile map packages.
-***REMOVED******REMOVED***/ - Parameter mobileMapPackages: The mobile map packages.
-***REMOVED***func setMobileMapPackages(_ mobileMapPackages: [MobileMapPackage]) {
-***REMOVED******REMOVED***self.mobileMapPackages = mobileMapPackages
-***REMOVED******REMOVED***setMobileMapPackage()
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Updates the status for a given packaging status.
 ***REMOVED***private func updateStatus(for packagingStatus: PreplannedMapArea.PackagingStatus) {
 ***REMOVED******REMOVED******REMOVED*** Update area status for a given packaging status.
@@ -141,21 +131,19 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
 ***REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED***setMobileMapPackage()
+***REMOVED******REMOVED******REMOVED***if let mobileMapPackage = try? downloadResult?.get() {
+***REMOVED******REMOVED******REMOVED******REMOVED***setMobileMapPackage(mobileMapPackage)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the mobile map pacakge if downloaded locally.
-***REMOVED***private func setMobileMapPackage() {
+***REMOVED***func setMobileMapPackage(_ mobileMapPackage: MobileMapPackage) {
 ***REMOVED******REMOVED******REMOVED*** Set the mobile map package if already downloaded or the download job succeeded.
 ***REMOVED******REMOVED***if job == nil || job?.status == .succeeded {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set the mobile map package if it downloaded.
-***REMOVED******REMOVED******REMOVED***if let mobileMapPackage = mobileMapPackages.first(where: {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.fileURL.deletingPathExtension().lastPathComponent == preplannedMapArea.id?.rawValue
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mobileMapPackage
-***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloaded
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mobileMapPackage
+***REMOVED******REMOVED******REMOVED***status = .downloaded
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
