@@ -41,13 +41,6 @@ public extension OfflineMapAreasView {
         /// A Boolean value indicating whether the map has preplanned map areas.
         @Published private(set) var hasPreplannedMapAreas = false
         
-        /// The currently selected map.
-        @Published var selectedMap: SelectedMap = .onlineWebMap {
-            didSet {
-                selectedMapDidChange(from: oldValue)
-            }
-        }
-        
         /// A Boolean value indicating whether the user has authorized notifications to be shown.
         @Published var canShowNotifications: Bool = false
         
@@ -82,33 +75,6 @@ public extension OfflineMapAreasView {
             }
             if let models = try? preplannedMapModels?.get() {
                 hasPreplannedMapAreas = !models.isEmpty
-            }
-        }
-        
-        /// Handles a selection of a map.
-        /// If the selected map is an offline map and it has not yet been taken offline, then
-        /// it will start downloading. Otherwise the selected map will be used as the displayed map.
-        func selectedMapDidChange(from oldValue: SelectedMap) {
-            switch selectedMap {
-            case .onlineWebMap:
-                offlineMap = nil
-            case .preplannedMap(let info):
-                if info.canDownload {
-                    // If we have not yet downloaded or started downloading, then kick off a
-                    // download and reset selection to previous selection since we have to download
-                    // the offline map.
-                    selectedMap = oldValue
-                    Task {
-                        await info.downloadPreplannedMapArea()
-                        loadPreplannedMobileMapPackages()
-                    }
-                } else if case .success(let mmpk) = info.result {
-                    // If we have already downloaded, then open the map in the mmpk.
-                    offlineMap = mmpk.maps.first
-                } else {
-                    // If we have a failure, then keep the online map selected.
-                    selectedMap = oldValue
-                }
             }
         }
         
@@ -152,16 +118,6 @@ public extension OfflineMapAreasView {
             }
             return files
         }
-    }
-}
-
-public extension OfflineMapAreasView.MapViewModel {
-    /// A type that specifies the currently selected map.
-    enum SelectedMap: Hashable {
-        /// The online version of the map.
-        case onlineWebMap
-        /// One of the preplanned offline maps.
-        case preplannedMap(PreplannedMapModel)
     }
 }
 
