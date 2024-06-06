@@ -77,7 +77,13 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.selectedMap = .preplannedMap(model)
+***REMOVED******REMOVED******REMOVED******REMOVED***if model.canDownload {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download preplanned map area.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadPreplannedMapArea()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.loadPreplannedMobileMapPackages()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED***
