@@ -66,12 +66,12 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") { dismiss() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***UNUserNotificationCenter.current().requestAuthorization(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***options: [.alert, .sound]
-***REMOVED******REMOVED******REMOVED******REMOVED***) { authorized,_ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.canShowNotifications = authorized
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.canShowNotifications = (
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await UNUserNotificationCenter.current()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***?? false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationTitle("Offline Maps")
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
