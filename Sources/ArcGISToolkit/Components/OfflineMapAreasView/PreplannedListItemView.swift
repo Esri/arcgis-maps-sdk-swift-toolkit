@@ -51,6 +51,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
 ***REMOVED***@ViewBuilder private var thumbnailView: some View {
 ***REMOVED******REMOVED***if let thumbnail = model.preplannedMapArea.thumbnail {
 ***REMOVED******REMOVED******REMOVED***LoadableImageView(loadableImage: thumbnail)
