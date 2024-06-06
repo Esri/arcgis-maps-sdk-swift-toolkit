@@ -16,122 +16,122 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED***To begin, we initialize a map containing a feature form definition.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***We place a `MapView` nested within a `MapViewReader` and `NavigationStack`.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep1)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep1.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Create a model class.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add an instance of the model to the view. Within the model, define a `State` enumeration. Each enumerated value represents a step in the form editing workflow.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep2)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep2.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Extend `FeatureForm` with a `featureLayer` property.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***This small extension will help in multiple places in the upcoming steps.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep3)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep3.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a `state` property to the model.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***When the state switches between editing and not editing, we select and deselect the corresponding feature in the map.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep4)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep4.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Create a group of helper properties.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***These properties (`alertIsPresented`, `cancelConfirmationIsPresented`, `featureForm`, `formControlsAreDisabled`, `formIsPresented`, `textForState`) allow for easy use of the enumerated state values within the view.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep5)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep5.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a `discardEdits` and `submitEdits` method to the model.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***These methods will be used in buttons added later to the view.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep6)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep6.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***When a form is submitted, there are a few necessary steps.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***First, check for any validation errors on the form.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep7)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep7.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***After checking for validation errors, finish editing the feature form.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep8)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep8.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***When edits are applied to the database, some errors may be returned.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Extend arrays containing `FeatureEditResult`s with an `errors` property to check for the existence of any errors.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep9)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep9.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***After the table has been updated, apply edits to the database.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Use the `errors` property from the previous step to collect any errors.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep10)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep10.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***With the model complete, the view code can be completed.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a method `identifyFeature` to extract a feature from the location selected on the map. The `identifyScreenPoint` property on the view will track the last selected location.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep11)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep11.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Use the `onSingleTapGesture` modifier to detect selections in the map.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***If the current model state is `idle`, use `identifyFeature` to produce the selected feature and instantiate a feature form.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep12)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep12.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add the feature form view to the hierarchy.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Present the feature form view using a floating panel, sheet, or other container view.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep13)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep13.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add the `validationErrors` modifier to the feature form view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a `validationErrorVisibility` property of type ``FeatureFormView/ValidationErrorVisibility`` to the view. When the form is closed, reset it to ``FeatureFormView/ValidationErrorVisibility/automatic``.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep14)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep14.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Support canceling and closing the form.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add an alert to confirm cancellation. Add a "Cancel" button to the toolbar to set the model's state to cancellation pending. 
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep15)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep15.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a second button ("Submit") to the toolbar. 
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***When this button is pressed, set `validationErrorVisibility` to ``FeatureFormView/ValidationErrorVisibility/visible``. This will cause any fields that never received focus but are considered invalid to show errors. This button should also call `submitEdits` on the model.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep16)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep16.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a second alert to indicate any errors.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep17)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep17.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add an overlay to display the current state to the user.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Some operations, like applying edits to the database, can take an extended period of time. To keep users informed, indicate the current state of the model to them.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep18)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep18.swift)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
