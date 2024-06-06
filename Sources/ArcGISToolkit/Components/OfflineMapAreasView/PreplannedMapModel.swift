@@ -26,13 +26,11 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***init(preplannedMapArea: PreplannedMapAreaProtocol) {
 ***REMOVED******REMOVED***self.preplannedMapArea = preplannedMapArea
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Kick off a load of the map area.
-***REMOVED******REMOVED***Task.detached { await self.load() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
-***REMOVED***private func load() async {
+***REMOVED***func load() async {
+***REMOVED******REMOVED***guard status.needsToBeLoaded else { return ***REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Load preplanned map area to obtain packaging status.
 ***REMOVED******REMOVED******REMOVED***status = .loading
@@ -99,6 +97,17 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***case downloaded
 ***REMOVED******REMOVED******REMOVED***/ Preplanned map area failed to download.
 ***REMOVED******REMOVED***case downloadFailure(Error)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the model is in a state
+***REMOVED******REMOVED******REMOVED***/ where it needs to be loaded or reloaded.
+***REMOVED******REMOVED***var needsToBeLoaded: Bool {
+***REMOVED******REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED******REMOVED***case .loading, .packaging, .packaged, .downloading, .downloaded:
+***REMOVED******REMOVED******REMOVED******REMOVED***false
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***true
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
