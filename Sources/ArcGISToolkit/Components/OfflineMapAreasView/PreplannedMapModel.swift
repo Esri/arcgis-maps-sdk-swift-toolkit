@@ -260,11 +260,6 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Awaits the output of the job and assigns the result.
 ***REMOVED******REMOVED***result = await job.result.map { $0.mobileMapPackage ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if job.status == .succeeded {
-***REMOVED******REMOVED******REMOVED***status = .downloaded
-***REMOVED******REMOVED******REMOVED***self.job = nil
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
