@@ -12,17 +12,17 @@
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Create a new view with a `MapViewReader` and `MapView`.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "CompassExampleView.swift", file: CompassStep1)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "CompassExampleView.swift", file: CompassStep1.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a property to track viewpoint changes with `.onViewpointChanged(kind:)`
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "CompassExampleView.swift", file: CompassStep2)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "CompassExampleView.swift", file: CompassStep2.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add an overlay to the `MapView` with `Compass` as the content.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "CompassExampleView.swift", file: CompassStep3) {
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "CompassExampleView.swift", file: CompassStep3.swift) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***@Image(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***source: CompassComplete, 
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alt: "An image of the compass component overlaid on a map view."
@@ -32,12 +32,12 @@
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Optionally specify a size and padding.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "CompassExampleView.swift", file: CompassStep4)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "CompassExampleView.swift", file: CompassStep4.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Optionally prevent the compass from hiding.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "CompassExampleView.swift", file: CompassStep5)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "CompassExampleView.swift", file: CompassStep5.swift)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
