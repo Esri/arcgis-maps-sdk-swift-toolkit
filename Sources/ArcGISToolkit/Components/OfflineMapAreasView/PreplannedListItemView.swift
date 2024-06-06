@@ -49,6 +49,7 @@ public struct PreplannedListItemView: View {
             } else if status == .failed {
                 model.notifyJobCompleted(.failed)
             }
+        }
     }
     
     @ViewBuilder private var thumbnailView: some View {
