@@ -35,6 +35,9 @@ public struct PreplannedListItemView: View {
                 statusView
             }
         }
+        .task {
+            await model.load()
+        }
         .onReceive(model.$result) { result in
             model.updateDownloadStatus(for: result)
         }
@@ -46,7 +49,6 @@ public struct PreplannedListItemView: View {
             } else if status == .failed {
                 model.notifyJobCompleted(.failed)
             }
-        }
     }
     
     @ViewBuilder private var thumbnailView: some View {
