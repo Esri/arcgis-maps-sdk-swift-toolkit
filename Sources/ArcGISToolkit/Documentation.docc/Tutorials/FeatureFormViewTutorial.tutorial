@@ -14,39 +14,39 @@
         @Steps {
             @Step {
                 Initialize data containing feature forms.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep1)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep1.swift)
             }
             
             @Step {
                 Track important information like the last selected screen point and the current
                 `Feature`.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep2)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep2.swift)
             }
             
             @Step {
                 Add the `MapView` with the `FeatureForm` data.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep3)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep3.swift)
             }
             
             @Step {
                 Track any tap gestures on the `MapView`.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep4)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep4.swift)
             }
             
             @Step {
                 Perform an identify operation whenever the map is tapped and grab the `FeatureForm` data
                 if present.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep5)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep5.swift)
             }
             
             @Step {
                 Show the `FeatureFormView` in a `FloatingPanel`.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep6)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep6.swift)
             }
             
             @Step {
                 Add the ability to submit or cancel edits made with the `FeatureForm`.
-                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep7)
+                @Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep7.swift)
             }
         }
     }
