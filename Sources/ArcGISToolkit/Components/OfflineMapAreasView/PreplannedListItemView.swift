@@ -77,7 +77,13 @@ public struct PreplannedListItemView: View {
             }
         default:
             Button {
-                mapViewModel.selectedMap = .preplannedMap(model)
+                if model.canDownload {
+                    Task {
+                        // Download preplanned map area.
+                        await model.downloadPreplannedMapArea()
+                        mapViewModel.loadPreplannedMobileMapPackages()
+                    }
+                }
             } label: {
                 Image(systemName: "arrow.down.circle")
             }
