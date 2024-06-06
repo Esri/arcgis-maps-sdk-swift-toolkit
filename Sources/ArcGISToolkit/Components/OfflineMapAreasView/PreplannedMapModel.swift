@@ -76,13 +76,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
         
         setDownloadJob()
-        
-        if self.job == nil {
-            Task.detached {
-                await self.load()
-                await self.setMobileMapPackage()
-            }
-        }
     }
     
     /// Loads the preplanned map area and updates the status.
