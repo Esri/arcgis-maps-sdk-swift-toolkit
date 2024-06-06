@@ -209,7 +209,7 @@ extension InputFooter {
 ***REMOVED***var isShowingError: Bool {
 ***REMOVED******REMOVED***element.isEditable || element.hasValueExpression
 ***REMOVED******REMOVED***&& primaryError != nil
-***REMOVED******REMOVED***&& (model.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible)
+***REMOVED******REMOVED***&& (model.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible || element.hasValueExpression)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The allowable number of characters in the input.
