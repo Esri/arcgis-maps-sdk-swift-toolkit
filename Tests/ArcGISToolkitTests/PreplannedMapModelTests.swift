@@ -51,20 +51,22 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
+***REMOVED******REMOVED***XCTAssertTrue(model.status.needsToBeLoaded)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testLoadingStatus() async throws {
 ***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Delay `retryLoad` method to slow down the model's private async
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `load` method, so the model status stays at "loading".
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** In `retryLoad` method, simulate a time-consuming `load` method,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** so the model status stays at "loading".
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await Task.sleep(nanoseconds: 2 * PreplannedMapModelTests.sleepNanoseconds)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
 ***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***Task { await model.load() ***REMOVED***
 ***REMOVED******REMOVED***try await Task.sleep(nanoseconds: PreplannedMapModelTests.sleepNanoseconds)
 ***REMOVED******REMOVED***guard case .loading = model.status else {
 ***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".loading\".")
@@ -72,6 +74,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
+***REMOVED******REMOVED***XCTAssertFalse(model.status.needsToBeLoaded)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
@@ -87,7 +90,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** when they have packaged areas but have incomplete metadata.
 ***REMOVED******REMOVED******REMOVED*** When the preplanned map area finishes loading, if its
 ***REMOVED******REMOVED******REMOVED*** packaging status is `nil`, we consider it as completed.
-***REMOVED******REMOVED***try await Task.sleep(nanoseconds: Self.sleepNanoseconds)
+***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***guard case .packaged = model.status else {
 ***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".packaged\".")
 ***REMOVED******REMOVED******REMOVED***return
@@ -95,6 +98,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** In this case, the areas can be downloaded.
 ***REMOVED******REMOVED***XCTAssertTrue(model.canDownload)
+***REMOVED******REMOVED***XCTAssertFalse(model.status.needsToBeLoaded)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
@@ -109,7 +113,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
 ***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
-***REMOVED******REMOVED***try await Task.sleep(nanoseconds: Self.sleepNanoseconds)
+***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard case .loadFailure = model.status else {
 ***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".loadFailure\".")
@@ -117,6 +121,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
+***REMOVED******REMOVED***XCTAssertTrue(model.status.needsToBeLoaded)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
@@ -131,7 +136,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
 ***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
-***REMOVED******REMOVED***try await Task.sleep(nanoseconds: Self.sleepNanoseconds)
+***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard case .packaging = model.status else {
 ***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".packaging\".")
@@ -139,6 +144,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
+***REMOVED******REMOVED***XCTAssertFalse(model.status.needsToBeLoaded)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
@@ -153,7 +159,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
 ***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
-***REMOVED******REMOVED***try await Task.sleep(nanoseconds: Self.sleepNanoseconds)
+***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard case .packaged = model.status else {
 ***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".packaged\".")
@@ -161,6 +167,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(model.canDownload)
+***REMOVED******REMOVED***XCTAssertFalse(model.status.needsToBeLoaded)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
@@ -176,7 +183,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
 ***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
-***REMOVED******REMOVED***try await Task.sleep(nanoseconds: Self.sleepNanoseconds)
+***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard case .packageFailure = model.status else {
 ***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".packageFailure\".")
@@ -184,6 +191,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
+***REMOVED******REMOVED***XCTAssertTrue(model.status.needsToBeLoaded)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
@@ -200,7 +208,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
 ***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
-***REMOVED******REMOVED***try await Task.sleep(nanoseconds: Self.sleepNanoseconds)
+***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard case .packageFailure = model.status else {
 ***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".loadFailure\".")
@@ -208,5 +216,6 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
+***REMOVED******REMOVED***XCTAssertTrue(model.status.needsToBeLoaded)
 ***REMOVED***
 ***REMOVED***
