@@ -66,12 +66,12 @@ public struct OfflineMapAreasView: View {
                     Button("Done") { dismiss() }
                 }
             }
-            .onAppear {
-                UNUserNotificationCenter.current().requestAuthorization(
-                    options: [.alert, .sound]
-                ) { authorized,_ in
-                    mapViewModel.canShowNotifications = authorized
-                }
+            .task {
+                mapViewModel.canShowNotifications = (
+                    try? await UNUserNotificationCenter.current()
+                        .requestAuthorization(options: [.alert, .sound])
+                )
+                ?? false
             }
             .navigationTitle("Offline Maps")
             .navigationBarTitleDisplayMode(.inline)
