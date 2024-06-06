@@ -260,11 +260,6 @@ extension PreplannedMapModel {
         
         // Awaits the output of the job and assigns the result.
         result = await job.result.map { $0.mobileMapPackage }
-        
-        if job.status == .succeeded {
-            status = .downloaded
-            self.job = nil
-        }
     }
 }
 
