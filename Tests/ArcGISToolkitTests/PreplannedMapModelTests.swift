@@ -17,6 +17,8 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 private extension PreplannedMapAreaProtocol {
+***REMOVED***var mapArea: ArcGIS.PreplannedMapArea? { nil ***REMOVED***
+***REMOVED***var id: ArcGIS.Item.ID? { nil ***REMOVED***
 ***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? { nil ***REMOVED***
 ***REMOVED***var title: String { "Mock Preplanned Map Area" ***REMOVED***
 ***REMOVED***var description: String { "This is the description text" ***REMOVED***
