@@ -35,6 +35,9 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***statusView
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***await model.load()
+***REMOVED***
 ***REMOVED******REMOVED***.onReceive(model.$result) { result in
 ***REMOVED******REMOVED******REMOVED***model.updateDownloadStatus(for: result)
 ***REMOVED***
@@ -46,7 +49,6 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED*** else if status == .failed {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.notifyJobCompleted(.failed)
 ***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var thumbnailView: some View {
