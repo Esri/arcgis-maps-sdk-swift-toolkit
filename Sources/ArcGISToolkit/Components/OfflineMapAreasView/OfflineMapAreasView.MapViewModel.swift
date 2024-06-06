@@ -100,6 +100,7 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedMap = oldValue
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await info.downloadPreplannedMapArea()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***loadPreplannedMobileMapPackages()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else if case .success(let mmpk) = info.result {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have already downloaded, then open the map in the mmpk.
