@@ -116,18 +116,22 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***state = .idle
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func submitChanges() async {
+***REMOVED***func submitEdits() async {
 ***REMOVED******REMOVED***guard case let .editing(featureForm) = state else { return ***REMOVED***
-***REMOVED******REMOVED***await validateChanges(featureForm)
+***REMOVED******REMOVED***validateChanges(featureForm)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard case let .validating(featureForm) = state else { return ***REMOVED***
+***REMOVED******REMOVED***await finishEditing(featureForm)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard case let .finishingEdits(featureForm) = state else { return ***REMOVED***
+***REMOVED******REMOVED***await applyEdits(featureForm)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func validateChanges(_ featureForm: FeatureForm) async {
+***REMOVED***private func validateChanges(_ featureForm: FeatureForm) {
 ***REMOVED******REMOVED***state = .validating(featureForm)
-***REMOVED******REMOVED***guard featureForm.validationErrors.isEmpty else {
+***REMOVED******REMOVED***if !featureForm.validationErrors.isEmpty {
 ***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
-***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***await finishEdits(featureForm)
 ***REMOVED***
 ***REMOVED***
 

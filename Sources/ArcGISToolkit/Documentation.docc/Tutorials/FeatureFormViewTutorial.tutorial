@@ -27,7 +27,7 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Add a `featureLayer` property to the `FeatureForm`.
+***REMOVED******REMOVED******REMOVED******REMOVED***Extend `FeatureForm` with a `featureLayer` property.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***This small extension will help in multiple places in the upcoming steps.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep3)
@@ -48,7 +48,7 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***Add a `discardEdits` and `submitChanges` method to the model.
+***REMOVED******REMOVED******REMOVED******REMOVED***Add a `discardEdits` and `submitEdits` method to the model.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***These methods will be used in buttons added later to the view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep6)
@@ -62,21 +62,21 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
-***REMOVED******REMOVED******REMOVED******REMOVED***After checking for validation errors, update the table with the edited feature.
+***REMOVED******REMOVED******REMOVED******REMOVED***After checking for validation errors, finish editing the feature form.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep8)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***When edits are applied to the database, some errors may be returned.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Add a method `checkFeatureEditResults` to iterate through feature edit results, checking for the existence of any errors.
+***REMOVED******REMOVED******REMOVED******REMOVED***Extend arrays containing `FeatureEditResult`s with an `errors` property to check for the existence of any errors.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep9)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***After the table has been updated, apply edits to the database.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Use the method `checkFeatureEditResults` from the previous step to check for errors.
+***REMOVED******REMOVED******REMOVED******REMOVED***Use the `errors` property from the previous step to collect any errors.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep10)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -118,7 +118,7 @@
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a second button ("Submit") to the toolbar. 
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***When this button is pressed, set `validationErrorVisibility` to ``FeatureFormView/ValidationErrorVisibility/visible``. This will cause any fields that never received focus but are considered invalid to show errors. This button should also call `submitChanges` on the model.
+***REMOVED******REMOVED******REMOVED******REMOVED***When this button is pressed, set `validationErrorVisibility` to ``FeatureFormView/ValidationErrorVisibility/visible``. This will cause any fields that never received focus but are considered invalid to show errors. This button should also call `submitEdits` on the model.
 ***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep16)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
