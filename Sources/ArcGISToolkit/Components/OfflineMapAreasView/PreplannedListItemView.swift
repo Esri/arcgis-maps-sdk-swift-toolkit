@@ -32,6 +32,9 @@ public struct PreplannedListItemView: View {
                 statusView
             }
         }
+        .task {
+            await model.load()
+        }
     }
     
     @ViewBuilder private var thumbnailView: some View {
