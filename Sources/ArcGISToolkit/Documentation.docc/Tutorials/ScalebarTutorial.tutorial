@@ -15,23 +15,23 @@
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***To begin, set up the parent view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a map property and pass it to a `MapView` in the view's body.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ScalebarExampleView.swift", file: ScalebarStep1)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ScalebarExampleView.swift", file: ScalebarStep1.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***The Scalebar needs three pieces of information to determine scale: a spatial reference, the number of units per point, and the viewpoint. Set these values and track their changes with their respective modifiers.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ScalebarExampleView.swift", file: ScalebarStep2)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ScalebarExampleView.swift", file: ScalebarStep2.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Choose an alignment for the Scalebar, such as `bottomLeading`, and determine
 ***REMOVED******REMOVED******REMOVED******REMOVED***the maximum amount of screen width the Scalebar should consume.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ScalebarExampleView.swift", file: ScalebarStep3)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ScalebarExampleView.swift", file: ScalebarStep3.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Overlay the `Scalebar` on the `MapView`, passing in all of the previously created properties.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ScalebarExampleView.swift", file: ScalebarStep4)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "ScalebarExampleView.swift", file: ScalebarStep4.swift)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

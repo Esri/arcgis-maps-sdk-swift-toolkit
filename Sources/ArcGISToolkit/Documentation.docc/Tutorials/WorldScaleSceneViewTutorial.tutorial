@@ -17,19 +17,19 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED***The tracking mode determines the type of tracking configuration that will be used by the AR view. 
 ***REMOVED******REMOVED******REMOVED******REMOVED***The `worldTracking` mode uses the `ARWorldTrackingConfiguration` and the `geoTracking` mode uses the `ARGeoTrackingConfiguration`. The `preferGeoTracking` mode uses the `ARGeoTrackingConfiguration` if 
 ***REMOVED******REMOVED******REMOVED******REMOVED***geo tracking is available, otherwise, `ARWorldTrackingConfiguration` is used.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep1)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep1.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a `SceneView` to the `WorldScaleSceneView` closure. The closure builds and overlays 
 ***REMOVED******REMOVED******REMOVED******REMOVED***the scene view on top of the augmented reality video feed. Specify the `scene` state 
 ***REMOVED******REMOVED******REMOVED******REMOVED***variable.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep2)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep2.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Set the `scene.baseSurface.opacity` to zero to make the basemap transparent.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep3)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep3.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
@@ -39,23 +39,23 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED***in order to display a ring around the initial location. The current location is also
 ***REMOVED******REMOVED******REMOVED******REMOVED***necessary because the `WorldScaleSceneView` utilizes a location datasource that
 ***REMOVED******REMOVED******REMOVED******REMOVED***will not start until authorized.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep4)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep4.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Start the location datasource and get the initial location.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep5)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep5.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***To display a ring around the initial location, create a graphic using the 
 ***REMOVED******REMOVED******REMOVED******REMOVED***initial location and add it to the graphics overlay.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep6)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep6.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Stop the location datasource after the initial location is retrieved.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep7)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "TableTopExampleView.swift", file: WorldScaleSceneViewStep7.swift)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
