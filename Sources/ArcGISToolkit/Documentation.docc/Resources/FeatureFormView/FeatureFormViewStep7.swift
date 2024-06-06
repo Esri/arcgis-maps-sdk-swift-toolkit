@@ -116,18 +116,22 @@ class Model: ObservableObject {
         state = .idle
     }
     
-    func submitChanges() async {
+    func submitEdits() async {
         guard case let .editing(featureForm) = state else { return }
-        await validateChanges(featureForm)
+        validateChanges(featureForm)
+        
+        guard case let .validating(featureForm) = state else { return }
+        await finishEditing(featureForm)
+        
+        guard case let .finishingEdits(featureForm) = state else { return }
+        await applyEdits(featureForm)
     }
     
-    private func validateChanges(_ featureForm: FeatureForm) async {
+    private func validateChanges(_ featureForm: FeatureForm) {
         state = .validating(featureForm)
-        guard featureForm.validationErrors.isEmpty else {
+        if !featureForm.validationErrors.isEmpty {
             state = .generalError(featureForm, Text("The form has ^[\(featureForm.validationErrors.count) validation error](inflect: true)."))
-            return
         }
-        await finishEdits(featureForm)
     }
 }
 
