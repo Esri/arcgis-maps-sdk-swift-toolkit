@@ -128,6 +128,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         switch downloadResult {
         case .success:
             status = .downloaded
+            if let mobileMapPackage = try? downloadResult?.get() {
+                self.mobileMapPackage = mobileMapPackage
+            }
         case .failure(let error):
             status = .downloadFailure(error)
         case .none:
@@ -166,13 +169,13 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         
         UNUserNotificationCenter.current().add(request)
     }
-}
-
-extension PreplannedMapModel {
+    
     /// Downloads the preplanned map area.
     /// - Precondition: `canDownload`
     func downloadPreplannedMapArea() async {
         precondition(canDownload)
+       
+        status = .downloading
         
         guard let mmpkDirectory = createDownloadDirectories(),
               let parameters = await createParameters() else { return }
@@ -245,10 +248,6 @@ extension PreplannedMapModel {
         
         // Starts the job.
         job.start()
-        
-        if canDownload {
-            status = .downloading
-        }
         
         // Awaits the output of the job and assigns the result.
         result = await job.result.map { $0.mobileMapPackage }

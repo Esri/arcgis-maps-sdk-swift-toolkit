@@ -220,4 +220,99 @@ class PreplannedMapModelTests: XCTestCase {
         XCTAssertFalse(model.canDownload)
         XCTAssertTrue(model.status.needsToBeLoaded)
     }
+    
+    @MainActor
+    func testDownloadingStatus() async throws {
+        class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+            func retryLoad() async throws {}
+        }
+        
+        let mockArea = MockPreplannedMapArea()
+        let model = PreplannedMapModel(preplannedMapArea: mockArea)
+        await model.load()
+        
+        XCTAssertTrue(model.canDownload)
+        await model.downloadPreplannedMapArea()
+        model.updateDownloadStatus(for: model.result)
+        
+        guard case .downloading = model.status else {
+            XCTFail("PreplannedMapModel status is not \".downloading\".")
+            return
+        }
+        
+        XCTAssertFalse(model.canDownload)
+        XCTAssertFalse(model.status.needsToBeLoaded)
+    }
+    
+    @MainActor
+    func testDownloadFailureStatus() async throws {
+        class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+            func retryLoad() async throws {}
+        }
+        
+        class MockPreplannedMapModel: PreplannedMapModel {
+            override var result: Result<MobileMapPackage, any Error>? {
+                get { _result }
+                set { _result = newValue }
+            }
+            var _result: Result<MobileMapPackage, any Error>?
+            
+            override func downloadPreplannedMapArea() async {
+                result = .failure(MappingError.invalidResponse(details: ""))
+            }
+        }
+        
+        let mockArea = MockPreplannedMapArea()
+        let model = MockPreplannedMapModel(preplannedMapArea: mockArea)
+        await model.load()
+        
+        XCTAssertTrue(model.canDownload)
+        await model.downloadPreplannedMapArea()
+        model.updateDownloadStatus(for: model.result)
+        
+        guard case .downloadFailure = model.status else {
+            XCTFail("PreplannedMapModel status is not \".downloadFailure\".")
+            return
+        }
+        
+        // Verify that a failed download can be retried.
+        XCTAssertTrue(model.canDownload)
+        XCTAssertTrue(model.status.needsToBeLoaded)
+    }
+    
+    @MainActor
+    func testDownloadedStatus() async throws {
+        class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+            func retryLoad() async throws {}
+        }
+        
+        class MockPreplannedMapModel: PreplannedMapModel {
+            override var result: Result<MobileMapPackage, any Error>? {
+                get { _result }
+                set { _result = newValue }
+            }
+            var _result: Result<MobileMapPackage, any Error>?
+            
+            override func downloadPreplannedMapArea() async {
+                result = .success(MobileMapPackage(fileURL: .downloadsDirectory))
+            }
+        }
+        
+        let mockArea = MockPreplannedMapArea()
+        let model = MockPreplannedMapModel(preplannedMapArea: mockArea)
+        await model.load()
+        
+        XCTAssertTrue(model.canDownload)
+        await model.downloadPreplannedMapArea()
+        model.updateDownloadStatus(for: model.result)
+        
+        guard case .downloaded = model.status else {
+            XCTFail("PreplannedMapModel status is not \".downloaded\".")
+            return
+        }
+        
+        XCTAssertNotNil(model.mobileMapPackage)
+        XCTAssertFalse(model.canDownload)
+        XCTAssertFalse(model.status.needsToBeLoaded)
+    }
 }
