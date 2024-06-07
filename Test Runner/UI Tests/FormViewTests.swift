@@ -1509,6 +1509,11 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(longTextTextInputPreview.exists)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Test value backed read only elements
+***REMOVED***func testCase_7_2() {
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
 
 private extension String {
 ***REMOVED******REMOVED***/ 257 characters of Lorem ipsum text
