@@ -87,6 +87,7 @@ public struct PreplannedListItemView: View {
             } label: {
                 Image(systemName: "arrow.down.circle")
             }
+            .buttonStyle(PlainButtonStyle())
             .disabled(!model.canDownload)
         }
     }
