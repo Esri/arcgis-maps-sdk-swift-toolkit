@@ -38,7 +38,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The combined status of the preplanned map area.
 ***REMOVED***@Published private(set) var status: Status = .notLoaded
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The result of the download job. When the result is `.success` the mobile map package is returned.
 ***REMOVED******REMOVED***/ If the result is `.failure` then the error is returned. The result will be `nil` when the preplanned
 ***REMOVED******REMOVED***/ map area is still packaging or loading.
@@ -98,12 +98,10 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***private func setDownloadJob() {
 ***REMOVED******REMOVED***guard let preplannedMapAreaID else { return ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***for job in JobManager.shared.jobs {
-***REMOVED******REMOVED******REMOVED***if let preplannedJob = job as? DownloadPreplannedOfflineMapJob {
-***REMOVED******REMOVED******REMOVED******REMOVED***if preplannedJob.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.job = preplannedJob
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***status = .downloading
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***for case let preplannedJob as DownloadPreplannedOfflineMapJob in JobManager.shared.jobs {
+***REMOVED******REMOVED******REMOVED***if preplannedJob.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.job = preplannedJob
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloading
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -174,7 +172,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ - Precondition: `canDownload`
 ***REMOVED***func downloadPreplannedMapArea() async {
 ***REMOVED******REMOVED***precondition(canDownload)
-***REMOVED***   
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***status = .downloading
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let mmpkDirectory = createDownloadDirectories(),
@@ -192,7 +190,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***.appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let packageDirectory = downloadDirectory
-***REMOVED******REMOVED******REMOVED***.appending(component: "package", directoryHint: .isDirectory)
+***REMOVED******REMOVED******REMOVED***.appending(component: PreplannedMapModel.PathComponents.package.rawValue, directoryHint: .isDirectory)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***try? FileManager.default.createDirectory(atPath: downloadDirectory.relativePath, withIntermediateDirectories: true)
 ***REMOVED******REMOVED***
@@ -200,7 +198,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mmpkDirectory = packageDirectory
 ***REMOVED******REMOVED******REMOVED***.appendingPathComponent(preplannedMapAreaID)
-***REMOVED******REMOVED******REMOVED***.appendingPathExtension("mmpk")
+***REMOVED******REMOVED******REMOVED***.appendingPathExtension(PreplannedMapModel.PathComponents.mmpk.rawValue)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return mmpkDirectory
 ***REMOVED***
@@ -211,11 +209,11 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***guard let preplannedMapArea = preplannedMapArea.mapArea,
 ***REMOVED******REMOVED******REMOVED***  let offlineMapTask else { return nil ***REMOVED***
 ***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Creates the parameters for the download preplanned offline map job.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Create the parameters for the download preplanned offline map job.
 ***REMOVED******REMOVED******REMOVED***let parameters = try await offlineMapTask.makeDefaultDownloadPreplannedOfflineMapParameters(
 ***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: preplannedMapArea
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED*** Sets the update mode to no updates as the offline map is display-only.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set the update mode to no updates as the offline map is display-only.
 ***REMOVED******REMOVED******REMOVED***parameters.updateMode = .noUpdates
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return parameters
@@ -236,7 +234,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***) async {
 ***REMOVED******REMOVED***guard let offlineMapTask else { return ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Creates the download preplanned offline map job.
+***REMOVED******REMOVED******REMOVED*** Create the download preplanned offline map job.
 ***REMOVED******REMOVED***let job = offlineMapTask.makeDownloadPreplannedOfflineMapJob(
 ***REMOVED******REMOVED******REMOVED***parameters: parameters,
 ***REMOVED******REMOVED******REMOVED***downloadDirectory: mmpkDirectory
@@ -246,10 +244,10 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.job = job
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Starts the job.
+***REMOVED******REMOVED******REMOVED*** Start the job.
 ***REMOVED******REMOVED***job.start()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Awaits the output of the job and assigns the result.
+***REMOVED******REMOVED******REMOVED*** Await the output of the job and assigns the result.
 ***REMOVED******REMOVED***result = await job.result.map { $0.mobileMapPackage ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -286,6 +284,13 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***true
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension PreplannedMapModel {
+***REMOVED***enum PathComponents: String {
+***REMOVED******REMOVED***case package = "package"
+***REMOVED******REMOVED***case mmpk = "mmpk"
 ***REMOVED***
 ***REMOVED***
 
