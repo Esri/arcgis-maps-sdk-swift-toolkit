@@ -63,7 +63,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     ) {
         self.offlineMapTask = offlineMapTask
         self.preplannedMapArea = preplannedMapArea
-        self.mobileMapPackage = mobileMapPackage
         self.preplannedDirectory = preplannedDirectory
         
         if let itemID = preplannedMapArea.id {
@@ -71,6 +70,11 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
         
         setDownloadJob()
+        
+        if let mobileMapPackage {
+            self.mobileMapPackage = mobileMapPackage
+            status = .downloaded
+        }
     }
     
     /// Loads the preplanned map area and updates the status.
@@ -177,17 +181,19 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
        
         status = .downloading
         
-        guard let mmpkDirectory = createDownloadDirectories(),
+        let (downloadDirectory, mmpkDirectory) = createDownloadDirectories()
+        guard let mmpkDirectory,
+              let downloadDirectory,
               let parameters = await createParameters() else { return }
         
-        await runDownloadTask(for: parameters, in: mmpkDirectory)
+        await runDownloadTask(for: parameters, in: mmpkDirectory, downloadDirectory: downloadDirectory)
     }
     
     /// Creates download directories for the preplanned map area and its mobile map package.
     /// - Returns: The URL for the mobile map package directory.
-    private func createDownloadDirectories() -> URL? {
+    private func createDownloadDirectories() -> (URL?, URL?) {
         guard let preplannedDirectory,
-              let preplannedMapAreaID else { return nil }
+              let preplannedMapAreaID else { return (nil, nil) }
         let downloadDirectory = preplannedDirectory
             .appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
         
@@ -202,9 +208,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
             .appendingPathComponent(preplannedMapAreaID)
             .appendingPathExtension("mmpk")
         
-        writeJSONFile(to: downloadDirectory, mmpkDirectory: mmpkDirectory)
-        
-        return mmpkDirectory
+        return (downloadDirectory, mmpkDirectory)
     }
     
     /// Creates the parameters to download a preplanned offline map.
@@ -234,7 +238,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     ///   - mmpkDirectory: The directory used to place the mobile map package result.
     private func runDownloadTask(
         for parameters: DownloadPreplannedOfflineMapParameters,
-        in mmpkDirectory: URL
+        in mmpkDirectory: URL,
+        downloadDirectory: URL
     ) async {
         guard let offlineMapTask else { return }
         
@@ -253,6 +258,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         
         // Awaits the output of the job and assigns the result.
         result = await job.result.map { $0.mobileMapPackage }
+        
+        // Save metadata if download succeeds.
+        writeJSONFile(to: downloadDirectory, mmpkDirectory: mmpkDirectory)
     }
     
     /// Writes preplanned map area metadata and thumbnail image data to local files in the specified directories.

@@ -111,13 +111,12 @@ extension OfflineMapAreasView {
                 if let (offlinePreplannedMapArea, mobileMapPackage) = parseJSONFile(for: fileURL),
                    let offlinePreplannedMapArea,
                    let mobileMapPackage {
-                    if let model = PreplannedMapModel(
-                        preplannedMapArea: offlinePreplannedMapArea,
-                        mapViewModel: self,
-                        mobileMapPackage: mobileMapPackage
-                    ) {
-                        offlinePreplannedModels.append(model)
-                    }
+                    offlinePreplannedModels.append(
+                        PreplannedMapModel(
+                            preplannedMapArea: offlinePreplannedMapArea,
+                            mobileMapPackage: mobileMapPackage
+                        )
+                    )
                 }
             }
         }
@@ -191,13 +190,12 @@ extension OfflineMapAreasView {
             for preplannedMap: PreplannedMapAreaProtocol,
             mobileMapPackage: MobileMapPackage?
         ) {
-            if let model = PreplannedMapModel(
-                preplannedMapArea: preplannedMap,
-                mapViewModel: self,
-                mobileMapPackage: mobileMapPackage
-            ) {
-                offlinePreplannedModels.append(model)
-            }
+            offlinePreplannedModels.append(
+                PreplannedMapModel(
+                    preplannedMapArea: preplannedMap,
+                    mobileMapPackage: mobileMapPackage
+                )
+            )
         }
     }
 }
