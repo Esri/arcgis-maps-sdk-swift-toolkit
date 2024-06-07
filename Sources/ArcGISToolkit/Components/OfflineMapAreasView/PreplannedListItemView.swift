@@ -35,10 +35,14 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***statusView
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***await model.load()
+***REMOVED***
 ***REMOVED******REMOVED***.onReceive(model.$result) { result in
 ***REMOVED******REMOVED******REMOVED***model.updateDownloadStatus(for: result)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.job?.status) { status in
+***REMOVED******REMOVED******REMOVED***guard mapViewModel.canShowNotifications else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Send notification using job status.
 ***REMOVED******REMOVED******REMOVED***if status == .succeeded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.notifyJobCompleted(.succeeded)
@@ -78,10 +82,17 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.selectedMap = OfflineMapAreasView.MapViewModel.SelectedMap.preplannedMap(model)
+***REMOVED******REMOVED******REMOVED******REMOVED***if model.canDownload {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download preplanned map area.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadPreplannedMapArea()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.loadPreplannedMobileMapPackages()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(PlainButtonStyle())
 ***REMOVED******REMOVED******REMOVED***.disabled(!model.canDownload)
 ***REMOVED***
 ***REMOVED***
@@ -134,15 +145,16 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***mapViewModel: OfflineMapAreasView.MapViewModel(map: Map()),
 ***REMOVED******REMOVED***model: PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***preplannedMapArea: MockPreplannedMapArea(),
-***REMOVED******REMOVED******REMOVED***mapViewModel: OfflineMapAreasView.MapViewModel(map: Map())
-***REMOVED******REMOVED***)!
+***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
+***REMOVED******REMOVED******REMOVED***preplannedDirectory: URL.documentsDirectory
+***REMOVED******REMOVED***)
 ***REMOVED***)
 ***REMOVED***.padding()
 ***REMOVED***
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***var mapArea: ArcGIS.PreplannedMapArea? = nil
-***REMOVED***var id: ArcGIS.Item.ID?
+***REMOVED***var id: PortalItem.ID? = nil
 ***REMOVED***var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
 ***REMOVED***var title: String = "Mock Preplanned Map Area"
 ***REMOVED***var description: String = "This is the description text"

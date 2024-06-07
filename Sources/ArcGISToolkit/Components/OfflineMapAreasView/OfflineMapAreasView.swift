@@ -19,7 +19,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***@StateObject private var mapViewModel: MapViewModel
 ***REMOVED***
-***REMOVED***@ObservedObject var jobManager = JobManager.shared
+***REMOVED***let jobManager = JobManager.shared
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
@@ -45,8 +45,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***rotationAngle = rotationAngle + 360
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reload the preplanned map areas.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await loadMapViewModel()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await loadPreplannedMapAreas()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.clockwise")
@@ -60,19 +59,19 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await loadMapViewModel()
+***REMOVED******REMOVED******REMOVED******REMOVED***await loadPreplannedMapAreas()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") { dismiss() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let error {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.canShowNotifications = (
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await UNUserNotificationCenter.current()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***?? false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationTitle("Offline Maps")
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
@@ -126,10 +125,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func loadMapViewModel() async {
+***REMOVED******REMOVED***/ Loads the preplanned map area models and mobile map packages.
+***REMOVED***private func loadPreplannedMapAreas() async {
+***REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
 ***REMOVED******REMOVED***mapViewModel.loadPreplannedMobileMapPackages()
 ***REMOVED******REMOVED***mapViewModel.loadOfflinePreplannedMapModels()
-***REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
 ***REMOVED***
 ***REMOVED***
 
