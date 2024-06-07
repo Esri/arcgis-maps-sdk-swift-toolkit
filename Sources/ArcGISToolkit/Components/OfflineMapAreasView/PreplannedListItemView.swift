@@ -87,6 +87,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(PlainButtonStyle())
 ***REMOVED******REMOVED******REMOVED***.disabled(!model.canDownload)
 ***REMOVED***
 ***REMOVED***
