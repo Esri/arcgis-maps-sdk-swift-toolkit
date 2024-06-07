@@ -63,7 +63,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.offlineMapTask = offlineMapTask
 ***REMOVED******REMOVED***self.preplannedMapArea = preplannedMapArea
-***REMOVED******REMOVED***self.mobileMapPackage = mobileMapPackage
 ***REMOVED******REMOVED***self.preplannedDirectory = preplannedDirectory
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let itemID = preplannedMapArea.id {
@@ -71,6 +70,11 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***setDownloadJob()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if let mobileMapPackage {
+***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mobileMapPackage
+***REMOVED******REMOVED******REMOVED***status = .downloaded
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
@@ -177,17 +181,19 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***   
 ***REMOVED******REMOVED***status = .downloading
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let mmpkDirectory = createDownloadDirectories(),
+***REMOVED******REMOVED***let (downloadDirectory, mmpkDirectory) = createDownloadDirectories()
+***REMOVED******REMOVED***guard let mmpkDirectory,
+***REMOVED******REMOVED******REMOVED***  let downloadDirectory,
 ***REMOVED******REMOVED******REMOVED***  let parameters = await createParameters() else { return ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***await runDownloadTask(for: parameters, in: mmpkDirectory)
+***REMOVED******REMOVED***await runDownloadTask(for: parameters, in: mmpkDirectory, downloadDirectory: downloadDirectory)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates download directories for the preplanned map area and its mobile map package.
 ***REMOVED******REMOVED***/ - Returns: The URL for the mobile map package directory.
-***REMOVED***private func createDownloadDirectories() -> URL? {
+***REMOVED***private func createDownloadDirectories() -> (URL?, URL?) {
 ***REMOVED******REMOVED***guard let preplannedDirectory,
-***REMOVED******REMOVED******REMOVED***  let preplannedMapAreaID else { return nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED***  let preplannedMapAreaID else { return (nil, nil) ***REMOVED***
 ***REMOVED******REMOVED***let downloadDirectory = preplannedDirectory
 ***REMOVED******REMOVED******REMOVED***.appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
 ***REMOVED******REMOVED***
@@ -202,9 +208,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***.appendingPathComponent(preplannedMapAreaID)
 ***REMOVED******REMOVED******REMOVED***.appendingPathExtension("mmpk")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***writeJSONFile(to: downloadDirectory, mmpkDirectory: mmpkDirectory)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return mmpkDirectory
+***REMOVED******REMOVED***return (downloadDirectory, mmpkDirectory)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates the parameters to download a preplanned offline map.
@@ -234,7 +238,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/   - mmpkDirectory: The directory used to place the mobile map package result.
 ***REMOVED***private func runDownloadTask(
 ***REMOVED******REMOVED***for parameters: DownloadPreplannedOfflineMapParameters,
-***REMOVED******REMOVED***in mmpkDirectory: URL
+***REMOVED******REMOVED***in mmpkDirectory: URL,
+***REMOVED******REMOVED***downloadDirectory: URL
 ***REMOVED***) async {
 ***REMOVED******REMOVED***guard let offlineMapTask else { return ***REMOVED***
 ***REMOVED******REMOVED***
@@ -253,6 +258,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Awaits the output of the job and assigns the result.
 ***REMOVED******REMOVED***result = await job.result.map { $0.mobileMapPackage ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Save metadata if download succeeds.
+***REMOVED******REMOVED***writeJSONFile(to: downloadDirectory, mmpkDirectory: mmpkDirectory)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Writes preplanned map area metadata and thumbnail image data to local files in the specified directories.

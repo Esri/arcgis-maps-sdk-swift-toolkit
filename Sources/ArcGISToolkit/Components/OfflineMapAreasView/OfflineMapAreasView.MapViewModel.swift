@@ -111,13 +111,12 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let (offlinePreplannedMapArea, mobileMapPackage) = parseJSONFile(for: fileURL),
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let offlinePreplannedMapArea,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let mobileMapPackage {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let model = PreplannedMapModel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: offlinePreplannedMapArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel: self,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mobileMapPackage: mobileMapPackage
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedModels.append(model)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedModels.append(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: offlinePreplannedMapArea,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mobileMapPackage: mobileMapPackage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -191,13 +190,12 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***for preplannedMap: PreplannedMapAreaProtocol,
 ***REMOVED******REMOVED******REMOVED***mobileMapPackage: MobileMapPackage?
 ***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***if let model = PreplannedMapModel(
-***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: preplannedMap,
-***REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel: self,
-***REMOVED******REMOVED******REMOVED******REMOVED***mobileMapPackage: mobileMapPackage
-***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedModels.append(model)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***offlinePreplannedModels.append(
+***REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: preplannedMap,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mobileMapPackage: mobileMapPackage
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
