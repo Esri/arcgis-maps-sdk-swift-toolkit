@@ -261,30 +261,50 @@ extension InputFooter {
     /// - Note: This is intended to be used in instances where the character minimum and maximum are
     /// identical, such as an ID field.
     func makeExactLengthMessage(_ lengthRange: ClosedRange<Int>) -> Text {
-        Text(
-            "Enter \(lengthRange.lowerBound) characters",
-            bundle: .toolkitModule,
-            comment: "Text indicating the user should enter a field's exact number of required characters."
-        )
+        if element.hasValueExpression {
+            Text(
+                "Value must be ^[\(lengthRange.lowerBound) characters](inflect: true)",
+                bundle: .toolkitModule,
+                comment: "Text indicating a field's computed value must be an exact number of characters."
+            )
+        } else {
+            Text(
+                "Enter ^[\(lengthRange.lowerBound) characters](inflect: true)",
+                bundle: .toolkitModule,
+                comment: "Text indicating the user should enter a field's exact number of characters."
+            )
+        }
     }
     
     /// Text indicating a field's value must be within the allowed length range.
     func makeLengthRangeMessage(_ lengthRange: ClosedRange<Int>) -> Text {
-        Text(
-            "Enter \(lengthRange.lowerBound) to \(lengthRange.upperBound) characters",
-            bundle: .toolkitModule,
-            comment: """
-                     Text indicating a field's value must be within the
-                     allowed length range. The first and second parameter
-                     hold the minimum and maximum length respectively.
-                     """
-        )
+        if element.hasValueExpression {
+            Text(
+                "Value must be \(lengthRange.lowerBound) to ^[\(lengthRange.upperBound) characters](inflect: true)",
+                bundle: .toolkitModule,
+                comment: """
+                         Text indicating a field's computed value must be within the
+                         allowed length range. The first and second parameter
+                         hold the minimum and maximum length respectively.
+                         """
+            )
+        } else {
+            Text(
+                "Enter \(lengthRange.lowerBound) to ^[\(lengthRange.upperBound) characters](inflect: true)",
+                bundle: .toolkitModule,
+                comment: """
+                         Text indicating a field's value must be within the
+                         allowed length range. The first and second parameter
+                         hold the minimum and maximum length respectively.
+                         """
+            )
+        }
     }
     
     /// Text indicating a field's maximum number of allowed characters.
     func makeMaximumLengthMessage(_ lengthRange: ClosedRange<Int>) -> Text {
         Text(
-            "Maximum \(lengthRange.upperBound) characters",
+            "Maximum ^[\(lengthRange.upperBound) characters](inflect: true)",
             bundle: .toolkitModule,
             comment: "Text indicating a field's maximum number of allowed characters."
         )
