@@ -312,14 +312,25 @@ extension InputFooter {
     
     /// Text indicating a field's value must be within the allowed numeric range.
     func makeNumericRangeMessage(_ numericRange: (min: String, max: String)) -> Text {
-        Text(
-            "Enter value from \(numericRange.min) to \(numericRange.max)",
-            bundle: .toolkitModule,
-            comment: """
-                     Text indicating a field's value must be within the allowed range.
-                     The first and second parameter hold the minimum and maximum values respectively.
-                     """
-        )
+        if element.hasValueExpression {
+            Text(
+                "Value must be from \(numericRange.min) to \(numericRange.max)",
+                bundle: .toolkitModule,
+                comment: """
+                         Text indicating a field's computed value must be within the allowed range.
+                         The first and second parameter hold the minimum and maximum values respectively.
+                         """
+            )
+        } else {
+            Text(
+                "Enter value from \(numericRange.min) to \(numericRange.max)",
+                bundle: .toolkitModule,
+                comment: """
+                         Text indicating a field's value must be within the allowed range.
+                         The first and second parameter hold the minimum and maximum values respectively.
+                         """
+            )
+        }
     }
 }
 
