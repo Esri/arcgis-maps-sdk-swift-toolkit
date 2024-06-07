@@ -17,12 +17,12 @@ import ArcGIS
 @testable import ArcGISToolkit
 
 private extension PreplannedMapAreaProtocol {
-    var mapArea: ArcGIS.PreplannedMapArea? { nil }
-    var id: ArcGIS.Item.ID? { nil }
+    var mapArea: PreplannedMapArea? { nil }
+    var id: PortalItem.ID? { nil }
     var packagingStatus: PreplannedMapArea.PackagingStatus? { nil }
     var title: String { "Mock Preplanned Map Area" }
     var description: String { "This is the description text" }
-    var thumbnail: ArcGIS.LoadableImage? { nil }
+    var thumbnail: LoadableImage? { nil }
 }
 
 class PreplannedMapModelTests: XCTestCase {

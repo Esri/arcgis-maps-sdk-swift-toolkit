@@ -16,7 +16,7 @@ import ArcGIS
 import Combine
 import Foundation
 
-public extension OfflineMapAreasView {
+extension OfflineMapAreasView {
     /// The model class for the offline map areas view.
     @MainActor
     class MapViewModel: ObservableObject {
@@ -33,7 +33,7 @@ public extension OfflineMapAreasView {
         let preplannedDirectory: URL
         
         /// The mobile map packages created from mmpk files in the documents directory.
-        @Published private(set) var mobileMapPackages = [MobileMapPackage]()
+        @Published private(set) var mobileMapPackages: [MobileMapPackage] = []
         
         /// The preplanned offline map information.
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
@@ -42,7 +42,7 @@ public extension OfflineMapAreasView {
         @Published private(set) var hasPreplannedMapAreas = false
         
         /// A Boolean value indicating whether the user has authorized notifications to be shown.
-        @Published var canShowNotifications: Bool = false
+        var canShowNotifications = false
         
         /// The job manager.
         let jobManager = JobManager.shared

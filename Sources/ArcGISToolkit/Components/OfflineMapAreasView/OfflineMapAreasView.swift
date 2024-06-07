@@ -19,7 +19,7 @@ public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: MapViewModel
     
-    @ObservedObject var jobManager = JobManager.shared
+    let jobManager = JobManager.shared
     
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
