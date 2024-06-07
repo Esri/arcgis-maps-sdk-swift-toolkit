@@ -38,7 +38,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// The combined status of the preplanned map area.
     @Published private(set) var status: Status = .notLoaded
-
+    
     /// The result of the download job. When the result is `.success` the mobile map package is returned.
     /// If the result is `.failure` then the error is returned. The result will be `nil` when the preplanned
     /// map area is still packaging or loading.
@@ -98,12 +98,10 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     private func setDownloadJob() {
         guard let preplannedMapAreaID else { return }
         
-        for job in JobManager.shared.jobs {
-            if let preplannedJob = job as? DownloadPreplannedOfflineMapJob {
-                if preplannedJob.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID {
-                    self.job = preplannedJob
-                    status = .downloading
-                }
+        for case let preplannedJob as DownloadPreplannedOfflineMapJob in JobManager.shared.jobs {
+            if preplannedJob.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID {
+                self.job = preplannedJob
+                status = .downloading
             }
         }
     }
@@ -174,7 +172,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// - Precondition: `canDownload`
     func downloadPreplannedMapArea() async {
         precondition(canDownload)
-       
+        
         status = .downloading
         
         guard let mmpkDirectory = createDownloadDirectories(),
@@ -192,7 +190,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
             .appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
         
         let packageDirectory = downloadDirectory
-            .appending(component: "package", directoryHint: .isDirectory)
+            .appending(component: PreplannedMapModel.PathComponents.package.rawValue, directoryHint: .isDirectory)
         
         try? FileManager.default.createDirectory(atPath: downloadDirectory.relativePath, withIntermediateDirectories: true)
         
@@ -200,7 +198,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         
         let mmpkDirectory = packageDirectory
             .appendingPathComponent(preplannedMapAreaID)
-            .appendingPathExtension("mmpk")
+            .appendingPathExtension(PreplannedMapModel.PathComponents.mmpk.rawValue)
         
         return mmpkDirectory
     }
@@ -211,11 +209,11 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         guard let preplannedMapArea = preplannedMapArea.mapArea,
               let offlineMapTask else { return nil }
         do {
-            // Creates the parameters for the download preplanned offline map job.
+            // Create the parameters for the download preplanned offline map job.
             let parameters = try await offlineMapTask.makeDefaultDownloadPreplannedOfflineMapParameters(
                 preplannedMapArea: preplannedMapArea
             )
-            // Sets the update mode to no updates as the offline map is display-only.
+            // Set the update mode to no updates as the offline map is display-only.
             parameters.updateMode = .noUpdates
             
             return parameters
@@ -236,7 +234,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     ) async {
         guard let offlineMapTask else { return }
         
-        // Creates the download preplanned offline map job.
+        // Create the download preplanned offline map job.
         let job = offlineMapTask.makeDownloadPreplannedOfflineMapJob(
             parameters: parameters,
             downloadDirectory: mmpkDirectory
@@ -246,10 +244,10 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         
         self.job = job
         
-        // Starts the job.
+        // Start the job.
         job.start()
         
-        // Awaits the output of the job and assigns the result.
+        // Await the output of the job and assigns the result.
         result = await job.result.map { $0.mobileMapPackage }
     }
 }
@@ -286,6 +284,13 @@ extension PreplannedMapModel {
                 true
             }
         }
+    }
+}
+
+private extension PreplannedMapModel {
+    enum PathComponents: String {
+        case package = "package"
+        case mmpk = "mmpk"
     }
 }
 
