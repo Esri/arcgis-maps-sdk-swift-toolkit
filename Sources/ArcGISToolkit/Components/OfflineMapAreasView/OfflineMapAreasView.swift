@@ -19,7 +19,7 @@ public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: MapViewModel
     
-    @ObservedObject var jobManager = JobManager.shared
+    let jobManager = JobManager.shared
     
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
@@ -45,8 +45,7 @@ public struct OfflineMapAreasView: View {
                             rotationAngle = rotationAngle + 360
                         }
                         Task {
-                            // Reload the preplanned map areas.
-                            await loadMapViewModel()
+                            await loadPreplannedMapAreas()
                         }
                     } label: {
                         Image(systemName: "arrow.clockwise")
@@ -60,19 +59,19 @@ public struct OfflineMapAreasView: View {
                 .textCase(nil)
             }
             .task {
-                await loadMapViewModel()
+                await loadPreplannedMapAreas()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
                 }
             }
-            .onAppear {
-                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, error in
-                    if let error {
-                        print(error.localizedDescription)
-                    }
-                }
+            .task {
+                mapViewModel.canShowNotifications = (
+                    try? await UNUserNotificationCenter.current()
+                        .requestAuthorization(options: [.alert, .sound])
+                )
+                ?? false
             }
             .navigationTitle("Offline Maps")
             .navigationBarTitleDisplayMode(.inline)
@@ -126,10 +125,11 @@ public struct OfflineMapAreasView: View {
         .frame(maxWidth: .infinity)
     }
     
-    private func loadMapViewModel() async {
+    /// Loads the preplanned map area models and mobile map packages.
+    private func loadPreplannedMapAreas() async {
+        await mapViewModel.makePreplannedOfflineMapModels()
         mapViewModel.loadPreplannedMobileMapPackages()
         mapViewModel.loadOfflinePreplannedMapModels()
-        await mapViewModel.makePreplannedOfflineMapModels()
     }
 }
 

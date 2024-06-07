@@ -35,10 +35,14 @@ public struct PreplannedListItemView: View {
                 statusView
             }
         }
+        .task {
+            await model.load()
+        }
         .onReceive(model.$result) { result in
             model.updateDownloadStatus(for: result)
         }
         .onChange(of: model.job?.status) { status in
+            guard mapViewModel.canShowNotifications else { return }
             // Send notification using job status.
             if status == .succeeded {
                 model.notifyJobCompleted(.succeeded)
@@ -78,10 +82,17 @@ public struct PreplannedListItemView: View {
             }
         default:
             Button {
-                mapViewModel.selectedMap = OfflineMapAreasView.MapViewModel.SelectedMap.preplannedMap(model)
+                if model.canDownload {
+                    Task {
+                        // Download preplanned map area.
+                        await model.downloadPreplannedMapArea()
+                        mapViewModel.loadPreplannedMobileMapPackages()
+                    }
+                }
             } label: {
                 Image(systemName: "arrow.down.circle")
             }
+            .buttonStyle(PlainButtonStyle())
             .disabled(!model.canDownload)
         }
     }
@@ -134,15 +145,16 @@ public struct PreplannedListItemView: View {
         mapViewModel: OfflineMapAreasView.MapViewModel(map: Map()),
         model: PreplannedMapModel(
             preplannedMapArea: MockPreplannedMapArea(),
-            mapViewModel: OfflineMapAreasView.MapViewModel(map: Map())
-        )!
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            preplannedDirectory: URL.documentsDirectory
+        )
     )
     .padding()
 }
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
     var mapArea: ArcGIS.PreplannedMapArea? = nil
-    var id: ArcGIS.Item.ID?
+    var id: PortalItem.ID? = nil
     var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
     var title: String = "Mock Preplanned Map Area"
     var description: String = "This is the description text"
