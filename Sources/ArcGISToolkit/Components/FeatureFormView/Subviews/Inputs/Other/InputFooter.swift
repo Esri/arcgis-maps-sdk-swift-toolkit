@@ -261,30 +261,50 @@ extension InputFooter {
 ***REMOVED******REMOVED***/ - Note: This is intended to be used in instances where the character minimum and maximum are
 ***REMOVED******REMOVED***/ identical, such as an ID field.
 ***REMOVED***func makeExactLengthMessage(_ lengthRange: ClosedRange<Int>) -> Text {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange.lowerBound) characters",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "Text indicating the user should enter a field's exact number of required characters."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***if element.hasValueExpression {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Value must be ^[\(lengthRange.lowerBound) characters](inflect: true)",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's computed value must be an exact number of characters."
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Enter ^[\(lengthRange.lowerBound) characters](inflect: true)",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: "Text indicating the user should enter a field's exact number of characters."
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Text indicating a field's value must be within the allowed length range.
 ***REMOVED***func makeLengthRangeMessage(_ lengthRange: ClosedRange<Int>) -> Text {
-***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Enter \(lengthRange.lowerBound) to \(lengthRange.upperBound) characters",
-***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text indicating a field's value must be within the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** allowed length range. The first and second parameter
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** hold the minimum and maximum length respectively.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***if element.hasValueExpression {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Value must be \(lengthRange.lowerBound) to ^[\(lengthRange.upperBound) characters](inflect: true)",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text indicating a field's computed value must be within the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** allowed length range. The first and second parameter
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** hold the minimum and maximum length respectively.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Enter \(lengthRange.lowerBound) to ^[\(lengthRange.upperBound) characters](inflect: true)",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED******REMOVED***comment: """
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Text indicating a field's value must be within the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** allowed length range. The first and second parameter
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** hold the minimum and maximum length respectively.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** """
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Text indicating a field's maximum number of allowed characters.
 ***REMOVED***func makeMaximumLengthMessage(_ lengthRange: ClosedRange<Int>) -> Text {
 ***REMOVED******REMOVED***Text(
-***REMOVED******REMOVED******REMOVED***"Maximum \(lengthRange.upperBound) characters",
+***REMOVED******REMOVED******REMOVED***"Maximum ^[\(lengthRange.upperBound) characters](inflect: true)",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "Text indicating a field's maximum number of allowed characters."
 ***REMOVED******REMOVED***)
