@@ -19,7 +19,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***@StateObject private var mapViewModel: MapViewModel
 ***REMOVED***
-***REMOVED***@ObservedObject var jobManager = JobManager.shared
+***REMOVED***let jobManager = JobManager.shared
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction

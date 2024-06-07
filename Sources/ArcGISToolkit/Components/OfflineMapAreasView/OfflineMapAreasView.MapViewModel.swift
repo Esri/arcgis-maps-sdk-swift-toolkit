@@ -16,7 +16,7 @@
 import Combine
 import Foundation
 
-public extension OfflineMapAreasView {
+extension OfflineMapAreasView {
 ***REMOVED******REMOVED***/ The model class for the offline map areas view.
 ***REMOVED***@MainActor
 ***REMOVED***class MapViewModel: ObservableObject {
@@ -33,7 +33,7 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***let preplannedDirectory: URL
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The mobile map packages created from mmpk files in the documents directory.
-***REMOVED******REMOVED***@Published private(set) var mobileMapPackages = [MobileMapPackage]()
+***REMOVED******REMOVED***@Published private(set) var mobileMapPackages: [MobileMapPackage] = []
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The preplanned offline map information.
 ***REMOVED******REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
@@ -42,7 +42,7 @@ public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***@Published private(set) var hasPreplannedMapAreas = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the user has authorized notifications to be shown.
-***REMOVED******REMOVED***@Published var canShowNotifications: Bool = false
+***REMOVED******REMOVED***var canShowNotifications = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The job manager.
 ***REMOVED******REMOVED***let jobManager = JobManager.shared
