@@ -128,6 +128,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***switch downloadResult {
 ***REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED***status = .downloaded
+***REMOVED******REMOVED******REMOVED***if let mobileMapPackage = try? downloadResult?.get() {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mobileMapPackage
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
 ***REMOVED******REMOVED***case .none:
@@ -167,12 +170,12 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***UNUserNotificationCenter.current().add(request)
 ***REMOVED***
 ***REMOVED***
-
-extension PreplannedMapModel {
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.
 ***REMOVED******REMOVED***/ - Precondition: `canDownload`
 ***REMOVED***func downloadPreplannedMapArea() async {
 ***REMOVED******REMOVED***precondition(canDownload)
+***REMOVED***   
+***REMOVED******REMOVED***status = .downloading
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let mmpkDirectory = createDownloadDirectories(),
 ***REMOVED******REMOVED******REMOVED***  let parameters = await createParameters() else { return ***REMOVED***
@@ -245,10 +248,6 @@ extension PreplannedMapModel {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Starts the job.
 ***REMOVED******REMOVED***job.start()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if canDownload {
-***REMOVED******REMOVED******REMOVED***status = .downloading
-***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Awaits the output of the job and assigns the result.
 ***REMOVED******REMOVED***result = await job.result.map { $0.mobileMapPackage ***REMOVED***

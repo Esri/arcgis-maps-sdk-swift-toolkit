@@ -221,3 +221,98 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(model.status.needsToBeLoaded)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***func testDownloadingStatus() async throws {
+***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
+***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***await model.load()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(model.canDownload)
+***REMOVED******REMOVED***await model.downloadPreplannedMapArea()
+***REMOVED******REMOVED***model.updateDownloadStatus(for: model.result)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard case .downloading = model.status else {
+***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".downloading\".")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
+***REMOVED******REMOVED***XCTAssertFalse(model.status.needsToBeLoaded)
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***func testDownloadFailureStatus() async throws {
+***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***class MockPreplannedMapModel: PreplannedMapModel {
+***REMOVED******REMOVED******REMOVED***override var result: Result<MobileMapPackage, any Error>? {
+***REMOVED******REMOVED******REMOVED******REMOVED***get { _result ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***set { _result = newValue ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***var _result: Result<MobileMapPackage, any Error>?
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***override func downloadPreplannedMapArea() async {
+***REMOVED******REMOVED******REMOVED******REMOVED***result = .failure(MappingError.invalidResponse(details: ""))
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
+***REMOVED******REMOVED***let model = MockPreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***await model.load()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(model.canDownload)
+***REMOVED******REMOVED***await model.downloadPreplannedMapArea()
+***REMOVED******REMOVED***model.updateDownloadStatus(for: model.result)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard case .downloadFailure = model.status else {
+***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".downloadFailure\".")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify that a failed download can be retried.
+***REMOVED******REMOVED***XCTAssertTrue(model.canDownload)
+***REMOVED******REMOVED***XCTAssertTrue(model.status.needsToBeLoaded)
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***func testDownloadedStatus() async throws {
+***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***class MockPreplannedMapModel: PreplannedMapModel {
+***REMOVED******REMOVED******REMOVED***override var result: Result<MobileMapPackage, any Error>? {
+***REMOVED******REMOVED******REMOVED******REMOVED***get { _result ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***set { _result = newValue ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***var _result: Result<MobileMapPackage, any Error>?
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***override func downloadPreplannedMapArea() async {
+***REMOVED******REMOVED******REMOVED******REMOVED***result = .success(MobileMapPackage(fileURL: .downloadsDirectory))
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
+***REMOVED******REMOVED***let model = MockPreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***await model.load()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(model.canDownload)
+***REMOVED******REMOVED***await model.downloadPreplannedMapArea()
+***REMOVED******REMOVED***model.updateDownloadStatus(for: model.result)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard case .downloaded = model.status else {
+***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".downloaded\".")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertNotNil(model.mobileMapPackage)
+***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
+***REMOVED******REMOVED***XCTAssertFalse(model.status.needsToBeLoaded)
+***REMOVED***
+***REMOVED***
