@@ -207,7 +207,7 @@ extension InputFooter {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value which indicates whether or not an error is showing in the footer.
 ***REMOVED***var isShowingError: Bool {
-***REMOVED******REMOVED***element.isEditable || element.hasValueExpression
+***REMOVED******REMOVED***(element.isEditable || element.hasValueExpression)
 ***REMOVED******REMOVED***&& primaryError != nil
 ***REMOVED******REMOVED***&& (model.previouslyFocusedElements.contains(element) || validationErrorVisibility == .visible || element.hasValueExpression)
 ***REMOVED***
