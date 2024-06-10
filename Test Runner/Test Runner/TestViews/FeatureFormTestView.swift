@@ -150,17 +150,19 @@ private extension FeatureFormTestView {
 ***REMOVED******REMOVED***.init("testCase_5_3", objectID: 1, portalID: .switchMapID),
 ***REMOVED******REMOVED***.init("testCase_6_1", objectID: 1, portalID: .groupElementMapID),
 ***REMOVED******REMOVED***.init("testCase_6_2", objectID: 2, portalID: .groupElementMapID),
-***REMOVED******REMOVED***.init("testCase_7_1", objectID: 2, portalID: .readOnlyMapID)
+***REMOVED******REMOVED***.init("testCase_7_1", objectID: 2, portalID: .readOnlyMapID),
+***REMOVED******REMOVED***.init("testCase_9_1", objectID: 1, portalID: .testCase9)
 ***REMOVED***]***REMOVED***
 ***REMOVED***
 
 private extension String {
 ***REMOVED***static let comboBoxMapID = "ed930cf0eb724ea49c6bccd8fd3dd9af"
 ***REMOVED***static let dateMapID = "ec09090060664cbda8d814e017337837"
+***REMOVED***static let groupElementMapID = "97495f67bd2e442dbbac485232375b07"
 ***REMOVED***static let inputValidationMapID = "5d69e2301ad14ec8a73b568dfc29450a"
 ***REMOVED***static let radioButtonMapID = "476e9b4180234961809485c8eff83d5d"
 ***REMOVED***static let rangeDomainMapID = "bb4c5e81740e4e7296943988c78a7ea6"
 ***REMOVED***static let readOnlyMapID = "1d6cd4607edf4a50ac10b5165926b597"
 ***REMOVED***static let switchMapID = "ff98f13b32b349adb55da5528d9174dc"
-***REMOVED***static let groupElementMapID = "97495f67bd2e442dbbac485232375b07"
+***REMOVED***static let testCase9 = "5f71b243b37e43a5ace3190241db0ac9"
 ***REMOVED***
