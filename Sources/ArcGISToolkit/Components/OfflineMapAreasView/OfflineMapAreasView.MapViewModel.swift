@@ -21,19 +21,13 @@ extension OfflineMapAreasView {
     @MainActor
     class MapViewModel: ObservableObject {
         /// The portal item ID of the web map.
-        private var portalItemID: String?
-        
-        /// The offline map of the downloaded preplanned map area.
-        private var offlineMap: Map?
+        private let portalItemID: String?
         
         /// The offline map task.
         private let offlineMapTask: OfflineMapTask
         
         /// The url for the preplanned map areas directory.
         private var preplannedDirectory: URL?
-        
-        /// The mobile map packages created from mmpk files in the documents directory.
-        @Published private(set) var mobileMapPackages: [MobileMapPackage] = []
         
         /// The preplanned offline map information.
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
@@ -42,10 +36,7 @@ extension OfflineMapAreasView {
         @Published private(set) var hasPreplannedMapAreas = false
         
         /// A Boolean value indicating whether the user has authorized notifications to be shown.
-        var canShowNotifications = false
-        
-        /// The job manager.
-        let jobManager = JobManager.shared
+        @Published var canShowNotifications: Bool = false
         
         init(map: Map) {
             offlineMapTask = OfflineMapTask(onlineMap: map)
@@ -81,7 +72,9 @@ extension OfflineMapAreasView {
         /// Sets locally stored mobile map packages for the map's preplanned map area models.
         func setPreplannedMobileMapPackages() {
             if let models = try? preplannedMapModels?.get() {
-                models.forEach { $0.setMobileMapPackageFromDownloads() }
+                for model in models {
+                    model.setMobileMapPackageFromDownloads()
+                }
             }
         }
     }
@@ -120,7 +113,7 @@ private extension FileManager {
     }
     
     /// The path to the offline map areas directory. The offline map areas directory is located in the documents directory.
-    private var offlineMapAreasDirectory: URL {
+    var offlineMapAreasDirectory: URL {
         documentsDirectory.appending(
             path: OfflineMapAreasView.MapViewModel.FolderNames.offlineMapAreas.rawValue,
             directoryHint: .isDirectory
@@ -128,7 +121,7 @@ private extension FileManager {
     }
     
     /// The path to the web map directory for a specific portal item.
-    private func webMapDirectory(forItemID itemID: String) -> URL {
+    func webMapDirectory(forItemID itemID: String) -> URL {
         offlineMapAreasDirectory.appending(path: itemID, directoryHint: .isDirectory)
     }
     

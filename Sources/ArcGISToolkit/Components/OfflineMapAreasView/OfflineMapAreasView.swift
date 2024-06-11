@@ -19,8 +19,6 @@ public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: MapViewModel
     
-    let jobManager = JobManager.shared
-    
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     
@@ -31,7 +29,7 @@ public struct OfflineMapAreasView: View {
         _mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
         
         // Ask the job manager to schedule background status checks for every 30 seconds.
-        jobManager.preferredBackgroundStatusCheckSchedule = .regularInterval(interval: 30)
+        JobManager.shared.preferredBackgroundStatusCheckSchedule = .regularInterval(interval: 30)
     }
     
     public var body: some View {
@@ -85,7 +83,8 @@ public struct OfflineMapAreasView: View {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(
                         mapViewModel: mapViewModel,
-                        model: preplannedMapModel
+                        model: preplannedMapModel,
+                        canShowNotifications: mapViewModel.canShowNotifications
                     )
                 }
             } else {
