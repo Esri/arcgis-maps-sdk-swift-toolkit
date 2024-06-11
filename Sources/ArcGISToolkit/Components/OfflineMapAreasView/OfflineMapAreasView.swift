@@ -119,7 +119,7 @@ public struct OfflineMapAreasView: View {
     /// Loads the preplanned map area models and mobile map packages.
     private func loadPreplannedMapAreas() async {
         await mapViewModel.makePreplannedOfflineMapModels()
-        mapViewModel.loadPreplannedMobileMapPackages()
+        mapViewModel.setPreplannedMobileMapPackages()
     }
 }
 
