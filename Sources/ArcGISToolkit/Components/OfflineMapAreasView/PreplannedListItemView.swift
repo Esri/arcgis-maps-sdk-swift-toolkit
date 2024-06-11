@@ -16,9 +16,6 @@ import SwiftUI
 import ArcGIS
 
 public struct PreplannedListItemView: View {
-    /// The view model for the map view.
-    @ObservedObject var mapViewModel: OfflineMapAreasView.MapViewModel
-    
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
@@ -84,7 +81,7 @@ public struct PreplannedListItemView: View {
                     Task {
                         // Download preplanned map area.
                         await model.downloadPreplannedMapArea()
-                        mapViewModel.setPreplannedMobileMapPackages()
+                        model.setMobileMapPackageFromDownloads()
                     }
                 }
             } label: {
@@ -140,7 +137,6 @@ public struct PreplannedListItemView: View {
 
 #Preview {
     PreplannedListItemView(
-        mapViewModel: OfflineMapAreasView.MapViewModel(map: Map()),
         model: PreplannedMapModel(
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             mapArea: MockPreplannedMapArea(),
