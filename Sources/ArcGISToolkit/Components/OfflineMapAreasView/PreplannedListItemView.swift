@@ -89,6 +89,7 @@ public struct PreplannedListItemView: View {
             }
             .buttonStyle(.plain)
             .disabled(!model.canDownload)
+            .foregroundColor(.accentColor)
         }
     }
     
