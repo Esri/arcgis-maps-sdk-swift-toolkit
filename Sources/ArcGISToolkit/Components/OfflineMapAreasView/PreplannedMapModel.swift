@@ -136,13 +136,28 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
-    /// Sets the mobile map pacakge if downloaded locally.
+    /// Sets the mobile map package once downloaded.
+    /// - Parameter mobileMapPackage: The mobile map package.
     func setMobileMapPackage(_ mobileMapPackage: MobileMapPackage) {
         // Set the mobile map package if already downloaded or the download job succeeded.
         if job == nil || job?.status == .succeeded {
             // Set the mobile map package if it downloaded.
             self.mobileMapPackage = mobileMapPackage
             status = .downloaded
+        }
+    }
+    
+    /// Sets the mobile map package if downloaded locally.
+    func setMobileMapPackageFromDownloads() {
+        let mobileMapPackages = OfflineMapAreasView.urls(
+            in: preplannedDirectory,
+            withPathExtension: "mmpk"
+        ).map(MobileMapPackage.init(fileURL:))
+        
+        if let mobileMapPackage = mobileMapPackages.first(where: {
+            $0.fileURL.deletingPathExtension().lastPathComponent == preplannedMapArea.id?.rawValue
+        }) {
+            setMobileMapPackage(mobileMapPackage)
         }
     }
     
