@@ -80,26 +80,14 @@ extension OfflineMapAreasView {
         
         /// Sets locally stored mobile map packages for the map's preplanned map area models.
         func setPreplannedMobileMapPackages() {
-            guard let preplannedDirectory else { return }
-            // Create mobile map packages with saved mmpk files.
-            self.mobileMapPackages = OfflineMapAreasView.MapViewModel.urls(in: preplannedDirectory, withPathExtension: "mmpk")
-                .map(MobileMapPackage.init(fileURL:))
-            
-            // Set mobile map package for preplanned map models.
             if let models = try? preplannedMapModels?.get() {
-                models.forEach { model in
-                    if let mobileMapPackage = mobileMapPackages.first(where: {
-                        $0.fileURL.deletingPathExtension().lastPathComponent == model.preplannedMapArea.id?.rawValue
-                    }) {
-                        model.setMobileMapPackage(mobileMapPackage)
-                    }
-                }
+                models.forEach { $0.setMobileMapPackageFromDownloads() }
             }
         }
     }
 }
 
-private extension OfflineMapAreasView.MapViewModel {
+public extension OfflineMapAreasView {
     /// Recursively searches for files with a specified file extension in a given directory and its subdirectories.
     /// - Parameters:
     ///   - directory: The directory to search.
@@ -115,7 +103,9 @@ private extension OfflineMapAreasView.MapViewModel {
             .compactMap { $0 as? URL }
             .filter { $0.pathExtension == pathExtension }
     }
-    
+}
+
+private extension OfflineMapAreasView.MapViewModel {
     /// The names of the folders used to save offline map areas.
     enum FolderNames: String {
         case preplanned = "Preplanned"
