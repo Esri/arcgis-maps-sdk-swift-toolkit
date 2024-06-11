@@ -22,6 +22,9 @@ public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
+    /// A Boolean value indicating whether the user has authorized notifications to be shown.
+    @State var canShowNotifications: Bool = false
+    
     public var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
@@ -42,7 +45,7 @@ public struct PreplannedListItemView: View {
             model.updateDownloadStatus(for: result)
         }
         .onChange(of: model.job?.status) { status in
-            guard mapViewModel.canShowNotifications else { return }
+            guard canShowNotifications else { return }
             // Send notification using job status.
             if status == .succeeded {
                 model.notifyJobCompleted(.succeeded)
@@ -87,7 +90,7 @@ public struct PreplannedListItemView: View {
             } label: {
                 Image(systemName: "arrow.down.circle")
             }
-            .buttonStyle(PlainButtonStyle())
+            .buttonStyle(.plain)
             .disabled(!model.canDownload)
         }
     }
@@ -148,7 +151,7 @@ public struct PreplannedListItemView: View {
 }
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-    var id: PortalItem.ID? = nil
+    var id: PortalItem.ID? = PortalItem.ID("012345")
     var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
     var title: String = "Mock Preplanned Map Area"
     var description: String = "This is the description text"
