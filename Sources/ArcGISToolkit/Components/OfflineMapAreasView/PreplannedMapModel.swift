@@ -136,13 +136,28 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the mobile map pacakge if downloaded locally.
+***REMOVED******REMOVED***/ Sets the mobile map package once downloaded.
+***REMOVED******REMOVED***/ - Parameter mobileMapPackage: The mobile map package.
 ***REMOVED***func setMobileMapPackage(_ mobileMapPackage: MobileMapPackage) {
 ***REMOVED******REMOVED******REMOVED*** Set the mobile map package if already downloaded or the download job succeeded.
 ***REMOVED******REMOVED***if job == nil || job?.status == .succeeded {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set the mobile map package if it downloaded.
 ***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mobileMapPackage
 ***REMOVED******REMOVED******REMOVED***status = .downloaded
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the mobile map package if downloaded locally.
+***REMOVED***func setMobileMapPackageFromDownloads() {
+***REMOVED******REMOVED***let mobileMapPackages = OfflineMapAreasView.urls(
+***REMOVED******REMOVED******REMOVED***in: preplannedDirectory,
+***REMOVED******REMOVED******REMOVED***withPathExtension: "mmpk"
+***REMOVED******REMOVED***).map(MobileMapPackage.init(fileURL:))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if let mobileMapPackage = mobileMapPackages.first(where: {
+***REMOVED******REMOVED******REMOVED***$0.fileURL.deletingPathExtension().lastPathComponent == preplannedMapArea.id?.rawValue
+***REMOVED***) {
+***REMOVED******REMOVED******REMOVED***setMobileMapPackage(mobileMapPackage)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

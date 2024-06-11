@@ -80,26 +80,14 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Sets locally stored mobile map packages for the map's preplanned map area models.
 ***REMOVED******REMOVED***func setPreplannedMobileMapPackages() {
-***REMOVED******REMOVED******REMOVED***guard let preplannedDirectory else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Create mobile map packages with saved mmpk files.
-***REMOVED******REMOVED******REMOVED***self.mobileMapPackages = OfflineMapAreasView.MapViewModel.urls(in: preplannedDirectory, withPathExtension: "mmpk")
-***REMOVED******REMOVED******REMOVED******REMOVED***.map(MobileMapPackage.init(fileURL:))
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Set mobile map package for preplanned map models.
 ***REMOVED******REMOVED******REMOVED***if let models = try? preplannedMapModels?.get() {
-***REMOVED******REMOVED******REMOVED******REMOVED***models.forEach { model in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let mobileMapPackage = mobileMapPackages.first(where: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.fileURL.deletingPathExtension().lastPathComponent == model.preplannedMapArea.id?.rawValue
-***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.setMobileMapPackage(mobileMapPackage)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***models.forEach { $0.setMobileMapPackageFromDownloads() ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-private extension OfflineMapAreasView.MapViewModel {
+public extension OfflineMapAreasView {
 ***REMOVED******REMOVED***/ Recursively searches for files with a specified file extension in a given directory and its subdirectories.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - directory: The directory to search.
@@ -116,6 +104,8 @@ private extension OfflineMapAreasView.MapViewModel {
 ***REMOVED******REMOVED******REMOVED***.filter { $0.pathExtension == pathExtension ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+private extension OfflineMapAreasView.MapViewModel {
 ***REMOVED******REMOVED***/ The names of the folders used to save offline map areas.
 ***REMOVED***enum FolderNames: String {
 ***REMOVED******REMOVED***case preplanned = "Preplanned"
