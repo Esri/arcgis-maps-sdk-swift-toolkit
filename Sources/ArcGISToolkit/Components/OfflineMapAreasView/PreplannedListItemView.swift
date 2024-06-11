@@ -22,6 +22,9 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the user has authorized notifications to be shown.
+***REMOVED***@State var canShowNotifications: Bool = false
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
 ***REMOVED******REMOVED******REMOVED***thumbnailView
@@ -42,7 +45,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***model.updateDownloadStatus(for: result)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.job?.status) { status in
-***REMOVED******REMOVED******REMOVED***guard mapViewModel.canShowNotifications else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard canShowNotifications else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Send notification using job status.
 ***REMOVED******REMOVED******REMOVED***if status == .succeeded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***model.notifyJobCompleted(.succeeded)
@@ -87,7 +90,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(PlainButtonStyle())
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.disabled(!model.canDownload)
 ***REMOVED***
 ***REMOVED***
@@ -148,7 +151,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED***
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED***var id: PortalItem.ID? = nil
+***REMOVED***var id: PortalItem.ID? = PortalItem.ID("012345")
 ***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
 ***REMOVED***var title: String = "Mock Preplanned Map Area"
 ***REMOVED***var description: String = "This is the description text"

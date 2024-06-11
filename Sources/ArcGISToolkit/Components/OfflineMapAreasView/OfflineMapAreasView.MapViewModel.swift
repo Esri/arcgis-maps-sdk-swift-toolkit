@@ -21,19 +21,13 @@ extension OfflineMapAreasView {
 ***REMOVED***@MainActor
 ***REMOVED***class MapViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***/ The portal item ID of the web map.
-***REMOVED******REMOVED***private var portalItemID: String?
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The offline map of the downloaded preplanned map area.
-***REMOVED******REMOVED***private var offlineMap: Map?
+***REMOVED******REMOVED***private let portalItemID: String?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The offline map task.
 ***REMOVED******REMOVED***private let offlineMapTask: OfflineMapTask
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The url for the preplanned map areas directory.
 ***REMOVED******REMOVED***private var preplannedDirectory: URL?
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The mobile map packages created from mmpk files in the documents directory.
-***REMOVED******REMOVED***@Published private(set) var mobileMapPackages: [MobileMapPackage] = []
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The preplanned offline map information.
 ***REMOVED******REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
@@ -42,10 +36,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED***@Published private(set) var hasPreplannedMapAreas = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the user has authorized notifications to be shown.
-***REMOVED******REMOVED***var canShowNotifications = false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The job manager.
-***REMOVED******REMOVED***let jobManager = JobManager.shared
+***REMOVED******REMOVED***@Published var canShowNotifications: Bool = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(map: Map) {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask = OfflineMapTask(onlineMap: map)
@@ -81,7 +72,9 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ Sets locally stored mobile map packages for the map's preplanned map area models.
 ***REMOVED******REMOVED***func setPreplannedMobileMapPackages() {
 ***REMOVED******REMOVED******REMOVED***if let models = try? preplannedMapModels?.get() {
-***REMOVED******REMOVED******REMOVED******REMOVED***models.forEach { $0.setMobileMapPackageFromDownloads() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***for model in models {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.setMobileMapPackageFromDownloads()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -120,7 +113,7 @@ private extension FileManager {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the offline map areas directory. The offline map areas directory is located in the documents directory.
-***REMOVED***private var offlineMapAreasDirectory: URL {
+***REMOVED***var offlineMapAreasDirectory: URL {
 ***REMOVED******REMOVED***documentsDirectory.appending(
 ***REMOVED******REMOVED******REMOVED***path: OfflineMapAreasView.MapViewModel.FolderNames.offlineMapAreas.rawValue,
 ***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
@@ -128,7 +121,7 @@ private extension FileManager {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the web map directory for a specific portal item.
-***REMOVED***private func webMapDirectory(forItemID itemID: String) -> URL {
+***REMOVED***func webMapDirectory(forItemID itemID: String) -> URL {
 ***REMOVED******REMOVED***offlineMapAreasDirectory.appending(path: itemID, directoryHint: .isDirectory)
 ***REMOVED***
 ***REMOVED***
