@@ -89,6 +89,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.disabled(!model.canDownload)
+***REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
