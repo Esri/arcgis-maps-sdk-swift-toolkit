@@ -18,11 +18,13 @@ import XCTest
 
 private extension PreplannedMapAreaProtocol {
 ***REMOVED***var mapArea: PreplannedMapArea? { nil ***REMOVED***
-***REMOVED***var id: PortalItem.ID? { nil ***REMOVED***
+***REMOVED***var id: PortalItem.ID? { PortalItem.ID("012345") ***REMOVED***
 ***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? { nil ***REMOVED***
 ***REMOVED***var title: String { "Mock Preplanned Map Area" ***REMOVED***
 ***REMOVED***var description: String { "This is the description text" ***REMOVED***
 ***REMOVED***var thumbnail: LoadableImage? { nil ***REMOVED***
+***REMOVED***
+***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { nil ***REMOVED***
 ***REMOVED***
 
 class PreplannedMapModelTests: XCTestCase {
@@ -35,7 +37,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, directory: .documentsDirectory)!
 ***REMOVED******REMOVED***XCTAssertIdentical(model.preplannedMapArea as? MockPreplannedMapArea, mockArea)
 ***REMOVED***
 ***REMOVED***
@@ -46,7 +48,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, directory: .documentsDirectory)!
 ***REMOVED******REMOVED***guard case .notLoaded = model.status else {
 ***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel initial status is not \".notLoaded\".")
 ***REMOVED******REMOVED******REMOVED***return
@@ -67,7 +69,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, directory: .documentsDirectory)!
 ***REMOVED******REMOVED***Task { await model.load() ***REMOVED***
 ***REMOVED******REMOVED***try await Task.sleep(nanoseconds: PreplannedMapModelTests.sleepNanoseconds)
 ***REMOVED******REMOVED***guard case .loading = model.status else {
@@ -86,7 +88,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, directory: .documentsDirectory)!
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Packaging status is `nil` for compatibility with legacy webmaps
 ***REMOVED******REMOVED******REMOVED*** when they have packaged areas but have incomplete metadata.
@@ -114,7 +116,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, directory: .documentsDirectory)!
 ***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard case .loadFailure = model.status else {
@@ -137,7 +139,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, directory: .documentsDirectory)!
 ***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard case .packaging = model.status else {
@@ -160,7 +162,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, directory: .documentsDirectory)!
 ***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard case .packaged = model.status else {
@@ -184,7 +186,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, directory: .documentsDirectory)!
 ***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard case .packageFailure = model.status else {
@@ -209,7 +211,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, directory: .documentsDirectory)!
 ***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard case .packageFailure = model.status else {
@@ -228,7 +230,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, directory: .documentsDirectory)!
 ***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(model.canDownload)
@@ -263,7 +265,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = MockPreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = MockPreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, directory: .documentsDirectory)!
 ***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(model.canDownload)
@@ -299,7 +301,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = MockPreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = MockPreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, directory: .documentsDirectory)!
 ***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(model.canDownload)

@@ -81,7 +81,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download preplanned map area.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadPreplannedMapArea()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.loadPreplannedMobileMapPackages()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.setPreplannedMobileMapPackages()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
@@ -139,21 +139,21 @@ public struct PreplannedListItemView: View {
 ***REMOVED***PreplannedListItemView(
 ***REMOVED******REMOVED***mapViewModel: OfflineMapAreasView.MapViewModel(map: Map()),
 ***REMOVED******REMOVED***model: PreplannedMapModel(
-***REMOVED******REMOVED******REMOVED***preplannedMapArea: MockPreplannedMapArea(),
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
-***REMOVED******REMOVED******REMOVED***preplannedDirectory: URL.documentsDirectory
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
+***REMOVED******REMOVED******REMOVED***directory: URL.documentsDirectory
+***REMOVED******REMOVED***)!
 ***REMOVED***)
 ***REMOVED***.padding()
 ***REMOVED***
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED***var mapArea: ArcGIS.PreplannedMapArea? = nil
 ***REMOVED***var id: PortalItem.ID? = nil
-***REMOVED***var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
+***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
 ***REMOVED***var title: String = "Mock Preplanned Map Area"
 ***REMOVED***var description: String = "This is the description text"
-***REMOVED***var thumbnail: ArcGIS.LoadableImage? = nil
+***REMOVED***var thumbnail: LoadableImage? = nil
 ***REMOVED***
 ***REMOVED***func retryLoad() async throws { ***REMOVED***
+***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { nil ***REMOVED***
 ***REMOVED***

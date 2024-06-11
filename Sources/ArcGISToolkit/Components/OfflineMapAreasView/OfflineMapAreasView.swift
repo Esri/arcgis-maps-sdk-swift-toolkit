@@ -119,7 +119,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ Loads the preplanned map area models and mobile map packages.
 ***REMOVED***private func loadPreplannedMapAreas() async {
 ***REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
-***REMOVED******REMOVED***mapViewModel.loadPreplannedMobileMapPackages()
+***REMOVED******REMOVED***mapViewModel.setPreplannedMobileMapPackages()
 ***REMOVED***
 ***REMOVED***
 
