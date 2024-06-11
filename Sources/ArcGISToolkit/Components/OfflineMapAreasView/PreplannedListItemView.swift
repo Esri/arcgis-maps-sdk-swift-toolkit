@@ -16,9 +16,6 @@
 ***REMOVED***
 
 public struct PreplannedListItemView: View {
-***REMOVED******REMOVED***/ The view model for the map view.
-***REMOVED***@ObservedObject var mapViewModel: OfflineMapAreasView.MapViewModel
-***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
@@ -84,7 +81,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download preplanned map area.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadPreplannedMapArea()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.setPreplannedMobileMapPackages()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.setMobileMapPackageFromDownloads()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
@@ -140,7 +137,6 @@ public struct PreplannedListItemView: View {
 
 #Preview {
 ***REMOVED***PreplannedListItemView(
-***REMOVED******REMOVED***mapViewModel: OfflineMapAreasView.MapViewModel(map: Map()),
 ***REMOVED******REMOVED***model: PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
 ***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),

@@ -98,8 +98,11 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***private func setDownloadJob() {
 ***REMOVED******REMOVED***for case let preplannedJob as DownloadPreplannedOfflineMapJob in JobManager.shared.jobs {
 ***REMOVED******REMOVED******REMOVED***if preplannedJob.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.job = preplannedJob
+***REMOVED******REMOVED******REMOVED******REMOVED***job = preplannedJob
 ***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloading
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***result = await preplannedJob.result.map { $0.mobileMapPackage ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
