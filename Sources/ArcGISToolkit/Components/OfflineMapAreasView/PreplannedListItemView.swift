@@ -81,7 +81,7 @@ public struct PreplannedListItemView: View {
                     Task {
                         // Download preplanned map area.
                         await model.downloadPreplannedMapArea()
-                        mapViewModel.loadPreplannedMobileMapPackages()
+                        mapViewModel.setPreplannedMobileMapPackages()
                     }
                 }
             } label: {
@@ -139,21 +139,21 @@ public struct PreplannedListItemView: View {
     PreplannedListItemView(
         mapViewModel: OfflineMapAreasView.MapViewModel(map: Map()),
         model: PreplannedMapModel(
-            preplannedMapArea: MockPreplannedMapArea(),
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
-            preplannedDirectory: URL.documentsDirectory
-        )
+            mapArea: MockPreplannedMapArea(),
+            directory: URL.documentsDirectory
+        )!
     )
     .padding()
 }
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-    var mapArea: ArcGIS.PreplannedMapArea? = nil
     var id: PortalItem.ID? = nil
-    var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
+    var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
     var title: String = "Mock Preplanned Map Area"
     var description: String = "This is the description text"
-    var thumbnail: ArcGIS.LoadableImage? = nil
+    var thumbnail: LoadableImage? = nil
     
     func retryLoad() async throws { }
+    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { nil }
 }
