@@ -20,7 +20,7 @@ public struct PreplannedListItemView: View {
     @ObservedObject var model: PreplannedMapModel
     
     /// A Boolean value indicating whether the user has authorized notifications to be shown.
-    @State var canShowNotifications: Bool = false
+    private(set) var canShowNotifications: Bool = false
     
     public var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -42,13 +42,11 @@ public struct PreplannedListItemView: View {
             model.updateDownloadStatus(for: result)
         }
         .onChange(of: model.job?.status) { status in
-            guard canShowNotifications else { return }
-            // Send notification using job status.
-            if status == .succeeded {
-                model.notifyJobCompleted(.succeeded)
-            } else if status == .failed {
-                model.notifyJobCompleted(.failed)
-            }
+            guard canShowNotifications,
+                  let job = model.job else { return }
+            
+            // Send notification using job.
+            model.notifyJobCompleted(job)
         }
     }
     

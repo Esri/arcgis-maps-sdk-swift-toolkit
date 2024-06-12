@@ -101,7 +101,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
                 job = preplannedJob
                 status = .downloading
                 Task {
-                    result = await preplannedJob.result.map { $0.mobileMapPackage }
+                    result = await job?.result.map { $0.mobileMapPackage }
                 }
             }
         }
@@ -164,21 +164,23 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
-    /// Posts a local notification that the job completed.
-    func notifyJobCompleted(_ jobStatus: Job.Status) {
+    /// Posts a local notification that the job completed with success or failure.
+    /// - Parameter job: The download preplanned offline map job.
+    func notifyJobCompleted(_ job: DownloadPreplannedOfflineMapJob) {
+        guard let preplannedMapArea = job.parameters.preplannedMapArea,
+              let id = preplannedMapArea.id,
+              job.status == .succeeded || job.status == .failed else { return }
+        
         let content = UNMutableNotificationContent()
         content.sound = UNNotificationSound.default
         
-        if jobStatus == .succeeded {
-            content.title = "Download Succeeded"
-            content.body = "The job for City Hall Area has completed successfully."
-        } else if jobStatus == .failed {
-            content.title = "Download Failed"
-            content.body = "The job for City Hall Area failed."
-        }
+        let jobStatus = job.status == .succeeded ? "Succeeded" : "Failed"
+        
+        content.title = "Download \(jobStatus)"
+        content.body = "The job for \(preplannedMapArea.title) has \(jobStatus.lowercased())."
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        let identifier = "My Local Notification"
+        let identifier = id.rawValue
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
         UNUserNotificationCenter.current().add(request)
