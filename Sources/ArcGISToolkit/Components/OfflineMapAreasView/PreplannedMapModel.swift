@@ -165,11 +165,11 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     /// Posts a local notification that the job completed with success or failure.
-    /// - Parameter job: The download preplanned offline map job.
-    func notifyJobCompleted(_ job: DownloadPreplannedOfflineMapJob) {
-        guard let preplannedMapArea = job.parameters.preplannedMapArea,
-              let id = preplannedMapArea.id,
-              job.status == .succeeded || job.status == .failed else { return }
+    func notifyJobCompleted() {
+        guard let job,
+              job.status == .succeeded || job.status == .failed,
+              let preplannedMapArea = job.parameters.preplannedMapArea,
+              let id = preplannedMapArea.id else { return }
         
         let content = UNMutableNotificationContent()
         content.sound = UNNotificationSound.default

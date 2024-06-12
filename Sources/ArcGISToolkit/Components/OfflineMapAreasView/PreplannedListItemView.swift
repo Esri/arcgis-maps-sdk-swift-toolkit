@@ -42,11 +42,8 @@ public struct PreplannedListItemView: View {
             model.updateDownloadStatus(for: result)
         }
         .onChange(of: model.job?.status) { status in
-            guard canShowNotifications,
-                  let job = model.job else { return }
-            
-            // Send notification using job.
-            model.notifyJobCompleted(job)
+            guard canShowNotifications else { return }
+            model.notifyJobCompleted()
         }
     }
     
