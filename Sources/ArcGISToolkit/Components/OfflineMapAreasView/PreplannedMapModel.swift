@@ -101,7 +101,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***job = preplannedJob
 ***REMOVED******REMOVED******REMOVED******REMOVED***status = .downloading
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***result = await preplannedJob.result.map { $0.mobileMapPackage ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***result = await job?.result.map { $0.mobileMapPackage ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -164,21 +164,23 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Posts a local notification that the job completed.
-***REMOVED***func notifyJobCompleted(_ jobStatus: Job.Status) {
+***REMOVED******REMOVED***/ Posts a local notification that the job completed with success or failure.
+***REMOVED******REMOVED***/ - Parameter job: The download preplanned offline map job.
+***REMOVED***func notifyJobCompleted(_ job: DownloadPreplannedOfflineMapJob) {
+***REMOVED******REMOVED***guard let preplannedMapArea = job.parameters.preplannedMapArea,
+***REMOVED******REMOVED******REMOVED***  let id = preplannedMapArea.id,
+***REMOVED******REMOVED******REMOVED***  job.status == .succeeded || job.status == .failed else { return ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let content = UNMutableNotificationContent()
 ***REMOVED******REMOVED***content.sound = UNNotificationSound.default
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if jobStatus == .succeeded {
-***REMOVED******REMOVED******REMOVED***content.title = "Download Succeeded"
-***REMOVED******REMOVED******REMOVED***content.body = "The job for City Hall Area has completed successfully."
-***REMOVED*** else if jobStatus == .failed {
-***REMOVED******REMOVED******REMOVED***content.title = "Download Failed"
-***REMOVED******REMOVED******REMOVED***content.body = "The job for City Hall Area failed."
-***REMOVED***
+***REMOVED******REMOVED***let jobStatus = job.status == .succeeded ? "Succeeded" : "Failed"
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***content.title = "Download \(jobStatus)"
+***REMOVED******REMOVED***content.body = "The job for \(preplannedMapArea.title) has \(jobStatus.lowercased())."
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-***REMOVED******REMOVED***let identifier = "My Local Notification"
+***REMOVED******REMOVED***let identifier = id.rawValue
 ***REMOVED******REMOVED***let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***UNUserNotificationCenter.current().add(request)

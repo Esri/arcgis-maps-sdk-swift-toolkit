@@ -20,7 +20,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the user has authorized notifications to be shown.
-***REMOVED***@State var canShowNotifications: Bool = false
+***REMOVED***private(set) var canShowNotifications: Bool = false
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
@@ -42,13 +42,11 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***model.updateDownloadStatus(for: result)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.job?.status) { status in
-***REMOVED******REMOVED******REMOVED***guard canShowNotifications else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Send notification using job status.
-***REMOVED******REMOVED******REMOVED***if status == .succeeded {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.notifyJobCompleted(.succeeded)
-***REMOVED******REMOVED*** else if status == .failed {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.notifyJobCompleted(.failed)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***guard canShowNotifications,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let job = model.job else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Send notification using job.
+***REMOVED******REMOVED******REMOVED***model.notifyJobCompleted(job)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
