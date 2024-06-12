@@ -42,11 +42,8 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***model.updateDownloadStatus(for: result)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.job?.status) { status in
-***REMOVED******REMOVED******REMOVED***guard canShowNotifications,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let job = model.job else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Send notification using job.
-***REMOVED******REMOVED******REMOVED***model.notifyJobCompleted(job)
+***REMOVED******REMOVED******REMOVED***guard canShowNotifications else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***model.notifyJobCompleted()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

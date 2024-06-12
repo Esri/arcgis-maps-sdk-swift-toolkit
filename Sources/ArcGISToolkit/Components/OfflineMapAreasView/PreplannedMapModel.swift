@@ -165,11 +165,11 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Posts a local notification that the job completed with success or failure.
-***REMOVED******REMOVED***/ - Parameter job: The download preplanned offline map job.
-***REMOVED***func notifyJobCompleted(_ job: DownloadPreplannedOfflineMapJob) {
-***REMOVED******REMOVED***guard let preplannedMapArea = job.parameters.preplannedMapArea,
-***REMOVED******REMOVED******REMOVED***  let id = preplannedMapArea.id,
-***REMOVED******REMOVED******REMOVED***  job.status == .succeeded || job.status == .failed else { return ***REMOVED***
+***REMOVED***func notifyJobCompleted() {
+***REMOVED******REMOVED***guard let job,
+***REMOVED******REMOVED******REMOVED***  job.status == .succeeded || job.status == .failed,
+***REMOVED******REMOVED******REMOVED***  let preplannedMapArea = job.parameters.preplannedMapArea,
+***REMOVED******REMOVED******REMOVED***  let id = preplannedMapArea.id else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let content = UNMutableNotificationContent()
 ***REMOVED******REMOVED***content.sound = UNNotificationSound.default
