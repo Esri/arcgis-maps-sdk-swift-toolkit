@@ -76,7 +76,6 @@ public struct PreplannedListItemView: View {
                     Task {
                         // Download preplanned map area.
                         await model.downloadPreplannedMapArea()
-                        model.setMobileMapPackageFromDownloads()
                     }
                 }
             } label: {
