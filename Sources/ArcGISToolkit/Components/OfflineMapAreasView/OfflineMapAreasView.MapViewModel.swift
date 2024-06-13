@@ -36,7 +36,7 @@ extension OfflineMapAreasView {
         @Published private(set) var hasPreplannedMapAreas = false
         
         /// A Boolean value indicating whether the user has authorized notifications to be shown.
-        @Published var canShowNotifications: Bool = false
+        var canShowNotifications = false
         
         init(map: Map) {
             offlineMapTask = OfflineMapTask(onlineMap: map)
@@ -64,14 +64,9 @@ extension OfflineMapAreasView {
                         )
                     }
             }
-            if let models = try? preplannedMapModels?.get() {
+            if let models = try? preplannedMapModels!.get() {
                 hasPreplannedMapAreas = !models.isEmpty
-            }
-        }
-        
-        /// Sets locally stored mobile map packages for the map's preplanned map area models.
-        func setPreplannedMobileMapPackages() {
-            if let models = try? preplannedMapModels?.get() {
+                
                 for model in models {
                     model.setMobileMapPackageFromDownloads()
                 }
@@ -80,29 +75,11 @@ extension OfflineMapAreasView {
     }
 }
 
-public extension OfflineMapAreasView {
-    /// Recursively searches for files with a specified file extension in a given directory and its subdirectories.
-    /// - Parameters:
-    ///   - directory: The directory to search.
-    ///   - pathExtension: The path extension to search for.
-    /// - Returns: An array of file paths.
-    static func urls(in directory: URL, withPathExtension pathExtension: String) -> [URL] {
-        guard let enumerator = FileManager.default.enumerator(
-            at: directory,
-            includingPropertiesForKeys: [.isDirectoryKey]
-        ) else { return [] }
-        
-        return enumerator
-            .compactMap { $0 as? URL }
-            .filter { $0.pathExtension == pathExtension }
-    }
-}
-
 private extension OfflineMapAreasView.MapViewModel {
     /// The names of the folders used to save offline map areas.
-    enum FolderNames: String {
-        case preplanned = "Preplanned"
-        case offlineMapAreas = "OfflineMapAreas"
+    enum FolderNames {
+        static var preplanned: String { "Preplanned" }
+        static var offlineMapAreas: String { "OfflineMapAreas" }
     }
 }
 
@@ -115,7 +92,7 @@ private extension FileManager {
     /// The path to the offline map areas directory. The offline map areas directory is located in the documents directory.
     var offlineMapAreasDirectory: URL {
         documentsDirectory.appending(
-            path: OfflineMapAreasView.MapViewModel.FolderNames.offlineMapAreas.rawValue,
+            path: OfflineMapAreasView.MapViewModel.FolderNames.offlineMapAreas,
             directoryHint: .isDirectory
         )
     }
@@ -128,7 +105,7 @@ private extension FileManager {
     /// The path to the preplanned map areas directory for a specific portal item.
     func preplannedDirectory(forItemID itemID: String) -> URL {
         webMapDirectory(forItemID: itemID).appending(
-            path: OfflineMapAreasView.MapViewModel.FolderNames.preplanned.rawValue,
+            path: OfflineMapAreasView.MapViewModel.FolderNames.preplanned,
             directoryHint: .isDirectory
         )
     }

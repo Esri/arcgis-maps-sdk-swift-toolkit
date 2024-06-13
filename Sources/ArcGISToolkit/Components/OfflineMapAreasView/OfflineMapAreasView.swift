@@ -43,7 +43,7 @@ public struct OfflineMapAreasView: View {
                             rotationAngle = rotationAngle + 360
                         }
                         Task {
-                            await loadPreplannedMapAreas()
+                            await mapViewModel.makePreplannedOfflineMapModels()
                         }
                     } label: {
                         Image(systemName: "arrow.clockwise")
@@ -57,7 +57,7 @@ public struct OfflineMapAreasView: View {
                 .textCase(nil)
             }
             .task {
-                await loadPreplannedMapAreas()
+                await mapViewModel.makePreplannedOfflineMapModels()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -112,12 +112,6 @@ public struct OfflineMapAreasView: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
-    }
-    
-    /// Loads the preplanned map area models and mobile map packages.
-    private func loadPreplannedMapAreas() async {
-        await mapViewModel.makePreplannedOfflineMapModels()
-        mapViewModel.setPreplannedMobileMapPackages()
     }
 }
 
