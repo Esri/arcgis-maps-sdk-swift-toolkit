@@ -20,7 +20,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the user has authorized notifications to be shown.
-***REMOVED***private(set) var canShowNotifications: Bool = false
+***REMOVED***var canShowNotifications = false
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {

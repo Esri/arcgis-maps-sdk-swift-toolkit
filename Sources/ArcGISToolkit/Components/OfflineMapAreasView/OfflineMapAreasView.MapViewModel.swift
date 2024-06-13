@@ -36,7 +36,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED***@Published private(set) var hasPreplannedMapAreas = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the user has authorized notifications to be shown.
-***REMOVED******REMOVED***@Published var canShowNotifications: Bool = false
+***REMOVED******REMOVED***var canShowNotifications = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(map: Map) {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask = OfflineMapTask(onlineMap: map)
@@ -64,14 +64,9 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let models = try? preplannedMapModels?.get() {
+***REMOVED******REMOVED******REMOVED***if let models = try? preplannedMapModels!.get() {
 ***REMOVED******REMOVED******REMOVED******REMOVED***hasPreplannedMapAreas = !models.isEmpty
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Sets locally stored mobile map packages for the map's preplanned map area models.
-***REMOVED******REMOVED***func setPreplannedMobileMapPackages() {
-***REMOVED******REMOVED******REMOVED***if let models = try? preplannedMapModels?.get() {
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***for model in models {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.setMobileMapPackageFromDownloads()
 ***REMOVED******REMOVED******REMOVED***
@@ -80,29 +75,11 @@ extension OfflineMapAreasView {
 ***REMOVED***
 ***REMOVED***
 
-public extension OfflineMapAreasView {
-***REMOVED******REMOVED***/ Recursively searches for files with a specified file extension in a given directory and its subdirectories.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - directory: The directory to search.
-***REMOVED******REMOVED***/   - pathExtension: The path extension to search for.
-***REMOVED******REMOVED***/ - Returns: An array of file paths.
-***REMOVED***static func urls(in directory: URL, withPathExtension pathExtension: String) -> [URL] {
-***REMOVED******REMOVED***guard let enumerator = FileManager.default.enumerator(
-***REMOVED******REMOVED******REMOVED***at: directory,
-***REMOVED******REMOVED******REMOVED***includingPropertiesForKeys: [.isDirectoryKey]
-***REMOVED******REMOVED***) else { return [] ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return enumerator
-***REMOVED******REMOVED******REMOVED***.compactMap { $0 as? URL ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.filter { $0.pathExtension == pathExtension ***REMOVED***
-***REMOVED***
-***REMOVED***
-
 private extension OfflineMapAreasView.MapViewModel {
 ***REMOVED******REMOVED***/ The names of the folders used to save offline map areas.
-***REMOVED***enum FolderNames: String {
-***REMOVED******REMOVED***case preplanned = "Preplanned"
-***REMOVED******REMOVED***case offlineMapAreas = "OfflineMapAreas"
+***REMOVED***enum FolderNames {
+***REMOVED******REMOVED***static var preplanned: String { "Preplanned" ***REMOVED***
+***REMOVED******REMOVED***static var offlineMapAreas: String { "OfflineMapAreas" ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -115,7 +92,7 @@ private extension FileManager {
 ***REMOVED******REMOVED***/ The path to the offline map areas directory. The offline map areas directory is located in the documents directory.
 ***REMOVED***var offlineMapAreasDirectory: URL {
 ***REMOVED******REMOVED***documentsDirectory.appending(
-***REMOVED******REMOVED******REMOVED***path: OfflineMapAreasView.MapViewModel.FolderNames.offlineMapAreas.rawValue,
+***REMOVED******REMOVED******REMOVED***path: OfflineMapAreasView.MapViewModel.FolderNames.offlineMapAreas,
 ***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -128,7 +105,7 @@ private extension FileManager {
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
 ***REMOVED***func preplannedDirectory(forItemID itemID: String) -> URL {
 ***REMOVED******REMOVED***webMapDirectory(forItemID: itemID).appending(
-***REMOVED******REMOVED******REMOVED***path: OfflineMapAreasView.MapViewModel.FolderNames.preplanned.rawValue,
+***REMOVED******REMOVED******REMOVED***path: OfflineMapAreasView.MapViewModel.FolderNames.preplanned,
 ***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
 ***REMOVED******REMOVED***)
 ***REMOVED***

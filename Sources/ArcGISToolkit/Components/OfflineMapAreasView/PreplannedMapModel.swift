@@ -28,7 +28,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***private let preplannedDirectory: URL
 ***REMOVED***
 ***REMOVED******REMOVED***/ The ID of the preplanned map area.
-***REMOVED***private let  preplannedMapAreaID: String
+***REMOVED***private let preplannedMapAreaID: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The mobile map package for the preplanned map area.
 ***REMOVED***private(set) var mobileMapPackage: MobileMapPackage?
@@ -125,11 +125,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ Updates the status based on the download result of the mobile map package.
 ***REMOVED***func updateDownloadStatus(for downloadResult: Optional<Result<MobileMapPackage, any Error>>) {
 ***REMOVED******REMOVED***switch downloadResult {
-***REMOVED******REMOVED***case .success:
+***REMOVED******REMOVED***case .success(let mobileMapPackage):
 ***REMOVED******REMOVED******REMOVED***status = .downloaded
-***REMOVED******REMOVED******REMOVED***if let mobileMapPackage = try? downloadResult?.get() {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mobileMapPackage
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mobileMapPackage
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
 ***REMOVED******REMOVED***case .none:
@@ -152,15 +150,16 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the mobile map package if downloaded locally.
 ***REMOVED***func setMobileMapPackageFromDownloads() {
-***REMOVED******REMOVED***let mobileMapPackages = OfflineMapAreasView.urls(
-***REMOVED******REMOVED******REMOVED***in: preplannedDirectory,
-***REMOVED******REMOVED******REMOVED***withPathExtension: "mmpk"
-***REMOVED******REMOVED***).map(MobileMapPackage.init(fileURL:))
+***REMOVED******REMOVED******REMOVED*** Construct file URL for mobile map package with file structure:
+***REMOVED******REMOVED******REMOVED*** .../OfflineMapAreas/Preplanned/{id***REMOVED***/package/{id***REMOVED***.mmpk
+***REMOVED******REMOVED***let fileURL = preplannedDirectory
+***REMOVED******REMOVED******REMOVED***.appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
+***REMOVED******REMOVED******REMOVED***.appending(component: PreplannedMapModel.PathComponents.package, directoryHint: .isDirectory)
+***REMOVED******REMOVED******REMOVED***.appendingPathComponent(preplannedMapAreaID)
+***REMOVED******REMOVED******REMOVED***.appendingPathExtension(PreplannedMapModel.PathComponents.mmpk)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if let mobileMapPackage = mobileMapPackages.first(where: {
-***REMOVED******REMOVED******REMOVED***$0.fileURL.deletingPathExtension().lastPathComponent == preplannedMapArea.id?.rawValue
-***REMOVED***) {
-***REMOVED******REMOVED******REMOVED***setMobileMapPackage(mobileMapPackage)
+***REMOVED******REMOVED***if FileManager.default.fileExists(atPath: fileURL.relativePath) {
+***REMOVED******REMOVED******REMOVED***setMobileMapPackage(MobileMapPackage.init(fileURL: fileURL))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -207,25 +206,21 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ Creates download directories for the preplanned map area and its mobile map package.
 ***REMOVED******REMOVED***/ - Returns: The URL for the mobile map package directory.
 ***REMOVED***private func createDownloadDirectories() throws -> URL {
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***let downloadDirectory = preplannedDirectory
-***REMOVED******REMOVED******REMOVED******REMOVED***.appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let packageDirectory = downloadDirectory
-***REMOVED******REMOVED******REMOVED******REMOVED***.appending(component: PreplannedMapModel.PathComponents.package.rawValue, directoryHint: .isDirectory)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(atPath: downloadDirectory.relativePath, withIntermediateDirectories: true)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(atPath: packageDirectory.relativePath, withIntermediateDirectories: true)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let mmpkDirectory = packageDirectory
-***REMOVED******REMOVED******REMOVED******REMOVED***.appendingPathComponent(preplannedMapAreaID)
-***REMOVED******REMOVED******REMOVED******REMOVED***.appendingPathExtension(PreplannedMapModel.PathComponents.mmpk.rawValue)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return mmpkDirectory
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***throw error
-***REMOVED***
+***REMOVED******REMOVED***let downloadDirectory = preplannedDirectory
+***REMOVED******REMOVED******REMOVED***.appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let packageDirectory = downloadDirectory
+***REMOVED******REMOVED******REMOVED***.appending(component: PreplannedMapModel.PathComponents.package, directoryHint: .isDirectory)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***try FileManager.default.createDirectory(atPath: downloadDirectory.relativePath, withIntermediateDirectories: true)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***try FileManager.default.createDirectory(atPath: packageDirectory.relativePath, withIntermediateDirectories: true)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let mmpkDirectory = packageDirectory
+***REMOVED******REMOVED******REMOVED***.appendingPathComponent(preplannedMapAreaID)
+***REMOVED******REMOVED******REMOVED***.appendingPathExtension(PreplannedMapModel.PathComponents.mmpk)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return mmpkDirectory
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Runs the download task to download the preplanned offline map.
@@ -290,9 +285,9 @@ extension PreplannedMapModel {
 ***REMOVED***
 
 private extension PreplannedMapModel {
-***REMOVED***enum PathComponents: String {
-***REMOVED******REMOVED***case package = "package"
-***REMOVED******REMOVED***case mmpk = "mmpk"
+***REMOVED***enum PathComponents {
+***REMOVED******REMOVED***static var package: String { "package" ***REMOVED***
+***REMOVED******REMOVED***static var mmpk: String { "mmpk" ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -321,18 +316,14 @@ protocol PreplannedMapAreaProtocol {
 ***REMOVED***/ Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
 extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? {
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Create the parameters for the download preplanned offline map job.
-***REMOVED******REMOVED******REMOVED***let parameters = try await offlineMapTask.makeDefaultDownloadPreplannedOfflineMapParameters(
-***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: self
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED*** Set the update mode to no updates as the offline map is display-only.
-***REMOVED******REMOVED******REMOVED***parameters.updateMode = .noUpdates
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return parameters
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***throw error
-***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create the parameters for the download preplanned offline map job.
+***REMOVED******REMOVED***let parameters = try await offlineMapTask.makeDefaultDownloadPreplannedOfflineMapParameters(
+***REMOVED******REMOVED******REMOVED***preplannedMapArea: self
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED*** Set the update mode to no updates as the offline map is display-only.
+***REMOVED******REMOVED***parameters.updateMode = .noUpdates
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return parameters
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var title: String {
