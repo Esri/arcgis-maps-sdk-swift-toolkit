@@ -28,7 +28,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     private let preplannedDirectory: URL
     
     /// The ID of the preplanned map area.
-    private let  preplannedMapAreaID: String
+    private let preplannedMapAreaID: String
     
     /// The mobile map package for the preplanned map area.
     private(set) var mobileMapPackage: MobileMapPackage?
@@ -125,11 +125,9 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// Updates the status based on the download result of the mobile map package.
     func updateDownloadStatus(for downloadResult: Optional<Result<MobileMapPackage, any Error>>) {
         switch downloadResult {
-        case .success:
+        case .success(let mobileMapPackage):
             status = .downloaded
-            if let mobileMapPackage = try? downloadResult?.get() {
-                self.mobileMapPackage = mobileMapPackage
-            }
+            self.mobileMapPackage = mobileMapPackage
         case .failure(let error):
             status = .downloadFailure(error)
         case .none:
@@ -152,15 +150,16 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// Sets the mobile map package if downloaded locally.
     func setMobileMapPackageFromDownloads() {
-        let mobileMapPackages = OfflineMapAreasView.urls(
-            in: preplannedDirectory,
-            withPathExtension: "mmpk"
-        ).map(MobileMapPackage.init(fileURL:))
+        // Construct file URL for mobile map package with file structure:
+        // .../OfflineMapAreas/Preplanned/{id}/package/{id}.mmpk
+        let fileURL = preplannedDirectory
+            .appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
+            .appending(component: PreplannedMapModel.PathComponents.package, directoryHint: .isDirectory)
+            .appendingPathComponent(preplannedMapAreaID)
+            .appendingPathExtension(PreplannedMapModel.PathComponents.mmpk)
         
-        if let mobileMapPackage = mobileMapPackages.first(where: {
-            $0.fileURL.deletingPathExtension().lastPathComponent == preplannedMapArea.id?.rawValue
-        }) {
-            setMobileMapPackage(mobileMapPackage)
+        if FileManager.default.fileExists(atPath: fileURL.relativePath) {
+            setMobileMapPackage(MobileMapPackage.init(fileURL: fileURL))
         }
     }
     
@@ -207,25 +206,21 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// Creates download directories for the preplanned map area and its mobile map package.
     /// - Returns: The URL for the mobile map package directory.
     private func createDownloadDirectories() throws -> URL {
-        do {
-            let downloadDirectory = preplannedDirectory
-                .appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
-            
-            let packageDirectory = downloadDirectory
-                .appending(component: PreplannedMapModel.PathComponents.package.rawValue, directoryHint: .isDirectory)
-            
-            try FileManager.default.createDirectory(atPath: downloadDirectory.relativePath, withIntermediateDirectories: true)
-            
-            try FileManager.default.createDirectory(atPath: packageDirectory.relativePath, withIntermediateDirectories: true)
-            
-            let mmpkDirectory = packageDirectory
-                .appendingPathComponent(preplannedMapAreaID)
-                .appendingPathExtension(PreplannedMapModel.PathComponents.mmpk.rawValue)
-            
-            return mmpkDirectory
-        } catch {
-            throw error
-        }
+        let downloadDirectory = preplannedDirectory
+            .appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
+        
+        let packageDirectory = downloadDirectory
+            .appending(component: PreplannedMapModel.PathComponents.package, directoryHint: .isDirectory)
+        
+        try FileManager.default.createDirectory(atPath: downloadDirectory.relativePath, withIntermediateDirectories: true)
+        
+        try FileManager.default.createDirectory(atPath: packageDirectory.relativePath, withIntermediateDirectories: true)
+        
+        let mmpkDirectory = packageDirectory
+            .appendingPathComponent(preplannedMapAreaID)
+            .appendingPathExtension(PreplannedMapModel.PathComponents.mmpk)
+        
+        return mmpkDirectory
     }
     
     /// Runs the download task to download the preplanned offline map.
@@ -290,9 +285,9 @@ extension PreplannedMapModel {
 }
 
 private extension PreplannedMapModel {
-    enum PathComponents: String {
-        case package = "package"
-        case mmpk = "mmpk"
+    enum PathComponents {
+        static var package: String { "package" }
+        static var mmpk: String { "mmpk" }
     }
 }
 
@@ -321,18 +316,14 @@ protocol PreplannedMapAreaProtocol {
 /// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
 extension PreplannedMapArea: PreplannedMapAreaProtocol {
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? {
-        do {
-            // Create the parameters for the download preplanned offline map job.
-            let parameters = try await offlineMapTask.makeDefaultDownloadPreplannedOfflineMapParameters(
-                preplannedMapArea: self
-            )
-            // Set the update mode to no updates as the offline map is display-only.
-            parameters.updateMode = .noUpdates
-            
-            return parameters
-        } catch {
-            throw error
-        }
+        // Create the parameters for the download preplanned offline map job.
+        let parameters = try await offlineMapTask.makeDefaultDownloadPreplannedOfflineMapParameters(
+            preplannedMapArea: self
+        )
+        // Set the update mode to no updates as the offline map is display-only.
+        parameters.updateMode = .noUpdates
+        
+        return parameters
     }
     
     var title: String {

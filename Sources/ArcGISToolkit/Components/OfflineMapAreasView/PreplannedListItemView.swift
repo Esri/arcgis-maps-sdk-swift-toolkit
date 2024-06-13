@@ -20,7 +20,7 @@ public struct PreplannedListItemView: View {
     @ObservedObject var model: PreplannedMapModel
     
     /// A Boolean value indicating whether the user has authorized notifications to be shown.
-    private(set) var canShowNotifications: Bool = false
+    var canShowNotifications = false
     
     public var body: some View {
         HStack(alignment: .center, spacing: 10) {
