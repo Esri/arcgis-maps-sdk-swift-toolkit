@@ -68,7 +68,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***hasPreplannedMapAreas = !models.isEmpty
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***for model in models {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.setMobileMapPackageFromDownloads()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.setMobileMapPackage()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

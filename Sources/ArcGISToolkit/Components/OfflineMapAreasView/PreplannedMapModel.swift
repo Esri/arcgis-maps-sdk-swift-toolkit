@@ -131,25 +131,14 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
 ***REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED***if let mobileMapPackage = try? downloadResult?.get() {
-***REMOVED******REMOVED******REMOVED******REMOVED***setMobileMapPackage(mobileMapPackage)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Sets the mobile map package once downloaded.
-***REMOVED******REMOVED***/ - Parameter mobileMapPackage: The mobile map package.
-***REMOVED***func setMobileMapPackage(_ mobileMapPackage: MobileMapPackage) {
-***REMOVED******REMOVED******REMOVED*** Set the mobile map package if already downloaded or the download job succeeded.
-***REMOVED******REMOVED***if job == nil || job?.status == .succeeded {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Set the mobile map package if it downloaded.
-***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mobileMapPackage
-***REMOVED******REMOVED******REMOVED***status = .downloaded
+***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the mobile map package if downloaded locally.
-***REMOVED***func setMobileMapPackageFromDownloads() {
+***REMOVED***func setMobileMapPackage() {
+***REMOVED******REMOVED***guard job == nil else { return ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Construct file URL for mobile map package with file structure:
 ***REMOVED******REMOVED******REMOVED*** .../OfflineMapAreas/Preplanned/{id***REMOVED***/package/{id***REMOVED***.mmpk
 ***REMOVED******REMOVED***let fileURL = preplannedDirectory
@@ -159,7 +148,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***.appendingPathExtension(PreplannedMapModel.PathComponents.mmpk)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if FileManager.default.fileExists(atPath: fileURL.relativePath) {
-***REMOVED******REMOVED******REMOVED***setMobileMapPackage(MobileMapPackage.init(fileURL: fileURL))
+***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = MobileMapPackage.init(fileURL: fileURL)
+***REMOVED******REMOVED******REMOVED***status = .downloaded
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
