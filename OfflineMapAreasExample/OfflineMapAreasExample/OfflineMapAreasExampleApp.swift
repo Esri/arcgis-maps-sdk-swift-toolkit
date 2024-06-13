@@ -18,6 +18,8 @@
 
 ***REMOVED***
 struct OfflineMapAreasExampleApp: App {
+***REMOVED***@UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+***REMOVED***
 ***REMOVED***init() {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Allow the `ArcGISURLSession` to handle it's background task events.

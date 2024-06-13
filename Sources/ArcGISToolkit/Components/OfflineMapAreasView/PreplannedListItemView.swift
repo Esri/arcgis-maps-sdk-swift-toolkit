@@ -16,11 +16,11 @@
 ***REMOVED***
 
 public struct PreplannedListItemView: View {
-***REMOVED******REMOVED***/ The view model for the map view.
-***REMOVED***@ObservedObject var mapViewModel: OfflineMapAreasView.MapViewModel
-***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the user has authorized notifications to be shown.
+***REMOVED***var canShowNotifications = false
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
@@ -42,13 +42,8 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***model.updateDownloadStatus(for: result)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.job?.status) { status in
-***REMOVED******REMOVED******REMOVED***guard mapViewModel.canShowNotifications else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Send notification using job status.
-***REMOVED******REMOVED******REMOVED***if status == .succeeded {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.notifyJobCompleted(.succeeded)
-***REMOVED******REMOVED*** else if status == .failed {
-***REMOVED******REMOVED******REMOVED******REMOVED***model.notifyJobCompleted(.failed)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***guard canShowNotifications else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***model.notifyJobCompleted()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -86,14 +81,14 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download preplanned map area.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadPreplannedMapArea()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel.loadPreplannedMobileMapPackages()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(PlainButtonStyle())
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.disabled(!model.canDownload)
+***REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -142,24 +137,23 @@ public struct PreplannedListItemView: View {
 
 #Preview {
 ***REMOVED***PreplannedListItemView(
-***REMOVED******REMOVED***mapViewModel: OfflineMapAreasView.MapViewModel(map: Map()),
 ***REMOVED******REMOVED***model: PreplannedMapModel(
-***REMOVED******REMOVED******REMOVED***preplannedMapArea: MockPreplannedMapArea(),
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
-***REMOVED******REMOVED******REMOVED***preplannedDirectory: URL.documentsDirectory
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
+***REMOVED******REMOVED******REMOVED***directory: URL.documentsDirectory
+***REMOVED******REMOVED***)!
 ***REMOVED***)
 ***REMOVED***.padding()
 ***REMOVED***
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED***var mapArea: ArcGIS.PreplannedMapArea? = nil
-***REMOVED***var id: PortalItem.ID? = nil
-***REMOVED***var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
+***REMOVED***var id: PortalItem.ID? = PortalItem.ID("012345")
+***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
 ***REMOVED***var title: String = "Mock Preplanned Map Area"
 ***REMOVED***var description: String = "This is the description text"
-***REMOVED***var thumbnail: ArcGIS.LoadableImage? = nil
+***REMOVED***var thumbnail: LoadableImage? = nil
 ***REMOVED***var thumbnailImage: UIImage?
 ***REMOVED***
 ***REMOVED***func retryLoad() async throws { ***REMOVED***
+***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { nil ***REMOVED***
 ***REMOVED***
