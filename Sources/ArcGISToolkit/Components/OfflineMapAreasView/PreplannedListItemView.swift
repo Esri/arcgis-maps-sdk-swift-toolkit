@@ -16,11 +16,11 @@ import SwiftUI
 import ArcGIS
 
 public struct PreplannedListItemView: View {
-    /// The view model for the map view.
-    @ObservedObject var mapViewModel: OfflineMapAreasView.MapViewModel
-    
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
+    
+    /// A Boolean value indicating whether the user has authorized notifications to be shown.
+    var canShowNotifications = false
     
     public var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -42,13 +42,8 @@ public struct PreplannedListItemView: View {
             model.updateDownloadStatus(for: result)
         }
         .onChange(of: model.job?.status) { status in
-            guard mapViewModel.canShowNotifications else { return }
-            // Send notification using job status.
-            if status == .succeeded {
-                model.notifyJobCompleted(.succeeded)
-            } else if status == .failed {
-                model.notifyJobCompleted(.failed)
-            }
+            guard canShowNotifications else { return }
+            model.notifyJobCompleted()
         }
     }
     
@@ -86,14 +81,14 @@ public struct PreplannedListItemView: View {
                     Task {
                         // Download preplanned map area.
                         await model.downloadPreplannedMapArea()
-                        mapViewModel.loadPreplannedMobileMapPackages()
                     }
                 }
             } label: {
                 Image(systemName: "arrow.down.circle")
             }
-            .buttonStyle(PlainButtonStyle())
+            .buttonStyle(.plain)
             .disabled(!model.canDownload)
+            .foregroundColor(.accentColor)
         }
     }
     
@@ -142,24 +137,23 @@ public struct PreplannedListItemView: View {
 
 #Preview {
     PreplannedListItemView(
-        mapViewModel: OfflineMapAreasView.MapViewModel(map: Map()),
         model: PreplannedMapModel(
-            preplannedMapArea: MockPreplannedMapArea(),
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
-            preplannedDirectory: URL.documentsDirectory
-        )
+            mapArea: MockPreplannedMapArea(),
+            directory: URL.documentsDirectory
+        )!
     )
     .padding()
 }
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-    var mapArea: ArcGIS.PreplannedMapArea? = nil
-    var id: PortalItem.ID? = nil
-    var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
+    var id: PortalItem.ID? = PortalItem.ID("012345")
+    var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
     var title: String = "Mock Preplanned Map Area"
     var description: String = "This is the description text"
-    var thumbnail: ArcGIS.LoadableImage? = nil
+    var thumbnail: LoadableImage? = nil
     var thumbnailImage: UIImage?
     
     func retryLoad() async throws { }
+    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { nil }
 }

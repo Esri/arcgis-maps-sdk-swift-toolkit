@@ -18,6 +18,8 @@ import SwiftUI
 
 @main
 struct OfflineMapAreasExampleApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     init() {
         Task {
             // Allow the `ArcGISURLSession` to handle it's background task events.
