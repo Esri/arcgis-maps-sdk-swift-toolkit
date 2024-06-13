@@ -131,25 +131,14 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         case .failure(let error):
             status = .downloadFailure(error)
         case .none:
-            if let mobileMapPackage = try? downloadResult?.get() {
-                setMobileMapPackage(mobileMapPackage)
-            }
-        }
-    }
-    
-    /// Sets the mobile map package once downloaded.
-    /// - Parameter mobileMapPackage: The mobile map package.
-    func setMobileMapPackage(_ mobileMapPackage: MobileMapPackage) {
-        // Set the mobile map package if already downloaded or the download job succeeded.
-        if job == nil || job?.status == .succeeded {
-            // Set the mobile map package if it downloaded.
-            self.mobileMapPackage = mobileMapPackage
-            status = .downloaded
+            return
         }
     }
     
     /// Sets the mobile map package if downloaded locally.
-    func setMobileMapPackageFromDownloads() {
+    func setMobileMapPackage() {
+        guard job == nil else { return }
+        
         // Construct file URL for mobile map package with file structure:
         // .../OfflineMapAreas/Preplanned/{id}/package/{id}.mmpk
         let fileURL = preplannedDirectory
@@ -159,7 +148,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
             .appendingPathExtension(PreplannedMapModel.PathComponents.mmpk)
         
         if FileManager.default.fileExists(atPath: fileURL.relativePath) {
-            setMobileMapPackage(MobileMapPackage.init(fileURL: fileURL))
+            self.mobileMapPackage = MobileMapPackage.init(fileURL: fileURL)
+            status = .downloaded
         }
     }
     

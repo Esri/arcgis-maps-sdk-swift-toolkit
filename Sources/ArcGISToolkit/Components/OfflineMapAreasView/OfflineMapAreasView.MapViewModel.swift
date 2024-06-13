@@ -68,7 +68,7 @@ extension OfflineMapAreasView {
                 hasPreplannedMapAreas = !models.isEmpty
                 
                 for model in models {
-                    model.setMobileMapPackageFromDownloads()
+                    model.setMobileMapPackage()
                 }
             }
         }
