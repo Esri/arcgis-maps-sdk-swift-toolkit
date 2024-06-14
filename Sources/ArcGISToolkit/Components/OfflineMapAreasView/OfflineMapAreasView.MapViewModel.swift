@@ -88,7 +88,7 @@ private extension FileManager {
 ***REMOVED******REMOVED***/ The path to the offline map areas directory within the documents directory.
 ***REMOVED***var offlineMapAreasDirectory: URL {
 ***REMOVED******REMOVED***documentsDirectory.appending(
-***REMOVED******REMOVED******REMOVED***path: FileManager.offlineMapAreasPath,
+***REMOVED******REMOVED******REMOVED***path: Self.offlineMapAreasPath,
 ***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -101,7 +101,7 @@ private extension FileManager {
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
 ***REMOVED***func preplannedDirectory(forItemID itemID: String) -> URL {
 ***REMOVED******REMOVED***webMapDirectory(forItemID: itemID).appending(
-***REMOVED******REMOVED******REMOVED***path: FileManager.preplannedDirectoryPath,
+***REMOVED******REMOVED******REMOVED***path: Self.preplannedDirectoryPath,
 ***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
 ***REMOVED******REMOVED***)
 ***REMOVED***
