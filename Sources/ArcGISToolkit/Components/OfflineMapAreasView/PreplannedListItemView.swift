@@ -72,11 +72,9 @@ public struct PreplannedListItemView: View {
             }
         default:
             Button {
-                if model.canDownload {
-                    Task {
-                        // Download preplanned map area.
-                        await model.downloadPreplannedMapArea()
-                    }
+                Task {
+                    // Download preplanned map area.
+                    await model.downloadPreplannedMapArea()
                 }
             } label: {
                 Image(systemName: "arrow.down.circle")
@@ -149,5 +147,5 @@ private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
     var thumbnail: LoadableImage? = nil
     
     func retryLoad() async throws { }
-    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { nil }
+    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { return DownloadPreplannedOfflineMapParameters() }
 }

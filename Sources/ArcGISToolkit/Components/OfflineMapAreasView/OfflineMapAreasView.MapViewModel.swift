@@ -41,6 +41,7 @@ extension OfflineMapAreasView {
         init(map: Map) {
             offlineMapTask = OfflineMapTask(onlineMap: map)
             portalItemID = map.item?.id?.rawValue
+            JobManager.shared.resumeAllPausedJobs()
         }
         
         /// Gets the preplanned map areas from the offline map task and creates the
@@ -75,24 +76,19 @@ extension OfflineMapAreasView {
     }
 }
 
-private extension OfflineMapAreasView.MapViewModel {
-    /// The names of the folders used to save offline map areas.
-    enum FolderNames {
-        static var preplanned: String { "Preplanned" }
-        static var offlineMapAreas: String { "OfflineMapAreas" }
-    }
-}
-
 private extension FileManager {
+    static let preplannedDirectoryPath: String = "Preplanned"
+    static let offlineMapAreasPath: String = "OfflineMapAreas"
+    
     /// The path to the documents folder.
     var documentsDirectory: URL {
         URL.documentsDirectory
     }
     
-    /// The path to the offline map areas directory. The offline map areas directory is located in the documents directory.
+    /// The path to the offline map areas directory within the documents directory.
     var offlineMapAreasDirectory: URL {
         documentsDirectory.appending(
-            path: OfflineMapAreasView.MapViewModel.FolderNames.offlineMapAreas,
+            path: FileManager.offlineMapAreasPath,
             directoryHint: .isDirectory
         )
     }
@@ -105,7 +101,7 @@ private extension FileManager {
     /// The path to the preplanned map areas directory for a specific portal item.
     func preplannedDirectory(forItemID itemID: String) -> URL {
         webMapDirectory(forItemID: itemID).appending(
-            path: OfflineMapAreasView.MapViewModel.FolderNames.preplanned,
+            path: FileManager.preplannedDirectoryPath,
             directoryHint: .isDirectory
         )
     }

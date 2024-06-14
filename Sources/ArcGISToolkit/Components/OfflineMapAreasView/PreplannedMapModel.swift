@@ -140,12 +140,12 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         guard job == nil else { return }
         
         // Construct file URL for mobile map package with file structure:
-        // .../OfflineMapAreas/Preplanned/{id}/package/{id}.mmpk
+        // .../OfflineMapAreas/Preplanned/{id}/Package/{id}.mmpk
         let fileURL = preplannedDirectory
             .appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
-            .appending(component: PreplannedMapModel.PathComponents.package, directoryHint: .isDirectory)
+            .appending(component: FileManager.packageDirectoryPath, directoryHint: .isDirectory)
             .appendingPathComponent(preplannedMapAreaID)
-            .appendingPathExtension(PreplannedMapModel.PathComponents.mmpk)
+            .appendingPathExtension(FileManager.mmpkPathExtension)
         
         if FileManager.default.fileExists(atPath: fileURL.relativePath) {
             self.mobileMapPackage = MobileMapPackage.init(fileURL: fileURL)
@@ -200,7 +200,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
             .appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
         
         let packageDirectory = downloadDirectory
-            .appending(component: PreplannedMapModel.PathComponents.package, directoryHint: .isDirectory)
+            .appending(component: FileManager.packageDirectoryPath, directoryHint: .isDirectory)
         
         try FileManager.default.createDirectory(atPath: downloadDirectory.relativePath, withIntermediateDirectories: true)
         
@@ -208,7 +208,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         
         let mmpkDirectory = packageDirectory
             .appendingPathComponent(preplannedMapAreaID)
-            .appendingPathExtension(PreplannedMapModel.PathComponents.mmpk)
+            .appendingPathExtension(FileManager.mmpkPathExtension)
         
         return mmpkDirectory
     }
@@ -274,11 +274,9 @@ extension PreplannedMapModel {
     }
 }
 
-private extension PreplannedMapModel {
-    enum PathComponents {
-        static var package: String { "package" }
-        static var mmpk: String { "mmpk" }
-    }
+private extension FileManager {
+    static let packageDirectoryPath: String = "Package"
+    static let mmpkPathExtension: String = "mmpk"
 }
 
 extension PreplannedMapModel: Hashable {
