@@ -38,9 +38,6 @@ public struct PreplannedListItemView: View {
         .task {
             await model.load()
         }
-        .onReceive(model.$result) { result in
-            model.updateDownloadStatus(for: result)
-        }
         .onChange(of: model.job?.status) { status in
             guard mapViewModel.canShowNotifications else { return }
             model.notifyJobCompleted()
