@@ -54,18 +54,12 @@ public struct OfflineMapAreasView: View {
             }
             .task {
                 await mapViewModel.makePreplannedOfflineMapModels()
+                await mapViewModel.checkCanShowNotifications()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
                 }
-            }
-            .task {
-                mapViewModel.canShowNotifications = (
-                    try? await UNUserNotificationCenter.current()
-                        .requestAuthorization(options: [.alert, .sound])
-                )
-                ?? false
             }
             .navigationTitle("Offline Maps")
             .navigationBarTitleDisplayMode(.inline)
@@ -78,9 +72,9 @@ public struct OfflineMapAreasView: View {
             if mapViewModel.hasPreplannedMapAreas {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(
-                        model: preplannedMapModel,
-                        canShowNotifications: mapViewModel.canShowNotifications
+                        model: preplannedMapModel
                     )
+                    .environmentObject(mapViewModel)
                 }
             } else {
                 emptyPreplannedMapAreasView
