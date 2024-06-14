@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-***REMOVED***Apple***REMOVED***DTD PLIST 1.0***REMOVED***EN" "http:***REMOVED***www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.esri.ArcGISToolkit.jobManager.statusCheck</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

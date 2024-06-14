@@ -27,9 +27,6 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***public init(map: Map) {
 ***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Ask the job manager to schedule background status checks for every 30 seconds.
-***REMOVED******REMOVED***JobManager.shared.preferredBackgroundStatusCheckSchedule = .regularInterval(interval: 30)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {

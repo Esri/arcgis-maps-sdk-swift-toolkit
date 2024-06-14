@@ -17,6 +17,7 @@
 
 /* Begin PBXFileReference section */
 		1C7F79B92C1A3F7D008D8D31 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; ***REMOVED***;
+		1C96FD5D2C1CC08900A1CC91 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; ***REMOVED***;
 		1CBE20192BF2BF2B0006B55D /* OfflineMapAreasExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OfflineMapAreasExample.app; sourceTree = BUILT_PRODUCTS_DIR; ***REMOVED***;
 		1CBE201C2BF2BF2B0006B55D /* OfflineMapAreasExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineMapAreasExampleApp.swift; sourceTree = "<group>"; ***REMOVED***;
 		1CBE201E2BF2BF2B0006B55D /* OfflineMapAreasExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineMapAreasExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
@@ -59,6 +60,7 @@
 		1CBE201B2BF2BF2B0006B55D /* OfflineMapAreasExample */ = {
 			isa = PBXGroup;
 			children = (
+				1C96FD5D2C1CC08900A1CC91 /* Info.plist */,
 				1C7F79B92C1A3F7D008D8D31 /* AppDelegate.swift */,
 				1CBE201C2BF2BF2B0006B55D /* OfflineMapAreasExampleApp.swift */,
 				1CBE201E2BF2BF2B0006B55D /* OfflineMapAreasExampleView.swift */,
