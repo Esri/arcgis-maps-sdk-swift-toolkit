@@ -41,6 +41,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED***init(map: Map) {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask = OfflineMapTask(onlineMap: map)
 ***REMOVED******REMOVED******REMOVED***portalItemID = map.item?.id?.rawValue
+***REMOVED******REMOVED******REMOVED***JobManager.shared.resumeAllPausedJobs()
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Gets the preplanned map areas from the offline map task and creates the
@@ -75,24 +76,19 @@ extension OfflineMapAreasView {
 ***REMOVED***
 ***REMOVED***
 
-private extension OfflineMapAreasView.MapViewModel {
-***REMOVED******REMOVED***/ The names of the folders used to save offline map areas.
-***REMOVED***enum FolderNames {
-***REMOVED******REMOVED***static var preplanned: String { "Preplanned" ***REMOVED***
-***REMOVED******REMOVED***static var offlineMapAreas: String { "OfflineMapAreas" ***REMOVED***
-***REMOVED***
-***REMOVED***
-
 private extension FileManager {
+***REMOVED***static let preplannedDirectoryPath: String = "Preplanned"
+***REMOVED***static let offlineMapAreasPath: String = "OfflineMapAreas"
+***REMOVED***
 ***REMOVED******REMOVED***/ The path to the documents folder.
 ***REMOVED***var documentsDirectory: URL {
 ***REMOVED******REMOVED***URL.documentsDirectory
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The path to the offline map areas directory. The offline map areas directory is located in the documents directory.
+***REMOVED******REMOVED***/ The path to the offline map areas directory within the documents directory.
 ***REMOVED***var offlineMapAreasDirectory: URL {
 ***REMOVED******REMOVED***documentsDirectory.appending(
-***REMOVED******REMOVED******REMOVED***path: OfflineMapAreasView.MapViewModel.FolderNames.offlineMapAreas,
+***REMOVED******REMOVED******REMOVED***path: FileManager.offlineMapAreasPath,
 ***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -105,7 +101,7 @@ private extension FileManager {
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
 ***REMOVED***func preplannedDirectory(forItemID itemID: String) -> URL {
 ***REMOVED******REMOVED***webMapDirectory(forItemID: itemID).appending(
-***REMOVED******REMOVED******REMOVED***path: OfflineMapAreasView.MapViewModel.FolderNames.preplanned,
+***REMOVED******REMOVED******REMOVED***path: FileManager.preplannedDirectoryPath,
 ***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
 ***REMOVED******REMOVED***)
 ***REMOVED***

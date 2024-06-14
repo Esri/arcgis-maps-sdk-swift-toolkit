@@ -140,12 +140,12 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***guard job == nil else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Construct file URL for mobile map package with file structure:
-***REMOVED******REMOVED******REMOVED*** .../OfflineMapAreas/Preplanned/{id***REMOVED***/package/{id***REMOVED***.mmpk
+***REMOVED******REMOVED******REMOVED*** .../OfflineMapAreas/Preplanned/{id***REMOVED***/Package/{id***REMOVED***.mmpk
 ***REMOVED******REMOVED***let fileURL = preplannedDirectory
 ***REMOVED******REMOVED******REMOVED***.appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
-***REMOVED******REMOVED******REMOVED***.appending(component: PreplannedMapModel.PathComponents.package, directoryHint: .isDirectory)
+***REMOVED******REMOVED******REMOVED***.appending(component: FileManager.packageDirectoryPath, directoryHint: .isDirectory)
 ***REMOVED******REMOVED******REMOVED***.appendingPathComponent(preplannedMapAreaID)
-***REMOVED******REMOVED******REMOVED***.appendingPathExtension(PreplannedMapModel.PathComponents.mmpk)
+***REMOVED******REMOVED******REMOVED***.appendingPathExtension(FileManager.mmpkPathExtension)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if FileManager.default.fileExists(atPath: fileURL.relativePath) {
 ***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = MobileMapPackage.init(fileURL: fileURL)
@@ -200,7 +200,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***.appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let packageDirectory = downloadDirectory
-***REMOVED******REMOVED******REMOVED***.appending(component: PreplannedMapModel.PathComponents.package, directoryHint: .isDirectory)
+***REMOVED******REMOVED******REMOVED***.appending(component: FileManager.packageDirectoryPath, directoryHint: .isDirectory)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***try FileManager.default.createDirectory(atPath: downloadDirectory.relativePath, withIntermediateDirectories: true)
 ***REMOVED******REMOVED***
@@ -208,7 +208,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mmpkDirectory = packageDirectory
 ***REMOVED******REMOVED******REMOVED***.appendingPathComponent(preplannedMapAreaID)
-***REMOVED******REMOVED******REMOVED***.appendingPathExtension(PreplannedMapModel.PathComponents.mmpk)
+***REMOVED******REMOVED******REMOVED***.appendingPathExtension(FileManager.mmpkPathExtension)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return mmpkDirectory
 ***REMOVED***
@@ -274,11 +274,9 @@ extension PreplannedMapModel {
 ***REMOVED***
 ***REMOVED***
 
-private extension PreplannedMapModel {
-***REMOVED***enum PathComponents {
-***REMOVED******REMOVED***static var package: String { "package" ***REMOVED***
-***REMOVED******REMOVED***static var mmpk: String { "mmpk" ***REMOVED***
-***REMOVED***
+private extension FileManager {
+***REMOVED***static let packageDirectoryPath: String = "Package"
+***REMOVED***static let mmpkPathExtension: String = "mmpk"
 ***REMOVED***
 
 extension PreplannedMapModel: Hashable {
