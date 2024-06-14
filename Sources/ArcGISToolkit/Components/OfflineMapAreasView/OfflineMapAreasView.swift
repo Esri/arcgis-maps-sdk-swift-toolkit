@@ -22,8 +22,8 @@ public struct OfflineMapAreasView: View {
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     
-    /// The rotation angle of the reload button image.
-    @State private var rotationAngle: CGFloat = 0.0
+    /// A Boolean value indicating whether the preplanned map areas are being reloaded.
+    @State private var isReloadingPreplannedMapAreas = false
     
     public init(map: Map) {
         _mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
@@ -36,17 +36,16 @@ public struct OfflineMapAreasView: View {
                     Text("Preplanned Map Areas").bold()
                     Spacer()
                     Button {
-                        withAnimation(.linear(duration: 0.6)) {
-                            rotationAngle = rotationAngle + 360
-                        }
                         Task {
+                            isReloadingPreplannedMapAreas = true
                             await mapViewModel.makePreplannedOfflineMapModels()
+                            isReloadingPreplannedMapAreas = false
                         }
                     } label: {
                         Image(systemName: "arrow.clockwise")
-                            .rotationEffect(.degrees(rotationAngle))
                     }
                     .controlSize(.mini)
+                    .disabled(isReloadingPreplannedMapAreas)
                 }.frame(maxWidth: .infinity)
                 ) {
                     preplannedMapAreas
