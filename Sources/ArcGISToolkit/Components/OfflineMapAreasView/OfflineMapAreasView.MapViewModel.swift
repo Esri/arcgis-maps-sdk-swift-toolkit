@@ -15,6 +15,7 @@
 import ArcGIS
 import Combine
 import Foundation
+import SwiftUI
 
 extension OfflineMapAreasView {
     /// The model class for the offline map areas view.
@@ -72,6 +73,15 @@ extension OfflineMapAreasView {
                     model.setMobileMapPackage()
                 }
             }
+        }
+        
+        /// Request authorization to show notifications.
+        func checkCanShowNotifications() async {
+            canShowNotifications = (
+                try? await UNUserNotificationCenter.current()
+                    .requestAuthorization(options: [.alert, .sound])
+            )
+            ?? false
         }
     }
 }

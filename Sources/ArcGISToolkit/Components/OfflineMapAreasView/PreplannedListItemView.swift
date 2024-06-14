@@ -19,8 +19,8 @@ public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
-    /// A Boolean value indicating whether the user has authorized notifications to be shown.
-    var canShowNotifications = false
+    /// The map view model for the online map.
+    @EnvironmentObject var mapViewModel: OfflineMapAreasView.MapViewModel
     
     public var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -42,7 +42,7 @@ public struct PreplannedListItemView: View {
             model.updateDownloadStatus(for: result)
         }
         .onChange(of: model.job?.status) { status in
-            guard canShowNotifications else { return }
+            guard mapViewModel.canShowNotifications else { return }
             model.notifyJobCompleted()
         }
     }
