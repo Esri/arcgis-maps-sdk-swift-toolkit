@@ -24,8 +24,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The task to use to take the area offline.
 ***REMOVED***private let offlineMapTask: OfflineMapTask
 ***REMOVED***
-***REMOVED******REMOVED***/ The download directory for the preplanned map areas.
-***REMOVED***private let preplannedDirectory: URL
+***REMOVED******REMOVED***/ The ID of the web map.
+***REMOVED***private let portalItemID: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The ID of the preplanned map area.
 ***REMOVED***private let preplannedMapAreaID: String
@@ -58,11 +58,11 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***init?(
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
 ***REMOVED******REMOVED***mapArea: PreplannedMapAreaProtocol,
-***REMOVED******REMOVED***directory: URL
+***REMOVED******REMOVED***portalItemID: String
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.offlineMapTask = offlineMapTask
 ***REMOVED******REMOVED***preplannedMapArea = mapArea
-***REMOVED******REMOVED***preplannedDirectory = directory
+***REMOVED******REMOVED***self.portalItemID = portalItemID
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let itemID = preplannedMapArea.id {
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID = itemID.rawValue
@@ -141,7 +141,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Construct file URL for mobile map package with file structure:
 ***REMOVED******REMOVED******REMOVED*** .../OfflineMapAreas/Preplanned/{id***REMOVED***/Package/{id***REMOVED***.mmpk
-***REMOVED******REMOVED***let fileURL = preplannedDirectory
+***REMOVED******REMOVED***let fileURL = FileManager.default.preplannedDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***.appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
 ***REMOVED******REMOVED******REMOVED***.appending(component: FileManager.packageDirectoryPath, directoryHint: .isDirectory)
 ***REMOVED******REMOVED******REMOVED***.appendingPathComponent(preplannedMapAreaID)
@@ -180,37 +180,19 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***func downloadPreplannedMapArea() async {
 ***REMOVED******REMOVED***precondition(canDownload)
 ***REMOVED******REMOVED***status = .downloading
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***guard let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask) else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let mmpkDirectory = try createDownloadDirectories()
+***REMOVED******REMOVED******REMOVED***let mmpkDirectory = FileManager.default.mmpkDirectory(forPortalItemID: portalItemID, preplannedMapAreaID: preplannedMapAreaID)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***await runDownloadTask(for: parameters, in: mmpkDirectory)
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If creating the parameters or directories fails, set the failure.
 ***REMOVED******REMOVED******REMOVED***self.result = .failure(error)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Creates download directories for the preplanned map area and its mobile map package.
-***REMOVED******REMOVED***/ - Returns: The URL for the mobile map package directory.
-***REMOVED***private func createDownloadDirectories() throws -> URL {
-***REMOVED******REMOVED***let downloadDirectory = preplannedDirectory
-***REMOVED******REMOVED******REMOVED***.appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let packageDirectory = downloadDirectory
-***REMOVED******REMOVED******REMOVED***.appending(component: FileManager.packageDirectoryPath, directoryHint: .isDirectory)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***try FileManager.default.createDirectory(atPath: downloadDirectory.relativePath, withIntermediateDirectories: true)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***try FileManager.default.createDirectory(atPath: packageDirectory.relativePath, withIntermediateDirectories: true)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let mmpkDirectory = packageDirectory
-***REMOVED******REMOVED******REMOVED***.appendingPathComponent(preplannedMapAreaID)
-***REMOVED******REMOVED******REMOVED***.appendingPathExtension(FileManager.mmpkPathExtension)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return mmpkDirectory
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Runs the download task to download the preplanned offline map.
@@ -274,11 +256,6 @@ extension PreplannedMapModel {
 ***REMOVED***
 ***REMOVED***
 
-private extension FileManager {
-***REMOVED***static let packageDirectoryPath: String = "Package"
-***REMOVED***static let mmpkPathExtension: String = "mmpk"
-***REMOVED***
-
 extension PreplannedMapModel: Hashable {
 ***REMOVED***nonisolated public static func == (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
 ***REMOVED******REMOVED***lhs === rhs
@@ -328,5 +305,74 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***
 ***REMOVED***var id: PortalItem.ID? {
 ***REMOVED******REMOVED***portalItem.id
+***REMOVED***
+***REMOVED***
+
+private extension FileManager {
+***REMOVED***static let mmpkPathExtension: String = "mmpk"
+***REMOVED***static let offlineMapAreasPath: String = "OfflineMapAreas"
+***REMOVED***static let packageDirectoryPath: String = "Package"
+***REMOVED***static let preplannedDirectoryPath: String = "Preplanned"
+***REMOVED***
+***REMOVED******REMOVED***/ The path to the documents folder.
+***REMOVED***var documentsDirectory: URL {
+***REMOVED******REMOVED***URL.documentsDirectory
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The path to the offline map areas directory within the documents directory.
+***REMOVED***var offlineMapAreasDirectory: URL {
+***REMOVED******REMOVED***documentsDirectory.appending(
+***REMOVED******REMOVED******REMOVED***path: Self.offlineMapAreasPath,
+***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The path to the web map directory for a specific portal item.
+***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
+***REMOVED***func webMapDirectory(forPortalItemID portalItemID: String) -> URL {
+***REMOVED******REMOVED***offlineMapAreasDirectory.appending(path: portalItemID, directoryHint: .isDirectory)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
+***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
+***REMOVED***func preplannedDirectory(forPortalItemID portalItemID: String) -> URL {
+***REMOVED******REMOVED***webMapDirectory(forPortalItemID: portalItemID).appending(
+***REMOVED******REMOVED******REMOVED***path: Self.preplannedDirectoryPath,
+***REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The path to the download directory for the preplanned map area metadata and mobile map package.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
+***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area.
+***REMOVED***func downloadDirectory(forPortalItemID portalItemID: String, preplannedMapAreaID: String) -> URL {
+***REMOVED******REMOVED***preplannedDirectory(forPortalItemID: portalItemID)
+***REMOVED******REMOVED******REMOVED***.appending(
+***REMOVED******REMOVED******REMOVED******REMOVED***path: preplannedMapAreaID,
+***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The path to the package directory for the preplanned map area mobile map package.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
+***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area.
+***REMOVED***func packageDirectory(forPortalItemID portalItemID: String, preplannedMapAreaID: String) -> URL {
+***REMOVED******REMOVED***downloadDirectory(forPortalItemID: portalItemID, preplannedMapAreaID: preplannedMapAreaID)
+***REMOVED******REMOVED******REMOVED***.appending(
+***REMOVED******REMOVED******REMOVED******REMOVED***component: Self.packageDirectoryPath,
+***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The path to the mobile map package file for the preplanned map area mobile map package.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
+***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area.
+***REMOVED***func mmpkDirectory(forPortalItemID portalItemID: String, preplannedMapAreaID: String) -> URL {
+***REMOVED******REMOVED***packageDirectory(forPortalItemID: portalItemID, preplannedMapAreaID: preplannedMapAreaID)
+***REMOVED******REMOVED******REMOVED***.appendingPathComponent(preplannedMapAreaID)
+***REMOVED******REMOVED******REMOVED***.appendingPathExtension(Self.mmpkPathExtension)
 ***REMOVED***
 ***REMOVED***

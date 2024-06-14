@@ -133,7 +133,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***model: PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
 ***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
-***REMOVED******REMOVED******REMOVED***directory: URL.documentsDirectory
+***REMOVED******REMOVED******REMOVED***portalItemID: ""
 ***REMOVED******REMOVED***)!
 ***REMOVED***)
 ***REMOVED***.padding()
