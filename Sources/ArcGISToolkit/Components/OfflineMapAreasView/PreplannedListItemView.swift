@@ -19,8 +19,8 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the user has authorized notifications to be shown.
-***REMOVED***var canShowNotifications = false
+***REMOVED******REMOVED***/ The map view model for the online map.
+***REMOVED***@EnvironmentObject var mapViewModel: OfflineMapAreasView.MapViewModel
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
@@ -42,7 +42,7 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED******REMOVED***model.updateDownloadStatus(for: result)
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: model.job?.status) { status in
-***REMOVED******REMOVED******REMOVED***guard canShowNotifications else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard mapViewModel.canShowNotifications else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***model.notifyJobCompleted()
 ***REMOVED***
 ***REMOVED***

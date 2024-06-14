@@ -15,6 +15,7 @@
 ***REMOVED***
 import Combine
 import Foundation
+***REMOVED***
 
 extension OfflineMapAreasView {
 ***REMOVED******REMOVED***/ The model class for the offline map areas view.
@@ -72,6 +73,15 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.setMobileMapPackage()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Request authorization to show notifications.
+***REMOVED******REMOVED***func checkCanShowNotifications() async {
+***REMOVED******REMOVED******REMOVED***canShowNotifications = (
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await UNUserNotificationCenter.current()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***?? false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
