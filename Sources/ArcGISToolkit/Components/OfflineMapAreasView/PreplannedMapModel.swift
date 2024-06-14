@@ -42,7 +42,11 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The result of the download job. When the result is `.success` the mobile map package is returned.
 ***REMOVED******REMOVED***/ If the result is `.failure` then the error is returned. The result will be `nil` when the preplanned
 ***REMOVED******REMOVED***/ map area is still packaging or loading.
-***REMOVED***@Published private(set) var result: Result<MobileMapPackage, Error>?
+***REMOVED***@Published private(set) var result: Result<MobileMapPackage, Error>? {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***updateDownloadStatus(for: result)
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if download can be called.
 ***REMOVED***var canDownload: Bool {
