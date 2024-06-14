@@ -25,8 +25,8 @@ extension AppDelegate: UIApplicationDelegate {
 ***REMOVED***
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
-***REMOVED***func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+***REMOVED***func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
 ***REMOVED******REMOVED******REMOVED*** Present banner notifications in app foreground.
-***REMOVED******REMOVED***completionHandler([.banner])
+***REMOVED******REMOVED***return [.banner]
 ***REMOVED***
 ***REMOVED***
