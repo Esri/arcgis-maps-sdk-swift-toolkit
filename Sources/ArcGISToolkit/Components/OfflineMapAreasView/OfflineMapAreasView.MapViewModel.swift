@@ -88,7 +88,7 @@ private extension FileManager {
     /// The path to the offline map areas directory within the documents directory.
     var offlineMapAreasDirectory: URL {
         documentsDirectory.appending(
-            path: FileManager.offlineMapAreasPath,
+            path: Self.offlineMapAreasPath,
             directoryHint: .isDirectory
         )
     }
@@ -101,7 +101,7 @@ private extension FileManager {
     /// The path to the preplanned map areas directory for a specific portal item.
     func preplannedDirectory(forItemID itemID: String) -> URL {
         webMapDirectory(forItemID: itemID).appending(
-            path: FileManager.preplannedDirectoryPath,
+            path: Self.preplannedDirectoryPath,
             directoryHint: .isDirectory
         )
     }
