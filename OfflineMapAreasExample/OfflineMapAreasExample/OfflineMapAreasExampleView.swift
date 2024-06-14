@@ -16,12 +16,18 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
+@MainActor
 struct OfflineMapAreasExampleView: View {
     /// The map of the Naperville water network.
     @State private var map = Map(item: PortalItem.naperville())
     
     /// A Boolean value indicating whether the offline map ares view should be presented.
     @State private var isShowingOfflineMapAreasView = false
+    
+    init() {
+        // Ask the job manager to schedule background status checks for every 30 seconds.
+        JobManager.shared.preferredBackgroundStatusCheckSchedule = .regularInterval(interval: 30)
+    }
     
     var body: some View {
         MapView(map: map)

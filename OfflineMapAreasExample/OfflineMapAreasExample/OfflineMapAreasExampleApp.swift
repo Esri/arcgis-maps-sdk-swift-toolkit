@@ -20,20 +20,17 @@ import SwiftUI
 struct OfflineMapAreasExampleApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    init() {
-        Task {
+    var body: some SwiftUI.Scene {
+        WindowGroup {
+            OfflineMapAreasExampleView()
+        }
+        .backgroundTask(.urlSession(ArcGISEnvironment.defaultBackgroundURLSessionIdentifier)) {
             // Allow the `ArcGISURLSession` to handle it's background task events.
             await ArcGISEnvironment.backgroundURLSession.handleEventsForBackgroundTask()
             
             // When the app is re-launched from a background url session, resume any paused jobs,
             // and check the job status.
-            JobManager.shared.resumeAllPausedJobs()
-        }
-    }
-    
-    var body: some SwiftUI.Scene {
-        WindowGroup {
-            OfflineMapAreasExampleView()
+            await JobManager.shared.resumeAllPausedJobs()
         }
     }
 }
