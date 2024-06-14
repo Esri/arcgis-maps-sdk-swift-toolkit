@@ -24,8 +24,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// The task to use to take the area offline.
     private let offlineMapTask: OfflineMapTask
     
-    /// The download directory for the preplanned map areas.
-    private let preplannedDirectory: URL
+    /// The ID of the web map.
+    private let portalItemID: String
     
     /// The ID of the preplanned map area.
     private let preplannedMapAreaID: String
@@ -58,11 +58,11 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     init?(
         offlineMapTask: OfflineMapTask,
         mapArea: PreplannedMapAreaProtocol,
-        directory: URL
+        portalItemID: String
     ) {
         self.offlineMapTask = offlineMapTask
         preplannedMapArea = mapArea
-        preplannedDirectory = directory
+        self.portalItemID = portalItemID
         
         if let itemID = preplannedMapArea.id {
             preplannedMapAreaID = itemID.rawValue
@@ -141,7 +141,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         
         // Construct file URL for mobile map package with file structure:
         // .../OfflineMapAreas/Preplanned/{id}/Package/{id}.mmpk
-        let fileURL = preplannedDirectory
+        let fileURL = FileManager.default.preplannedDirectory(forPortalItemID: portalItemID)
             .appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
             .appending(component: FileManager.packageDirectoryPath, directoryHint: .isDirectory)
             .appendingPathComponent(preplannedMapAreaID)
@@ -180,37 +180,19 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     func downloadPreplannedMapArea() async {
         precondition(canDownload)
         status = .downloading
-
+        
         do {
             guard let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask) else { return }
             
-            let mmpkDirectory = try createDownloadDirectories()
+            let mmpkDirectory = FileManager.default.mmpkDirectory(forPortalItemID: portalItemID, preplannedMapAreaID: preplannedMapAreaID)
+            
+            try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
             
             await runDownloadTask(for: parameters, in: mmpkDirectory)
         } catch {
             // If creating the parameters or directories fails, set the failure.
             self.result = .failure(error)
         }
-    }
-    
-    /// Creates download directories for the preplanned map area and its mobile map package.
-    /// - Returns: The URL for the mobile map package directory.
-    private func createDownloadDirectories() throws -> URL {
-        let downloadDirectory = preplannedDirectory
-            .appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
-        
-        let packageDirectory = downloadDirectory
-            .appending(component: FileManager.packageDirectoryPath, directoryHint: .isDirectory)
-        
-        try FileManager.default.createDirectory(atPath: downloadDirectory.relativePath, withIntermediateDirectories: true)
-        
-        try FileManager.default.createDirectory(atPath: packageDirectory.relativePath, withIntermediateDirectories: true)
-        
-        let mmpkDirectory = packageDirectory
-            .appendingPathComponent(preplannedMapAreaID)
-            .appendingPathExtension(FileManager.mmpkPathExtension)
-        
-        return mmpkDirectory
     }
     
     /// Runs the download task to download the preplanned offline map.
@@ -274,11 +256,6 @@ extension PreplannedMapModel {
     }
 }
 
-private extension FileManager {
-    static let packageDirectoryPath: String = "Package"
-    static let mmpkPathExtension: String = "mmpk"
-}
-
 extension PreplannedMapModel: Hashable {
     nonisolated public static func == (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
         lhs === rhs
@@ -328,5 +305,74 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
     
     var id: PortalItem.ID? {
         portalItem.id
+    }
+}
+
+private extension FileManager {
+    static let mmpkPathExtension: String = "mmpk"
+    static let offlineMapAreasPath: String = "OfflineMapAreas"
+    static let packageDirectoryPath: String = "Package"
+    static let preplannedDirectoryPath: String = "Preplanned"
+    
+    /// The path to the documents folder.
+    var documentsDirectory: URL {
+        URL.documentsDirectory
+    }
+    
+    /// The path to the offline map areas directory within the documents directory.
+    var offlineMapAreasDirectory: URL {
+        documentsDirectory.appending(
+            path: Self.offlineMapAreasPath,
+            directoryHint: .isDirectory
+        )
+    }
+    
+    /// The path to the web map directory for a specific portal item.
+    /// - Parameter portalItemID: The ID of the web map portal item.
+    func webMapDirectory(forPortalItemID portalItemID: String) -> URL {
+        offlineMapAreasDirectory.appending(path: portalItemID, directoryHint: .isDirectory)
+    }
+    
+    /// The path to the preplanned map areas directory for a specific portal item.
+    /// - Parameter portalItemID: The ID of the web map portal item.
+    func preplannedDirectory(forPortalItemID portalItemID: String) -> URL {
+        webMapDirectory(forPortalItemID: portalItemID).appending(
+            path: Self.preplannedDirectoryPath,
+            directoryHint: .isDirectory
+        )
+    }
+    
+    /// The path to the download directory for the preplanned map area metadata and mobile map package.
+    /// - Parameters:
+    ///   - portalItemID: The ID of the web map portal item.
+    ///   - preplannedMapAreaID: The ID of the preplanned map area.
+    func downloadDirectory(forPortalItemID portalItemID: String, preplannedMapAreaID: String) -> URL {
+        preplannedDirectory(forPortalItemID: portalItemID)
+            .appending(
+                path: preplannedMapAreaID,
+                directoryHint: .isDirectory
+            )
+    }
+    
+    /// The path to the package directory for the preplanned map area mobile map package.
+    /// - Parameters:
+    ///   - portalItemID: The ID of the web map portal item.
+    ///   - preplannedMapAreaID: The ID of the preplanned map area.
+    func packageDirectory(forPortalItemID portalItemID: String, preplannedMapAreaID: String) -> URL {
+        downloadDirectory(forPortalItemID: portalItemID, preplannedMapAreaID: preplannedMapAreaID)
+            .appending(
+                component: Self.packageDirectoryPath,
+                directoryHint: .isDirectory
+            )
+    }
+    
+    /// The path to the mobile map package file for the preplanned map area mobile map package.
+    /// - Parameters:
+    ///   - portalItemID: The ID of the web map portal item.
+    ///   - preplannedMapAreaID: The ID of the preplanned map area.
+    func mmpkDirectory(forPortalItemID portalItemID: String, preplannedMapAreaID: String) -> URL {
+        packageDirectory(forPortalItemID: portalItemID, preplannedMapAreaID: preplannedMapAreaID)
+            .appendingPathComponent(preplannedMapAreaID)
+            .appendingPathExtension(Self.mmpkPathExtension)
     }
 }

@@ -133,7 +133,7 @@ public struct PreplannedListItemView: View {
         model: PreplannedMapModel(
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             mapArea: MockPreplannedMapArea(),
-            directory: URL.documentsDirectory
+            portalItemID: ""
         )!
     )
     .padding()
