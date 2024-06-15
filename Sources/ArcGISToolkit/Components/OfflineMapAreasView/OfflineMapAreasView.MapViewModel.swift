@@ -30,11 +30,8 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ The preplanned offline map information.
 ***REMOVED******REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the map has preplanned map areas.
-***REMOVED******REMOVED***@Published private(set) var hasPreplannedMapAreas = false
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the user has authorized notifications to be shown.
-***REMOVED******REMOVED***var canShowNotifications = false
+***REMOVED******REMOVED***@Published var canShowNotifications = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(map: Map) {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask = OfflineMapTask(onlineMap: map)
@@ -58,17 +55,10 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let models = try? preplannedMapModels!.get() {
-***REMOVED******REMOVED******REMOVED******REMOVED***hasPreplannedMapAreas = !models.isEmpty
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***for model in models {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model.setMobileMapPackage()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Request authorization to show notifications.
-***REMOVED******REMOVED***func checkCanShowNotifications() async {
+***REMOVED******REMOVED***func requestUserNotificationAuthorization() async {
 ***REMOVED******REMOVED******REMOVED***canShowNotifications = (
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await UNUserNotificationCenter.current()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
