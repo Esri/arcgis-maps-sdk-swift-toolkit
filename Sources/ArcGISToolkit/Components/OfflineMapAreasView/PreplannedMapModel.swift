@@ -123,7 +123,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// Posts a local notification that the job completed with success or failure.
     /// - Precondition: `job.status == .succeeded || job.status == .failed`
-    private static func notifyJobCompleted(job: DownloadPreplannedOfflineMapJob) {
+    private static func notifyJobCompleted(job: DownloadPreplannedOfflineMapJob) async throws {
         precondition(job.status == .succeeded || job.status == .failed)
         guard
             let preplannedMapArea = job.parameters.preplannedMapArea,
@@ -142,7 +142,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         let identifier = id.rawValue
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
-        UNUserNotificationCenter.current().add(request)
+        //try await UNUserNotificationCenter.current().add(request)
     }
     
     /// Downloads the preplanned map area.
@@ -181,7 +181,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
             mobileMapPackage = try? result.map { $0.mobileMapPackage }.get()
             JobManager.shared.jobs.removeAll { $0 === job }
             if job.status == .succeeded || job.status == .failed {
-                Self.notifyJobCompleted(job: job)
+                try? await Self.notifyJobCompleted(job: job)
             }
         }
     }
@@ -285,7 +285,7 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
     }
 }
 
-private extension FileManager {
+extension FileManager {
     private static let mmpkPathExtension: String = "mmpk"
     private static let offlineMapAreasPath: String = "OfflineMapAreas"
     private static let packageDirectoryPath: String = "Package"
