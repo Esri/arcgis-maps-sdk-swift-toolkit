@@ -39,15 +39,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The combined status of the preplanned map area.
 ***REMOVED***@Published private(set) var status: Status = .notLoaded
 ***REMOVED***
-***REMOVED******REMOVED***/ The result of the download job. When the result is `.success` the mobile map package is returned.
-***REMOVED******REMOVED***/ If the result is `.failure` then the error is returned. The result will be `nil` when the preplanned
-***REMOVED******REMOVED***/ map area is still packaging or loading.
-***REMOVED***@Published private(set) var result: Result<MobileMapPackage, Error>? {
-***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***updateDownloadStatus(for: result)
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if download can be called.
 ***REMOVED***var canDownload: Bool {
 ***REMOVED******REMOVED***switch status {
@@ -59,28 +50,22 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***init?(
+***REMOVED***init(
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
 ***REMOVED******REMOVED***mapArea: PreplannedMapAreaProtocol,
-***REMOVED******REMOVED***portalItemID: String
+***REMOVED******REMOVED***portalItemID: String,
+***REMOVED******REMOVED***preplannedMapAreaID: String
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.offlineMapTask = offlineMapTask
 ***REMOVED******REMOVED***preplannedMapArea = mapArea
 ***REMOVED******REMOVED***self.portalItemID = portalItemID
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if let itemID = preplannedMapArea.id {
-***REMOVED******REMOVED******REMOVED***preplannedMapAreaID = itemID.rawValue
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
+***REMOVED******REMOVED***self.preplannedMapAreaID = preplannedMapAreaID
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let foundJob = lookupDownloadJob() {
-***REMOVED******REMOVED******REMOVED***job = foundJob
-***REMOVED******REMOVED******REMOVED***status = .downloading
-***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***result = await job?.result.map { $0.mobileMapPackage ***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***print("-- found job: \(job?.parameters.preplannedMapArea?.title ?? "unknown")")
+***REMOVED******REMOVED******REMOVED***startAndObserveJob(foundJob)
 ***REMOVED*** else if let mmpk = lookupMobileMapPackage() {
+***REMOVED******REMOVED******REMOVED***print("-- found mmpk: \(mmpk.fileURL)")
 ***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mmpk
 ***REMOVED******REMOVED******REMOVED***self.status = .downloaded
 ***REMOVED***
@@ -113,7 +98,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***.lazy
 ***REMOVED******REMOVED******REMOVED***.compactMap { $0 as? DownloadPreplannedOfflineMapJob ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.first {
-***REMOVED******REMOVED******REMOVED******REMOVED***return $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -131,11 +116,10 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the status based on the download result of the mobile map package.
-***REMOVED***private func updateDownloadStatus(for downloadResult: Optional<Result<MobileMapPackage, any Error>>) {
+***REMOVED***private func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>?) {
 ***REMOVED******REMOVED***switch downloadResult {
-***REMOVED******REMOVED***case .success(let mobileMapPackage):
+***REMOVED******REMOVED***case .success:
 ***REMOVED******REMOVED******REMOVED***status = .downloaded
-***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mobileMapPackage
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
 ***REMOVED******REMOVED***case .none:
@@ -151,11 +135,13 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Posts a local notification that the job completed with success or failure.
-***REMOVED***func notifyJobCompleted() {
-***REMOVED******REMOVED***guard let job,
-***REMOVED******REMOVED******REMOVED***  job.status == .succeeded || job.status == .failed,
-***REMOVED******REMOVED******REMOVED***  let preplannedMapArea = job.parameters.preplannedMapArea,
-***REMOVED******REMOVED******REMOVED***  let id = preplannedMapArea.id else { return ***REMOVED***
+***REMOVED******REMOVED***/ - Precondition: `job.status == .succeeded || job.status == .failed`
+***REMOVED***private static func notifyJobCompleted(job: DownloadPreplannedOfflineMapJob) {
+***REMOVED******REMOVED***precondition(job.status == .succeeded || job.status == .failed)
+***REMOVED******REMOVED***guard
+***REMOVED******REMOVED******REMOVED***let preplannedMapArea = job.parameters.preplannedMapArea,
+***REMOVED******REMOVED******REMOVED***let id = preplannedMapArea.id
+***REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let content = UNMutableNotificationContent()
 ***REMOVED******REMOVED***content.sound = UNNotificationSound.default
@@ -180,41 +166,39 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***guard let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask) else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let mmpkDirectory = FileManager.default.mmpkDirectory(forPortalItemID: portalItemID, preplannedMapAreaID: preplannedMapAreaID)
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***await runDownloadTask(for: parameters, in: mmpkDirectory)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Create the download preplanned offline map job.
+***REMOVED******REMOVED******REMOVED***let job = offlineMapTask.makeDownloadPreplannedOfflineMapJob(
+***REMOVED******REMOVED******REMOVED******REMOVED***parameters: parameters,
+***REMOVED******REMOVED******REMOVED******REMOVED***downloadDirectory: mmpkDirectory
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***JobManager.shared.jobs.append(job)
+***REMOVED******REMOVED******REMOVED***startAndObserveJob(job)
 ***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED*** If creating the parameters or directories fails, set the failure.
-***REMOVED******REMOVED******REMOVED***self.result = .failure(error)
+***REMOVED******REMOVED******REMOVED***status = .downloadFailure(error)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Runs the download task to download the preplanned offline map.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - parameters: The parameters used to download the offline map.
-***REMOVED******REMOVED***/   - mmpkDirectory: The directory used to place the mobile map package result.
-***REMOVED***private func runDownloadTask(
-***REMOVED******REMOVED***for parameters: DownloadPreplannedOfflineMapParameters,
-***REMOVED******REMOVED***in mmpkDirectory: URL
-***REMOVED***) async {
-***REMOVED******REMOVED******REMOVED*** Create the download preplanned offline map job.
-***REMOVED******REMOVED***let job = offlineMapTask.makeDownloadPreplannedOfflineMapJob(
-***REMOVED******REMOVED******REMOVED***parameters: parameters,
-***REMOVED******REMOVED******REMOVED***downloadDirectory: mmpkDirectory
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***JobManager.shared.jobs.append(job)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***/ Sets the job property of this instance, starts the job, observes it, and
+***REMOVED******REMOVED***/ when it's done, updates the status, removes the job from the job manager,
+***REMOVED******REMOVED***/ and fires a user notification.
+***REMOVED***private func startAndObserveJob(_ job: DownloadPreplannedOfflineMapJob) {
+***REMOVED******REMOVED***print("-- starting job: \(job.parameters.preplannedMapArea?.title ?? "")")
 ***REMOVED******REMOVED***self.job = job
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Start the job.
 ***REMOVED******REMOVED***job.start()
+***REMOVED******REMOVED***status = .downloading
+***REMOVED******REMOVED***Task { @MainActor in
+***REMOVED******REMOVED******REMOVED***print("-- job complete: \(job.parameters.preplannedMapArea?.title ?? ""), status: \(job.status)")
+***REMOVED******REMOVED******REMOVED***let result = await job.result
+***REMOVED******REMOVED******REMOVED***updateDownloadStatus(for: result)
+***REMOVED******REMOVED******REMOVED***mobileMapPackage = try? result.map { $0.mobileMapPackage ***REMOVED***.get()
+***REMOVED******REMOVED******REMOVED***JobManager.shared.jobs.removeAll { $0 === job ***REMOVED***
+***REMOVED******REMOVED******REMOVED***if job.status == .succeeded || job.status == .failed {
+***REMOVED******REMOVED******REMOVED******REMOVED***Self.notifyJobCompleted(job: job)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Await the output of the job and assigns the result.
-***REMOVED******REMOVED***result = await job.result.map { $0.mobileMapPackage ***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
