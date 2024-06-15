@@ -14,6 +14,7 @@
 
 import XCTest
 import ArcGIS
+import Combine
 @testable import ArcGISToolkit
 
 private extension PreplannedMapAreaProtocol {
@@ -242,6 +243,99 @@ class PreplannedMapModelTests: XCTestCase {
         guard case .packageFailure = model.status else {
             XCTFail("PreplannedMapModel status is not \".loadFailure\".")
             return
+        }
+    }
+    
+    @MainActor
+    func testDownloadStatuses() async throws {
+        let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+        let task = OfflineMapTask(portalItem: portalItem)
+        let areas = try await task.preplannedMapAreas
+        let area = try XCTUnwrap(areas.first)
+        let areaID = try XCTUnwrap(area.id)
+        
+        defer {
+            // Clean up
+            let directory = FileManager.default.mmpkDirectory(forPortalItemID: portalItem.id!.rawValue, preplannedMapAreaID: areaID.rawValue)
+            try? FileManager.default.removeItem(at: directory)
+        }
+        
+        let model = PreplannedMapModel(
+            offlineMapTask: task,
+            mapArea: area,
+            portalItemID: "acc027394bc84c2fb04d1ed317aac674",
+            preplannedMapAreaID: areaID.rawValue
+        )
+        
+        var statuses = [PreplannedMapModel.Status]()
+        var subscriptions = Set<AnyCancellable>()
+        model.$status
+            .receive(on: DispatchQueue.main)
+            .sink { value in
+                statuses.append(value)
+            }
+            .store(in: &subscriptions)
+        
+        await model.load()
+        
+        // Start downloading
+        await model.downloadPreplannedMapArea()
+        
+        // Wait for job to finish.
+        _ = await model.job?.result
+        
+        // Give the final status some time to be updated.
+        try? await Task.sleep(nanoseconds: 1_000_000)
+        
+        // Verify statuses
+        let expectedStatusCount = 6
+        guard statuses.count == expectedStatusCount else {
+            XCTFail("Expected a statuses count of \(expectedStatusCount), count is \(statuses.count).")
+            return
+        }
+        
+        let expected: [PreplannedMapModel.Status] = [
+            .notLoaded,
+            .loading,
+            .packaged,
+            .downloading,
+            .downloading,
+            .downloaded
+        ]
+        
+        for zipped in zip(statuses, expected) {
+            let status = zipped.0
+            let expected = zipped.1
+            if !status.matches(other: expected) {
+                XCTFail("Status \(status) was expected to be \"\(expected)\".")
+            }
+        }
+    }
+}
+
+private extension PreplannedMapModel.Status {
+    /// Checks if another value is equivalent to this value ignoring
+    /// any associated values.
+    func matches(other: Self) -> Bool {
+        switch self {
+        case .notLoaded:
+            if case .notLoaded = other { true } else { false }
+        case .loading:
+            if case .loading = other { true } else { false }
+        case .loadFailure:
+            if case .loadFailure = other { true } else { false }
+        case .packaged:
+            if case .packaged = other { true } else { false }
+        case .packaging:
+            if case .packaging = other { true } else { false }
+        case .packageFailure:
+            if case .packageFailure = other { true } else { false }
+        case .downloading:
+            if case .downloading = other { true } else { false }
+        case .downloaded:
+            if case .downloaded = other { true } else { false }
+        case .downloadFailure:
+            if case .downloadFailure = other { true } else { false }
         }
     }
 }
