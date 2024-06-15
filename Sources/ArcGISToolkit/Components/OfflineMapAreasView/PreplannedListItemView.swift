@@ -138,5 +138,7 @@ private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
     var thumbnail: LoadableImage? = nil
     
     func retryLoad() async throws { }
-    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { return DownloadPreplannedOfflineMapParameters() }
+    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+        DownloadPreplannedOfflineMapParameters()
+    }
 }
