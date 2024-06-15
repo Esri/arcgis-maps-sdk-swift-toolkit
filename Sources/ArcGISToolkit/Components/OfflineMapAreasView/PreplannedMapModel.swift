@@ -62,10 +62,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         self.preplannedMapAreaID = preplannedMapAreaID
         
         if let foundJob = lookupDownloadJob() {
-            print("-- found job: \(job?.parameters.preplannedMapArea?.title ?? "unknown")")
             startAndObserveJob(foundJob)
         } else if let mmpk = lookupMobileMapPackage() {
-            print("-- found mmpk: \(mmpk.fileURL)")
             self.mobileMapPackage = mmpk
             self.status = .downloaded
         }
@@ -185,12 +183,10 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// when it's done, updates the status, removes the job from the job manager,
     /// and fires a user notification.
     private func startAndObserveJob(_ job: DownloadPreplannedOfflineMapJob) {
-        print("-- starting job: \(job.parameters.preplannedMapArea?.title ?? "")")
         self.job = job
         job.start()
         status = .downloading
         Task { @MainActor in
-            print("-- job complete: \(job.parameters.preplannedMapArea?.title ?? ""), status: \(job.status)")
             let result = await job.result
             updateDownloadStatus(for: result)
             mobileMapPackage = try? result.map { $0.mobileMapPackage }.get()
