@@ -32,29 +32,33 @@ public struct OfflineMapAreasView: View {
     public var body: some View {
         NavigationStack {
             Form {
-                Section(header: HStack {
-                    Text("Preplanned Map Areas").bold()
-                    Spacer()
-                    Button {
-                        Task {
-                            isReloadingPreplannedMapAreas = true
-                            await mapViewModel.makePreplannedOfflineMapModels()
-                            isReloadingPreplannedMapAreas = false
+                Section {
+                    preplannedMapAreaViews
+                } header: {
+                    HStack {
+                        Text("Preplanned Map Areas").bold()
+                        Spacer()
+                        Button {
+                            Task {
+                                isReloadingPreplannedMapAreas = true
+                                await mapViewModel.makePreplannedOfflineMapModels()
+                                isReloadingPreplannedMapAreas = false
+                            }
+                        } label: {
+                            Image(systemName: "arrow.clockwise")
                         }
-                    } label: {
-                        Image(systemName: "arrow.clockwise")
+                        .controlSize(.mini)
+                        .disabled(isReloadingPreplannedMapAreas)
                     }
-                    .controlSize(.mini)
-                    .disabled(isReloadingPreplannedMapAreas)
-                }.frame(maxWidth: .infinity)
-                ) {
-                    preplannedMapAreas
+                    .frame(maxWidth: .infinity)
                 }
                 .textCase(nil)
             }
             .task {
                 await mapViewModel.makePreplannedOfflineMapModels()
-                await mapViewModel.checkCanShowNotifications()
+            }
+            .task {
+                await mapViewModel.requestUserNotificationAuthorization()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -66,10 +70,10 @@ public struct OfflineMapAreasView: View {
         }
     }
     
-    @ViewBuilder private var preplannedMapAreas: some View {
+    @ViewBuilder private var preplannedMapAreaViews: some View {
         switch mapViewModel.preplannedMapModels {
         case .success(let models):
-            if mapViewModel.hasPreplannedMapAreas {
+            if !models.isEmpty {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(
                         model: preplannedMapModel
