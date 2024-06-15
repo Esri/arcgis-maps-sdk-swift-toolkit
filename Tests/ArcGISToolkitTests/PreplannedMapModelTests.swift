@@ -37,7 +37,12 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         let mockArea = MockPreplannedMapArea()
-        let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, portalItemID: "")!
+        let model = PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: mockArea,
+            portalItemID: "",
+            preplannedMapAreaID: ""
+        )
         XCTAssertIdentical(model.preplannedMapArea as? MockPreplannedMapArea, mockArea)
     }
     
@@ -48,7 +53,12 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         let mockArea = MockPreplannedMapArea()
-        let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, portalItemID: "")!
+        let model = PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: mockArea,
+            portalItemID: "",
+            preplannedMapAreaID: ""
+        )
         guard case .notLoaded = model.status else {
             XCTFail("PreplannedMapModel initial status is not \".notLoaded\".")
             return
@@ -69,7 +79,12 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         let mockArea = MockPreplannedMapArea()
-        let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, portalItemID: "")!
+        let model = PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: mockArea,
+            portalItemID: "",
+            preplannedMapAreaID: ""
+        )
         Task { await model.load() }
         try await Task.sleep(nanoseconds: PreplannedMapModelTests.sleepNanoseconds)
         guard case .loading = model.status else {
@@ -88,7 +103,12 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         let mockArea = MockPreplannedMapArea()
-        let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, portalItemID: "")!
+        let model = PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: mockArea,
+            portalItemID: "",
+            preplannedMapAreaID: ""
+        )
         
         // Packaging status is `nil` for compatibility with legacy webmaps
         // when they have packaged areas but have incomplete metadata.
@@ -116,7 +136,12 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         let mockArea = MockPreplannedMapArea()
-        let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, portalItemID: "")!
+        let model = PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: mockArea,
+            portalItemID: "",
+            preplannedMapAreaID: ""
+        )
         await model.load()
         
         guard case .loadFailure = model.status else {
@@ -139,7 +164,12 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         let mockArea = MockPreplannedMapArea()
-        let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, portalItemID: "")!
+        let model = PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: mockArea,
+            portalItemID: "",
+            preplannedMapAreaID: ""
+        )
         await model.load()
         
         guard case .packaging = model.status else {
@@ -162,7 +192,12 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         let mockArea = MockPreplannedMapArea()
-        let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, portalItemID: "")!
+        let model = PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: mockArea,
+            portalItemID: "",
+            preplannedMapAreaID: ""
+        )
         await model.load()
         
         guard case .packaged = model.status else {
@@ -186,7 +221,12 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         let mockArea = MockPreplannedMapArea()
-        let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, portalItemID: "")!
+        let model = PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: mockArea,
+            portalItemID: "",
+            preplannedMapAreaID: ""
+        )
         await model.load()
         
         guard case .packageFailure = model.status else {
@@ -211,7 +251,12 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         let mockArea = MockPreplannedMapArea()
-        let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, portalItemID: "")!
+        let model = PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: mockArea,
+            portalItemID: "",
+            preplannedMapAreaID: ""
+        )
         await model.load()
         
         guard case .packageFailure = model.status else {
@@ -230,7 +275,12 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         let mockArea = MockPreplannedMapArea()
-        let model = PreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, portalItemID: "")!
+        let model = PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: mockArea,
+            portalItemID: "",
+            preplannedMapAreaID: ""
+        )
         await model.load()
         
         XCTAssertTrue(model.canDownload)
@@ -265,7 +315,12 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         let mockArea = MockPreplannedMapArea()
-        let model = MockPreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, portalItemID: "")!
+        let model = PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: mockArea,
+            portalItemID: "",
+            preplannedMapAreaID: ""
+        )
         await model.load()
         
         XCTAssertTrue(model.canDownload)
@@ -301,7 +356,12 @@ class PreplannedMapModelTests: XCTestCase {
         }
         
         let mockArea = MockPreplannedMapArea()
-        let model = MockPreplannedMapModel(offlineMapTask: OfflineMapTask(onlineMap: Map()), mapArea: mockArea, portalItemID: "")!
+        let model = PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: mockArea,
+            portalItemID: "",
+            preplannedMapAreaID: ""
+        )
         await model.load()
         
         XCTAssertTrue(model.canDownload)
