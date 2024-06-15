@@ -39,16 +39,21 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The combined status of the preplanned map area.
 ***REMOVED***@Published private(set) var status: Status = .notLoaded
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if a user notification should be shown when a job completes.
+***REMOVED***let showsUserNotificationOnCompletion: Bool
+***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
 ***REMOVED******REMOVED***mapArea: PreplannedMapAreaProtocol,
 ***REMOVED******REMOVED***portalItemID: String,
-***REMOVED******REMOVED***preplannedMapAreaID: String
+***REMOVED******REMOVED***preplannedMapAreaID: String,
+***REMOVED******REMOVED***showsUserNotificationOnCompletion: Bool = true
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.offlineMapTask = offlineMapTask
 ***REMOVED******REMOVED***preplannedMapArea = mapArea
 ***REMOVED******REMOVED***self.portalItemID = portalItemID
 ***REMOVED******REMOVED***self.preplannedMapAreaID = preplannedMapAreaID
+***REMOVED******REMOVED***self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let foundJob = lookupDownloadJob() {
 ***REMOVED******REMOVED******REMOVED***startAndObserveJob(foundJob)
@@ -142,7 +147,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***let identifier = id.rawValue
 ***REMOVED******REMOVED***let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***try await UNUserNotificationCenter.current().add(request)
+***REMOVED******REMOVED***try await UNUserNotificationCenter.current().add(request)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.
@@ -180,7 +185,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***updateDownloadStatus(for: result)
 ***REMOVED******REMOVED******REMOVED***mobileMapPackage = try? result.map { $0.mobileMapPackage ***REMOVED***.get()
 ***REMOVED******REMOVED******REMOVED***JobManager.shared.jobs.removeAll { $0 === job ***REMOVED***
-***REMOVED******REMOVED******REMOVED***if job.status == .succeeded || job.status == .failed {
+***REMOVED******REMOVED******REMOVED***if showsUserNotificationOnCompletion && (job.status == .succeeded || job.status == .failed) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await Self.notifyJobCompleted(job: job)
 ***REMOVED******REMOVED***
 ***REMOVED***

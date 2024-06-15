@@ -264,7 +264,10 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
 ***REMOVED******REMOVED******REMOVED***portalItemID: "acc027394bc84c2fb04d1ed317aac674",
-***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID.rawValue
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID.rawValue,
+***REMOVED******REMOVED******REMOVED******REMOVED*** User notifications in unit tests are not supported, must pass false here
+***REMOVED******REMOVED******REMOVED******REMOVED*** or the test process will crash.
+***REMOVED******REMOVED******REMOVED***showsUserNotificationOnCompletion: false
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var statuses = [PreplannedMapModel.Status]()
