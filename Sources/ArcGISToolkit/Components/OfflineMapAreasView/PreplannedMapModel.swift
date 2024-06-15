@@ -123,7 +123,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Posts a local notification that the job completed with success or failure.
 ***REMOVED******REMOVED***/ - Precondition: `job.status == .succeeded || job.status == .failed`
-***REMOVED***private static func notifyJobCompleted(job: DownloadPreplannedOfflineMapJob) {
+***REMOVED***private static func notifyJobCompleted(job: DownloadPreplannedOfflineMapJob) async throws {
 ***REMOVED******REMOVED***precondition(job.status == .succeeded || job.status == .failed)
 ***REMOVED******REMOVED***guard
 ***REMOVED******REMOVED******REMOVED***let preplannedMapArea = job.parameters.preplannedMapArea,
@@ -142,7 +142,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***let identifier = id.rawValue
 ***REMOVED******REMOVED***let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***UNUserNotificationCenter.current().add(request)
+***REMOVED******REMOVED******REMOVED***try await UNUserNotificationCenter.current().add(request)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.
@@ -181,7 +181,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***mobileMapPackage = try? result.map { $0.mobileMapPackage ***REMOVED***.get()
 ***REMOVED******REMOVED******REMOVED***JobManager.shared.jobs.removeAll { $0 === job ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***if job.status == .succeeded || job.status == .failed {
-***REMOVED******REMOVED******REMOVED******REMOVED***Self.notifyJobCompleted(job: job)
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await Self.notifyJobCompleted(job: job)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -285,7 +285,7 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***
 ***REMOVED***
 
-private extension FileManager {
+extension FileManager {
 ***REMOVED***private static let mmpkPathExtension: String = "mmpk"
 ***REMOVED***private static let offlineMapAreasPath: String = "OfflineMapAreas"
 ***REMOVED***private static let packageDirectoryPath: String = "Package"
