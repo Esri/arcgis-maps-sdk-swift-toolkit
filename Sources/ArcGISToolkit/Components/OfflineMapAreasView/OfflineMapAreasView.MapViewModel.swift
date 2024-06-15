@@ -30,11 +30,8 @@ extension OfflineMapAreasView {
         /// The preplanned offline map information.
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
         
-        /// A Boolean value indicating whether the map has preplanned map areas.
-        @Published private(set) var hasPreplannedMapAreas = false
-        
         /// A Boolean value indicating whether the user has authorized notifications to be shown.
-        var canShowNotifications = false
+        @Published var canShowNotifications = false
         
         init(map: Map) {
             offlineMapTask = OfflineMapTask(onlineMap: map)
@@ -58,17 +55,10 @@ extension OfflineMapAreasView {
                         )
                     }
             }
-            if let models = try? preplannedMapModels!.get() {
-                hasPreplannedMapAreas = !models.isEmpty
-                
-                for model in models {
-                    model.setMobileMapPackage()
-                }
-            }
         }
         
         /// Request authorization to show notifications.
-        func checkCanShowNotifications() async {
+        func requestUserNotificationAuthorization() async {
             canShowNotifications = (
                 try? await UNUserNotificationCenter.current()
                     .requestAuthorization(options: [.alert, .sound])

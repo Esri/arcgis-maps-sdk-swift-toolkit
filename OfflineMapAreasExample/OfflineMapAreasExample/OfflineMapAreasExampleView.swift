@@ -26,6 +26,7 @@ struct OfflineMapAreasExampleView: View {
     
     init() {
         // Ask the job manager to schedule background status checks for every 30 seconds.
+        // In your app, set this to a value that makes sense for the kinds of jobs that you run.
         JobManager.shared.preferredBackgroundStatusCheckSchedule = .regularInterval(interval: 30)
     }
     
