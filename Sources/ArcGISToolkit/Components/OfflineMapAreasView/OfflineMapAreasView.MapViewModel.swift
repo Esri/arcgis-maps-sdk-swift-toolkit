@@ -22,7 +22,7 @@ extension OfflineMapAreasView {
     @MainActor
     class MapViewModel: ObservableObject {
         /// The portal item ID of the web map.
-        private let portalItemID: String?
+        private let portalItemID: Item.ID?
         
         /// The offline map task.
         private let offlineMapTask: OfflineMapTask
@@ -32,7 +32,7 @@ extension OfflineMapAreasView {
         
         init(map: Map) {
             offlineMapTask = OfflineMapTask(onlineMap: map)
-            portalItemID = map.item?.id?.rawValue
+            portalItemID = map.item?.id
         }
         
         /// Gets the preplanned map areas from the offline map task and creates the
@@ -48,7 +48,7 @@ extension OfflineMapAreasView {
                         PreplannedMapModel(
                             offlineMapTask: offlineMapTask,
                             mapArea: $0,
-                            portalItemID: portalItemID,
+                            portalItemID: portalItemID.rawValue,
                             preplannedMapAreaID: $0.id!.rawValue
                         )
                     }
