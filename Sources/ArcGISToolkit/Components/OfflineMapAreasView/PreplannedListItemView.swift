@@ -70,7 +70,7 @@ public struct PreplannedListItemView: View {
                 Image(systemName: "arrow.down.circle")
             }
             .buttonStyle(.plain)
-            .disabled(!model.canDownload)
+            .disabled(!model.status.allowsDownload)
             .foregroundColor(.accentColor)
         }
     }

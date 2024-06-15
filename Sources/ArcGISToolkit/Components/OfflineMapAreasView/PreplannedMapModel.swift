@@ -39,17 +39,6 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// The combined status of the preplanned map area.
     @Published private(set) var status: Status = .notLoaded
     
-    /// A Boolean value indicating if download can be called.
-    var canDownload: Bool {
-        switch status {
-        case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
-                .downloading, .downloaded:
-            false
-        case .packaged, .downloadFailure:
-            true
-        }
-    }
-    
     init(
         offlineMapTask: OfflineMapTask,
         mapArea: PreplannedMapAreaProtocol,
@@ -114,7 +103,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     /// Updates the status based on the download result of the mobile map package.
-    private func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>?) {
+    func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>?) {
         switch downloadResult {
         case .success:
             status = .downloaded
@@ -159,7 +148,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// Downloads the preplanned map area.
     /// - Precondition: `canDownload`
     func downloadPreplannedMapArea() async {
-        precondition(canDownload)
+        precondition(status.allowsDownload)
         status = .downloading
         
         do {
@@ -227,6 +216,17 @@ extension PreplannedMapModel {
             case .loading, .packaging, .packaged, .downloading, .downloaded:
                 false
             default:
+                true
+            }
+        }
+        
+        /// A Boolean value indicating if download is allowed for this status.
+        var allowsDownload: Bool {
+            switch self {
+            case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
+                    .downloading, .downloaded:
+                false
+            case .packaged, .downloadFailure:
                 true
             }
         }
