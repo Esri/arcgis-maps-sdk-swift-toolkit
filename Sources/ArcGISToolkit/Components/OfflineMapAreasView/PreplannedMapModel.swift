@@ -152,7 +152,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***status = .downloading
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***guard let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask)
 ***REMOVED******REMOVED******REMOVED***let mmpkDirectory = FileManager.default.mmpkDirectory(forPortalItemID: portalItemID, preplannedMapAreaID: preplannedMapAreaID)
 ***REMOVED******REMOVED******REMOVED***try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
 ***REMOVED******REMOVED******REMOVED***
@@ -246,7 +246,7 @@ extension PreplannedMapModel: Hashable {
 ***REMOVED***/ A type that acts as a preplanned map area.
 protocol PreplannedMapAreaProtocol {
 ***REMOVED***func retryLoad() async throws
-***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters?
+***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters
 ***REMOVED***
 ***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? { get ***REMOVED***
 ***REMOVED***var title: String { get ***REMOVED***
@@ -257,7 +257,7 @@ protocol PreplannedMapAreaProtocol {
 
 ***REMOVED***/ Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
 extension PreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? {
+***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
 ***REMOVED******REMOVED******REMOVED*** Create the parameters for the download preplanned offline map job.
 ***REMOVED******REMOVED***let parameters = try await offlineMapTask.makeDefaultDownloadPreplannedOfflineMapParameters(
 ***REMOVED******REMOVED******REMOVED***preplannedMapArea: self

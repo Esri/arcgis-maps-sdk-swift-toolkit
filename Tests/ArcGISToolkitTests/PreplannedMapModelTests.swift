@@ -24,7 +24,9 @@ private extension PreplannedMapAreaProtocol {
 ***REMOVED***var description: String { "This is the description text" ***REMOVED***
 ***REMOVED***var thumbnail: LoadableImage? { nil ***REMOVED***
 ***REMOVED***
-***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { nil ***REMOVED***
+***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+***REMOVED******REMOVED***throw NSError()
+***REMOVED***
 ***REMOVED***
 
 class PreplannedMapModelTests: XCTestCase {
@@ -239,30 +241,6 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard case .packageFailure = model.status else {
 ***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".loadFailure\".")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***@MainActor
-***REMOVED***func testDownloadingStatus() async throws {
-***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(
-***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
-***REMOVED******REMOVED******REMOVED***mapArea: mockArea,
-***REMOVED******REMOVED******REMOVED***portalItemID: "",
-***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: ""
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await model.load()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***await model.downloadPreplannedMapArea()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard case .downloading = model.status else {
-***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".downloading\".")
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED***

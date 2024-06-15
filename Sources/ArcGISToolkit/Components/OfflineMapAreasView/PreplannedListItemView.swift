@@ -138,5 +138,7 @@ private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***var thumbnail: LoadableImage? = nil
 ***REMOVED***
 ***REMOVED***func retryLoad() async throws { ***REMOVED***
-***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { return DownloadPreplannedOfflineMapParameters() ***REMOVED***
+***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+***REMOVED******REMOVED***DownloadPreplannedOfflineMapParameters()
+***REMOVED***
 ***REMOVED***
