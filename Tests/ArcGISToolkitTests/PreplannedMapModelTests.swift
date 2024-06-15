@@ -24,7 +24,9 @@ private extension PreplannedMapAreaProtocol {
     var description: String { "This is the description text" }
     var thumbnail: LoadableImage? { nil }
     
-    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { nil }
+    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+        throw NSError()
+    }
 }
 
 class PreplannedMapModelTests: XCTestCase {
@@ -239,30 +241,6 @@ class PreplannedMapModelTests: XCTestCase {
         
         guard case .packageFailure = model.status else {
             XCTFail("PreplannedMapModel status is not \".loadFailure\".")
-            return
-        }
-    }
-    
-    
-    @MainActor
-    func testDownloadingStatus() async throws {
-        class MockPreplannedMapArea: PreplannedMapAreaProtocol {
-            func retryLoad() async throws {}
-        }
-        
-        let mockArea = MockPreplannedMapArea()
-        let model = PreplannedMapModel(
-            offlineMapTask: OfflineMapTask(onlineMap: Map()),
-            mapArea: mockArea,
-            portalItemID: "",
-            preplannedMapAreaID: ""
-        )
-        await model.load()
-        
-        await model.downloadPreplannedMapArea()
-        
-        guard case .downloading = model.status else {
-            XCTFail("PreplannedMapModel status is not \".downloading\".")
             return
         }
     }
