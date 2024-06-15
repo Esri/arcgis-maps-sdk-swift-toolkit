@@ -30,13 +30,9 @@ extension OfflineMapAreasView {
         /// The preplanned offline map information.
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
         
-        /// A Boolean value indicating whether the user has authorized notifications to be shown.
-        @Published var canShowNotifications = false
-        
         init(map: Map) {
             offlineMapTask = OfflineMapTask(onlineMap: map)
             portalItemID = map.item?.id?.rawValue
-            JobManager.shared.resumeAllPausedJobs()
         }
         
         /// Gets the preplanned map areas from the offline map task and creates the
@@ -46,12 +42,14 @@ extension OfflineMapAreasView {
             
             preplannedMapModels = await Result {
                 try await offlineMapTask.preplannedMapAreas
+                    .filter { $0.id != nil }
                     .sorted(using: KeyPathComparator(\.portalItem.title))
-                    .compactMap {
+                    .map {
                         PreplannedMapModel(
                             offlineMapTask: offlineMapTask,
                             mapArea: $0,
-                            portalItemID: portalItemID
+                            portalItemID: portalItemID,
+                            preplannedMapAreaID: $0.id!.rawValue
                         )
                     }
             }
@@ -59,11 +57,8 @@ extension OfflineMapAreasView {
         
         /// Request authorization to show notifications.
         func requestUserNotificationAuthorization() async {
-            canShowNotifications = (
-                try? await UNUserNotificationCenter.current()
-                    .requestAuthorization(options: [.alert, .sound])
-            )
-            ?? false
+            _ = try? await UNUserNotificationCenter.current()
+                .requestAuthorization(options: [.alert, .sound])
         }
     }
 }
