@@ -19,9 +19,6 @@ public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
-    /// The map view model for the online map.
-    @EnvironmentObject var mapViewModel: OfflineMapAreasView.MapViewModel
-    
     public var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
@@ -37,10 +34,6 @@ public struct PreplannedListItemView: View {
         }
         .task {
             await model.load()
-        }
-        .onChange(of: model.job?.status) { status in
-            guard mapViewModel.canShowNotifications else { return }
-            model.notifyJobCompleted()
         }
     }
     
@@ -130,8 +123,9 @@ public struct PreplannedListItemView: View {
         model: PreplannedMapModel(
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             mapArea: MockPreplannedMapArea(),
-            portalItemID: ""
-        )!
+            portalItemID: "",
+            preplannedMapAreaID: ""
+        )
     )
     .padding()
 }

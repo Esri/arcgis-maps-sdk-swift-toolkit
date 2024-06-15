@@ -78,7 +78,6 @@ public struct OfflineMapAreasView: View {
                     PreplannedListItemView(
                         model: preplannedMapModel
                     )
-                    .environmentObject(mapViewModel)
                 }
             } else {
                 emptyPreplannedMapAreasView
