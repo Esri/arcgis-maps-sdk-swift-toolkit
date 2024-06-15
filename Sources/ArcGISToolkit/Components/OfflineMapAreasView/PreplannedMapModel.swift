@@ -62,10 +62,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***self.preplannedMapAreaID = preplannedMapAreaID
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let foundJob = lookupDownloadJob() {
-***REMOVED******REMOVED******REMOVED***print("-- found job: \(job?.parameters.preplannedMapArea?.title ?? "unknown")")
 ***REMOVED******REMOVED******REMOVED***startAndObserveJob(foundJob)
 ***REMOVED*** else if let mmpk = lookupMobileMapPackage() {
-***REMOVED******REMOVED******REMOVED***print("-- found mmpk: \(mmpk.fileURL)")
 ***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mmpk
 ***REMOVED******REMOVED******REMOVED***self.status = .downloaded
 ***REMOVED***
@@ -185,12 +183,10 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ when it's done, updates the status, removes the job from the job manager,
 ***REMOVED******REMOVED***/ and fires a user notification.
 ***REMOVED***private func startAndObserveJob(_ job: DownloadPreplannedOfflineMapJob) {
-***REMOVED******REMOVED***print("-- starting job: \(job.parameters.preplannedMapArea?.title ?? "")")
 ***REMOVED******REMOVED***self.job = job
 ***REMOVED******REMOVED***job.start()
 ***REMOVED******REMOVED***status = .downloading
 ***REMOVED******REMOVED***Task { @MainActor in
-***REMOVED******REMOVED******REMOVED***print("-- job complete: \(job.parameters.preplannedMapArea?.title ?? ""), status: \(job.status)")
 ***REMOVED******REMOVED******REMOVED***let result = await job.result
 ***REMOVED******REMOVED******REMOVED***updateDownloadStatus(for: result)
 ***REMOVED******REMOVED******REMOVED***mobileMapPackage = try? result.map { $0.mobileMapPackage ***REMOVED***.get()
