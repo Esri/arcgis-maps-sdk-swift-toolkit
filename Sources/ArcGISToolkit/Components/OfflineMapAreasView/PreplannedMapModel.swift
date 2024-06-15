@@ -39,16 +39,21 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// The combined status of the preplanned map area.
     @Published private(set) var status: Status = .notLoaded
     
+    /// A Boolean value indicating if a user notification should be shown when a job completes.
+    let showsUserNotificationOnCompletion: Bool
+    
     init(
         offlineMapTask: OfflineMapTask,
         mapArea: PreplannedMapAreaProtocol,
         portalItemID: String,
-        preplannedMapAreaID: String
+        preplannedMapAreaID: String,
+        showsUserNotificationOnCompletion: Bool = true
     ) {
         self.offlineMapTask = offlineMapTask
         preplannedMapArea = mapArea
         self.portalItemID = portalItemID
         self.preplannedMapAreaID = preplannedMapAreaID
+        self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
         
         if let foundJob = lookupDownloadJob() {
             startAndObserveJob(foundJob)
@@ -142,7 +147,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         let identifier = id.rawValue
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
-        //try await UNUserNotificationCenter.current().add(request)
+        try await UNUserNotificationCenter.current().add(request)
     }
     
     /// Downloads the preplanned map area.
@@ -180,7 +185,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
             updateDownloadStatus(for: result)
             mobileMapPackage = try? result.map { $0.mobileMapPackage }.get()
             JobManager.shared.jobs.removeAll { $0 === job }
-            if job.status == .succeeded || job.status == .failed {
+            if showsUserNotificationOnCompletion && (job.status == .succeeded || job.status == .failed) {
                 try? await Self.notifyJobCompleted(job: job)
             }
         }

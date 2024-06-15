@@ -264,7 +264,10 @@ class PreplannedMapModelTests: XCTestCase {
             offlineMapTask: task,
             mapArea: area,
             portalItemID: "acc027394bc84c2fb04d1ed317aac674",
-            preplannedMapAreaID: areaID.rawValue
+            preplannedMapAreaID: areaID.rawValue,
+            // User notifications in unit tests are not supported, must pass false here
+            // or the test process will crash.
+            showsUserNotificationOnCompletion: false
         )
         
         var statuses = [PreplannedMapModel.Status]()
