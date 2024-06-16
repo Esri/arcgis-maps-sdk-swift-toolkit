@@ -123,8 +123,8 @@ public struct PreplannedListItemView: View {
         model: PreplannedMapModel(
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             mapArea: MockPreplannedMapArea(),
-            portalItemID: "",
-            preplannedMapAreaID: ""
+            portalItemID: .init("preview")!,
+            preplannedMapAreaID: .init("preview")!
         )
     )
     .padding()
