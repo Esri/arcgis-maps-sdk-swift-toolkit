@@ -184,6 +184,46 @@ class PreplannedMapModelTests: XCTestCase {
         }
     }
     
+    /// This tests that the initial status is "downloading" if there is a matching job
+    /// in the job manager.
+    @MainActor
+    func testStartupDownloadingStatus() async throws {
+        let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+        let task = OfflineMapTask(portalItem: portalItem)
+        let areas = try await task.preplannedMapAreas
+        let area = try XCTUnwrap(areas.first)
+        let areaID = try XCTUnwrap(area.id)
+        let mmpkDirectory = FileManager.default.mmpkDirectory(forPortalItemID: portalItem.id!, preplannedMapAreaID: areaID)
+        
+        defer {
+            // Clean up JobManager.
+            JobManager.shared.jobs.removeAll()
+            
+            // Clean up folder.
+            try? FileManager.default.removeItem(at: mmpkDirectory)
+        }
+        
+        // Add a job to the job manager so that when creating the model it finds it.
+        let parameters = try await task.makeDefaultDownloadPreplannedOfflineMapParameters(preplannedMapArea: area)
+        let job = task.makeDownloadPreplannedOfflineMapJob(parameters: parameters, downloadDirectory: mmpkDirectory)
+        JobManager.shared.jobs.append(job)
+        
+        let model = PreplannedMapModel(
+            offlineMapTask: task,
+            mapArea: area,
+            portalItemID: portalItem.id!,
+            preplannedMapAreaID: areaID,
+            // User notifications in unit tests are not supported, must pass false here
+            // or the test process will crash.
+            showsUserNotificationOnCompletion: false
+        )
+        
+        XCTAssertTrue(model.status.isMatch(for: .downloading))
+        
+        // Cancel the job to be a good citizen.
+        await job.cancel()
+    }
+    
     @MainActor
     func testDownloadStatuses() async throws {
         let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
@@ -193,7 +233,10 @@ class PreplannedMapModelTests: XCTestCase {
         let areaID = try XCTUnwrap(area.id)
         
         defer {
-            // Clean up
+            // Clean up JobManager.
+            JobManager.shared.jobs.removeAll()
+            
+            // Clean up folder.
             let directory = FileManager.default.mmpkDirectory(forPortalItemID: portalItem.id!, preplannedMapAreaID: areaID)
             try? FileManager.default.removeItem(at: directory)
         }
@@ -201,7 +244,7 @@ class PreplannedMapModelTests: XCTestCase {
         let model = PreplannedMapModel(
             offlineMapTask: task,
             mapArea: area,
-            portalItemID: .init("acc027394bc84c2fb04d1ed317aac674")!,
+            portalItemID: portalItem.id!,
             preplannedMapAreaID: areaID,
             // User notifications in unit tests are not supported, must pass false here
             // or the test process will crash.
@@ -247,17 +290,28 @@ class PreplannedMapModelTests: XCTestCase {
         for zipped in zip(statuses, expected) {
             let status = zipped.0
             let expected = zipped.1
-            if !status.matches(other: expected) {
+            if !status.isMatch(for: expected) {
                 XCTFail("Status \(status) was expected to be \"\(expected)\".")
             }
         }
+        
+        // Now test that creating a new matching model will have the status set to
+        // downloaded as there is a mmpk downloaded at the appropriate location.
+        let model2 = PreplannedMapModel(
+            offlineMapTask: task,
+            mapArea: area,
+            portalItemID: portalItem.id!,
+            preplannedMapAreaID: areaID
+        )
+        
+        XCTAssertTrue(model2.status.isMatch(for: .downloaded))
     }
 }
 
 private extension PreplannedMapModel.Status {
     /// Checks if another value is equivalent to this value ignoring
     /// any associated values.
-    func matches(other: Self) -> Bool {
+    func isMatch(for other: Self) -> Bool {
         switch self {
         case .notLoaded:
             if case .notLoaded = other { true } else { false }
