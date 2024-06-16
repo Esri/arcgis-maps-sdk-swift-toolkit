@@ -25,10 +25,10 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     private let offlineMapTask: OfflineMapTask
     
     /// The ID of the web map.
-    private let portalItemID: String
+    private let portalItemID: Item.ID
     
     /// The ID of the preplanned map area.
-    private let preplannedMapAreaID: String
+    private let preplannedMapAreaID: Item.ID
     
     /// The mobile map package for the preplanned map area.
     private(set) var mobileMapPackage: MobileMapPackage?
@@ -45,8 +45,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     init(
         offlineMapTask: OfflineMapTask,
         mapArea: PreplannedMapAreaProtocol,
-        portalItemID: String,
-        preplannedMapAreaID: String,
+        portalItemID: Item.ID,
+        preplannedMapAreaID: Item.ID,
         showsUserNotificationOnCompletion: Bool = true
     ) {
         self.offlineMapTask = offlineMapTask
@@ -90,7 +90,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
             .lazy
             .compactMap { $0 as? DownloadPreplannedOfflineMapJob }
             .first {
-                $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID
+                $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID.rawValue
             }
     }
     
@@ -313,21 +313,21 @@ extension FileManager {
     /// The path to the web map directory for a specific portal item.
     /// `Documents/OfflineMapAreas/<Portal Item ID>`
     /// - Parameter portalItemID: The ID of the web map portal item.
-    private func portalItemDirectory(forPortalItemID portalItemID: String) -> URL {
-        offlineMapAreasDirectory.appending(path: portalItemID, directoryHint: .isDirectory)
+    private func portalItemDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
+        offlineMapAreasDirectory.appending(path: portalItemID.rawValue, directoryHint: .isDirectory)
     }
     
     /// The path to the preplanned map areas directory for a specific portal item.
     /// `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>`
     /// - Parameter portalItemID: The ID of the web map portal item.
-    private func preplannedDirectory(forPortalItemID portalItemID: String, preplannedMapAreaID: String) -> URL {
+    private func preplannedDirectory(forPortalItemID portalItemID: Item.ID, preplannedMapAreaID: Item.ID) -> URL {
         portalItemDirectory(forPortalItemID: portalItemID)
             .appending(
                 path: Self.preplannedDirectoryPath,
                 directoryHint: .isDirectory
             )
             .appending(
-                path: preplannedMapAreaID,
+                path: preplannedMapAreaID.rawValue,
                 directoryHint: .isDirectory
             )
     }
@@ -338,9 +338,9 @@ extension FileManager {
     /// - Parameters:
     ///   - portalItemID: The ID of the web map portal item.
     ///   - preplannedMapAreaID: The ID of the preplanned map area.
-    func mmpkDirectory(forPortalItemID portalItemID: String, preplannedMapAreaID: String) -> URL {
+    func mmpkDirectory(forPortalItemID portalItemID: Item.ID, preplannedMapAreaID: Item.ID) -> URL {
         preplannedDirectory(forPortalItemID: portalItemID, preplannedMapAreaID: preplannedMapAreaID)
-            .appendingPathComponent(preplannedMapAreaID)
+            .appendingPathComponent(preplannedMapAreaID.rawValue)
             .appendingPathExtension(Self.mmpkPathExtension)
     }
 }

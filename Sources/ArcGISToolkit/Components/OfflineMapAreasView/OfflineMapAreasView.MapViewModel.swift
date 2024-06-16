@@ -48,8 +48,8 @@ extension OfflineMapAreasView {
                         PreplannedMapModel(
                             offlineMapTask: offlineMapTask,
                             mapArea: $0,
-                            portalItemID: portalItemID.rawValue,
-                            preplannedMapAreaID: $0.id!.rawValue
+                            portalItemID: portalItemID,
+                            preplannedMapAreaID: $0.id!
                         )
                     }
             }
