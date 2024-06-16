@@ -184,6 +184,46 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ This tests that the initial status is "downloading" if there is a matching job
+***REMOVED******REMOVED***/ in the job manager.
+***REMOVED***@MainActor
+***REMOVED***func testStartupDownloadingStatus() async throws {
+***REMOVED******REMOVED***let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
+***REMOVED******REMOVED***let areas = try await task.preplannedMapAreas
+***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first)
+***REMOVED******REMOVED***let areaID = try XCTUnwrap(area.id)
+***REMOVED******REMOVED***let mmpkDirectory = FileManager.default.mmpkDirectory(forPortalItemID: portalItem.id!, preplannedMapAreaID: areaID)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***defer {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up JobManager.
+***REMOVED******REMOVED******REMOVED***JobManager.shared.jobs.removeAll()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up folder.
+***REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectory)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Add a job to the job manager so that when creating the model it finds it.
+***REMOVED******REMOVED***let parameters = try await task.makeDefaultDownloadPreplannedOfflineMapParameters(preplannedMapArea: area)
+***REMOVED******REMOVED***let job = task.makeDownloadPreplannedOfflineMapJob(parameters: parameters, downloadDirectory: mmpkDirectory)
+***REMOVED******REMOVED***JobManager.shared.jobs.append(job)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let model = PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
+***REMOVED******REMOVED******REMOVED***mapArea: area,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
+***REMOVED******REMOVED******REMOVED******REMOVED*** User notifications in unit tests are not supported, must pass false here
+***REMOVED******REMOVED******REMOVED******REMOVED*** or the test process will crash.
+***REMOVED******REMOVED******REMOVED***showsUserNotificationOnCompletion: false
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(model.status.isMatch(for: .downloading))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Cancel the job to be a good citizen.
+***REMOVED******REMOVED***await job.cancel()
+***REMOVED***
+***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testDownloadStatuses() async throws {
 ***REMOVED******REMOVED***let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
@@ -193,7 +233,10 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***let areaID = try XCTUnwrap(area.id)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***defer {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up
+***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up JobManager.
+***REMOVED******REMOVED******REMOVED***JobManager.shared.jobs.removeAll()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up folder.
 ***REMOVED******REMOVED******REMOVED***let directory = FileManager.default.mmpkDirectory(forPortalItemID: portalItem.id!, preplannedMapAreaID: areaID)
 ***REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: directory)
 ***REMOVED***
@@ -201,7 +244,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***let model = PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
 ***REMOVED******REMOVED******REMOVED***mapArea: area,
-***REMOVED******REMOVED******REMOVED***portalItemID: .init("acc027394bc84c2fb04d1ed317aac674")!,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
 ***REMOVED******REMOVED******REMOVED******REMOVED*** User notifications in unit tests are not supported, must pass false here
 ***REMOVED******REMOVED******REMOVED******REMOVED*** or the test process will crash.
@@ -247,17 +290,28 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***for zipped in zip(statuses, expected) {
 ***REMOVED******REMOVED******REMOVED***let status = zipped.0
 ***REMOVED******REMOVED******REMOVED***let expected = zipped.1
-***REMOVED******REMOVED******REMOVED***if !status.matches(other: expected) {
+***REMOVED******REMOVED******REMOVED***if !status.isMatch(for: expected) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***XCTFail("Status \(status) was expected to be \"\(expected)\".")
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Now test that creating a new matching model will have the status set to
+***REMOVED******REMOVED******REMOVED*** downloaded as there is a mmpk downloaded at the appropriate location.
+***REMOVED******REMOVED***let model2 = PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
+***REMOVED******REMOVED******REMOVED***mapArea: area,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(model2.status.isMatch(for: .downloaded))
 ***REMOVED***
 ***REMOVED***
 
 private extension PreplannedMapModel.Status {
 ***REMOVED******REMOVED***/ Checks if another value is equivalent to this value ignoring
 ***REMOVED******REMOVED***/ any associated values.
-***REMOVED***func matches(other: Self) -> Bool {
+***REMOVED***func isMatch(for other: Self) -> Bool {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .notLoaded:
 ***REMOVED******REMOVED******REMOVED***if case .notLoaded = other { true ***REMOVED*** else { false ***REMOVED***
