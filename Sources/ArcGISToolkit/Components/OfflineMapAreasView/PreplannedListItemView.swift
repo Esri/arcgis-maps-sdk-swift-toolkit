@@ -123,8 +123,8 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***model: PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
 ***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
-***REMOVED******REMOVED******REMOVED***portalItemID: "",
-***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: ""
+***REMOVED******REMOVED******REMOVED***portalItemID: .init("preview")!,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
 ***REMOVED******REMOVED***)
 ***REMOVED***)
 ***REMOVED***.padding()
