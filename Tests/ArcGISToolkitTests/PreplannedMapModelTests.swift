@@ -50,10 +50,7 @@ class PreplannedMapModelTests: XCTestCase {
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
-        guard case .notLoaded = model.status else {
-            XCTFail("PreplannedMapModel initial status is not \".notLoaded\".")
-            return
-        }
+        model.status.assertExpectedValue(.notLoaded)
     }
     
     @MainActor
@@ -70,10 +67,7 @@ class PreplannedMapModelTests: XCTestCase {
         // When the preplanned map area finishes loading, if its
         // packaging status is `nil`, we consider it as completed.
         await model.load()
-        guard case .packaged = model.status else {
-            XCTFail("PreplannedMapModel status is not \".packaged\".")
-            return
-        }
+        model.status.assertExpectedValue(.packaged)
     }
     
     @MainActor
@@ -88,13 +82,8 @@ class PreplannedMapModelTests: XCTestCase {
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
-        
         await model.load()
-        
-        guard case .loadFailure = model.status else {
-            XCTFail("PreplannedMapModel status is not \".loadFailure\".")
-            return
-        }
+        model.status.assertExpectedValue(.loadFailure(MappingError.notLoaded(details: "")))
     }
     
     @MainActor
@@ -109,13 +98,8 @@ class PreplannedMapModelTests: XCTestCase {
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
-        
         await model.load()
-        
-        guard case .packaging = model.status else {
-            XCTFail("PreplannedMapModel status is not \".packaging\".")
-            return
-        }
+        model.status.assertExpectedValue(.packaging)
     }
     
     @MainActor
@@ -130,13 +114,8 @@ class PreplannedMapModelTests: XCTestCase {
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
-        
         await model.load()
-        
-        guard case .packaged = model.status else {
-            XCTFail("PreplannedMapModel status is not \".packaged\".")
-            return
-        }
+        model.status.assertExpectedValue(.packaged)
     }
     
     @MainActor
@@ -152,13 +131,8 @@ class PreplannedMapModelTests: XCTestCase {
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
-        
         await model.load()
-        
-        guard case .packageFailure = model.status else {
-            XCTFail("PreplannedMapModel status is not \".packageFailure\".")
-            return
-        }
+        model.status.assertExpectedValue(.packageFailure)
     }
     
     @MainActor
@@ -175,13 +149,8 @@ class PreplannedMapModelTests: XCTestCase {
         
         let mockArea = MockPreplannedMapArea()
         let model = PreplannedMapModel.makeTest(mapArea: mockArea)
-        
         await model.load()
-        
-        guard case .packageFailure = model.status else {
-            XCTFail("PreplannedMapModel status is not \".loadFailure\".")
-            return
-        }
+        model.status.assertExpectedValue(.packageFailure)
     }
     
     /// This tests that the initial status is "downloading" if there is a matching job
@@ -193,7 +162,10 @@ class PreplannedMapModelTests: XCTestCase {
         let areas = try await task.preplannedMapAreas
         let area = try XCTUnwrap(areas.first)
         let areaID = try XCTUnwrap(area.id)
-        let mmpkDirectory = FileManager.default.mmpkDirectory(forPortalItemID: portalItem.id!, preplannedMapAreaID: areaID)
+        let mmpkDirectory = FileManager.default.preplannedDirectory(
+            forPortalItemID: portalItem.id!,
+            preplannedMapAreaID: areaID
+        )
         
         defer {
             // Clean up JobManager.
@@ -218,7 +190,7 @@ class PreplannedMapModelTests: XCTestCase {
             showsUserNotificationOnCompletion: false
         )
         
-        XCTAssertTrue(model.status.isMatch(for: .downloading))
+        model.status.assertExpectedValue(.downloading)
         
         // Cancel the job to be a good citizen.
         await job.cancel()
@@ -237,7 +209,10 @@ class PreplannedMapModelTests: XCTestCase {
             JobManager.shared.jobs.removeAll()
             
             // Clean up folder.
-            let directory = FileManager.default.mmpkDirectory(forPortalItemID: portalItem.id!, preplannedMapAreaID: areaID)
+            let directory = FileManager.default.preplannedDirectory(
+                forPortalItemID: portalItem.id!,
+                preplannedMapAreaID: areaID
+            )
             try? FileManager.default.removeItem(at: directory)
         }
         
@@ -287,12 +262,8 @@ class PreplannedMapModelTests: XCTestCase {
             .downloaded
         ]
         
-        for zipped in zip(statuses, expected) {
-            let status = zipped.0
-            let expected = zipped.1
-            if !status.isMatch(for: expected) {
-                XCTFail("Status \(status) was expected to be \"\(expected)\".")
-            }
+        for (status, expected) in zip(statuses, expected) {
+            status.assertExpectedValue(expected)
         }
         
         // Now test that creating a new matching model will have the status set to
@@ -304,14 +275,14 @@ class PreplannedMapModelTests: XCTestCase {
             preplannedMapAreaID: areaID
         )
         
-        XCTAssertTrue(model2.status.isMatch(for: .downloaded))
+        model2.status.assertExpectedValue(.downloaded)
     }
 }
 
 private extension PreplannedMapModel.Status {
     /// Checks if another value is equivalent to this value ignoring
     /// any associated values.
-    func isMatch(for other: Self) -> Bool {
+    private func isMatch(for other: Self) -> Bool {
         switch self {
         case .notLoaded:
             if case .notLoaded = other { true } else { false }
@@ -332,6 +303,11 @@ private extension PreplannedMapModel.Status {
         case .downloadFailure:
             if case .downloadFailure = other { true } else { false }
         }
+    }
+    
+    func assertExpectedValue(_ expected: Self, file: StaticString = #filePath, line: UInt = #line) {
+        guard !isMatch(for: expected) else { return }
+        XCTFail("Status '\(self)' does not match expected status of '\(expected)'", file: file, line: line)
     }
 }
 
