@@ -55,7 +55,7 @@ extension OfflineMapAreasView {
             }
         }
         
-        /// Request authorization to show notifications.
+        /// Requests authorization to show notifications.
         func requestUserNotificationAuthorization() async {
             _ = try? await UNUserNotificationCenter.current()
                 .requestAuthorization(options: [.alert, .sound])

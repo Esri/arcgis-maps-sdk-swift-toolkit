@@ -17,7 +17,7 @@ import ArcGIS
 
 /// An object that encapsulates state about a preplanned map.
 @MainActor
-public class PreplannedMapModel: ObservableObject, Identifiable {
+class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
     let preplannedMapArea: any PreplannedMapAreaProtocol
     
@@ -119,7 +119,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
-    /// Looks in the  mobile map package if downloaded locally.
+    /// Looks up the mobile map package directory for locally downloaded package.
     private func lookupMobileMapPackage() -> MobileMapPackage? {
         let fileURL = FileManager.default.preplannedDirectory(
             forPortalItemID: portalItemID,
@@ -186,7 +186,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         self.job = job
         job.start()
         status = .downloading
-        Task { @MainActor in
+        Task {
             let result = await job.result
             updateDownloadStatus(for: result)
             mobileMapPackage = try? result.map { $0.mobileMapPackage }.get()
@@ -194,6 +194,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
             if showsUserNotificationOnCompletion && (job.status == .succeeded || job.status == .failed) {
                 try? await Self.notifyJobCompleted(job: job)
             }
+            self.job = nil
         }
     }
 }
