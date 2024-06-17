@@ -25,10 +25,10 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***private let offlineMapTask: OfflineMapTask
 ***REMOVED***
 ***REMOVED******REMOVED***/ The ID of the web map.
-***REMOVED***private let portalItemID: Item.ID
+***REMOVED***private let portalItemID: PortalItem.ID
 ***REMOVED***
 ***REMOVED******REMOVED***/ The ID of the preplanned map area.
-***REMOVED***private let preplannedMapAreaID: Item.ID
+***REMOVED***private let preplannedMapAreaID: PortalItem.ID
 ***REMOVED***
 ***REMOVED******REMOVED***/ The mobile map package for the preplanned map area.
 ***REMOVED***private(set) var mobileMapPackage: MobileMapPackage?
@@ -45,8 +45,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***init(
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
 ***REMOVED******REMOVED***mapArea: PreplannedMapAreaProtocol,
-***REMOVED******REMOVED***portalItemID: Item.ID,
-***REMOVED******REMOVED***preplannedMapAreaID: Item.ID,
+***REMOVED******REMOVED***portalItemID: PortalItem.ID,
+***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID,
 ***REMOVED******REMOVED***showsUserNotificationOnCompletion: Bool = true
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.offlineMapTask = offlineMapTask
@@ -320,14 +320,17 @@ extension FileManager {
 ***REMOVED******REMOVED***/ The path to the web map directory for a specific portal item.
 ***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>`
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
-***REMOVED***private func portalItemDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
+***REMOVED***private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
 ***REMOVED******REMOVED***offlineMapAreasDirectory.appending(path: portalItemID.rawValue, directoryHint: .isDirectory)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
 ***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>`
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
-***REMOVED***func preplannedDirectory(forPortalItemID portalItemID: Item.ID, preplannedMapAreaID: Item.ID) -> URL {
+***REMOVED***func preplannedDirectory(
+***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
+***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
+***REMOVED***) -> URL {
 ***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***.appending(
 ***REMOVED******REMOVED******REMOVED******REMOVED***path: Self.preplannedDirectoryPath,
