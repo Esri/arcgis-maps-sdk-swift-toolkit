@@ -17,7 +17,7 @@
 
 ***REMOVED***/ An object that encapsulates state about a preplanned map.
 @MainActor
-public class PreplannedMapModel: ObservableObject, Identifiable {
+class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***/ The preplanned map area.
 ***REMOVED***let preplannedMapArea: any PreplannedMapAreaProtocol
 ***REMOVED***
@@ -119,7 +119,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Looks in the  mobile map package if downloaded locally.
+***REMOVED******REMOVED***/ Looks up the mobile map package directory for locally downloaded package.
 ***REMOVED***private func lookupMobileMapPackage() -> MobileMapPackage? {
 ***REMOVED******REMOVED***let fileURL = FileManager.default.preplannedDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
@@ -186,7 +186,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED***self.job = job
 ***REMOVED******REMOVED***job.start()
 ***REMOVED******REMOVED***status = .downloading
-***REMOVED******REMOVED***Task { @MainActor in
+***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***let result = await job.result
 ***REMOVED******REMOVED******REMOVED***updateDownloadStatus(for: result)
 ***REMOVED******REMOVED******REMOVED***mobileMapPackage = try? result.map { $0.mobileMapPackage ***REMOVED***.get()
@@ -194,6 +194,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***if showsUserNotificationOnCompletion && (job.status == .succeeded || job.status == .failed) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await Self.notifyJobCompleted(job: job)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***self.job = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

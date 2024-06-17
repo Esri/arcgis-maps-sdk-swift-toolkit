@@ -55,7 +55,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Request authorization to show notifications.
+***REMOVED******REMOVED******REMOVED***/ Requests authorization to show notifications.
 ***REMOVED******REMOVED***func requestUserNotificationAuthorization() async {
 ***REMOVED******REMOVED******REMOVED***_ = try? await UNUserNotificationCenter.current()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
