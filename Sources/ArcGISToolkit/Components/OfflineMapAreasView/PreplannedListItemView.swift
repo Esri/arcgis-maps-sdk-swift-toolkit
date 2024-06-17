@@ -19,9 +19,6 @@ public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
-    /// The map view model for the online map.
-    @EnvironmentObject var mapViewModel: OfflineMapAreasView.MapViewModel
-    
     public var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
@@ -37,10 +34,6 @@ public struct PreplannedListItemView: View {
         }
         .task {
             await model.load()
-        }
-        .onChange(of: model.job?.status) { status in
-            guard mapViewModel.canShowNotifications else { return }
-            model.notifyJobCompleted()
         }
     }
     
@@ -77,7 +70,7 @@ public struct PreplannedListItemView: View {
                 Image(systemName: "arrow.down.circle")
             }
             .buttonStyle(.plain)
-            .disabled(!model.canDownload)
+            .disabled(!model.status.allowsDownload)
             .foregroundColor(.accentColor)
         }
     }
@@ -130,8 +123,9 @@ public struct PreplannedListItemView: View {
         model: PreplannedMapModel(
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             mapArea: MockPreplannedMapArea(),
-            portalItemID: ""
-        )!
+            portalItemID: .init("preview")!,
+            preplannedMapAreaID: .init("preview")!
+        )
     )
     .padding()
 }
@@ -144,5 +138,7 @@ private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
     var thumbnail: LoadableImage? = nil
     
     func retryLoad() async throws { }
-    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { return DownloadPreplannedOfflineMapParameters() }
+    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+        DownloadPreplannedOfflineMapParameters()
+    }
 }
