@@ -102,12 +102,9 @@ struct AttachmentImportMenu: View {
                 .progressViewStyle(.circular)
         }
         Menu {
-            if element.input is AnyAttachmentsFormInput {
-                // Show photo/video and library picker if
-                // we're allowing all input types.
-                takePhotoOrVideoButton()
-                chooseFromLibraryButton()
-            }
+            // Show photo/video and library picker.
+            takePhotoOrVideoButton()
+            chooseFromLibraryButton()
             // Always show file picker, no matter the input type.
             chooseFromFilesButton()
         } label: {

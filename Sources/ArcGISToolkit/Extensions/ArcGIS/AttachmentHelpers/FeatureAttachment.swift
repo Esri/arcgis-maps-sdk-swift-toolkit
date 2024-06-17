@@ -30,9 +30,6 @@ public enum FeatureAttachmentKind {
 }
 
 public protocol FeatureAttachment: Loadable {
-    /// The underlying `Attachment`.
-    var attachment: Attachment? { get }
-    
     /// The MIME content type of the attachment.
     var contentType: String { get }
     
