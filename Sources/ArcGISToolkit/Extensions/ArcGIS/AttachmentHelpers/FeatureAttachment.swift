@@ -30,9 +30,6 @@ public enum FeatureAttachmentKind {
 ***REMOVED***
 
 public protocol FeatureAttachment: Loadable {
-***REMOVED******REMOVED***/ The underlying `Attachment`.
-***REMOVED***var attachment: Attachment? { get ***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The MIME content type of the attachment.
 ***REMOVED***var contentType: String { get ***REMOVED***
 ***REMOVED***
