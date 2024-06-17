@@ -19,9 +19,6 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***/ The view model for the preplanned map.
 ***REMOVED***@ObservedObject var model: PreplannedMapModel
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the user has authorized notifications to be shown.
-***REMOVED***var canShowNotifications = false
-***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .center, spacing: 10) {
 ***REMOVED******REMOVED******REMOVED***thumbnailView
@@ -37,13 +34,6 @@ public struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***await model.load()
-***REMOVED***
-***REMOVED******REMOVED***.onReceive(model.$result) { result in
-***REMOVED******REMOVED******REMOVED***model.updateDownloadStatus(for: result)
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: model.job?.status) { status in
-***REMOVED******REMOVED******REMOVED***guard canShowNotifications else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***model.notifyJobCompleted()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -77,17 +67,15 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***if model.canDownload {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download preplanned map area.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadPreplannedMapArea()
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download preplanned map area.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadPreplannedMapArea()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
-***REMOVED******REMOVED******REMOVED***.disabled(!model.canDownload)
+***REMOVED******REMOVED******REMOVED***.disabled(!model.status.allowsDownload)
 ***REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED***
 ***REMOVED***
@@ -140,8 +128,9 @@ public struct PreplannedListItemView: View {
 ***REMOVED******REMOVED***model: PreplannedMapModel(
 ***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
 ***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
-***REMOVED******REMOVED******REMOVED***directory: URL.documentsDirectory
-***REMOVED******REMOVED***)!
+***REMOVED******REMOVED******REMOVED***portalItemID: .init("preview")!,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
+***REMOVED******REMOVED***)
 ***REMOVED***)
 ***REMOVED***.padding()
 ***REMOVED***
@@ -155,5 +144,7 @@ private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***var thumbnailImage: UIImage?
 ***REMOVED***
 ***REMOVED***func retryLoad() async throws { ***REMOVED***
-***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { nil ***REMOVED***
+***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+***REMOVED******REMOVED***DownloadPreplannedOfflineMapParameters()
+***REMOVED***
 ***REMOVED***

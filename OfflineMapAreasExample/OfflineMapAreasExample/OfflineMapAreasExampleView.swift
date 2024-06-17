@@ -16,12 +16,19 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
+@MainActor
 struct OfflineMapAreasExampleView: View {
 ***REMOVED******REMOVED***/ The map of the Naperville water network.
 ***REMOVED***@State private var map = Map(item: PortalItem.naperville())
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the offline map ares view should be presented.
 ***REMOVED***@State private var isShowingOfflineMapAreasView = false
+***REMOVED***
+***REMOVED***init() {
+***REMOVED******REMOVED******REMOVED*** Ask the job manager to schedule background status checks for every 30 seconds.
+***REMOVED******REMOVED******REMOVED*** In your app, set this to a value that makes sense for the kinds of jobs that you run.
+***REMOVED******REMOVED***JobManager.shared.preferredBackgroundStatusCheckSchedule = .regularInterval(interval: 30)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map)
