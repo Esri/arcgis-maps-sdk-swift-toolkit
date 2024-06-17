@@ -22,68 +22,61 @@ public struct OfflineMapAreasView: View {
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     
-    /// The rotation angle of the reload button image.
-    @State private var rotationAngle: CGFloat = 0.0
+    /// A Boolean value indicating whether the preplanned map areas are being reloaded.
+    @State private var isReloadingPreplannedMapAreas = false
     
     public init(map: Map) {
         _mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
-        
-        // Ask the job manager to schedule background status checks for every 30 seconds.
-        JobManager.shared.preferredBackgroundStatusCheckSchedule = .regularInterval(interval: 30)
     }
     
     public var body: some View {
         NavigationStack {
             Form {
-                Section(header: HStack {
-                    Text("Preplanned Map Areas").bold()
-                    Spacer()
-                    Button {
-                        withAnimation(.linear(duration: 0.6)) {
-                            rotationAngle = rotationAngle + 360
+                Section {
+                    preplannedMapAreaViews
+                } header: {
+                    HStack {
+                        Text("Preplanned Map Areas").bold()
+                        Spacer()
+                        Button {
+                            Task {
+                                isReloadingPreplannedMapAreas = true
+                                await mapViewModel.makePreplannedOfflineMapModels()
+                                isReloadingPreplannedMapAreas = false
+                            }
+                        } label: {
+                            Image(systemName: "arrow.clockwise")
                         }
-                        Task {
-                            await mapViewModel.makePreplannedOfflineMapModels()
-                        }
-                    } label: {
-                        Image(systemName: "arrow.clockwise")
-                            .rotationEffect(.degrees(rotationAngle))
+                        .controlSize(.mini)
+                        .disabled(isReloadingPreplannedMapAreas)
                     }
-                    .controlSize(.mini)
-                }.frame(maxWidth: .infinity)
-                ) {
-                    preplannedMapAreas
+                    .frame(maxWidth: .infinity)
                 }
                 .textCase(nil)
             }
             .task {
                 await mapViewModel.makePreplannedOfflineMapModels()
             }
+            .task {
+                await mapViewModel.requestUserNotificationAuthorization()
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
                 }
-            }
-            .task {
-                mapViewModel.canShowNotifications = (
-                    try? await UNUserNotificationCenter.current()
-                        .requestAuthorization(options: [.alert, .sound])
-                )
-                ?? false
             }
             .navigationTitle("Offline Maps")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
     
-    @ViewBuilder private var preplannedMapAreas: some View {
+    @ViewBuilder private var preplannedMapAreaViews: some View {
         switch mapViewModel.preplannedMapModels {
         case .success(let models):
-            if mapViewModel.hasPreplannedMapAreas {
+            if !models.isEmpty {
                 List(models) { preplannedMapModel in
                     PreplannedListItemView(
-                        model: preplannedMapModel,
-                        canShowNotifications: mapViewModel.canShowNotifications
+                        model: preplannedMapModel
                     )
                 }
             } else {

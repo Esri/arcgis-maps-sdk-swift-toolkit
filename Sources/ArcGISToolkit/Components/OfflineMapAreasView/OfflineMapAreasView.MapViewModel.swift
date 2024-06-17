@@ -15,6 +15,7 @@
 import ArcGIS
 import Combine
 import Foundation
+import SwiftUI
 import UIKit
 
 extension OfflineMapAreasView {
@@ -22,29 +23,17 @@ extension OfflineMapAreasView {
     @MainActor
     class MapViewModel: ObservableObject {
         /// The portal item ID of the web map.
-        private let portalItemID: String?
+        private let portalItemID: Item.ID?
         
         /// The offline map task.
         private let offlineMapTask: OfflineMapTask
         
-        /// The url for the preplanned map areas directory.
-        private var preplannedDirectory: URL?
-        
-        /// The preplanned map information.
+        /// The preplanned offline map information.
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
-        
-        /// The offline preplanned map information.
-        @Published private(set) var offlinePreplannedModels = [PreplannedMapModel]()
-        
-        /// A Boolean value indicating whether the map has preplanned map areas.
-        @Published private(set) var hasPreplannedMapAreas = false
-        
-        /// A Boolean value indicating whether the user has authorized notifications to be shown.
-        var canShowNotifications = false
         
         init(map: Map) {
             offlineMapTask = OfflineMapTask(onlineMap: map)
-            portalItemID = map.item?.id?.rawValue
+            portalItemID = map.item?.id
         }
         
         /// Gets the preplanned map areas from the offline map task and creates the
@@ -52,29 +41,25 @@ extension OfflineMapAreasView {
         func makePreplannedOfflineMapModels() async {
             guard let portalItemID else { return }
             
-            FileManager.default.createDirectories(for: portalItemID)
-            preplannedDirectory = FileManager.default.preplannedDirectory(forItemID: portalItemID)
-            
-            guard let preplannedDirectory else { return }
-            
             preplannedMapModels = await Result {
                 try await offlineMapTask.preplannedMapAreas
+                    .filter { $0.id != nil }
                     .sorted(using: KeyPathComparator(\.portalItem.title))
-                    .compactMap {
+                    .map {
                         PreplannedMapModel(
                             offlineMapTask: offlineMapTask,
                             mapArea: $0,
-                            directory: preplannedDirectory
+                            portalItemID: portalItemID,
+                            preplannedMapAreaID: $0.id!
                         )
                     }
             }
-            if let models = try? preplannedMapModels!.get() {
-                hasPreplannedMapAreas = !models.isEmpty
-                
-                for model in models {
-                    model.setMobileMapPackage()
-                }
-            }
+        }
+        
+        /// Request authorization to show notifications.
+        func requestUserNotificationAuthorization() async {
+            _ = try? await UNUserNotificationCenter.current()
+                .requestAuthorization(options: [.alert, .sound])
         }
         
         /// Loads the offline preplanned map models using metadata json files.
@@ -173,55 +158,5 @@ extension OfflineMapAreasView {
                 )
             )
         }
-    }
-}
-
-private extension OfflineMapAreasView.MapViewModel {
-    /// The names of the folders used to save offline map areas.
-    enum FolderNames {
-        static var preplanned: String { "Preplanned" }
-        static var offlineMapAreas: String { "OfflineMapAreas" }
-    }
-}
-
-private extension FileManager {
-    /// The path to the documents folder.
-    var documentsDirectory: URL {
-        URL.documentsDirectory
-    }
-    
-    /// The path to the offline map areas directory. The offline map areas directory is located in the documents directory.
-    var offlineMapAreasDirectory: URL {
-        documentsDirectory.appending(
-            path: OfflineMapAreasView.MapViewModel.FolderNames.offlineMapAreas,
-            directoryHint: .isDirectory
-        )
-    }
-    
-    /// The path to the web map directory for a specific portal item.
-    func webMapDirectory(forItemID itemID: String) -> URL {
-        offlineMapAreasDirectory.appending(path: itemID, directoryHint: .isDirectory)
-    }
-    
-    /// The path to the preplanned map areas directory for a specific portal item.
-    func preplannedDirectory(forItemID itemID: String) -> URL {
-        webMapDirectory(forItemID: itemID).appending(
-            path: OfflineMapAreasView.MapViewModel.FolderNames.preplanned,
-            directoryHint: .isDirectory
-        )
-    }
-    
-    /// Creates the directories needed to save a preplanned map area mobile map package and metadata
-    /// with a given portal item ID.
-    /// - Parameter portalItemID: The portal item ID.
-    func createDirectories(for portalItemID: String) {
-        // Create directory for offline map areas.
-        try? FileManager.default.createDirectory(at: FileManager.default.offlineMapAreasDirectory, withIntermediateDirectories: true)
-        
-        // Create directory for the webmap.
-        try? FileManager.default.createDirectory(at: FileManager.default.webMapDirectory(forItemID: portalItemID), withIntermediateDirectories: true)
-        
-        // Create directory for preplanned map areas.
-        try? FileManager.default.createDirectory(at: FileManager.default.preplannedDirectory(forItemID: portalItemID), withIntermediateDirectories: true)
     }
 }

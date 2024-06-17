@@ -24,11 +24,11 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// The task to use to take the area offline.
     private let offlineMapTask: OfflineMapTask
     
-    /// The download directory for the preplanned map areas.
-    private let preplannedDirectory: URL
+    /// The ID of the web map.
+    private let portalItemID: Item.ID
     
     /// The ID of the preplanned map area.
-    private let preplannedMapAreaID: String
+    private let preplannedMapAreaID: Item.ID
     
     /// The mobile map package for the preplanned map area.
     private(set) var mobileMapPackage: MobileMapPackage?
@@ -39,42 +39,27 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     /// The combined status of the preplanned map area.
     @Published private(set) var status: Status = .notLoaded
     
-    /// The result of the download job. When the result is `.success` the mobile map package is returned.
-    /// If the result is `.failure` then the error is returned. The result will be `nil` when the preplanned
-    /// map area is still packaging or loading.
-    @Published private(set) var result: Result<MobileMapPackage, Error>?
+    /// A Boolean value indicating if a user notification should be shown when a job completes.
+    let showsUserNotificationOnCompletion: Bool
     
-    /// A Boolean value indicating if download can be called.
-    var canDownload: Bool {
-        switch status {
-        case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
-                .downloading, .downloaded:
-            false
-        case .packaged, .downloadFailure:
-            true
-        }
-    }
-    
-    init?(
+    init(
         offlineMapTask: OfflineMapTask,
         mapArea: PreplannedMapAreaProtocol,
-        directory: URL
+        portalItemID: Item.ID,
+        preplannedMapAreaID: Item.ID,
+        showsUserNotificationOnCompletion: Bool = true
     ) {
         self.offlineMapTask = offlineMapTask
         preplannedMapArea = mapArea
-        preplannedDirectory = directory
+        self.portalItemID = portalItemID
+        self.preplannedMapAreaID = preplannedMapAreaID
+        self.showsUserNotificationOnCompletion = showsUserNotificationOnCompletion
         
-        if let itemID = preplannedMapArea.id {
-            preplannedMapAreaID = itemID.rawValue
-        } else {
-            return nil
-        }
-        
-        setDownloadJob()
-        
-        if let mobileMapPackage {
-            self.mobileMapPackage = mobileMapPackage
-            status = .downloaded
+        if let foundJob = lookupDownloadJob() {
+            startAndObserveJob(foundJob)
+        } else if let mmpk = lookupMobileMapPackage() {
+            self.mobileMapPackage = mmpk
+            self.status = .downloaded
         }
     }
     
@@ -99,17 +84,14 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
-    /// Sets the model download preplanned offline map job if the job is in progress.
-    private func setDownloadJob() {
-        for case let preplannedJob as DownloadPreplannedOfflineMapJob in JobManager.shared.jobs {
-            if preplannedJob.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID {
-                job = preplannedJob
-                status = .downloading
-                Task {
-                    result = await job?.result.map { $0.mobileMapPackage }
-                }
+    /// Look up the job associated with this preplanned map model.
+    private func lookupDownloadJob() -> DownloadPreplannedOfflineMapJob? {
+        JobManager.shared.jobs
+            .lazy
+            .compactMap { $0 as? DownloadPreplannedOfflineMapJob }
+            .first {
+                $0.downloadDirectoryURL.deletingPathExtension().lastPathComponent == preplannedMapAreaID.rawValue
             }
-        }
     }
     
     /// Updates the status for a given packaging status.
@@ -122,17 +104,14 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
             status = .packageFailure
         case .complete:
             status = .packaged
-        @unknown default:
-            fatalError("Unknown packaging status")
         }
     }
     
     /// Updates the status based on the download result of the mobile map package.
-    func updateDownloadStatus(for downloadResult: Optional<Result<MobileMapPackage, any Error>>) {
+    func updateDownloadStatus(for downloadResult: Result<DownloadPreplannedOfflineMapResult, any Error>?) {
         switch downloadResult {
-        case .success(let mobileMapPackage):
+        case .success:
             status = .downloaded
-            self.mobileMapPackage = mobileMapPackage
         case .failure(let error):
             status = .downloadFailure(error)
         case .none:
@@ -140,30 +119,24 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
-    /// Sets the mobile map package if downloaded locally.
-    func setMobileMapPackage() {
-        guard job == nil else { return }
-        
-        // Construct file URL for mobile map package with file structure:
-        // .../OfflineMapAreas/Preplanned/{id}/package/{id}.mmpk
-        let fileURL = preplannedDirectory
-            .appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
-            .appending(component: PreplannedMapModel.PathComponents.package, directoryHint: .isDirectory)
-            .appendingPathComponent(preplannedMapAreaID)
-            .appendingPathExtension(PreplannedMapModel.PathComponents.mmpk)
-        
-        if FileManager.default.fileExists(atPath: fileURL.relativePath) {
-            self.mobileMapPackage = MobileMapPackage.init(fileURL: fileURL)
-            status = .downloaded
-        }
+    /// Looks in the  mobile map package if downloaded locally.
+    private func lookupMobileMapPackage() -> MobileMapPackage? {
+        let fileURL = FileManager.default.preplannedDirectory(
+            forPortalItemID: portalItemID,
+            preplannedMapAreaID: preplannedMapAreaID
+        )
+        guard FileManager.default.fileExists(atPath: fileURL.relativePath) else { return nil }
+        return MobileMapPackage.init(fileURL: fileURL)
     }
     
     /// Posts a local notification that the job completed with success or failure.
-    func notifyJobCompleted() {
-        guard let job,
-              job.status == .succeeded || job.status == .failed,
-              let preplannedMapArea = job.parameters.preplannedMapArea,
-              let id = preplannedMapArea.id else { return }
+    /// - Precondition: `job.status == .succeeded || job.status == .failed`
+    private static func notifyJobCompleted(job: DownloadPreplannedOfflineMapJob) async throws {
+        precondition(job.status == .succeeded || job.status == .failed)
+        guard
+            let preplannedMapArea = job.parameters.preplannedMapArea,
+            let id = preplannedMapArea.id
+        else { return }
         
         let content = UNMutableNotificationContent()
         content.sound = UNNotificationSound.default
@@ -177,120 +150,50 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         let identifier = id.rawValue
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
-        UNUserNotificationCenter.current().add(request)
+        try await UNUserNotificationCenter.current().add(request)
     }
     
     /// Downloads the preplanned map area.
     /// - Precondition: `canDownload`
     func downloadPreplannedMapArea() async {
-        precondition(canDownload)
+        precondition(status.allowsDownload)
         status = .downloading
         
         do {
-        let (downloadDirectory, mmpkDirectory) = createDownloadDirectories()
-        guard let mmpkDirectory,
-              let downloadDirectory,
-              let parameters = await createParameters() else { return }
-        
-        await runDownloadTask(for: parameters, in: mmpkDirectory, downloadDirectory: downloadDirectory)
-         } catch {
-            // If creating the parameters or directories fails, set the failure.
-            self.result = .failure(error)
-         }
-    }
-    
-    /// Creates download directories for the preplanned map area and its mobile map package.
-    /// - Returns: The URL for the mobile map package directory.
-    private func createDownloadDirectories() -> (URL?, URL?) {
-        guard let preplannedDirectory,
-              let preplannedMapAreaID else { return (nil, nil) }
-        let downloadDirectory = preplannedDirectory
-            .appending(path: preplannedMapAreaID, directoryHint: .isDirectory)
-        
-        let packageDirectory = downloadDirectory
-            .appending(component: PreplannedMapModel.PathComponents.package, directoryHint: .isDirectory)
-        
-        try FileManager.default.createDirectory(atPath: downloadDirectory.relativePath, withIntermediateDirectories: true)
-        
-        try FileManager.default.createDirectory(atPath: packageDirectory.relativePath, withIntermediateDirectories: true)
-        
-        let mmpkDirectory = packageDirectory
-            .appendingPathComponent(preplannedMapAreaID)
-            .appendingPathExtension(PreplannedMapModel.PathComponents.mmpk)
-        
-        return (downloadDirectory, mmpkDirectory)
-    }
-    
-    /// Runs the download task to download the preplanned offline map.
-    /// - Parameters:
-    ///   - parameters: The parameters used to download the offline map.
-    ///   - mmpkDirectory: The directory used to place the mobile map package result.
-    private func runDownloadTask(
-        for parameters: DownloadPreplannedOfflineMapParameters,
-        in mmpkDirectory: URL,
-        downloadDirectory: URL
-    ) async {
-        // Create the download preplanned offline map job.
-        let job = offlineMapTask.makeDownloadPreplannedOfflineMapJob(
-            parameters: parameters,
-            downloadDirectory: mmpkDirectory
-        )
-        
-        JobManager.shared.jobs.append(job)
-        
-        self.job = job
-        
-        // Start the job.
-        job.start()
-        
-        // Await the output of the job and assigns the result.
-        result = await job.result.map { $0.mobileMapPackage }
-        
-        // Save metadata if download succeeds.
-        writeJSONFile(to: downloadDirectory, mmpkDirectory: mmpkDirectory)
-    }
-    
-    /// Writes preplanned map area metadata and thumbnail image data to local files in the specified directories.
-    /// - Parameters:
-    ///   - directory: The directory for the preplanned map area.
-    ///   - mmpkDirectory: The directory for the mobile map package.
-    @MainActor
-    private func writeJSONFile(to directory: URL, mmpkDirectory: URL) {
-        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
-        
-        let fileURL = directory
-            .appending(path: "metadata", directoryHint: .notDirectory)
-            .appendingPathExtension("json")
-        
-        FileManager.default.createFile(atPath: fileURL.relativePath, contents: nil)
-        
-        // Save preplanned map area thumbnail image in `thumbnail.png` file.
-        if let thumbnail = preplannedMapArea.thumbnail?.image {
-            let thumbnailURL = directory
-                .appending(path: "thumbnail", directoryHint: .notDirectory)
-                .appendingPathExtension("png")
+            let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask)
+            let mmpkDirectory = FileManager.default.preplannedDirectory(
+                forPortalItemID: portalItemID,
+                preplannedMapAreaID: preplannedMapAreaID
+            )
+            try FileManager.default.createDirectory(at: mmpkDirectory, withIntermediateDirectories: true)
             
-            FileManager.default.createFile(atPath: thumbnailURL.relativePath, contents: nil)
-            
-            if let thumbnailData = thumbnail.pngData() {
-                try? thumbnailData.write(to: thumbnailURL, options: .atomic)
-            }
-        }
-        
-        // Save preplanned map area metadata in `metadata.json` file.
-        guard let id = preplannedMapArea.id?.rawValue else { return }
-        
-        let jsonObject: [String: Any] = [
-            "title" : preplannedMapArea.title,
-            "description" : preplannedMapArea.description,
-            "id" : id,
-            "mmpkURL" : mmpkDirectory.relativePath
-        ]
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: .sortedKeys)
-            try jsonData.write(to: fileURL, options: .atomic)
+            // Create the download preplanned offline map job.
+            let job = offlineMapTask.makeDownloadPreplannedOfflineMapJob(
+                parameters: parameters,
+                downloadDirectory: mmpkDirectory
+            )
+            JobManager.shared.jobs.append(job)
+            startAndObserveJob(job)
         } catch {
-            print(error)
+            status = .downloadFailure(error)
+        }
+    }
+    
+    /// Sets the job property of this instance, starts the job, observes it, and
+    /// when it's done, updates the status, removes the job from the job manager,
+    /// and fires a user notification.
+    private func startAndObserveJob(_ job: DownloadPreplannedOfflineMapJob) {
+        self.job = job
+        job.start()
+        status = .downloading
+        Task { @MainActor in
+            let result = await job.result
+            updateDownloadStatus(for: result)
+            mobileMapPackage = try? result.map { $0.mobileMapPackage }.get()
+            JobManager.shared.jobs.removeAll { $0 === job }
+            if showsUserNotificationOnCompletion && (job.status == .succeeded || job.status == .failed) {
+                try? await Self.notifyJobCompleted(job: job)
+            }
         }
     }
 }
@@ -327,13 +230,17 @@ extension PreplannedMapModel {
                 true
             }
         }
-    }
-}
-
-private extension PreplannedMapModel {
-    enum PathComponents {
-        static var package: String { "package" }
-        static var mmpk: String { "mmpk" }
+        
+        /// A Boolean value indicating if download is allowed for this status.
+        var allowsDownload: Bool {
+            switch self {
+            case .notLoaded, .loading, .loadFailure, .packaging, .packageFailure,
+                    .downloading, .downloaded:
+                false
+            case .packaged, .downloadFailure:
+                true
+            }
+        }
     }
 }
 
@@ -350,7 +257,7 @@ extension PreplannedMapModel: Hashable {
 /// A type that acts as a preplanned map area.
 protocol PreplannedMapAreaProtocol {
     func retryLoad() async throws
-    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters?
+    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters
     
     var packagingStatus: PreplannedMapArea.PackagingStatus? { get }
     var title: String { get }
@@ -362,7 +269,7 @@ protocol PreplannedMapAreaProtocol {
 
 /// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
 extension PreplannedMapArea: PreplannedMapAreaProtocol {
-    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? {
+    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
         // Create the parameters for the download preplanned offline map job.
         let parameters = try await offlineMapTask.makeDefaultDownloadPreplannedOfflineMapParameters(
             preplannedMapArea: self
@@ -392,37 +299,45 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
     }
 }
 
-struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
-    func retryLoad() async throws {}
+extension FileManager {
+    private static let mmpkPathExtension: String = "mmpk"
+    private static let offlineMapAreasPath: String = "OfflineMapAreas"
+    private static let packageDirectoryPath: String = "Package"
+    private static let preplannedDirectoryPath: String = "Preplanned"
     
-    init(
-        mapArea: ArcGIS.PreplannedMapArea? = nil,
-        packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = nil,
-        title: String,
-        description: String,
-        thumbnail: ArcGIS.LoadableImage? = nil,
-        thumbnailImage: UIImage? = nil,
-        id: ArcGIS.Item.ID? = nil
-    ) {
-        self.mapArea = mapArea
-        self.packagingStatus = packagingStatus
-        self.title = title
-        self.description = description
-        self.thumbnail = thumbnail
-        self.thumbnailImage = thumbnailImage
-        self.id = id
+    /// The path to the documents folder.
+    private var documentsDirectory: URL {
+        URL.documentsDirectory
     }
-    var mapArea: ArcGIS.PreplannedMapArea?
     
-    var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus?
+    /// The path to the offline map areas directory within the documents directory.
+    /// `Documents/OfflineMapAreas`
+    private var offlineMapAreasDirectory: URL {
+        documentsDirectory.appending(
+            path: Self.offlineMapAreasPath,
+            directoryHint: .isDirectory
+        )
+    }
     
-    var title: String
+    /// The path to the web map directory for a specific portal item.
+    /// `Documents/OfflineMapAreas/<Portal Item ID>`
+    /// - Parameter portalItemID: The ID of the web map portal item.
+    private func portalItemDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
+        offlineMapAreasDirectory.appending(path: portalItemID.rawValue, directoryHint: .isDirectory)
+    }
     
-    var description: String
-    
-    var thumbnail: ArcGIS.LoadableImage?
-    
-    var thumbnailImage: UIImage?
-    
-    var id: ArcGIS.Item.ID?
+    /// The path to the preplanned map areas directory for a specific portal item.
+    /// `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>`
+    /// - Parameter portalItemID: The ID of the web map portal item.
+    func preplannedDirectory(forPortalItemID portalItemID: Item.ID, preplannedMapAreaID: Item.ID) -> URL {
+        portalItemDirectory(forPortalItemID: portalItemID)
+            .appending(
+                path: Self.preplannedDirectoryPath,
+                directoryHint: .isDirectory
+            )
+            .appending(
+                path: preplannedMapAreaID.rawValue,
+                directoryHint: .isDirectory
+            )
+    }
 }

@@ -19,9 +19,6 @@ public struct PreplannedListItemView: View {
     /// The view model for the preplanned map.
     @ObservedObject var model: PreplannedMapModel
     
-    /// A Boolean value indicating whether the user has authorized notifications to be shown.
-    var canShowNotifications = false
-    
     public var body: some View {
         HStack(alignment: .center, spacing: 10) {
             thumbnailView
@@ -37,13 +34,6 @@ public struct PreplannedListItemView: View {
         }
         .task {
             await model.load()
-        }
-        .onReceive(model.$result) { result in
-            model.updateDownloadStatus(for: result)
-        }
-        .onChange(of: model.job?.status) { status in
-            guard canShowNotifications else { return }
-            model.notifyJobCompleted()
         }
     }
     
@@ -77,17 +67,15 @@ public struct PreplannedListItemView: View {
             }
         default:
             Button {
-                if model.canDownload {
-                    Task {
-                        // Download preplanned map area.
-                        await model.downloadPreplannedMapArea()
-                    }
+                Task {
+                    // Download preplanned map area.
+                    await model.downloadPreplannedMapArea()
                 }
             } label: {
                 Image(systemName: "arrow.down.circle")
             }
             .buttonStyle(.plain)
-            .disabled(!model.canDownload)
+            .disabled(!model.status.allowsDownload)
             .foregroundColor(.accentColor)
         }
     }
@@ -140,8 +128,9 @@ public struct PreplannedListItemView: View {
         model: PreplannedMapModel(
             offlineMapTask: OfflineMapTask(onlineMap: Map()),
             mapArea: MockPreplannedMapArea(),
-            directory: URL.documentsDirectory
-        )!
+            portalItemID: .init("preview")!,
+            preplannedMapAreaID: .init("preview")!
+        )
     )
     .padding()
 }
@@ -155,5 +144,7 @@ private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
     var thumbnailImage: UIImage?
     
     func retryLoad() async throws { }
-    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters? { nil }
+    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+        DownloadPreplannedOfflineMapParameters()
+    }
 }
