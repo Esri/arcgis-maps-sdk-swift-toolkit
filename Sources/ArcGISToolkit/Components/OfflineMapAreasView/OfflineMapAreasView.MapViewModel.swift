@@ -22,7 +22,7 @@ extension OfflineMapAreasView {
     @MainActor
     class MapViewModel: ObservableObject {
         /// The portal item ID of the web map.
-        private let portalItemID: Item.ID?
+        private let portalItemID: PortalItem.ID?
         
         /// The offline map task.
         private let offlineMapTask: OfflineMapTask
