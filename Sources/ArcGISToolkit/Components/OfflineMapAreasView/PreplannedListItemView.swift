@@ -51,12 +51,28 @@ public struct PreplannedListItemView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var downloadButton: some View {
-***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED***switch model.status {
+***REMOVED******REMOVED***case .downloaded:
+***REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
+***REMOVED******REMOVED***case .downloading:
+***REMOVED******REMOVED******REMOVED***if let job = model.job {
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(job.progress)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.gauge)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Download preplanned map area.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await model.downloadPreplannedMapArea()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.down.circle")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.disabled(!model.status.allowsDownload)
+***REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED***
-***REMOVED******REMOVED***.disabled(!model.canDownload)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ViewBuilder private var descriptionView: some View {
@@ -104,16 +120,25 @@ public struct PreplannedListItemView: View {
 
 #Preview {
 ***REMOVED***PreplannedListItemView(
-***REMOVED******REMOVED***model: PreplannedMapModel(preplannedMapArea: MockPreplannedMapArea())
+***REMOVED******REMOVED***model: PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
+***REMOVED******REMOVED******REMOVED***mapArea: MockPreplannedMapArea(),
+***REMOVED******REMOVED******REMOVED***portalItemID: .init("preview")!,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("preview")!
+***REMOVED******REMOVED***)
 ***REMOVED***)
 ***REMOVED***.padding()
 ***REMOVED***
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED***var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
+***REMOVED***var id: PortalItem.ID? = PortalItem.ID("012345")
+***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
 ***REMOVED***var title: String = "Mock Preplanned Map Area"
 ***REMOVED***var description: String = "This is the description text"
-***REMOVED***var thumbnail: ArcGIS.LoadableImage? = nil
+***REMOVED***var thumbnail: LoadableImage? = nil
 ***REMOVED***
 ***REMOVED***func retryLoad() async throws { ***REMOVED***
+***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+***REMOVED******REMOVED***DownloadPreplannedOfflineMapParameters()
+***REMOVED***
 ***REMOVED***

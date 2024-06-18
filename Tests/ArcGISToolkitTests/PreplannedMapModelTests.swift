@@ -14,18 +14,23 @@
 
 import XCTest
 ***REMOVED***
+import Combine
 @testable ***REMOVED***Toolkit
 
 private extension PreplannedMapAreaProtocol {
+***REMOVED***var mapArea: PreplannedMapArea? { nil ***REMOVED***
+***REMOVED***var id: PortalItem.ID? { PortalItem.ID("012345") ***REMOVED***
 ***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? { nil ***REMOVED***
 ***REMOVED***var title: String { "Mock Preplanned Map Area" ***REMOVED***
 ***REMOVED***var description: String { "This is the description text" ***REMOVED***
-***REMOVED***var thumbnail: ArcGIS.LoadableImage? { nil ***REMOVED***
+***REMOVED***var thumbnail: LoadableImage? { nil ***REMOVED***
+***REMOVED***
+***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+***REMOVED******REMOVED***throw NSError()
+***REMOVED***
 ***REMOVED***
 
 class PreplannedMapModelTests: XCTestCase {
-***REMOVED***private static var sleepNanoseconds: UInt64 { 1_000_000 ***REMOVED***
-***REMOVED***
 ***REMOVED***@MainActor
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
@@ -33,7 +38,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel.makeTest(mapArea: mockArea)
 ***REMOVED******REMOVED***XCTAssertIdentical(model.preplannedMapArea as? MockPreplannedMapArea, mockArea)
 ***REMOVED***
 ***REMOVED***
@@ -44,37 +49,8 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
-***REMOVED******REMOVED***guard case .notLoaded = model.status else {
-***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel initial status is not \".notLoaded\".")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
-***REMOVED******REMOVED***XCTAssertTrue(model.status.needsToBeLoaded)
-***REMOVED***
-***REMOVED***
-***REMOVED***@MainActor
-***REMOVED***func testLoadingStatus() async throws {
-***REMOVED******REMOVED***class MockPreplannedMapArea: PreplannedMapAreaProtocol {
-***REMOVED******REMOVED******REMOVED***func retryLoad() async throws {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** In `retryLoad` method, simulate a time-consuming `load` method,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** so the model status stays at "loading".
-***REMOVED******REMOVED******REMOVED******REMOVED***try await Task.sleep(nanoseconds: 2 * PreplannedMapModelTests.sleepNanoseconds)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
-***REMOVED******REMOVED***Task { await model.load() ***REMOVED***
-***REMOVED******REMOVED***try await Task.sleep(nanoseconds: PreplannedMapModelTests.sleepNanoseconds)
-***REMOVED******REMOVED***guard case .loading = model.status else {
-***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".loading\".")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
-***REMOVED******REMOVED***XCTAssertFalse(model.status.needsToBeLoaded)
+***REMOVED******REMOVED***let model = PreplannedMapModel.makeTest(mapArea: mockArea)
+***REMOVED******REMOVED***model.status.assertExpectedValue(.notLoaded)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
@@ -84,21 +60,14 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel.makeTest(mapArea: mockArea)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Packaging status is `nil` for compatibility with legacy webmaps
 ***REMOVED******REMOVED******REMOVED*** when they have packaged areas but have incomplete metadata.
 ***REMOVED******REMOVED******REMOVED*** When the preplanned map area finishes loading, if its
 ***REMOVED******REMOVED******REMOVED*** packaging status is `nil`, we consider it as completed.
 ***REMOVED******REMOVED***await model.load()
-***REMOVED******REMOVED***guard case .packaged = model.status else {
-***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".packaged\".")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** In this case, the areas can be downloaded.
-***REMOVED******REMOVED***XCTAssertTrue(model.canDownload)
-***REMOVED******REMOVED***XCTAssertFalse(model.status.needsToBeLoaded)
+***REMOVED******REMOVED***model.status.assertExpectedValue(.packaged)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
@@ -112,16 +81,9 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel.makeTest(mapArea: mockArea)
 ***REMOVED******REMOVED***await model.load()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard case .loadFailure = model.status else {
-***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".loadFailure\".")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
-***REMOVED******REMOVED***XCTAssertTrue(model.status.needsToBeLoaded)
+***REMOVED******REMOVED***model.status.assertExpectedValue(.loadFailure(MappingError.notLoaded(details: "")))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
@@ -135,16 +97,9 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel.makeTest(mapArea: mockArea)
 ***REMOVED******REMOVED***await model.load()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard case .packaging = model.status else {
-***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".packaging\".")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
-***REMOVED******REMOVED***XCTAssertFalse(model.status.needsToBeLoaded)
+***REMOVED******REMOVED***model.status.assertExpectedValue(.packaging)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
@@ -158,16 +113,9 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel.makeTest(mapArea: mockArea)
 ***REMOVED******REMOVED***await model.load()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard case .packaged = model.status else {
-***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".packaged\".")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(model.canDownload)
-***REMOVED******REMOVED***XCTAssertFalse(model.status.needsToBeLoaded)
+***REMOVED******REMOVED***model.status.assertExpectedValue(.packaged)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
@@ -182,16 +130,9 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel.makeTest(mapArea: mockArea)
 ***REMOVED******REMOVED***await model.load()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard case .packageFailure = model.status else {
-***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".packageFailure\".")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
-***REMOVED******REMOVED***XCTAssertTrue(model.status.needsToBeLoaded)
+***REMOVED******REMOVED***model.status.assertExpectedValue(.packageFailure)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
@@ -207,15 +148,176 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mockArea = MockPreplannedMapArea()
-***REMOVED******REMOVED***let model = PreplannedMapModel(preplannedMapArea: mockArea)
+***REMOVED******REMOVED***let model = PreplannedMapModel.makeTest(mapArea: mockArea)
+***REMOVED******REMOVED***await model.load()
+***REMOVED******REMOVED***model.status.assertExpectedValue(.packageFailure)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ This tests that the initial status is "downloading" if there is a matching job
+***REMOVED******REMOVED***/ in the job manager.
+***REMOVED***@MainActor
+***REMOVED***func testStartupDownloadingStatus() async throws {
+***REMOVED******REMOVED***let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
+***REMOVED******REMOVED***let areas = try await task.preplannedMapAreas
+***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first)
+***REMOVED******REMOVED***let areaID = try XCTUnwrap(area.id)
+***REMOVED******REMOVED***let mmpkDirectory = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***defer {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up JobManager.
+***REMOVED******REMOVED******REMOVED***JobManager.shared.jobs.removeAll()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up folder.
+***REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: mmpkDirectory)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Add a job to the job manager so that when creating the model it finds it.
+***REMOVED******REMOVED***let parameters = try await task.makeDefaultDownloadPreplannedOfflineMapParameters(preplannedMapArea: area)
+***REMOVED******REMOVED***let job = task.makeDownloadPreplannedOfflineMapJob(parameters: parameters, downloadDirectory: mmpkDirectory)
+***REMOVED******REMOVED***JobManager.shared.jobs.append(job)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let model = PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
+***REMOVED******REMOVED******REMOVED***mapArea: area,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
+***REMOVED******REMOVED******REMOVED******REMOVED*** User notifications in unit tests are not supported, must pass false here
+***REMOVED******REMOVED******REMOVED******REMOVED*** or the test process will crash.
+***REMOVED******REMOVED******REMOVED***showsUserNotificationOnCompletion: false
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***model.status.assertExpectedValue(.downloading)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Cancel the job to be a good citizen.
+***REMOVED******REMOVED***await job.cancel()
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***func testDownloadStatuses() async throws {
+***REMOVED******REMOVED***let portalItem = PortalItem(portal: Portal.arcGISOnline(connection: .anonymous), id: .init("acc027394bc84c2fb04d1ed317aac674")!)
+***REMOVED******REMOVED***let task = OfflineMapTask(portalItem: portalItem)
+***REMOVED******REMOVED***let areas = try await task.preplannedMapAreas
+***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first)
+***REMOVED******REMOVED***let areaID = try XCTUnwrap(area.id)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***defer {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up JobManager.
+***REMOVED******REMOVED******REMOVED***JobManager.shared.jobs.removeAll()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up folder.
+***REMOVED******REMOVED******REMOVED***let directory = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED******REMOVED******REMOVED***forPortalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***try? FileManager.default.removeItem(at: directory)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let model = PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
+***REMOVED******REMOVED******REMOVED***mapArea: area,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID,
+***REMOVED******REMOVED******REMOVED******REMOVED*** User notifications in unit tests are not supported, must pass false here
+***REMOVED******REMOVED******REMOVED******REMOVED*** or the test process will crash.
+***REMOVED******REMOVED******REMOVED***showsUserNotificationOnCompletion: false
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var statuses = [PreplannedMapModel.Status]()
+***REMOVED******REMOVED***var subscriptions = Set<AnyCancellable>()
+***REMOVED******REMOVED***model.$status
+***REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
+***REMOVED******REMOVED******REMOVED***.sink { value in
+***REMOVED******REMOVED******REMOVED******REMOVED***statuses.append(value)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.store(in: &subscriptions)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await model.load()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard case .packageFailure = model.status else {
-***REMOVED******REMOVED******REMOVED***XCTFail("PreplannedMapModel status is not \".loadFailure\".")
+***REMOVED******REMOVED******REMOVED*** Start downloading
+***REMOVED******REMOVED***await model.downloadPreplannedMapArea()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait for job to finish.
+***REMOVED******REMOVED***_ = await model.job?.result
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Give the final status some time to be updated.
+***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 1_000_000)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Verify statuses
+***REMOVED******REMOVED***let expectedStatusCount = 6
+***REMOVED******REMOVED***guard statuses.count == expectedStatusCount else {
+***REMOVED******REMOVED******REMOVED***XCTFail("Expected a statuses count of \(expectedStatusCount), count is \(statuses.count).")
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertFalse(model.canDownload)
-***REMOVED******REMOVED***XCTAssertTrue(model.status.needsToBeLoaded)
+***REMOVED******REMOVED***let expected: [PreplannedMapModel.Status] = [
+***REMOVED******REMOVED******REMOVED***.notLoaded,
+***REMOVED******REMOVED******REMOVED***.loading,
+***REMOVED******REMOVED******REMOVED***.packaged,
+***REMOVED******REMOVED******REMOVED***.downloading,
+***REMOVED******REMOVED******REMOVED***.downloading,
+***REMOVED******REMOVED******REMOVED***.downloaded
+***REMOVED******REMOVED***]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***for (status, expected) in zip(statuses, expected) {
+***REMOVED******REMOVED******REMOVED***status.assertExpectedValue(expected)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Now test that creating a new matching model will have the status set to
+***REMOVED******REMOVED******REMOVED*** downloaded as there is a mmpk downloaded at the appropriate location.
+***REMOVED******REMOVED***let model2 = PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED***offlineMapTask: task,
+***REMOVED******REMOVED******REMOVED***mapArea: area,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***model2.status.assertExpectedValue(.downloaded)
+***REMOVED***
+***REMOVED***
+
+private extension PreplannedMapModel.Status {
+***REMOVED******REMOVED***/ Checks if another value is equivalent to this value ignoring
+***REMOVED******REMOVED***/ any associated values.
+***REMOVED***private func isMatch(for other: Self) -> Bool {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .notLoaded:
+***REMOVED******REMOVED******REMOVED***if case .notLoaded = other { true ***REMOVED*** else { false ***REMOVED***
+***REMOVED******REMOVED***case .loading:
+***REMOVED******REMOVED******REMOVED***if case .loading = other { true ***REMOVED*** else { false ***REMOVED***
+***REMOVED******REMOVED***case .loadFailure:
+***REMOVED******REMOVED******REMOVED***if case .loadFailure = other { true ***REMOVED*** else { false ***REMOVED***
+***REMOVED******REMOVED***case .packaged:
+***REMOVED******REMOVED******REMOVED***if case .packaged = other { true ***REMOVED*** else { false ***REMOVED***
+***REMOVED******REMOVED***case .packaging:
+***REMOVED******REMOVED******REMOVED***if case .packaging = other { true ***REMOVED*** else { false ***REMOVED***
+***REMOVED******REMOVED***case .packageFailure:
+***REMOVED******REMOVED******REMOVED***if case .packageFailure = other { true ***REMOVED*** else { false ***REMOVED***
+***REMOVED******REMOVED***case .downloading:
+***REMOVED******REMOVED******REMOVED***if case .downloading = other { true ***REMOVED*** else { false ***REMOVED***
+***REMOVED******REMOVED***case .downloaded:
+***REMOVED******REMOVED******REMOVED***if case .downloaded = other { true ***REMOVED*** else { false ***REMOVED***
+***REMOVED******REMOVED***case .downloadFailure:
+***REMOVED******REMOVED******REMOVED***if case .downloadFailure = other { true ***REMOVED*** else { false ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func assertExpectedValue(_ expected: Self, file: StaticString = #filePath, line: UInt = #line) {
+***REMOVED******REMOVED***guard !isMatch(for: expected) else { return ***REMOVED***
+***REMOVED******REMOVED***XCTFail("Status '\(self)' does not match expected status of '\(expected)'", file: file, line: line)
+***REMOVED***
+***REMOVED***
+
+private extension PreplannedMapModel {
+***REMOVED***static func makeTest(mapArea: PreplannedMapAreaProtocol) -> PreplannedMapModel {
+***REMOVED******REMOVED***PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED***offlineMapTask: OfflineMapTask(onlineMap: Map()),
+***REMOVED******REMOVED******REMOVED***mapArea: mapArea,
+***REMOVED******REMOVED******REMOVED***portalItemID: .init("test-item-id")!,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: .init("test-preplanned-map-area-id")!
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

@@ -15,6 +15,7 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
 public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***@StateObject private var mapViewModel: MapViewModel
@@ -22,9 +23,11 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The action to dismiss the view.
 ***REMOVED***@Environment(\.dismiss) private var dismiss: DismissAction
 ***REMOVED***
-***REMOVED******REMOVED***/ The rotation angle of the reload button image.
-***REMOVED***@State private var rotationAngle: CGFloat = 0.0
+***REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map areas are being reloaded.
+***REMOVED***@State private var isReloadingPreplannedMapAreas = false
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates an `OfflineMapAreasView` with a given web map.
+***REMOVED******REMOVED***/ - Parameter map: The web map.
 ***REMOVED***public init(map: Map) {
 ***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
 ***REMOVED***
@@ -32,30 +35,33 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***NavigationStack {
 ***REMOVED******REMOVED******REMOVED***Form {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section(header: HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Preplanned Map Areas").bold()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.linear(duration: 0.6)) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***rotationAngle = rotationAngle + 360
+***REMOVED******REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaViews
+***REMOVED******REMOVED******REMOVED*** header: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Preplanned Map Areas").bold()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isReloadingPreplannedMapAreas = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isReloadingPreplannedMapAreas = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.clockwise")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reload the preplanned map areas.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "arrow.clockwise")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(.degrees(rotationAngle))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.controlSize(.mini)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(isReloadingPreplannedMapAreas)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.controlSize(.mini)
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreas
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.requestUserNotificationAuthorization()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .confirmationAction) {
@@ -67,12 +73,14 @@ public struct OfflineMapAreasView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ViewBuilder private var preplannedMapAreas: some View {
+***REMOVED***@ViewBuilder private var preplannedMapAreaViews: some View {
 ***REMOVED******REMOVED***switch mapViewModel.preplannedMapModels {
 ***REMOVED******REMOVED***case .success(let models):
-***REMOVED******REMOVED******REMOVED***if mapViewModel.hasPreplannedMapAreas {
+***REMOVED******REMOVED******REMOVED***if !models.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(models) { preplannedMapModel in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: preplannedMapModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: preplannedMapModel
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***emptyPreplannedMapAreasView
@@ -100,47 +108,6 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundStyle(.secondary)
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED***
-***REMOVED***
-
-public extension OfflineMapAreasView {
-***REMOVED******REMOVED***/ The model class for the offline map areas view.
-***REMOVED***@MainActor
-***REMOVED***class MapViewModel: ObservableObject {
-***REMOVED******REMOVED******REMOVED***/ The online map.
-***REMOVED******REMOVED***private let onlineMap: Map
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The offline map task.
-***REMOVED******REMOVED***private let offlineMapTask: OfflineMapTask
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The preplanned offline map information.
-***REMOVED******REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the map has preplanned map areas.
-***REMOVED******REMOVED***@Published private(set) var hasPreplannedMapAreas = false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(map: Map) {
-***REMOVED******REMOVED******REMOVED***self.onlineMap = map
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***offlineMapTask = OfflineMapTask(onlineMap: onlineMap)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Gets the preplanned map areas from the offline map task and creates the
-***REMOVED******REMOVED******REMOVED***/ offline map models.
-***REMOVED******REMOVED***func makePreplannedOfflineMapModels() async {
-***REMOVED******REMOVED******REMOVED***preplannedMapModels = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await offlineMapTask.preplannedMapAreas
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sorted(using: KeyPathComparator(\.portalItem.title))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.compactMap {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: $0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let models = try? preplannedMapModels!.get() {
-***REMOVED******REMOVED******REMOVED******REMOVED***hasPreplannedMapAreas = !models.isEmpty
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 

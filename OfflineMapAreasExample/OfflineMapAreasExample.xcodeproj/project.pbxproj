@@ -1,0 +1,398 @@
+***REMOVED*** !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	***REMOVED***;
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1C7F79BA2C1A3F7D008D8D31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7F79B92C1A3F7D008D8D31 /* AppDelegate.swift */; ***REMOVED***;
+		1CBE201D2BF2BF2B0006B55D /* OfflineMapAreasExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CBE201C2BF2BF2B0006B55D /* OfflineMapAreasExampleApp.swift */; ***REMOVED***;
+		1CBE201F2BF2BF2B0006B55D /* OfflineMapAreasExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CBE201E2BF2BF2B0006B55D /* OfflineMapAreasExampleView.swift */; ***REMOVED***;
+		1CBE20212BF2BF2C0006B55D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CBE20202BF2BF2C0006B55D /* Assets.xcassets */; ***REMOVED***;
+		1CBE20252BF2BF2C0006B55D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CBE20242BF2BF2C0006B55D /* Preview Assets.xcassets */; ***REMOVED***;
+		1CBE20322BF2C6130006B55D /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = 1CBE20312BF2C6130006B55D /* ArcGISToolkit */; ***REMOVED***;
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1C7F79B92C1A3F7D008D8D31 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; ***REMOVED***;
+		1C96FD5D2C1CC08900A1CC91 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; ***REMOVED***;
+		1CBE20192BF2BF2B0006B55D /* OfflineMapAreasExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OfflineMapAreasExample.app; sourceTree = BUILT_PRODUCTS_DIR; ***REMOVED***;
+		1CBE201C2BF2BF2B0006B55D /* OfflineMapAreasExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineMapAreasExampleApp.swift; sourceTree = "<group>"; ***REMOVED***;
+		1CBE201E2BF2BF2B0006B55D /* OfflineMapAreasExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineMapAreasExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
+		1CBE20202BF2BF2C0006B55D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; ***REMOVED***;
+		1CBE20222BF2BF2C0006B55D /* OfflineMapAreasExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OfflineMapAreasExample.entitlements; sourceTree = "<group>"; ***REMOVED***;
+		1CBE20242BF2BF2C0006B55D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; ***REMOVED***;
+		1CBE202F2BF2C5AD0006B55D /* arcgis-maps-sdk-swift-toolkit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "arcgis-maps-sdk-swift-toolkit"; path = ..; sourceTree = "<group>"; ***REMOVED***;
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1CBE20162BF2BF2B0006B55D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1CBE20322BF2C6130006B55D /* ArcGISToolkit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		***REMOVED***;
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1CBE20102BF2BF2B0006B55D = {
+			isa = PBXGroup;
+			children = (
+				1CBE202F2BF2C5AD0006B55D /* arcgis-maps-sdk-swift-toolkit */,
+				1CBE201B2BF2BF2B0006B55D /* OfflineMapAreasExample */,
+				1CBE201A2BF2BF2B0006B55D /* Products */,
+				1CBE20302BF2C6130006B55D /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		***REMOVED***;
+		1CBE201A2BF2BF2B0006B55D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1CBE20192BF2BF2B0006B55D /* OfflineMapAreasExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		***REMOVED***;
+		1CBE201B2BF2BF2B0006B55D /* OfflineMapAreasExample */ = {
+			isa = PBXGroup;
+			children = (
+				1C96FD5D2C1CC08900A1CC91 /* Info.plist */,
+				1C7F79B92C1A3F7D008D8D31 /* AppDelegate.swift */,
+				1CBE201C2BF2BF2B0006B55D /* OfflineMapAreasExampleApp.swift */,
+				1CBE201E2BF2BF2B0006B55D /* OfflineMapAreasExampleView.swift */,
+				1CBE20202BF2BF2C0006B55D /* Assets.xcassets */,
+				1CBE20222BF2BF2C0006B55D /* OfflineMapAreasExample.entitlements */,
+				1CBE20232BF2BF2C0006B55D /* Preview Content */,
+			);
+			path = OfflineMapAreasExample;
+			sourceTree = "<group>";
+		***REMOVED***;
+		1CBE20232BF2BF2C0006B55D /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				1CBE20242BF2BF2C0006B55D /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		***REMOVED***;
+		1CBE20302BF2C6130006B55D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		***REMOVED***;
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1CBE20182BF2BF2B0006B55D /* OfflineMapAreasExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1CBE20282BF2BF2C0006B55D /* Build configuration list for PBXNativeTarget "OfflineMapAreasExample" */;
+			buildPhases = (
+				1CBE20152BF2BF2B0006B55D /* Sources */,
+				1CBE20162BF2BF2B0006B55D /* Frameworks */,
+				1CBE20172BF2BF2B0006B55D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OfflineMapAreasExample;
+			packageProductDependencies = (
+				1CBE20312BF2C6130006B55D /* ArcGISToolkit */,
+			);
+			productName = OfflineMapAreasExample;
+			productReference = 1CBE20192BF2BF2B0006B55D /* OfflineMapAreasExample.app */;
+			productType = "com.apple.product-type.application";
+		***REMOVED***;
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1CBE20112BF2BF2B0006B55D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1530;
+				LastUpgradeCheck = 1530;
+				TargetAttributes = {
+					1CBE20182BF2BF2B0006B55D = {
+						CreatedOnToolsVersion = 15.3;
+					***REMOVED***;
+				***REMOVED***;
+			***REMOVED***;
+			buildConfigurationList = 1CBE20142BF2BF2B0006B55D /* Build configuration list for PBXProject "OfflineMapAreasExample" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1CBE20102BF2BF2B0006B55D;
+			packageReferences = (
+			);
+			productRefGroup = 1CBE201A2BF2BF2B0006B55D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1CBE20182BF2BF2B0006B55D /* OfflineMapAreasExample */,
+			);
+		***REMOVED***;
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1CBE20172BF2BF2B0006B55D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1CBE20252BF2BF2C0006B55D /* Preview Assets.xcassets in Resources */,
+				1CBE20212BF2BF2C0006B55D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		***REMOVED***;
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1CBE20152BF2BF2B0006B55D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C7F79BA2C1A3F7D008D8D31 /* AppDelegate.swift in Sources */,
+				1CBE201F2BF2BF2B0006B55D /* OfflineMapAreasExampleView.swift in Sources */,
+				1CBE201D2BF2BF2B0006B55D /* OfflineMapAreasExampleApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		***REMOVED***;
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1CBE20262BF2BF2C0006B55D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			***REMOVED***;
+			name = Debug;
+		***REMOVED***;
+		1CBE20272BF2BF2C0006B55D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			***REMOVED***;
+			name = Release;
+		***REMOVED***;
+		1CBE20292BF2BF2C0006B55D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = OfflineMapAreasExample/OfflineMapAreasExample.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"OfflineMapAreasExample/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OfflineMapAreasExample/Info.plist;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = esri.OfflineMapAreasExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			***REMOVED***;
+			name = Debug;
+		***REMOVED***;
+		1CBE202A2BF2BF2C0006B55D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = OfflineMapAreasExample/OfflineMapAreasExample.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"OfflineMapAreasExample/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OfflineMapAreasExample/Info.plist;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = esri.OfflineMapAreasExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			***REMOVED***;
+			name = Release;
+		***REMOVED***;
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1CBE20142BF2BF2B0006B55D /* Build configuration list for PBXProject "OfflineMapAreasExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1CBE20262BF2BF2C0006B55D /* Debug */,
+				1CBE20272BF2BF2C0006B55D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		***REMOVED***;
+		1CBE20282BF2BF2C0006B55D /* Build configuration list for PBXNativeTarget "OfflineMapAreasExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1CBE20292BF2BF2C0006B55D /* Debug */,
+				1CBE202A2BF2BF2C0006B55D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		***REMOVED***;
+/* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1CBE20312BF2C6130006B55D /* ArcGISToolkit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ArcGISToolkit;
+		***REMOVED***;
+/* End XCSwiftPackageProductDependency section */
+	***REMOVED***;
+	rootObject = 1CBE20112BF2BF2B0006B55D /* Project object */;
+***REMOVED***
