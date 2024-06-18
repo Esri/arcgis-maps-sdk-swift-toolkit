@@ -120,13 +120,14 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***.menuStyle(.borderlessButton)
 #endif
 ***REMOVED******REMOVED***.task(id: importState) {
-***REMOVED******REMOVED******REMOVED***guard case let .finalizing(newAttachmentImportData) = importState else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard case let .finalizing(newAttachmentImportData) = importState,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let attachments = try? await element.attachments else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***defer { importState = .none ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***let fileName: String
 ***REMOVED******REMOVED******REMOVED***if let presetFileName = newAttachmentImportData.fileName {
 ***REMOVED******REMOVED******REMOVED******REMOVED***fileName = presetFileName
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***let attachmentNumber = element.attachments.count + 1
+***REMOVED******REMOVED******REMOVED******REMOVED***let attachmentNumber = attachments.count + 1
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let fileExtension = newAttachmentImportData.fileExtension {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fileName = "Attachment \(attachmentNumber).\(fileExtension)"
 ***REMOVED******REMOVED******REMOVED*** else {
