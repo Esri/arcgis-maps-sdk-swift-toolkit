@@ -24,6 +24,7 @@ private extension PreplannedMapAreaProtocol {
     var title: String { "Mock Preplanned Map Area" }
     var description: String { "This is the description text" }
     var thumbnail: LoadableImage? { nil }
+    var thumbnailImage: UIImage? { nil }
     
     func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
         throw NSError()

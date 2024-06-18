@@ -41,7 +41,7 @@ public struct OfflineMapAreasView: View {
                         Button {
                             Task {
                                 isReloadingPreplannedMapAreas = true
-                                await mapViewModel.makePreplannedOfflineMapModels()
+                                await makePreplannedOfflineMapModels()
                                 isReloadingPreplannedMapAreas = false
                             }
                         } label: {
@@ -55,7 +55,7 @@ public struct OfflineMapAreasView: View {
                 .textCase(nil)
             }
             .task {
-                await mapViewModel.makePreplannedOfflineMapModels()
+                await makePreplannedOfflineMapModels()
             }
             .task {
                 await mapViewModel.requestUserNotificationAuthorization()
@@ -85,10 +85,7 @@ public struct OfflineMapAreasView: View {
         case .failure(let error):
             if error.localizedDescription == "The Internet connection appears to be offline." && !mapViewModel.offlinePreplannedModels.isEmpty {
                 List(mapViewModel.offlinePreplannedModels.sorted(by: < ), id: \.preplannedMapArea.title) { model in
-                    PreplannedListItemView(
-                        mapViewModel: mapViewModel,
-                        model: model
-                    )
+                    PreplannedListItemView(model: model)
                 }
             } else {
                 VStack(alignment: .center) {
@@ -116,11 +113,10 @@ public struct OfflineMapAreasView: View {
         .frame(maxWidth: .infinity)
     }
     
-    /// Loads the preplanned map area models and mobile map packages.
-    private func loadPreplannedMapAreas() async {
-        await mapViewModel.makePreplannedOfflineMapModels()
-        mapViewModel.loadPreplannedMobileMapPackages()
-        mapViewModel.loadOfflinePreplannedMapModels()
+    /// Makes preplanned map models and offline preplanned map models.
+    func makePreplannedOfflineMapModels() async {
+        await mapViewModel.makePreplannedMapModels()
+        mapViewModel.makeOfflinePreplannedMapModels()
     }
 }
 

@@ -22,7 +22,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     let preplannedMapArea: any PreplannedMapAreaProtocol
     
     /// The task to use to take the area offline.
-    private let offlineMapTask: OfflineMapTask
+    private let offlineMapTask: OfflineMapTask?
     
     /// The ID of the web map.
     private let portalItemID: Item.ID
@@ -40,7 +40,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     @Published private(set) var status: Status = .notLoaded
     
     /// A Boolean value indicating if a user notification should be shown when a job completes.
-    let showsUserNotificationOnCompletion: Bool
+    private let showsUserNotificationOnCompletion: Bool
     
     init(
         offlineMapTask: OfflineMapTask,
@@ -63,9 +63,26 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
+    init(
+        portalItemID: Item.ID,
+        mapAreaID: Item.ID,
+        mapArea: PreplannedMapAreaProtocol
+    ) {
+        self.portalItemID = portalItemID
+        self.preplannedMapAreaID = mapAreaID
+        self.preplannedMapArea = mapArea
+        showsUserNotificationOnCompletion = false
+        offlineMapTask = nil
+        if let mmpk = lookupMobileMapPackage() {
+            self.mobileMapPackage = mmpk
+            self.status = .downloaded
+        }
+    }
+    
     /// Loads the preplanned map area and updates the status.
     func load() async {
         guard status.needsToBeLoaded else { return }
+        
         do {
             // Load preplanned map area to obtain packaging status.
             status = .loading
@@ -121,7 +138,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     
     /// Looks in the  mobile map package if downloaded locally.
     private func lookupMobileMapPackage() -> MobileMapPackage? {
-        let fileURL = FileManager.default.preplannedDirectory(
+        let fileURL = FileManager.default.mmpkDirectory(
             forPortalItemID: portalItemID,
             preplannedMapAreaID: preplannedMapAreaID
         )
@@ -154,14 +171,15 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     /// Downloads the preplanned map area.
-    /// - Precondition: `canDownload`
+    /// - Precondition: `status.allowsDownload`
     func downloadPreplannedMapArea() async {
         precondition(status.allowsDownload)
+        guard let offlineMapTask else { return }
         status = .downloading
         
         do {
             let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask)
-            let mmpkDirectory = FileManager.default.preplannedDirectory(
+            let mmpkDirectory = FileManager.default.mmpkDirectory(
                 forPortalItemID: portalItemID,
                 preplannedMapAreaID: preplannedMapAreaID
             )
@@ -194,6 +212,40 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
             if showsUserNotificationOnCompletion && (job.status == .succeeded || job.status == .failed) {
                 try? await Self.notifyJobCompleted(job: job)
             }
+            writeMetadata()
+        }
+    }
+    
+    /// Writes the metadata for the preplanned map model to an associated `metadata.json` file.
+    private func writeMetadata() {
+        do {
+            // Write preplanned map area thumbnail image to `thumbnail.png` file.
+            if let thumbnail = preplannedMapArea.thumbnail?.image {
+                let thumbnailPath = FileManager.default.thumbnailPath(
+                    forPortalItemID: portalItemID,
+                    preplannedMapAreaID: preplannedMapAreaID
+                )
+                
+                if let thumbnailData = thumbnail.pngData() {
+                    try thumbnailData.write(to: thumbnailPath, options: .atomic)
+                }
+            }
+            
+            // Write preplanned map area metadata to `metadata.json` file.
+            let metadataPath = FileManager.default.metadataPath(
+                forPortalItemID: portalItemID,
+                preplannedMapAreaID: preplannedMapAreaID
+            )
+            
+            let jsonObject: [String: Any] = [
+                "title" : preplannedMapArea.title,
+                "description" : preplannedMapArea.description,
+                "id" : preplannedMapAreaID.rawValue
+            ]
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: .sortedKeys)
+            try jsonData.write(to: metadataPath, options: .atomic)
+        } catch {
+            return
         }
     }
 }
@@ -264,7 +316,7 @@ protocol PreplannedMapAreaProtocol {
     var description: String { get }
     var thumbnail: LoadableImage? { get }
     var thumbnailImage: UIImage? { get }
-    var id: PortalItem.ID? { get }
+    var id: Item.ID? { get }
 }
 
 /// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -300,10 +352,13 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 }
 
 extension FileManager {
-    private static let mmpkPathExtension: String = "mmpk"
+    private static let jsonPathExtension: String = "json"
+    private static let metadataFilePath: String = "metadata"
     private static let offlineMapAreasPath: String = "OfflineMapAreas"
     private static let packageDirectoryPath: String = "Package"
     private static let preplannedDirectoryPath: String = "Preplanned"
+    private static let pngPathExtension: String = "png"
+    private static let thumbnailFilePath: String = "thumbnail"
     
     /// The path to the documents folder.
     private var documentsDirectory: URL {
@@ -326,10 +381,26 @@ extension FileManager {
         offlineMapAreasDirectory.appending(path: portalItemID.rawValue, directoryHint: .isDirectory)
     }
     
+    /// The path to the preplanned map areas directory.
+    /// `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned`
+    /// - Parameter portalItemID: The ID of the web map portal item.
+    func preplannedDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
+        portalItemDirectory(forPortalItemID: portalItemID)
+            .appending(
+                path: Self.preplannedDirectoryPath,
+                directoryHint: .isDirectory
+            )
+    }
+    
     /// The path to the preplanned map areas directory for a specific portal item.
     /// `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>`
-    /// - Parameter portalItemID: The ID of the web map portal item.
-    func preplannedDirectory(forPortalItemID portalItemID: Item.ID, preplannedMapAreaID: Item.ID) -> URL {
+    /// - Parameters:
+    ///  - portalItemID: The ID of the web map portal item.
+    ///  - preplannedMapAreaID: The ID of the preplanned map area.
+    private func preplannedDirectory(
+        forPortalItemID portalItemID: Item.ID,
+        preplannedMapAreaID: Item.ID
+    ) -> URL {
         portalItemDirectory(forPortalItemID: portalItemID)
             .appending(
                 path: Self.preplannedDirectoryPath,
@@ -340,4 +411,55 @@ extension FileManager {
                 directoryHint: .isDirectory
             )
     }
+    
+    /// The path to the`metadata.json` file for a specific preplanned map area.
+    /// `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/metadata.json`
+    /// - Parameters:
+    ///   - portalItemID: The ID of the web map portal item.
+    ///   - preplannedMapAreaID: The ID of the preplanned map area.
+    func metadataPath(
+        forPortalItemID portalItemID: Item.ID,
+        preplannedMapAreaID: Item.ID
+    ) -> URL {
+        preplannedDirectory(
+            forPortalItemID: portalItemID,
+            preplannedMapAreaID: preplannedMapAreaID
+        )
+        .appending(path: Self.metadataFilePath)
+        .appendingPathExtension(Self.jsonPathExtension)
+    }
+    
+    /// The path to the thumbnail image file for a specific preplanned map area.
+    /// `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/thumbnail.png`
+    /// - Parameters:
+    ///   - portalItemID: The ID of the web map portal item.
+    ///   - preplannedMapAreaID: The ID of the preplanned map area.
+    func thumbnailPath(
+        forPortalItemID portalItemID: Item.ID,
+        preplannedMapAreaID: Item.ID
+    ) -> URL {
+        preplannedDirectory(
+            forPortalItemID: portalItemID,
+            preplannedMapAreaID: preplannedMapAreaID
+        )
+        .appending(path: Self.thumbnailFilePath)
+        .appendingPathExtension(Self.pngPathExtension)
+    }
+    
+    /// The path to the mobile map package directory for a specific preplanned map area.
+    /// `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>`
+    /// - Parameters:
+    ///   - portalItemID: The ID of the web map portal item.
+    ///   - preplannedMapAreaID: The ID of the preplanned map area.
+    func mmpkDirectory(
+        forPortalItemID portalItemID: Item.ID,
+        preplannedMapAreaID: Item.ID
+    ) -> URL {
+        preplannedDirectory(
+            forPortalItemID: portalItemID,
+            preplannedMapAreaID: preplannedMapAreaID
+        )
+        .appending(path: preplannedMapAreaID.rawValue)
+    }
 }
+

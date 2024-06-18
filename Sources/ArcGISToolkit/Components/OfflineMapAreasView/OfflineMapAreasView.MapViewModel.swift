@@ -31,14 +31,17 @@ extension OfflineMapAreasView {
         /// The preplanned offline map information.
         @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
         
+        /// The offline preplanned map information.
+        @Published private(set) var offlinePreplannedModels = [PreplannedMapModel]()
+        
         init(map: Map) {
             offlineMapTask = OfflineMapTask(onlineMap: map)
             portalItemID = map.item?.id
         }
         
         /// Gets the preplanned map areas from the offline map task and creates the
-        /// offline map models.
-        func makePreplannedOfflineMapModels() async {
+        /// preplanned map models.
+        func makePreplannedMapModels() async {
             guard let portalItemID else { return }
             
             preplannedMapModels = await Result {
@@ -62,101 +65,106 @@ extension OfflineMapAreasView {
                 .requestAuthorization(options: [.alert, .sound])
         }
         
-        /// Loads the offline preplanned map models using metadata json files.
-        func loadOfflinePreplannedMapModels() {
-            offlinePreplannedModels.removeAll()
+        /// Gets the preplanned map areas from local metadata json files.
+        func makeOfflinePreplannedMapModels() {
+            guard let portalItemID else { return }
             
-            let jsonFiles = searchFiles(in: preplannedDirectory, with: "json")
-            
-            for fileURL in jsonFiles {
-                if let (offlinePreplannedMapArea, mobileMapPackage) = parseJSONFile(for: fileURL),
-                   let offlinePreplannedMapArea,
-                   let mobileMapPackage {
-                    offlinePreplannedModels.append(
-                        PreplannedMapModel(
-                            preplannedMapArea: offlinePreplannedMapArea,
-                            mobileMapPackage: mobileMapPackage
-                        )
+            do {
+                let portalItemDirectory = FileManager.default.preplannedDirectory(forPortalItemID: portalItemID)
+                let preplannedMapAreaDirectories = try FileManager.default.contentsOfDirectory(
+                    at: portalItemDirectory,
+                    includingPropertiesForKeys: nil
+                )
+                
+                let preplannedMapAreaIDs = preplannedMapAreaDirectories.map { Item.ID($0.lastPathComponent)! }
+                let mapAreas = preplannedMapAreaIDs.compactMap { mapAreaID in
+                    readMetadata(
+                        for: portalItemID,
+                        preplannedMapAreaID: mapAreaID
                     )
                 }
+                
+                offlinePreplannedModels = mapAreas.map { mapArea in
+                    PreplannedMapModel(
+                        portalItemID: portalItemID,
+                        mapAreaID: mapArea.id!,
+                        mapArea: mapArea
+                    )
+                }
+            } catch {
+                return
             }
         }
         
-        /// Parses the json from a metadata file for the preplanned map area.
-        /// - Parameter fileURL: The file URL of the metadata json file.
-        /// - Returns: An `OfflinePreplannedMapArea` instantiated using the metadata json
-        /// and the mobile map package for the preplanned map area.
-        func parseJSONFile(for fileURL: URL) -> (OfflinePreplannedMapArea?, MobileMapPackage?)? {
+        /// Reads the metadata for a given preplanned map area from a portal item and returns a preplanned
+        /// map area protocol constructed with the metadata.
+        /// - Parameters:
+        ///   - portalItemID: The ID for the portal item.
+        ///   - preplannedMapAreaID: The ID for the preplanned map area.
+        /// - Returns: A preplanned map area protocol.
+        private func readMetadata(for portalItemID: Item.ID, preplannedMapAreaID: Item.ID) -> PreplannedMapAreaProtocol? {
             do {
-                let contentString = try String(contentsOf: fileURL)
+                let metadataPath = FileManager.default.metadataPath(
+                    forPortalItemID: portalItemID,
+                    preplannedMapAreaID: preplannedMapAreaID
+                )
+                let contentString = try String(contentsOf: metadataPath)
                 let jsonData = Data(contentString.utf8)
                 
-                let thumbnailURL = fileURL
-                    .deletingPathExtension()
-                    .deletingLastPathComponent()
-                    .appending(path: "thumbnail")
-                    .appendingPathExtension("png")
-
+                let thumbnailURL = FileManager.default.thumbnailPath(
+                    forPortalItemID: portalItemID,
+                    preplannedMapAreaID: preplannedMapAreaID
+                )
                 let thumbnailImage = UIImage(contentsOfFile: thumbnailURL.relativePath)
                 
                 if let json = try JSONSerialization.jsonObject(with: jsonData) as? [String: Any] {
                     guard let title = json["title"] as? String,
                           let description = json["description"] as? String,
                           let id = json["id"] as? String,
-                          let itemID = Item.ID(id),
-                          let path = json["mmpkURL"] as? String else { return nil }
-                    let fileURL = URL(filePath: path)
-                    let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
-                    return (
-                        OfflinePreplannedMapArea(
-                            packagingStatus: .complete,
-                            title: title,
-                            description: description, 
-                            thumbnailImage: thumbnailImage,
-                            id: itemID
-                        ),
-                        mobileMapPackage
+                          let itemID = Item.ID(id) else { return nil }
+                    return OfflinePreplannedMapArea(
+                        title: title,
+                        description: description,
+                        thumbnailImage: thumbnailImage,
+                        id: itemID
                     )
-                } else {
-                    return nil
                 }
             } catch {
                 return nil
             }
+            return nil
         }
-        
-        /// Searches for files with a specified file extension in a given directory and its subdirectories.
-        /// - Parameters:
-        ///   - directory: The directory to search.
-        ///   - fileExtension: The file extension to search for.
-        /// - Returns: An array of file paths.
-        func searchFiles(in directory: URL, with fileExtension: String) -> [URL] {
-            guard let enumerator = FileManager.default.enumerator(
-                at: directory,
-                includingPropertiesForKeys: [.isDirectoryKey],
-                options: [.skipsHiddenFiles]
-            ) else { return [] }
-            
-            var files: [URL] = []
-            
-            for case let fileURL as URL in enumerator {
-                if fileURL.pathExtension == fileExtension {
-                    files.append(fileURL)
-                }
-            }
-            return files
-        }
-        
-        func addOfflinePreplannedModel(
-            for preplannedMap: PreplannedMapAreaProtocol,
-            mobileMapPackage: MobileMapPackage?
-        ) {
-            offlinePreplannedModels.append(
-                PreplannedMapModel(
-                    preplannedMapArea: preplannedMap,
-                    mobileMapPackage: mobileMapPackage
-                )
-            )
-        }
+    }
+}
+
+private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
+    var packagingStatus: PreplannedMapArea.PackagingStatus?
+    
+    var title: String
+    
+    var description: String
+    
+    var thumbnail: LoadableImage?
+    
+    var thumbnailImage: UIImage?
+    
+    var id: ArcGIS.Item.ID?
+    
+    func retryLoad() async throws {}
+    
+    func makeParameters(using offlineMapTask: ArcGIS.OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+        DownloadPreplannedOfflineMapParameters()
+    }
+    
+    init(
+        title: String,
+        description: String,
+        thumbnailImage: UIImage? = nil,
+        id: ArcGIS.Item.ID? = nil
+    ) {
+        self.title = title
+        self.description = description
+        self.thumbnailImage = thumbnailImage
+        self.id = id
     }
 }
