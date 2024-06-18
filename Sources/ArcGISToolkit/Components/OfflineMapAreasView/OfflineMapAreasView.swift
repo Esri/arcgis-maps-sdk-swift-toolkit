@@ -15,6 +15,7 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
 public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ The view model for the map.
 ***REMOVED***@StateObject private var mapViewModel: MapViewModel
@@ -25,6 +26,8 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the preplanned map areas are being reloaded.
 ***REMOVED***@State private var isReloadingPreplannedMapAreas = false
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates an `OfflineMapAreasView` with a given web map.
+***REMOVED******REMOVED***/ - Parameter map: The web map.
 ***REMOVED***public init(map: Map) {
 ***REMOVED******REMOVED***_mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
 ***REMOVED***
