@@ -22,7 +22,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***let preplannedMapArea: any PreplannedMapAreaProtocol
 ***REMOVED***
 ***REMOVED******REMOVED***/ The task to use to take the area offline.
-***REMOVED***private let offlineMapTask: OfflineMapTask
+***REMOVED***private let offlineMapTask: OfflineMapTask?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The ID of the web map.
 ***REMOVED***private let portalItemID: Item.ID
@@ -40,7 +40,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***@Published private(set) var status: Status = .notLoaded
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if a user notification should be shown when a job completes.
-***REMOVED***let showsUserNotificationOnCompletion: Bool
+***REMOVED***private let showsUserNotificationOnCompletion: Bool
 ***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***offlineMapTask: OfflineMapTask,
@@ -63,9 +63,26 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***init(
+***REMOVED******REMOVED***portalItemID: Item.ID,
+***REMOVED******REMOVED***mapAreaID: Item.ID,
+***REMOVED******REMOVED***mapArea: PreplannedMapAreaProtocol
+***REMOVED***) {
+***REMOVED******REMOVED***self.portalItemID = portalItemID
+***REMOVED******REMOVED***self.preplannedMapAreaID = mapAreaID
+***REMOVED******REMOVED***self.preplannedMapArea = mapArea
+***REMOVED******REMOVED***showsUserNotificationOnCompletion = false
+***REMOVED******REMOVED***offlineMapTask = nil
+***REMOVED******REMOVED***if let mmpk = lookupMobileMapPackage() {
+***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mmpk
+***REMOVED******REMOVED******REMOVED***self.status = .downloaded
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Loads the preplanned map area and updates the status.
 ***REMOVED***func load() async {
 ***REMOVED******REMOVED***guard status.needsToBeLoaded else { return ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Load preplanned map area to obtain packaging status.
 ***REMOVED******REMOVED******REMOVED***status = .loading
@@ -121,7 +138,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Looks in the  mobile map package if downloaded locally.
 ***REMOVED***private func lookupMobileMapPackage() -> MobileMapPackage? {
-***REMOVED******REMOVED***let fileURL = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED***let fileURL = FileManager.default.mmpkDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
 ***REMOVED******REMOVED***)
@@ -154,14 +171,15 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Downloads the preplanned map area.
-***REMOVED******REMOVED***/ - Precondition: `canDownload`
+***REMOVED******REMOVED***/ - Precondition: `status.allowsDownload`
 ***REMOVED***func downloadPreplannedMapArea() async {
 ***REMOVED******REMOVED***precondition(status.allowsDownload)
+***REMOVED******REMOVED***guard let offlineMapTask else { return ***REMOVED***
 ***REMOVED******REMOVED***status = .downloading
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***let parameters = try await preplannedMapArea.makeParameters(using: offlineMapTask)
-***REMOVED******REMOVED******REMOVED***let mmpkDirectory = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED******REMOVED***let mmpkDirectory = FileManager.default.mmpkDirectory(
 ***REMOVED******REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
 ***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
 ***REMOVED******REMOVED******REMOVED***)
@@ -194,6 +212,40 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***if showsUserNotificationOnCompletion && (job.status == .succeeded || job.status == .failed) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await Self.notifyJobCompleted(job: job)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***writeMetadata()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Writes the metadata for the preplanned map model to an associated `metadata.json` file.
+***REMOVED***private func writeMetadata() {
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Write preplanned map area thumbnail image to `thumbnail.png` file.
+***REMOVED******REMOVED******REMOVED***if let thumbnail = preplannedMapArea.thumbnail?.image {
+***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnailPath = FileManager.default.thumbnailPath(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnailData = thumbnail.pngData() {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try thumbnailData.write(to: thumbnailPath, options: .atomic)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Write preplanned map area metadata to `metadata.json` file.
+***REMOVED******REMOVED******REMOVED***let metadataPath = FileManager.default.metadataPath(
+***REMOVED******REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
+***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let jsonObject: [String: Any] = [
+***REMOVED******REMOVED******REMOVED******REMOVED***"title" : preplannedMapArea.title,
+***REMOVED******REMOVED******REMOVED******REMOVED***"description" : preplannedMapArea.description,
+***REMOVED******REMOVED******REMOVED******REMOVED***"id" : preplannedMapAreaID.rawValue
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED******REMOVED***let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: .sortedKeys)
+***REMOVED******REMOVED******REMOVED***try jsonData.write(to: metadataPath, options: .atomic)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -264,7 +316,7 @@ protocol PreplannedMapAreaProtocol {
 ***REMOVED***var description: String { get ***REMOVED***
 ***REMOVED***var thumbnail: LoadableImage? { get ***REMOVED***
 ***REMOVED***var thumbnailImage: UIImage? { get ***REMOVED***
-***REMOVED***var id: PortalItem.ID? { get ***REMOVED***
+***REMOVED***var id: Item.ID? { get ***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -300,10 +352,13 @@ extension PreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***
 
 extension FileManager {
-***REMOVED***private static let mmpkPathExtension: String = "mmpk"
+***REMOVED***private static let jsonPathExtension: String = "json"
+***REMOVED***private static let metadataFilePath: String = "metadata"
 ***REMOVED***private static let offlineMapAreasPath: String = "OfflineMapAreas"
 ***REMOVED***private static let packageDirectoryPath: String = "Package"
 ***REMOVED***private static let preplannedDirectoryPath: String = "Preplanned"
+***REMOVED***private static let pngPathExtension: String = "png"
+***REMOVED***private static let thumbnailFilePath: String = "thumbnail"
 ***REMOVED***
 ***REMOVED******REMOVED***/ The path to the documents folder.
 ***REMOVED***private var documentsDirectory: URL {
@@ -326,10 +381,26 @@ extension FileManager {
 ***REMOVED******REMOVED***offlineMapAreasDirectory.appending(path: portalItemID.rawValue, directoryHint: .isDirectory)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The path to the preplanned map areas directory.
+***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned`
+***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
+***REMOVED***func preplannedDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
+***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID)
+***REMOVED******REMOVED******REMOVED***.appending(
+***REMOVED******REMOVED******REMOVED******REMOVED***path: Self.preplannedDirectoryPath,
+***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
 ***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>`
-***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
-***REMOVED***func preplannedDirectory(forPortalItemID portalItemID: Item.ID, preplannedMapAreaID: Item.ID) -> URL {
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/  - portalItemID: The ID of the web map portal item.
+***REMOVED******REMOVED***/  - preplannedMapAreaID: The ID of the preplanned map area.
+***REMOVED***private func preplannedDirectory(
+***REMOVED******REMOVED***forPortalItemID portalItemID: Item.ID,
+***REMOVED******REMOVED***preplannedMapAreaID: Item.ID
+***REMOVED***) -> URL {
 ***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***.appending(
 ***REMOVED******REMOVED******REMOVED******REMOVED***path: Self.preplannedDirectoryPath,
@@ -341,3 +412,54 @@ extension FileManager {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The path to the`metadata.json` file for a specific preplanned map area.
+***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/metadata.json`
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
+***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area.
+***REMOVED***func metadataPath(
+***REMOVED******REMOVED***forPortalItemID portalItemID: Item.ID,
+***REMOVED******REMOVED***preplannedMapAreaID: Item.ID
+***REMOVED***) -> URL {
+***REMOVED******REMOVED***preplannedDirectory(
+***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.appending(path: Self.metadataFilePath)
+***REMOVED******REMOVED***.appendingPathExtension(Self.jsonPathExtension)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The path to the thumbnail image file for a specific preplanned map area.
+***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/thumbnail.png`
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
+***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area.
+***REMOVED***func thumbnailPath(
+***REMOVED******REMOVED***forPortalItemID portalItemID: Item.ID,
+***REMOVED******REMOVED***preplannedMapAreaID: Item.ID
+***REMOVED***) -> URL {
+***REMOVED******REMOVED***preplannedDirectory(
+***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.appending(path: Self.thumbnailFilePath)
+***REMOVED******REMOVED***.appendingPathExtension(Self.pngPathExtension)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The path to the mobile map package directory for a specific preplanned map area.
+***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>`
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
+***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area.
+***REMOVED***func mmpkDirectory(
+***REMOVED******REMOVED***forPortalItemID portalItemID: Item.ID,
+***REMOVED******REMOVED***preplannedMapAreaID: Item.ID
+***REMOVED***) -> URL {
+***REMOVED******REMOVED***preplannedDirectory(
+***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.appending(path: preplannedMapAreaID.rawValue)
+***REMOVED***
+***REMOVED***
+

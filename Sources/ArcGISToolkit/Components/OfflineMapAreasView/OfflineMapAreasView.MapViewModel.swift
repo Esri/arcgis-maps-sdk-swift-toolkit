@@ -31,14 +31,17 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/ The preplanned offline map information.
 ***REMOVED******REMOVED***@Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The offline preplanned map information.
+***REMOVED******REMOVED***@Published private(set) var offlinePreplannedModels = [PreplannedMapModel]()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(map: Map) {
 ***REMOVED******REMOVED******REMOVED***offlineMapTask = OfflineMapTask(onlineMap: map)
 ***REMOVED******REMOVED******REMOVED***portalItemID = map.item?.id
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Gets the preplanned map areas from the offline map task and creates the
-***REMOVED******REMOVED******REMOVED***/ offline map models.
-***REMOVED******REMOVED***func makePreplannedOfflineMapModels() async {
+***REMOVED******REMOVED******REMOVED***/ preplanned map models.
+***REMOVED******REMOVED***func makePreplannedMapModels() async {
 ***REMOVED******REMOVED******REMOVED***guard let portalItemID else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***preplannedMapModels = await Result {
@@ -62,101 +65,106 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Loads the offline preplanned map models using metadata json files.
-***REMOVED******REMOVED***func loadOfflinePreplannedMapModels() {
-***REMOVED******REMOVED******REMOVED***offlinePreplannedModels.removeAll()
+***REMOVED******REMOVED******REMOVED***/ Gets the preplanned map areas from local metadata json files.
+***REMOVED******REMOVED***func makeOfflinePreplannedMapModels() {
+***REMOVED******REMOVED******REMOVED***guard let portalItemID else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let jsonFiles = searchFiles(in: preplannedDirectory, with: "json")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***for fileURL in jsonFiles {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let (offlinePreplannedMapArea, mobileMapPackage) = parseJSONFile(for: fileURL),
-***REMOVED******REMOVED******REMOVED******REMOVED***   let offlinePreplannedMapArea,
-***REMOVED******REMOVED******REMOVED******REMOVED***   let mobileMapPackage {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedModels.append(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: offlinePreplannedMapArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mobileMapPackage: mobileMapPackage
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***let portalItemDirectory = FileManager.default.preplannedDirectory(forPortalItemID: portalItemID)
+***REMOVED******REMOVED******REMOVED******REMOVED***let preplannedMapAreaDirectories = try FileManager.default.contentsOfDirectory(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: portalItemDirectory,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***includingPropertiesForKeys: nil
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***let preplannedMapAreaIDs = preplannedMapAreaDirectories.map { Item.ID($0.lastPathComponent)! ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***let mapAreas = preplannedMapAreaIDs.compactMap { mapAreaID in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***readMetadata(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: portalItemID,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: mapAreaID
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedModels = mapAreas.map { mapArea in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapAreaID: mapArea.id!,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapArea: mapArea
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Parses the json from a metadata file for the preplanned map area.
-***REMOVED******REMOVED******REMOVED***/ - Parameter fileURL: The file URL of the metadata json file.
-***REMOVED******REMOVED******REMOVED***/ - Returns: An `OfflinePreplannedMapArea` instantiated using the metadata json
-***REMOVED******REMOVED******REMOVED***/ and the mobile map package for the preplanned map area.
-***REMOVED******REMOVED***func parseJSONFile(for fileURL: URL) -> (OfflinePreplannedMapArea?, MobileMapPackage?)? {
+***REMOVED******REMOVED******REMOVED***/ Reads the metadata for a given preplanned map area from a portal item and returns a preplanned
+***REMOVED******REMOVED******REMOVED***/ map area protocol constructed with the metadata.
+***REMOVED******REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED******REMOVED***/   - portalItemID: The ID for the portal item.
+***REMOVED******REMOVED******REMOVED***/   - preplannedMapAreaID: The ID for the preplanned map area.
+***REMOVED******REMOVED******REMOVED***/ - Returns: A preplanned map area protocol.
+***REMOVED******REMOVED***private func readMetadata(for portalItemID: Item.ID, preplannedMapAreaID: Item.ID) -> PreplannedMapAreaProtocol? {
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let contentString = try String(contentsOf: fileURL)
+***REMOVED******REMOVED******REMOVED******REMOVED***let metadataPath = FileManager.default.metadataPath(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***let contentString = try String(contentsOf: metadataPath)
 ***REMOVED******REMOVED******REMOVED******REMOVED***let jsonData = Data(contentString.utf8)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnailURL = fileURL
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.deletingPathExtension()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.deletingLastPathComponent()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.appending(path: "thumbnail")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.appendingPathExtension("png")
-
+***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnailURL = FileManager.default.thumbnailPath(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: preplannedMapAreaID
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnailImage = UIImage(contentsOfFile: thumbnailURL.relativePath)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let json = try JSONSerialization.jsonObject(with: jsonData) as? [String: Any] {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let title = json["title"] as? String,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let description = json["description"] as? String,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let id = json["id"] as? String,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let itemID = Item.ID(id),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let path = json["mmpkURL"] as? String else { return nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let fileURL = URL(filePath: path)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let mobileMapPackage = MobileMapPackage(fileURL: fileURL)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OfflinePreplannedMapArea(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***packagingStatus: .complete,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: description, 
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailImage: thumbnailImage,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: itemID
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mobileMapPackage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let itemID = Item.ID(id) else { return nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return OfflinePreplannedMapArea(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: description,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailImage: thumbnailImage,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: itemID
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Searches for files with a specified file extension in a given directory and its subdirectories.
-***REMOVED******REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED******REMOVED***/   - directory: The directory to search.
-***REMOVED******REMOVED******REMOVED***/   - fileExtension: The file extension to search for.
-***REMOVED******REMOVED******REMOVED***/ - Returns: An array of file paths.
-***REMOVED******REMOVED***func searchFiles(in directory: URL, with fileExtension: String) -> [URL] {
-***REMOVED******REMOVED******REMOVED***guard let enumerator = FileManager.default.enumerator(
-***REMOVED******REMOVED******REMOVED******REMOVED***at: directory,
-***REMOVED******REMOVED******REMOVED******REMOVED***includingPropertiesForKeys: [.isDirectoryKey],
-***REMOVED******REMOVED******REMOVED******REMOVED***options: [.skipsHiddenFiles]
-***REMOVED******REMOVED******REMOVED***) else { return [] ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***var files: [URL] = []
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***for case let fileURL as URL in enumerator {
-***REMOVED******REMOVED******REMOVED******REMOVED***if fileURL.pathExtension == fileExtension {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***files.append(fileURL)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return files
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func addOfflinePreplannedModel(
-***REMOVED******REMOVED******REMOVED***for preplannedMap: PreplannedMapAreaProtocol,
-***REMOVED******REMOVED******REMOVED***mobileMapPackage: MobileMapPackage?
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***offlinePreplannedModels.append(
-***REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapArea: preplannedMap,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mobileMapPackage: mobileMapPackage
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
+
+private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
+***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus?
+***REMOVED***
+***REMOVED***var title: String
+***REMOVED***
+***REMOVED***var description: String
+***REMOVED***
+***REMOVED***var thumbnail: LoadableImage?
+***REMOVED***
+***REMOVED***var thumbnailImage: UIImage?
+***REMOVED***
+***REMOVED***var id: ArcGIS.Item.ID?
+***REMOVED***
+***REMOVED***func retryLoad() async throws {***REMOVED***
+***REMOVED***
+***REMOVED***func makeParameters(using offlineMapTask: ArcGIS.OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+***REMOVED******REMOVED***DownloadPreplannedOfflineMapParameters()
+***REMOVED***
+***REMOVED***
+***REMOVED***init(
+***REMOVED******REMOVED***title: String,
+***REMOVED******REMOVED***description: String,
+***REMOVED******REMOVED***thumbnailImage: UIImage? = nil,
+***REMOVED******REMOVED***id: ArcGIS.Item.ID? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***self.title = title
+***REMOVED******REMOVED***self.description = description
+***REMOVED******REMOVED***self.thumbnailImage = thumbnailImage
+***REMOVED******REMOVED***self.id = id
 ***REMOVED***
 ***REMOVED***

@@ -41,7 +41,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isReloadingPreplannedMapAreas = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await makePreplannedOfflineMapModels()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isReloadingPreplannedMapAreas = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
@@ -55,7 +55,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.textCase(nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
+***REMOVED******REMOVED******REMOVED******REMOVED***await makePreplannedOfflineMapModels()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await mapViewModel.requestUserNotificationAuthorization()
@@ -85,10 +85,7 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***if error.localizedDescription == "The Internet connection appears to be offline." && !mapViewModel.offlinePreplannedModels.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(mapViewModel.offlinePreplannedModels.sorted(by: < ), id: \.preplannedMapArea.title) { model in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewModel: mapViewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***model: model
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedListItemView(model: model)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
@@ -116,11 +113,10 @@ public struct OfflineMapAreasView: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Loads the preplanned map area models and mobile map packages.
-***REMOVED***private func loadPreplannedMapAreas() async {
-***REMOVED******REMOVED***await mapViewModel.makePreplannedOfflineMapModels()
-***REMOVED******REMOVED***mapViewModel.loadPreplannedMobileMapPackages()
-***REMOVED******REMOVED***mapViewModel.loadOfflinePreplannedMapModels()
+***REMOVED******REMOVED***/ Makes preplanned map models and offline preplanned map models.
+***REMOVED***func makePreplannedOfflineMapModels() async {
+***REMOVED******REMOVED***await mapViewModel.makePreplannedMapModels()
+***REMOVED******REMOVED***mapViewModel.makeOfflinePreplannedMapModels()
 ***REMOVED***
 ***REMOVED***
 
