@@ -136,7 +136,7 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
 ***REMOVED******REMOVED***if !(element.input is UnsupportedFormInput ||
-***REMOVED******REMOVED******REMOVED*** element.input is BarcodeScannerFormInput){
+***REMOVED******REMOVED******REMOVED*** element.input is BarcodeScannerFormInput) {
 ***REMOVED******REMOVED******REMOVED***InputWrapper(element: element)
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
