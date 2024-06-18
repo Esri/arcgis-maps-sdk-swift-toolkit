@@ -17,7 +17,7 @@ import ArcGIS
 
 /// An object that encapsulates state about a preplanned map.
 @MainActor
-public class PreplannedMapModel: ObservableObject, Identifiable {
+class PreplannedMapModel: ObservableObject, Identifiable {
     /// The preplanned map area.
     let preplannedMapArea: any PreplannedMapAreaProtocol
     
@@ -25,10 +25,10 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     private let offlineMapTask: OfflineMapTask?
     
     /// The ID of the web map.
-    private let portalItemID: Item.ID
+    private let portalItemID: PortalItem.ID
     
     /// The ID of the preplanned map area.
-    private let preplannedMapAreaID: Item.ID
+    private let preplannedMapAreaID: PortalItem.ID
     
     /// The mobile map package for the preplanned map area.
     private(set) var mobileMapPackage: MobileMapPackage?
@@ -45,8 +45,8 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
     init(
         offlineMapTask: OfflineMapTask,
         mapArea: PreplannedMapAreaProtocol,
-        portalItemID: Item.ID,
-        preplannedMapAreaID: Item.ID,
+        portalItemID: PortalItem.ID,
+        preplannedMapAreaID: PortalItem.ID,
         showsUserNotificationOnCompletion: Bool = true
     ) {
         self.offlineMapTask = offlineMapTask
@@ -136,7 +136,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         }
     }
     
-    /// Looks in the  mobile map package if downloaded locally.
+    /// Looks up the mobile map package directory for locally downloaded package.
     private func lookupMobileMapPackage() -> MobileMapPackage? {
         let fileURL = FileManager.default.mmpkDirectory(
             forPortalItemID: portalItemID,
@@ -204,7 +204,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
         self.job = job
         job.start()
         status = .downloading
-        Task { @MainActor in
+        Task {
             let result = await job.result
             updateDownloadStatus(for: result)
             mobileMapPackage = try? result.map { $0.mobileMapPackage }.get()
@@ -212,6 +212,7 @@ public class PreplannedMapModel: ObservableObject, Identifiable {
             if showsUserNotificationOnCompletion && (job.status == .succeeded || job.status == .failed) {
                 try? await Self.notifyJobCompleted(job: job)
             }
+            self.job = nil
             writeMetadata()
         }
     }
@@ -377,7 +378,7 @@ extension FileManager {
     /// The path to the web map directory for a specific portal item.
     /// `Documents/OfflineMapAreas/<Portal Item ID>`
     /// - Parameter portalItemID: The ID of the web map portal item.
-    private func portalItemDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
+    private func portalItemDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
         offlineMapAreasDirectory.appending(path: portalItemID.rawValue, directoryHint: .isDirectory)
     }
     
@@ -398,8 +399,8 @@ extension FileManager {
     ///  - portalItemID: The ID of the web map portal item.
     ///  - preplannedMapAreaID: The ID of the preplanned map area.
     private func preplannedDirectory(
-        forPortalItemID portalItemID: Item.ID,
-        preplannedMapAreaID: Item.ID
+        forPortalItemID portalItemID: PortalItem.ID,
+        preplannedMapAreaID: PortalItem.ID
     ) -> URL {
         portalItemDirectory(forPortalItemID: portalItemID)
             .appending(
