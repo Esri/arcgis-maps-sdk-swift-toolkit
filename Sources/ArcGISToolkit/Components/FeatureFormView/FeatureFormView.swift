@@ -136,7 +136,7 @@ extension FeatureFormView {
     /// - Parameter element: The element to generate UI for.
     @ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
         if !(element.input is UnsupportedFormInput ||
-             element.input is BarcodeScannerFormInput){
+             element.input is BarcodeScannerFormInput) {
             InputWrapper(element: element)
             Divider()
         }
