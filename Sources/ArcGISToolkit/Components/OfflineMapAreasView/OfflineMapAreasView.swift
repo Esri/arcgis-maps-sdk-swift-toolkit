@@ -15,6 +15,7 @@
 import SwiftUI
 import ArcGIS
 
+/// The `OfflineMapAreasView` component displays a list of downloadable preplanned map areas from a given web map.
 public struct OfflineMapAreasView: View {
     /// The view model for the map.
     @StateObject private var mapViewModel: MapViewModel
@@ -22,9 +23,11 @@ public struct OfflineMapAreasView: View {
     /// The action to dismiss the view.
     @Environment(\.dismiss) private var dismiss: DismissAction
     
-    /// The rotation angle of the reload button image.
-    @State private var rotationAngle: CGFloat = 0.0
+    /// A Boolean value indicating whether the preplanned map areas are being reloaded.
+    @State private var isReloadingPreplannedMapAreas = false
     
+    /// Creates an `OfflineMapAreasView` with a given web map.
+    /// - Parameter map: The web map.
     public init(map: Map) {
         _mapViewModel = StateObject(wrappedValue: MapViewModel(map: map))
     }
@@ -32,30 +35,33 @@ public struct OfflineMapAreasView: View {
     public var body: some View {
         NavigationStack {
             Form {
-                Section(header: HStack {
-                    Text("Preplanned Map Areas").bold()
-                    Spacer()
-                    Button {
-                        withAnimation(.linear(duration: 0.6)) {
-                            rotationAngle = rotationAngle + 360
+                Section {
+                    preplannedMapAreaViews
+                } header: {
+                    HStack {
+                        Text("Preplanned Map Areas").bold()
+                        Spacer()
+                        Button {
+                            Task {
+                                isReloadingPreplannedMapAreas = true
+                                await mapViewModel.makePreplannedOfflineMapModels()
+                                isReloadingPreplannedMapAreas = false
+                            }
+                        } label: {
+                            Image(systemName: "arrow.clockwise")
                         }
-                        Task {
-                            // Reload the preplanned map areas.
-                            await mapViewModel.makePreplannedOfflineMapModels()
-                        }
-                    } label: {
-                        Image(systemName: "arrow.clockwise")
-                            .rotationEffect(.degrees(rotationAngle))
+                        .controlSize(.mini)
+                        .disabled(isReloadingPreplannedMapAreas)
                     }
-                    .controlSize(.mini)
-                }.frame(maxWidth: .infinity)
-                ) {
-                    preplannedMapAreas
+                    .frame(maxWidth: .infinity)
                 }
                 .textCase(nil)
             }
             .task {
                 await mapViewModel.makePreplannedOfflineMapModels()
+            }
+            .task {
+                await mapViewModel.requestUserNotificationAuthorization()
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -67,12 +73,14 @@ public struct OfflineMapAreasView: View {
         }
     }
     
-    @ViewBuilder private var preplannedMapAreas: some View {
+    @ViewBuilder private var preplannedMapAreaViews: some View {
         switch mapViewModel.preplannedMapModels {
         case .success(let models):
-            if mapViewModel.hasPreplannedMapAreas {
+            if !models.isEmpty {
                 List(models) { preplannedMapModel in
-                    PreplannedListItemView(model: preplannedMapModel)
+                    PreplannedListItemView(
+                        model: preplannedMapModel
+                    )
                 }
             } else {
                 emptyPreplannedMapAreasView
@@ -100,47 +108,6 @@ public struct OfflineMapAreasView: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
-    }
-}
-
-public extension OfflineMapAreasView {
-    /// The model class for the offline map areas view.
-    @MainActor
-    class MapViewModel: ObservableObject {
-        /// The online map.
-        private let onlineMap: Map
-        
-        /// The offline map task.
-        private let offlineMapTask: OfflineMapTask
-        
-        /// The preplanned offline map information.
-        @Published private(set) var preplannedMapModels: Result<[PreplannedMapModel], Error>?
-        
-        /// A Boolean value indicating whether the map has preplanned map areas.
-        @Published private(set) var hasPreplannedMapAreas = false
-        
-        init(map: Map) {
-            self.onlineMap = map
-            
-            offlineMapTask = OfflineMapTask(onlineMap: onlineMap)
-        }
-        
-        /// Gets the preplanned map areas from the offline map task and creates the
-        /// offline map models.
-        func makePreplannedOfflineMapModels() async {
-            preplannedMapModels = await Result {
-                try await offlineMapTask.preplannedMapAreas
-                    .sorted(using: KeyPathComparator(\.portalItem.title))
-                    .compactMap {
-                        PreplannedMapModel(
-                            preplannedMapArea: $0
-                        )
-                    }
-            }
-            if let models = try? preplannedMapModels!.get() {
-                hasPreplannedMapAreas = !models.isEmpty
-            }
-        }
     }
 }
 
