@@ -15,7 +15,6 @@
 ***REMOVED***
 import Combine
 import Foundation
-***REMOVED***
 import UIKit
 
 extension OfflineMapAreasView {
@@ -76,13 +75,14 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***includingPropertiesForKeys: nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let preplannedMapAreaIDs = preplannedMapAreaDirectories.map { Item.ID($0.lastPathComponent)! ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let mapAreas = preplannedMapAreaIDs.compactMap { mapAreaID in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***readMetadata(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: portalItemID,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: mapAreaID
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***let mapAreas = preplannedMapAreaDirectories
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.compactMap { PortalItem.ID($0.lastPathComponent) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.compactMap { mapAreaID in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***readMetadata(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: portalItemID,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: mapAreaID
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedModels = mapAreas.map { mapArea in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
@@ -118,9 +118,9 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let thumbnailImage = UIImage(contentsOfFile: thumbnailURL.relativePath)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let json = try JSONSerialization.jsonObject(with: jsonData) as? [String: Any] {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let title = json["title"] as? String,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let description = json["description"] as? String,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let id = json["id"] as? String,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let title = json[OfflineMapAreasView.title] as? String,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let description = json[OfflineMapAreasView.description] as? String,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let id = json[OfflineMapAreasView.id] as? String,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let itemID = Item.ID(id) else { return nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return OfflinePreplannedMapArea(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
@@ -167,4 +167,10 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED***self.thumbnailImage = thumbnailImage
 ***REMOVED******REMOVED***self.id = id
 ***REMOVED***
+***REMOVED***
+
+extension OfflineMapAreasView {
+***REMOVED***static let title = "title"
+***REMOVED***static let description = "description"
+***REMOVED***static let id = "id"
 ***REMOVED***

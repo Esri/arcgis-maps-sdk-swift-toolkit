@@ -64,8 +64,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***init(
-***REMOVED******REMOVED***portalItemID: Item.ID,
-***REMOVED******REMOVED***mapAreaID: Item.ID,
+***REMOVED******REMOVED***portalItemID: PortalItem.ID,
+***REMOVED******REMOVED***mapAreaID: PortalItem.ID,
 ***REMOVED******REMOVED***mapArea: PreplannedMapAreaProtocol
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.portalItemID = portalItemID
@@ -239,9 +239,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let jsonObject: [String: Any] = [
-***REMOVED******REMOVED******REMOVED******REMOVED***"title" : preplannedMapArea.title,
-***REMOVED******REMOVED******REMOVED******REMOVED***"description" : preplannedMapArea.description,
-***REMOVED******REMOVED******REMOVED******REMOVED***"id" : preplannedMapAreaID.rawValue
+***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreasView.title : preplannedMapArea.title,
+***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreasView.description : preplannedMapArea.description,
+***REMOVED******REMOVED******REMOVED******REMOVED***OfflineMapAreasView.id : preplannedMapAreaID.rawValue
 ***REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED******REMOVED***let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: .sortedKeys)
 ***REMOVED******REMOVED******REMOVED***try jsonData.write(to: metadataPath, options: .atomic)
@@ -317,7 +317,7 @@ protocol PreplannedMapAreaProtocol {
 ***REMOVED***var description: String { get ***REMOVED***
 ***REMOVED***var thumbnail: LoadableImage? { get ***REMOVED***
 ***REMOVED***var thumbnailImage: UIImage? { get ***REMOVED***
-***REMOVED***var id: Item.ID? { get ***REMOVED***
+***REMOVED***var id: PortalItem.ID? { get ***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -385,7 +385,7 @@ extension FileManager {
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory.
 ***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned`
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
-***REMOVED***func preplannedDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
+***REMOVED***func preplannedDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
 ***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***.appending(
 ***REMOVED******REMOVED******REMOVED******REMOVED***path: Self.preplannedDirectoryPath,
@@ -419,8 +419,8 @@ extension FileManager {
 ***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
 ***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area.
 ***REMOVED***func metadataPath(
-***REMOVED******REMOVED***forPortalItemID portalItemID: Item.ID,
-***REMOVED******REMOVED***preplannedMapAreaID: Item.ID
+***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
+***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
 ***REMOVED***) -> URL {
 ***REMOVED******REMOVED***preplannedDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
@@ -436,8 +436,8 @@ extension FileManager {
 ***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
 ***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area.
 ***REMOVED***func thumbnailPath(
-***REMOVED******REMOVED***forPortalItemID portalItemID: Item.ID,
-***REMOVED******REMOVED***preplannedMapAreaID: Item.ID
+***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
+***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
 ***REMOVED***) -> URL {
 ***REMOVED******REMOVED***preplannedDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
@@ -453,8 +453,8 @@ extension FileManager {
 ***REMOVED******REMOVED***/   - portalItemID: The ID of the web map portal item.
 ***REMOVED******REMOVED***/   - preplannedMapAreaID: The ID of the preplanned map area.
 ***REMOVED***func mmpkDirectory(
-***REMOVED******REMOVED***forPortalItemID portalItemID: Item.ID,
-***REMOVED******REMOVED***preplannedMapAreaID: Item.ID
+***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
+***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
 ***REMOVED***) -> URL {
 ***REMOVED******REMOVED***preplannedDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
