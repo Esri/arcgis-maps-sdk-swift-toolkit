@@ -64,8 +64,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     init(
-        portalItemID: Item.ID,
-        mapAreaID: Item.ID,
+        portalItemID: PortalItem.ID,
+        mapAreaID: PortalItem.ID,
         mapArea: PreplannedMapAreaProtocol
     ) {
         self.portalItemID = portalItemID
@@ -239,9 +239,9 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             )
             
             let jsonObject: [String: Any] = [
-                "title" : preplannedMapArea.title,
-                "description" : preplannedMapArea.description,
-                "id" : preplannedMapAreaID.rawValue
+                OfflineMapAreasView.title : preplannedMapArea.title,
+                OfflineMapAreasView.description : preplannedMapArea.description,
+                OfflineMapAreasView.id : preplannedMapAreaID.rawValue
             ]
             let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: .sortedKeys)
             try jsonData.write(to: metadataPath, options: .atomic)
@@ -317,7 +317,7 @@ protocol PreplannedMapAreaProtocol {
     var description: String { get }
     var thumbnail: LoadableImage? { get }
     var thumbnailImage: UIImage? { get }
-    var id: Item.ID? { get }
+    var id: PortalItem.ID? { get }
 }
 
 /// Extend `PreplannedMapArea` to conform to `PreplannedMapAreaProtocol`.
@@ -385,7 +385,7 @@ extension FileManager {
     /// The path to the preplanned map areas directory.
     /// `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned`
     /// - Parameter portalItemID: The ID of the web map portal item.
-    func preplannedDirectory(forPortalItemID portalItemID: Item.ID) -> URL {
+    func preplannedDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
         portalItemDirectory(forPortalItemID: portalItemID)
             .appending(
                 path: Self.preplannedDirectoryPath,
@@ -419,8 +419,8 @@ extension FileManager {
     ///   - portalItemID: The ID of the web map portal item.
     ///   - preplannedMapAreaID: The ID of the preplanned map area.
     func metadataPath(
-        forPortalItemID portalItemID: Item.ID,
-        preplannedMapAreaID: Item.ID
+        forPortalItemID portalItemID: PortalItem.ID,
+        preplannedMapAreaID: PortalItem.ID
     ) -> URL {
         preplannedDirectory(
             forPortalItemID: portalItemID,
@@ -436,8 +436,8 @@ extension FileManager {
     ///   - portalItemID: The ID of the web map portal item.
     ///   - preplannedMapAreaID: The ID of the preplanned map area.
     func thumbnailPath(
-        forPortalItemID portalItemID: Item.ID,
-        preplannedMapAreaID: Item.ID
+        forPortalItemID portalItemID: PortalItem.ID,
+        preplannedMapAreaID: PortalItem.ID
     ) -> URL {
         preplannedDirectory(
             forPortalItemID: portalItemID,
@@ -453,8 +453,8 @@ extension FileManager {
     ///   - portalItemID: The ID of the web map portal item.
     ///   - preplannedMapAreaID: The ID of the preplanned map area.
     func mmpkDirectory(
-        forPortalItemID portalItemID: Item.ID,
-        preplannedMapAreaID: Item.ID
+        forPortalItemID portalItemID: PortalItem.ID,
+        preplannedMapAreaID: PortalItem.ID
     ) -> URL {
         preplannedDirectory(
             forPortalItemID: portalItemID,

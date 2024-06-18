@@ -15,7 +15,6 @@
 import ArcGIS
 import Combine
 import Foundation
-import SwiftUI
 import UIKit
 
 extension OfflineMapAreasView {
@@ -76,13 +75,14 @@ extension OfflineMapAreasView {
                     includingPropertiesForKeys: nil
                 )
                 
-                let preplannedMapAreaIDs = preplannedMapAreaDirectories.map { Item.ID($0.lastPathComponent)! }
-                let mapAreas = preplannedMapAreaIDs.compactMap { mapAreaID in
-                    readMetadata(
-                        for: portalItemID,
-                        preplannedMapAreaID: mapAreaID
-                    )
-                }
+                let mapAreas = preplannedMapAreaDirectories
+                    .compactMap { PortalItem.ID($0.lastPathComponent) }
+                    .compactMap { mapAreaID in
+                        readMetadata(
+                            for: portalItemID,
+                            preplannedMapAreaID: mapAreaID
+                        )
+                    }
                 
                 offlinePreplannedModels = mapAreas.map { mapArea in
                     PreplannedMapModel(
@@ -118,9 +118,9 @@ extension OfflineMapAreasView {
                 let thumbnailImage = UIImage(contentsOfFile: thumbnailURL.relativePath)
                 
                 if let json = try JSONSerialization.jsonObject(with: jsonData) as? [String: Any] {
-                    guard let title = json["title"] as? String,
-                          let description = json["description"] as? String,
-                          let id = json["id"] as? String,
+                    guard let title = json[OfflineMapAreasView.title] as? String,
+                          let description = json[OfflineMapAreasView.description] as? String,
+                          let id = json[OfflineMapAreasView.id] as? String,
                           let itemID = Item.ID(id) else { return nil }
                     return OfflinePreplannedMapArea(
                         title: title,
@@ -167,4 +167,10 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
         self.thumbnailImage = thumbnailImage
         self.id = id
     }
+}
+
+extension OfflineMapAreasView {
+    static let title = "title"
+    static let description = "description"
+    static let id = "id"
 }
