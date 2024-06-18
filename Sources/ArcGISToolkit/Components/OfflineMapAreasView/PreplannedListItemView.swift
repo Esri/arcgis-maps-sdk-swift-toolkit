@@ -51,12 +51,28 @@ public struct PreplannedListItemView: View {
     }
     
     @ViewBuilder private var downloadButton: some View {
-        Button {
-            
-        } label: {
-            Image(systemName: "arrow.down.circle")
+        switch model.status {
+        case .downloaded:
+            Image(systemName: "checkmark.circle")
+                .foregroundStyle(.secondary)
+        case .downloading:
+            if let job = model.job {
+                ProgressView(job.progress)
+                    .progressViewStyle(.gauge)
+            }
+        default:
+            Button {
+                Task {
+                    // Download preplanned map area.
+                    await model.downloadPreplannedMapArea()
+                }
+            } label: {
+                Image(systemName: "arrow.down.circle")
+            }
+            .buttonStyle(.plain)
+            .disabled(!model.status.allowsDownload)
+            .foregroundColor(.accentColor)
         }
-        .disabled(!model.canDownload)
     }
     
     @ViewBuilder private var descriptionView: some View {
@@ -104,16 +120,25 @@ public struct PreplannedListItemView: View {
 
 #Preview {
     PreplannedListItemView(
-        model: PreplannedMapModel(preplannedMapArea: MockPreplannedMapArea())
+        model: PreplannedMapModel(
+            offlineMapTask: OfflineMapTask(onlineMap: Map()),
+            mapArea: MockPreplannedMapArea(),
+            portalItemID: .init("preview")!,
+            preplannedMapAreaID: .init("preview")!
+        )
     )
     .padding()
 }
 
 private struct MockPreplannedMapArea: PreplannedMapAreaProtocol {
-    var packagingStatus: ArcGIS.PreplannedMapArea.PackagingStatus? = .complete
+    var id: PortalItem.ID? = PortalItem.ID("012345")
+    var packagingStatus: PreplannedMapArea.PackagingStatus? = .complete
     var title: String = "Mock Preplanned Map Area"
     var description: String = "This is the description text"
-    var thumbnail: ArcGIS.LoadableImage? = nil
+    var thumbnail: LoadableImage? = nil
     
     func retryLoad() async throws { }
+    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+        DownloadPreplannedOfflineMapParameters()
+    }
 }
