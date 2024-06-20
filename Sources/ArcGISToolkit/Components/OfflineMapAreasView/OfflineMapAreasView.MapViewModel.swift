@@ -58,18 +58,13 @@ extension OfflineMapAreasView {
             }
         }
         
-        /// Requests authorization to show notifications.
-        func requestUserNotificationAuthorization() async {
-            _ = try? await UNUserNotificationCenter.current()
-                .requestAuthorization(options: [.alert, .sound])
-        }
-        
-        /// Gets the preplanned map areas from local metadata json files.
+        /// Gets the offline preplanned map areas by using the preplanned map area IDs found in the
+        /// preplanned map areas directory to create preplanned map models.
         func makeOfflinePreplannedMapModels() {
             guard let portalItemID else { return }
             
             do {
-                let portalItemDirectory = FileManager.default.preplannedDirectory(
+                let portalItemDirectory = FileManager.default.preplannedAreasDirectory(
                     forPortalItemID: portalItemID
                 )
                 let preplannedMapAreaDirectories = try FileManager.default.contentsOfDirectory(
@@ -93,6 +88,8 @@ extension OfflineMapAreasView {
                         preplannedMapAreaID: mapArea.id!
                     )
                 }
+                .sorted(using: KeyPathComparator(\.preplannedMapArea.title))
+                
             } catch {
                 return
             }
@@ -130,14 +127,20 @@ extension OfflineMapAreasView {
                     return OfflinePreplannedMapArea(
                         title: title,
                         description: description,
-                        thumbnailImage: thumbnailImage,
-                        id: itemID
+                        id: itemID,
+                        thumbnailImage: thumbnailImage
                     )
                 }
             } catch {
                 return nil
             }
             return nil
+        }
+        
+        /// Requests authorization to show notifications.
+        func requestUserNotificationAuthorization() async {
+            _ = try? await UNUserNotificationCenter.current()
+                .requestAuthorization(options: [.alert, .sound])
         }
     }
 }
@@ -164,13 +167,13 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     init(
         title: String,
         description: String,
-        thumbnailImage: UIImage? = nil,
-        id: PortalItem.ID? = nil
+        id: PortalItem.ID,
+        thumbnailImage: UIImage? = nil
     ) {
         self.title = title
         self.description = description
-        self.thumbnailImage = thumbnailImage
         self.id = id
+        self.thumbnailImage = thumbnailImage
     }
 }
 

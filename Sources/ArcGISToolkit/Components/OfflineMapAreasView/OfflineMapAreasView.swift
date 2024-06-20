@@ -86,10 +86,8 @@ public struct OfflineMapAreasView: View {
                 emptyPreplannedMapAreasView
             }
         case .failure(let error):
-            if error.localizedDescription == "The Internet connection appears to be offline." && !mapViewModel.offlinePreplannedModels.isEmpty {
-                List(mapViewModel.offlinePreplannedModels.sorted(by: < ), id: \.preplannedMapArea.title) { model in
-                    PreplannedListItemView(model: model)
-                }
+            if error.localizedDescription == "The Internet connection appears to be offline." {
+                offlinePreplannedMapAreaViews
             } else {
                 VStack(alignment: .center) {
                     Image(systemName: "exclamationmark.circle")
@@ -102,6 +100,16 @@ public struct OfflineMapAreasView: View {
         case .none:
             ProgressView()
                 .frame(maxWidth: .infinity)
+        }
+    }
+    
+    @ViewBuilder private var offlinePreplannedMapAreaViews: some View {
+        if !mapViewModel.offlinePreplannedModels.isEmpty {
+            List(mapViewModel.offlinePreplannedModels) { model in
+                PreplannedListItemView(model: model)
+            }
+        } else {
+            emptyPreplannedMapAreasView
         }
     }
     
@@ -132,10 +140,4 @@ public struct OfflineMapAreasView: View {
             )
         )
     )
-}
-
-extension PreplannedMapModel: Comparable {
-    public static func < (lhs: PreplannedMapModel, rhs: PreplannedMapModel) -> Bool {
-        return lhs.preplannedMapArea.title < rhs.preplannedMapArea.title
-    }
 }
