@@ -23,9 +23,6 @@ struct TextInput: View {
     /// A Boolean value indicating whether or not the field is focused.
     @FocusState private var isFocused: Bool
     
-    /// The formatted version of the element's current value.
-    @State private var formattedValue = ""
-    
     /// A Boolean value indicating whether the full screen text input is presented.
     @State private var fullScreenTextInputIsPresented = false
     
@@ -71,9 +68,8 @@ struct TextInput: View {
                     model.focusedElement = element
                 }
             }
-            .onValueChange(of: element) { newValue, newFormattedValue in
-                formattedValue = newFormattedValue
-                text = formattedValue
+            .onValueChange(of: element, when: !element.isMultiline || !fullScreenTextInputIsPresented) { _, newFormattedValue in
+                text = newFormattedValue
             }
     }
 }
@@ -82,24 +78,33 @@ private extension TextInput {
     /// The body of the text input when the element is editable.
     var textWriter: some View {
         HStack(alignment: .bottom) {
-            TextField(
-                element.label,
-                text: $text,
-                prompt: Text(element.hint).foregroundColor(.secondary),
-                axis: element.isMultiline ? .vertical : .horizontal
-            )
-            .disabled(element.isMultiline)
-            .sheet(isPresented: $fullScreenTextInputIsPresented) {
-                FullScreenTextInput(text: $text, element: element)
+            Group {
+                if element.isMultiline {
+                    Text(text)
+                        .accessibilityIdentifier("\(element.label) Text Input Preview")
+                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(10)
+                        .truncationMode(.tail)
+                        .sheet(isPresented: $fullScreenTextInputIsPresented) {
+                            FullScreenTextInput(text: $text, element: element, model: model)
+                                .padding()
 #if targetEnvironment(macCatalyst)
-                    .environmentObject(model)
+                                .environmentObject(model)
 #endif
-                    .padding()
+                        }
+                } else {
+                    TextField(
+                        element.label,
+                        text: $text,
+                        prompt: Text(element.hint).foregroundColor(.secondary),
+                        axis: .horizontal
+                    )
+                    .accessibilityIdentifier("\(element.label) Text Input")
+                    .keyboardType(keyboardType)
+                }
             }
-            .accessibilityIdentifier("\(element.label) Text Input")
-            .background(.clear)
             .focused($isFocused)
-            .keyboardType(keyboardType)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     if UIDevice.current.userInterfaceIdiom == .phone, isFocused, (element.fieldType?.isNumeric ?? false) {
@@ -165,6 +170,9 @@ private extension TextInput {
         /// The element the input belongs to.
         let element: FieldFormElement
         
+        /// The view model for the form.
+        let model: FormViewModel
+        
         var body: some View {
             HStack {
                 InputHeader(element: element)
@@ -174,12 +182,12 @@ private extension TextInput {
                 .buttonStyle(.plain)
                 .foregroundColor(.accentColor)
             }
-            TextField(
-                element.label,
-                text: $text,
-                prompt: Text(element.hint).foregroundColor(.secondary),
-                axis: .vertical
-            )
+            RepresentedUITextView(initialText: text) { text in
+                element.convertAndUpdateValue(text)
+                model.evaluateExpressions()
+            } onTextViewDidEndEditing: { text in
+                self.text = text
+            }
             .focused($textFieldIsFocused, equals: true)
             .onAppear {
                 textFieldIsFocused = true
@@ -212,6 +220,42 @@ private extension FieldFormElement {
             } else {
                 updateValue(value)
             }
+        }
+    }
+}
+
+private extension View {
+    /// Wraps `onValueChange(of:action:)` with an additional boolean property that when false will
+    /// not monitor value changes.
+    /// - Parameters:
+    ///   - element: The form element to watch for changes on.
+    ///   - when: The boolean value which disables monitoring. When `true` changes will be monitored.
+    ///   - action: The action which watches for changes.
+    /// - Returns: The modified view.
+    func onValueChange(of element: FieldFormElement, when: Bool, action: @escaping (_ newValue: Any?, _ newFormattedValue: String) -> Void) -> some View {
+        modifier(
+            ConditionalChangeOfModifier(element: element, condition: when) { newValue, newFormattedValue in
+                action(newValue, newFormattedValue)
+            }
+        )
+    }
+}
+
+private struct ConditionalChangeOfModifier: ViewModifier {
+    let element: FieldFormElement
+    
+    let condition: Bool
+    
+    let action: (_ newValue: Any?, _ newFormattedValue: String) -> Void
+    
+    func body(content: Content) -> some View {
+        if condition {
+            content
+                .onValueChange(of: element) { newValue, newFormattedValue in
+                    action(newValue, newFormattedValue)
+                }
+        } else {
+            content
         }
     }
 }
