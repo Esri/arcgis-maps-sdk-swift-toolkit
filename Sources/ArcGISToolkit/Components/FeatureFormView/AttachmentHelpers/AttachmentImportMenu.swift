@@ -271,12 +271,12 @@ private extension AttachmentImportMenu {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ An error message indicated the selected attachment exceeds the megabyte limit.
+***REMOVED******REMOVED***/ An error message indicating the selected attachment exceeds the megabyte limit.
 ***REMOVED***var sizeLimitExceededImportFailureAlertMessage: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "The selected attachment exceeds the \(attachmentSizeLimit.formatted()) limit.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
-***REMOVED******REMOVED******REMOVED***comment: "An error message indicated the selected attachment exceeds the megabyte limit."
+***REMOVED******REMOVED******REMOVED***comment: "An error message indicating the selected attachment exceeds the megabyte limit."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
