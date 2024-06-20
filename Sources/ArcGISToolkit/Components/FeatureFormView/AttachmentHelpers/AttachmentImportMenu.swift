@@ -43,6 +43,12 @@ struct AttachmentImportMenu: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the attachment photo picker is presented.
 ***REMOVED***@State private var photoPickerIsPresented = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The maximum attachment size limit.
+***REMOVED***let attachmentSizeLimit = Measurement(
+***REMOVED******REMOVED***value: 50,
+***REMOVED******REMOVED***unit: UnitInformationStorage.megabytes
+***REMOVED***)
+***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when an attachment is added.
 ***REMOVED***let onAdd: ((FeatureAttachment) -> Void)?
 ***REMOVED***
@@ -121,6 +127,16 @@ struct AttachmentImportMenu: View {
 #endif
 ***REMOVED******REMOVED***.task(id: importState) {
 ***REMOVED******REMOVED******REMOVED***guard case let .finalizing(newAttachmentImportData) = importState else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let attachmentSize = Measurement(
+***REMOVED******REMOVED******REMOVED******REMOVED***value: Double(newAttachmentImportData.data.count),
+***REMOVED******REMOVED******REMOVED******REMOVED***unit: UnitInformationStorage.bytes
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***guard attachmentSize <= attachmentSizeLimit else {
+***REMOVED******REMOVED******REMOVED******REMOVED***importState = .errored(.sizeLimitExceeded)
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***defer { importState = .none ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***let fileName: String
 ***REMOVED******REMOVED******REMOVED***if let presetFileName = newAttachmentImportData.fileName {
@@ -211,16 +227,27 @@ private extension AttachmentImportMenu {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A message for an alert that the selected file was not able to be imported as an attachment.
-***REMOVED***var importFailureAlertMessage: String {
+***REMOVED******REMOVED***/ A generic message for an alert that the selected file was not able to be imported as an attachment.
+***REMOVED***var genericImportFailureAlertMessage: String {
 ***REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED***localized: "The selected attachment could not be imported.",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: """
-***REMOVED******REMOVED******REMOVED***A message for an alert that the selected file was not able to be
-***REMOVED******REMOVED******REMOVED***imported as an attachment.
+***REMOVED******REMOVED******REMOVED***A generic message for an alert that the selected file was not able
+***REMOVED******REMOVED******REMOVED***to be imported as an attachment.
 ***REMOVED******REMOVED******REMOVED***"""
 ***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Returns a user facing error message for the present attachment import error.
+***REMOVED***var importFailureAlertMessage: String {
+***REMOVED******REMOVED***guard case .errored(let attachmentImportError) = importState else { return "" ***REMOVED***
+***REMOVED******REMOVED***return switch attachmentImportError {
+***REMOVED******REMOVED***case .sizeLimitExceeded:
+***REMOVED******REMOVED******REMOVED***sizeLimitExceededImportFailureAlertMessage
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***genericImportFailureAlertMessage
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A title for an alert that the selected file was not able to be imported as an attachment.
@@ -241,6 +268,15 @@ private extension AttachmentImportMenu {
 ***REMOVED******REMOVED******REMOVED***localized: "Choose From Library",
 ***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
 ***REMOVED******REMOVED******REMOVED***comment: "A label for a button to choose a photo or video from the user's photo library."
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ An error message indicated the selected attachment exceeds the megabyte limit.
+***REMOVED***var sizeLimitExceededImportFailureAlertMessage: String {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***localized: "The selected attachment exceeds the \(attachmentSizeLimit.formatted()) limit.",
+***REMOVED******REMOVED******REMOVED***bundle: .toolkitModule,
+***REMOVED******REMOVED******REMOVED***comment: "An error message indicated the selected attachment exceeds the megabyte limit."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
