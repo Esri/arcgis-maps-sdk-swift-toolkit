@@ -327,7 +327,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Highlight/select the current value and replace it
 ***REMOVED******REMOVED***textField.doubleTap()
-***REMOVED******REMOVED***textField.typeText("2.1")
+***REMOVED******REMOVED***textField.typeText("3")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***expectation(
 ***REMOVED******REMOVED******REMOVED***for: NSPredicate(format: "label == \"Range domain 2-5\""),
@@ -337,7 +337,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Highlight/select the current value and replace it
 ***REMOVED******REMOVED***textField.doubleTap()
-***REMOVED******REMOVED***textField.typeText("5.1")
+***REMOVED******REMOVED***textField.typeText("6")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***footer.label,
@@ -1307,9 +1307,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 6.1: Test initially expanded and collapsed
 ***REMOVED***func testCase_6_1() {
-***REMOVED******REMOVED***XCTExpectFailure("Attachment form elements remain unapproved but are injected by core, triggering a crash when this form's elements are accessed. Apollo #663")
-***REMOVED******REMOVED***XCTFail("Failing early to pre-empt the expected crash.")
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let collapsedGroupFirstElement = app.staticTexts["Single Line Text"]
 ***REMOVED******REMOVED***let expandedGroupFirstElement = app.staticTexts["MultiLine Text"]
@@ -1374,9 +1371,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 6.2: Test visibility of empty group
 ***REMOVED***func testCase_6_2() {
-***REMOVED******REMOVED***XCTExpectFailure("Attachment form elements remain unapproved but are injected by core, triggering a crash when this form's elements are accessed. Apollo #663")
-***REMOVED******REMOVED***XCTFail("Failing early to pre-empt the expected crash.")
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["group_formelement_UI_not_editable"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -1442,9 +1436,6 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test case 7.1: Test read only elements
 ***REMOVED***func testCase_7_1() {
-***REMOVED******REMOVED***XCTExpectFailure("Attachment form elements remain unapproved but are injected by core, triggering a crash when this form's elements are accessed. Apollo #663")
-***REMOVED******REMOVED***XCTFail("Failing early to pre-empt the expected crash.")
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let app = XCUIApplication()
 ***REMOVED******REMOVED***let formTitle = app.staticTexts["Test Case 7.1 - Read only elements"]
 ***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
@@ -1465,7 +1456,7 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***let shortTextTextInput = app.textFields["Short text Text Input"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let longTextReadOnlyInput = app.staticTexts["Long text Read Only Input"]
-***REMOVED******REMOVED***let longTextTextInput = app.textViews["Long text Text Input"]
+***REMOVED******REMOVED***let longTextTextInputPreview = app.staticTexts["Long text Text Input Preview"]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***app.launch()
 ***REMOVED******REMOVED***
@@ -1506,7 +1497,36 @@ final class FeatureFormViewTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(shortTextTextInput.exists)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(longTextTextInput.exists)
+***REMOVED******REMOVED***XCTAssertTrue(longTextTextInputPreview.exists)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Test value backed read only elements
+***REMOVED***func testCase_9_1() {
+***REMOVED******REMOVED***let app = XCUIApplication()
+***REMOVED******REMOVED***let formTitle = app.staticTexts["Test Case 9 Form"]
+***REMOVED******REMOVED***let formViewTestsButton = app.buttons["Feature Form Tests"]
+***REMOVED******REMOVED***let singleCharacterString = app.staticTexts["singleCharacterString Footer"]
+***REMOVED******REMOVED***let lengthRangeString = app.staticTexts["lengthRangeString Footer"]
+***REMOVED******REMOVED***let maxExceededString = app.staticTexts["maxExceededString Footer"]
+***REMOVED******REMOVED***let numericalRange = app.staticTexts["numericalRange Footer"]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***app.launch()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Open the FeatureFormView component test view.
+***REMOVED******REMOVED***formViewTestsButton.tap()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectTestCase(app)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait and verify that the form is opened.
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***formTitle.waitForExistence(timeout: 10),
+***REMOVED******REMOVED******REMOVED***"The form failed to open after 10 seconds."
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(singleCharacterString.label, "Value must be 1 character")
+***REMOVED******REMOVED***XCTAssertEqual(lengthRangeString.label, "Value must be 2 to 5 characters")
+***REMOVED******REMOVED***XCTAssertEqual(maxExceededString.label, "Maximum 5 characters")
+***REMOVED******REMOVED***XCTAssertEqual(numericalRange.label, "Value must be from 2 to 5")
 ***REMOVED***
 ***REMOVED***
 

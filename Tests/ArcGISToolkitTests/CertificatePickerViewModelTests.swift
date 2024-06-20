@@ -30,11 +30,13 @@ final class CertificatePickerViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.proceedToPicker()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Have to wait here because the proceed function is delayed to avoid a bug.
+#if swift(<5.10)
 ***REMOVED******REMOVED***XCTExpectFailure(
-***REMOVED******REMOVED******REMOVED***"fulfillment(of:timeout:enforceOrder:) doesn't work properly with Xcode 15.0. Ref Toolkit #699",
+***REMOVED******REMOVED******REMOVED***"fulfillment(of:timeout:enforceOrder:) doesn't work properly with Swift 5.9. Ref Toolkit #699",
 ***REMOVED******REMOVED******REMOVED***options: .nonStrict()
 ***REMOVED******REMOVED***)
+#endif
+***REMOVED******REMOVED******REMOVED*** Have to wait here because the proceed function is delayed to avoid a bug.
 ***REMOVED******REMOVED***await fulfillment(
 ***REMOVED******REMOVED******REMOVED***of: [
 ***REMOVED******REMOVED******REMOVED******REMOVED***expectation(
@@ -52,10 +54,12 @@ final class CertificatePickerViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.proceedToUseCertificate(withPassword: "1234")
 ***REMOVED******REMOVED***
+#if swift(<5.10)
 ***REMOVED******REMOVED***XCTExpectFailure(
-***REMOVED******REMOVED******REMOVED***"fulfillment(of:timeout:enforceOrder:) doesn't work properly with Xcode 15.0. Ref Toolkit #699",
+***REMOVED******REMOVED******REMOVED***"fulfillment(of:timeout:enforceOrder:) doesn't work properly with Swift 5.9. Ref Toolkit #699",
 ***REMOVED******REMOVED******REMOVED***options: .nonStrict()
 ***REMOVED******REMOVED***)
+#endif
 ***REMOVED******REMOVED***await fulfillment(
 ***REMOVED******REMOVED******REMOVED***of: [
 ***REMOVED******REMOVED******REMOVED******REMOVED***expectation(

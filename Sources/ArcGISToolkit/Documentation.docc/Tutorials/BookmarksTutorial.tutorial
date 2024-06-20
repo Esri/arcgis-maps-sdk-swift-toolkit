@@ -16,28 +16,28 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED***Initialize a map that contains preset bookmarks.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a `MapView` to the body of the view, passing in the map.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Wrap the `MapView` in a `MapViewReader` to obtain a `MapViewProxy`.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BookmarksExampleView.swift", file: BookmarksStep1)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BookmarksExampleView.swift", file: BookmarksStep1.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a button within a toolbar to present the `Bookmarks` component.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***The property `bookmarksIsPresented` will control when the `Bookmarks` component is shown or hidden.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BookmarksExampleView.swift", file: BookmarksStep2)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BookmarksExampleView.swift", file: BookmarksStep2.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Host the `Bookmarks` component inside of a popover.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Create a new property named `selection` to hold the selected bookmark.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BookmarksExampleView.swift", file: BookmarksStep3)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BookmarksExampleView.swift", file: BookmarksStep3.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Enable automatic pan and zoom to the selected bookmark.
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Pass the `MapViewProxy` from Step 1 into the `Bookmarks` initializer.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BookmarksExampleView.swift", file: BookmarksStep4)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "BookmarksExampleView.swift", file: BookmarksStep4.swift)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

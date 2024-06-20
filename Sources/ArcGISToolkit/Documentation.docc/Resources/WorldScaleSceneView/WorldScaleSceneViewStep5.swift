@@ -20,6 +20,9 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED***return scene
 ***REMOVED***()
 ***REMOVED***
+***REMOVED******REMOVED***/ The location datasource that is used to access the device location.
+***REMOVED***@State private var locationDataSource = SystemLocationDataSource()
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***WorldScaleSceneView(
 ***REMOVED******REMOVED******REMOVED***clippingDistance: 400
@@ -31,6 +34,11 @@ struct WorldScaleExampleView: View {
 ***REMOVED******REMOVED******REMOVED***if locationManager.authorizationStatus == .notDetermined {
 ***REMOVED******REMOVED******REMOVED******REMOVED***locationManager.requestWhenInUseAuthorization()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***try? await locationDataSource.start()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Retrieve initial location.
+***REMOVED******REMOVED******REMOVED***guard let initialLocation = await locationDataSource.locations.first(where: { _ in true ***REMOVED***) else { return ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

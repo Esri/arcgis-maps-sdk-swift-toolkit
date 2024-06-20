@@ -15,28 +15,28 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED***To begin, set up the parent view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add a map with floor aware data, a property to track the current viewpoint and place
 ***REMOVED******REMOVED******REMOVED******REMOVED***a `MapView` into the body using these properties.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep1)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep1.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add an alignment property so that the Floor Filter can properly display its internal views.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep2)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep2.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add logic to load the map and handle any resulting errors when the view loads.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep3)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep3.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Track when the user is navigating the map with `.onNavigatingChanged` and also keep
 ***REMOVED******REMOVED******REMOVED******REMOVED***track of the latest viewpoint with `onViewpointChanged`.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep4)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep4.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Overlay the map with the Floor Filter, optionally adding UI to handle any loading errors.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep5)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FloorFilterExampleView.swift", file: FloorFilterStep5.swift)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -14,39 +14,39 @@
 ***REMOVED******REMOVED***@Steps {
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Initialize data containing feature forms.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep1)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep1.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Track important information like the last selected screen point and the current
 ***REMOVED******REMOVED******REMOVED******REMOVED***`Feature`.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep2)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep2.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add the `MapView` with the `FeatureForm` data.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep3)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep3.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Track any tap gestures on the `MapView`.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep4)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep4.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Perform an identify operation whenever the map is tapped and grab the `FeatureForm` data
 ***REMOVED******REMOVED******REMOVED******REMOVED***if present.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep5)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep5.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Show the `FeatureFormView` in a `FloatingPanel`.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep6)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep6.swift)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***@Step {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Add the ability to submit or cancel edits made with the `FeatureForm`.
-***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep7)
+***REMOVED******REMOVED******REMOVED******REMOVED***@Code(name: "FeatureFormExampleView.swift", file: FeatureFormViewStep7.swift)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
