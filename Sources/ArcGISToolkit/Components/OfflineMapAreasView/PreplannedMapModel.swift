@@ -388,7 +388,7 @@ extension FileManager {
 ***REMOVED******REMOVED***/ The path to the preplanned map areas directory.
 ***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned`
 ***REMOVED******REMOVED***/ - Parameter portalItemID: The ID of the web map portal item.
-***REMOVED***func preplannedDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
+***REMOVED***func preplannedAreasDirectory(forPortalItemID portalItemID: PortalItem.ID) -> URL {
 ***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***.appending(
 ***REMOVED******REMOVED******REMOVED******REMOVED***path: Self.preplannedDirectoryPath,
@@ -396,7 +396,7 @@ extension FileManager {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The path to the preplanned map areas directory for a specific portal item.
+***REMOVED******REMOVED***/ The path to the directory for a given preplanned map area from a specific portal item.
 ***REMOVED******REMOVED***/ `Documents/OfflineMapAreas/<Portal Item ID>/Preplanned/<Preplanned Area ID>`
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/  - portalItemID: The ID of the web map portal item.
@@ -405,11 +405,7 @@ extension FileManager {
 ***REMOVED******REMOVED***forPortalItemID portalItemID: PortalItem.ID,
 ***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
 ***REMOVED***) -> URL {
-***REMOVED******REMOVED***portalItemDirectory(forPortalItemID: portalItemID)
-***REMOVED******REMOVED******REMOVED***.appending(
-***REMOVED******REMOVED******REMOVED******REMOVED***path: Self.preplannedDirectoryPath,
-***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***preplannedAreasDirectory(forPortalItemID: portalItemID)
 ***REMOVED******REMOVED******REMOVED***.appending(
 ***REMOVED******REMOVED******REMOVED******REMOVED***path: preplannedMapAreaID.rawValue,
 ***REMOVED******REMOVED******REMOVED******REMOVED***directoryHint: .isDirectory

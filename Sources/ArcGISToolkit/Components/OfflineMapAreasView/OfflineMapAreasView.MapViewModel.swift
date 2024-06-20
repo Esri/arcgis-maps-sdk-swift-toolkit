@@ -58,18 +58,13 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Requests authorization to show notifications.
-***REMOVED******REMOVED***func requestUserNotificationAuthorization() async {
-***REMOVED******REMOVED******REMOVED***_ = try? await UNUserNotificationCenter.current()
-***REMOVED******REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Gets the preplanned map areas from local metadata json files.
+***REMOVED******REMOVED******REMOVED***/ Gets the offline preplanned map areas by using the preplanned map area IDs found in the
+***REMOVED******REMOVED******REMOVED***/ preplanned map areas directory to create preplanned map models.
 ***REMOVED******REMOVED***func makeOfflinePreplannedMapModels() {
 ***REMOVED******REMOVED******REMOVED***guard let portalItemID else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let portalItemDirectory = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED******REMOVED******REMOVED***let portalItemDirectory = FileManager.default.preplannedAreasDirectory(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***let preplannedMapAreaDirectories = try FileManager.default.contentsOfDirectory(
@@ -93,6 +88,8 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: mapArea.id!
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.sorted(using: KeyPathComparator(\.preplannedMapArea.title))
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
@@ -130,14 +127,20 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return OfflinePreplannedMapArea(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: description,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailImage: thumbnailImage,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: itemID
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: itemID,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailImage: thumbnailImage
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Requests authorization to show notifications.
+***REMOVED******REMOVED***func requestUserNotificationAuthorization() async {
+***REMOVED******REMOVED******REMOVED***_ = try? await UNUserNotificationCenter.current()
+***REMOVED******REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -164,13 +167,13 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***init(
 ***REMOVED******REMOVED***title: String,
 ***REMOVED******REMOVED***description: String,
-***REMOVED******REMOVED***thumbnailImage: UIImage? = nil,
-***REMOVED******REMOVED***id: PortalItem.ID? = nil
+***REMOVED******REMOVED***id: PortalItem.ID,
+***REMOVED******REMOVED***thumbnailImage: UIImage? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.title = title
 ***REMOVED******REMOVED***self.description = description
-***REMOVED******REMOVED***self.thumbnailImage = thumbnailImage
 ***REMOVED******REMOVED***self.id = id
+***REMOVED******REMOVED***self.thumbnailImage = thumbnailImage
 ***REMOVED***
 ***REMOVED***
 
