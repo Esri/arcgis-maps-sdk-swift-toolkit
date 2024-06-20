@@ -361,7 +361,7 @@ match the spatial reference of the map. */
 to be imported as an attachment. */
 "The selected attachment could not be imported." = "The selected attachment could not be imported.";
 
-/* An error message indicated the selected attachment exceeds the megabyte limit. */
+/* An error message indicating the selected attachment exceeds the megabyte limit. */
 "The selected attachment exceeds the %@ limit." = "The selected attachment exceeds the %@ limit.";
 
 /* Description of error thrown when a remote image could not be loaded. */
