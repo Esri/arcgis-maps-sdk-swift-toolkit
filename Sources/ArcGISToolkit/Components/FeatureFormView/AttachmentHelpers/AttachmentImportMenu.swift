@@ -43,6 +43,12 @@ struct AttachmentImportMenu: View {
     /// A Boolean value indicating whether the attachment photo picker is presented.
     @State private var photoPickerIsPresented = false
     
+    /// The maximum attachment size limit.
+    let attachmentSizeLimit = Measurement(
+        value: 50,
+        unit: UnitInformationStorage.megabytes
+    )
+    
     /// The action to perform when an attachment is added.
     let onAdd: ((FeatureAttachment) -> Void)?
     
@@ -121,6 +127,16 @@ struct AttachmentImportMenu: View {
 #endif
         .task(id: importState) {
             guard case let .finalizing(newAttachmentImportData) = importState else { return }
+            
+            let attachmentSize = Measurement(
+                value: Double(newAttachmentImportData.data.count),
+                unit: UnitInformationStorage.bytes
+            )
+            guard attachmentSize <= attachmentSizeLimit else {
+                importState = .errored(.sizeLimitExceeded)
+                return
+            }
+            
             defer { importState = .none }
             let fileName: String
             if let presetFileName = newAttachmentImportData.fileName {
@@ -211,16 +227,27 @@ private extension AttachmentImportMenu {
         )
     }
     
-    /// A message for an alert that the selected file was not able to be imported as an attachment.
-    var importFailureAlertMessage: String {
+    /// A generic message for an alert that the selected file was not able to be imported as an attachment.
+    var genericImportFailureAlertMessage: String {
         .init(
             localized: "The selected attachment could not be imported.",
             bundle: .toolkitModule,
             comment: """
-            A message for an alert that the selected file was not able to be
-            imported as an attachment.
+            A generic message for an alert that the selected file was not able
+            to be imported as an attachment.
             """
         )
+    }
+    
+    /// Returns a user facing error message for the present attachment import error.
+    var importFailureAlertMessage: String {
+        guard case .errored(let attachmentImportError) = importState else { return "" }
+        return switch attachmentImportError {
+        case .sizeLimitExceeded:
+            sizeLimitExceededImportFailureAlertMessage
+        default:
+            genericImportFailureAlertMessage
+        }
     }
     
     /// A title for an alert that the selected file was not able to be imported as an attachment.
@@ -241,6 +268,15 @@ private extension AttachmentImportMenu {
             localized: "Choose From Library",
             bundle: .toolkitModule,
             comment: "A label for a button to choose a photo or video from the user's photo library."
+        )
+    }
+    
+    /// An error message indicated the selected attachment exceeds the megabyte limit.
+    var sizeLimitExceededImportFailureAlertMessage: String {
+        .init(
+            localized: "The selected attachment exceeds the \(attachmentSizeLimit.formatted()) limit.",
+            bundle: .toolkitModule,
+            comment: "An error message indicated the selected attachment exceeds the megabyte limit."
         )
     }
 }
