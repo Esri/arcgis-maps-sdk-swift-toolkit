@@ -271,12 +271,12 @@ private extension AttachmentImportMenu {
         )
     }
     
-    /// An error message indicated the selected attachment exceeds the megabyte limit.
+    /// An error message indicating the selected attachment exceeds the megabyte limit.
     var sizeLimitExceededImportFailureAlertMessage: String {
         .init(
             localized: "The selected attachment exceeds the \(attachmentSizeLimit.formatted()) limit.",
             bundle: .toolkitModule,
-            comment: "An error message indicated the selected attachment exceeds the megabyte limit."
+            comment: "An error message indicating the selected attachment exceeds the megabyte limit."
         )
     }
 }
