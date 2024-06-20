@@ -15,5 +15,6 @@
 /// The possible errors when importing an attachment.
 enum AttachmentImportError: Error, Equatable {
     case dataInaccessible
+    case sizeLimitExceeded
     case system(String)
 }
