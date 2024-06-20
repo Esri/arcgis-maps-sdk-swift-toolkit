@@ -22,7 +22,7 @@ extension OfflineMapAreasView {
 ***REMOVED***@MainActor
 ***REMOVED***class MapViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***/ The portal item ID of the web map.
-***REMOVED******REMOVED***private let portalItemID: Item.ID?
+***REMOVED******REMOVED***private let portalItemID: PortalItem.ID?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The offline map task.
 ***REMOVED******REMOVED***private let offlineMapTask: OfflineMapTask
@@ -55,7 +55,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Request authorization to show notifications.
+***REMOVED******REMOVED******REMOVED***/ Requests authorization to show notifications.
 ***REMOVED******REMOVED***func requestUserNotificationAuthorization() async {
 ***REMOVED******REMOVED******REMOVED***_ = try? await UNUserNotificationCenter.current()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.requestAuthorization(options: [.alert, .sound])
