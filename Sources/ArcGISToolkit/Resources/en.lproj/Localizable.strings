@@ -357,9 +357,12 @@ match the spatial reference of the map. */
 /* A label indicating the given password was invalid. */
 "The password was invalid." = "The password was invalid.";
 
-/* A message for an alert that the selected file was not able to be
-imported as an attachment. */
+/* A generic message for an alert that the selected file was not able
+to be imported as an attachment. */
 "The selected attachment could not be imported." = "The selected attachment could not be imported.";
+
+/* An error message indicated the selected attachment exceeds the megabyte limit. */
+"The selected attachment exceeds the %@ limit." = "The selected attachment exceeds the %@ limit.";
 
 /* Description of error thrown when a remote image could not be loaded. */
 "The URL could not be reached or did not contain image data." = "The URL could not be reached or did not contain image data.";
