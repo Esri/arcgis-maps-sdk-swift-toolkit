@@ -64,15 +64,16 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***init(
+***REMOVED******REMOVED***mapArea: PreplannedMapAreaProtocol,
 ***REMOVED******REMOVED***portalItemID: PortalItem.ID,
-***REMOVED******REMOVED***mapAreaID: PortalItem.ID,
-***REMOVED******REMOVED***mapArea: PreplannedMapAreaProtocol
+***REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
 ***REMOVED***) {
+***REMOVED******REMOVED***preplannedMapArea = mapArea
 ***REMOVED******REMOVED***self.portalItemID = portalItemID
-***REMOVED******REMOVED***self.preplannedMapAreaID = mapAreaID
-***REMOVED******REMOVED***self.preplannedMapArea = mapArea
+***REMOVED******REMOVED***self.preplannedMapAreaID = preplannedMapAreaID
 ***REMOVED******REMOVED***showsUserNotificationOnCompletion = false
 ***REMOVED******REMOVED***offlineMapTask = nil
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let mmpk = lookupMobileMapPackage() {
 ***REMOVED******REMOVED******REMOVED***self.mobileMapPackage = mmpk
 ***REMOVED******REMOVED******REMOVED***self.status = .downloaded
@@ -121,6 +122,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
 ***REMOVED******REMOVED******REMOVED***status = .packageFailure
 ***REMOVED******REMOVED***case .complete:
 ***REMOVED******REMOVED******REMOVED***status = .packaged
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -69,7 +69,9 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***guard let portalItemID else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let portalItemDirectory = FileManager.default.preplannedDirectory(forPortalItemID: portalItemID)
+***REMOVED******REMOVED******REMOVED******REMOVED***let portalItemDirectory = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***let preplannedMapAreaDirectories = try FileManager.default.contentsOfDirectory(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: portalItemDirectory,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***includingPropertiesForKeys: nil
@@ -86,9 +88,9 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***offlinePreplannedModels = mapAreas.map { mapArea in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapArea: mapArea,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***portalItemID: portalItemID,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapAreaID: mapArea.id!,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapArea: mapArea
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: mapArea.id!
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
@@ -102,7 +104,10 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED***/   - portalItemID: The ID for the portal item.
 ***REMOVED******REMOVED******REMOVED***/   - preplannedMapAreaID: The ID for the preplanned map area.
 ***REMOVED******REMOVED******REMOVED***/ - Returns: A preplanned map area protocol.
-***REMOVED******REMOVED***private func readMetadata(for portalItemID: Item.ID, preplannedMapAreaID: Item.ID) -> PreplannedMapAreaProtocol? {
+***REMOVED******REMOVED***private func readMetadata(
+***REMOVED******REMOVED******REMOVED***for portalItemID: PortalItem.ID,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: PortalItem.ID
+***REMOVED******REMOVED***) -> PreplannedMapAreaProtocol? {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let metadataPath = FileManager.default.metadataPath(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***forPortalItemID: portalItemID,
@@ -121,7 +126,7 @@ extension OfflineMapAreasView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let title = json[OfflineMapAreasView.title] as? String,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let description = json[OfflineMapAreasView.description] as? String,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let id = json[OfflineMapAreasView.id] as? String,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let itemID = Item.ID(id) else { return nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let itemID = PortalItem.ID(id) else { return nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return OfflinePreplannedMapArea(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: title,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: description,
@@ -148,11 +153,11 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED***
 ***REMOVED***var thumbnailImage: UIImage?
 ***REMOVED***
-***REMOVED***var id: ArcGIS.Item.ID?
+***REMOVED***var id: PortalItem.ID?
 ***REMOVED***
 ***REMOVED***func retryLoad() async throws {***REMOVED***
 ***REMOVED***
-***REMOVED***func makeParameters(using offlineMapTask: ArcGIS.OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+***REMOVED***func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
 ***REMOVED******REMOVED***DownloadPreplannedOfflineMapParameters()
 ***REMOVED***
 ***REMOVED***
@@ -160,7 +165,7 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
 ***REMOVED******REMOVED***title: String,
 ***REMOVED******REMOVED***description: String,
 ***REMOVED******REMOVED***thumbnailImage: UIImage? = nil,
-***REMOVED******REMOVED***id: ArcGIS.Item.ID? = nil
+***REMOVED******REMOVED***id: PortalItem.ID? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.title = title
 ***REMOVED******REMOVED***self.description = description

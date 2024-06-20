@@ -18,7 +18,6 @@ import Combine
 @testable ***REMOVED***Toolkit
 
 private extension PreplannedMapAreaProtocol {
-***REMOVED***var mapArea: PreplannedMapArea? { nil ***REMOVED***
 ***REMOVED***var id: PortalItem.ID? { PortalItem.ID("012345") ***REMOVED***
 ***REMOVED***var packagingStatus: PreplannedMapArea.PackagingStatus? { nil ***REMOVED***
 ***REMOVED***var title: String { "Mock Preplanned Map Area" ***REMOVED***
@@ -163,7 +162,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***let areas = try await task.preplannedMapAreas
 ***REMOVED******REMOVED***let area = try XCTUnwrap(areas.first)
 ***REMOVED******REMOVED***let areaID = try XCTUnwrap(area.id)
-***REMOVED******REMOVED***let mmpkDirectory = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED***let mmpkDirectory = FileManager.default.mmpkDirectory(
 ***REMOVED******REMOVED******REMOVED***forPortalItemID: portalItem.id!,
 ***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID
 ***REMOVED******REMOVED***)
@@ -210,7 +209,7 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***JobManager.shared.jobs.removeAll()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Clean up folder.
-***REMOVED******REMOVED******REMOVED***let directory = FileManager.default.preplannedDirectory(
+***REMOVED******REMOVED******REMOVED***let directory = FileManager.default.mmpkDirectory(
 ***REMOVED******REMOVED******REMOVED******REMOVED***forPortalItemID: portalItem.id!,
 ***REMOVED******REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID
 ***REMOVED******REMOVED******REMOVED***)
@@ -277,6 +276,18 @@ class PreplannedMapModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model2.status.assertExpectedValue(.downloaded)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Test that creating a matching model with the initializer used for offline
+***REMOVED******REMOVED******REMOVED*** support will have the status set to downloaded as there is a mmpk downloaded
+***REMOVED******REMOVED******REMOVED*** at the appropriate location.
+***REMOVED******REMOVED***let model3 = PreplannedMapModel(
+***REMOVED******REMOVED******REMOVED***mapArea: area,
+***REMOVED******REMOVED******REMOVED***portalItemID: portalItem.id!,
+***REMOVED******REMOVED******REMOVED***preplannedMapAreaID: areaID
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***model3.status.assertExpectedValue(.downloaded)
+***REMOVED******REMOVED***XCTAssertNotNil(model3.mobileMapPackage)
 ***REMOVED***
 ***REMOVED***
 
