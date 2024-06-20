@@ -69,7 +69,9 @@ extension OfflineMapAreasView {
             guard let portalItemID else { return }
             
             do {
-                let portalItemDirectory = FileManager.default.preplannedDirectory(forPortalItemID: portalItemID)
+                let portalItemDirectory = FileManager.default.preplannedDirectory(
+                    forPortalItemID: portalItemID
+                )
                 let preplannedMapAreaDirectories = try FileManager.default.contentsOfDirectory(
                     at: portalItemDirectory,
                     includingPropertiesForKeys: nil
@@ -86,9 +88,9 @@ extension OfflineMapAreasView {
                 
                 offlinePreplannedModels = mapAreas.map { mapArea in
                     PreplannedMapModel(
+                        mapArea: mapArea,
                         portalItemID: portalItemID,
-                        mapAreaID: mapArea.id!,
-                        mapArea: mapArea
+                        preplannedMapAreaID: mapArea.id!
                     )
                 }
             } catch {
@@ -102,7 +104,10 @@ extension OfflineMapAreasView {
         ///   - portalItemID: The ID for the portal item.
         ///   - preplannedMapAreaID: The ID for the preplanned map area.
         /// - Returns: A preplanned map area protocol.
-        private func readMetadata(for portalItemID: Item.ID, preplannedMapAreaID: Item.ID) -> PreplannedMapAreaProtocol? {
+        private func readMetadata(
+            for portalItemID: PortalItem.ID,
+            preplannedMapAreaID: PortalItem.ID
+        ) -> PreplannedMapAreaProtocol? {
             do {
                 let metadataPath = FileManager.default.metadataPath(
                     forPortalItemID: portalItemID,
@@ -121,7 +126,7 @@ extension OfflineMapAreasView {
                     guard let title = json[OfflineMapAreasView.title] as? String,
                           let description = json[OfflineMapAreasView.description] as? String,
                           let id = json[OfflineMapAreasView.id] as? String,
-                          let itemID = Item.ID(id) else { return nil }
+                          let itemID = PortalItem.ID(id) else { return nil }
                     return OfflinePreplannedMapArea(
                         title: title,
                         description: description,
@@ -148,11 +153,11 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
     
     var thumbnailImage: UIImage?
     
-    var id: ArcGIS.Item.ID?
+    var id: PortalItem.ID?
     
     func retryLoad() async throws {}
     
-    func makeParameters(using offlineMapTask: ArcGIS.OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
+    func makeParameters(using offlineMapTask: OfflineMapTask) async throws -> DownloadPreplannedOfflineMapParameters {
         DownloadPreplannedOfflineMapParameters()
     }
     
@@ -160,7 +165,7 @@ private struct OfflinePreplannedMapArea: PreplannedMapAreaProtocol {
         title: String,
         description: String,
         thumbnailImage: UIImage? = nil,
-        id: ArcGIS.Item.ID? = nil
+        id: PortalItem.ID? = nil
     ) {
         self.title = title
         self.description = description

@@ -18,7 +18,6 @@ import Combine
 @testable import ArcGISToolkit
 
 private extension PreplannedMapAreaProtocol {
-    var mapArea: PreplannedMapArea? { nil }
     var id: PortalItem.ID? { PortalItem.ID("012345") }
     var packagingStatus: PreplannedMapArea.PackagingStatus? { nil }
     var title: String { "Mock Preplanned Map Area" }
@@ -163,7 +162,7 @@ class PreplannedMapModelTests: XCTestCase {
         let areas = try await task.preplannedMapAreas
         let area = try XCTUnwrap(areas.first)
         let areaID = try XCTUnwrap(area.id)
-        let mmpkDirectory = FileManager.default.preplannedDirectory(
+        let mmpkDirectory = FileManager.default.mmpkDirectory(
             forPortalItemID: portalItem.id!,
             preplannedMapAreaID: areaID
         )
@@ -210,7 +209,7 @@ class PreplannedMapModelTests: XCTestCase {
             JobManager.shared.jobs.removeAll()
             
             // Clean up folder.
-            let directory = FileManager.default.preplannedDirectory(
+            let directory = FileManager.default.mmpkDirectory(
                 forPortalItemID: portalItem.id!,
                 preplannedMapAreaID: areaID
             )
@@ -277,6 +276,18 @@ class PreplannedMapModelTests: XCTestCase {
         )
         
         model2.status.assertExpectedValue(.downloaded)
+        
+        // Test that creating a matching model with the initializer used for offline
+        // support will have the status set to downloaded as there is a mmpk downloaded
+        // at the appropriate location.
+        let model3 = PreplannedMapModel(
+            mapArea: area,
+            portalItemID: portalItem.id!,
+            preplannedMapAreaID: areaID
+        )
+        
+        model3.status.assertExpectedValue(.downloaded)
+        XCTAssertNotNil(model3.mobileMapPackage)
     }
 }
 

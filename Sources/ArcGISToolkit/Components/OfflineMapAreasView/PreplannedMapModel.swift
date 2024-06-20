@@ -64,15 +64,16 @@ class PreplannedMapModel: ObservableObject, Identifiable {
     }
     
     init(
+        mapArea: PreplannedMapAreaProtocol,
         portalItemID: PortalItem.ID,
-        mapAreaID: PortalItem.ID,
-        mapArea: PreplannedMapAreaProtocol
+        preplannedMapAreaID: PortalItem.ID
     ) {
+        preplannedMapArea = mapArea
         self.portalItemID = portalItemID
-        self.preplannedMapAreaID = mapAreaID
-        self.preplannedMapArea = mapArea
+        self.preplannedMapAreaID = preplannedMapAreaID
         showsUserNotificationOnCompletion = false
         offlineMapTask = nil
+        
         if let mmpk = lookupMobileMapPackage() {
             self.mobileMapPackage = mmpk
             self.status = .downloaded
@@ -121,6 +122,8 @@ class PreplannedMapModel: ObservableObject, Identifiable {
             status = .packageFailure
         case .complete:
             status = .packaged
+        @unknown default:
+            return
         }
     }
     
