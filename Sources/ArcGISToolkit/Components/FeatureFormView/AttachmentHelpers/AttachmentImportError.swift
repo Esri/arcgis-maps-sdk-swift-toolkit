@@ -15,5 +15,6 @@
 ***REMOVED***/ The possible errors when importing an attachment.
 enum AttachmentImportError: Error, Equatable {
 ***REMOVED***case dataInaccessible
+***REMOVED***case sizeLimitExceeded
 ***REMOVED***case system(String)
 ***REMOVED***
