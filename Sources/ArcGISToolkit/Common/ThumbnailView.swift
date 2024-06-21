@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import SwiftUI
 
 /// A view displaying a thumbnail image for an attachment.
 struct ThumbnailView: View  {
@@ -25,8 +25,8 @@ struct ThumbnailView: View  {
     
     var body: some View {
         Group {
-            if attachmentModel.usingDefaultImage,
-               let systemName = attachmentModel.defaultSystemName {
+            if attachmentModel.usingSystemImage,
+               let systemName = attachmentModel.systemImageName {
                 Image(systemName: systemName)
                     .resizable()
                     .renderingMode(.template)
@@ -39,6 +39,7 @@ struct ThumbnailView: View  {
                     .aspectRatio(contentMode: .fill)
             }
         }
+        .accessibilityIdentifier("\(attachmentModel.name) Thumbnail")
         .frame(width: size.width, height: size.height, alignment: .center)
         .clipShape(RoundedRectangle(cornerRadius: 4))
         .contentShape(RoundedRectangle(cornerRadius: 4))
@@ -50,6 +51,6 @@ struct ThumbnailView: View  {
     /// - Returns: A color to be used as the foreground color.
     func foregroundColor(for attachmentModel: AttachmentModel) -> Color {
         attachmentModel.loadStatus == .failed ? .red :
-        (attachmentModel.usingDefaultImage ? .gray : .primary)
+        (attachmentModel.usingSystemImage ? .gray : .primary)
     }
 }
