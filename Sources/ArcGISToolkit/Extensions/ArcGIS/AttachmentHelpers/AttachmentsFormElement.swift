@@ -27,7 +27,7 @@ extension AttachmentsFormElement : AttachmentsFeatureElement {
 ***REMOVED******REMOVED***/ This property will be empty if the element has not yet been evaluated.
 ***REMOVED***public var featureAttachments: [FeatureAttachment] {
 ***REMOVED******REMOVED***get async throws {
-***REMOVED******REMOVED******REMOVED***try await attachments.map { $0 as FeatureAttachment ***REMOVED***
+***REMOVED******REMOVED******REMOVED***try await attachments
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
