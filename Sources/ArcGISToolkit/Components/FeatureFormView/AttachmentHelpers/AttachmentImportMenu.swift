@@ -142,7 +142,11 @@ struct AttachmentImportMenu: View {
             if let presetFileName = newAttachmentImportData.fileName {
                 fileName = presetFileName
             } else {
-                let attachmentNumber = element.attachments.count + 1
+                // `element.attachments` is now marked `async throws`, so this
+                // needs to be modified. We can address it as part of
+                // Apollo #682. Temporarily, just use a random Int.
+//                let attachmentNumber = element.attachments.count + 1
+                let attachmentNumber = Int.random(in: 0...99)
                 if let fileExtension = newAttachmentImportData.fileExtension {
                     fileName = "Attachment \(attachmentNumber).\(fileExtension)"
                 } else {
