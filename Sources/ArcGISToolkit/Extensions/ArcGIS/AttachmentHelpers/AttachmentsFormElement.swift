@@ -27,7 +27,7 @@ extension AttachmentsFormElement : AttachmentsFeatureElement {
     /// This property will be empty if the element has not yet been evaluated.
     public var featureAttachments: [FeatureAttachment] {
         get async throws {
-            try await attachments.map { $0 as FeatureAttachment }
+            try await attachments
         }
     }
     
