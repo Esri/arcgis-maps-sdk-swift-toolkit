@@ -127,6 +127,49 @@ class Model: ObservableObject {
         await applyEdits(featureForm)
     }
     
+    private func applyEdits(_ featureForm: FeatureForm) async {
+        state = .applyingEdits(featureForm)
+        guard let table = featureForm.feature.table as? ServiceFeatureTable else {
+            state = .generalError(featureForm, Text("Error resolving feature table."))
+            return
+        }
+        guard let database = table.serviceGeodatabase else {
+            state = .generalError(featureForm, Text("No geodatabase found."))
+            return
+        }
+        guard database.hasLocalEdits else {
+            state = .generalError(featureForm, Text("No database edits found."))
+            return
+        }
+        let resultErrors: [Error]
+        do {
+            if let serviceInfo = database.serviceInfo, serviceInfo.canUseServiceGeodatabaseApplyEdits {
+                let featureTableEditResults = try await database.applyEdits()
+                resultErrors = featureTableEditResults.flatMap { $0.editResults.errors }
+            } else {
+                let featureEditResults = try await table.applyEdits()
+                resultErrors = featureEditResults.errors
+            }
+        } catch {
+            state = .generalError(featureForm, Text("The changes could not be applied to the database or table.\n\n\(error.localizedDescription)"))
+            return
+        }
+        if resultErrors.isEmpty {
+            state = .idle
+        } else {
+            state = .generalError(featureForm, Text("Apply edits failed with ^[\(resultErrors.count) error](inflect: true)."))
+        }
+    }
+    
+    private func finishEditing(_ featureForm: FeatureForm) async {
+        state = .finishingEdits(featureForm)
+        do {
+            try await featureForm.finishEditing()
+        } catch {
+            state = .generalError(featureForm, Text("Finish editing failed.\n\n\(error.localizedDescription)"))
+        }
+    }
+    
     private func validateChanges(_ featureForm: FeatureForm) {
         state = .validating(featureForm)
         if !featureForm.validationErrors.isEmpty {
@@ -138,5 +181,12 @@ class Model: ObservableObject {
 private extension FeatureForm {
     var featureLayer: FeatureLayer? {
         feature.table?.layer as? FeatureLayer
+    }
+}
+
+private extension Array where Element == FeatureEditResult {
+    ///  Any errors from the edit results and their inner attachment results.
+    var errors: [Error] {
+        compactMap { $0.error } + flatMap { $0.attachmentResults.compactMap { $0.error } }
     }
 }
