@@ -13,3 +13,11 @@ struct FeatureFormExampleView: View {
 ***REMOVED***
 ***REMOVED***@State private var map = makeMap()
 ***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***NavigationStack {
+***REMOVED******REMOVED******REMOVED***MapViewReader { mapViewProxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
