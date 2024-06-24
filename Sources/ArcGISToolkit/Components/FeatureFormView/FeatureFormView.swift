@@ -55,6 +55,10 @@
 ***REMOVED***/ [FeatureFormExampleView.swift](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/blob/Forms/Examples/Examples/FeatureFormExampleView.swift)
 ***REMOVED***/ in the project. To learn more about using the `FeatureFormView` see the <doc:FeatureFormViewTutorial>.
 ***REMOVED***/
+***REMOVED***/ - Note: In order to capture video and photos as form attachments, your application will need
+***REMOVED***/ `NSCameraUsageDescription` and, `NSMicrophoneUsageDescription` entries in the
+***REMOVED***/ `Info.plist` file.
+***REMOVED***/
 ***REMOVED***/ - Since: 200.4
 public struct FeatureFormView: View {
 ***REMOVED******REMOVED***/ The view model for the form.
@@ -87,6 +91,9 @@ public struct FeatureFormView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(model.visibleElements, id: \.self) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(element)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let attachmentElement = model.featureForm.defaultAttachmentsElement {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeElement(attachmentElement)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -114,6 +121,8 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeElement(_ element: FormElement) -> some View {
 ***REMOVED******REMOVED***switch element {
+***REMOVED******REMOVED***case let attachmentsElement as AttachmentsFormElement:
+***REMOVED******REMOVED******REMOVED***AttachmentsFeatureElementView(featureElement: attachmentsElement)
 ***REMOVED******REMOVED***case let element as FieldFormElement:
 ***REMOVED******REMOVED******REMOVED***makeFieldElement(element)
 ***REMOVED******REMOVED***case let element as GroupFormElement:
@@ -126,7 +135,8 @@ extension FeatureFormView {
 ***REMOVED******REMOVED***/ Makes UI for a field form element including a divider beneath it.
 ***REMOVED******REMOVED***/ - Parameter element: The element to generate UI for.
 ***REMOVED***@ViewBuilder func makeFieldElement(_ element: FieldFormElement) -> some View {
-***REMOVED******REMOVED***if !(element.input is UnsupportedFormInput) {
+***REMOVED******REMOVED***if !(element.input is UnsupportedFormInput ||
+***REMOVED******REMOVED******REMOVED*** element.input is BarcodeScannerFormInput) {
 ***REMOVED******REMOVED******REMOVED***InputWrapper(element: element)
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***

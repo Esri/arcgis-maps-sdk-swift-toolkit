@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-***REMOVED***Apple***REMOVED***DTD PLIST 1.0***REMOVED***EN" "http:***REMOVED***www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app uses your location to anchor virtual objects to real-world locations in an augmented reality experience.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -60,7 +58,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>This app uses your camera for augmented reality that overlays imagery over your real-world environment.</string>
+	<string>This app uses your camera to record video, capture photos or provide a live feed to the Augmented Reality component.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app uses your location to anchor virtual objects to real-world locations in an augmented reality experience.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app uses your microphone when recording video.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -68,8 +70,6 @@
 		<key>UISceneConfigurations</key>
 		<dict/>
 	</dict>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UIRequiredDeviceCapabilities</key>

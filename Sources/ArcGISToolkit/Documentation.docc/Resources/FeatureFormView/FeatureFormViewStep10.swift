@@ -127,6 +127,49 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***await applyEdits(featureForm)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***private func applyEdits(_ featureForm: FeatureForm) async {
+***REMOVED******REMOVED***state = .applyingEdits(featureForm)
+***REMOVED******REMOVED***guard let table = featureForm.feature.table as? ServiceFeatureTable else {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Error resolving feature table."))
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***guard let database = table.serviceGeodatabase else {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("No geodatabase found."))
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***guard database.hasLocalEdits else {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("No database edits found."))
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***let resultErrors: [Error]
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***if let serviceInfo = database.serviceInfo, serviceInfo.canUseServiceGeodatabaseApplyEdits {
+***REMOVED******REMOVED******REMOVED******REMOVED***let featureTableEditResults = try await database.applyEdits()
+***REMOVED******REMOVED******REMOVED******REMOVED***resultErrors = featureTableEditResults.flatMap { $0.editResults.errors ***REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***let featureEditResults = try await table.applyEdits()
+***REMOVED******REMOVED******REMOVED******REMOVED***resultErrors = featureEditResults.errors
+***REMOVED******REMOVED***
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("The changes could not be applied to the database or table.\n\n\(error.localizedDescription)"))
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***if resultErrors.isEmpty {
+***REMOVED******REMOVED******REMOVED***state = .idle
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Apply edits failed with ^[\(resultErrors.count) error](inflect: true)."))
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func finishEditing(_ featureForm: FeatureForm) async {
+***REMOVED******REMOVED***state = .finishingEdits(featureForm)
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***try await featureForm.finishEditing()
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Finish editing failed.\n\n\(error.localizedDescription)"))
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***private func validateChanges(_ featureForm: FeatureForm) {
 ***REMOVED******REMOVED***state = .validating(featureForm)
 ***REMOVED******REMOVED***if !featureForm.validationErrors.isEmpty {
@@ -138,5 +181,12 @@ class Model: ObservableObject {
 private extension FeatureForm {
 ***REMOVED***var featureLayer: FeatureLayer? {
 ***REMOVED******REMOVED***feature.table?.layer as? FeatureLayer
+***REMOVED***
+***REMOVED***
+
+private extension Array where Element == FeatureEditResult {
+***REMOVED******REMOVED***/  Any errors from the edit results and their inner attachment results.
+***REMOVED***var errors: [Error] {
+***REMOVED******REMOVED***compactMap { $0.error ***REMOVED*** + flatMap { $0.attachmentResults.compactMap { $0.error ***REMOVED*** ***REMOVED***
 ***REMOVED***
 ***REMOVED***

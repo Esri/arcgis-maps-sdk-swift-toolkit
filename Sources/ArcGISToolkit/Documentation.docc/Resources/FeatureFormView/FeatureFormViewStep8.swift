@@ -127,6 +127,15 @@ class Model: ObservableObject {
 ***REMOVED******REMOVED***await applyEdits(featureForm)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***private func finishEditing(_ featureForm: FeatureForm) async {
+***REMOVED******REMOVED***state = .finishingEdits(featureForm)
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***try await featureForm.finishEditing()
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***state = .generalError(featureForm, Text("Finish editing failed.\n\n\(error.localizedDescription)"))
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***private func validateChanges(_ featureForm: FeatureForm) {
 ***REMOVED******REMOVED***state = .validating(featureForm)
 ***REMOVED******REMOVED***if !featureForm.validationErrors.isEmpty {

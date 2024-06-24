@@ -25,8 +25,8 @@ struct ThumbnailView: View  {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if attachmentModel.usingDefaultImage,
-***REMOVED******REMOVED******REMOVED***   let systemName = attachmentModel.defaultSystemName {
+***REMOVED******REMOVED******REMOVED***if attachmentModel.usingSystemImage,
+***REMOVED******REMOVED******REMOVED***   let systemName = attachmentModel.systemImageName {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: systemName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.template)
@@ -39,6 +39,7 @@ struct ThumbnailView: View  {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.accessibilityIdentifier("\(attachmentModel.name) Thumbnail")
 ***REMOVED******REMOVED***.frame(width: size.width, height: size.height, alignment: .center)
 ***REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 4))
 ***REMOVED******REMOVED***.contentShape(RoundedRectangle(cornerRadius: 4))
@@ -50,6 +51,6 @@ struct ThumbnailView: View  {
 ***REMOVED******REMOVED***/ - Returns: A color to be used as the foreground color.
 ***REMOVED***func foregroundColor(for attachmentModel: AttachmentModel) -> Color {
 ***REMOVED******REMOVED***attachmentModel.loadStatus == .failed ? .red :
-***REMOVED******REMOVED***(attachmentModel.usingDefaultImage ? .gray : .primary)
+***REMOVED******REMOVED***(attachmentModel.usingSystemImage ? .gray : .primary)
 ***REMOVED***
 ***REMOVED***
