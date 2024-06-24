@@ -47,9 +47,11 @@ The *ArcGIS Maps SDK for Swift Toolkit* has a *Target SDK* version of *16.0*, me
 
  New to Swift Package Manager? Visit [swift.org/package-manager/](https://swift.org/package-manager/).
 
-## Configure API Key
+## Configure API Key & Licensing
 
-Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS Platform services, including basemaps, and therefore require an API Key to be set in `ExamplesApp.swift`. Please see the [setup guide](https://developers.arcgis.com/swift/get-started/#3-access-services-and-content-with-an-api-key/) for more information.
+Use of ArcGIS location services, such as basemaps, geocoding, and routing, requires either user authentication or API key authentication. Some of the toolkit components and examples utilize a set of these ready-to-use ArcGIS location services, including basemaps, and therefore require an API Key to be set in `ExamplesApp.swift`. Please see the [setup guide](https://developers.arcgis.com/swift/get-started/#3-access-services-and-content-with-an-api-key/), https://links.esri.com/arcgis-maps-sdk-security-auth and https://links.esri.com/arcgis-maps-sdk-license-and-deploy for more information.
+
+Production deployment of applications built with ArcGIS Maps SDK requires you to license ArcGIS Maps SDK functionality. For more information see https://links.esri.com/arcgis-maps-sdk-license-and-deploy.
 
 ## Additional Resources
 

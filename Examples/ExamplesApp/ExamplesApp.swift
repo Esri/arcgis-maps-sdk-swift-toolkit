@@ -26,12 +26,17 @@ struct ExamplesApp: App {
     init() {
         #warning("Require user to sign in with an ArcGIS identity or set your developer API key")
         /*
-         Use of Esri location services, including basemaps and geocoding, requires either an ArcGIS identity or an API Key. For more information see https://links.esri.com/arcgis-maps-sdk-security-auth.
-         1) ArcGIS identity: An ArcGIS named user account that is a member of an organization in ArcGIS Online or ArcGIS Enterprise.
-         2) API key: A permanent key that gives your application access to Esri location services. Create a new API key or access existing API keys from your ArcGIS for Developers dashboard (https://links.esri.com/arcgis-api-keys).
-         Production deployment of applications built with ArcGIS Maps SDK requires you to license ArcGIS Maps SDK functionality. For more information see https://links.esri.com/arcgis-maps-sdk-license-and-deploy.
+         Use of ArcGIS location services, such as basemaps, geocoding, and routing, requires either user authentication or API key authentication. For more information see https://links.esri.com/arcgis-maps-sdk-security-auth or https://links.esri.com/arcgis-maps-sdk-license-and-deploy.
+         1) User authentication: Allows users with an ArcGIS account to sign into an application and access secure services.
+         2) API key authentication: A long-lived access token that gives your application access to secure services. Go to the [Create an API key](https://developers.arcgis.com/documentation/security-and-authentication/api-key-authentication/tutorials/create-an-api-key/) tutorial to copy the API key access token. To access all services used by this application set the location services privileges to:
+         
+           Location services > Basemaps > Basemaps style service
+           Location services > Geocoding > Geocode (not stored)
+           Location services > Routing > Simple routing
+         
+        Production deployment of applications built with the ArcGIS Runtime SDK requires you to license ArcGIS Runtime functionality. For more information see https://links.esri.com/arcgis-runtime-license-and-deploy.
          */
-        // Uncomment the following line to access Esri location services using an API key.
+        // Uncomment the following line to access ArcGIS location services using an API key.
 //         ArcGISEnvironment.apiKey = APIKey("<#API Key#>")
     }
 }
